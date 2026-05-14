@@ -1,0 +1,10 @@
+# Nao versionar / nao publicar
+Imagens/
+publicar/
+*.xlsx
+_*.py
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini

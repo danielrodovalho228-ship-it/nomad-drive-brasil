@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NomadDrive Brasil — Monthly car rental for travelers in Brazil</title>
+<meta name="description" content="Affordable monthly car rental in Uberlândia, Brazil — built for Americans and expats. Skip the agency markup. By referral, fully insured, backup car included." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="#top" class="brand">
+      <span class="brand__mark">ND</span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="#car" data-i18n="nav.car">The car</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#safety" data-i18n="nav.safety">Safety</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+        <span class="lang-toggle__opt is-active" data-lang="en">EN</span>
+        <span class="lang-toggle__sep">/</span>
+        <span class="lang-toggle__opt" data-lang="pt">PT</span>
+      </button>
+      <a href="#quote" class="btn btn--solid btn--sm" data-i18n="nav.cta">Get a quote</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <span class="badge" data-i18n="hero.badge">Built for travelers between the US &amp; Brazil</span>
+        <h1 data-i18n="hero.title">Skip the agency markup. Drive Brazil for less.</h1>
+        <p class="hero__sub" data-i18n="hero.sub">Big agencies charge a premium for monthly rentals. We're one well-kept car, properly insured, offered by referral — at a fair, all-in monthly price.</p>
+        <div class="hero__cta">
+          <a href="#quote" class="btn btn--solid" data-i18n="hero.cta1">Request your quote</a>
+          <a href="#how" class="btn btn--ghost" data-i18n="hero.cta2">See how it works</a>
+        </div>
+        <div class="hero__stats">
+          <div class="stat">
+            <strong>R$3,000<span>/mo</span></strong>
+            <span data-i18n="hero.stat1">all-in, taxes included</span>
+          </div>
+          <div class="stat">
+            <strong data-i18n="hero.stat2v">Owner-direct</strong>
+            <span data-i18n="hero.stat2">no agency markup</span>
+          </div>
+          <div class="stat">
+            <strong>1-on-1</strong>
+            <span data-i18n="hero.stat3">personal handover &amp; support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <!-- IMAGE SLOT: drop images/hero.jpg (real photo of the white Cobalt) -->
+        <div class="photo-slot photo-slot--hero" data-photo="hero">
+          <img src="images/hero.jpg" alt="White Chevrolet Cobalt — NomadDrive Brasil" onerror="this.remove()" />
+          <span class="photo-slot__icon">🚗</span>
+          <span class="photo-slot__label" data-i18n="photo.hero">Add <strong>images/hero.jpg</strong><br /><em>(white Cobalt photo — see README)</em></span>
+        </div>
+        <div class="price-card">
+          <span class="price-card__tag" data-i18n="hero.pricecard.tag">Your monthly price</span>
+          <span class="price-card__value">R$3,000</span>
+          <span class="price-card__note" data-i18n="hero.pricecard.note">≈ $530 USD · taxes included · backup car</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRUST STRIP ===== -->
+  <section class="strip">
+    <div class="container strip__inner">
+      <span data-i18n="strip.1">✓ Fully insured for rental use</span>
+      <span data-i18n="strip.2">✓ By referral only</span>
+      <span data-i18n="strip.3">✓ Backup car if anything happens</span>
+      <span data-i18n="strip.4">✓ English-speaking support</span>
+      <span data-i18n="strip.5">✓ Based in Uberlândia, MG</span>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEM ===== -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="problem.eyebrow">The problem</span>
+        <h2 data-i18n="problem.title">Monthly rentals in Brazil are quietly expensive</h2>
+        <p data-i18n="problem.sub">Visiting family for one or two months shouldn't cost a fortune. But the big chains price for their overhead — huge fleets, staff, branches — not for you.</p>
+      </div>
+      <div class="cards cards--3">
+        <article class="card">
+          <span class="card__num">01</span>
+          <h3 data-i18n="problem.c1.title">A premium hiding in the daily rate</h3>
+          <p data-i18n="problem.c1.body">A daily rate looks small — but over a one or two-month stay it quietly adds up to far more than it should cost to rent a car.</p>
+        </article>
+        <article class="card">
+          <span class="card__num">02</span>
+          <h3 data-i18n="problem.c2.title">Priced for their costs, not yours</h3>
+          <p data-i18n="problem.c2.body">Fleets, employees and branches are expensive. That overhead is baked into every daily rate you pay.</p>
+        </article>
+        <article class="card">
+          <span class="card__num">03</span>
+          <h3 data-i18n="problem.c3.title">No one speaks your situation</h3>
+          <p data-i18n="problem.c3.body">Long stays, a foreign license, family visits — generic counters aren't built for the US-to-Brazil traveler.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section section--alt" id="how">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="how.eyebrow">How it works</span>
+        <h2 data-i18n="how.title">Simple, personal, and by referral</h2>
+        <p data-i18n="how.sub">We keep it small on purpose. Fewer cars, trusted renters, and a real person on the other side of the conversation.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step__n">1</span>
+          <h3 data-i18n="how.s1.title">You're referred</h3>
+          <p data-i18n="how.s1.body">A friend or family member who knows us connects you. Referral-first keeps everyone safe and trusted.</p>
+        </div>
+        <div class="step">
+          <span class="step__n">2</span>
+          <h3 data-i18n="how.s2.title">Request a quote</h3>
+          <p data-i18n="how.s2.body">Tell us your dates and pick-up city. We confirm availability and send an all-in monthly price.</p>
+        </div>
+        <div class="step">
+          <span class="step__n">3</span>
+          <h3 data-i18n="how.s3.title">Sign &amp; secure</h3>
+          <p data-i18n="how.s3.body">A clear rental contract, ID/license check, a refundable deposit and a quick photo inspection.</p>
+        </div>
+        <div class="step">
+          <span class="step__n">4</span>
+          <h3 data-i18n="how.s4.title">Pick up &amp; drive</h3>
+          <p data-i18n="how.s4.body">We hand over the car in person in Uberlândia and stay reachable for your whole trip.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THE CAR ===== -->
+  <section class="section" id="car">
+    <div class="container car">
+      <div class="car__media">
+        <!-- IMAGE SLOT: drop images/car-exterior.jpg -->
+        <div class="photo-slot photo-slot--tall" data-photo="car-main">
+          <img src="images/car-exterior.jpg" alt="Chevrolet Cobalt exterior" onerror="this.remove()" />
+          <span class="photo-slot__icon">📸</span>
+          <span class="photo-slot__label" data-i18n="photo.car">images/car-exterior.jpg</span>
+        </div>
+        <div class="car__thumbs">
+          <div class="photo-slot photo-slot--sm" data-photo="car-interior">
+            <img src="images/car-interior.jpg" alt="Chevrolet Cobalt interior" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.interior">images/car-interior.jpg</span>
+          </div>
+          <div class="photo-slot photo-slot--sm" data-photo="car-trunk">
+            <img src="images/car-trunk.jpg" alt="Chevrolet Cobalt trunk space" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.trunk">images/car-trunk.jpg</span>
+          </div>
+        </div>
+      </div>
+      <div class="car__info">
+        <span class="eyebrow" data-i18n="car.eyebrow">The car</span>
+        <h2 data-i18n="car.title">2018 Chevrolet Cobalt Elite. Well kept. Ready for the road.</h2>
+        <p data-i18n="car.sub">A 2018 Chevrolet Cobalt Elite — automatic, fully optioned, white. A comfortable mid-size sedan: cheap to maintain and roomy for road trips and family.</p>
+        <ul class="specs">
+          <li><span data-i18n="car.spec1.k">Year</span><strong data-i18n="car.spec1.v">2018</strong></li>
+          <li><span data-i18n="car.spec2.k">Transmission</span><strong data-i18n="car.spec2.v">Automatic</strong></li>
+          <li><span data-i18n="car.spec3.k">Model</span><strong data-i18n="car.spec3.v">Chevrolet Cobalt Elite</strong></li>
+          <li><span data-i18n="car.spec4.k">Color</span><strong data-i18n="car.spec4.v">White</strong></li>
+          <li><span data-i18n="car.spec5.k">Mileage</span><strong data-i18n="car.spec5.v">120,000 km</strong></li>
+          <li><span data-i18n="car.spec6.k">Best for</span><strong data-i18n="car.spec6.v">Long stays &amp; travel</strong></li>
+        </ul>
+        <p class="car__editnote" data-i18n="car.editnote">Add real photos of the car to the <strong>/images</strong> folder — see the README.</p>
+        <a href="#quote" class="btn btn--solid" data-i18n="car.cta">Check availability</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section class="section section--alt" id="pricing">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="pricing.eyebrow">Pricing</span>
+        <h2 data-i18n="pricing.title">Fair, all-in, no surprises</h2>
+        <p data-i18n="pricing.sub">One transparent monthly rate with taxes included. Longer stays get a better rate. USD figures are approximate.</p>
+      </div>
+
+      <div class="pricing">
+        <div class="pricing__plans">
+          <article class="plan">
+            <h3 data-i18n="pricing.p1.title">1 month</h3>
+            <div class="plan__price">R$3,000<span>/mo</span></div>
+            <div class="plan__usd" data-i18n="pricing.p1.usd">≈ $530 USD</div>
+            <ul>
+              <li data-i18n="pricing.feat.taxes">Taxes included</li>
+              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
+              <li data-i18n="pricing.feat.backup">Backup car included</li>
+            </ul>
+            <a href="#quote" class="btn btn--ghost btn--block" data-i18n="pricing.p1.cta">Request quote</a>
+          </article>
+
+          <article class="plan plan--featured">
+            <span class="plan__flag" data-i18n="pricing.p2.flag">Most popular</span>
+            <h3 data-i18n="pricing.p2.title">2 months</h3>
+            <div class="plan__price">R$5,800<span>/total</span></div>
+            <div class="plan__usd" data-i18n="pricing.p2.usd">≈ $1,020 USD · taxes included</div>
+            <ul>
+              <li data-i18n="pricing.feat.taxes">Taxes included</li>
+              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
+              <li data-i18n="pricing.feat.backup">Backup car included</li>
+              <li data-i18n="pricing.p2.feat">Priority support during your stay</li>
+            </ul>
+            <a href="#quote" class="btn btn--solid btn--block" data-i18n="pricing.p2.cta">Request quote</a>
+          </article>
+
+          <article class="plan">
+            <h3 data-i18n="pricing.p3.title">3+ months</h3>
+            <div class="plan__price" data-i18n="pricing.p3.price">Custom</div>
+            <div class="plan__usd" data-i18n="pricing.p3.usd">Best monthly rate — let's talk</div>
+            <ul>
+              <li data-i18n="pricing.feat.taxes">Taxes included</li>
+              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
+              <li data-i18n="pricing.feat.backup">Backup car included</li>
+            </ul>
+            <a href="#quote" class="btn btn--ghost btn--block" data-i18n="pricing.p3.cta">Talk to us</a>
+          </article>
+        </div>
+
+        <div class="compare">
+          <h3 data-i18n="compare.title">NomadDrive vs. a big agency</h3>
+          <table class="compare__table">
+            <thead>
+              <tr>
+                <th></th>
+                <th data-i18n="compare.col1">Big agency</th>
+                <th class="is-us">NomadDrive</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="compare.r1">2-month rental, same car class</td>
+                <td data-i18n="compare.r1v">Noticeably higher</td>
+                <td class="is-us">R$5,800</td>
+              </tr>
+              <tr>
+                <td data-i18n="compare.r2">Taxes included</td>
+                <td>—</td>
+                <td class="is-us">✓</td>
+              </tr>
+              <tr>
+                <td data-i18n="compare.r3">Backup car</td>
+                <td data-i18n="compare.r3v">Sometimes</td>
+                <td class="is-us">✓</td>
+              </tr>
+              <tr>
+                <td data-i18n="compare.r4">English-speaking, personal contact</td>
+                <td>—</td>
+                <td class="is-us">✓</td>
+              </tr>
+              <tr>
+                <td data-i18n="compare.r5">In-person handover</td>
+                <td data-i18n="compare.r5v">Counter only</td>
+                <td class="is-us">✓</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="compare__note" data-i18n="compare.note">Prices and exchange rates vary and depend on the car. Your quote is always confirmed in writing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SAFETY ===== -->
+  <section class="section" id="safety">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="safety.eyebrow">Safety &amp; trust</span>
+        <h2 data-i18n="safety.title">How we keep everyone protected</h2>
+        <p data-i18n="safety.sub">A small operation can still be a serious one. Here's how risk is handled on both sides.</p>
+      </div>
+      <div class="cards cards--4">
+        <article class="card card--icon">
+          <span class="card__ico">🛡️</span>
+          <h3 data-i18n="safety.c1.title">Proper insurance</h3>
+          <p data-i18n="safety.c1.body">The car carries insurance that covers rental use — not just a personal policy.</p>
+        </article>
+        <article class="card card--icon">
+          <span class="card__ico">📄</span>
+          <h3 data-i18n="safety.c2.title">Clear contract</h3>
+          <p data-i18n="safety.c2.body">A written rental agreement, ID and license verification, and a photo inspection at pick-up and return.</p>
+        </article>
+        <article class="card card--icon">
+          <span class="card__ico">📍</span>
+          <h3 data-i18n="safety.c3.title">Tracker equipped</h3>
+          <p data-i18n="safety.c3.body">The car has a GPS tracker for recovery and peace of mind on both sides.</p>
+        </article>
+        <article class="card card--icon">
+          <span class="card__ico">🤝</span>
+          <h3 data-i18n="safety.c4.title">Referral-first</h3>
+          <p data-i18n="safety.c4.body">We start with people connected to our circle. Trust before scale.</p>
+        </article>
+      </div>
+      <p class="disclaimer" data-i18n="safety.disclaimer">Note: insurance terms, deposit and contract details are confirmed individually for each rental. This page is informational and not a binding offer.</p>
+    </div>
+  </section>
+
+  <!-- ===== WHO IT'S FOR ===== -->
+  <section class="section section--alt" id="who">
+    <div class="container who">
+      <div class="who__copy">
+        <span class="eyebrow" data-i18n="who.eyebrow">Who it's for</span>
+        <h2 data-i18n="who.title">Made for the US-to-Brazil traveler</h2>
+        <p data-i18n="who.sub">If you live in the States and come back to spend real time in Brazil, you're exactly who we built this for.</p>
+        <ul class="checklist">
+          <li data-i18n="who.l1">Visiting family for 1–3 months</li>
+          <li data-i18n="who.l2">Want an automatic, comfortable car without agency prices</li>
+          <li data-i18n="who.l3">Prefer dealing with a real, English-speaking person</li>
+          <li data-i18n="who.l4">Value a backup car and a contract that protects you</li>
+        </ul>
+      </div>
+      <div class="who__media">
+        <!-- IMAGE SLOT: drop images/travel.jpg -->
+        <div class="photo-slot photo-slot--wide" data-photo="travel">
+          <img src="images/travel.jpg" alt="Road trip in Brazil" onerror="this.remove()" />
+          <span class="photo-slot__icon">🛣️</span>
+          <span class="photo-slot__label" data-i18n="photo.travel">images/travel.jpg</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUOTE FORM ===== -->
+  <section class="section" id="quote">
+    <div class="container">
+      <div class="quote">
+        <div class="quote__intro">
+          <span class="eyebrow" data-i18n="quote.eyebrow">Get a quote</span>
+          <h2 data-i18n="quote.title">Tell us your dates — we'll reply fast</h2>
+          <p data-i18n="quote.sub">Fill this in and it opens WhatsApp with your details ready to send. No account, no spam.</p>
+          <ul class="quote__points">
+            <li data-i18n="quote.p1">Reply within 24 hours</li>
+            <li data-i18n="quote.p2">All-in price in writing</li>
+            <li data-i18n="quote.p3">No commitment to ask</li>
+          </ul>
+        </div>
+
+        <form class="quote__form" id="quoteForm" novalidate>
+          <div class="field">
+            <label for="f-name" data-i18n="form.name">Your name</label>
+            <input type="text" id="f-name" name="name" required />
+          </div>
+          <div class="field">
+            <label for="f-contact" data-i18n="form.contact">Email or WhatsApp</label>
+            <input type="text" id="f-contact" name="contact" required />
+          </div>
+          <div class="field field--half">
+            <label for="f-start" data-i18n="form.start">Pick-up date</label>
+            <input type="date" id="f-start" name="start" />
+          </div>
+          <div class="field field--half">
+            <label for="f-months" data-i18n="form.months">How long?</label>
+            <select id="f-months" name="months">
+              <option value="1" data-i18n="form.months.1">1 month</option>
+              <option value="2" selected data-i18n="form.months.2">2 months</option>
+              <option value="3" data-i18n="form.months.3">3 months</option>
+              <option value="4+" data-i18n="form.months.4">4+ months</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-city" data-i18n="form.city">Pick-up city</label>
+            <input type="text" id="f-city" name="city" value="Uberlândia, MG" />
+          </div>
+          <div class="field">
+            <label for="f-ref" data-i18n="form.ref">Who referred you? <span class="opt" data-i18n="form.optional">(optional)</span></label>
+            <input type="text" id="f-ref" name="ref" />
+          </div>
+          <div class="field">
+            <label for="f-msg" data-i18n="form.msg">Anything else? <span class="opt" data-i18n="form.optional">(optional)</span></label>
+            <textarea id="f-msg" name="msg" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn--solid btn--block btn--lg" data-i18n="form.submit">Send via WhatsApp</button>
+          <p class="form__alt">
+            <span data-i18n="form.altprefix">Prefer email?</span>
+            <a href="mailto:hello@nomaddrive.com.br" id="emailLink" data-i18n="form.altlink">Email us instead</a>
+          </p>
+          <p class="form__err" id="formErr" data-i18n="form.err">Please fill in your name and a way to reach you.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section--alt" id="faq">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="faq.eyebrow">FAQ</span>
+        <h2 data-i18n="faq.title">Good questions, straight answers</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary data-i18n="faq.q1">Can I rent without a referral?</summary>
+          <p data-i18n="faq.a1">Right now we work referral-first to keep things trusted and safe. If you don't have one, reach out anyway — tell us your situation and we'll see what's possible.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q2">Can I drive with my US license?</summary>
+          <p data-i18n="faq.a2">Generally a valid foreign license is accepted in Brazil for visitors, often alongside an international permit. We confirm the exact requirement with you before pick-up.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q3">What happens if the car has a problem?</summary>
+          <p data-i18n="faq.a3">You get a backup car so you're never stranded, and we stay reachable for your whole trip.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q4">Is there a deposit?</summary>
+          <p data-i18n="faq.a4">Yes — a refundable security deposit is part of the contract. The amount is confirmed in your quote.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q5">Which cities do you serve?</summary>
+          <p data-i18n="faq.a5">Pick-up is in Uberlândia, MG. From there the car is yours to travel anywhere in Brazil within the contract terms.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q6">How do I pay?</summary>
+          <p data-i18n="faq.a6">We'll arrange a convenient method when you book — discussed openly, with everything in writing.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="finalcta">
+    <div class="container finalcta__inner">
+      <h2 data-i18n="final.title">Coming to Brazil soon?</h2>
+      <p data-i18n="final.sub">Lock in a fair monthly price before your trip. It starts with a quick message.</p>
+      <a href="#quote" class="btn btn--solid btn--lg" data-i18n="final.cta">Request your quote</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="#top" class="brand">
+        <span class="brand__mark">ND</span>
+        <span class="brand__name">NomadDrive <span>Brasil</span></span>
+      </a>
+      <p data-i18n="footer.tag">Fair monthly car rental for travelers between the US and Brazil.</p>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="footer.contact">Contact</h4>
+      <a href="#" id="footerWhats" data-i18n="footer.whatsapp">WhatsApp</a>
+      <a href="mailto:hello@nomaddrive.com.br" data-i18n="footer.email">hello@nomaddrive.com.br</a>
+      <a href="#" id="footerInsta" data-i18n="footer.instagram">Instagram</a>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="footer.explore">Explore</h4>
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#safety" data-i18n="nav.safety">Safety</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    </div>
+  </div>
+  <div class="container footer__legal">
+    <span data-i18n="footer.legal">© 2026 NomadDrive Brasil. Informational website — not a binding offer. Rental terms, insurance and contract confirmed individually.</span>
+  </div>
+</footer>
+
+<!-- floating whatsapp -->
+<a href="#" class="wa-float" id="waFloat" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
