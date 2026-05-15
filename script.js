@@ -47,7 +47,7 @@ const I18N = {
     "renda.rFee": "NomadDrive platform fee",
     "renda.rCarCosts": "Your car costs (insurance, upkeep)",
     "renda.rNet": "Your estimated net / year",
-    "renda.rMonthly": "≈ per month",
+    "renda.rMonthly": "≈ per rented month (your take when the car is out)",
     "renda.note": "NomadDrive keeps a small platform fee that runs the network, screening and support — your car costs are separate and stay yours. Rough estimate, not a guarantee of income.",
     "renda.cta": "I want to join",
     "about.eyebrow": "Who we are",
@@ -301,7 +301,7 @@ const I18N = {
     "renda.rFee": "Taxa da plataforma NomadDrive",
     "renda.rCarCosts": "Custos do seu carro (seguro, manutenção)",
     "renda.rNet": "Seu ganho líquido estimado / ano",
-    "renda.rMonthly": "≈ por mês",
+    "renda.rMonthly": "≈ por mês alugado (o que você fica quando o carro está rendendo)",
     "renda.note": "A NomadDrive fica com uma pequena taxa de plataforma que mantém a rede, a triagem e o suporte — os custos do seu carro são à parte e continuam seus. Estimativa aproximada, não é garantia de renda.",
     "renda.cta": "Quero participar",
     "about.eyebrow": "Quem somos",
@@ -558,7 +558,7 @@ const I18N = {
     "renda.rFee": "Comisión de la plataforma NomadDrive",
     "renda.rCarCosts": "Costos de tu auto (seguro, mantenimiento)",
     "renda.rNet": "Tu ganancia neta estimada / año",
-    "renda.rMonthly": "≈ por mes",
+    "renda.rMonthly": "≈ por mes alquilado (lo que te queda cuando el auto está rentado)",
     "renda.note": "NomadDrive se queda con una pequeña comisión de plataforma que mantiene la red, la verificación y el soporte — los costos de tu auto son aparte y siguen siendo tuyos. Estimación aproximada, no es garantía de ingresos.",
     "renda.cta": "Quiero participar",
 
@@ -929,7 +929,7 @@ document.querySelectorAll(".dest-card__foot").forEach((foot) => {
     el("simFee").textContent = "– " + brl(fee) + "  (" + pct(PLATFORM_RATE) + ")";
     el("simCarCosts").textContent = "– " + brl(carCosts) + "  (" + pct(CAR_COST_RATE) + ")";
     el("simNet").textContent = brl(net);
-    el("simMonthly").textContent = brl(net / 12);
+    el("simMonthly").textContent = brl(m > 0 ? net / m : 0);
   }
   document.querySelectorAll(".tier-opt").forEach((b) => {
     b.addEventListener("click", () => {
