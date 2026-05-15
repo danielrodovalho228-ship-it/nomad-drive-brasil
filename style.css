@@ -363,6 +363,7 @@ img { max-width: 100%; display: block; }
   border-radius: var(--radius-sm); padding: 13px 15px; margin: 5px 0;
 }
 .sim-row--total span, .sim-row--total strong { color: var(--accent); font-size: 15.5px; }
+.sim-row--fee span, .sim-row--fee strong { color: var(--emerald); }
 .sim-note { font-size: 12px; color: var(--muted); opacity: .8; margin: 16px 0 18px; line-height: 1.5; }
 
 /* ===== testimonials ===== */

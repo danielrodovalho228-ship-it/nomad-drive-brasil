@@ -38,10 +38,11 @@ const I18N = {
     "renda.priceLabel": "Monthly rental price",
     "renda.monthsLabel": "Months rented per year",
     "renda.rGross": "Gross / year",
-    "renda.rCosts": "Estimated costs & fees",
+    "renda.rFee": "NomadDrive platform fee",
+    "renda.rCarCosts": "Your car costs (insurance, upkeep)",
     "renda.rNet": "Your estimated net / year",
     "renda.rMonthly": "≈ per month",
-    "renda.note": "Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income.",
+    "renda.note": "NomadDrive keeps a small platform fee that runs the network, screening and support — your car costs are separate and stay yours. Rough estimate, not a guarantee of income.",
     "renda.cta": "I want to join",
     "about.eyebrow": "Who we are",
     "about.title": "A real person, not a faceless agency",
@@ -244,10 +245,11 @@ const I18N = {
     "renda.priceLabel": "Preço mensal do aluguel",
     "renda.monthsLabel": "Meses alugados por ano",
     "renda.rGross": "Receita bruta / ano",
-    "renda.rCosts": "Custos e taxas estimados",
+    "renda.rFee": "Taxa da plataforma NomadDrive",
+    "renda.rCarCosts": "Custos do seu carro (seguro, manutenção)",
     "renda.rNet": "Seu ganho líquido estimado / ano",
     "renda.rMonthly": "≈ por mês",
-    "renda.note": "Estimativa aproximada — os números finais dependem do seu carro, do seguro e do acordo. Não é garantia de renda.",
+    "renda.note": "A NomadDrive fica com uma pequena taxa de plataforma que mantém a rede, a triagem e o suporte — os custos do seu carro são à parte e continuam seus. Estimativa aproximada, não é garantia de renda.",
     "renda.cta": "Quero participar",
     "about.eyebrow": "Quem somos",
     "about.title": "Uma pessoa de verdade, não uma locadora sem rosto",
@@ -453,10 +455,11 @@ const I18N = {
     "renda.priceLabel": "Precio mensual del alquiler",
     "renda.monthsLabel": "Meses alquilado por año",
     "renda.rGross": "Ingreso bruto / año",
-    "renda.rCosts": "Costos y comisiones estimados",
+    "renda.rFee": "Comisión de la plataforma NomadDrive",
+    "renda.rCarCosts": "Costos de tu auto (seguro, mantenimiento)",
     "renda.rNet": "Tu ganancia neta estimada / año",
     "renda.rMonthly": "≈ por mes",
-    "renda.note": "Estimación aproximada — los números finales dependen de tu auto, el seguro y el acuerdo. No es garantía de ingresos.",
+    "renda.note": "NomadDrive se queda con una pequeña comisión de plataforma que mantiene la red, la verificación y el soporte — los costos de tu auto son aparte y siguen siendo tuyos. Estimación aproximada, no es garantía de ingresos.",
     "renda.cta": "Quiero participar",
 
     "hero.badge": "Hecho para viajeros internacionales que vienen a Brasil",
@@ -743,16 +746,23 @@ form.addEventListener("submit", (e) => {
   const price = document.getElementById("simPrice");
   const months = document.getElementById("simMonths");
   if (!price || !months) return;
-  const COST_RATE = 0.35; // estimated owner costs + NomadDrive fee, as a share of gross
+  // Taxas que você pode ajustar:
+  const PLATFORM_RATE = 0.10; // margem da NomadDrive sobre cada locação (mantenha pequena)
+  const CAR_COST_RATE = 0.25; // custos estimados do dono: seguro, manutenção, depreciação
   const el = (id) => document.getElementById(id);
   const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
+  const pct = (r) => Math.round(r * 100) + "%";
   function update() {
     const p = +price.value, m = +months.value;
-    const gross = p * m, costs = gross * COST_RATE, net = gross - costs;
+    const gross = p * m;
+    const fee = gross * PLATFORM_RATE;
+    const carCosts = gross * CAR_COST_RATE;
+    const net = gross - fee - carCosts;
     el("simPriceVal").textContent = brl(p);
     el("simMonthsVal").textContent = m;
     el("simGross").textContent = brl(gross);
-    el("simCosts").textContent = "– " + brl(costs);
+    el("simFee").textContent = "– " + brl(fee) + "  (" + pct(PLATFORM_RATE) + ")";
+    el("simCarCosts").textContent = "– " + brl(carCosts) + "  (" + pct(CAR_COST_RATE) + ")";
     el("simNet").textContent = brl(net);
     el("simMonthly").textContent = brl(net / 12);
   }
