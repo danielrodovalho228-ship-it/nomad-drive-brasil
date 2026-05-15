@@ -23,11 +23,17 @@ const I18N = {
     "renda.ownerBody": "Turn an idle car into passive income. We bring verified renters — you approve every rental and stay in control.",
     "renda.ownerCta": "I want to rent out my car",
     "renda.partnerTitle": "Become a partner",
-    "renda.partnerBody": "Bring trusted car owners or travelers into the network and earn a commission on every rental you originate — no car of your own needed.",
-    "renda.partnerB1": "Earn a commission on rentals you bring in",
-    "renda.partnerB2": "No car needed — your network is the asset",
-    "renda.partnerB3": "We handle contracts, screening and support",
+    "renda.partnerBody": "Refer friends and car owners to the network. Every referral that rents earns you points — credit toward your own next rental.",
+    "renda.partnerB1": "Earn points for every friend who rents",
+    "renda.partnerB2": "No car needed — just your network",
+    "renda.partnerB3": "Points become credit on your next trip",
     "renda.partnerCta": "I want to be a partner",
+    "renda.simPartnerTitle": "Estimate your referral points",
+    "renda.refsLabel": "Friends who rent through you",
+    "renda.rPoints": "Points earned",
+    "renda.rCredit": "Credit toward your next rental",
+    "renda.rPctOff": "≈ discount on a monthly rental",
+    "renda.partnerSimNote": "Each friend who completes a rental earns you points toward your own next trip. Example values — final terms confirmed when you join.",
     "photo.rendaOwner": "images/renda-owner.jpg",
     "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Passive income from a car you already own",
@@ -66,7 +72,7 @@ const I18N = {
     "dest.c5.body": "A calm lakeside park, perfect for a walk, a run or a relaxed afternoon.",
     "dest.c6.title": "Day trips across Minas",
     "dest.c6.body": "Waterfalls, small historic towns and countryside — all within an easy drive.",
-    "dest.note": "Add real photos of each spot to the /images folder — see the README for the exact file names.",
+    "dest.note": "Tap an address to open it in Maps, or use the share button to send a destination to a friend on WhatsApp.",
     "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
     "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
     "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
@@ -230,11 +236,17 @@ const I18N = {
     "renda.ownerBody": "Transforme um carro parado em renda passiva. A gente traz locatários verificados — você aprova cada locação e fica no controle.",
     "renda.ownerCta": "Quero alugar meu carro",
     "renda.partnerTitle": "Seja um parceiro",
-    "renda.partnerBody": "Traga donos de carro ou viajantes de confiança para a rede e ganhe comissão em cada locação que você originar — sem precisar de carro próprio.",
-    "renda.partnerB1": "Ganhe comissão nas locações que você traz",
-    "renda.partnerB2": "Sem precisar de carro — sua rede é o ativo",
-    "renda.partnerB3": "A gente cuida de contrato, triagem e suporte",
+    "renda.partnerBody": "Indique amigos e donos de carro para a rede. Cada indicação que aluga te dá pontos — crédito para o seu próximo aluguel.",
+    "renda.partnerB1": "Ganhe pontos por cada amigo que aluga",
+    "renda.partnerB2": "Sem precisar de carro — só a sua rede",
+    "renda.partnerB3": "Pontos viram crédito na sua próxima viagem",
     "renda.partnerCta": "Quero ser parceiro",
+    "renda.simPartnerTitle": "Simule seus pontos de indicação",
+    "renda.refsLabel": "Amigos que alugam pela sua indicação",
+    "renda.rPoints": "Pontos acumulados",
+    "renda.rCredit": "Crédito para seu próximo aluguel",
+    "renda.rPctOff": "≈ de desconto num aluguel mensal",
+    "renda.partnerSimNote": "Cada amigo que aluga te dá pontos para a sua própria próxima viagem. Valores de exemplo — condições finais confirmadas ao entrar.",
     "photo.rendaOwner": "images/renda-owner.jpg",
     "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Renda passiva de um carro que já é seu",
@@ -273,7 +285,7 @@ const I18N = {
     "dest.c5.body": "Um parque tranquilo à beira do lago, perfeito para caminhar, correr ou relaxar à tarde.",
     "dest.c6.title": "Bate-voltas por Minas",
     "dest.c6.body": "Cachoeiras, cidadezinhas históricas e campo — tudo a uma viagem curta de carro.",
-    "dest.note": "Adicione fotos reais de cada lugar na pasta /images — veja os nomes exatos dos arquivos no README.",
+    "dest.note": "Toque no endereço para abrir no Maps, ou use o botão de compartilhar para enviar um destino no WhatsApp.",
     "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
     "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
     "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
@@ -440,11 +452,17 @@ const I18N = {
     "renda.ownerBody": "Convierte un auto parado en ingresos pasivos. Traemos inquilinos verificados — tú apruebas cada alquiler y tienes el control.",
     "renda.ownerCta": "Quiero alquilar mi auto",
     "renda.partnerTitle": "Sé un socio",
-    "renda.partnerBody": "Trae dueños de autos o viajeros de confianza a la red y gana una comisión por cada alquiler que originas — sin necesidad de auto propio.",
-    "renda.partnerB1": "Gana comisión por los alquileres que traes",
-    "renda.partnerB2": "Sin auto necesario — tu red es el activo",
-    "renda.partnerB3": "Nos encargamos de contratos, verificación y soporte",
+    "renda.partnerBody": "Recomienda amigos y dueños de autos a la red. Cada recomendación que alquila te da puntos — crédito para tu propio próximo alquiler.",
+    "renda.partnerB1": "Gana puntos por cada amigo que alquila",
+    "renda.partnerB2": "Sin auto necesario — solo tu red",
+    "renda.partnerB3": "Los puntos se vuelven crédito en tu próximo viaje",
     "renda.partnerCta": "Quiero ser socio",
+    "renda.simPartnerTitle": "Simula tus puntos de recomendación",
+    "renda.refsLabel": "Amigos que alquilan por tu recomendación",
+    "renda.rPoints": "Puntos acumulados",
+    "renda.rCredit": "Crédito para tu próximo alquiler",
+    "renda.rPctOff": "≈ de descuento en un alquiler mensual",
+    "renda.partnerSimNote": "Cada amigo que alquila te da puntos para tu propio próximo viaje. Valores de ejemplo — condiciones finales confirmadas al unirte.",
     "photo.rendaOwner": "images/renda-owner.jpg",
     "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Ingresos pasivos de un auto que ya tienes",
@@ -617,7 +635,7 @@ const I18N = {
     "dest.c5.body": "Un parque tranquilo junto al lago, perfecto para caminar, correr o relajarse por la tarde.",
     "dest.c6.title": "Escapadas por Minas",
     "dest.c6.body": "Cascadas, pueblitos históricos y campo — todo a un viaje corto en auto.",
-    "dest.note": "Agrega fotos reales de cada lugar a la carpeta /images — ver los nombres exactos en el README.",
+    "dest.note": "Toca una dirección para abrirla en Maps, o usa el botón de compartir para enviar un destino por WhatsApp.",
     "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
     "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
     "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
@@ -741,6 +759,17 @@ form.addEventListener("submit", (e) => {
   window.open(waUrl(lines.filter(Boolean).join("\n")), "_blank");
 });
 
+/* ---- destinations: Maps + WhatsApp share ---- */
+document.querySelectorAll(".dest-card__foot").forEach((foot) => {
+  const q = encodeURIComponent(foot.dataset.maps || "");
+  if (!q) return;
+  const maps = "https://www.google.com/maps/search/?api=1&query=" + q;
+  const addr = foot.querySelector(".dest-card__addr");
+  const share = foot.querySelector(".dest-card__share");
+  if (addr) addr.href = maps;
+  if (share) share.href = "https://wa.me/?text=" + encodeURIComponent(foot.dataset.maps + " — " + maps);
+});
+
 /* ---- earnings simulator ---- */
 (function () {
   const price = document.getElementById("simPrice");
@@ -768,6 +797,30 @@ form.addEventListener("submit", (e) => {
   }
   price.addEventListener("input", update);
   months.addEventListener("input", update);
+  update();
+})();
+
+/* ---- referral points simulator (partner) ---- */
+(function () {
+  const refs = document.getElementById("simRefs");
+  if (!refs) return;
+  // Modelo de pontos (ajuste aqui se quiser mudar o programa):
+  const POINTS_PER_REFERRAL = 300;  // pontos ganhos por amigo que aluga
+  const POINT_VALUE = 1;            // R$ por ponto
+  const REF_RENTAL = 3000;          // aluguel mensal de referência (para % de desconto)
+  const el = (id) => document.getElementById(id);
+  const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
+  function update() {
+    const n = +refs.value;
+    const points = n * POINTS_PER_REFERRAL;
+    const credit = points * POINT_VALUE;
+    const pct = Math.round((credit / REF_RENTAL) * 100);
+    el("simRefsVal").textContent = n;
+    el("simPoints").textContent = points.toLocaleString("pt-BR");
+    el("simCredit").textContent = brl(credit);
+    el("simPctOff").textContent = pct >= 100 ? "100%+" : pct + "%";
+  }
+  refs.addEventListener("input", update);
   update();
 })();
 
