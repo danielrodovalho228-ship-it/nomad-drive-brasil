@@ -304,6 +304,37 @@ img { max-width: 100%; display: block; }
 /* ===== share ===== */
 .share__cta { text-align: center; }
 
+/* ===== earn with your car / simulator ===== */
+.renda { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.renda__benefits { padding-top: 6px; }
+.renda__sim {
+  background: var(--surface); border: 1px solid var(--border-2);
+  border-radius: var(--radius); padding: 30px;
+}
+.renda__sim h3 { font-size: 19px; margin-bottom: 22px; }
+.sim-field { margin-bottom: 22px; }
+.sim-field label {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-size: 13.5px; color: var(--muted); margin-bottom: 10px;
+  font-family: var(--font-d); font-weight: 600;
+}
+.sim-field label strong { color: var(--accent); font-size: 15px; white-space: nowrap; }
+.sim-field input[type="range"] {
+  width: 100%; accent-color: var(--accent); cursor: pointer; height: 22px;
+}
+.sim-results {
+  border-top: 1px solid var(--border); margin-top: 4px; padding-top: 18px;
+  display: flex; flex-direction: column; gap: 11px;
+}
+.sim-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
+.sim-row strong { font-family: var(--font-d); color: var(--text); }
+.sim-row--total {
+  background: rgba(245,184,65,.10); border: 1px solid rgba(245,184,65,.32);
+  border-radius: var(--radius-sm); padding: 13px 15px; margin: 5px 0;
+}
+.sim-row--total span, .sim-row--total strong { color: var(--accent); font-size: 15.5px; }
+.sim-note { font-size: 12px; color: var(--muted); opacity: .8; margin: 16px 0 18px; line-height: 1.5; }
+
 /* ===== testimonials ===== */
 .testi {
   background: var(--surface); border: 1px solid var(--border);
@@ -407,7 +438,7 @@ img { max-width: 100%; display: block; }
 /* ===== responsive ===== */
 @media (max-width: 960px) {
   .nav__links { display: none; }
-  .hero__inner, .car, .who, .pricing, .quote { grid-template-columns: 1fr; }
+  .hero__inner, .car, .who, .pricing, .quote, .renda { grid-template-columns: 1fr; }
   .hero { padding: 56px 0 70px; }
   .hero__visual { margin-top: 30px; }
   .price-card { left: 0; bottom: -20px; }

@@ -16,6 +16,22 @@ const I18N = {
     "share.title": "Know someone heading to Brazil?",
     "share.sub": "NomadDrive runs on referrals. Share it with a friend in one tap — they get a fair price, and trust keeps the circle strong.",
     "share.btn": "Share on WhatsApp",
+    "renda.eyebrow": "Earn with your car",
+    "renda.title": "Have a car sitting idle? Put it to work.",
+    "renda.sub": "Join the NomadDrive network. We connect your well-kept car with trusted international travelers and handle the matching, screening and contracts — you earn passive income, we keep it safe.",
+    "renda.b1": "Passive income from a car you already own",
+    "renda.b2": "We bring verified renters — referral-first",
+    "renda.b3": "Contract, deposit and insurance guidance included",
+    "renda.b4": "You stay in control — approve every rental",
+    "renda.simtitle": "Estimate your earnings",
+    "renda.priceLabel": "Monthly rental price",
+    "renda.monthsLabel": "Months rented per year",
+    "renda.rGross": "Gross / year",
+    "renda.rCosts": "Estimated costs & fees",
+    "renda.rNet": "Your estimated net / year",
+    "renda.rMonthly": "≈ per month",
+    "renda.note": "Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income.",
+    "renda.cta": "I want to join",
     "about.eyebrow": "Who we are",
     "about.title": "A real person, not a faceless agency",
     "about.sub": "NomadDrive Brasil is a small, personal operation in Uberlândia. One owner, one well-kept car, and a direct relationship with every traveler — built on trust, not call centers.",
@@ -191,6 +207,22 @@ const I18N = {
     "share.title": "Conhece alguém que vai para o Brasil?",
     "share.sub": "A NomadDrive funciona por indicação. Compartilhe com um amigo em um toque — ele paga um preço justo e a confiança mantém o círculo forte.",
     "share.btn": "Compartilhar no WhatsApp",
+    "renda.eyebrow": "Ganhe com seu carro",
+    "renda.title": "Tem um carro parado? Coloque ele para trabalhar.",
+    "renda.sub": "Faça parte da rede NomadDrive. A gente conecta o seu carro bem cuidado a viajantes internacionais de confiança e cuida da indicação, da triagem e dos contratos — você ganha renda passiva, a gente mantém seguro.",
+    "renda.b1": "Renda passiva de um carro que já é seu",
+    "renda.b2": "A gente traz locatários verificados — por indicação",
+    "renda.b3": "Orientação de contrato, caução e seguro inclusa",
+    "renda.b4": "Você no controle — aprova cada locação",
+    "renda.simtitle": "Simule seus ganhos",
+    "renda.priceLabel": "Preço mensal do aluguel",
+    "renda.monthsLabel": "Meses alugados por ano",
+    "renda.rGross": "Receita bruta / ano",
+    "renda.rCosts": "Custos e taxas estimados",
+    "renda.rNet": "Seu ganho líquido estimado / ano",
+    "renda.rMonthly": "≈ por mês",
+    "renda.note": "Estimativa aproximada — os números finais dependem do seu carro, do seguro e do acordo. Não é garantia de renda.",
+    "renda.cta": "Quero participar",
     "about.eyebrow": "Quem somos",
     "about.title": "Uma pessoa de verdade, não uma locadora sem rosto",
     "about.sub": "A NomadDrive Brasil é uma operação pequena e pessoal em Uberlândia. Um dono, um carro bem cuidado e uma relação direta com cada viajante — baseada em confiança, não em call center.",
@@ -386,6 +418,11 @@ function applyLang(lang) {
     ? "Conheça a NomadDrive Brasil — aluguel mensal de carro para viajantes no Brasil: "
     : "Check out NomadDrive Brasil — monthly car rental for travelers in Brazil: ") + CONFIG.siteUrl;
   document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(shareMsg);
+  document.getElementById("joinWhats").href = waUrl(
+    lang === "pt"
+      ? "Olá! Quero alugar meu carro pela NomadDrive Brasil — me conta como funciona."
+      : "Hi! I'd like to rent out my car through NomadDrive Brasil — tell me how it works."
+  );
 }
 
 document.getElementById("langToggle").addEventListener("click", () => {
@@ -450,6 +487,29 @@ form.addEventListener("submit", (e) => {
 
   window.open(waUrl(lines.filter(Boolean).join("\n")), "_blank");
 });
+
+/* ---- earnings simulator ---- */
+(function () {
+  const price = document.getElementById("simPrice");
+  const months = document.getElementById("simMonths");
+  if (!price || !months) return;
+  const COST_RATE = 0.35; // estimated owner costs + NomadDrive fee, as a share of gross
+  const el = (id) => document.getElementById(id);
+  const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
+  function update() {
+    const p = +price.value, m = +months.value;
+    const gross = p * m, costs = gross * COST_RATE, net = gross - costs;
+    el("simPriceVal").textContent = brl(p);
+    el("simMonthsVal").textContent = m;
+    el("simGross").textContent = brl(gross);
+    el("simCosts").textContent = "– " + brl(costs);
+    el("simNet").textContent = brl(net);
+    el("simMonthly").textContent = brl(net / 12);
+  }
+  price.addEventListener("input", update);
+  months.addEventListener("input", update);
+  update();
+})();
 
 /* ---- init ---- */
 applyLang(currentLang);
