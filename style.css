@@ -457,7 +457,7 @@ img { max-width: 100%; display: block; }
   transition: border-color .18s ease, transform .18s ease;
 }
 .path:hover { border-color: var(--border-2); transform: translateY(-3px); }
-.photo-slot--path { aspect-ratio: 16 / 9; border-radius: 0; border: none; }
+.photo-slot--path { aspect-ratio: 3 / 4; border-radius: 0; border: none; }
 .path__body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 13px; flex: 1; }
 .path__body h3 { font-size: 20px; }
 .path__body > p { color: var(--muted); font-size: 14.5px; }
