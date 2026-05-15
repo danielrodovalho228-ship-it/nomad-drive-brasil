@@ -16,9 +16,20 @@ const I18N = {
     "share.title": "Know someone heading to Brazil?",
     "share.sub": "NomadDrive runs on referrals. Share it with a friend in one tap — they get a fair price, and trust keeps the circle strong.",
     "share.btn": "Share on WhatsApp",
-    "renda.eyebrow": "Earn with your car",
-    "renda.title": "Have a car sitting idle? Put it to work.",
-    "renda.sub": "Join the NomadDrive network. We connect your well-kept car with trusted international travelers and handle the matching, screening and contracts — you earn passive income, we keep it safe.",
+    "renda.eyebrow": "The difference",
+    "renda.title": "More than a rental — a trusted income network",
+    "renda.sub": "This is what sets NomadDrive apart. It's not one car — it's a growing network. Put your own car to work, or join as a partner. Both earn, both stay protected by the same referral-first trust.",
+    "renda.ownerTitle": "Rent out your car",
+    "renda.ownerBody": "Turn an idle car into passive income. We bring verified renters — you approve every rental and stay in control.",
+    "renda.ownerCta": "I want to rent out my car",
+    "renda.partnerTitle": "Become a partner",
+    "renda.partnerBody": "Bring trusted car owners or travelers into the network and earn a commission on every rental you originate — no car of your own needed.",
+    "renda.partnerB1": "Earn a commission on rentals you bring in",
+    "renda.partnerB2": "No car needed — your network is the asset",
+    "renda.partnerB3": "We handle contracts, screening and support",
+    "renda.partnerCta": "I want to be a partner",
+    "photo.rendaOwner": "images/renda-owner.jpg",
+    "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Passive income from a car you already own",
     "renda.b2": "We bring verified renters — referral-first",
     "renda.b3": "Contract, deposit and insurance guidance included",
@@ -211,9 +222,20 @@ const I18N = {
     "share.title": "Conhece alguém que vai para o Brasil?",
     "share.sub": "A NomadDrive funciona por indicação. Compartilhe com um amigo em um toque — ele paga um preço justo e a confiança mantém o círculo forte.",
     "share.btn": "Compartilhar no WhatsApp",
-    "renda.eyebrow": "Ganhe com seu carro",
-    "renda.title": "Tem um carro parado? Coloque ele para trabalhar.",
-    "renda.sub": "Faça parte da rede NomadDrive. A gente conecta o seu carro bem cuidado a viajantes internacionais de confiança e cuida da indicação, da triagem e dos contratos — você ganha renda passiva, a gente mantém seguro.",
+    "renda.eyebrow": "O grande diferencial",
+    "renda.title": "Mais que um aluguel — uma rede de renda confiável",
+    "renda.sub": "É isso que diferencia a NomadDrive. Não é um carro só — é uma rede que cresce. Coloque o seu carro para render, ou entre como parceiro. Os dois ganham, os dois ficam protegidos pela mesma confiança por indicação.",
+    "renda.ownerTitle": "Alugue seu carro",
+    "renda.ownerBody": "Transforme um carro parado em renda passiva. A gente traz locatários verificados — você aprova cada locação e fica no controle.",
+    "renda.ownerCta": "Quero alugar meu carro",
+    "renda.partnerTitle": "Seja um parceiro",
+    "renda.partnerBody": "Traga donos de carro ou viajantes de confiança para a rede e ganhe comissão em cada locação que você originar — sem precisar de carro próprio.",
+    "renda.partnerB1": "Ganhe comissão nas locações que você traz",
+    "renda.partnerB2": "Sem precisar de carro — sua rede é o ativo",
+    "renda.partnerB3": "A gente cuida de contrato, triagem e suporte",
+    "renda.partnerCta": "Quero ser parceiro",
+    "photo.rendaOwner": "images/renda-owner.jpg",
+    "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Renda passiva de um carro que já é seu",
     "renda.b2": "A gente traz locatários verificados — por indicação",
     "renda.b3": "Orientação de contrato, caução e seguro inclusa",
@@ -409,9 +431,20 @@ const I18N = {
     "share.title": "¿Conoces a alguien que viaja a Brasil?",
     "share.sub": "NomadDrive funciona por recomendación. Compártelo con un amigo en un toque — él consigue un precio justo y la confianza mantiene el círculo fuerte.",
     "share.btn": "Compartir por WhatsApp",
-    "renda.eyebrow": "Gana con tu auto",
-    "renda.title": "¿Tienes un auto parado? Ponlo a trabajar.",
-    "renda.sub": "Únete a la red NomadDrive. Conectamos tu auto bien cuidado con viajeros internacionales de confianza y nos encargamos de la búsqueda, la verificación y los contratos — tú ganas ingresos pasivos, nosotros lo mantenemos seguro.",
+    "renda.eyebrow": "El gran diferencial",
+    "renda.title": "Más que un alquiler — una red de ingresos confiable",
+    "renda.sub": "Esto es lo que distingue a NomadDrive. No es un solo auto — es una red que crece. Pon tu propio auto a trabajar, o únete como socio. Los dos ganan, los dos quedan protegidos por la misma confianza por recomendación.",
+    "renda.ownerTitle": "Alquila tu auto",
+    "renda.ownerBody": "Convierte un auto parado en ingresos pasivos. Traemos inquilinos verificados — tú apruebas cada alquiler y tienes el control.",
+    "renda.ownerCta": "Quiero alquilar mi auto",
+    "renda.partnerTitle": "Sé un socio",
+    "renda.partnerBody": "Trae dueños de autos o viajeros de confianza a la red y gana una comisión por cada alquiler que originas — sin necesidad de auto propio.",
+    "renda.partnerB1": "Gana comisión por los alquileres que traes",
+    "renda.partnerB2": "Sin auto necesario — tu red es el activo",
+    "renda.partnerB3": "Nos encargamos de contratos, verificación y soporte",
+    "renda.partnerCta": "Quiero ser socio",
+    "photo.rendaOwner": "images/renda-owner.jpg",
+    "photo.rendaPartner": "images/renda-partner.jpg",
     "renda.b1": "Ingresos pasivos de un auto que ya tienes",
     "renda.b2": "Traemos inquilinos verificados — por recomendación",
     "renda.b3": "Orientación de contrato, depósito y seguro incluida",
@@ -615,20 +648,31 @@ function applyLang(lang) {
   });
 
   // language-dependent WhatsApp links
-  document.getElementById("waFloat").href = waUrl(
-    lang === "pt"
-      ? "Olá! Vi o site da NomadDrive Brasil e quero um orçamento."
-      : "Hi! I saw the NomadDrive Brasil site and I'd like a quote."
-  );
-  const shareMsg = (lang === "pt"
-    ? "Conheça a NomadDrive Brasil — aluguel mensal de carro para viajantes no Brasil: "
-    : "Check out NomadDrive Brasil — monthly car rental for travelers in Brazil: ") + CONFIG.siteUrl;
-  document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(shareMsg);
-  document.getElementById("joinWhats").href = waUrl(
-    lang === "pt"
-      ? "Olá! Quero alugar meu carro pela NomadDrive Brasil — me conta como funciona."
-      : "Hi! I'd like to rent out my car through NomadDrive Brasil — tell me how it works."
-  );
+  const M = {
+    en: {
+      wa: "Hi! I saw the NomadDrive Brasil site and I'd like a quote.",
+      share: "Check out NomadDrive Brasil — monthly car rental for travelers in Brazil: ",
+      join: "Hi! I'd like to rent out my car through NomadDrive Brasil — tell me how it works.",
+      partner: "Hi! I'd like to become a NomadDrive Brasil partner — tell me how it works.",
+    },
+    pt: {
+      wa: "Olá! Vi o site da NomadDrive Brasil e quero um orçamento.",
+      share: "Conheça a NomadDrive Brasil — aluguel mensal de carro para viajantes no Brasil: ",
+      join: "Olá! Quero alugar meu carro pela NomadDrive Brasil — me conta como funciona.",
+      partner: "Olá! Quero ser parceiro da NomadDrive Brasil — me conta como funciona.",
+    },
+    es: {
+      wa: "¡Hola! Vi el sitio de NomadDrive Brasil y quiero un presupuesto.",
+      share: "Conoce NomadDrive Brasil — alquiler mensual de auto para viajeros en Brasil: ",
+      join: "¡Hola! Quiero alquilar mi auto con NomadDrive Brasil — cuéntame cómo funciona.",
+      partner: "¡Hola! Quiero ser socio de NomadDrive Brasil — cuéntame cómo funciona.",
+    },
+  };
+  const m = M[lang] || M.en;
+  document.getElementById("waFloat").href = waUrl(m.wa);
+  document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(m.share + CONFIG.siteUrl);
+  document.getElementById("joinWhats").href = waUrl(m.join);
+  document.getElementById("partnerWhats").href = waUrl(m.partner);
 }
 
 document.querySelectorAll(".lang-toggle__opt").forEach((opt) => {

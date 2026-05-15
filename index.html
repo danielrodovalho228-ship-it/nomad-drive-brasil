@@ -636,42 +636,65 @@
     </div>
   </section>
 
-  <!-- ===== EARN WITH YOUR CAR ===== -->
+  <!-- ===== EARN WITH YOUR CAR — THE NETWORK ===== -->
   <section class="section" id="renda">
     <div class="container">
       <div class="section__head">
-        <span class="eyebrow" data-i18n="renda.eyebrow">Earn with your car</span>
-        <h2 data-i18n="renda.title">Have a car sitting idle? Put it to work.</h2>
-        <p data-i18n="renda.sub">Join the NomadDrive network. We connect your well-kept car with trusted international travelers and handle the matching, screening and contracts — you earn passive income, we keep it safe.</p>
+        <span class="eyebrow" data-i18n="renda.eyebrow">The difference</span>
+        <h2 data-i18n="renda.title">More than a rental — a trusted income network</h2>
+        <p data-i18n="renda.sub">This is what sets NomadDrive apart. It's not one car — it's a growing network. Put your own car to work, or join as a partner. Both earn, both stay protected by the same referral-first trust.</p>
       </div>
-      <div class="renda">
-        <div class="renda__benefits">
-          <ul class="checklist">
-            <li data-i18n="renda.b1">Passive income from a car you already own</li>
-            <li data-i18n="renda.b2">We bring verified renters — referral-first</li>
-            <li data-i18n="renda.b3">Contract, deposit and insurance guidance included</li>
-            <li data-i18n="renda.b4">You stay in control — approve every rental</li>
-          </ul>
+      <div class="paths">
+        <article class="path">
+          <div class="photo-slot photo-slot--path" data-photo="renda-owner">
+            <img src="images/renda-owner.jpg" alt="Rent out your car" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.rendaOwner">images/renda-owner.jpg</span>
+          </div>
+          <div class="path__body">
+            <h3 data-i18n="renda.ownerTitle">Rent out your car</h3>
+            <p data-i18n="renda.ownerBody">Turn an idle car into passive income. We bring verified renters — you approve every rental and stay in control.</p>
+            <ul class="checklist">
+              <li data-i18n="renda.b1">Passive income from a car you already own</li>
+              <li data-i18n="renda.b2">We bring verified renters — referral-first</li>
+              <li data-i18n="renda.b4">You stay in control — approve every rental</li>
+            </ul>
+            <a href="#" id="joinWhats" class="btn btn--solid" data-i18n="renda.ownerCta">I want to rent out my car</a>
+          </div>
+        </article>
+        <article class="path">
+          <div class="photo-slot photo-slot--path" data-photo="renda-partner">
+            <img src="images/renda-partner.jpg" alt="Become a partner" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.rendaPartner">images/renda-partner.jpg</span>
+          </div>
+          <div class="path__body">
+            <h3 data-i18n="renda.partnerTitle">Become a partner</h3>
+            <p data-i18n="renda.partnerBody">Bring trusted car owners or travelers into the network and earn a commission on every rental you originate — no car of your own needed.</p>
+            <ul class="checklist">
+              <li data-i18n="renda.partnerB1">Earn a commission on rentals you bring in</li>
+              <li data-i18n="renda.partnerB2">No car needed — your network is the asset</li>
+              <li data-i18n="renda.partnerB3">We handle contracts, screening and support</li>
+            </ul>
+            <a href="#" id="partnerWhats" class="btn btn--ghost" data-i18n="renda.partnerCta">I want to be a partner</a>
+          </div>
+        </article>
+      </div>
+      <div class="renda__sim">
+        <h3 data-i18n="renda.simtitle">Estimate your earnings</h3>
+        <div class="sim-field">
+          <label><span data-i18n="renda.priceLabel">Monthly rental price</span> <strong id="simPriceVal">R$ 3.000</strong></label>
+          <input type="range" id="simPrice" min="2000" max="4500" step="250" value="3000" />
         </div>
-        <div class="renda__sim">
-          <h3 data-i18n="renda.simtitle">Estimate your earnings</h3>
-          <div class="sim-field">
-            <label><span data-i18n="renda.priceLabel">Monthly rental price</span> <strong id="simPriceVal">R$ 3.000</strong></label>
-            <input type="range" id="simPrice" min="2000" max="4500" step="250" value="3000" />
-          </div>
-          <div class="sim-field">
-            <label><span data-i18n="renda.monthsLabel">Months rented per year</span> <strong id="simMonthsVal">8</strong></label>
-            <input type="range" id="simMonths" min="2" max="12" step="1" value="8" />
-          </div>
-          <div class="sim-results">
-            <div class="sim-row"><span data-i18n="renda.rGross">Gross / year</span><strong id="simGross">—</strong></div>
-            <div class="sim-row"><span data-i18n="renda.rCosts">Estimated costs &amp; fees</span><strong id="simCosts">—</strong></div>
-            <div class="sim-row sim-row--total"><span data-i18n="renda.rNet">Your estimated net / year</span><strong id="simNet">—</strong></div>
-            <div class="sim-row"><span data-i18n="renda.rMonthly">≈ per month</span><strong id="simMonthly">—</strong></div>
-          </div>
-          <p class="sim-note" data-i18n="renda.note">Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income.</p>
-          <a href="#" id="joinWhats" class="btn btn--solid btn--block" data-i18n="renda.cta">I want to join</a>
+        <div class="sim-field">
+          <label><span data-i18n="renda.monthsLabel">Months rented per year</span> <strong id="simMonthsVal">8</strong></label>
+          <input type="range" id="simMonths" min="2" max="12" step="1" value="8" />
         </div>
+        <div class="sim-results">
+          <div class="sim-row"><span data-i18n="renda.rGross">Gross / year</span><strong id="simGross">—</strong></div>
+          <div class="sim-row"><span data-i18n="renda.rCosts">Estimated costs &amp; fees</span><strong id="simCosts">—</strong></div>
+          <div class="sim-row sim-row--total"><span data-i18n="renda.rNet">Your estimated net / year</span><strong id="simNet">—</strong></div>
+          <div class="sim-row"><span data-i18n="renda.rMonthly">≈ per month</span><strong id="simMonthly">—</strong></div>
+        </div>
+        <p class="sim-note" data-i18n="renda.note">Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income.</p>
       </div>
     </div>
   </section>
