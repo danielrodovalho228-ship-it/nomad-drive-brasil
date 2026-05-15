@@ -5,11 +5,53 @@ const CONFIG = {
   whatsapp: "5534999999999",          // <-- replace with the real WhatsApp number (country+area+number, digits only)
   email: "hello@nomaddrive.com.br",   // <-- replace with the real email
   instagram: "https://instagram.com/", // <-- replace with the real Instagram URL
+  siteUrl: "https://seusite.netlify.app", // <-- after deploy, replace with the real site URL (used in the "share with a friend" link)
 };
 
 /* ---- translations ---- */
 const I18N = {
   en: {
+    "nav.about": "About", "nav.destinos": "Destinations",
+    "share.eyebrow": "Refer a friend",
+    "share.title": "Know someone heading to Brazil?",
+    "share.sub": "NomadDrive runs on referrals. Share it with a friend in one tap — they get a fair price, and trust keeps the circle strong.",
+    "share.btn": "Share on WhatsApp",
+    "about.eyebrow": "Who we are",
+    "about.title": "A real person, not a faceless agency",
+    "about.sub": "NomadDrive Brasil is a small, personal operation in Uberlândia. One owner, one well-kept car, and a direct relationship with every traveler — built on trust, not call centers.",
+    "about.l1": "You talk to the owner directly — before, during and after your trip",
+    "about.l2": "The car is cared for personally, not rotated through a fleet",
+    "about.l3": "Based in Uberlândia, MG — handover in person",
+    "photo.founder": "images/founder.jpg",
+    "dest.eyebrow": "Where to go",
+    "dest.title": "Your base to explore Uberlândia & around",
+    "dest.sub": "With the car yours for the whole month, Uberlândia opens up — parks, markets, great food and easy day trips across Minas Gerais.",
+    "dest.c1.title": "Parque do Sabiá",
+    "dest.c1.body": "Uberlândia's huge green park — zoo, lake, trails and sports. A full day with the family.",
+    "dest.c2.title": "Praça Tubal Vilela & Centro",
+    "dest.c2.body": "The historic heart of the city — the central square, shops and local life.",
+    "dest.c3.title": "Mercado Municipal",
+    "dest.c3.body": "Local produce, cheeses, sweets and the flavors of Minas — a must for food lovers.",
+    "dest.c4.title": "Restaurants & dining",
+    "dest.c4.body": "From traditional comida mineira to modern bistros — Uberlândia eats very well.",
+    "dest.c5.title": "Parque Vitória Régia",
+    "dest.c5.body": "A calm lakeside park, perfect for a walk, a run or a relaxed afternoon.",
+    "dest.c6.title": "Day trips across Minas",
+    "dest.c6.body": "Waterfalls, small historic towns and countryside — all within an easy drive.",
+    "dest.note": "Add real photos of each spot to the /images folder — see the README for the exact file names.",
+    "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
+    "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
+    "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
+    "testi.eyebrow": "Testimonials",
+    "testi.title": "What travelers say",
+    "testi.sub": "Real words from people who rented with us. Trust is the whole point.",
+    "testi.q1": "\"Renting for two months was simple and fair. The car was clean and well kept, and having someone reachable the whole time made all the difference.\"",
+    "testi.n1": "Your client's name", "testi.o1": "Country / city",
+    "testi.q2": "\"Way cheaper than the big agencies and zero hassle. Picked the car up in person, drove all over Minas, no surprises.\"",
+    "testi.n2": "Your client's name", "testi.o2": "Country / city",
+    "testi.q3": "\"I was referred by a friend and I'd do the same. Honest pricing, a contract that protects both sides, and a backup car just in case.\"",
+    "testi.n3": "Your client's name", "testi.o3": "Country / city",
+    "testi.note": "Placeholder testimonials — replace with real reviews from your first clients in the script.js file.",
     "nav.how": "How it works", "nav.car": "The car", "nav.pricing": "Pricing",
     "nav.safety": "Safety", "nav.faq": "FAQ", "nav.cta": "Get a quote",
 
@@ -59,7 +101,8 @@ const I18N = {
     "car.spec3.k": "Model", "car.spec3.v": "Chevrolet Cobalt Elite",
     "car.spec4.k": "Color", "car.spec4.v": "White",
     "car.spec5.k": "Mileage", "car.spec5.v": "120,000 km",
-    "car.spec6.k": "Best for", "car.spec6.v": "Long stays & travel",
+    "car.spec6.k": "Trunk", "car.spec6.v": "560 L — fits big luggage",
+    "car.extras": "🧳 Need a child seat, roof rack or travel gear? These can be arranged and are rented separately, on request.",
     "car.editnote": "Add real photos of the car to the <strong>/images</strong> folder — see the README.",
     "car.cta": "Check availability",
 
@@ -143,6 +186,47 @@ const I18N = {
   },
 
   pt: {
+    "nav.about": "Sobre", "nav.destinos": "Destinos",
+    "share.eyebrow": "Indique um amigo",
+    "share.title": "Conhece alguém que vai para o Brasil?",
+    "share.sub": "A NomadDrive funciona por indicação. Compartilhe com um amigo em um toque — ele paga um preço justo e a confiança mantém o círculo forte.",
+    "share.btn": "Compartilhar no WhatsApp",
+    "about.eyebrow": "Quem somos",
+    "about.title": "Uma pessoa de verdade, não uma locadora sem rosto",
+    "about.sub": "A NomadDrive Brasil é uma operação pequena e pessoal em Uberlândia. Um dono, um carro bem cuidado e uma relação direta com cada viajante — baseada em confiança, não em call center.",
+    "about.l1": "Você fala direto com o dono — antes, durante e depois da viagem",
+    "about.l2": "O carro é cuidado pessoalmente, não roda numa frota",
+    "about.l3": "Em Uberlândia, MG — entrega em mãos",
+    "photo.founder": "images/founder.jpg",
+    "dest.eyebrow": "Para onde ir",
+    "dest.title": "Sua base para explorar Uberlândia e a região",
+    "dest.sub": "Com o carro seu o mês inteiro, Uberlândia se abre — parques, mercados, boa comida e bate-voltas fáceis por Minas Gerais.",
+    "dest.c1.title": "Parque do Sabiá",
+    "dest.c1.body": "O grande parque verde de Uberlândia — zoológico, lago, trilhas e esporte. Um dia inteiro com a família.",
+    "dest.c2.title": "Praça Tubal Vilela e Centro",
+    "dest.c2.body": "O coração histórico da cidade — a praça central, o comércio e a vida local.",
+    "dest.c3.title": "Mercado Municipal",
+    "dest.c3.body": "Produtos da região, queijos, doces e os sabores de Minas — parada obrigatória para quem ama comer.",
+    "dest.c4.title": "Restaurantes e gastronomia",
+    "dest.c4.body": "Da comida mineira tradicional aos bistrôs modernos — Uberlândia come muito bem.",
+    "dest.c5.title": "Parque Vitória Régia",
+    "dest.c5.body": "Um parque tranquilo à beira do lago, perfeito para caminhar, correr ou relaxar à tarde.",
+    "dest.c6.title": "Bate-voltas por Minas",
+    "dest.c6.body": "Cachoeiras, cidadezinhas históricas e campo — tudo a uma viagem curta de carro.",
+    "dest.note": "Adicione fotos reais de cada lugar na pasta /images — veja os nomes exatos dos arquivos no README.",
+    "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
+    "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
+    "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
+    "testi.eyebrow": "Depoimentos",
+    "testi.title": "O que os viajantes dizem",
+    "testi.sub": "Palavras reais de quem alugou com a gente. Confiança é o ponto central.",
+    "testi.q1": "\"Alugar por dois meses foi simples e justo. O carro estava limpo e bem cuidado, e ter alguém à disposição o tempo todo fez toda a diferença.\"",
+    "testi.n1": "Nome do seu cliente", "testi.o1": "País / cidade",
+    "testi.q2": "\"Bem mais barato que as grandes locadoras e sem dor de cabeça. Peguei o carro em mãos, rodei Minas inteira, sem surpresas.\"",
+    "testi.n2": "Nome do seu cliente", "testi.o2": "País / cidade",
+    "testi.q3": "\"Vim por indicação de um amigo e faria o mesmo. Preço honesto, contrato que protege os dois lados e carro reserva por garantia.\"",
+    "testi.n3": "Nome do seu cliente", "testi.o3": "País / cidade",
+    "testi.note": "Depoimentos de exemplo — troque pelos comentários reais dos seus primeiros clientes no arquivo script.js.",
     "nav.how": "Como funciona", "nav.car": "O carro", "nav.pricing": "Preços",
     "nav.safety": "Segurança", "nav.faq": "Dúvidas", "nav.cta": "Pedir orçamento",
 
@@ -192,7 +276,8 @@ const I18N = {
     "car.spec3.k": "Modelo", "car.spec3.v": "Chevrolet Cobalt Elite",
     "car.spec4.k": "Cor", "car.spec4.v": "Branco",
     "car.spec5.k": "Quilometragem", "car.spec5.v": "120.000 km",
-    "car.spec6.k": "Ideal para", "car.spec6.v": "Estadias longas e viagens",
+    "car.spec6.k": "Porta-malas", "car.spec6.v": "560 L — cabe mala grande",
+    "car.extras": "🧳 Precisa de cadeirinha, suporte de teto ou equipamento de viagem? Dá pra providenciar — alugados à parte, sob consulta.",
     "car.editnote": "Adicione fotos reais do carro na pasta <strong>/images</strong> — veja o README.",
     "car.cta": "Ver disponibilidade",
 
@@ -290,6 +375,17 @@ function applyLang(lang) {
   document.querySelectorAll(".lang-toggle__opt").forEach((opt) => {
     opt.classList.toggle("is-active", opt.dataset.lang === lang);
   });
+
+  // language-dependent WhatsApp links
+  document.getElementById("waFloat").href = waUrl(
+    lang === "pt"
+      ? "Olá! Vi o site da NomadDrive Brasil e quero um orçamento."
+      : "Hi! I saw the NomadDrive Brasil site and I'd like a quote."
+  );
+  const shareMsg = (lang === "pt"
+    ? "Conheça a NomadDrive Brasil — aluguel mensal de carro para viajantes no Brasil: "
+    : "Check out NomadDrive Brasil — monthly car rental for travelers in Brazil: ") + CONFIG.siteUrl;
+  document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(shareMsg);
 }
 
 document.getElementById("langToggle").addEventListener("click", () => {
@@ -307,11 +403,6 @@ function waUrl(text) {
   const base = "https://wa.me/" + CONFIG.whatsapp;
   return text ? base + "?text=" + encodeURIComponent(text) : base;
 }
-document.getElementById("waFloat").href = waUrl(
-  currentLang === "pt"
-    ? "Olá! Vi o site da NomadDrive Brasil e quero um orçamento."
-    : "Hi! I saw the NomadDrive Brasil site and I'd like a quote."
-);
 document.getElementById("footerWhats").href = waUrl("");
 document.getElementById("footerInsta").href = CONFIG.instagram;
 document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {

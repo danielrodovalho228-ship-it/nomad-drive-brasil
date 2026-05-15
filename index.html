@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NomadDrive Brasil — Monthly car rental for travelers in Brazil</title>
 <meta name="description" content="Affordable monthly car rental in Uberlândia, Brazil — built for international travelers on holiday. Skip the agency markup. By referral, fully insured, backup car included." />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<!-- Open Graph / social sharing. After deploy, change og:image to the full URL, e.g. https://seusite.netlify.app/images/hero.jpg -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="NomadDrive Brasil — Monthly car rental for travelers in Brazil" />
+<meta property="og:description" content="Fair monthly car rental in Uberlândia, Brazil — built for international travelers. Skip the agency markup." />
+<meta property="og:image" content="images/og-share.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="pt_BR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="NomadDrive Brasil — Monthly car rental for travelers in Brazil" />
+<meta name="twitter:description" content="Fair monthly car rental in Uberlândia, Brazil — built for international travelers." />
+<meta name="twitter:image" content="images/og-share.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -16,14 +28,15 @@
 <header class="nav" id="nav">
   <div class="container nav__inner">
     <a href="#top" class="brand">
-      <span class="brand__mark">ND</span>
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
       <span class="brand__name">NomadDrive <span>Brasil</span></span>
     </a>
     <nav class="nav__links">
+      <a href="#about" data-i18n="nav.about">About</a>
       <a href="#how" data-i18n="nav.how">How it works</a>
       <a href="#car" data-i18n="nav.car">The car</a>
+      <a href="#destinos" data-i18n="nav.destinos">Destinations</a>
       <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
-      <a href="#safety" data-i18n="nav.safety">Safety</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </nav>
     <div class="nav__actions">
@@ -155,8 +168,32 @@
     </div>
   </section>
 
+  <!-- ===== ABOUT ===== -->
+  <section class="section" id="about">
+    <div class="container who">
+      <div class="who__media">
+        <!-- IMAGE SLOT: drop images/founder.jpg (sua foto) -->
+        <div class="photo-slot photo-slot--wide" data-photo="founder">
+          <img src="images/founder.jpg" alt="NomadDrive Brasil" onerror="this.remove()" />
+          <span class="photo-slot__icon">👋</span>
+          <span class="photo-slot__label" data-i18n="photo.founder">images/founder.jpg</span>
+        </div>
+      </div>
+      <div class="who__copy">
+        <span class="eyebrow" data-i18n="about.eyebrow">Who we are</span>
+        <h2 data-i18n="about.title">A real person, not a faceless agency</h2>
+        <p data-i18n="about.sub">NomadDrive Brasil is a small, personal operation in Uberlândia. One owner, one well-kept car, and a direct relationship with every traveler — built on trust, not call centers.</p>
+        <ul class="checklist">
+          <li data-i18n="about.l1">You talk to the owner directly — before, during and after your trip</li>
+          <li data-i18n="about.l2">The car is cared for personally, not rotated through a fleet</li>
+          <li data-i18n="about.l3">Based in Uberlândia, MG — handover in person</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== THE CAR ===== -->
-  <section class="section" id="car">
+  <section class="section section--alt" id="car">
     <div class="container car">
       <div class="car__media">
         <!-- IMAGE SLOT: drop images/car-exterior.jpg -->
@@ -186,11 +223,86 @@
           <li><span data-i18n="car.spec3.k">Model</span><strong data-i18n="car.spec3.v">Chevrolet Cobalt Elite</strong></li>
           <li><span data-i18n="car.spec4.k">Color</span><strong data-i18n="car.spec4.v">White</strong></li>
           <li><span data-i18n="car.spec5.k">Mileage</span><strong data-i18n="car.spec5.v">120,000 km</strong></li>
-          <li><span data-i18n="car.spec6.k">Best for</span><strong data-i18n="car.spec6.v">Long stays &amp; travel</strong></li>
+          <li><span data-i18n="car.spec6.k">Trunk</span><strong data-i18n="car.spec6.v">560 L — fits big luggage</strong></li>
         </ul>
+        <p class="car__extras" data-i18n="car.extras">🧳 Need a child seat, roof rack or travel gear? These can be arranged and are rented separately, on request.</p>
         <p class="car__editnote" data-i18n="car.editnote">Add real photos of the car to the <strong>/images</strong> folder — see the README.</p>
         <a href="#quote" class="btn btn--solid" data-i18n="car.cta">Check availability</a>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINOS ===== -->
+  <section class="section" id="destinos">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="dest.eyebrow">Where to go</span>
+        <h2 data-i18n="dest.title">Your base to explore Uberlândia &amp; around</h2>
+        <p data-i18n="dest.sub">With the car yours for the whole month, Uberlândia opens up — parks, markets, great food and easy day trips across Minas Gerais.</p>
+      </div>
+      <div class="cards cards--3">
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-1">
+            <img src="images/dest-parque-sabia.jpg" alt="Parque do Sabiá" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest1">images/dest-parque-sabia.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c1.title">Parque do Sabiá</h3>
+            <p data-i18n="dest.c1.body">Uberlândia's huge green park — zoo, lake, trails and sports. A full day with the family.</p>
+          </div>
+        </article>
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-2">
+            <img src="images/dest-centro.jpg" alt="Centro de Uberlândia" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest2">images/dest-centro.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c2.title">Praça Tubal Vilela &amp; Centro</h3>
+            <p data-i18n="dest.c2.body">The historic heart of the city — the central square, shops and local life.</p>
+          </div>
+        </article>
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-3">
+            <img src="images/dest-mercado.jpg" alt="Mercado Municipal" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest3">images/dest-mercado.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c3.title">Mercado Municipal</h3>
+            <p data-i18n="dest.c3.body">Local produce, cheeses, sweets and the flavors of Minas — a must for food lovers.</p>
+          </div>
+        </article>
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-4">
+            <img src="images/dest-gastronomia.jpg" alt="Restaurantes em Uberlândia" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest4">images/dest-gastronomia.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c4.title">Restaurants &amp; dining</h3>
+            <p data-i18n="dest.c4.body">From traditional comida mineira to modern bistros — Uberlândia eats very well.</p>
+          </div>
+        </article>
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-5">
+            <img src="images/dest-vitoria-regia.jpg" alt="Parque Vitória Régia" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest5">images/dest-vitoria-regia.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c5.title">Parque Vitória Régia</h3>
+            <p data-i18n="dest.c5.body">A calm lakeside park, perfect for a walk, a run or a relaxed afternoon.</p>
+          </div>
+        </article>
+        <article class="dest-card">
+          <div class="photo-slot photo-slot--dest" data-photo="dest-6">
+            <img src="images/dest-passeios.jpg" alt="Passeios e bate-voltas" onerror="this.remove()" />
+            <span class="photo-slot__label" data-i18n="photo.dest6">images/dest-passeios.jpg</span>
+          </div>
+          <div class="dest-card__body">
+            <h3 data-i18n="dest.c6.title">Day trips across Minas</h3>
+            <p data-i18n="dest.c6.body">Waterfalls, small historic towns and countryside — all within an easy drive.</p>
+          </div>
+        </article>
+      </div>
+      <p class="disclaimer" data-i18n="dest.note">Add real photos of each spot to the /images folder — see the README for the exact file names.</p>
     </div>
   </section>
 
@@ -347,8 +459,52 @@
     </div>
   </section>
 
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section" id="depoimentos">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="testi.eyebrow">Testimonials</span>
+        <h2 data-i18n="testi.title">What travelers say</h2>
+        <p data-i18n="testi.sub">Real words from people who rented with us. Trust is the whole point.</p>
+      </div>
+      <div class="cards cards--3">
+        <article class="testi">
+          <p class="testi__quote" data-i18n="testi.q1">"Renting for two months was simple and fair. The car was clean and well kept, and having someone reachable the whole time made all the difference."</p>
+          <div class="testi__author">
+            <span class="testi__avatar">★</span>
+            <div>
+              <strong data-i18n="testi.n1">Your client's name</strong>
+              <span data-i18n="testi.o1">Country / city</span>
+            </div>
+          </div>
+        </article>
+        <article class="testi">
+          <p class="testi__quote" data-i18n="testi.q2">"Way cheaper than the big agencies and zero hassle. Picked the car up in person, drove all over Minas, no surprises."</p>
+          <div class="testi__author">
+            <span class="testi__avatar">★</span>
+            <div>
+              <strong data-i18n="testi.n2">Your client's name</strong>
+              <span data-i18n="testi.o2">Country / city</span>
+            </div>
+          </div>
+        </article>
+        <article class="testi">
+          <p class="testi__quote" data-i18n="testi.q3">"I was referred by a friend and I'd do the same. Honest pricing, a contract that protects both sides, and a backup car just in case."</p>
+          <div class="testi__author">
+            <span class="testi__avatar">★</span>
+            <div>
+              <strong data-i18n="testi.n3">Your client's name</strong>
+              <span data-i18n="testi.o3">Country / city</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <p class="disclaimer" data-i18n="testi.note">Placeholder testimonials — replace with real reviews from your first clients in the script.js file.</p>
+    </div>
+  </section>
+
   <!-- ===== QUOTE FORM ===== -->
-  <section class="section" id="quote">
+  <section class="section section--alt" id="quote">
     <div class="container">
       <div class="quote">
         <div class="quote__intro">
@@ -408,7 +564,7 @@
   </section>
 
   <!-- ===== FAQ ===== -->
-  <section class="section section--alt" id="faq">
+  <section class="section" id="faq">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow" data-i18n="faq.eyebrow">FAQ</span>
@@ -443,6 +599,23 @@
     </div>
   </section>
 
+  <!-- ===== SHARE / REFER A FRIEND ===== -->
+  <section class="section section--alt" id="share">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="share.eyebrow">Refer a friend</span>
+        <h2 data-i18n="share.title">Know someone heading to Brazil?</h2>
+        <p data-i18n="share.sub">NomadDrive runs on referrals. Share it with a friend in one tap — they get a fair price, and trust keeps the circle strong.</p>
+      </div>
+      <div class="share__cta">
+        <a href="#" id="shareWhats" class="btn btn--solid btn--lg">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          <span data-i18n="share.btn">Share on WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== FINAL CTA ===== -->
   <section class="finalcta">
     <div class="container finalcta__inner">
@@ -459,7 +632,7 @@
   <div class="container footer__inner">
     <div class="footer__brand">
       <a href="#top" class="brand">
-        <span class="brand__mark">ND</span>
+        <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
         <span class="brand__name">NomadDrive <span>Brasil</span></span>
       </a>
       <p data-i18n="footer.tag">Fair monthly car rental for international travelers in Brazil.</p>

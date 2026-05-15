@@ -1,6 +1,6 @@
 # NomadDrive Brasil — MVP
 
-Landing page bilíngue (EN/PT) para aluguel mensal de carro voltado a americanos/expats que vêm ao Brasil. Carro-piloto: **Chevrolet Cobalt Elite 2018, automático, branco** — em Uberlândia-MG.
+Landing page bilíngue (EN/PT) para aluguel mensal de carro voltado a **viajantes do exterior** (de qualquer país) que vêm passar férias/um tempo no Brasil. Carro-piloto: **Chevrolet Cobalt Elite 2018, automático, branco** — em Uberlândia-MG.
 
 Site estático (HTML/CSS/JS), sem backend. O formulário de orçamento abre o WhatsApp com os dados prontos para enviar.
 
@@ -8,8 +8,7 @@ Site estático (HTML/CSS/JS), sem backend. O formulário de orçamento abre o Wh
 
 ## 1. Como rodar / ver
 
-Não precisa de build. Abra o `index.html` no navegador, ou rode um servidor local:
-
+Abra o `index.html` no navegador, ou rode um servidor local:
 ```bash
 python -m http.server 8000      # depois acesse http://localhost:8000
 ```
@@ -21,55 +20,49 @@ python -m http.server 8000      # depois acesse http://localhost:8000
 const CONFIG = {
   whatsapp:  "5534999999999",            // número real, só dígitos (país+DDD+número)
   email:     "hello@nomaddrive.com.br",  // e-mail real
-  instagram: "https://instagram.com/...",// link real do Instagram que você já criou
+  instagram: "https://instagram.com/...",// link real do Instagram
+  siteUrl:   "https://seusite.netlify.app", // depois de publicar, troque pela URL real do site
 };
 ```
 
-### b) Fotos do carro — pasta `images/`
-O site tem 5 espaços de foto já ligados a arquivos. Coloque suas fotos reais do **Cobalt branco** na pasta `images/` com estes nomes exatos:
-- `images/hero.jpg` — melhor foto externa (aparece no topo)
-- `images/car-exterior.jpg` — foto externa (seção "O carro")
-- `images/car-interior.jpg` — interior
-- `images/car-trunk.jpg` — porta-malas / espaço
-- `images/travel.jpg` — foto de estilo de vida / estrada
+### b) Fotos — pasta `images/`
+Coloque suas fotos reais com **estes nomes exatos**. Enquanto o arquivo não existir, aparece um placeholder.
 
-Enquanto o arquivo não existir, aparece um placeholder com o nome do arquivo. Assim que você adicionar a foto com o nome certo, ela aparece sozinha. Fotos reais do carro convertem muito mais que banco de imagens.
+**Carro (já adicionadas):** `hero.jpg`, `car-exterior.jpg`, `car-interior.jpg`, `car-trunk.jpg`, `travel.jpg`
 
-### c) Preços
-Valores atuais no site: 1 mês R$3.000 · 2 meses R$5.800 · 3+ meses sob medida.
-**Revise depois de rodar o `Simulador_Viabilidade_NomadDrive.xlsx`** (veja a seção 4) — o preço final tem que cobrir todos os custos com margem.
+**Sua foto (seção "Quem somos"):** `founder.jpg`
+
+**Destinos / turismo em Uberlândia:**
+`dest-parque-sabia.jpg` · `dest-centro.jpg` · `dest-mercado.jpg` · `dest-gastronomia.jpg` · `dest-vitoria-regia.jpg` · `dest-passeios.jpg`
+
+### c) Depoimentos — `script.js`
+Procure as chaves `testi.q1/n1/o1`, `testi.q2/...`, `testi.q3/...` (nas duas línguas, `en` e `pt`) e troque pelos comentários reais dos seus primeiros clientes.
+
+### d) Preços
+1 mês R$3.000 · 2 meses R$5.800 · 3+ meses sob medida. **Revise depois de rodar o simulador** (seção 4).
 
 ## 3. Publicar (grátis)
-Arraste a pasta para o **Netlify Drop** (app.netlify.com/drop) ou conecte ao **Vercel**. Depois aponte o domínio.
-
----
+- **Mais fácil:** arraste a pasta `publicar/` no **app.netlify.com/drop**.
+- **GitHub + Vercel:** o repositório git já está configurado — `git push` para o seu repo e importe no Vercel.
+- Depois de publicar, atualize `CONFIG.siteUrl` e o `og:image` no `index.html` (troque o caminho relativo pela URL completa).
 
 ## 4. Simulador de Viabilidade Financeira
+`Simulador_Viabilidade_NomadDrive.xlsx` — planilha interativa: cada custo tem menu de opções (baixo/médio/alto), soma total, impostos, lucro e ponto de equilíbrio. Você preenche só as células amarelas. Valores são estimativas — valide com contador e corretor.
 
-`Simulador_Viabilidade_NomadDrive.xlsx` — planilha interativa para testar se o negócio cobre os custos.
+## 5. Imagens e arquivos gerados automaticamente
+- `images/favicon.svg` — ícone do site (logo em formato de carro)
+- `images/og-share.jpg` — imagem que aparece ao compartilhar o link no WhatsApp/redes
+- `_build_simulador.py`, `_optimize_images.py`, `_blur_plates.py`, `_make_og_image.py` — scripts geradores. **Pode apagar todos** — não fazem falta pro site.
 
-- Cada item de custo tem um **menu de opções** (baixo / médio / alto) — você escolhe o que bate com a sua realidade.
-- Você só preenche as **células amarelas** (suas premissas).
-- A planilha soma tudo automaticamente: receita, impostos, custos fixos e variáveis, lucro, margem e ponto de equilíbrio.
-- Todos os números são **estimativas de mercado para você validar** com contador e corretor — não são valores oficiais.
-
----
-
-## 5. Resumo estratégico
-
-**Fase 1 — Piloto:** validar com 1 carro, só por indicação. Resolver antes da 1ª locação: seguro que cobre locação, contrato, caução, rastreador, conferência de CNH/passaporte, vistoria com fotos.
-**Fase 2 — Operação enxuta:** CNPJ adequado (locação **não cabe no MEI**), contador, processos padronizados.
-**Fase 3 — Rede por indicação:** com 1 carro o teto é baixo; o modelo escalável é virar a ponte de confiança entre donos de carro e locatários verificados, cobrando comissão.
-
-> Site informativo — não é oferta vinculante. As partes jurídica, fiscal e de seguro devem ser validadas com profissionais antes de operar.
-
-## 6. Arquivos
+## 6. Estrutura
 ```
 App NomadesDrive Brasil/
-├── index.html                              # estrutura e conteúdo
-├── style.css                               # design (tema escuro, verde/âmbar)
-├── script.js                               # idioma EN/PT, formulário→WhatsApp, CONFIG
-├── images/                                 # suas fotos reais do Cobalt branco
-├── Simulador_Viabilidade_NomadDrive.xlsx   # simulador de custos e viabilidade
-└── README.md                               # este arquivo
+├── index.html      ├── style.css      ├── script.js
+├── images/         (fotos do carro, destinos, favicon, og-share)
+├── Imagens/        (suas fotos originais — não vão pro site)
+├── publicar/       (cópia limpa só com os arquivos do site, p/ Netlify Drop)
+├── Simulador_Viabilidade_NomadDrive.xlsx
+└── README.md
 ```
+
+> Site informativo — não é oferta vinculante. Seguro para locação, CNPJ, contrato e impostos devem ser validados com profissionais antes de operar.
