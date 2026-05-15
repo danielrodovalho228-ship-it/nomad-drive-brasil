@@ -40,11 +40,13 @@
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </nav>
     <div class="nav__actions">
-      <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
         <span class="lang-toggle__opt is-active" data-lang="en">EN</span>
         <span class="lang-toggle__sep">/</span>
         <span class="lang-toggle__opt" data-lang="pt">PT</span>
-      </button>
+        <span class="lang-toggle__sep">/</span>
+        <span class="lang-toggle__opt" data-lang="es">ES</span>
+      </div>
       <a href="#quote" class="btn btn--solid btn--sm" data-i18n="nav.cta">Get a quote</a>
     </div>
   </div>
@@ -64,6 +66,7 @@
           <a href="#quote" class="btn btn--solid" data-i18n="hero.cta1">Request your quote</a>
           <a href="#how" class="btn btn--ghost" data-i18n="hero.cta2">See how it works</a>
         </div>
+        <div class="hero__avail" data-i18n="hero.avail">🟢 Available from July 2026 — book ahead</div>
         <div class="hero__stats">
           <div class="stat">
             <strong>R$3,000<span>/mo</span></strong>
@@ -559,6 +562,23 @@
           </p>
           <p class="form__err" id="formErr" data-i18n="form.err">Please fill in your name and a way to reach you.</p>
         </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PICKUP LOCATION ===== -->
+  <section class="section" id="local">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="local.eyebrow">Pickup location</span>
+        <h2 data-i18n="local.title">Pick up your car in Uberlândia, MG</h2>
+        <p data-i18n="local.sub">We hand the car over in person in Uberlândia — central Brazil, easy to reach by air or road. The exact spot is confirmed when you book.</p>
+      </div>
+      <div class="map-wrap">
+        <iframe
+          title="Uberlândia, MG — Brazil"
+          src="https://www.google.com/maps?q=Uberl%C3%A2ndia%2C+Minas+Gerais%2C+Brazil&z=12&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </section>
