@@ -445,6 +445,40 @@ img { max-width: 100%; display: block; }
 }
 .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; filter: grayscale(.15); }
 
+/* ===== perfis ideais ===== */
+.perfis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 32px; }
+.perfil {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 24px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: border-color .18s ease, transform .18s ease;
+}
+.perfil:hover { transform: translateY(-3px); border-color: var(--border-2); }
+.perfil h3 { font-size: 18px; }
+.perfil__detail { font-size: 13.5px; color: var(--muted); margin-top: -8px; }
+.perfil__metrics {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  background: var(--bg); padding: 14px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.perfil__metrics > div { display: flex; flex-direction: column; gap: 4px; }
+.perfil__metrics span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.perfil__metrics strong { font-family: var(--font-d); font-size: 14px; color: var(--accent); }
+.perfil__frame {
+  font-style: italic; font-size: 14px; color: var(--text);
+  padding: 6px 0 6px 14px; border-left: 3px solid var(--emerald);
+  line-height: 1.5;
+}
+.perfis-warn {
+  background: rgba(255,120,110,.06); border: 1px solid rgba(255,120,110,.22);
+  border-radius: var(--radius); padding: 22px 26px;
+  max-width: 720px; margin: 0 auto;
+}
+.perfis-warn h3 { font-size: 15.5px; color: #ff8a7a; margin-bottom: 12px; font-family: var(--font-d); }
+.checklist--warn li::before {
+  content: "✕"; background: rgba(255,120,110,.15); color: #ff8a7a;
+}
+
 /* ===== earn with your car / network ===== */
 .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 36px; }
 .path {
@@ -607,7 +641,7 @@ img { max-width: 100%; display: block; }
 /* ===== responsive ===== */
 @media (max-width: 960px) {
   .nav__links { display: none; }
-  .hero__inner, .car, .who, .pricing, .quote, .paths, .sims { grid-template-columns: 1fr; }
+  .hero__inner, .car, .who, .pricing, .quote, .paths, .sims, .perfis { grid-template-columns: 1fr; }
   .hero { padding: 56px 0 70px; }
   .hero__visual { margin-top: 30px; }
   .cards--3, .cards--4 { grid-template-columns: 1fr 1fr; }
