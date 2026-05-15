@@ -45,10 +45,11 @@ const I18N = {
     "renda.monthsLabel": "Months rented per year",
     "renda.rGross": "Gross / year",
     "renda.rFee": "NomadDrive platform fee",
-    "renda.rCarCosts": "Your car costs (insurance, upkeep)",
+    "renda.rCarCosts": "Annual car costs (insurance, IPVA, upkeep)",
+    "renda.rBreakEven": "Break-even (months to cover costs)",
     "renda.rNet": "Your estimated net / year",
     "renda.rMonthly": "≈ per rented month (your take when the car is out)",
-    "renda.note": "NomadDrive keeps a small platform fee that runs the network, screening and support — your car costs are separate and stay yours. Rough estimate, not a guarantee of income.",
+    "renda.note": "NomadDrive keeps a small platform fee on each rental. Your car costs (insurance, IPVA, maintenance) are fixed yearly amounts — that's why more rented months means much better profit. Rough estimate, not a guarantee of income.",
     "renda.cta": "I want to join",
     "about.eyebrow": "Who we are",
     "about.title": "A real person, not a faceless agency",
@@ -299,10 +300,11 @@ const I18N = {
     "renda.monthsLabel": "Meses alugados por ano",
     "renda.rGross": "Receita bruta / ano",
     "renda.rFee": "Taxa da plataforma NomadDrive",
-    "renda.rCarCosts": "Custos do seu carro (seguro, manutenção)",
+    "renda.rCarCosts": "Custos anuais do carro (seguro, IPVA, manutenção)",
+    "renda.rBreakEven": "Ponto de equilíbrio (meses pra cobrir os custos)",
     "renda.rNet": "Seu ganho líquido estimado / ano",
     "renda.rMonthly": "≈ por mês alugado (o que você fica quando o carro está rendendo)",
-    "renda.note": "A NomadDrive fica com uma pequena taxa de plataforma que mantém a rede, a triagem e o suporte — os custos do seu carro são à parte e continuam seus. Estimativa aproximada, não é garantia de renda.",
+    "renda.note": "A NomadDrive fica com uma pequena taxa por locação. Os custos do seu carro (seguro, IPVA, manutenção) são valores fixos anuais — por isso, quanto mais meses alugados, muito melhor o seu lucro. Estimativa aproximada, não é garantia de renda.",
     "renda.cta": "Quero participar",
     "about.eyebrow": "Quem somos",
     "about.title": "Uma pessoa de verdade, não uma locadora sem rosto",
@@ -556,10 +558,11 @@ const I18N = {
     "renda.monthsLabel": "Meses alquilado por año",
     "renda.rGross": "Ingreso bruto / año",
     "renda.rFee": "Comisión de la plataforma NomadDrive",
-    "renda.rCarCosts": "Costos de tu auto (seguro, mantenimiento)",
+    "renda.rCarCosts": "Costos anuales del auto (seguro, IPVA, mantenimiento)",
+    "renda.rBreakEven": "Punto de equilibrio (meses para cubrir los costos)",
     "renda.rNet": "Tu ganancia neta estimada / año",
     "renda.rMonthly": "≈ por mes alquilado (lo que te queda cuando el auto está rentado)",
-    "renda.note": "NomadDrive se queda con una pequeña comisión de plataforma que mantiene la red, la verificación y el soporte — los costos de tu auto son aparte y siguen siendo tuyos. Estimación aproximada, no es garantía de ingresos.",
+    "renda.note": "NomadDrive se queda con una pequeña comisión por alquiler. Los costos de tu auto (seguro, IPVA, mantenimiento) son montos fijos anuales — por eso, cuantos más meses alquilado, mucho mejor tu ganancia. Estimación aproximada, no es garantía de ingresos.",
     "renda.cta": "Quiero participar",
 
     "hero.badge": "Hecho para viajeros internacionales que vienen a Brasil",
@@ -893,43 +896,54 @@ document.querySelectorAll(".dest-card__foot").forEach((foot) => {
   if (share) share.href = "https://wa.me/?text=" + encodeURIComponent(foot.dataset.maps + " — " + maps);
 });
 
-/* ---- earnings simulator (owner) — tier-based ---- */
+/* ---- earnings simulator (owner) — tier-based + realistic FIXED annual costs ---- */
 (function () {
   const months = document.getElementById("simMonths");
   const fipe = document.getElementById("simFipe");
   if (!months || !fipe) return;
-  // Modelo de tiers (preço representativo + % da FIPE). Ajuste aqui:
+  // Modelo (tudo ajustável aqui):
+  // - rate: preço mensal como % da FIPE
+  // - costRatio: custos ANUAIS FIXOS do dono (seguro+IPVA+manutenção+pneus+depreciação) como % da FIPE
+  // - repFipe: FIPE representativa do tier (usada quando o dono não preenche FIPE)
   const TIERS = {
-    A: { price: 2300, rate: 0.075 }, // Econômico — ~7.5% da FIPE/mês
-    B: { price: 3000, rate: 0.065 }, // Confort (ex: Cobalt) — ~6.5%
-    C: { price: 5000, rate: 0.042 }, // Premium — ~4.2%
-    D: { price: 8000, rate: 0.032 }, // Luxo — ~3.2% (carros mais caros alugam por % menor)
+    A: { price: 2300, rate: 0.075, costRatio: 0.30, repFipe: 30000 },   // Econômico
+    B: { price: 3000, rate: 0.065, costRatio: 0.25, repFipe: 45000 },   // Confort (ex: Cobalt)
+    C: { price: 5000, rate: 0.042, costRatio: 0.18, repFipe: 120000 },  // Premium
+    D: { price: 8000, rate: 0.032, costRatio: 0.14, repFipe: 250000 },  // Luxo
   };
-  const PLATFORM_RATE = 0.10; // margem da NomadDrive
-  const CAR_COST_RATE = 0.25; // custos estimados do dono
+  const PLATFORM_RATE = 0.10; // margem da NomadDrive sobre cada locação
   let currentTier = "B";
   const el = (id) => document.getElementById(id);
-  const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
+  const brl = (n) => (n < 0 ? "– R$ " : "R$ ") + Math.round(Math.abs(n)).toLocaleString("pt-BR");
   const pct = (r) => Math.round(r * 100) + "%";
   function getPrice() {
     const f = parseFloat(fipe.value);
     if (f && f > 0) return Math.round(f * TIERS[currentTier].rate);
     return TIERS[currentTier].price;
   }
+  function getAnnualCarCosts() {
+    const f = parseFloat(fipe.value);
+    const t = TIERS[currentTier];
+    return Math.round((f && f > 0 ? f : t.repFipe) * t.costRatio);
+  }
   function update() {
     const p = getPrice();
     const m = +months.value;
     const gross = p * m;
     const fee = gross * PLATFORM_RATE;
-    const carCosts = gross * CAR_COST_RATE;
+    const carCosts = getAnnualCarCosts();  // FIXO no ano — não muda com meses alugados
     const net = gross - fee - carCosts;
+    const monthlyNet = p * (1 - PLATFORM_RATE);
+    const breakEven = monthlyNet > 0 ? carCosts / monthlyNet : 0;
     el("simMonthsVal").textContent = m;
     el("simPriceShown").textContent = brl(p) + " / mês";
     el("simGross").textContent = brl(gross);
     el("simFee").textContent = "– " + brl(fee) + "  (" + pct(PLATFORM_RATE) + ")";
-    el("simCarCosts").textContent = "– " + brl(carCosts) + "  (" + pct(CAR_COST_RATE) + ")";
+    el("simCarCosts").textContent = "– " + brl(carCosts);
     el("simNet").textContent = brl(net);
-    el("simMonthly").textContent = brl(m > 0 ? net / m : 0);
+    el("simNet").parentElement.classList.toggle("sim-row--loss", net < 0);
+    el("simBreakEven").textContent = breakEven.toFixed(1) + " meses/ano";
+    el("simMonthly").textContent = m > 0 ? brl(net / m) : "—";
   }
   document.querySelectorAll(".tier-opt").forEach((b) => {
     b.addEventListener("click", () => {

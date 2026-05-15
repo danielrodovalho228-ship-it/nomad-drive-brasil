@@ -492,6 +492,12 @@ img { max-width: 100%; display: block; }
 }
 .sim-row--total span, .sim-row--total strong { color: var(--accent); font-size: 15.5px; }
 .sim-row--fee span, .sim-row--fee strong { color: var(--emerald); }
+.sim-row--total.sim-row--loss {
+  background: rgba(255,120,110,.10);
+  border-color: rgba(255,120,110,.34);
+}
+.sim-row--total.sim-row--loss span,
+.sim-row--total.sim-row--loss strong { color: #ff8a7a; }
 .sim-note { font-size: 12px; color: var(--muted); opacity: .8; margin: 16px 0 18px; line-height: 1.5; }
 
 /* ===== testimonials ===== */
