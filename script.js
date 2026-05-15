@@ -221,6 +221,47 @@ const I18N = {
     "footer.contact": "Contact", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
     "footer.instagram": "Instagram", "footer.explore": "Explore",
     "footer.legal": "© 2026 NomadDrive Brasil. Informational website — not a binding offer. Rental terms, insurance and contract confirmed individually.",
+    "preco.eyebrow": "How the price is set",
+    "preco.title": "Transparent pricing across the network",
+    "preco.sub": "Cars in the network come in tiers. Always cheaper than big agencies — and the formula is open.",
+    "preco.tA.title": "Econômico",
+    "preco.tA.car": "Manual hatchback, 5–10 yrs (HB20, Onix popular)",
+    "preco.tA.price": "R$ 2.000–2.500",
+    "preco.tB.title": "Confort",
+    "preco.tB.car": "Automatic sedan / small SUV, 5–10 yrs (Cobalt, HB20S, Tracker)",
+    "preco.tB.price": "R$ 2.800–3.500",
+    "preco.tB.featured": "← the current Cobalt",
+    "preco.tC.title": "Premium",
+    "preco.tC.car": "Recent automatic SUV / large sedan (Compass, Corolla, T-Cross)",
+    "preco.tC.price": "R$ 4.500–6.000",
+    "preco.tD.title": "Luxo",
+    "preco.tD.car": "BMW, Audi, premium SUV (phase 3)",
+    "preco.tD.price": "R$ 8.000+",
+    "preco.vs": "vs. big agency",
+    "preco.formula.title": "The formula",
+    "preco.formula.body": "Each car is priced as a percentage of its FIPE value — roughly <code>3% to 8% per month</code>, depending on the tier (bigger, costlier cars rent at a smaller share). Always capped below the equivalent agency rate.",
+    "preco.modsTitle": "Adjustments",
+    "preco.mod1": "Manual transmission: −10%",
+    "preco.mod2": "0–3 years old: +10–15%",
+    "preco.mod3": "7+ years old: −5–10%",
+    "preco.mod4": "Always 30% below Localiza / Movida for the equivalent car",
+    "frota.eyebrow": "Our fleet",
+    "frota.title": "Cars currently in the network",
+    "frota.sub": "Hand-picked, well-kept cars from owners we trust. The network grows by referral.",
+    "frota.car1.tier": "Tier B · Confort",
+    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
+    "frota.car1.specs": "Automatic · 560 L trunk · 120k km · white",
+    "frota.car1.cta": "Check availability",
+    "frota.add.title": "Your car here",
+    "frota.add.body": "Join the network. Earn passive income on a car you already own.",
+    "frota.add.cta": "See how it works",
+    "renda.tierLabel": "Your car's tier",
+    "renda.tA": "Econômico",
+    "renda.tB": "Confort",
+    "renda.tC": "Premium",
+    "renda.tD": "Luxo",
+    "renda.fipeLabel": "Or your FIPE value",
+    "renda.rPriceUsed": "Monthly price",
   },
 
   pt: {
@@ -434,6 +475,47 @@ const I18N = {
     "footer.contact": "Contato", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
     "footer.instagram": "Instagram", "footer.explore": "Navegar",
     "footer.legal": "© 2026 NomadDrive Brasil. Site informativo — não constitui oferta vinculante. Condições de locação, seguro e contrato confirmados individualmente.",
+    "preco.eyebrow": "Como o preço é calculado",
+    "preco.title": "Preço transparente em toda a rede",
+    "preco.sub": "Os carros da rede entram em categorias. Sempre mais barato que as grandes locadoras — e a fórmula é aberta.",
+    "preco.tA.title": "Econômico",
+    "preco.tA.car": "Hatch manual, 5–10 anos (HB20, Onix popular)",
+    "preco.tA.price": "R$ 2.000–2.500",
+    "preco.tB.title": "Confort",
+    "preco.tB.car": "Sedã / SUV pequeno automático, 5–10 anos (Cobalt, HB20S, Tracker)",
+    "preco.tB.price": "R$ 2.800–3.500",
+    "preco.tB.featured": "← o Cobalt atual",
+    "preco.tC.title": "Premium",
+    "preco.tC.car": "SUV / sedã grande automático recente (Compass, Corolla, T-Cross)",
+    "preco.tC.price": "R$ 4.500–6.000",
+    "preco.tD.title": "Luxo",
+    "preco.tD.car": "BMW, Audi, SUV premium (fase 3)",
+    "preco.tD.price": "R$ 8.000+",
+    "preco.vs": "vs. grande locadora",
+    "preco.formula.title": "A fórmula",
+    "preco.formula.body": "Cada carro é precificado como uma porcentagem do valor FIPE — em torno de <code>3% a 8% por mês</code>, dependendo do tier (carros maiores e mais caros alugam por uma fatia menor). Sempre limitado abaixo da locadora equivalente.",
+    "preco.modsTitle": "Ajustes",
+    "preco.mod1": "Câmbio manual: −10%",
+    "preco.mod2": "0–3 anos de uso: +10–15%",
+    "preco.mod3": "7+ anos: −5–10%",
+    "preco.mod4": "Sempre 30% abaixo da Localiza / Movida no carro equivalente",
+    "frota.eyebrow": "Nossa frota",
+    "frota.title": "Carros atualmente na rede",
+    "frota.sub": "Carros escolhidos a dedo, bem cuidados, de donos de confiança. A rede cresce por indicação.",
+    "frota.car1.tier": "Tier B · Confort",
+    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
+    "frota.car1.specs": "Automático · porta-malas 560 L · 120k km · branco",
+    "frota.car1.cta": "Ver disponibilidade",
+    "frota.add.title": "Seu carro aqui",
+    "frota.add.body": "Entre para a rede. Renda passiva de um carro que já é seu.",
+    "frota.add.cta": "Ver como funciona",
+    "renda.tierLabel": "Categoria do seu carro",
+    "renda.tA": "Econômico",
+    "renda.tB": "Confort",
+    "renda.tC": "Premium",
+    "renda.tD": "Luxo",
+    "renda.fipeLabel": "Ou valor FIPE do seu carro",
+    "renda.rPriceUsed": "Preço mensal",
   },
 
   es: {
@@ -612,6 +694,47 @@ const I18N = {
     "footer.contact": "Contacto", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
     "footer.instagram": "Instagram", "footer.explore": "Explorar",
     "footer.legal": "© 2026 NomadDrive Brasil. Sitio informativo — no constituye una oferta vinculante. Condiciones de alquiler, seguro y contrato confirmados individualmente.",
+    "preco.eyebrow": "Cómo se calcula el precio",
+    "preco.title": "Precios transparentes en toda la red",
+    "preco.sub": "Los autos de la red se organizan por categorías. Siempre más barato que las grandes agencias — y la fórmula es abierta.",
+    "preco.tA.title": "Económico",
+    "preco.tA.car": "Hatchback manual, 5–10 años (HB20, Onix básico)",
+    "preco.tA.price": "R$ 2.000–2.500",
+    "preco.tB.title": "Confort",
+    "preco.tB.car": "Sedán / SUV pequeño automático, 5–10 años (Cobalt, HB20S, Tracker)",
+    "preco.tB.price": "R$ 2.800–3.500",
+    "preco.tB.featured": "← el Cobalt actual",
+    "preco.tC.title": "Premium",
+    "preco.tC.car": "SUV / sedán grande automático reciente (Compass, Corolla, T-Cross)",
+    "preco.tC.price": "R$ 4.500–6.000",
+    "preco.tD.title": "Lujo",
+    "preco.tD.car": "BMW, Audi, SUV premium (fase 3)",
+    "preco.tD.price": "R$ 8.000+",
+    "preco.vs": "vs. gran agencia",
+    "preco.formula.title": "La fórmula",
+    "preco.formula.body": "Cada auto se precia como un porcentaje de su valor FIPE — aproximadamente <code>3% a 8% por mes</code>, según la categoría (autos más grandes y caros se alquilan a un porcentaje menor). Siempre limitado por debajo de la agencia equivalente.",
+    "preco.modsTitle": "Ajustes",
+    "preco.mod1": "Caja manual: −10%",
+    "preco.mod2": "0–3 años de uso: +10–15%",
+    "preco.mod3": "7+ años: −5–10%",
+    "preco.mod4": "Siempre 30% por debajo de Localiza / Movida en el auto equivalente",
+    "frota.eyebrow": "Nuestra flota",
+    "frota.title": "Autos actualmente en la red",
+    "frota.sub": "Autos elegidos uno a uno, bien cuidados, de dueños de confianza. La red crece por recomendación.",
+    "frota.car1.tier": "Tier B · Confort",
+    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
+    "frota.car1.specs": "Automático · maletero 560 L · 120k km · blanco",
+    "frota.car1.cta": "Ver disponibilidad",
+    "frota.add.title": "Tu auto aquí",
+    "frota.add.body": "Únete a la red. Ingresos pasivos de un auto que ya tienes.",
+    "frota.add.cta": "Ver cómo funciona",
+    "renda.tierLabel": "Categoría de tu auto",
+    "renda.tA": "Económico",
+    "renda.tB": "Confort",
+    "renda.tC": "Premium",
+    "renda.tD": "Lujo",
+    "renda.fipeLabel": "O valor FIPE de tu auto",
+    "renda.rPriceUsed": "Precio mensual",
 
     "about.eyebrow": "Nosotros",
     "about.title": "Una persona real, no una agencia sin rostro",
@@ -770,32 +893,53 @@ document.querySelectorAll(".dest-card__foot").forEach((foot) => {
   if (share) share.href = "https://wa.me/?text=" + encodeURIComponent(foot.dataset.maps + " — " + maps);
 });
 
-/* ---- earnings simulator ---- */
+/* ---- earnings simulator (owner) — tier-based ---- */
 (function () {
-  const price = document.getElementById("simPrice");
   const months = document.getElementById("simMonths");
-  if (!price || !months) return;
-  // Taxas que você pode ajustar:
-  const PLATFORM_RATE = 0.10; // margem da NomadDrive sobre cada locação (mantenha pequena)
-  const CAR_COST_RATE = 0.25; // custos estimados do dono: seguro, manutenção, depreciação
+  const fipe = document.getElementById("simFipe");
+  if (!months || !fipe) return;
+  // Modelo de tiers (preço representativo + % da FIPE). Ajuste aqui:
+  const TIERS = {
+    A: { price: 2300, rate: 0.075 }, // Econômico — ~7.5% da FIPE/mês
+    B: { price: 3000, rate: 0.065 }, // Confort (ex: Cobalt) — ~6.5%
+    C: { price: 5000, rate: 0.042 }, // Premium — ~4.2%
+    D: { price: 8000, rate: 0.032 }, // Luxo — ~3.2% (carros mais caros alugam por % menor)
+  };
+  const PLATFORM_RATE = 0.10; // margem da NomadDrive
+  const CAR_COST_RATE = 0.25; // custos estimados do dono
+  let currentTier = "B";
   const el = (id) => document.getElementById(id);
   const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
   const pct = (r) => Math.round(r * 100) + "%";
+  function getPrice() {
+    const f = parseFloat(fipe.value);
+    if (f && f > 0) return Math.round(f * TIERS[currentTier].rate);
+    return TIERS[currentTier].price;
+  }
   function update() {
-    const p = +price.value, m = +months.value;
+    const p = getPrice();
+    const m = +months.value;
     const gross = p * m;
     const fee = gross * PLATFORM_RATE;
     const carCosts = gross * CAR_COST_RATE;
     const net = gross - fee - carCosts;
-    el("simPriceVal").textContent = brl(p);
     el("simMonthsVal").textContent = m;
+    el("simPriceShown").textContent = brl(p) + " / mês";
     el("simGross").textContent = brl(gross);
     el("simFee").textContent = "– " + brl(fee) + "  (" + pct(PLATFORM_RATE) + ")";
     el("simCarCosts").textContent = "– " + brl(carCosts) + "  (" + pct(CAR_COST_RATE) + ")";
     el("simNet").textContent = brl(net);
     el("simMonthly").textContent = brl(net / 12);
   }
-  price.addEventListener("input", update);
+  document.querySelectorAll(".tier-opt").forEach((b) => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".tier-opt").forEach((x) => x.classList.remove("is-active"));
+      b.classList.add("is-active");
+      currentTier = b.dataset.tier;
+      update();
+    });
+  });
+  fipe.addEventListener("input", update);
   months.addEventListener("input", update);
   update();
 })();

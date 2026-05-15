@@ -427,6 +427,95 @@
     </div>
   </section>
 
+  <!-- ===== HOW PRICE IS SET / TIERS ===== -->
+  <section class="section" id="precomodelo">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="preco.eyebrow">How the price is set</span>
+        <h2 data-i18n="preco.title">Transparent pricing across the network</h2>
+        <p data-i18n="preco.sub">Cars in the network come in tiers. Always cheaper than big agencies — and the formula is open.</p>
+      </div>
+      <div class="tiers">
+        <article class="tier">
+          <span class="tier__badge">A</span>
+          <h3 data-i18n="preco.tA.title">Econômico</h3>
+          <p class="tier__car" data-i18n="preco.tA.car">Manual hatchback, 5–10 yrs (HB20, Onix popular)</p>
+          <div class="tier__price" data-i18n="preco.tA.price">R$ 2.000–2.500</div>
+          <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
+        </article>
+        <article class="tier tier--featured">
+          <span class="tier__badge">B</span>
+          <h3 data-i18n="preco.tB.title">Confort</h3>
+          <p class="tier__car" data-i18n="preco.tB.car">Automatic sedan / small SUV, 5–10 yrs (Cobalt, HB20S, Tracker)</p>
+          <div class="tier__price" data-i18n="preco.tB.price">R$ 2.800–3.500</div>
+          <span class="tier__vs" data-i18n="preco.tB.featured">← the current Cobalt</span>
+        </article>
+        <article class="tier">
+          <span class="tier__badge">C</span>
+          <h3 data-i18n="preco.tC.title">Premium</h3>
+          <p class="tier__car" data-i18n="preco.tC.car">Recent automatic SUV / large sedan (Compass, Corolla, T-Cross)</p>
+          <div class="tier__price" data-i18n="preco.tC.price">R$ 4.500–6.000</div>
+          <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
+        </article>
+        <article class="tier">
+          <span class="tier__badge">D</span>
+          <h3 data-i18n="preco.tD.title">Luxo</h3>
+          <p class="tier__car" data-i18n="preco.tD.car">BMW, Audi, premium SUV (phase 3)</p>
+          <div class="tier__price" data-i18n="preco.tD.price">R$ 8.000+</div>
+          <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
+        </article>
+      </div>
+      <div class="tier-formula">
+        <div class="tier-formula__col">
+          <h3 data-i18n="preco.formula.title">The formula</h3>
+          <p data-i18n="preco.formula.body">Each car is priced as a percentage of its FIPE value — roughly <code>3% to 8% per month</code>, depending on the tier (bigger, costlier cars rent at a smaller share). Always capped below the equivalent agency rate.</p>
+        </div>
+        <div class="tier-formula__col">
+          <h3 data-i18n="preco.modsTitle">Adjustments</h3>
+          <ul class="checklist">
+            <li data-i18n="preco.mod1">Manual transmission: −10%</li>
+            <li data-i18n="preco.mod2">0–3 years old: +10–15%</li>
+            <li data-i18n="preco.mod3">7+ years old: −5–10%</li>
+            <li data-i18n="preco.mod4">Always 30% below Localiza / Movida for the equivalent car</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OUR FLEET ===== -->
+  <section class="section section--alt" id="frota">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="frota.eyebrow">Our fleet</span>
+        <h2 data-i18n="frota.title">Cars currently in the network</h2>
+        <p data-i18n="frota.sub">Hand-picked, well-kept cars from owners we trust. The network grows by referral.</p>
+      </div>
+      <div class="fleet">
+        <article class="fleet-car">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/hero.jpg" alt="Chevrolet Cobalt Elite 2018" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="frota.car1.tier">Tier B · Confort</span>
+            <h3 data-i18n="frota.car1.name">Chevrolet Cobalt Elite 2018</h3>
+            <p data-i18n="frota.car1.specs">Automatic · 560 L trunk · 120k km · white</p>
+            <div class="fleet-car__price">R$ 3.000<span>/mês</span></div>
+            <a href="#quote" class="btn btn--solid btn--sm" data-i18n="frota.car1.cta">Check availability</a>
+          </div>
+        </article>
+        <article class="fleet-car fleet-car--add">
+          <div class="fleet-car__add">
+            <span class="fleet-car__plus">+</span>
+            <h3 data-i18n="frota.add.title">Your car here</h3>
+            <p data-i18n="frota.add.body">Join the network. Earn passive income on a car you already own.</p>
+            <a href="#renda" class="btn btn--ghost btn--sm" data-i18n="frota.add.cta">See how it works</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== SAFETY ===== -->
   <section class="section" id="safety">
     <div class="container">
@@ -706,14 +795,24 @@
       <div class="renda__sim">
         <h3 data-i18n="renda.simtitle">Estimate your earnings</h3>
         <div class="sim-field">
-          <label><span data-i18n="renda.priceLabel">Monthly rental price</span> <strong id="simPriceVal">R$ 3.000</strong></label>
-          <input type="range" id="simPrice" min="2000" max="4500" step="250" value="3000" />
+          <label data-i18n="renda.tierLabel">Your car's tier</label>
+          <div class="tier-picker">
+            <button type="button" class="tier-opt" data-tier="A">A · <span data-i18n="renda.tA">Econômico</span></button>
+            <button type="button" class="tier-opt is-active" data-tier="B">B · <span data-i18n="renda.tB">Confort</span></button>
+            <button type="button" class="tier-opt" data-tier="C">C · <span data-i18n="renda.tC">Premium</span></button>
+            <button type="button" class="tier-opt" data-tier="D">D · <span data-i18n="renda.tD">Luxo</span></button>
+          </div>
+        </div>
+        <div class="sim-field">
+          <label><span data-i18n="renda.fipeLabel">Or your FIPE value</span> <span class="opt" data-i18n="form.optional">(optional)</span></label>
+          <input type="number" id="simFipe" placeholder="ex: 45000" inputmode="numeric" />
         </div>
         <div class="sim-field">
           <label><span data-i18n="renda.monthsLabel">Months rented per year</span> <strong id="simMonthsVal">8</strong></label>
           <input type="range" id="simMonths" min="2" max="12" step="1" value="8" />
         </div>
         <div class="sim-results">
+          <div class="sim-row sim-row--price"><span data-i18n="renda.rPriceUsed">Monthly price used</span><strong id="simPriceShown">—</strong></div>
           <div class="sim-row"><span data-i18n="renda.rGross">Gross / year</span><strong id="simGross">—</strong></div>
           <div class="sim-row sim-row--fee"><span data-i18n="renda.rFee">NomadDrive platform fee</span><strong id="simFee">—</strong></div>
           <div class="sim-row"><span data-i18n="renda.rCarCosts">Your car costs (insurance, upkeep)</span><strong id="simCarCosts">—</strong></div>
