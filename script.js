@@ -1066,6 +1066,8 @@ function applyLang(lang) {
   document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(m.share + CONFIG.siteUrl);
   document.getElementById("joinWhats").href = waUrl(m.join);
   document.getElementById("partnerWhats").href = waUrl(m.partner);
+  // recompute fleet prices + calc lines (handles language switch)
+  if (typeof updateFleetPricing === "function") updateFleetPricing(lang);
 }
 
 document.querySelectorAll(".lang-toggle__opt").forEach((opt) => {
@@ -1227,6 +1229,47 @@ document.querySelectorAll(".dest-card__foot").forEach((foot) => {
   refs.addEventListener("input", update);
   update();
 })();
+
+/* ---- fleet pricing from FIPE (transparent calculation) ---- */
+const FLEET_TIER_RATES = { A: 0.075, B: 0.065, C: 0.042, D: 0.032 };
+function updateFleetPricing(lang) {
+  const useComma = lang !== "en";
+  const fmtPct = (r) => {
+    const v = (r * 100).toFixed(1);
+    return (useComma ? v.replace(".", ",") : v) + "%";
+  };
+  const fmtBRL = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
+  const manualLabel = { en: "manual", pt: "manual", es: "manual" }[lang] || "manual";
+  const catLabel = { en: "Cat.", pt: "Cat.", es: "Cat." }[lang] || "Cat.";
+  const perText = { en: "/mo", pt: "/mês", es: "/mes" }[lang] || "/mês";
+
+  document.querySelectorAll(".fleet-car[data-fipe]").forEach((card) => {
+    const fipe = +card.dataset.fipe;
+    const tier = card.dataset.tier;
+    const manual = card.dataset.manual === "true";
+    const rate = FLEET_TIER_RATES[tier] || 0;
+    const finalRate = manual ? rate * 0.9 : rate;
+    const price = fipe * finalRate;
+
+    // Rewrite price element keeping the /mês span with i18n key
+    const priceEl = card.querySelector(".fleet-car__price");
+    if (priceEl) {
+      priceEl.innerHTML = fmtBRL(price) + '<span data-i18n="fleet.per">' + perText + '</span>';
+    }
+
+    // Insert/update calc line right before the price
+    let calcEl = card.querySelector(".fleet-car__calc");
+    if (!calcEl && priceEl) {
+      calcEl = document.createElement("p");
+      calcEl.className = "fleet-car__calc";
+      priceEl.parentNode.insertBefore(calcEl, priceEl);
+    }
+    if (calcEl) {
+      const mod = manual ? ` × ${useComma ? "0,9" : "0.9"} (${manualLabel})` : "";
+      calcEl.textContent = `FIPE × ${fmtPct(rate)}${mod} · ${catLabel} ${tier}`;
+    }
+  });
+}
 
 /* ---- fleet filter ---- */
 document.querySelectorAll(".fleet-filter").forEach((btn) => {
