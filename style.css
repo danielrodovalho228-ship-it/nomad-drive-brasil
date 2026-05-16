@@ -397,6 +397,14 @@ img { max-width: 100%; display: block; }
 .fleet-car__year span { color: var(--text); }
 .fleet-car__specs { color: var(--muted); font-size: 13px; margin-bottom: 14px; min-height: 36px; }
 .fleet-car__calc { font-size: 11px; color: var(--muted); margin: -10px 0 10px; font-style: italic; opacity: .85; }
+.fleet-car__condition {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  margin: 2px 0 14px; padding: 10px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+}
+.fleet-car__condition > div { display: flex; flex-direction: column; gap: 2px; text-align: center; min-width: 0; }
+.fleet-car__condition span { font-size: 9.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; line-height: 1.2; }
+.fleet-car__condition strong { font-family: var(--font-d); font-size: 12.5px; color: var(--text); white-space: nowrap; }
 
 /* fleet filters */
 .fleet-filters {
