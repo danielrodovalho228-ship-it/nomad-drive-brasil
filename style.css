@@ -734,6 +734,43 @@ img { max-width: 100%; display: block; }
   .section { padding: 64px 0; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
+/* Comparativa: vira cards empilhados no mobile */
+@media (max-width: 760px) {
+  .compare { padding: 20px 18px; }
+  .compare h3 { font-size: 16.5px; }
+  .compare__table thead { display: none; }
+  .compare__table, .compare__table tbody { display: block; }
+  .compare__table tbody { display: flex; flex-direction: column; gap: 9px; }
+  .compare__table tr {
+    display: block; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .compare__table td { display: block; border: none; padding: 0; }
+  .compare__table td:first-child {
+    font-family: var(--font-d); font-weight: 700;
+    font-size: 12.5px; color: var(--text);
+    text-transform: uppercase; letter-spacing: .5px;
+    margin-bottom: 8px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare__table td:nth-child(2) {
+    font-size: 13.5px; color: var(--muted); padding: 3px 0;
+  }
+  .compare__table td:nth-child(2)::before {
+    content: "○ "; margin-right: 2px; opacity: .6;
+  }
+  .compare__table td.is-us {
+    font-size: 14px; font-weight: 600; color: var(--accent); padding: 3px 0;
+  }
+  .compare__table td.is-us::before {
+    content: "✓ NomadDrive · "; margin-right: 2px;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .4px;
+    color: var(--accent); opacity: .85;
+  }
+  .compare__honest { font-size: 12.5px; padding: 12px 14px; }
+}
+
 @media (max-width: 560px) {
   .cards--3, .cards--4, .steps, .specs, .tiers, .fleet { grid-template-columns: 1fr; }
   .quote__form { grid-template-columns: 1fr; padding: 28px; }
