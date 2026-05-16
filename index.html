@@ -490,31 +490,143 @@
     <div class="container">
       <div class="section__head">
         <span class="eyebrow" data-i18n="frota.eyebrow">Our fleet</span>
-        <h2 data-i18n="frota.title">Cars currently in the network</h2>
-        <p data-i18n="frota.sub">Hand-picked, well-kept cars from owners we trust. The network grows by referral.</p>
+        <h2 data-i18n="frota.title">Cars in the network</h2>
+        <p data-i18n="frota.sub">Hand-picked, well-kept cars. Prices follow FIPE × category — always below big agencies. The network grows by referral.</p>
       </div>
+
+      <div class="fleet-filters" role="tablist">
+        <button class="fleet-filter is-active" data-filter="all" data-i18n="filter.all">All</button>
+        <button class="fleet-filter" data-filter="A" data-i18n="filter.A">Econômico</button>
+        <button class="fleet-filter" data-filter="B" data-i18n="filter.B">Confort</button>
+        <button class="fleet-filter" data-filter="C" data-i18n="filter.C">Premium</button>
+        <button class="fleet-filter" data-filter="D" data-i18n="filter.D">Luxo</button>
+      </div>
+
       <div class="fleet">
-        <article class="fleet-car">
+        <article class="fleet-car fleet-car--featured" data-tier="B">
+          <span class="fleet-car__flag" data-i18n="fleet.pilot">Our pilot car</span>
           <div class="photo-slot photo-slot--fleet">
             <img src="images/hero.jpg" alt="Chevrolet Cobalt Elite 2018" onerror="this.remove()" />
           </div>
           <div class="fleet-car__body">
-            <span class="fleet-car__tier" data-i18n="frota.car1.tier">Tier B · Confort</span>
-            <h3 data-i18n="frota.car1.name">Chevrolet Cobalt Elite 2018</h3>
-            <p data-i18n="frota.car1.specs">Automatic · 560 L trunk · 120k km · white</p>
-            <div class="fleet-car__price">R$ 3.000<span>/mês</span></div>
-            <a href="#quote" class="btn btn--solid btn--sm" data-i18n="frota.car1.cta">Check availability</a>
+            <span class="fleet-car__tier" data-i18n="fleet.cB">Categoria B · Confort</span>
+            <h3>Chevrolet Cobalt Elite</h3>
+            <p class="fleet-car__year">2018 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 45.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.cobalt">Sedã · 5 lugares · porta-malas 560L · 120k km</p>
+            <div class="fleet-car__price">R$ 3.000<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--solid btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
           </div>
         </article>
+
+        <article class="fleet-car" data-tier="B">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-hb20.jpg" alt="Hyundai HB20 Comfort 2019" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cB">Categoria B · Confort</span>
+            <h3>Hyundai HB20 Comfort</h3>
+            <p class="fleet-car__year">2019 · <span data-i18n="fleet.manual">Manual</span> · FIPE R$ 58.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.hb20">Hatch compacto · 5 lugares · econômico no consumo</p>
+            <div class="fleet-car__price">R$ 3.400<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="B">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-cruze.jpg" alt="Chevrolet Cruze LT 2018" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cB">Categoria B · Confort</span>
+            <h3>Chevrolet Cruze LT</h3>
+            <p class="fleet-car__year">2018 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 78.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.cruze">Sedã médio · 5 lugares · ar digital · multimídia</p>
+            <div class="fleet-car__price">R$ 5.000<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="C">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-renegade.jpg" alt="Jeep Renegade Sport 2020" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cC">Categoria C · Premium</span>
+            <h3>Jeep Renegade Sport</h3>
+            <p class="fleet-car__year">2020 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 95.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.renegade">SUV compacto · 5 lugares · ideal pra viagem</p>
+            <div class="fleet-car__price">R$ 4.000<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="C">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-corolla.jpg" alt="Toyota Corolla XEi 2021" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cC">Categoria C · Premium</span>
+            <h3>Toyota Corolla XEi</h3>
+            <p class="fleet-car__year">2021 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 135.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.corolla">Sedã premium · 5 lugares · confiabilidade Toyota</p>
+            <div class="fleet-car__price">R$ 5.700<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="C">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-compass.jpg" alt="Jeep Compass Longitude 2022" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cC">Categoria C · Premium</span>
+            <h3>Jeep Compass Longitude</h3>
+            <p class="fleet-car__year">2022 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 165.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.compass">SUV médio · 5 lugares · diesel · alto conforto</p>
+            <div class="fleet-car__price">R$ 7.000<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="D">
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-bmw320.jpg" alt="BMW 320i 2023" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cD">Categoria D · Luxo</span>
+            <h3>BMW 320i</h3>
+            <p class="fleet-car__year">2023 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 285.000</p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.bmw">Sedã esportivo · 5 lugares · couro · pacote premium</p>
+            <div class="fleet-car__price">R$ 9.100<span data-i18n="fleet.per">/mês</span></div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
+        <article class="fleet-car" data-tier="D">
+          <span class="fleet-car__flag fleet-car__flag--special" data-i18n="fleet.special">Aspirational</span>
+          <div class="photo-slot photo-slot--fleet">
+            <img src="images/fleet-cybertruck.jpg" alt="Tesla Cybertruck 2025" onerror="this.remove()" />
+          </div>
+          <div class="fleet-car__body">
+            <span class="fleet-car__tier" data-i18n="fleet.cD">Categoria D · Luxo</span>
+            <h3>Tesla Cybertruck</h3>
+            <p class="fleet-car__year">2025 · <span data-i18n="fleet.auto">Automático</span> · <span data-i18n="fleet.fipeNa">FIPE não oficial no Brasil</span></p>
+            <p class="fleet-car__specs" data-i18n="fleet.s.cybertruck">Picape elétrica · 5 lugares · ultra · disponibilidade sob consulta</p>
+            <div class="fleet-car__price" data-i18n="fleet.cyberPrice">Sob consulta</div>
+            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+          </div>
+        </article>
+
         <article class="fleet-car fleet-car--add">
           <div class="fleet-car__add">
             <span class="fleet-car__plus">+</span>
             <h3 data-i18n="frota.add.title">Your car here</h3>
             <p data-i18n="frota.add.body">Join the network. Earn passive income on a car you already own.</p>
-            <a href="#renda" class="btn btn--ghost btn--sm" data-i18n="frota.add.cta">See how it works</a>
+            <a href="#renda" class="btn btn--solid btn--sm" data-i18n="frota.add.cta">See how it works</a>
           </div>
         </article>
       </div>
+      <p class="disclaimer" data-i18n="fleet.note">Prices calculated as FIPE × category rate. Availability and final price confirmed on quote. Photos illustrative — replace with real ones as the network grows.</p>
     </div>
   </section>
 
@@ -753,6 +865,15 @@
           <span data-i18n="share.btn">Share on WhatsApp</span>
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== HOST / GUEST DIVIDER ===== -->
+  <section class="host-divider" id="host-side">
+    <div class="container host-divider__inner">
+      <span class="eyebrow" data-i18n="divider.eyebrow">Now for the other side</span>
+      <h2 data-i18n="divider.title">Do you own a car in Uberlândia?</h2>
+      <p data-i18n="divider.sub">Above was the renter side. Below is the host side — for car owners who want their car to generate passive income through the network.</p>
     </div>
   </section>
 
