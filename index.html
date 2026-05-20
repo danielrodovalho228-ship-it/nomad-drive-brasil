@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,22 +32,23 @@
       <span class="brand__name">NomadDrive <span>Brasil</span></span>
     </a>
     <nav class="nav__links">
-      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
       <a href="#how" data-i18n="nav.how">How it works</a>
-      <a href="#car" data-i18n="nav.car">The car</a>
-      <a href="#destinos" data-i18n="nav.destinos">Destinations</a>
-      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#renda" data-i18n="nav.renda">Earn</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </nav>
     <div class="nav__actions">
       <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
-        <span class="lang-toggle__opt is-active" data-lang="en">EN</span>
+        <span class="lang-toggle__opt" data-lang="en">EN</span>
         <span class="lang-toggle__sep">/</span>
-        <span class="lang-toggle__opt" data-lang="pt">PT</span>
+        <span class="lang-toggle__opt is-active" data-lang="pt">PT</span>
         <span class="lang-toggle__sep">/</span>
         <span class="lang-toggle__opt" data-lang="es">ES</span>
       </div>
-      <a href="#quote" class="btn btn--solid btn--sm" data-i18n="nav.cta">Get a quote</a>
+      <a href="#quote" class="btn btn--solid btn--sm nav__cta">
+        <span class="nav__cta-full" data-i18n="nav.cta">Get a quote</span>
+        <span class="nav__cta-short" data-i18n="nav.ctaShort">Quote</span>
+      </a>
     </div>
   </div>
 </header>
@@ -59,18 +60,18 @@
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="container hero__inner">
       <div class="hero__copy">
-        <span class="badge" data-i18n="hero.badge">Built for international travelers coming to Brazil</span>
-        <h1 data-i18n="hero.title">Skip the agency markup. Drive Brazil for less.</h1>
-        <p class="hero__sub" data-i18n="hero.sub">Big agencies charge a premium for monthly rentals. We're one well-kept car, properly insured, offered by referral — at a fair, all-in monthly price.</p>
+        <span class="badge" data-i18n="hero.badge">Aluguel mensal de carro — direto com o proprietário</span>
+        <h1 data-i18n="hero.title">Alugue um carro de confiança por meses, diretamente do dono.</h1>
+        <p class="hero__sub" data-i18n="hero.sub">Conectamos carros parados a quem precisa de mobilidade por mais tempo: profissionais em projeto temporário, famílias em tratamento médico, mudanças e reformas, nômades digitais, brasileiros voltando de fora e viajantes do exterior. Um mês ou mais, preço justo, tudo incluso.</p>
         <div class="hero__cta">
-          <a href="#quote" class="btn btn--solid" data-i18n="hero.cta1">Request your quote</a>
-          <a href="#how" class="btn btn--ghost" data-i18n="hero.cta2">See how it works</a>
+          <a href="#quote" class="btn btn--solid" data-i18n="hero.cta1">Pedir orçamento</a>
+          <a href="#how" class="btn btn--ghost" data-i18n="hero.cta2">Ver como funciona</a>
         </div>
-        <div class="hero__avail" data-i18n="hero.avail">🟢 Available from July 2026 — book ahead</div>
+        <div class="hero__avail" data-i18n="hero.avail">🟢 Disponível a partir de julho/2026 — reserve com antecedência</div>
         <div class="hero__stats">
           <div class="stat">
-            <strong>R$3,000<span>/mo</span></strong>
-            <span data-i18n="hero.stat1">all-in, taxes included</span>
+            <strong data-i18n="hero.stat1v">9 carros</strong>
+            <span data-i18n="hero.stat1">a partir de R$ 1.400/mês</span>
           </div>
           <div class="stat">
             <strong data-i18n="hero.stat2v">Owner-direct</strong>
@@ -81,8 +82,8 @@
             <span data-i18n="hero.stat3">handover &amp; support</span>
           </div>
           <div class="stat">
-            <strong data-i18n="hero.stat4v">Free km</strong>
-            <span data-i18n="hero.stat4">fair use 3,000 km/mo · no penalty</span>
+            <strong data-i18n="hero.stat4v">3.000 km/mo</strong>
+            <span data-i18n="hero.stat4">included · R$ 0,40/km extra</span>
           </div>
         </div>
       </div>
@@ -106,7 +107,7 @@
       <span data-i18n="strip.3">✓ Backup car if anything happens</span>
       <span data-i18n="strip.4">✓ English-speaking support</span>
       <span data-i18n="strip.5">✓ Based in Uberlândia, MG</span>
-      <span data-i18n="strip.6">✓ Free mileage (fair use)</span>
+      <span data-i18n="strip.6">✓ 3.000 km/mo included + R$ 0,40/km extra</span>
     </div>
   </section>
 
@@ -196,44 +197,7 @@
   </section>
 
   <!-- ===== THE CAR ===== -->
-  <section class="section section--alt" id="car">
-    <div class="container car">
-      <div class="car__media">
-        <!-- IMAGE SLOT: drop images/car-exterior.jpg -->
-        <div class="photo-slot photo-slot--tall" data-photo="car-main">
-          <img src="images/car-exterior.jpg" alt="Chevrolet Cobalt exterior" onerror="this.remove()" />
-          <span class="photo-slot__icon">📸</span>
-          <span class="photo-slot__label" data-i18n="photo.car">images/car-exterior.jpg</span>
-        </div>
-        <div class="car__thumbs">
-          <div class="photo-slot photo-slot--sm" data-photo="car-interior">
-            <img src="images/car-interior.jpg" alt="Chevrolet Cobalt interior" onerror="this.remove()" />
-            <span class="photo-slot__label" data-i18n="photo.interior">images/car-interior.jpg</span>
-          </div>
-          <div class="photo-slot photo-slot--sm" data-photo="car-trunk">
-            <img src="images/car-trunk.jpg" alt="Chevrolet Cobalt trunk space" onerror="this.remove()" />
-            <span class="photo-slot__label" data-i18n="photo.trunk">images/car-trunk.jpg</span>
-          </div>
-        </div>
-      </div>
-      <div class="car__info">
-        <span class="eyebrow" data-i18n="car.eyebrow">The car</span>
-        <h2 data-i18n="car.title">2018 Chevrolet Cobalt Elite. Well kept. Ready for the road.</h2>
-        <p data-i18n="car.sub">A 2018 Chevrolet Cobalt Elite — automatic, fully optioned, white. A comfortable mid-size sedan: cheap to maintain and roomy for road trips and family.</p>
-        <ul class="specs">
-          <li><span data-i18n="car.spec1.k">Year</span><strong data-i18n="car.spec1.v">2018</strong></li>
-          <li><span data-i18n="car.spec2.k">Transmission</span><strong data-i18n="car.spec2.v">Automatic</strong></li>
-          <li><span data-i18n="car.spec3.k">Model</span><strong data-i18n="car.spec3.v">Chevrolet Cobalt Elite</strong></li>
-          <li><span data-i18n="car.spec4.k">Color</span><strong data-i18n="car.spec4.v">White</strong></li>
-          <li><span data-i18n="car.spec5.k">Mileage</span><strong data-i18n="car.spec5.v">120,000 km</strong></li>
-          <li><span data-i18n="car.spec6.k">Trunk</span><strong data-i18n="car.spec6.v">560 L — fits big luggage</strong></li>
-        </ul>
-        <p class="car__extras" data-i18n="car.extras">🧳 Need a child seat, roof rack or travel gear? These can be arranged and are rented separately, on request.</p>
-        <p class="car__editnote" data-i18n="car.editnote">Add real photos of the car to the <strong>/images</strong> folder — see the README.</p>
-        <a href="#quote" class="btn btn--solid" data-i18n="car.cta">Check availability</a>
-      </div>
-    </div>
-  </section>
+  <!-- "The car" detail section removed — now each car has its own page at car.html?id=X -->
 
   <!-- ===== DESTINOS ===== -->
   <section class="section" id="destinos">
@@ -343,50 +307,14 @@
       </div>
 
       <div class="pricing">
-        <div class="pricing__plans">
-          <article class="plan">
-            <h3 data-i18n="pricing.p1.title">1 month</h3>
-            <div class="plan__price">R$3,000<span>/mo</span></div>
-            <div class="plan__usd" data-i18n="pricing.p1.usd">≈ $530 USD</div>
-            <ul>
-              <li data-i18n="pricing.feat.taxes">Taxes included</li>
-              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
-              <li data-i18n="pricing.feat.backup">Backup car included</li>
-              <li data-i18n="pricing.feat.cleaning">Cleaning included</li>
-              <li data-i18n="pricing.feat.km">Unlimited mileage</li>
-            </ul>
-            <a href="#quote" class="btn btn--ghost btn--block" data-i18n="pricing.p1.cta">Request quote</a>
-          </article>
-
-          <article class="plan plan--featured">
-            <span class="plan__flag" data-i18n="pricing.p2.flag">Most popular</span>
-            <h3 data-i18n="pricing.p2.title">2 months</h3>
-            <div class="plan__price">R$5,800<span>/total</span></div>
-            <div class="plan__usd" data-i18n="pricing.p2.usd">≈ $1,020 USD · taxes included</div>
-            <ul>
-              <li data-i18n="pricing.feat.taxes">Taxes included</li>
-              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
-              <li data-i18n="pricing.feat.backup">Backup car included</li>
-              <li data-i18n="pricing.feat.cleaning">Cleaning included</li>
-              <li data-i18n="pricing.feat.km">Unlimited mileage</li>
-              <li data-i18n="pricing.p2.feat">Priority support during your stay</li>
-            </ul>
-            <a href="#quote" class="btn btn--solid btn--block" data-i18n="pricing.p2.cta">Request quote</a>
-          </article>
-
-          <article class="plan">
-            <h3 data-i18n="pricing.p3.title">3+ months</h3>
-            <div class="plan__price" data-i18n="pricing.p3.price">Custom</div>
-            <div class="plan__usd" data-i18n="pricing.p3.usd">Best monthly rate — let's talk</div>
-            <ul>
-              <li data-i18n="pricing.feat.taxes">Taxes included</li>
-              <li data-i18n="pricing.feat.insurance">Insured for rental use</li>
-              <li data-i18n="pricing.feat.backup">Backup car included</li>
-              <li data-i18n="pricing.feat.cleaning">Cleaning included</li>
-              <li data-i18n="pricing.feat.km">Unlimited mileage</li>
-            </ul>
-            <a href="#quote" class="btn btn--ghost btn--block" data-i18n="pricing.p3.cta">Talk to us</a>
-          </article>
+        <div class="duration-structure">
+          <h3 data-i18n="pricing.structureTitle">Discount structure (applies to any car)</h3>
+          <ul class="duration-structure__list">
+            <li><span class="ds-len" data-i18n="pricing.d1.len">1 month</span><span class="ds-rate" data-i18n="pricing.d1.rate">car's base monthly rate</span></li>
+            <li class="is-featured"><span class="ds-flag" data-i18n="pricing.d2.flag">Most popular</span><span class="ds-len" data-i18n="pricing.d2.len">2 months</span><span class="ds-rate" data-i18n="pricing.d2.rate">−5% on each month</span></li>
+            <li><span class="ds-len" data-i18n="pricing.d3.len">3+ months</span><span class="ds-rate" data-i18n="pricing.d3.rate">−10% on each month · custom terms</span></li>
+          </ul>
+          <p class="duration-structure__note" data-i18n="pricing.structureNote">Per-car prices on the fleet section below. All include taxes, rental insurance, backup car, and 3.000 km/month — overage charged at R$ 0,40/km.</p>
         </div>
 
         <div class="compare">
@@ -395,49 +323,49 @@
             <thead>
               <tr>
                 <th></th>
-                <th data-i18n="compare.col1">Big agency</th>
                 <th class="is-us">NomadDrive</th>
+                <th data-i18n="compare.col1">Big agency</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td data-i18n="compare.r1">Cronos auto · 30 days · ~3,000 km</td>
+                <td class="is-us">R$ 3.510</td>
                 <td data-i18n="compare.r1v">R$ 4.300 (km cap)</td>
-                <td class="is-us">R$ 5.070</td>
               </tr>
               <tr>
-                <td data-i18n="compare.r2">Mileage overage</td>
-                <td data-i18n="compare.r2v">Charged per km</td>
-                <td class="is-us" data-i18n="compare.r2us">Fair use, no penalty</td>
+                <td data-i18n="compare.r2">Mileage included</td>
+                <td class="is-us" data-i18n="compare.r2us">3.000 km/mo · R$ 0,40 extra/km</td>
+                <td data-i18n="compare.r2v">~2.000 km cap · then per km</td>
               </tr>
               <tr>
                 <td data-i18n="compare.r3">Customer service</td>
-                <td data-i18n="compare.r3v">Counter + queue</td>
                 <td class="is-us" data-i18n="compare.r3us">WhatsApp 24/7</td>
+                <td data-i18n="compare.r3v">Counter + queue</td>
               </tr>
               <tr>
                 <td data-i18n="compare.r4">Language</td>
-                <td data-i18n="compare.r4v">Portuguese only</td>
                 <td class="is-us" data-i18n="compare.r4us">PT · EN · ES</td>
+                <td data-i18n="compare.r4v">Portuguese only</td>
               </tr>
               <tr>
                 <td data-i18n="compare.r5">Handover</td>
-                <td data-i18n="compare.r5v">Store / counter</td>
                 <td class="is-us" data-i18n="compare.r5us">In person · airport possible</td>
+                <td data-i18n="compare.r5v">Store / counter</td>
               </tr>
               <tr>
                 <td data-i18n="compare.r6">Security deposit</td>
-                <td data-i18n="compare.r6v">R$ 3,000 – 5,000</td>
                 <td class="is-us">R$ 2.000</td>
+                <td data-i18n="compare.r6v">R$ 3,000 – 5,000</td>
               </tr>
               <tr>
                 <td data-i18n="compare.r7">On-site paperwork</td>
-                <td data-i18n="compare.r7v">Queue + forms</td>
                 <td class="is-us" data-i18n="compare.r7us">All pre-arranged on WhatsApp</td>
+                <td data-i18n="compare.r7v">Queue + forms</td>
               </tr>
             </tbody>
           </table>
-          <p class="compare__honest" data-i18n="compare.honest">Our model includes what makes a long trip smoother: EN/ES support, in-person handover at your arrival time, no counter queue, and free mileage. And every car here is owned by a real person on our network — cared for personally, not rotated through a corporate fleet. That care reaches you.</p>
+          <p class="compare__honest" data-i18n="compare.honest">Lean model wins. No counter, no branches, no fleet management — just a small network of owners and a personal handover. That low overhead lets us be cheaper than the corporate agencies on the same car (a Cronos saves you about R$ 790/month vs. the quote above — that's ≈18% cheaper, with free mileage on top), while still including what makes a long trip easy: EN/ES support, in-person handover at your arrival time, and a real owner who actually cares for the car.</p>
           <p class="compare__note" data-i18n="compare.note">Comparison based on a real quote from a Uberlândia rental agency, May 2026. Prices vary by car and date — your quote is always confirmed in writing.</p>
         </div>
       </div>
@@ -447,15 +375,17 @@
   <!-- ===== BUILT FOR YOU (positive fit) ===== -->
   <section class="section antifit-section" id="antifit">
     <div class="container antifit">
-      <h3 data-i18n="antifit.title">Built for you if…</h3>
-      <p data-i18n="antifit.sub">A short read to see if we fit your trip. We're a curated network for a specific kind of traveler:</p>
-      <ul class="checklist">
-        <li data-i18n="antifit.1">You're visiting Brazil from abroad for one month or more</li>
-        <li data-i18n="antifit.2">You value English or Spanish support during your stay</li>
-        <li data-i18n="antifit.3">You want the car handed over in person — no airport counter queue</li>
-        <li data-i18n="antifit.4">You like the idea of renting from a real owner (not a corporate fleet) who earns a fair income from sharing the car</li>
+      <h3 data-i18n="antifit.title">Built for you if your life needs a car for a few months</h3>
+      <p data-i18n="antifit.sub">Not just for tourists. We were built for any chapter of life where you need a real car, not a daily rental treadmill:</p>
+      <ul class="checklist checklist--2col">
+        <li data-i18n="antifit.1">🌎 Traveling to Brazil from abroad for 1 to 6+ months</li>
+        <li data-i18n="antifit.2">💼 Professional on a temporary project away from home</li>
+        <li data-i18n="antifit.3">🏥 Family accompanying medical treatment at a referral hospital</li>
+        <li data-i18n="antifit.4">🏡 In a life transition — moving cities, home renovation, between cars</li>
+        <li data-i18n="antifit.5">💻 Digital nomad spending real time in Brazil</li>
+        <li data-i18n="antifit.6">👨‍👩‍👧 Visiting family for an extended stay, hosting relatives</li>
       </ul>
-      <p class="antifit__yes" data-i18n="antifit.yes">Sound like you? Then we're a great match. Every car in the network is shared by an owner we trust — your rental helps them generate a fair, ethical income, and you get a car that's actually cared for.</p>
+      <p class="antifit__yes" data-i18n="antifit.yes">If any of those sound like you, we fit. Every car in the network is shared by an owner we trust — your rental funds them and gets you a car that's actually cared for.</p>
     </div>
   </section>
 
@@ -472,28 +402,28 @@
           <span class="tier__badge">A</span>
           <h3 data-i18n="preco.tA.title">Econômico</h3>
           <p class="tier__car" data-i18n="preco.tA.car">Manual hatchback, 5–10 yrs (HB20, Onix popular)</p>
-          <div class="tier__price" data-i18n="preco.tA.price">R$ 2.000–2.500</div>
+          <div class="tier__price" data-i18n="preco.tA.price">R$ 1.400–2.000</div>
           <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
         </article>
         <article class="tier tier--featured">
           <span class="tier__badge">B</span>
           <h3 data-i18n="preco.tB.title">Confort</h3>
           <p class="tier__car" data-i18n="preco.tB.car">Automatic sedan / small SUV, 5–10 yrs (Cobalt, HB20S, Tracker)</p>
-          <div class="tier__price" data-i18n="preco.tB.price">R$ 2.800–3.500</div>
+          <div class="tier__price" data-i18n="preco.tB.price">R$ 2.000–3.600</div>
           <span class="tier__vs" data-i18n="preco.tB.featured">← the current Cobalt</span>
         </article>
         <article class="tier">
           <span class="tier__badge">C</span>
           <h3 data-i18n="preco.tC.title">Premium</h3>
           <p class="tier__car" data-i18n="preco.tC.car">Recent automatic SUV / large sedan (Compass, Corolla, T-Cross)</p>
-          <div class="tier__price" data-i18n="preco.tC.price">R$ 4.500–6.000</div>
+          <div class="tier__price" data-i18n="preco.tC.price">R$ 3.500–5.500</div>
           <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
         </article>
         <article class="tier">
           <span class="tier__badge">D</span>
           <h3 data-i18n="preco.tD.title">Luxo</h3>
           <p class="tier__car" data-i18n="preco.tD.car">BMW, Audi, premium SUV (phase 3)</p>
-          <div class="tier__price" data-i18n="preco.tD.price">R$ 8.000+</div>
+          <div class="tier__price" data-i18n="preco.tD.price">R$ 5.500+</div>
           <span class="tier__vs" data-i18n="preco.vs">vs. big agency</span>
           <span class="tier__addon" data-i18n="preco.tD.addon">🛡️ Armoring on request</span>
         </article>
@@ -501,7 +431,7 @@
       <div class="tier-formula">
         <div class="tier-formula__col">
           <h3 data-i18n="preco.formula.title">The formula</h3>
-          <p data-i18n="preco.formula.body">Each car is priced as a percentage of its FIPE value — roughly <code>3% to 8% per month</code>, depending on the tier (bigger, costlier cars rent at a smaller share). Always capped below the equivalent agency rate.</p>
+          <p data-i18n="preco.formula.body">Each car is priced as a percentage of its FIPE value — about <code>2.8% to 5.5% per month</code>, depending on the tier (bigger, costlier cars rent at a smaller share, but the absolute price still grows with FIPE). A lean P2P network has lower overhead than a corporate fleet, so the saving comes back to you.</p>
         </div>
         <div class="tier-formula__col">
           <h3 data-i18n="preco.modsTitle">Adjustments</h3>
@@ -517,7 +447,7 @@
   </section>
 
   <!-- ===== OUR FLEET ===== -->
-  <section class="section section--alt" id="frota">
+  <section class="section section--alt" id="fleet">
     <div class="container">
       <div class="section__head">
         <span class="eyebrow" data-i18n="frota.eyebrow">Our fleet</span>
@@ -534,7 +464,7 @@
       </div>
 
       <div class="fleet">
-        <article class="fleet-car fleet-car--featured" data-tier="B" data-fipe="45000" data-manual="false">
+        <article class="fleet-car fleet-car--featured" data-tier="B" data-fipe="57000" data-manual="false" data-car-id="cobalt">
           <span class="fleet-car__flag" data-i18n="fleet.pilot">Our pilot car</span>
           <div class="photo-slot photo-slot--fleet">
             <img src="images/hero.jpg" alt="Chevrolet Cobalt Elite 2018" onerror="this.remove()" />
@@ -542,19 +472,19 @@
           <div class="fleet-car__body">
             <span class="fleet-car__tier" data-i18n="fleet.cB">Categoria B · Confort</span>
             <h3>Chevrolet Cobalt Elite</h3>
-            <p class="fleet-car__year">2018 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 45.000</p>
+            <p class="fleet-car__year">2018 · <span data-i18n="fleet.auto">Automático</span> · FIPE R$ 57.000</p>
             <p class="fleet-car__specs" data-i18n="fleet.s.cobalt">Sedã · 5 lugares · porta-malas 560L · 120k km</p>
             <div class="fleet-car__condition">
               <div><span data-i18n="fleet.condKM">KM</span><strong>120.000</strong></div>
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>03/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>65%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 3.000<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--solid btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 2.565<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=cobalt" class="btn btn--solid btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="B" data-fipe="58000" data-manual="true">
+        <article class="fleet-car" data-tier="B" data-fipe="58000" data-manual="true" data-car-id="hb20">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-hb20.jpg" alt="Hyundai HB20 Comfort 2019" onerror="this.remove()" />
           </div>
@@ -568,12 +498,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>02/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>75%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 3.400<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 2.349<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=hb20" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="B" data-fipe="78000" data-manual="false">
+        <article class="fleet-car" data-tier="B" data-fipe="78000" data-manual="false" data-car-id="cronos">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-cronos.jpg" alt="Fiat Cronos Drive 1.3 Automático 2023" onerror="this.remove()" />
           </div>
@@ -587,12 +517,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>04/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>95%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 3.200<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 3.510<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=cronos" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="B" data-fipe="68000" data-manual="false">
+        <article class="fleet-car" data-tier="B" data-fipe="68000" data-manual="false" data-car-id="cruze">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-cruze.jpg" alt="Chevrolet Cruze LT 2018" onerror="this.remove()" />
           </div>
@@ -606,12 +536,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>04/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>80%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 4.420<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 3.060<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=cruze" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="C" data-fipe="95000" data-manual="false">
+        <article class="fleet-car" data-tier="C" data-fipe="95000" data-manual="false" data-car-id="tracker">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-tracker.jpg" alt="Chevrolet Tracker LTZ 2020" onerror="this.remove()" />
           </div>
@@ -625,12 +555,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>03/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>85%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 4.000<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 3.800<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=tracker" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="C" data-fipe="135000" data-manual="false">
+        <article class="fleet-car" data-tier="C" data-fipe="135000" data-manual="false" data-car-id="corolla">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-corolla.jpg" alt="Toyota Corolla XEi 2021" onerror="this.remove()" />
           </div>
@@ -644,12 +574,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>04/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>90%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 5.700<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 5.400<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=corolla" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="C" data-fipe="100000" data-manual="false">
+        <article class="fleet-car" data-tier="C" data-fipe="100000" data-manual="false" data-car-id="renegade">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-renegade.jpg" alt="Jeep Renegade Sport 2020" onerror="this.remove()" />
           </div>
@@ -663,12 +593,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>02/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>70%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 4.200<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 4.000<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=renegade" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="D" data-fipe="285000" data-manual="false">
+        <article class="fleet-car" data-tier="D" data-fipe="285000" data-manual="false" data-car-id="bmw320">
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-bmw320.jpg" alt="BMW 320i 2023" onerror="this.remove()" />
           </div>
@@ -682,12 +612,12 @@
               <div><span data-i18n="fleet.condRev">Última revisão</span><strong>04/2026</strong></div>
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>95%</strong></div>
             </div>
-            <div class="fleet-car__price">R$ 9.100<span data-i18n="fleet.per">/mês</span></div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <div class="fleet-car__price">R$ 7.980<span data-i18n="fleet.per">/mês</span></div>
+            <a href="car.html?id=bmw320" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
-        <article class="fleet-car" data-tier="D">
+        <article class="fleet-car" data-tier="D" data-car-id="cybertruck">
           <span class="fleet-car__flag fleet-car__flag--special" data-i18n="fleet.special">Aspirational</span>
           <div class="photo-slot photo-slot--fleet">
             <img src="images/fleet-cybertruck.jpg" alt="Tesla Cybertruck 2025" onerror="this.remove()" />
@@ -703,7 +633,7 @@
               <div><span data-i18n="fleet.condTires">Pneus</span><strong>—</strong></div>
             </div>
             <div class="fleet-car__price" data-i18n="fleet.cyberPrice">Sob consulta</div>
-            <a href="#quote" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Pedir orçamento</a>
+            <a href="car.html?id=cybertruck" class="btn btn--ghost btn--sm" data-i18n="fleet.cta">Ver detalhes</a>
           </div>
         </article>
 
@@ -720,6 +650,54 @@
     </div>
   </section>
 
+  <!-- ===== NETWORK / CITIES ===== -->
+  <section class="section" id="network">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="net.eyebrow">Network</span>
+        <h2 data-i18n="net.title">Where the network is — and where it's going</h2>
+        <p data-i18n="net.sub">We started in Uberlândia (MG) and we're building city by city. Be the first car (or first renter) in your region.</p>
+      </div>
+
+      <div class="cities">
+        <article class="city city--live">
+          <header><span class="city__badge city__badge--live" data-i18n="net.statusLive">Available now</span></header>
+          <h3>Uberlândia · MG</h3>
+          <ul>
+            <li data-i18n="net.uli.cars">9 cars in the network</li>
+            <li data-i18n="net.uli.handover">In-person handover · airport meet-up possible</li>
+            <li data-i18n="net.uli.support">Local team in town</li>
+          </ul>
+        </article>
+
+        <article class="city city--soon">
+          <header><span class="city__badge city__badge--soon" data-i18n="net.statusSoon">Coming next</span></header>
+          <h3>São Paulo · SP</h3>
+          <ul>
+            <li data-i18n="net.spli.demand">Highest demand on our waiting list</li>
+            <li data-i18n="net.spli.target">Target: Q3 2026 · first 5 partner cars</li>
+            <li data-i18n="net.spli.owner">Owners: priority spot if you sign now</li>
+          </ul>
+        </article>
+
+        <article class="city city--planned">
+          <header><span class="city__badge city__badge--planned" data-i18n="net.statusPlanned">On the roadmap</span></header>
+          <h3 data-i18n="net.plannedTitle">Belo Horizonte · Brasília · Goiânia · Campinas · Rio</h3>
+          <ul>
+            <li data-i18n="net.plli.signal">Open if you signal interest</li>
+            <li data-i18n="net.plli.match">We match supply (owners) with demand (renters) before opening</li>
+            <li data-i18n="net.plli.expand">Goal: 5+ cars/city before launch</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="cities__ctas">
+        <a href="#quote" class="btn btn--solid" data-i18n="net.ctaRenter">I need a car in my city</a>
+        <a href="#renda" class="btn btn--ghost" data-i18n="net.ctaOwner">I want to be the first owner in my city</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== SAFETY ===== -->
   <section class="section" id="safety">
     <div class="container">
@@ -731,26 +709,95 @@
       <div class="cards cards--4">
         <article class="card card--icon">
           <span class="card__ico">🛡️</span>
-          <h3 data-i18n="safety.c1.title">Proper insurance</h3>
-          <p data-i18n="safety.c1.body">The car carries insurance that covers rental use — not just a personal policy.</p>
+          <h3 data-i18n="safety.c1.title">Rental-use insurance</h3>
+          <p data-i18n="safety.c1.body">Every car carries insurance for rental use — not just a personal policy. Coverage and deductibles detailed below.</p>
         </article>
         <article class="card card--icon">
           <span class="card__ico">📄</span>
           <h3 data-i18n="safety.c2.title">Clear contract</h3>
-          <p data-i18n="safety.c2.body">A written rental agreement, ID and license verification, and a photo inspection at pick-up and return.</p>
+          <p data-i18n="safety.c2.body">Written rental agreement, ID and license verification, photo + video inspection at pick-up and return.</p>
         </article>
         <article class="card card--icon">
           <span class="card__ico">📍</span>
-          <h3 data-i18n="safety.c3.title">Tracker equipped</h3>
-          <p data-i18n="safety.c3.body">The car has a GPS tracker for recovery and peace of mind on both sides.</p>
+          <h3 data-i18n="safety.c3.title">GPS tracker</h3>
+          <p data-i18n="safety.c3.body">Every car has a GPS tracker for recovery and peace of mind on both sides — never used for routine monitoring.</p>
         </article>
         <article class="card card--icon">
-          <span class="card__ico">🤝</span>
-          <h3 data-i18n="safety.c4.title">Referral-first</h3>
-          <p data-i18n="safety.c4.body">We start with people connected to our circle. Trust before scale.</p>
+          <span class="card__ico">📞</span>
+          <h3 data-i18n="safety.c4.title">24/7 emergency line</h3>
+          <p data-i18n="safety.c4.body">A dedicated phone available 24h for accidents, breakdowns or assistance. Number shared at pick-up and in the contract.</p>
         </article>
       </div>
+
+      <div class="cover-table">
+        <h3 data-i18n="safety.cov.title">Insurance coverage — at a glance</h3>
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="safety.cov.h1">Coverage</th>
+              <th data-i18n="safety.cov.h2">Included</th>
+              <th data-i18n="safety.cov.h3">Standard deductible (franquia)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td data-i18n="safety.cov.r1">Collision damage to the car</td><td>✓</td><td>R$ 3.500 – 5.000</td></tr>
+            <tr><td data-i18n="safety.cov.r2">Third-party damage (bodily + property — BI/PD)</td><td>✓</td><td data-i18n="safety.cov.r2d">Up to R$ 100k each, no driver deductible</td></tr>
+            <tr><td data-i18n="safety.cov.r3">Theft / total loss</td><td>✓</td><td data-i18n="safety.cov.r3d">100% covered (per contract)</td></tr>
+            <tr><td data-i18n="safety.cov.r4">Fire / natural events</td><td>✓</td><td data-i18n="safety.cov.r4d">100% covered (per contract)</td></tr>
+            <tr><td data-i18n="safety.cov.r5">Glass (windshield, mirrors)</td><td>✓</td><td>R$ 600</td></tr>
+            <tr><td data-i18n="safety.cov.r6">Tires (puncture / damage)</td><td>✓</td><td>R$ 400 per tire</td></tr>
+            <tr><td data-i18n="safety.cov.r7">24h roadside assistance + tow</td><td>✓</td><td data-i18n="safety.cov.r7d">Included nationwide</td></tr>
+            <tr><td data-i18n="safety.cov.r8">Replacement car if needed</td><td>✓</td><td data-i18n="safety.cov.r8d">Same category</td></tr>
+          </tbody>
+        </table>
+        <p class="cover-table__note" data-i18n="safety.cov.note">Final coverage and deductible values per category are confirmed in the contract. Driver remains responsible for tolls, fines and any damage from misuse (alcohol, racing, off-road).</p>
+      </div>
+
       <p class="disclaimer" data-i18n="safety.disclaimer">Note: insurance terms, deposit and contract details are confirmed individually for each rental. This page is informational and not a binding offer.</p>
+    </div>
+  </section>
+
+  <!-- ===== DOCUMENTS + REQUIREMENTS ===== -->
+  <section class="section section--alt" id="docs">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="docs.eyebrow">Documents & requirements</span>
+        <h2 data-i18n="docs.title">Everything in writing — read before you book</h2>
+        <p data-i18n="docs.sub">Transparency starts with the paperwork. Below is what you need on your side, and the contract we use — available for download in advance.</p>
+      </div>
+
+      <div class="docs-grid">
+        <article class="docs-card">
+          <h3 data-i18n="docs.req.title">What you need to rent</h3>
+          <ul>
+            <li data-i18n="docs.req.1"><strong>Age:</strong> minimum 21 years</li>
+            <li data-i18n="docs.req.2"><strong>License:</strong> valid CNH (or equivalent foreign license) for at least 2 years</li>
+            <li data-i18n="docs.req.3"><strong>ID:</strong> RG / passport with photo</li>
+            <li data-i18n="docs.req.4"><strong>Proof of address:</strong> recent utility bill or rental agreement</li>
+            <li data-i18n="docs.req.5"><strong>Payment method:</strong> credit card for pre-authorized deposit, or Pix</li>
+            <li data-i18n="docs.req.6"><strong>Driving record:</strong> clean recent history</li>
+          </ul>
+        </article>
+
+        <article class="docs-card docs-card--accent">
+          <h3 data-i18n="docs.contract.title">Rental contract</h3>
+          <p data-i18n="docs.contract.body">The same contract that goes with every rental. Trilingual (PT/EN/ES), clear language, includes adhesion form, deposit receipt and inspection checklist. Sign digitally — no fax required.</p>
+          <a href="Contrato_NomadDrive.xlsx" class="btn btn--solid btn--sm" download data-i18n="docs.contract.cta">⬇ Download the contract (Excel)</a>
+          <p class="docs-card__note" data-i18n="docs.contract.note">7 tabs: rental agreement PT/EN/ES · deposit receipt · adhesion · simulation · inspection. Format will move to PDF + e-signature in Q3 2026.</p>
+        </article>
+
+        <article class="docs-card">
+          <h3 data-i18n="docs.fast.title">Fast facts</h3>
+          <ul>
+            <li data-i18n="docs.fast.1"><strong>Deposit:</strong> R$ 2.000 (A/B) · R$ 3.000 (C) · R$ 5.000 (D)</li>
+            <li data-i18n="docs.fast.2"><strong>Payment:</strong> Pix, transfer, credit card up to 3×</li>
+            <li data-i18n="docs.fast.3"><strong>Mileage:</strong> 3.000 km/month included · R$ 0,40/km extra</li>
+            <li data-i18n="docs.fast.4"><strong>Cancellation:</strong> full refund 7+ days · 50% 3–7 days · none under 72h</li>
+            <li data-i18n="docs.fast.5"><strong>Insurance:</strong> rental-use policy, deductible R$ 3.500–5.000</li>
+            <li data-i18n="docs.fast.6"><strong>Pickup:</strong> in-person in Uberlândia, airport meet-up possible</li>
+          </ul>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -759,14 +806,14 @@
     <div class="container who">
       <div class="who__copy">
         <span class="eyebrow" data-i18n="who.eyebrow">Who it's for</span>
-        <h2 data-i18n="who.title">Made for travelers coming to Brazil from abroad</h2>
-        <p data-i18n="who.sub">If you live abroad and come to spend real time in Brazil — on holiday or visiting — you're exactly who we built this for.</p>
+        <h2 data-i18n="who.title">Real life chapters that need a real car</h2>
+        <p data-i18n="who.sub">If you're going to spend a month or more somewhere — for any reason — daily rentals add up fast and Uber gets expensive. A monthly rental is the calm, sensible choice.</p>
         <ul class="checklist">
-          <li data-i18n="who.l1">On holiday or visiting for 1–3 months</li>
-          <li data-i18n="who.l2">Want an automatic, comfortable car without agency prices</li>
-          <li data-i18n="who.l3">Prefer dealing with a real, English-speaking person</li>
-          <li data-i18n="who.l4">Value a backup car and a contract that protects you</li>
-          <li data-i18n="who.l5">Want less hassle — pick up once, keep the car the whole month</li>
+          <li data-i18n="who.l1">Want a comfortable automatic car without paying agency monthly markup</li>
+          <li data-i18n="who.l2">Prefer dealing with a real person, in your language (EN/PT/ES)</li>
+          <li data-i18n="who.l3">Value a backup car and a contract that protects you</li>
+          <li data-i18n="who.l4">Want less hassle — pick up once, keep the car the whole month</li>
+          <li data-i18n="who.l5">Need flexibility on dates and the kind of car (sedan, SUV, premium)</li>
         </ul>
       </div>
       <div class="who__media">
@@ -790,6 +837,7 @@
       </div>
       <div class="cards cards--3">
         <article class="testi">
+          <span class="testi__stars" aria-label="5 of 5">★★★★★</span>
           <p class="testi__quote" data-i18n="testi.q1">"Renting for two months was simple and fair. The car was clean and well kept, and having someone reachable the whole time made all the difference."</p>
           <div class="testi__author">
             <span class="testi__avatar">★</span>
@@ -800,6 +848,7 @@
           </div>
         </article>
         <article class="testi">
+          <span class="testi__stars" aria-label="5 of 5">★★★★★</span>
           <p class="testi__quote" data-i18n="testi.q2">"Way cheaper than the big agencies and zero hassle. Picked the car up in person, drove all over Minas, no surprises."</p>
           <div class="testi__author">
             <span class="testi__avatar">★</span>
@@ -810,6 +859,7 @@
           </div>
         </article>
         <article class="testi">
+          <span class="testi__stars" aria-label="5 of 5">★★★★★</span>
           <p class="testi__quote" data-i18n="testi.q3">"I was referred by a friend and I'd do the same. Honest pricing, a contract that protects both sides, and a backup car just in case."</p>
           <div class="testi__author">
             <span class="testi__avatar">★</span>
@@ -820,6 +870,18 @@
           </div>
         </article>
       </div>
+
+      <div class="trust-strip">
+        <span class="trust-strip__label" data-i18n="trust.label">Built with partners</span>
+        <div class="trust-strip__items">
+          <div class="trust-badge">🛡️ <span data-i18n="trust.b1">Insurance partner</span></div>
+          <div class="trust-badge">📍 <span data-i18n="trust.b2">GPS tracker network</span></div>
+          <div class="trust-badge">📄 <span data-i18n="trust.b3">SUSEP-compliant policy</span></div>
+          <div class="trust-badge">🔒 <span data-i18n="trust.b4">LGPD data protection</span></div>
+          <div class="trust-badge">💰 <span data-i18n="trust.b5">Pix · cartão · transferência</span></div>
+        </div>
+      </div>
+
       <p class="disclaimer" data-i18n="testi.note">Placeholder testimonials — replace with real reviews from your first clients in the script.js file.</p>
     </div>
   </section>
@@ -909,33 +971,64 @@
         <h2 data-i18n="faq.title">Good questions, straight answers</h2>
       </div>
       <div class="faq">
+        <h3 class="faq__group" data-i18n="faq.g.reserva">Booking & access</h3>
         <details>
-          <summary data-i18n="faq.q1">Can I rent without a referral?</summary>
-          <p data-i18n="faq.a1">Right now we work referral-first to keep things trusted and safe. If you don't have one, reach out anyway — tell us your situation and we'll see what's possible.</p>
+          <summary data-i18n="faq.q1">Do I need a referral to rent?</summary>
+          <p data-i18n="faq.a1">No. We started referral-first to grow with trust, but anyone with valid documents can request a quote. Tell us your situation and we'll send the next steps.</p>
         </details>
         <details>
           <summary data-i18n="faq.q2">Can I drive with my foreign license?</summary>
-          <p data-i18n="faq.a2">Generally a valid foreign license is accepted in Brazil for visitors, often alongside an international permit. We confirm the exact requirement with you before pick-up.</p>
+          <p data-i18n="faq.a2">Yes — a valid foreign license is accepted in Brazil for visitors (often with an international permit). For stays beyond 180 days, a Brazilian translation may be needed. We confirm the exact requirement before pick-up.</p>
         </details>
         <details>
-          <summary data-i18n="faq.q3">What happens if the car has a problem?</summary>
-          <p data-i18n="faq.a3">You get a backup car so you're never stranded, and we stay reachable for your whole trip.</p>
+          <summary data-i18n="faq.q3">What are the driver requirements?</summary>
+          <p data-i18n="faq.a3">Minimum 21 years old, valid CNH (or equivalent foreign license) for at least 2 years, photo ID and proof of address. Clean recent driving record. Final approval after document review.</p>
         </details>
         <details>
-          <summary data-i18n="faq.q4">Is there a deposit?</summary>
-          <p data-i18n="faq.a4">Yes — a refundable security deposit is part of the contract. The amount is confirmed in your quote.</p>
+          <summary data-i18n="faq.q4">Which cities do you serve?</summary>
+          <p data-i18n="faq.a4">Pick-up is currently in Uberlândia, MG. From there the car is yours to travel anywhere in Brazil under the contract. Expansion to São Paulo, Belo Horizonte, Brasília and other cities is on the roadmap — see the "Network" section.</p>
+        </details>
+
+        <h3 class="faq__group" data-i18n="faq.g.pagamento">Deposit & payment</h3>
+        <details>
+          <summary data-i18n="faq.q5">How much is the deposit and how is it paid?</summary>
+          <p data-i18n="faq.a5">The refundable deposit is R$ 2.000 for categories A/B, R$ 3.000 for C and R$ 5.000 for D (luxury). Paid by Pix or pre-authorized on a credit card. Refunded within 7 business days after the car is returned in the same condition (minus any tolls/fines that arrive late).</p>
         </details>
         <details>
-          <summary data-i18n="faq.q5">Which cities do you serve?</summary>
-          <p data-i18n="faq.a5">Pick-up is in Uberlândia, MG. From there the car is yours to travel anywhere in Brazil within the contract terms.</p>
+          <summary data-i18n="faq.q6">How do I pay the monthly rate?</summary>
+          <p data-i18n="faq.a6">Pix, bank transfer or credit card (up to 3× without interest). First month paid before pick-up; longer stays may pay month by month with proof of address and stable contact.</p>
         </details>
         <details>
-          <summary data-i18n="faq.q6">How do I pay?</summary>
-          <p data-i18n="faq.a6">PIX, bank transfer or card. We arrange the details when you book — open conversation, everything in writing.</p>
+          <summary data-i18n="faq.q7">What's the cancellation policy?</summary>
+          <p data-i18n="faq.a7">Cancellations more than 7 days before pick-up: full refund. 3–7 days before: 50%. Less than 72h or no-show: no refund. Force majeure (illness, document issues) is reviewed case-by-case with full transparency.</p>
+        </details>
+
+        <h3 class="faq__group" data-i18n="faq.g.seguro">Insurance & incidents</h3>
+        <details>
+          <summary data-i18n="faq.q8">What does the insurance cover?</summary>
+          <p data-i18n="faq.a8">All cars carry insurance for rental use covering: collision, third-party damage (BI/PD), theft, fire, and natural events. Standard franquia (deductible) of R$ 3.500–R$ 5.000 depending on category. Glass and tires have a smaller dedicated franquia. Full terms in the contract.</p>
         </details>
         <details>
-          <summary data-i18n="faq.q7">Who pays for tolls and traffic fines?</summary>
-          <p data-i18n="faq.a7">Tolls and fines incurred during your rental are your responsibility. If a fine arrives later, we transfer the points/charge to your name and handle the paperwork — fully transparent.</p>
+          <summary data-i18n="faq.q9">What happens if I have an accident?</summary>
+          <p data-i18n="faq.a9">Call our 24/7 emergency line first (in the contract and on the WhatsApp pinned message). We dispatch assistance, you fill the boletim de ocorrência (BO) if needed, take photos and we open the sinistro with the insurer. Backup car arranged so you're not stranded.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q10">Who pays for tolls and traffic fines?</summary>
+          <p data-i18n="faq.a10">All tolls and fines incurred during your rental are your responsibility. Fines that arrive after return: we transfer the points to your CNH and the charge to you, with a copy of the auto. Fully transparent — no markup.</p>
+        </details>
+
+        <h3 class="faq__group" data-i18n="faq.g.entrega">Hand-over & inspection</h3>
+        <details>
+          <summary data-i18n="faq.q11">How does the vistoria work?</summary>
+          <p data-i18n="faq.a11">Photo + video inspection of all four sides, interior, dashboard mileage, fuel level and tire condition at pick-up — both sides sign. Same at return. Any new damage is compared against pick-up photos. Zero surprises.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q12">Does the car have a backup if it breaks down?</summary>
+          <p data-i18n="faq.a12">Yes. Mechanical issue or accident: we arrange a replacement car of the same category (or a credit if you accept a different category) so your plans don't break.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq.q13">Can I leave the city / cross state borders?</summary>
+          <p data-i18n="faq.a13">Yes, within Brazil. Crossing into Argentina/Uruguay/Paraguay needs prior authorization and extra paperwork. The car has a GPS tracker — for safety, never for spying.</p>
         </details>
       </div>
     </div>
@@ -1009,10 +1102,55 @@
           </div>
         </article>
       </div>
+
+      <div class="owner-steps">
+        <h3 class="owner-steps__title" data-i18n="renda.steps.title">From your car to your first rent — 5 steps</h3>
+        <ol class="owner-steps__list">
+          <li>
+            <span class="owner-steps__num">1</span>
+            <div>
+              <strong data-i18n="renda.steps.s1.title">Check eligibility</strong>
+              <p data-i18n="renda.steps.s1.body">Car up to 8 years old, well kept, documents up to date (CRLV, IPVA, licenciamento). Mileage under 150k km is preferred.</p>
+            </div>
+          </li>
+          <li>
+            <span class="owner-steps__num">2</span>
+            <div>
+              <strong data-i18n="renda.steps.s2.title">Simulate your income</strong>
+              <p data-i18n="renda.steps.s2.body">Use the simulator below — enter FIPE and occupancy. You see the cash that lands in your account, the ROI on FIPE, and three realistic scenarios.</p>
+            </div>
+          </li>
+          <li>
+            <span class="owner-steps__num">3</span>
+            <div>
+              <strong data-i18n="renda.steps.s3.title">Send documents</strong>
+              <p data-i18n="renda.steps.s3.body">CRLV (digital is fine), photos of the four sides + interior, ID, recent maintenance history. We do a quick analysis (1–3 business days).</p>
+            </div>
+          </li>
+          <li>
+            <span class="owner-steps__num">4</span>
+            <div>
+              <strong data-i18n="renda.steps.s4.title">Tracker + inspection</strong>
+              <p data-i18n="renda.steps.s4.body">We install a GPS tracker (cost shared — your share R$ 30/month) and do a baseline mechanical inspection. The rental-use insurance starts here.</p>
+            </div>
+          </li>
+          <li>
+            <span class="owner-steps__num">5</span>
+            <div>
+              <strong data-i18n="renda.steps.s5.title">Get paid every month</strong>
+              <p data-i18n="renda.steps.s5.body">First rental closes on WhatsApp, contract signed, deposit secured. You receive your share via Pix on the 5th of every month, with a clear statement (gross − platform fee − tracker − any sinistro). 100% transparent.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="owner-steps__cta">
+          <a href="#" id="joinWhatsBottom" class="btn btn--solid" data-i18n="renda.steps.cta">Start the onboarding (WhatsApp)</a>
+        </div>
+      </div>
+
       <div class="sims">
       <div class="renda__sim">
         <h3 data-i18n="renda.simtitle">Estimate your earnings</h3>
-        <p class="sim-example" data-i18n="renda.simExample">Default values reflect our pilot car — Chevrolet Cobalt Elite 2018 (FIPE ~R$45k). Use the FIPE field for your own.</p>
+        <p class="sim-example" data-i18n="renda.simExample">Default values reflect our pilot car — Chevrolet Cobalt Elite 2018 (FIPE ~R$57k). Use the FIPE field for your own.</p>
         <div class="sim-field">
           <label data-i18n="renda.tierLabel">Your car's tier</label>
           <div class="tier-picker">
@@ -1024,7 +1162,7 @@
         </div>
         <div class="sim-field">
           <label><span data-i18n="renda.fipeLabel">Or your FIPE value</span> <span class="opt" data-i18n="form.optional">(optional)</span></label>
-          <input type="number" id="simFipe" placeholder="ex: 45000" inputmode="numeric" />
+          <input type="number" id="simFipe" placeholder="ex: 57000" inputmode="numeric" />
         </div>
         <div class="sim-field">
           <label><span data-i18n="renda.monthsLabel">Months rented per year</span> <strong id="simMonthsVal">8</strong></label>
@@ -1034,12 +1172,74 @@
           <div class="sim-row sim-row--price"><span data-i18n="renda.rPriceUsed">Monthly price used</span><strong id="simPriceShown">—</strong></div>
           <div class="sim-row"><span data-i18n="renda.rGross">Gross / year</span><strong id="simGross">—</strong></div>
           <div class="sim-row sim-row--fee"><span data-i18n="renda.rFee">NomadDrive platform fee</span><strong id="simFee">—</strong></div>
-          <div class="sim-row"><span data-i18n="renda.rCarCosts">Your car costs (insurance, upkeep)</span><strong id="simCarCosts">—</strong></div>
-          <div class="sim-row sim-row--total"><span data-i18n="renda.rNet">Your estimated net / year</span><strong id="simNet">—</strong></div>
-          <div class="sim-row sim-row--fee"><span data-i18n="renda.rBreakEven">Break-even (months to cover costs)</span><strong id="simBreakEven">—</strong></div>
-          <div class="sim-row"><span data-i18n="renda.rMonthly">≈ per month</span><strong id="simMonthly">—</strong></div>
+          <div class="sim-row sim-row--cash">
+            <span data-i18n="renda.rCash">Cash in your pocket / year</span>
+            <strong id="simCash">—</strong>
+          </div>
+          <div class="sim-row sim-row--roi sim-row--roi-cash">
+            <span data-i18n="renda.rRoiCash">Cash return on FIPE</span>
+            <strong id="simRoiCash">—</strong>
+          </div>
+
+          <div class="sim-divider">
+            <span data-i18n="renda.dividerLabel">Optional view — subtract the car's annual costs</span>
+            <small data-i18n="renda.dividerHint">You'd pay these even if the car sat parked.</small>
+          </div>
+
+          <div class="sim-row sim-row--muted"><span data-i18n="renda.rCarCosts">Annual car costs (IPVA, insurance, upkeep, extra wear)</span><strong id="simCarCosts">—</strong></div>
+          <div class="sim-row sim-row--total"><span data-i18n="renda.rNet">Net after covering the car's full year</span><strong id="simNet">—</strong></div>
+          <div class="sim-row sim-row--roi"><span data-i18n="renda.rRoi">ROI after car costs (net ÷ FIPE)</span><strong id="simRoi">—</strong></div>
+          <div class="sim-row sim-row--fee"><span data-i18n="renda.rBreakEven">Break-even (months to cover full annual costs)</span><strong id="simBreakEven">—</strong></div>
+          <div class="sim-row"><span data-i18n="renda.rMonthly">≈ per month (cash net of all costs)</span><strong id="simMonthly">—</strong></div>
         </div>
-        <p class="sim-note" data-i18n="renda.note">Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income.</p>
+
+        <div class="sim-view-help">
+          <h4 data-i18n="renda.viewHelpTitle">Which view fits your situation?</h4>
+          <div class="sim-view-help__grid">
+            <div class="sim-view-help__col sim-view-help__col--cash">
+              <strong data-i18n="renda.viewHelpA">Use "Cash in pocket" if…</strong>
+              <p data-i18n="renda.viewHelpAbody">You already own this car (inheritance, second car, retirement). IPVA, insurance and maintenance are sunk costs — you'd pay them anyway. Every R$ from the rental is extra cash on top of your normal life.</p>
+            </div>
+            <div class="sim-view-help__col sim-view-help__col--net">
+              <strong data-i18n="renda.viewHelpB">Use "Net after car costs" if…</strong>
+              <p data-i18n="renda.viewHelpBbody">You're thinking of buying a car specifically to rent it out. Then the car's full annual cost (IPVA, insurance, depreciation) is a real business expense — and the deal only makes sense if rental income covers it with margin.</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="sim-scenarios__title" data-i18n="renda.scnTitle">Three realistic scenarios for this car</h4>
+        <p class="sim-scenarios__sub" data-i18n="renda.scnSub">Same car, same FIPE — only the occupancy changes. Both views shown side by side.</p>
+        <table class="scenarios-table scenarios-table--dual">
+          <thead>
+            <tr>
+              <th data-i18n="renda.scnHead">Scenario</th>
+              <th data-i18n="renda.scnMonths">Mo/yr</th>
+              <th data-i18n="renda.scnCash">Cash / yr<br /><small>(ROI)</small></th>
+              <th data-i18n="renda.scnNet">Net after costs<br /><small>(ROI)</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="scnFull">
+              <td><strong data-i18n="renda.scn1.name">Idle car</strong><br /><span class="scn-tag" data-i18n="renda.scn1.tag">Best fit</span></td>
+              <td>11</td>
+              <td><strong id="scnFullCash">—</strong><br /><span class="scn-roi" id="scnFullCashRoi">—</span></td>
+              <td><strong id="scnFullNet">—</strong><br /><span class="scn-roi" id="scnFullRoi">—</span></td>
+            </tr>
+            <tr id="scnHalf">
+              <td><strong data-i18n="renda.scn2.name">Light personal use</strong><br /><span class="scn-tag" data-i18n="renda.scn2.tag">Realistic</span></td>
+              <td>7</td>
+              <td><strong id="scnHalfCash">—</strong><br /><span class="scn-roi" id="scnHalfCashRoi">—</span></td>
+              <td><strong id="scnHalfNet">—</strong><br /><span class="scn-roi" id="scnHalfRoi">—</span></td>
+            </tr>
+            <tr id="scnLow">
+              <td><strong data-i18n="renda.scn3.name">Owner's own trips only</strong><br /><span class="scn-tag" data-i18n="renda.scn3.tag">Tight</span></td>
+              <td>3</td>
+              <td><strong id="scnLowCash">—</strong><br /><span class="scn-roi" id="scnLowCashRoi">—</span></td>
+              <td><strong id="scnLowNet">—</strong><br /><span class="scn-roi" id="scnLowRoi">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="sim-note" data-i18n="renda.note">Rough estimate — final numbers depend on your car, insurance and the agreement. Not a guarantee of income. In the end, it's a personal call: a parked car costs the same as a rented one for IPVA and insurance, so even one rented month is extra cash. Only you can decide what makes sense.</p>
       </div>
       <div class="renda__sim">
         <h3 data-i18n="renda.simPartnerTitle">Estimate your referral points</h3>
@@ -1159,11 +1359,55 @@
     </div>
   </section>
 
+  <!-- ===== DIGITAL ROADMAP ===== -->
+  <section class="section section--alt" id="roadmap">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow" data-i18n="rmap.eyebrow">What's coming next</span>
+        <h2 data-i18n="rmap.title">From WhatsApp-first to a full digital platform</h2>
+        <p data-i18n="rmap.sub">Today every booking closes by WhatsApp with a real person on the other side — that's on purpose, while the network is small. As we grow, the digital layer comes online:</p>
+      </div>
+      <div class="roadmap">
+        <article class="rmap-item rmap-item--now">
+          <span class="rmap-item__phase" data-i18n="rmap.now">Available today</span>
+          <ul>
+            <li data-i18n="rmap.now.1">WhatsApp-based booking with real human support</li>
+            <li data-i18n="rmap.now.2">Contract by PDF/Excel · digital signature accepted</li>
+            <li data-i18n="rmap.now.3">Pix / bank transfer / credit card</li>
+            <li data-i18n="rmap.now.4">Per-car detail page · live price calc · gallery</li>
+            <li data-i18n="rmap.now.5">Owner-earnings simulator (this page)</li>
+          </ul>
+        </article>
+        <article class="rmap-item rmap-item--soon">
+          <span class="rmap-item__phase" data-i18n="rmap.soon">Q3 2026</span>
+          <ul>
+            <li data-i18n="rmap.soon.1">Online booking with real-time availability</li>
+            <li data-i18n="rmap.soon.2">Auth + account dashboard (rentals, km used, history)</li>
+            <li data-i18n="rmap.soon.3">Pix block on deposit · auto-release on return</li>
+            <li data-i18n="rmap.soon.4">CNH/CRLV automatic validation (anti-fraud)</li>
+            <li data-i18n="rmap.soon.5">Owner dashboard: calendar, payouts, statements</li>
+          </ul>
+        </article>
+        <article class="rmap-item rmap-item--later">
+          <span class="rmap-item__phase" data-i18n="rmap.later">2027</span>
+          <ul>
+            <li data-i18n="rmap.later.1">Live chat + AI assistant 24/7</li>
+            <li data-i18n="rmap.later.2">Expansion to top 6 Brazilian cities</li>
+            <li data-i18n="rmap.later.3">Native iOS / Android app</li>
+            <li data-i18n="rmap.later.4">Multi-driver per rental (couples, families)</li>
+            <li data-i18n="rmap.later.5">Insurance bundles with partner brokers</li>
+          </ul>
+        </article>
+      </div>
+      <p class="rmap-note" data-i18n="rmap.note">We ship in small steps and tell you what's real today. Want to suggest something? <a href="#quote">Send us a message</a>.</p>
+    </div>
+  </section>
+
   <!-- ===== FINAL CTA ===== -->
-  <section class="finalcta">
+  <section class="finalcta finalcta--bg">
     <div class="container finalcta__inner">
-      <h2 data-i18n="final.title">Coming to Brazil soon?</h2>
-      <p data-i18n="final.sub">Lock in a fair monthly price before your trip. It starts with a quick message.</p>
+      <h2 data-i18n="final.title">Need a car for a few months?</h2>
+      <p data-i18n="final.sub">Lock in a fair monthly price before your stay. It starts with a quick message.</p>
       <a href="#quote" class="btn btn--solid btn--lg" data-i18n="final.cta">Request your quote</a>
     </div>
   </section>

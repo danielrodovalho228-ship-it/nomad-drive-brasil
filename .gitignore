@@ -1,10 +1,33 @@
-# Nao versionar / nao publicar
-Imagens/
-publicar/
-*.xlsx
-_*.py
+# ============================================================
+# NomadDrive Brasil — repository ignore list
+# ============================================================
 
-# Sistema operacional
+# --- Source / raw materials (NOT deployed to the site) ---
+Imagens/
+Imagens brand-logo/
+Imagens Uberlandia/
+
+# --- Internal financial / planning spreadsheets ---
+# (keep Contrato_NomadDrive.xlsx — it's downloadable from the site)
+Simulador_Viabilidade_NomadDrive.xlsx
+
+# --- Helper scripts (used once to build assets, no need to ship) ---
+_*.py
+_*.js
+
+# --- Mirror folder for Netlify Drop (we use Vercel now from root) ---
+publicar/
+
+# --- Test artifacts ---
+node_modules/
+*.log
+
+# --- OS junk ---
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Editor configs ---
+.vscode/
+.idea/
+*.swp
