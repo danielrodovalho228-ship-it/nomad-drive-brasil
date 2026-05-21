@@ -216,6 +216,35 @@ as $$
   select w.id from public.workshops w where w.user_id = auth.uid() limit 1;
 $$;
 
+-- owns_vehicle() / workshop_sees_vehicle(): checagens entre tabelas usadas
+-- pelas policies. SECURITY DEFINER evita recursao de RLS (erro 42P17) quando
+-- a policy de vehicles consulta vehicle_inspections e vice-versa.
+create or replace function public.owns_vehicle(v_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.vehicles v
+    where v.id = v_id and v.owner_id = auth.uid()
+  );
+$$;
+
+create or replace function public.workshop_sees_vehicle(v_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.vehicle_inspections vi
+    where vi.vehicle_id = v_id and vi.workshop_id = public.my_workshop_id()
+  );
+$$;
+
 -- set_updated_at(): mantem a coluna updated_at sincronizada.
 create or replace function public.set_updated_at()
 returns trigger
@@ -339,29 +368,13 @@ create policy vehicles_owner on public.vehicles
   with check (owner_id = auth.uid() or public.is_admin());
 drop policy if exists vehicles_workshop_select on public.vehicles;
 create policy vehicles_workshop_select on public.vehicles
-  for select using (
-    exists (
-      select 1 from public.vehicle_inspections vi
-      where vi.vehicle_id = vehicles.id
-        and vi.workshop_id = public.my_workshop_id()
-    )
-  );
+  for select using (public.workshop_sees_vehicle(id));
 
 -- VEHICLE_DOCUMENTS: proprietario do veiculo; admin.
 drop policy if exists vehicle_documents_access on public.vehicle_documents;
 create policy vehicle_documents_access on public.vehicle_documents
-  for all using (
-    public.is_admin() or exists (
-      select 1 from public.vehicles v
-      where v.id = vehicle_documents.vehicle_id and v.owner_id = auth.uid()
-    )
-  )
-  with check (
-    public.is_admin() or exists (
-      select 1 from public.vehicles v
-      where v.id = vehicle_documents.vehicle_id and v.owner_id = auth.uid()
-    )
-  );
+  for all using (public.is_admin() or public.owns_vehicle(vehicle_id))
+  with check (public.is_admin() or public.owns_vehicle(vehicle_id));
 
 -- VEHICLE_INSPECTIONS: oficina atribuida; proprietario do veiculo (leitura); admin.
 drop policy if exists vehicle_inspections_select on public.vehicle_inspections;
@@ -369,10 +382,7 @@ create policy vehicle_inspections_select on public.vehicle_inspections
   for select using (
     public.is_admin()
     or workshop_id = public.my_workshop_id()
-    or exists (
-      select 1 from public.vehicles v
-      where v.id = vehicle_inspections.vehicle_id and v.owner_id = auth.uid()
-    )
+    or public.owns_vehicle(vehicle_id)
   );
 drop policy if exists vehicle_inspections_workshop_write on public.vehicle_inspections;
 create policy vehicle_inspections_workshop_write on public.vehicle_inspections
@@ -402,12 +412,7 @@ create policy partners_referrals_owner on public.partners_referrals
 -- PROTECTION_CASES: proprietario do veiculo le; admin gerencia tudo.
 drop policy if exists protection_cases_select on public.protection_cases;
 create policy protection_cases_select on public.protection_cases
-  for select using (
-    public.is_admin() or exists (
-      select 1 from public.vehicles v
-      where v.id = protection_cases.vehicle_id and v.owner_id = auth.uid()
-    )
-  );
+  for select using (public.is_admin() or public.owns_vehicle(vehicle_id));
 drop policy if exists protection_cases_admin_write on public.protection_cases;
 create policy protection_cases_admin_write on public.protection_cases
   for all using (public.is_admin()) with check (public.is_admin());
