@@ -100,9 +100,14 @@
     </div>
 
     <div class="onb-done" id="onbDone" hidden>
-      <h2>Credenciamento enviado</h2>
-      <p>Recebemos o cadastro da sua oficina. O status entra como <strong>em análise</strong> e a equipe da Nomade Drive vai avaliar os dados antes da aprovação. Você pode fechar esta página com segurança.</p>
-      <a href="index.html" class="btn btn--solid btn--lg">Voltar ao site</a>
+      <h2>Cadastro recebido com sucesso</h2>
+      <p>Recebemos o cadastro da sua oficina e criamos o seu protocolo. O credenciamento entra <strong>em análise</strong> e a equipe Nomade Drive vai avaliar os dados antes da aprovação.</p>
+      <p class="onb-proto">Protocolo: <strong id="onbProtocolo">—</strong></p>
+      <div class="onb-done__cta">
+        <a href="status-cadastro.html" id="onbAcompanhar" class="btn btn--solid btn--lg">Acompanhar meu cadastro</a>
+        <a href="#" class="btn btn--outline btn--lg" data-wa="Olá! Enviei o credenciamento da minha oficina na Nomade Drive Brasil e quero acompanhar.">Falar no WhatsApp</a>
+        <a href="index.html" class="btn btn--ghost btn--lg">Voltar ao site</a>
+      </div>
     </div>
 
   </div>
@@ -195,6 +200,13 @@
       if (r2.error) throw r2.error;
       return c.from("profiles").update({ phone: fone, city: cidade }).eq("id", uid);
     }).then(function () {
+      return a.createApplication({ profileType: "workshop", fullName: razao, phone: fone, city: cidade, source: "onboarding-oficina" });
+    }).then(function (app) {
+      if (app && app.protocol) {
+        document.getElementById("onbProtocolo").textContent = app.protocol;
+        document.getElementById("onbAcompanhar").setAttribute("href",
+          "status-cadastro.html?protocolo=" + encodeURIComponent(app.protocol));
+      }
       form.hidden = true;
       document.querySelector(".onb-aside").hidden = true;
       document.getElementById("onbDone").hidden = false;

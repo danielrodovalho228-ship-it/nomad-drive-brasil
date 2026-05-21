@@ -165,6 +165,37 @@
       }).catch(function () { return false; });
     },
 
+    /* registra um cadastro (application) e devolve o protocolo gerado */
+    createApplication: function (opts) {
+      opts = opts || {};
+      if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
+      return ndAuth.getSession().then(function (s) {
+        return client.from("applications").insert({
+          profile_type: opts.profileType || null,
+          user_id: s ? s.user.id : null,
+          full_name: opts.fullName || null,
+          email: opts.email || (s ? s.user.email : null),
+          phone: opts.phone || null,
+          city: opts.city || null,
+          source: opts.source || null,
+          status: "em_analise"
+        }).select("protocol").maybeSingle().then(function (r) {
+          if (r.error) return { ok: false, error: translateError(r.error) };
+          return { ok: true, protocol: (r.data && r.data.protocol) || null };
+        });
+      }).catch(function (e) { return { ok: false, error: translateError(e) }; });
+    },
+
+    /* consulta o status de um cadastro pelo protocolo (RPC pública) */
+    applicationStatus: function (protocol) {
+      if (!client) return Promise.resolve(null);
+      return client.rpc("application_status_by_protocol", { p: protocol })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          return rows.length ? rows[0] : null;
+        }).catch(function () { return null; });
+    },
+
     signIn: function (email, password) {
       if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
       return client.auth.signInWithPassword({ email: email, password: password })

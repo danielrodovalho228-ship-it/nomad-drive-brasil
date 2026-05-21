@@ -131,11 +131,13 @@
     </div>
 
     <div class="onb-done" id="onbDone" hidden>
-      <h2>Veículo cadastrado para análise</h2>
-      <p>Recebemos os dados do seu veículo. O próximo passo é a análise documental e o checklist técnico em oficina parceira. Você pode simular a faixa de receita enquanto isso.</p>
+      <h2>Cadastro recebido com sucesso</h2>
+      <p>Recebemos os dados do seu veículo e criamos o seu protocolo. O cadastro está <strong>em análise</strong> — o próximo passo é a análise documental e o checklist técnico em oficina parceira. O envio não garante aprovação automática.</p>
+      <p class="onb-proto">Protocolo: <strong id="onbProtocolo">—</strong></p>
       <div class="onb-done__cta">
-        <a href="proprietarios.html#simuladorProp" class="btn btn--solid btn--lg">Simular a receita</a>
-        <a href="index.html" class="btn btn--outline btn--lg">Voltar ao site</a>
+        <a href="status-cadastro.html" id="onbAcompanhar" class="btn btn--solid btn--lg">Acompanhar meu cadastro</a>
+        <a href="#" class="btn btn--outline btn--lg" data-wa="Olá! Cadastrei meu veículo na Nomade Drive Brasil e quero acompanhar.">Falar no WhatsApp</a>
+        <a href="proprietarios.html#simuladorProp" class="btn btn--ghost btn--lg">Simular a receita</a>
       </div>
     </div>
 
@@ -244,6 +246,13 @@
         });
       }).then(function (r2) {
         if (r2.error) throw r2.error;
+        return a.createApplication({ profileType: "owner", fullName: nome, phone: fone, city: cidade, source: "onboarding-proprietario" });
+      }).then(function (app) {
+        if (app && app.protocol) {
+          document.getElementById("onbProtocolo").textContent = app.protocol;
+          document.getElementById("onbAcompanhar").setAttribute("href",
+            "status-cadastro.html?protocolo=" + encodeURIComponent(app.protocol));
+        }
         form.hidden = true;
         document.querySelector(".onb-aside").hidden = true;
         document.querySelector(".onb-context").hidden = true;

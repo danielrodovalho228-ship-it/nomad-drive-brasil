@@ -120,9 +120,14 @@
     </div>
 
     <div class="onb-done" id="onbDone" hidden>
-      <h2>Perfil enviado para análise</h2>
-      <p>Recebemos os seus dados. A equipe da Nomade Drive vai analisar o seu perfil e pode entrar em contato para solicitar documentos. Você pode fechar esta página com segurança.</p>
-      <a href="index.html" class="btn btn--solid btn--lg">Voltar ao site</a>
+      <h2>Cadastro recebido com sucesso</h2>
+      <p>Recebemos os seus dados e criamos o seu protocolo. O perfil está <strong>em análise</strong> pela equipe Nomade Drive — normalmente em até 1 a 3 dias úteis. O envio não garante aprovação automática: a liberação depende de análise, documentação e regras da plataforma.</p>
+      <p class="onb-proto">Protocolo: <strong id="onbProtocolo">—</strong></p>
+      <div class="onb-done__cta">
+        <a href="status-cadastro.html" id="onbAcompanhar" class="btn btn--solid btn--lg">Acompanhar meu cadastro</a>
+        <a href="#" class="btn btn--outline btn--lg" data-wa="Olá! Enviei meu cadastro de cliente na Nomade Drive Brasil e quero acompanhar.">Falar no WhatsApp</a>
+        <a href="index.html" class="btn btn--ghost btn--lg">Voltar ao site</a>
+      </div>
     </div>
 
   </div>
@@ -199,6 +204,13 @@
       });
     }).then(function (r2) {
       if (r2.error) throw r2.error;
+      return a.createApplication({ profileType: "client", fullName: nome, phone: fone, city: cidade, source: "onboarding-cliente" });
+    }).then(function (app) {
+      if (app && app.protocol) {
+        document.getElementById("onbProtocolo").textContent = app.protocol;
+        document.getElementById("onbAcompanhar").setAttribute("href",
+          "status-cadastro.html?protocolo=" + encodeURIComponent(app.protocol));
+      }
       form.hidden = true;
       document.querySelector(".onb-aside").hidden = true;
       document.getElementById("onbDone").hidden = false;

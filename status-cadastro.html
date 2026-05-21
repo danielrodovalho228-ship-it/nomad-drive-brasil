@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Acompanhar cadastro — Nomade Drive Brasil</title>
+<meta name="description" content="Acompanhe o status do seu cadastro na Nomade Drive Brasil pelo número de protocolo." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="auth">
+  <div class="container">
+    <div class="status-card">
+      <span class="eyebrow">Acompanhamento</span>
+      <h1 class="auth-card__title">Acompanhar meu cadastro</h1>
+      <p class="auth-card__sub">Digite o número de protocolo que você recebeu ao enviar o cadastro — por exemplo <strong>NDB-2026-000123</strong>.</p>
+
+      <div class="auth-msg" id="protoMsg" hidden></div>
+
+      <form class="auth-form" id="protoForm" novalidate>
+        <div class="auth-field">
+          <label for="protoInput">Número de protocolo</label>
+          <input type="text" id="protoInput" placeholder="NDB-2026-000000" autocomplete="off" />
+        </div>
+        <button type="submit" class="btn btn--solid btn--lg auth-submit" id="protoBtn">Consultar status</button>
+      </form>
+
+      <div class="status-result" id="protoResult" hidden>
+        <div class="status-result__head">
+          <span class="status-result__label">Protocolo</span>
+          <strong id="rProtocolo">—</strong>
+        </div>
+        <div class="status-result__row">
+          <span>Status atual</span>
+          <span class="dash-pill dash-pill--neutral" id="rStatus">—</span>
+        </div>
+        <p class="status-result__text" id="rTexto">—</p>
+        <p class="status-result__meta">Última atualização: <span id="rData">—</span></p>
+        <p class="status-result__meta">Canal de contato: WhatsApp ou e-mail informado no cadastro.</p>
+      </div>
+
+      <a href="#" class="btn btn--outline btn--block status-wa" data-wa="Olá! Quero acompanhar o meu cadastro na Nomade Drive Brasil. Meu protocolo é: ">Falar no WhatsApp</a>
+      <p class="auth-note">A consulta mostra apenas o andamento do cadastro. Dados pessoais não são exibidos nesta página.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var STATUS = {
+    recebido:               { t: "Recebido", k: "warn", d: "Recebemos o seu cadastro e criamos o seu protocolo." },
+    em_analise:             { t: "Em análise", k: "warn", d: "Sua solicitação está em análise pela equipe Nomade Drive." },
+    aguardando_documentos:  { t: "Aguardando documentos", k: "warn", d: "Precisamos de documentos ou informações adicionais para continuar." },
+    entrevista_pendente:    { t: "Entrevista pendente", k: "warn", d: "Será necessária uma validação rápida por WhatsApp ou vídeo." },
+    aprovado:               { t: "Aprovado", k: "ok", d: "Seu perfil foi aprovado. Você já pode avançar para a próxima etapa." },
+    reprovado:              { t: "Reprovado", k: "bad", d: "No momento, sua solicitação não atende aos critérios mínimos da plataforma." },
+    bloqueado:              { t: "Bloqueado", k: "bad", d: "Seu perfil está temporariamente bloqueado para revisão." },
+    inativo:                { t: "Inativo", k: "neutral", d: "Este cadastro está inativo." }
+  };
+  var msg = document.getElementById("protoMsg");
+  var result = document.getElementById("protoResult");
+  function showMsg(text, kind) {
+    msg.textContent = text;
+    msg.className = "auth-msg auth-msg--" + (kind || "warn");
+    msg.hidden = false;
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    var dt = new Date(d);
+    if (isNaN(dt.getTime())) return String(d);
+    return ("0" + dt.getDate()).slice(-2) + "/" + ("0" + (dt.getMonth() + 1)).slice(-2) +
+      "/" + dt.getFullYear();
+  }
+  var a = window.ndAuth;
+  if (!a || !a.configured) {
+    showMsg(a ? a.notConfiguredMessage() : "Consulta indisponível nesta página.", "warn");
+  }
+
+  function consultar(proto) {
+    proto = (proto || "").trim().toUpperCase();
+    if (!proto) { showMsg("Digite o número de protocolo.", "warn"); return; }
+    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Indisponível.", "warn"); return; }
+    var btn = document.getElementById("protoBtn");
+    btn.disabled = true; btn.textContent = "Consultando...";
+    a.applicationStatus(proto).then(function (row) {
+      btn.disabled = false; btn.textContent = "Consultar status";
+      if (!row) {
+        result.hidden = true;
+        showMsg("Não encontramos um cadastro com este protocolo. Confira o número e tente novamente.", "error");
+        return;
+      }
+      msg.hidden = true;
+      var info = STATUS[row.status] || { t: row.status, k: "neutral", d: "Status do cadastro." };
+      document.getElementById("rProtocolo").textContent = row.protocol;
+      var pill = document.getElementById("rStatus");
+      pill.textContent = info.t;
+      pill.className = "dash-pill dash-pill--" + info.k;
+      document.getElementById("rTexto").textContent = info.d;
+      document.getElementById("rData").textContent = fmtDate(row.updated_at);
+      result.hidden = false;
+    });
+  }
+
+  document.getElementById("protoForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    consultar(document.getElementById("protoInput").value);
+  });
+
+  /* deep-link: status-cadastro.html?protocolo=NDB-2026-000123 */
+  try {
+    var p = new URLSearchParams(window.location.search).get("protocolo");
+    if (p) { document.getElementById("protoInput").value = p; consultar(p); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

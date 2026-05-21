@@ -139,6 +139,7 @@
   var notice = document.getElementById("onbNotice");
   var form = document.getElementById("onbForm");
   var leadForm = document.getElementById("leadForm");
+  var parceiroProto = null;
   var leadMsg = document.getElementById("leadMsg");
   var session = null;
   function showNotice(text, kind) {
@@ -182,9 +183,25 @@
     a.client().from("profiles").update({
       full_name: nome, phone: document.getElementById("fone").value.trim(), city: cidade
     }).eq("id", session.user.id).then(function (r) {
-      btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
-      if (r.error) { showNotice("Não foi possível salvar: " + r.error.message, "error"); return; }
-      showNotice("Dados de parceiro salvos. Agora você pode registrar indicações abaixo.", "ok");
+      if (r.error) { btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
+        showNotice("Não foi possível salvar: " + r.error.message, "error"); return; }
+      if (parceiroProto) {
+        btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
+        showNotice("Dados atualizados. Seu protocolo é " + parceiroProto + ".", "ok");
+        return;
+      }
+      a.createApplication({ profileType: "referral_partner", fullName: nome,
+        phone: document.getElementById("fone").value.trim(), city: cidade,
+        source: "onboarding-parceiro" }).then(function (app) {
+        btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
+        parceiroProto = app && app.protocol;
+        if (parceiroProto) {
+          showNotice("Cadastro recebido com sucesso! Protocolo " + parceiroProto +
+            " — acompanhe em status-cadastro.html. Você já pode registrar indicações abaixo.", "ok");
+        } else {
+          showNotice("Dados de parceiro salvos. Você já pode registrar indicações abaixo.", "ok");
+        }
+      });
     }).catch(function (err) {
       btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
       showNotice("Não foi possível salvar: " + ((err && err.message) || "tente novamente."), "error");
