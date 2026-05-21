@@ -367,6 +367,38 @@ ul, ol { list-style: none; }
 .sim-scn span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); font-weight: 600; }
 .sim-scn strong { font-family: var(--font-d); font-size: 14px; color: var(--ink); }
 .sim-scn--hl { border-color: var(--green); background: var(--green-l); }
+.sim-field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sim-hint {
+  margin: 7px 0 0; font-size: 12px; font-weight: 600; color: var(--green-d);
+}
+.sim-alert {
+  margin-top: 4px; background: #fff4e0; border: 1px solid #f0d79a;
+  border-radius: var(--radius-sm); padding: 11px 13px;
+}
+.sim-alert p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #8a6116; }
+.sim-alert p + p { margin-top: 7px; }
+.sim-result-card {
+  margin: 12px 0 6px; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); overflow: hidden;
+}
+.sim-result-line {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 11px 13px; font-size: 14px; color: var(--muted);
+}
+.sim-result-line strong { font-family: var(--font-d); color: var(--ink); white-space: nowrap; }
+.sim-result-line em { font-style: normal; font-size: 12px; color: var(--muted); }
+.sim-result-line--reserve { background: var(--surface); border-top: 1px solid var(--line); }
+.sim-result-line--cash {
+  background: var(--green); border-top: 1px solid var(--green-d); padding: 16px 13px;
+}
+.sim-result-line--cash span { color: #eafff5; font-weight: 600; font-size: 14.5px; }
+.sim-result-line--cash strong { color: #fff; font-size: 22px; }
+.reserve-cards .card { position: relative; }
+.reserve-pct {
+  display: inline-block; margin-bottom: 8px; padding: 3px 11px;
+  background: var(--green-l); color: var(--green-d);
+  border-radius: 999px; font-family: var(--font-d); font-weight: 700; font-size: 13px;
+}
 
 /* ---------- parceiro ---------- */
 .parceiro-rules {
@@ -1007,3 +1039,28 @@ ul, ol { list-style: none; }
   .perfil-cta { flex-direction: column; }
   .perfil-cta .btn { width: 100%; }
 }
+
+/* ====================================================================
+   POLÍTICA DE LIMPEZA E DEVOLUÇÃO
+   ==================================================================== */
+.why-box--warn { background: #fff4e0; border-color: #f0d79a; }
+.why-box--warn h3 { color: #8a6116; }
+.why-box--warn a { color: #8a6116; font-weight: 600; }
+.lead-text {
+  max-width: 760px; margin: 0 auto 24px; text-align: center;
+  color: var(--muted); font-size: 14.5px; line-height: 1.65;
+}
+.block-title {
+  text-align: center; font-family: var(--font-d); font-size: 17px;
+  margin: 30px 0 16px;
+}
+.badge-strip {
+  margin-top: 26px; text-align: center;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 22px;
+}
+.badge-strip__label {
+  display: block; font-family: var(--font-d); font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 10px;
+}
+.badge-strip .status-pills { justify-content: center; margin-bottom: 0; }

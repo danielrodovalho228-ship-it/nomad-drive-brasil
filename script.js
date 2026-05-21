@@ -169,8 +169,8 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
    SIMULADOR de ganhos do proprietário (proprietarios.html)
    ==================================================================== */
 (function () {
-  var diasEl = document.getElementById("simDias");
-  if (!diasEl) return;
+  var mesesEl = document.getElementById("simMeses");
+  if (!mesesEl) return;
 
   var TIERS = {
     A: { price: 1650, rate: 0.055, repFipe: 30000 },
@@ -179,11 +179,17 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     D: { price: 7000, rate: 0.028, repFipe: 250000 }
   };
   var ESTADO = { otimo: 1.0, bom: 0.92, regular: 0.82 };
-  var OWNER_SHARE = 0.90; // dono recebe ~90% (10% taxa da plataforma)
+  var OWNER_SHARE = 0.828;  // parte estimada do proprietário (taxa da plataforma já descontada)
+  var RESERVE_FRAC = 0.40;  // reservas recomendadas: IPVA, manutenção, pneus, seguro, depreciação, imprevistos
+  var MAX_AGE = 10;         // anos de uso
+  var MAX_KM = 200000;      // quilometragem
 
   var tier = "B";
   var fipeEl = document.getElementById("simFipe");
   var estadoEl = document.getElementById("simEstado");
+  var anoEl = document.getElementById("simAno");
+  var kmEl = document.getElementById("simKm");
+  var alertEl = document.getElementById("simAlert");
   var el = function (id) { return document.getElementById(id); };
 
   function priceMonthly() {
@@ -191,23 +197,49 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     if (f && f > 0) return Math.round(f * TIERS[tier].rate);
     return TIERS[tier].price;
   }
+  function cenario(meses) {
+    if (meses <= 4) return "Cenário conservador";
+    if (meses <= 8) return "Cenário moderado";
+    return "Cenário otimista";
+  }
+  function checkElegibilidade() {
+    if (!alertEl) return;
+    var msgs = [];
+    var ano = parseInt(anoEl && anoEl.value, 10);
+    var km = parseInt(kmEl && kmEl.value, 10);
+    var anoAtual = new Date().getFullYear();
+    if (ano && ano > 1950 && (anoAtual - ano) > MAX_AGE) {
+      msgs.push("O veículo tem mais de " + MAX_AGE + " anos de uso. Veículos mais antigos podem ter restrições e costumam exigir análise adicional na aprovação — a elegibilidade não é garantida.");
+    }
+    if (km && km > MAX_KM) {
+      msgs.push("A quilometragem está acima de " + (MAX_KM / 1000) + " mil km. Veículos muito rodados podem ter restrições e costumam exigir análise adicional na aprovação — a elegibilidade não é garantida.");
+    }
+    if (msgs.length) {
+      alertEl.innerHTML = msgs.map(function (m) { return "<p>" + m + "</p>"; }).join("");
+      alertEl.hidden = false;
+    } else {
+      alertEl.innerHTML = "";
+      alertEl.hidden = true;
+    }
+  }
   function update() {
-    var dias = +diasEl.value;
+    var meses = +mesesEl.value;
     var price = priceMonthly();
     var estadoF = ESTADO[estadoEl.value] || 0.92;
-    var ownerNet = price * OWNER_SHARE * estadoF;
-    var availFrac = dias / 30;
-    // ocupação realista: entre 45% (conservador) e 80% (otimista) dos dias disponíveis
-    var monthsLow = Math.max(0, Math.round(availFrac * 12 * 0.45));
-    var monthsHigh = Math.max(monthsLow, Math.round(availFrac * 12 * 0.80));
-    var annualLow = ownerNet * monthsLow;
-    var annualHigh = ownerNet * monthsHigh;
+    var ownerPerMonth = price * OWNER_SHARE * estadoF;
+    var gross = ownerPerMonth * meses;
+    var reserve = gross * RESERVE_FRAC;
+    var net = gross - reserve;
 
-    el("simDiasVal").textContent = dias;
+    el("simMesesVal").textContent = meses;
+    el("simCenario").textContent = cenario(meses);
+    el("simMesesNote").textContent = "(" + meses + (meses === 1 ? " mês" : " meses") + " no ano)";
     el("simPrice").textContent = brl(price) + " / mês";
-    el("simMonthly").textContent = "≈ " + brl(ownerNet);
-    el("simRange").textContent = brl(annualLow) + "  –  " + brl(annualHigh);
-    el("simMonthsRange").textContent = monthsLow + " a " + monthsHigh + " meses alugados/ano";
+    el("simMonthly").textContent = "≈ " + brl(ownerPerMonth);
+    el("simGross").textContent = "≈ " + brl(gross);
+    el("simReserve").textContent = "− " + brl(reserve);
+    el("simNet").textContent = "≈ " + brl(net);
+    checkElegibilidade();
   }
   document.querySelectorAll(".tier-opt").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -219,7 +251,9 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
   });
   if (fipeEl) fipeEl.addEventListener("input", update);
   if (estadoEl) estadoEl.addEventListener("change", update);
-  diasEl.addEventListener("input", update);
+  if (anoEl) anoEl.addEventListener("input", update);
+  if (kmEl) kmEl.addEventListener("input", update);
+  mesesEl.addEventListener("input", update);
   update();
 })();
 

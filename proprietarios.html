@@ -192,10 +192,10 @@
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Passo 2 — Simulação</span>
-      <h2>Simule uma faixa de ganho estimada</h2>
-      <p>Uma estimativa de referência — <strong>nunca um valor garantido</strong>. Os números reais dependem de demanda, categoria, disponibilidade e aprovação do veículo.</p>
+      <h2>Faixa estimada de receita e ganho líquido prudente</h2>
+      <p>Uma estimativa de referência — <strong>nunca um valor garantido</strong>. Os números reais dependem de demanda, categoria, conservação, reservas para custos e aprovação do veículo.</p>
     </div>
-    <div class="sim">
+    <div class="sim sim--2col">
       <div class="sim__controls">
         <div class="sim-field">
           <label>Categoria do veículo</label>
@@ -211,8 +211,19 @@
           <input type="number" id="simFipe" inputmode="numeric" placeholder="ex: 57000" />
         </div>
         <div class="sim-field">
-          <label for="simDias">Dias disponíveis por mês: <strong id="simDiasVal">20</strong></label>
-          <input type="range" id="simDias" min="5" max="30" step="1" value="20" />
+          <label for="simMeses">Meses que pretende deixar alugado por ano: <strong id="simMesesVal">6</strong></label>
+          <input type="range" id="simMeses" min="1" max="12" step="1" value="6" />
+          <p class="sim-hint" id="simCenario">Cenário moderado</p>
+        </div>
+        <div class="sim-field sim-field--row">
+          <div>
+            <label for="simAno">Ano/modelo do veículo</label>
+            <input type="number" id="simAno" inputmode="numeric" placeholder="ex: 2019" />
+          </div>
+          <div>
+            <label for="simKm">Quilometragem atual</label>
+            <input type="number" id="simKm" inputmode="numeric" placeholder="ex: 85000" />
+          </div>
         </div>
         <div class="sim-field">
           <label for="simEstado">Estado do veículo</label>
@@ -222,15 +233,46 @@
             <option value="regular">Regular — precisa de revisão</option>
           </select>
         </div>
+        <div class="sim-alert" id="simAlert" hidden></div>
       </div>
       <div class="sim__results">
         <div class="sim-row"><span>Preço mensal de referência</span><strong id="simPrice">—</strong></div>
-        <div class="sim-row"><span>Sua parte por mês alugado (~90%)</span><strong id="simMonthly">—</strong></div>
-        <div class="sim-row sim-row--cash"><span>Faixa estimada de ganho / ano</span><strong id="simRange">—</strong></div>
-        <p class="sim-range-note" id="simMonthsRange">—</p>
-        <p class="note">Faixa estimada, não garantida. Considera ocupação realista sobre os dias disponíveis e desconta a taxa da plataforma. Custos do carro (IPVA, seguro, manutenção, desgaste) são por conta do proprietário.</p>
+        <div class="sim-row"><span>Parte estimada do proprietário por mês alugado</span><strong id="simMonthly">—</strong></div>
+        <div class="sim-result-card">
+          <div class="sim-result-line"><span>Receita estimada do proprietário <em id="simMesesNote">(6 meses no ano)</em></span><strong id="simGross">—</strong></div>
+          <div class="sim-result-line sim-result-line--reserve"><span>Reservas recomendadas para custos <em>(~40%)</em></span><strong id="simReserve">—</strong></div>
+          <div class="sim-result-line sim-result-line--cash"><span>Valor prudente para colocar no bolso</span><strong id="simNet">—</strong></div>
+        </div>
+        <p class="note">Faixa estimada e <strong>não garantida</strong>, sujeita à aprovação do veículo. Custos do carro (IPVA, seguro, manutenção, pneus, desgaste) são por conta do proprietário — por isso recomendamos separar reservas antes de considerar o valor como ganho.</p>
       </div>
     </div>
+
+    <!-- RESERVAS RECOMENDADAS -->
+    <div class="block-title">Reservas recomendadas para os custos do veículo</div>
+    <p class="lead-text">Antes de considerar o valor como ganho, é prudente separar parte da receita para os custos reais de manter o carro rodando. Abaixo, uma referência de reservas que somam aproximadamente 40% da receita.</p>
+    <div class="cards cards--3 reserve-cards">
+      <article class="card"><span class="reserve-pct">5%</span><h3>IPVA e licenciamento</h3><p>Imposto anual e taxas obrigatórias para manter a documentação em dia.</p></article>
+      <article class="card"><span class="reserve-pct">8%</span><h3>Manutenção preventiva</h3><p>Revisões, óleo, filtros e itens de desgaste que evitam problemas maiores.</p></article>
+      <article class="card"><span class="reserve-pct">5%</span><h3>Pneus</h3><p>Troca e rodízio de pneus conforme o uso e a quilometragem do veículo.</p></article>
+      <article class="card"><span class="reserve-pct">5%</span><h3>Seguro e proteção</h3><p>Custo de seguro próprio e participação em proteção, conforme o contrato.</p></article>
+      <article class="card"><span class="reserve-pct">12%</span><h3>Depreciação e desgaste</h3><p>Perda natural de valor do veículo e desgaste ao longo do tempo de uso.</p></article>
+      <article class="card"><span class="reserve-pct">5%</span><h3>Imprevistos</h3><p>Margem para reparos não programados e situações fora do previsto.</p></article>
+    </div>
+
+    <!-- EXEMPLO EDUCATIVO -->
+    <div class="why-box">
+      <h3>Exemplo educativo</h3>
+      <p>Se um veículo gera R$ 2.124 por mês alugado e fica alugado por 6 meses no ano, a receita estimada seria de R$ 12.744. Se o proprietário separar 40% para IPVA, pneus, manutenção, depreciação e imprevistos, o valor prudente para uso pessoal seria de aproximadamente R$ 7.646 no ano. Essa é apenas uma simulação educativa, não uma promessa de rendimento.</p>
+    </div>
+
+    <!-- CENÁRIOS DE OCUPAÇÃO -->
+    <div class="block-title">Cenários de ocupação ao longo do ano</div>
+    <div class="cards cards--3">
+      <article class="card"><h3>Conservador</h3><p><strong>3 a 4 meses alugado por ano.</strong> Cenário cauteloso, indicado para quem está começando ou ainda usa o carro com frequência.</p></article>
+      <article class="card"><h3>Moderado</h3><p><strong>5 a 8 meses alugado por ano.</strong> Ocupação intermediária, equilibrando uso pessoal e disponibilidade na plataforma.</p></article>
+      <article class="card"><h3>Otimista</h3><p><strong>9 a 12 meses alugado por ano.</strong> Cenário de alta disponibilidade, sujeito a demanda, categoria e aprovação do veículo.</p></article>
+    </div>
+    <p class="note note--center">Os cenários acima são apenas referências educativas. A ocupação real depende da demanda, da categoria, da conservação e da aprovação do veículo — nenhum cenário representa uma promessa de renda.</p>
   </div>
 </section>
 
@@ -249,6 +291,26 @@
       <li class="step"><span class="step__num">5</span><h3>Aprovação operacional</h3><p>Análise final. O veículo pode ser aprovado ou recusado.</p></li>
       <li class="step"><span class="step__num">6</span><h3>Publicação na frota</h3><p>Aprovado, o carro entra na rede e você aprova cada locação.</p></li>
     </ol>
+  </div>
+</section>
+
+<!-- CONSERVAÇÃO DO VEÍCULO -->
+<section class="section section--surface" id="conservacao">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Conservação</span>
+      <h2>Como protegemos a conservação do seu veículo</h2>
+      <p>Para proteger proprietários e clientes, a NomadDrive deve operar com checklist de retirada e devolução, fotos obrigatórias, padrão de limpeza e regras de uso adequado. Isso ajuda a identificar se o veículo retornou em condição normal, se precisa de limpeza especial ou se houve dano ou mau uso.</p>
+    </div>
+    <div class="cards cards--3">
+      <article class="card"><h3>Fotos antes e depois</h3><p>Registro fotográfico do veículo na retirada e na devolução, para comparar a condição.</p></article>
+      <article class="card"><h3>Checklist de interior e exterior</h3><p>Vistoria padronizada de bancos, painel, porta-malas, lataria, pneus e itens do veículo.</p></article>
+      <article class="card"><h3>Registro de odores, manchas e danos</h3><p>Qualquer odor, mancha, resíduo ou dano é documentado para análise.</p></article>
+      <article class="card"><h3>Política de limpeza especial</h3><p>Sujeira acima do uso normal pode gerar cobrança de limpeza ou higienização, conforme avaliação.</p></article>
+      <article class="card"><h3>Análise administrativa em divergência</h3><p>Em caso de divergência, a equipe analisa fotos, vistoria e relatos antes de qualquer cobrança.</p></article>
+      <article class="card"><h3>Regras de uso adequado</h3><p>Proibição de fumar, drogas e mau uso. As regras protegem o seu carro e o próximo cliente.</p></article>
+    </div>
+    <p class="note note--center">Veja a <a href="seguranca-sinistros.html#limpeza">política completa de limpeza e devolução</a>. Cobranças dependem de avaliação, comprovantes, orçamento e regras vigentes.</p>
   </div>
 </section>
 
