@@ -1,1895 +1,295 @@
-/* ===== NomadDrive Brasil — behavior ===== */
+/* ====================================================================
+   NomadDrive Brasil — site logic (PT-only)
+   ==================================================================== */
 
-/* ---- CONFIG: edit these ---- */
-const CONFIG = {
-  whatsapp: "5534999999999",          // <-- replace with the real WhatsApp number (country+area+number, digits only)
-  email: "hello@nomaddrive.com.br",   // <-- replace with the real email
-  instagram: "https://instagram.com/", // <-- replace with the real Instagram URL
-  siteUrl: "https://seusite.netlify.app", // <-- after deploy, replace with the real site URL (used in the "share with a friend" link)
-};
+/* ---- CONFIG ---- */
+// TODO: trocar pelo número real de WhatsApp (formato: 55 + DDD + número)
+var WA_PHONE = "5500000000000";
+var SITE_URL = "https://danielrodovalho228-ship-it.github.io/nomad-drive-brasil/";
 
-/* ---- translations ---- */
-const I18N = {
-  en: {
-    "nav.about": "About", "nav.destinos": "Destinations",
-    "share.eyebrow": "Refer a friend",
-    "share.title": "Know someone heading to Brazil?",
-    "share.sub": "NomadDrive runs on referrals. Share it with a friend in one tap — they get a fair price, and trust keeps the circle strong.",
-    "share.btn": "Share on WhatsApp",
-    "renda.eyebrow": "The difference",
-    "renda.title": "More than a rental — a trusted passive-income network",
-    "renda.sub": "This is what sets NomadDrive apart. It's not one car — it's a growing network. Put your own car to work, or join as a partner. Both earn, both stay protected by the same referral-first trust.",
-    "renda.ownerTitle": "Rent out your car",
-    "renda.ownerBody": "Turn an idle car into passive income. We bring verified renters — you approve every rental and stay in control.",
-    "renda.ownerCta": "I want to rent out my car",
-    "renda.partnerTitle": "Become a partner",
-    "renda.partnerBody": "Refer friends and car owners to the network. Every referral that rents earns you points — credit toward your own next rental.",
-    "renda.partnerB1": "Earn points for every friend who rents",
-    "renda.partnerB2": "No car needed — just your network",
-    "renda.partnerB3": "Points become credit on your next trip",
-    "renda.partnerCta": "I want to be a partner",
-    "renda.simPartnerTitle": "Estimate your referral points",
-    "renda.refsLabel": "Friends who rent through you",
-    "renda.rPoints": "Points earned",
-    "renda.rCredit": "Credit toward your next rental",
-    "renda.rPctOff": "≈ discount on a monthly rental",
-    "renda.partnerSimNote": "Each friend who completes a rental earns you points toward your own next trip. Example values — final terms confirmed when you join.",
-    "photo.rendaOwner": "images/renda-owner.jpg",
-    "photo.rendaPartner": "images/renda-partner.jpg",
-    "renda.b1": "Passive income from a car you already own",
-    "renda.b2": "We bring verified renters — referral-first",
-    "renda.b3": "Contract, deposit and insurance guidance included",
-    "renda.b4": "You stay in control — approve every rental",
-    "renda.steps.title": "From your car to your first rent — 5 steps",
-    "renda.steps.s1.title": "Check eligibility",
-    "renda.steps.s1.body": "Car up to 8 years old, well kept, documents up to date (CRLV, IPVA, licenciamento). Mileage under 150k km is preferred.",
-    "renda.steps.s2.title": "Simulate your income",
-    "renda.steps.s2.body": "Use the simulator below — enter FIPE and occupancy. You see the cash that lands in your account, the ROI on FIPE, and three realistic scenarios.",
-    "renda.steps.s3.title": "Send documents",
-    "renda.steps.s3.body": "CRLV (digital is fine), photos of the four sides + interior, ID, recent maintenance history. We do a quick analysis (1–3 business days).",
-    "renda.steps.s4.title": "Tracker + inspection",
-    "renda.steps.s4.body": "We install a GPS tracker (cost shared — your share R$ 30/month) and do a baseline mechanical inspection. The rental-use insurance starts here.",
-    "renda.steps.s5.title": "Get paid every month",
-    "renda.steps.s5.body": "First rental closes on WhatsApp, contract signed, deposit secured. You receive your share via Pix on the 5th of every month, with a clear statement (gross − platform fee − tracker − any sinistro). 100% transparent.",
-    "renda.steps.cta": "Start the onboarding (WhatsApp)",
-    "renda.simtitle": "Estimate your earnings",
-    "renda.simExample": "Default values reflect our pilot car — Chevrolet Cobalt Elite 2018 (FIPE ~R$57k). Use the FIPE field for your own.",
-    "renda.priceLabel": "Monthly rental price",
-    "renda.monthsLabel": "Months rented per year",
-    "renda.rGross": "Gross / year",
-    "renda.rFee": "NomadDrive platform fee",
-    "renda.rCash": "Cash in your pocket / year",
-    "renda.rRoiCash": "Cash return on FIPE",
-    "renda.dividerLabel": "Optional view — subtract the car's annual costs",
-    "renda.dividerHint": "You'd pay these even if the car sat parked.",
-    "renda.rCarCosts": "Annual car costs (IPVA, insurance, upkeep, extra wear)",
-    "renda.rNet": "Net after covering the car's full year",
-    "renda.rRoi": "ROI after car costs (net ÷ FIPE)",
-    "renda.rBreakEven": "Break-even (months to cover full annual costs)",
-    "renda.rMonthly": "≈ per month (cash net of all costs)",
-    "renda.viewHelpTitle": "Which view fits your situation?",
-    "renda.viewHelpA": "Use \"Cash in pocket\" if…",
-    "renda.viewHelpAbody": "You already own this car (inheritance, second car, retirement). IPVA, insurance and maintenance are sunk costs — you'd pay them anyway. Every R$ from the rental is extra cash on top of your normal life.",
-    "renda.viewHelpB": "Use \"Net after car costs\" if…",
-    "renda.viewHelpBbody": "You're thinking of buying a car specifically to rent it out. Then the car's full annual cost (IPVA, insurance, depreciation) is a real business expense — and the deal only makes sense if rental income covers it with margin.",
-    "renda.scnTitle": "Three realistic scenarios for this car",
-    "renda.scnSub": "Same car, same FIPE — only the occupancy changes. Both views shown side by side.",
-    "renda.scnHead": "Scenario",
-    "renda.scnMonths": "Mo/yr",
-    "renda.scnCash": "Cash / yr<br /><small>(ROI)</small>",
-    "renda.scnNet": "Net after costs<br /><small>(ROI)</small>",
-    "renda.scn1.name": "Idle car",
-    "renda.scn1.tag": "Best fit",
-    "renda.scn2.name": "Light personal use",
-    "renda.scn2.tag": "Realistic",
-    "renda.scn3.name": "Owner's own trips only",
-    "renda.scn3.tag": "Tight margin",
-    "renda.note": "NomadDrive keeps a small platform fee on each rental. The car's annual costs (IPVA, insurance, maintenance) exist whether the car is rented or sits parked — so even one rented month is real extra cash. The \"net after costs\" view is only the right lens if you bought the car specifically as a rental business. It's your call: only you know your situation.",
-    "renda.cta": "I want to join",
-    "about.eyebrow": "Who we are",
-    "about.title": "A real person, not a faceless agency",
-    "about.sub": "NomadDrive Brasil is a small, personal operation in Uberlândia. One owner, one well-kept car, and a direct relationship with every traveler — built on trust, not call centers.",
-    "about.l1": "You talk to the owner directly — before, during and after your trip",
-    "about.l2": "The car is cared for personally, not rotated through a fleet",
-    "about.l3": "Based in Uberlândia, MG — handover in person",
-    "photo.founder": "images/founder.jpg",
-    "dest.eyebrow": "Where to go",
-    "dest.title": "Your base to explore Uberlândia & around",
-    "dest.sub": "With the car yours for the whole month, Uberlândia opens up — parks, markets, great food and easy day trips across Minas Gerais.",
-    "dest.c1.title": "Parque do Sabiá",
-    "dest.c1.body": "Uberlândia's huge green park — zoo, lake, trails and sports. A full day with the family.",
-    "dest.c2.title": "Praça Tubal Vilela & Centro",
-    "dest.c2.body": "The historic heart of the city — the central square, shops and local life.",
-    "dest.c3.title": "Mercado Municipal",
-    "dest.c3.body": "Local produce, cheeses, sweets and the flavors of Minas — a must for food lovers.",
-    "dest.c4.title": "Restaurants & dining",
-    "dest.c4.body": "From traditional comida mineira to modern bistros — Uberlândia eats very well.",
-    "dest.c5.title": "Parque Vitória Régia",
-    "dest.c5.body": "A calm lakeside park, perfect for a walk, a run or a relaxed afternoon.",
-    "dest.c6.title": "Day trips across Minas",
-    "dest.c6.body": "Waterfalls, small historic towns and countryside — all within an easy drive.",
-    "dest.note": "Tap an address to open it in Maps, or use the share button to send a destination to a friend on WhatsApp.",
-    "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
-    "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
-    "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
-    "testi.eyebrow": "Testimonials",
-    "testi.title": "What travelers say",
-    "testi.sub": "Real words from people who rented with us. Trust is the whole point.",
-    "testi.q1": "\"Renting for two months was simple and fair. The car was clean and well kept, and having someone reachable the whole time made all the difference.\"",
-    "testi.n1": "Your client's name", "testi.o1": "Country / city",
-    "testi.q2": "\"Way cheaper than the big agencies and zero hassle. Picked the car up in person, drove all over Minas, no surprises.\"",
-    "testi.n2": "Your client's name", "testi.o2": "Country / city",
-    "testi.q3": "\"I was referred by a friend and I'd do the same. Honest pricing, a contract that protects both sides, and a backup car just in case.\"",
-    "testi.n3": "Your client's name", "testi.o3": "Country / city",
-    "testi.note": "Placeholder testimonials — replace with real reviews from your first clients in the script.js file.",
-    "trust.label": "Built with partners",
-    "trust.b1": "Insurance partner",
-    "trust.b2": "GPS tracker network",
-    "trust.b3": "SUSEP-compliant policy",
-    "trust.b4": "LGPD data protection",
-    "trust.b5": "Pix · card · transfer",
-    "nav.how": "How it works", "nav.car": "The car", "nav.pricing": "Pricing",
-    "nav.safety": "Safety", "nav.faq": "FAQ", "nav.cta": "Get a quote", "nav.ctaShort": "Quote",
-    "nav.fleet": "Fleet", "nav.renda": "Earn",
-
-    /* ----- car detail page (car.html) ----- */
-    "car.backToFleet": "← Back to fleet",
-    "car.back": "← All cars",
-    "car.pilotBadge": "★ Pilot car",
-    "car.notFound.title": "Car not found",
-    "car.notFound.body": "We couldn't find this car in the catalog. Browse the full fleet instead:",
-    "car.notFound.cta": "See the fleet",
-    "car.q.body": "Body", "car.q.seats": "Seats", "car.q.trunk": "Trunk", "car.q.color": "Color",
-    "car.h.condition": "Condition", "car.c.km": "Mileage", "car.c.rev": "Last revision", "car.c.tires": "Tires",
-    "car.h.about": "About this car",
-    "car.h.included": "What's included",
-    "car.inc.1": "✓ Insurance for rental use",
-    "car.inc.2": "✓ 3.000 km/month included · R$ 0,40 per extra km",
-    "car.inc.3": "✓ In-person handover in Uberlândia",
-    "car.inc.4": "✓ Backup car if anything goes wrong",
-    "car.inc.5": "✓ Tax included in the monthly rate",
-    "car.inc.6": "✓ EN / PT / ES support on WhatsApp",
-    "car.h.location": "Pickup location",
-    "car.location.body": "In-person handover in Uberlândia, MG. The exact address is shared after booking. Airport meet-up is possible — just ask.",
-    "car.priceUnit": "/mo",
-    "car.book.start": "Pick-up date",
-    "car.book.months": "How long?",
-    "car.book.monthsHint": "Months. Need more? Talk to us for a custom rate.",
-    "car.book.endDate": "Estimated return",
-    "car.book.totalLabel": "Estimated total",
-    "car.book.totalHint": "All-in, taxes included. Final price confirmed in writing.",
-    "car.book.cta": "Reserve on WhatsApp",
-    "car.share.title": "Share this car",
-    "car.share.native": "↗ Share",
-    "car.share.copy": "📋 Copy link",
-    "car.share.whats": "WhatsApp",
-    "car.share.email": "Email",
-    "car.share.copied": "Link copied!",
-    "car.others.title": "Other cars in the fleet",
-
-    "hero.badge": "Monthly car rental — direct from the owner",
-    "hero.title": "Rent a trusted car for months, directly from the owner.",
-    "hero.sub": "We connect idle cars with people who need real mobility for longer stays: professionals on a temporary project, families during medical treatment, moves and home renovations, digital nomads, Brazilians returning from abroad, and international travelers. One month or more, fair price, all-in.",
-    "hero.cta1": "Request your quote", "hero.cta2": "See how it works",
-    "hero.avail": "🟢 Available from July 2026 — book ahead",
-    "local.eyebrow": "Pickup location",
-    "local.title": "Pick up your car in Uberlândia, MG",
-    "local.sub": "We hand the car over in person in Uberlândia — central Brazil, easy to reach by air or road. The exact spot is confirmed when you book.",
-    "hero.stat1v": "9 cars", "hero.stat1": "from R$ 1.400/mo",
-    "hero.stat2v": "Owner-direct", "hero.stat2": "no agency markup",
-    "hero.stat3v": "In person",
-    "hero.stat3": "handover & support",
-    "hero.stat4v": "3.000 km/mo",
-    "hero.stat4": "included · R$ 0,40/km extra",
-    "hero.pricecard.tag": "Your monthly price",
-    "hero.pricecard.note": "≈ $470 USD · taxes included · backup car",
-    "photo.hero": "Add <strong>images/hero.jpg</strong><br /><em>(white Cobalt photo — see README)</em>",
-
-    "strip.1": "✓ Fully insured for rental use", "strip.2": "✓ By referral only",
-    "strip.3": "✓ Backup car if anything happens", "strip.4": "✓ English-speaking support",
-    "strip.5": "✓ Based in Uberlândia, MG",
-    "strip.6": "✓ 3.000 km/mo included + R$ 0,40/km extra",
-    "antifit.title": "Built for you if your life needs a car for a few months",
-    "antifit.sub": "Not just for tourists. We were built for any chapter of life where you need a real car, not a daily rental treadmill:",
-    "antifit.1": "🌎 Traveling to Brazil from abroad for 1 to 6+ months",
-    "antifit.2": "💼 Professional on a temporary project away from home",
-    "antifit.3": "🏥 Family accompanying medical treatment at a referral hospital",
-    "antifit.4": "🏡 In a life transition — moving cities, home renovation, between cars",
-    "antifit.5": "💻 Digital nomad spending real time in Brazil",
-    "antifit.6": "👨‍👩‍👧 Visiting family for an extended stay, hosting relatives",
-    "antifit.yes": "If any of those sound like you, we fit. Every car in the network is shared by an owner we trust — your rental funds them and gets you a car that's actually cared for.",
-
-    "problem.eyebrow": "The problem",
-    "problem.title": "Monthly rentals in Brazil are quietly expensive",
-    "problem.sub": "Visiting family for one or two months shouldn't cost a fortune. But the big chains price for their overhead — huge fleets, staff, branches — not for you.",
-    "problem.c1.title": "A premium hiding in the daily rate",
-    "problem.c1.body": "A daily rate looks small — but over a one or two-month stay it quietly adds up to far more than it should cost to rent a car.",
-    "problem.c2.title": "Priced for their costs, not yours",
-    "problem.c2.body": "Fleets, employees and branches are expensive. That overhead is baked into every daily rate you pay.",
-    "problem.c3.title": "No one speaks your situation",
-    "problem.c3.body": "Long stays, a foreign license, a holiday far from home — generic counters aren't built for the international traveler.",
-
-    "how.eyebrow": "How it works",
-    "how.title": "Simple, personal, and by referral",
-    "how.sub": "We keep it small on purpose. Fewer cars, trusted renters, and a real person on the other side of the conversation.",
-    "how.s1.title": "You're referred",
-    "how.s1.body": "A friend or family member who knows us connects you. Referral-first keeps everyone safe and trusted.",
-    "how.s2.title": "Request a quote",
-    "how.s2.body": "Tell us your dates and pick-up city. We confirm availability and send an all-in monthly price.",
-    "how.s3.title": "Sign & secure",
-    "how.s3.body": "A clear rental contract, ID/license check, a refundable deposit and a quick photo inspection.",
-    "how.s4.title": "Pick up & drive",
-    "how.s4.body": "We hand over the car in person in Uberlândia and stay reachable for your whole trip.",
-
-    "photo.car": "images/car-exterior.jpg", "photo.interior": "images/car-interior.jpg", "photo.trunk": "images/car-trunk.jpg",
-    "car.eyebrow": "The car",
-    "car.title": "2018 Chevrolet Cobalt Elite. Well kept. Ready for the road.",
-    "car.sub": "A 2018 Chevrolet Cobalt Elite — automatic, fully optioned, white. A comfortable mid-size sedan: cheap to maintain and roomy for road trips and family.",
-    "car.spec1.k": "Year", "car.spec1.v": "2018",
-    "car.spec2.k": "Transmission", "car.spec2.v": "Automatic",
-    "car.spec3.k": "Model", "car.spec3.v": "Chevrolet Cobalt Elite",
-    "car.spec4.k": "Color", "car.spec4.v": "White",
-    "car.spec5.k": "Mileage", "car.spec5.v": "120,000 km",
-    "car.spec6.k": "Trunk", "car.spec6.v": "560 L — fits big luggage",
-    "car.extras": "🧳 Need a child seat, roof rack or travel gear? These can be arranged and are rented separately, on request.",
-    "car.editnote": "Add real photos of the car to the <strong>/images</strong> folder — see the README.",
-    "car.cta": "Check availability",
-
-    "pricing.eyebrow": "Pricing",
-    "pricing.title": "Fair, all-in, no surprises",
-    "pricing.sub": "Each car has its own monthly rate (see the fleet). Longer stays unlock better rates.",
-    "pricing.structureTitle": "Discount structure (applies to any car)",
-    "pricing.d1.len": "1 month",     "pricing.d1.rate": "car's base monthly rate",
-    "pricing.d2.flag": "Most popular",
-    "pricing.d2.len": "2 months",    "pricing.d2.rate": "−5% on each month",
-    "pricing.d3.len": "3+ months",   "pricing.d3.rate": "−10% on each month · custom terms",
-    "pricing.structureNote": "Per-car prices on the fleet section below. All include taxes, rental insurance, backup car, and 3.000 km/month — overage charged at R$ 0,40/km.",
-    "compare.title": "NomadDrive vs. a local rental agency",
-    "compare.col1": "Local rental",
-    "compare.r1": "Cronos auto · 30 days · ~3,000 km", "compare.r1v": "R$ 4,300 (km cap)",
-    "compare.r2": "Mileage included", "compare.r2v": "~2.000 km cap · then per km", "compare.r2us": "3.000 km/mo · R$ 0,40 extra/km",
-    "compare.r3": "Customer service", "compare.r3v": "Counter + queue", "compare.r3us": "WhatsApp 24/7",
-    "compare.r4": "Language", "compare.r4v": "Portuguese only", "compare.r4us": "PT · EN · ES",
-    "compare.r5": "Handover", "compare.r5v": "Store / counter", "compare.r5us": "In person · airport possible",
-    "compare.r6": "Security deposit", "compare.r6v": "R$ 3,000 – 5,000",
-    "compare.r7": "On-site paperwork", "compare.r7v": "Queue + forms", "compare.r7us": "All pre-arranged on WhatsApp",
-    "compare.honest": "Lean model wins. No counter, no branches, no fleet management — just a small network of owners and a personal handover. That low overhead lets us be cheaper than the corporate agencies on the same car (a Cronos saves you about R$ 790/month vs. the quote above — that's ≈18% cheaper), while still including what makes a long trip easy: EN/ES support, in-person handover at your arrival time, 3.000 km/month included, and a real owner who actually cares for the car.",
-    "compare.note": "Comparison based on a real quote from a Uberlândia rental agency, May 2026. Prices vary by car and date — your quote is always confirmed in writing.",
-
-    "net.eyebrow": "Network",
-    "net.title": "Where the network is — and where it's going",
-    "net.sub": "We started in Uberlândia (MG) and we're building city by city. Be the first car (or first renter) in your region.",
-    "net.statusLive": "Available now",
-    "net.statusSoon": "Coming next",
-    "net.statusPlanned": "On the roadmap",
-    "net.uli.cars": "9 cars in the network",
-    "net.uli.handover": "In-person handover · airport meet-up possible",
-    "net.uli.support": "Local team in town",
-    "net.spli.demand": "Highest demand on our waiting list",
-    "net.spli.target": "Target: Q3 2026 · first 5 partner cars",
-    "net.spli.owner": "Owners: priority spot if you sign now",
-    "net.plannedTitle": "Belo Horizonte · Brasília · Goiânia · Campinas · Rio",
-    "net.plli.signal": "Open if you signal interest",
-    "net.plli.match": "We match supply (owners) with demand (renters) before opening",
-    "net.plli.expand": "Goal: 5+ cars per city before launch",
-    "net.ctaRenter": "I need a car in my city",
-    "net.ctaOwner": "I want to be the first owner in my city",
-
-    "safety.eyebrow": "Safety & trust",
-    "safety.title": "How we keep everyone protected",
-    "safety.sub": "A small operation can still be a serious one. Here's how risk is handled on both sides.",
-    "safety.c1.title": "Rental-use insurance",
-    "safety.c1.body": "Every car carries insurance for rental use — not just a personal policy. Coverage and deductibles detailed below.",
-    "safety.c2.title": "Clear contract",
-    "safety.c2.body": "Written rental agreement, ID and license verification, photo + video inspection at pick-up and return.",
-    "safety.c3.title": "GPS tracker",
-    "safety.c3.body": "Every car has a GPS tracker for recovery and peace of mind on both sides — never used for routine monitoring.",
-    "safety.c4.title": "24/7 emergency line",
-    "safety.c4.body": "A dedicated phone available 24h for accidents, breakdowns or assistance. Number shared at pick-up and in the contract.",
-    "safety.cov.title": "Insurance coverage — at a glance",
-    "safety.cov.h1": "Coverage", "safety.cov.h2": "Included", "safety.cov.h3": "Standard deductible (franquia)",
-    "safety.cov.r1": "Collision damage to the car",
-    "safety.cov.r2": "Third-party damage (bodily + property — BI/PD)", "safety.cov.r2d": "Up to R$ 100k each, no driver deductible",
-    "safety.cov.r3": "Theft / total loss", "safety.cov.r3d": "100% covered (per contract)",
-    "safety.cov.r4": "Fire / natural events", "safety.cov.r4d": "100% covered (per contract)",
-    "safety.cov.r5": "Glass (windshield, mirrors)",
-    "safety.cov.r6": "Tires (puncture / damage)",
-    "safety.cov.r7": "24h roadside assistance + tow", "safety.cov.r7d": "Included nationwide",
-    "safety.cov.r8": "Replacement car if needed", "safety.cov.r8d": "Same category",
-    "safety.cov.note": "Final coverage and deductible values per category are confirmed in the contract. Driver remains responsible for tolls, fines and any damage from misuse (alcohol, racing, off-road).",
-    "safety.disclaimer": "Note: insurance terms, deposit and contract details are confirmed individually for each rental. This page is informational and not a binding offer.",
-
-    "docs.eyebrow": "Documents & requirements",
-    "docs.title": "Everything in writing — read before you book",
-    "docs.sub": "Transparency starts with the paperwork. Below is what you need on your side, and the contract we use — available for download in advance.",
-    "docs.req.title": "What you need to rent",
-    "docs.req.1": "<strong>Age:</strong> minimum 21 years",
-    "docs.req.2": "<strong>License:</strong> valid CNH (or equivalent foreign license) for at least 2 years",
-    "docs.req.3": "<strong>ID:</strong> RG / passport with photo",
-    "docs.req.4": "<strong>Proof of address:</strong> recent utility bill or rental agreement",
-    "docs.req.5": "<strong>Payment method:</strong> credit card for pre-authorized deposit, or Pix",
-    "docs.req.6": "<strong>Driving record:</strong> clean recent history",
-    "docs.contract.title": "Rental contract",
-    "docs.contract.body": "The same contract that goes with every rental. Trilingual (PT/EN/ES), clear language, includes adhesion form, deposit receipt and inspection checklist. Sign digitally — no fax required.",
-    "docs.contract.cta": "⬇ Download the contract (Excel)",
-    "docs.contract.note": "7 tabs: rental agreement PT/EN/ES · deposit receipt · adhesion · simulation · inspection. Format will move to PDF + e-signature in Q3 2026.",
-    "docs.fast.title": "Fast facts",
-    "docs.fast.1": "<strong>Deposit:</strong> R$ 2.000 (A/B) · R$ 3.000 (C) · R$ 5.000 (D)",
-    "docs.fast.2": "<strong>Payment:</strong> Pix, transfer, credit card up to 3×",
-    "docs.fast.3": "<strong>Mileage:</strong> 3.000 km/month included · R$ 0,40/km extra",
-    "docs.fast.4": "<strong>Cancellation:</strong> full refund 7+ days · 50% 3–7 days · none under 72h",
-    "docs.fast.5": "<strong>Insurance:</strong> rental-use policy, deductible R$ 3.500–5.000",
-    "docs.fast.6": "<strong>Pickup:</strong> in-person in Uberlândia, airport meet-up possible",
-
-    "who.eyebrow": "Who it's for",
-    "who.title": "Real life chapters that need a real car",
-    "who.sub": "If you're going to spend a month or more somewhere — for any reason — daily rentals add up fast and Uber gets expensive. A monthly rental is the calm, sensible choice.",
-    "who.l1": "Want a comfortable automatic car without paying agency monthly markup",
-    "who.l2": "Prefer dealing with a real person, in your language (EN/PT/ES)",
-    "who.l3": "Value a backup car and a contract that protects you",
-    "who.l4": "Want less hassle — pick up once, keep the car the whole month",
-    "who.l5": "Need flexibility on dates and the kind of car (sedan, SUV, premium)",
-    "photo.travel": "images/travel.jpg",
-
-    "quote.eyebrow": "Get a quote",
-    "quote.title": "Tell us your dates — we'll reply fast",
-    "quote.sub": "Fill this in and it opens WhatsApp with your details ready to send. No account, no spam.",
-    "quote.p1": "Reply within 24 hours", "quote.p2": "All-in price in writing", "quote.p3": "No commitment to ask",
-    "form.name": "Your name", "form.contact": "Email or WhatsApp",
-    "form.start": "Pick-up date", "form.months": "How long?",
-    "form.months.1": "1 month", "form.months.2": "2 months", "form.months.3": "3 months", "form.months.4": "4+ months",
-    "form.city": "Pick-up city", "form.ref": "Who referred you?", "form.optional": "(optional)",
-    "form.msg": "Anything else?", "form.submit": "Send via WhatsApp",
-    "form.altprefix": "Prefer email?", "form.altlink": "Email us instead",
-    "form.err": "Please fill in your name and a way to reach you.",
-
-    "faq.eyebrow": "FAQ", "faq.title": "Good questions, straight answers",
-    "faq.g.reserva": "Booking & access",
-    "faq.q1": "Do I need a referral to rent?",
-    "faq.a1": "No. We started referral-first to grow with trust, but anyone with valid documents can request a quote. Tell us your situation and we'll send the next steps.",
-    "faq.q2": "Can I drive with my foreign license?",
-    "faq.a2": "Yes — a valid foreign license is accepted in Brazil for visitors (often with an international permit). For stays beyond 180 days, a Brazilian translation may be needed. We confirm the exact requirement before pick-up.",
-    "faq.q3": "What are the driver requirements?",
-    "faq.a3": "Minimum 21 years old, valid CNH (or equivalent foreign license) for at least 2 years, photo ID and proof of address. Clean recent driving record. Final approval after document review.",
-    "faq.q4": "Which cities do you serve?",
-    "faq.a4": "Pick-up is currently in Uberlândia, MG. From there the car is yours to travel anywhere in Brazil under the contract. Expansion to São Paulo, Belo Horizonte, Brasília and other cities is on the roadmap — see the \"Network\" section.",
-    "faq.g.pagamento": "Deposit & payment",
-    "faq.q5": "How much is the deposit and how is it paid?",
-    "faq.a5": "The refundable deposit is R$ 2.000 for categories A/B, R$ 3.000 for C and R$ 5.000 for D (luxury). Paid by Pix or pre-authorized on a credit card. Refunded within 7 business days after the car is returned in the same condition (minus any tolls/fines that arrive late).",
-    "faq.q6": "How do I pay the monthly rate?",
-    "faq.a6": "Pix, bank transfer or credit card (up to 3× without interest). First month paid before pick-up; longer stays may pay month by month with proof of address and stable contact.",
-    "faq.q7": "What's the cancellation policy?",
-    "faq.a7": "Cancellations more than 7 days before pick-up: full refund. 3–7 days before: 50%. Less than 72h or no-show: no refund. Force majeure (illness, document issues) is reviewed case-by-case with full transparency.",
-    "faq.g.seguro": "Insurance & incidents",
-    "faq.q8": "What does the insurance cover?",
-    "faq.a8": "All cars carry insurance for rental use covering: collision, third-party damage (BI/PD), theft, fire, and natural events. Standard franquia (deductible) of R$ 3.500–R$ 5.000 depending on category. Glass and tires have a smaller dedicated franquia. Full terms in the contract.",
-    "faq.q9": "What happens if I have an accident?",
-    "faq.a9": "Call our 24/7 emergency line first (in the contract and on the WhatsApp pinned message). We dispatch assistance, you fill the boletim de ocorrência (BO) if needed, take photos and we open the sinistro with the insurer. Backup car arranged so you're not stranded.",
-    "faq.q10": "Who pays for tolls and traffic fines?",
-    "faq.a10": "All tolls and fines incurred during your rental are your responsibility. Fines that arrive after return: we transfer the points to your CNH and the charge to you, with a copy of the auto. Fully transparent — no markup.",
-    "faq.g.entrega": "Hand-over & inspection",
-    "faq.q11": "How does the vistoria work?",
-    "faq.a11": "Photo + video inspection of all four sides, interior, dashboard mileage, fuel level and tire condition at pick-up — both sides sign. Same at return. Any new damage is compared against pick-up photos. Zero surprises.",
-    "faq.q12": "Does the car have a backup if it breaks down?",
-    "faq.a12": "Yes. Mechanical issue or accident: we arrange a replacement car of the same category (or a credit if you accept a different category) so your plans don't break.",
-    "faq.q13": "Can I leave the city / cross state borders?",
-    "faq.a13": "Yes, within Brazil. Crossing into Argentina/Uruguay/Paraguay needs prior authorization and extra paperwork. The car has a GPS tracker — for safety, never for spying.",
-
-    "rmap.eyebrow": "What's coming next",
-    "rmap.title": "From WhatsApp-first to a full digital platform",
-    "rmap.sub": "Today every booking closes by WhatsApp with a real person on the other side — that's on purpose, while the network is small. As we grow, the digital layer comes online:",
-    "rmap.now": "Available today",
-    "rmap.now.1": "WhatsApp-based booking with real human support",
-    "rmap.now.2": "Contract by PDF/Excel · digital signature accepted",
-    "rmap.now.3": "Pix / bank transfer / credit card",
-    "rmap.now.4": "Per-car detail page · live price calc · gallery",
-    "rmap.now.5": "Owner-earnings simulator (this page)",
-    "rmap.soon": "Q3 2026",
-    "rmap.soon.1": "Online booking with real-time availability",
-    "rmap.soon.2": "Auth + account dashboard (rentals, km used, history)",
-    "rmap.soon.3": "Pix block on deposit · auto-release on return",
-    "rmap.soon.4": "CNH/CRLV automatic validation (anti-fraud)",
-    "rmap.soon.5": "Owner dashboard: calendar, payouts, statements",
-    "rmap.later": "2027",
-    "rmap.later.1": "Live chat + AI assistant 24/7",
-    "rmap.later.2": "Expansion to top 6 Brazilian cities",
-    "rmap.later.3": "Native iOS / Android app",
-    "rmap.later.4": "Multi-driver per rental (couples, families)",
-    "rmap.later.5": "Insurance bundles with partner brokers",
-    "rmap.note": "We ship in small steps and tell you what's real today. Want to suggest something? <a href=\"#quote\">Send us a message</a>.",
-
-    "final.title": "Need a car for a few months?",
-    "final.sub": "Lock in a fair monthly price before your stay. It starts with a quick message.",
-    "final.cta": "Request your quote",
-
-    "footer.tag": "Fair monthly car rental for international travelers in Brazil.",
-    "footer.contact": "Contact", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
-    "footer.instagram": "Instagram", "footer.explore": "Explore",
-    "footer.legal": "© 2026 NomadDrive Brasil. Informational website — not a binding offer. Rental terms, insurance and contract confirmed individually.",
-    "perfil.eyebrow": "Who it's for",
-    "perfil.title": "Real passive income — for whom?",
-    "perfil.sub": "Not everyone makes money renting out their car. These are the profiles where it actually works.",
-    "perfil.occ": "Occupancy",
-    "perfil.profit": "Net / year",
-    "perfil.p1.title": "Idle car most of the year",
-    "perfil.p1.detail": "2nd family car or inheritance — rarely used",
-    "perfil.p1.occ": "10–12 mo/yr",
-    "perfil.p1.profit": "R$ 12k–20k",
-    "perfil.p1.frame": "\"The car that used to sit parked now pays its own IPVA, insurance, and still leaves a surplus.\"",
-    "perfil.p2.title": "Retiree with a low-use car",
-    "perfil.p2.detail": "Drives a couple of times a week",
-    "perfil.p2.occ": "6–8 mo/yr",
-    "perfil.p2.profit": "R$ 5k–12k",
-    "perfil.p2.frame": "\"~R$ 500–800 extra per month on top of retirement — without driving for apps.\"",
-    "perfil.p3.title": "Planning to sell the car",
-    "perfil.p3.detail": "Will sell in 6–12 months anyway",
-    "perfil.p3.occ": "6–8 mo before selling",
-    "perfil.p3.profit": "R$ 8k–15k + sale value",
-    "perfil.p3.frame": "\"Let it earn for a year before you sell — pure extra.\"",
-    "perfil.p4.title": "Daily-use personal car",
-    "perfil.p4.detail": "Only available during the owner's own vacation",
-    "perfil.p4.occ": "1–3 mo/yr",
-    "perfil.p4.profit": "R$ 1k–4k",
-    "perfil.p4.frame": "\"Small bite. Only worth it if it offsets the saudade of leaving the car behind.\"",
-    "perfil.warn.title": "When NOT to join the network",
-    "perfil.warn.1": "Heavy daily use — no time for the car to be rented out",
-    "perfil.warn.2": "Heavy financing — depreciation + monthly payment eat the earnings",
-    "perfil.warn.3": "No discipline to reserve money for IPVA, insurance and maintenance",
-    "compromisso.eyebrow": "Our commitment",
-    "compromisso.title": "The platform's side of the deal",
-    "compromisso.sub": "You bring the car. We bring the renter. Here's how we keep our part of the bargain — no empty promises.",
-    "compromisso.c1.title": "We bring the renter",
-    "compromisso.c1.body": "Active marketing channels: multilingual SEO, weekly Instagram and Reels, paid Meta ads geo-targeting foreign travelers, expat communities, travel agency partnerships.",
-    "compromisso.c2.title": "Monthly transparency report",
-    "compromisso.c2.body": "Each month you get the numbers: leads generated, quotes sent, contracts closed for your car, and the average time between rentals.",
-    "compromisso.c3.title": "Fair priority queue",
-    "compromisso.c3.body": "When a new renter shows up, the car that's been idle the longest goes first. No favoritism — every car in the network gets a fair shot.",
-    "compromisso.c4.title": "Honest expectations",
-    "compromisso.c4.body": "No promise of \"magic passive income\". Occupancy depends on demand — we tell you what's realistic and the public simulator backs the numbers.",
-    "compromisso.c5.title": "24/7 renter support",
-    "compromisso.c5.body": "WhatsApp support throughout the rental so day-to-day issues don't reach you. We handle problems first — you only step in if it's something only the owner can solve.",
-    "compromisso.c6.title": "Paperwork off your plate",
-    "compromisso.c6.body": "Contracts, photo inspection, fine transfers, dispute handling — all on us. You sign the adhesion once and we run the operation.",
-    "compromisso.disclaimer": "These are best-effort commitments — not financial guarantees. Real income depends on demand, your car's category and your availability. Realistic ranges are in the public simulator above.",
-    "filter.all": "All",
-    "filter.A": "Economy",
-    "filter.B": "Comfort",
-    "filter.C": "Premium",
-    "filter.D": "Luxury",
-    "fleet.cB": "Category B · Comfort",
-    "fleet.cC": "Category C · Premium",
-    "fleet.cD": "Category D · Luxury",
-    "fleet.cta": "See details",
-    "fleet.condKM": "KM",
-    "fleet.condRev": "Last service",
-    "fleet.condTires": "Tires",
-    "fleet.auto": "Automatic",
-    "fleet.manual": "Manual",
-    "fleet.per": "/mo",
-    "fleet.pilot": "Our pilot car",
-    "fleet.special": "Aspirational",
-    "fleet.fipeNa": "FIPE not officially listed in Brazil",
-    "fleet.cyberPrice": "On request",
-    "fleet.note": "Prices follow FIPE × category rate, always below big agencies. Availability and final price confirmed on quote. Photos are illustrative — replaced with real ones as the network grows.",
-    "fleet.s.cobalt": "Sedan · 5 seats · 560L trunk · 120k km",
-    "fleet.s.hb20": "Compact hatch · 5 seats · fuel-efficient",
-    "fleet.s.cronos": "Compact sedan · 5 seats · fuel-efficient · infotainment",
-    "fleet.s.cruze": "Mid-size sedan · 5 seats · digital A/C · infotainment",
-    "fleet.s.tracker": "Compact SUV · 5 seats · turbo · spacious for road trips",
-    "fleet.s.corolla": "Premium sedan · 5 seats · Toyota reliability",
-    "fleet.s.renegade": "Compact SUV · 5 seats · 4x2 · spacious for road trips",
-    "fleet.s.bmw": "Sport sedan · 5 seats · leather · premium package",
-    "fleet.s.cybertruck": "Electric pickup · 5 seats · ultra · availability on request",
-    "divider.eyebrow": "Now for the other side",
-    "divider.title": "Do you own a car in Uberlândia?",
-    "divider.sub": "Above was the renter side. Below is the host side — for car owners who want their car to generate passive income through the network.",
-    "preco.eyebrow": "How the price is set",
-    "preco.title": "Transparent pricing across the network",
-    "preco.sub": "Cars in the network come in tiers. Always cheaper than big agencies — and the formula is open.",
-    "preco.tA.title": "Econômico",
-    "preco.tA.car": "Manual hatchback, 5–10 yrs (HB20, Onix popular)",
-    "preco.tA.price": "R$ 1.400–2.000",
-    "preco.tB.title": "Confort",
-    "preco.tB.car": "Automatic sedan / small SUV, 5–10 yrs (Cobalt, HB20S, Tracker)",
-    "preco.tB.price": "R$ 2.000–3.600",
-    "preco.tB.featured": "← the current Cobalt",
-    "preco.tC.title": "Premium",
-    "preco.tC.car": "Recent automatic SUV / large sedan (Compass, Corolla, T-Cross)",
-    "preco.tC.price": "R$ 3.500–5.500",
-    "preco.tD.title": "Luxo",
-    "preco.tD.car": "BMW, Audi, premium SUV (phase 3)",
-    "preco.tD.price": "R$ 5.500+",
-    "preco.tD.addon": "🛡️ Armoring on request",
-    "preco.vs": "vs. big agency",
-    "preco.formula.title": "The formula",
-    "preco.formula.body": "Each car is priced as a percentage of its FIPE value — about <code>2.8% to 5.5% per month</code>, depending on the tier (bigger, costlier cars rent at a smaller share, but the absolute price still grows with FIPE). A lean P2P network has lower overhead than a corporate fleet, so the saving comes back to you.",
-    "preco.modsTitle": "Adjustments",
-    "preco.mod1": "Manual transmission: −10%",
-    "preco.mod2": "0–3 years old: +10–15%",
-    "preco.mod3": "7+ years old: −5–10%",
-    "preco.mod4": "Real-check: before listing each car, we get a fresh Localiza/Movida quote and price ours ~30% below — proof on request",
-    "frota.eyebrow": "Our fleet",
-    "frota.title": "Cars currently in the network",
-    "frota.sub": "Hand-picked, well-kept cars from owners we trust. The network grows by referral.",
-    "frota.car1.tier": "Tier B · Confort",
-    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
-    "frota.car1.specs": "Automatic · 560 L trunk · 120k km · white",
-    "frota.car1.cta": "Check availability",
-    "frota.add.title": "Your car here",
-    "frota.add.body": "Join the network. Earn passive income on a car you already own.",
-    "frota.add.cta": "See how it works",
-    "renda.tierLabel": "Your car's tier",
-    "renda.tA": "Econômico",
-    "renda.tB": "Confort",
-    "renda.tC": "Premium",
-    "renda.tD": "Luxo",
-    "renda.fipeLabel": "Or your FIPE value",
-    "renda.rPriceUsed": "Monthly price",
-  },
-
-  pt: {
-    "nav.about": "Sobre", "nav.destinos": "Destinos",
-    "share.eyebrow": "Indique um amigo",
-    "share.title": "Conhece alguém que vai para o Brasil?",
-    "share.sub": "A NomadDrive funciona por indicação. Compartilhe com um amigo em um toque — ele paga um preço justo e a confiança mantém o círculo forte.",
-    "share.btn": "Compartilhar no WhatsApp",
-    "renda.eyebrow": "O grande diferencial",
-    "renda.title": "Mais que um aluguel — uma rede de renda passiva confiável",
-    "renda.sub": "É isso que diferencia a NomadDrive. Não é um carro só — é uma rede que cresce. Coloque o seu carro para render, ou entre como parceiro. Os dois ganham, os dois ficam protegidos pela mesma confiança por indicação.",
-    "renda.ownerTitle": "Alugue seu carro",
-    "renda.ownerBody": "Transforme um carro parado em renda passiva. A gente traz locatários verificados — você aprova cada locação e fica no controle.",
-    "renda.ownerCta": "Quero alugar meu carro",
-    "renda.partnerTitle": "Seja um parceiro",
-    "renda.partnerBody": "Indique amigos e donos de carro para a rede. Cada indicação que aluga te dá pontos — crédito para o seu próximo aluguel.",
-    "renda.partnerB1": "Ganhe pontos por cada amigo que aluga",
-    "renda.partnerB2": "Sem precisar de carro — só a sua rede",
-    "renda.partnerB3": "Pontos viram crédito na sua próxima viagem",
-    "renda.partnerCta": "Quero ser parceiro",
-    "renda.simPartnerTitle": "Simule seus pontos de indicação",
-    "renda.refsLabel": "Amigos que alugam pela sua indicação",
-    "renda.rPoints": "Pontos acumulados",
-    "renda.rCredit": "Crédito para seu próximo aluguel",
-    "renda.rPctOff": "≈ de desconto num aluguel mensal",
-    "renda.partnerSimNote": "Cada amigo que aluga te dá pontos para a sua própria próxima viagem. Valores de exemplo — condições finais confirmadas ao entrar.",
-    "photo.rendaOwner": "images/renda-owner.jpg",
-    "photo.rendaPartner": "images/renda-partner.jpg",
-    "renda.b1": "Renda passiva de um carro que já é seu",
-    "renda.b2": "A gente traz locatários verificados — por indicação",
-    "renda.b3": "Orientação de contrato, caução e seguro inclusa",
-    "renda.b4": "Você no controle — aprova cada locação",
-    "renda.steps.title": "Do seu carro ao seu primeiro aluguel — 5 passos",
-    "renda.steps.s1.title": "Confira a elegibilidade",
-    "renda.steps.s1.body": "Carro com até 8 anos, bem cuidado, documentos em dia (CRLV, IPVA, licenciamento). Quilometragem abaixo de 150 mil km é preferida.",
-    "renda.steps.s2.title": "Simule sua renda",
-    "renda.steps.s2.body": "Use o simulador abaixo — informe a FIPE e a ocupação. Você vê o dinheiro que cai na sua conta, o retorno sobre a FIPE e três cenários realistas.",
-    "renda.steps.s3.title": "Envie os documentos",
-    "renda.steps.s3.body": "CRLV (digital tá ok), fotos das 4 laterais + interior, RG/CNH, histórico recente de manutenção. Análise rápida (1 a 3 dias úteis).",
-    "renda.steps.s4.title": "Rastreador + vistoria",
-    "renda.steps.s4.body": "Instalamos um rastreador GPS (custo compartilhado — sua parte R$ 30/mês) e fazemos uma vistoria mecânica inicial. O seguro de locação começa aqui.",
-    "renda.steps.s5.title": "Receba todo mês",
-    "renda.steps.s5.body": "Primeira locação é fechada via WhatsApp, contrato assinado, caução garantida. Você recebe sua parte por Pix todo dia 5, com extrato claro (bruto − taxa da plataforma − rastreador − eventuais sinistros). 100% transparente.",
-    "renda.steps.cta": "Começar o onboarding (WhatsApp)",
-    "renda.simtitle": "Simule seus ganhos",
-    "renda.simExample": "Os valores padrão são do nosso piloto — Chevrolet Cobalt Elite 2018 (FIPE ~R$57 mil). Use o campo FIPE pro seu carro.",
-    "renda.priceLabel": "Preço mensal do aluguel",
-    "renda.monthsLabel": "Meses alugados por ano",
-    "renda.rGross": "Receita bruta / ano",
-    "renda.rFee": "Taxa da plataforma NomadDrive",
-    "renda.rCash": "Cash no seu bolso / ano",
-    "renda.rRoiCash": "Retorno em cash sobre a FIPE",
-    "renda.dividerLabel": "Visão opcional — descontar os custos anuais do carro",
-    "renda.dividerHint": "Esses você pagaria mesmo com o carro parado na garagem.",
-    "renda.rCarCosts": "Custos anuais do carro (IPVA, seguro, manutenção, desgaste extra)",
-    "renda.rNet": "Líquido depois de cobrir o ano todo do carro",
-    "renda.rRoi": "Retorno depois dos custos (líquido ÷ FIPE)",
-    "renda.rBreakEven": "Ponto de equilíbrio (meses pra cobrir o ano todo)",
-    "renda.rMonthly": "≈ por mês (líquido depois de tudo)",
-    "renda.viewHelpTitle": "Qual visão faz sentido pra você?",
-    "renda.viewHelpA": "Use \"Cash no bolso\" se…",
-    "renda.viewHelpAbody": "Você já tem este carro (herança, segundo carro, aposentadoria). IPVA, seguro e manutenção são custos que você paga de qualquer jeito. Cada R$ do aluguel é dinheiro extra entrando, em cima da sua vida normal.",
-    "renda.viewHelpB": "Use \"Líquido após custos\" se…",
-    "renda.viewHelpBbody": "Você está pensando em comprar um carro especificamente pra alugar. Aí o custo anual completo (IPVA, seguro, depreciação) é uma despesa real do negócio — e o jogo só faz sentido se a renda do aluguel cobrir tudo isso com margem.",
-    "renda.scnTitle": "Três cenários realistas pra este carro",
-    "renda.scnSub": "Mesmo carro, mesma FIPE — só muda a ocupação. As duas visões lado a lado.",
-    "renda.scnHead": "Cenário",
-    "renda.scnMonths": "Meses/ano",
-    "renda.scnCash": "Cash / ano<br /><small>(retorno)</small>",
-    "renda.scnNet": "Líquido após custos<br /><small>(retorno)</small>",
-    "renda.scn1.name": "Carro parado",
-    "renda.scn1.tag": "Encaixe ideal",
-    "renda.scn2.name": "Pouco uso pessoal",
-    "renda.scn2.tag": "Realista",
-    "renda.scn3.name": "Só nas suas férias",
-    "renda.scn3.tag": "Margem apertada",
-    "renda.note": "A NomadDrive fica com uma pequena taxa por locação. Os custos do carro (IPVA, seguro, manutenção) existem alugando ou com o carro parado — então até um mês alugado já é dinheiro extra de verdade. A visão \"líquido após custos\" só é a lente certa se você comprou o carro especificamente como um negócio de aluguel. No fim é a sua consciência: só você sabe a sua situação.",
-    "renda.cta": "Quero participar",
-    "about.eyebrow": "Quem somos",
-    "about.title": "Uma pessoa de verdade, não uma locadora sem rosto",
-    "about.sub": "A NomadDrive Brasil é uma operação pequena e pessoal em Uberlândia. Um dono, um carro bem cuidado e uma relação direta com cada viajante — baseada em confiança, não em call center.",
-    "about.l1": "Você fala direto com o dono — antes, durante e depois da viagem",
-    "about.l2": "O carro é cuidado pessoalmente, não roda numa frota",
-    "about.l3": "Em Uberlândia, MG — entrega em mãos",
-    "photo.founder": "images/founder.jpg",
-    "dest.eyebrow": "Para onde ir",
-    "dest.title": "Sua base para explorar Uberlândia e a região",
-    "dest.sub": "Com o carro seu o mês inteiro, Uberlândia se abre — parques, mercados, boa comida e bate-voltas fáceis por Minas Gerais.",
-    "dest.c1.title": "Parque do Sabiá",
-    "dest.c1.body": "O grande parque verde de Uberlândia — zoológico, lago, trilhas e esporte. Um dia inteiro com a família.",
-    "dest.c2.title": "Praça Tubal Vilela e Centro",
-    "dest.c2.body": "O coração histórico da cidade — a praça central, o comércio e a vida local.",
-    "dest.c3.title": "Mercado Municipal",
-    "dest.c3.body": "Produtos da região, queijos, doces e os sabores de Minas — parada obrigatória para quem ama comer.",
-    "dest.c4.title": "Restaurantes e gastronomia",
-    "dest.c4.body": "Da comida mineira tradicional aos bistrôs modernos — Uberlândia come muito bem.",
-    "dest.c5.title": "Parque Vitória Régia",
-    "dest.c5.body": "Um parque tranquilo à beira do lago, perfeito para caminhar, correr ou relaxar à tarde.",
-    "dest.c6.title": "Bate-voltas por Minas",
-    "dest.c6.body": "Cachoeiras, cidadezinhas históricas e campo — tudo a uma viagem curta de carro.",
-    "dest.note": "Toque no endereço para abrir no Maps, ou use o botão de compartilhar para enviar um destino no WhatsApp.",
-    "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
-    "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
-    "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
-    "testi.eyebrow": "Depoimentos",
-    "testi.title": "O que os viajantes dizem",
-    "testi.sub": "Palavras reais de quem alugou com a gente. Confiança é o ponto central.",
-    "testi.q1": "\"Alugar por dois meses foi simples e justo. O carro estava limpo e bem cuidado, e ter alguém à disposição o tempo todo fez toda a diferença.\"",
-    "testi.n1": "Nome do seu cliente", "testi.o1": "País / cidade",
-    "testi.q2": "\"Bem mais barato que as grandes locadoras e sem dor de cabeça. Peguei o carro em mãos, rodei Minas inteira, sem surpresas.\"",
-    "testi.n2": "Nome do seu cliente", "testi.o2": "País / cidade",
-    "testi.q3": "\"Vim por indicação de um amigo e faria o mesmo. Preço honesto, contrato que protege os dois lados e carro reserva por garantia.\"",
-    "testi.n3": "Nome do seu cliente", "testi.o3": "País / cidade",
-    "testi.note": "Depoimentos de exemplo — troque pelos comentários reais dos seus primeiros clientes no arquivo script.js.",
-    "trust.label": "Construído com parceiros",
-    "trust.b1": "Seguradora parceira",
-    "trust.b2": "Rede de rastreadores GPS",
-    "trust.b3": "Apólice em conformidade SUSEP",
-    "trust.b4": "Proteção de dados LGPD",
-    "trust.b5": "Pix · cartão · transferência",
-    "nav.how": "Como funciona", "nav.car": "O carro", "nav.pricing": "Preços",
-    "nav.safety": "Segurança", "nav.faq": "Dúvidas", "nav.cta": "Pedir orçamento", "nav.ctaShort": "Orçamento",
-    "nav.fleet": "Frota", "nav.renda": "Ganhe",
-
-    /* ----- car detail page (car.html) ----- */
-    "car.backToFleet": "← Voltar pra frota",
-    "car.back": "← Todos os carros",
-    "car.pilotBadge": "★ Carro piloto",
-    "car.notFound.title": "Carro não encontrado",
-    "car.notFound.body": "Não encontramos este carro no catálogo. Veja a frota completa:",
-    "car.notFound.cta": "Ver a frota",
-    "car.q.body": "Tipo", "car.q.seats": "Lugares", "car.q.trunk": "Porta-malas", "car.q.color": "Cor",
-    "car.h.condition": "Condição", "car.c.km": "Quilometragem", "car.c.rev": "Última revisão", "car.c.tires": "Pneus",
-    "car.h.about": "Sobre este carro",
-    "car.h.included": "O que está incluso",
-    "car.inc.1": "✓ Seguro para uso em locação",
-    "car.inc.2": "✓ 3.000 km/mês inclusos · R$ 0,40 por km extra",
-    "car.inc.3": "✓ Entrega em mãos em Uberlândia",
-    "car.inc.4": "✓ Carro reserva se algo der errado",
-    "car.inc.5": "✓ Impostos inclusos no valor mensal",
-    "car.inc.6": "✓ Suporte EN / PT / ES no WhatsApp",
-    "car.h.location": "Local de retirada",
-    "car.location.body": "Entrega em mãos em Uberlândia, MG. O endereço exato é combinado depois da reserva. Encontro no aeroporto é possível — só pedir.",
-    "car.priceUnit": "/mês",
-    "car.book.start": "Data de retirada",
-    "car.book.months": "Quanto tempo?",
-    "car.book.monthsHint": "Meses. Quer mais? Fale com a gente para um valor customizado.",
-    "car.book.endDate": "Devolução estimada",
-    "car.book.totalLabel": "Total estimado",
-    "car.book.totalHint": "Tudo incluso, impostos inclusos. Valor final confirmado por escrito.",
-    "car.book.cta": "Reservar no WhatsApp",
-    "car.share.title": "Compartilhar este carro",
-    "car.share.native": "↗ Compartilhar",
-    "car.share.copy": "📋 Copiar link",
-    "car.share.whats": "WhatsApp",
-    "car.share.email": "E-mail",
-    "car.share.copied": "Link copiado!",
-    "car.others.title": "Outros carros da frota",
-
-    "hero.badge": "Aluguel mensal de carro — direto com o proprietário",
-    "hero.title": "Alugue um carro de confiança por meses, diretamente do dono.",
-    "hero.sub": "Conectamos carros parados a quem precisa de mobilidade por mais tempo: profissionais em projeto temporário, famílias em tratamento médico, mudanças e reformas, nômades digitais, brasileiros voltando de fora e viajantes do exterior. Um mês ou mais, preço justo, tudo incluso.",
-    "hero.cta1": "Pedir meu orçamento", "hero.cta2": "Ver como funciona",
-    "hero.avail": "🟢 Disponível a partir de julho/2026 — reserve com antecedência",
-    "local.eyebrow": "Ponto de retirada",
-    "local.title": "Retire seu carro em Uberlândia, MG",
-    "local.sub": "Entregamos o carro pessoalmente em Uberlândia — no centro do Brasil, fácil de chegar por avião ou estrada. O ponto exato é confirmado na reserva.",
-    "hero.stat1v": "9 carros", "hero.stat1": "a partir de R$ 1.400/mês",
-    "hero.stat2v": "Direto com o dono", "hero.stat2": "sem markup de locadora",
-    "hero.stat3v": "Em mãos",
-    "hero.stat3": "entrega e suporte",
-    "hero.stat4v": "3.000 km/mês",
-    "hero.stat4": "inclusos · R$ 0,40/km extra",
-    "hero.pricecard.tag": "Seu preço mensal",
-    "hero.pricecard.note": "≈ $470 USD · impostos inclusos · carro reserva",
-    "photo.hero": "Adicione <strong>images/hero.jpg</strong><br /><em>(foto do Cobalt branco — veja o README)</em>",
-
-    "strip.1": "✓ Seguro para locação", "strip.2": "✓ Somente por indicação",
-    "strip.3": "✓ Carro reserva se acontecer algo", "strip.4": "✓ Suporte em inglês e português",
-    "strip.5": "✓ Em Uberlândia, MG",
-    "strip.6": "✓ 3.000 km/mês inclusos + R$ 0,40/km extra",
-    "antifit.title": "Feito pra você se sua vida pede um carro por uns meses",
-    "antifit.sub": "Não é só pra turista. A gente nasceu pra qualquer capítulo da vida em que você precisa de um carro de verdade, não de uma esteira de diárias:",
-    "antifit.1": "🌎 Vindo do exterior passar 1 a 6+ meses no Brasil",
-    "antifit.2": "💼 Profissional num projeto temporário longe de casa",
-    "antifit.3": "🏥 Família acompanhando tratamento médico em hospital de referência",
-    "antifit.4": "🏡 Transição de vida — mudança de cidade, reforma da casa, entre carros",
-    "antifit.5": "💻 Nômade digital passando um tempo de verdade no Brasil",
-    "antifit.6": "👨‍👩‍👧 Visitando família por temporada, recebendo parente",
-    "antifit.yes": "Se algum encaixou, a gente combina. Cada carro da rede é compartilhado por um dono em quem confiamos — seu aluguel ajuda essa pessoa e você ganha um carro de verdade cuidado.",
-
-    "problem.eyebrow": "O problema",
-    "problem.title": "O aluguel mensal no Brasil é caro sem parecer",
-    "problem.sub": "Visitar a família por um ou dois meses não deveria custar uma fortuna. Mas as grandes redes precificam pela estrutura delas — frota enorme, funcionários, lojas — não por você.",
-    "problem.c1.title": "Um preço escondido na diária",
-    "problem.c1.body": "A diária parece pequena — mas numa estadia de um ou dois meses ela se acumula e fica bem acima do que deveria custar alugar um carro.",
-    "problem.c2.title": "Precificado pelo custo deles, não pelo seu",
-    "problem.c2.body": "Frota, funcionários e lojas custam caro. Esse custo está embutido em cada diária que você paga.",
-    "problem.c3.title": "Ninguém entende a sua situação",
-    "problem.c3.body": "Estadias longas, habilitação estrangeira, férias longe de casa — o balcão genérico não foi feito para o viajante internacional.",
-
-    "how.eyebrow": "Como funciona",
-    "how.title": "Simples, pessoal e por indicação",
-    "how.sub": "A gente mantém pequeno de propósito. Menos carros, locatários de confiança e uma pessoa de verdade do outro lado.",
-    "how.s1.title": "Você é indicado",
-    "how.s1.body": "Um amigo ou familiar que nos conhece faz a ponte. Começar por indicação mantém todo mundo seguro.",
-    "how.s2.title": "Peça um orçamento",
-    "how.s2.body": "Conte as datas e a cidade de retirada. Confirmamos a disponibilidade e enviamos o preço mensal, tudo incluso.",
-    "how.s3.title": "Assine e garanta",
-    "how.s3.body": "Contrato de locação claro, conferência de documento/CNH, caução reembolsável e vistoria com fotos.",
-    "how.s4.title": "Retire e dirija",
-    "how.s4.body": "Entregamos o carro pessoalmente em Uberlândia e ficamos à disposição durante toda a sua viagem.",
-
-    "photo.car": "images/car-exterior.jpg", "photo.interior": "images/car-interior.jpg", "photo.trunk": "images/car-trunk.jpg",
-    "car.eyebrow": "O carro",
-    "car.title": "Chevrolet Cobalt Elite 2018. Bem cuidado. Pronto para a estrada.",
-    "car.sub": "Um Chevrolet Cobalt Elite 2018 — automático, completo, branco. Um sedã médio confortável: barato de manter e espaçoso para viagens e família.",
-    "car.spec1.k": "Ano", "car.spec1.v": "2018",
-    "car.spec2.k": "Câmbio", "car.spec2.v": "Automático",
-    "car.spec3.k": "Modelo", "car.spec3.v": "Chevrolet Cobalt Elite",
-    "car.spec4.k": "Cor", "car.spec4.v": "Branco",
-    "car.spec5.k": "Quilometragem", "car.spec5.v": "120.000 km",
-    "car.spec6.k": "Porta-malas", "car.spec6.v": "560 L — cabe mala grande",
-    "car.extras": "🧳 Precisa de cadeirinha, suporte de teto ou equipamento de viagem? Dá pra providenciar — alugados à parte, sob consulta.",
-    "car.editnote": "Adicione fotos reais do carro na pasta <strong>/images</strong> — veja o README.",
-    "car.cta": "Ver disponibilidade",
-
-    "pricing.eyebrow": "Preços",
-    "pricing.title": "Justo, tudo incluso, sem surpresas",
-    "pricing.sub": "Cada carro tem sua mensal (veja na frota). Estadias mais longas ganham desconto.",
-    "pricing.structureTitle": "Estrutura de desconto (vale pra qualquer carro)",
-    "pricing.d1.len": "1 mês",     "pricing.d1.rate": "preço mensal cheio do carro",
-    "pricing.d2.flag": "Mais procurado",
-    "pricing.d2.len": "2 meses",   "pricing.d2.rate": "−5% em cada mês",
-    "pricing.d3.len": "3+ meses",  "pricing.d3.rate": "−10% em cada mês · condições customizadas",
-    "pricing.structureNote": "Preço de cada carro na seção da frota abaixo. Tudo inclui impostos, seguro de locação, carro reserva e 3.000 km/mês — excedente cobrado a R$ 0,40/km.",
-    "compare.title": "NomadDrive vs. uma locadora local",
-    "compare.col1": "Locadora local",
-    "compare.r1": "Cronos auto · 30 dias · ~3.000 km", "compare.r1v": "R$ 4.300 (com cap de km)",
-    "compare.r2": "Km inclusos", "compare.r2v": "~2.000 km cap · depois por km", "compare.r2us": "3.000 km/mês · R$ 0,40 extra/km",
-    "compare.r3": "Atendimento", "compare.r3v": "Balcão + fila", "compare.r3us": "WhatsApp 24/7",
-    "compare.r4": "Idioma", "compare.r4v": "Só português", "compare.r4us": "PT · EN · ES",
-    "compare.r5": "Entrega", "compare.r5v": "Loja / balcão", "compare.r5us": "Em mãos · até no aeroporto",
-    "compare.r6": "Caução", "compare.r6v": "R$ 3.000 – 5.000",
-    "compare.r7": "Burocracia na hora", "compare.r7v": "Fila + papelada", "compare.r7us": "Tudo pré-feito por WhatsApp",
-    "compare.honest": "Modelo enxuto vence. Sem balcão, sem filial, sem gestão de frota — só uma rede pequena de donos e entrega em mãos. Esse custo fixo baixo permite ser mais barato que a locadora corporativa no mesmo carro (um Cronos sai ~R$ 790/mês mais barato que o orçamento acima — cerca de 18% de economia), mantendo o que faz a viagem longa ser fácil: suporte EN/ES, entrega no horário que você chegar, 3.000 km/mês inclusos e um dono real que cuida do carro de verdade.",
-    "compare.note": "Comparação baseada em orçamento real de uma locadora de Uberlândia, maio de 2026. Preços variam por carro e data — seu orçamento é sempre confirmado por escrito.",
-
-    "net.eyebrow": "Rede",
-    "net.title": "Onde a rede está — e pra onde está indo",
-    "net.sub": "Começamos em Uberlândia (MG) e a gente cresce cidade por cidade. Seja o primeiro carro (ou o primeiro locatário) na sua região.",
-    "net.statusLive": "Disponível agora",
-    "net.statusSoon": "Próxima parada",
-    "net.statusPlanned": "No roadmap",
-    "net.uli.cars": "9 carros na rede",
-    "net.uli.handover": "Entrega em mãos · possível no aeroporto",
-    "net.uli.support": "Equipe local na cidade",
-    "net.spli.demand": "Maior demanda na nossa lista de espera",
-    "net.spli.target": "Meta: 3º tri/2026 · primeiros 5 carros parceiros",
-    "net.spli.owner": "Donos: vaga prioritária se entrarem agora",
-    "net.plannedTitle": "Belo Horizonte · Brasília · Goiânia · Campinas · Rio",
-    "net.plli.signal": "Abre se houver interesse sinalizado",
-    "net.plli.match": "A gente conecta oferta (donos) com demanda (locatários) antes de abrir",
-    "net.plli.expand": "Meta: 5+ carros por cidade antes do lançamento",
-    "net.ctaRenter": "Quero carro na minha cidade",
-    "net.ctaOwner": "Quero ser o primeiro dono na minha cidade",
-
-    "safety.eyebrow": "Segurança e confiança",
-    "safety.title": "Como protegemos todo mundo",
-    "safety.sub": "Uma operação pequena também pode ser séria. Veja como o risco é tratado dos dois lados.",
-    "safety.c1.title": "Seguro para locação",
-    "safety.c1.body": "Todo carro tem seguro para uso em locação — não é só apólice pessoal. Coberturas e franquias detalhadas abaixo.",
-    "safety.c2.title": "Contrato claro",
-    "safety.c2.body": "Contrato de locação por escrito, conferência de documento e CNH, vistoria com foto e vídeo na retirada e devolução.",
-    "safety.c3.title": "Rastreador GPS",
-    "safety.c3.body": "Todo carro tem rastreador GPS para recuperação e tranquilidade — nunca usado pra monitorar uso rotineiro.",
-    "safety.c4.title": "Linha de emergência 24/7",
-    "safety.c4.body": "Telefone dedicado disponível 24h pra acidentes, panes e assistência. Número informado na retirada e no contrato.",
-    "safety.cov.title": "Cobertura do seguro — resumo",
-    "safety.cov.h1": "Cobertura", "safety.cov.h2": "Incluso", "safety.cov.h3": "Franquia padrão",
-    "safety.cov.r1": "Danos por colisão no carro",
-    "safety.cov.r2": "Danos a terceiros (corporais + materiais — BI/PD)", "safety.cov.r2d": "Até R$ 100 mil cada, sem franquia pro condutor",
-    "safety.cov.r3": "Roubo / perda total", "safety.cov.r3d": "100% coberto (por contrato)",
-    "safety.cov.r4": "Incêndio / eventos da natureza", "safety.cov.r4d": "100% coberto (por contrato)",
-    "safety.cov.r5": "Vidros (para-brisa, retrovisores)",
-    "safety.cov.r6": "Pneus (furo / dano)",
-    "safety.cov.r7": "Assistência 24h + guincho", "safety.cov.r7d": "Incluso em todo o Brasil",
-    "safety.cov.r8": "Carro reserva se necessário", "safety.cov.r8d": "Mesma categoria",
-    "safety.cov.note": "Coberturas e valores finais de franquia por categoria são confirmados no contrato. O condutor continua responsável por pedágios, multas e qualquer dano por uso indevido (álcool, racha, off-road).",
-    "safety.disclaimer": "Observação: condições do seguro, caução e detalhes do contrato são confirmados individualmente em cada locação. Esta página é informativa e não constitui oferta vinculante.",
-
-    "docs.eyebrow": "Documentos e requisitos",
-    "docs.title": "Tudo por escrito — leia antes de reservar",
-    "docs.sub": "Transparência começa na papelada. Abaixo o que você precisa do seu lado, e o contrato que a gente usa — disponível pra baixar antes.",
-    "docs.req.title": "O que você precisa pra alugar",
-    "docs.req.1": "<strong>Idade:</strong> mínimo 21 anos",
-    "docs.req.2": "<strong>Habilitação:</strong> CNH válida (ou equivalente estrangeira) há pelo menos 2 anos",
-    "docs.req.3": "<strong>Documento:</strong> RG / passaporte com foto",
-    "docs.req.4": "<strong>Comprovante de endereço:</strong> conta recente ou contrato de aluguel",
-    "docs.req.5": "<strong>Forma de pagamento:</strong> cartão de crédito pra pré-autorização da caução, ou Pix",
-    "docs.req.6": "<strong>Histórico de direção:</strong> limpo recente",
-    "docs.contract.title": "Contrato de locação",
-    "docs.contract.body": "É o mesmo contrato que vai pra cada locação. Trilíngue (PT/EN/ES), linguagem clara, inclui termo de adesão, recibo de caução e checklist de vistoria. Assina digital — sem fax.",
-    "docs.contract.cta": "⬇ Baixar o contrato (Excel)",
-    "docs.contract.note": "7 abas: contrato PT/EN/ES · recibo de caução · adesão · simulação · vistoria. Formato migra pra PDF + assinatura eletrônica no 3º tri/2026.",
-    "docs.fast.title": "Resumo rápido",
-    "docs.fast.1": "<strong>Caução:</strong> R$ 2.000 (A/B) · R$ 3.000 (C) · R$ 5.000 (D)",
-    "docs.fast.2": "<strong>Pagamento:</strong> Pix, transferência, cartão de crédito em até 3×",
-    "docs.fast.3": "<strong>Quilometragem:</strong> 3.000 km/mês inclusos · R$ 0,40/km extra",
-    "docs.fast.4": "<strong>Cancelamento:</strong> reembolso integral 7+ dias · 50% de 3 a 7 dias · sem reembolso abaixo de 72h",
-    "docs.fast.5": "<strong>Seguro:</strong> apólice de locação, franquia R$ 3.500–5.000",
-    "docs.fast.6": "<strong>Retirada:</strong> em mãos em Uberlândia, encontro no aeroporto é possível",
-
-    "who.eyebrow": "Para quem é",
-    "who.title": "Capítulos reais da vida que pedem um carro de verdade",
-    "who.sub": "Se você vai passar um mês ou mais em algum lugar — por qualquer motivo — diária de locadora vira fortuna e Uber também. Aluguel mensal é a opção calma e racional.",
-    "who.l1": "Quer um carro automático e confortável sem markup de locadora",
-    "who.l2": "Prefere falar com uma pessoa de verdade, no seu idioma (EN/PT/ES)",
-    "who.l3": "Valoriza carro reserva e um contrato que te protege",
-    "who.l4": "Quer menos burocracia — pega o carro uma vez e fica com ele o mês todo",
-    "who.l5": "Precisa de flexibilidade nas datas e no tipo de carro (sedã, SUV, premium)",
-    "photo.travel": "images/travel.jpg",
-
-    "quote.eyebrow": "Pedir orçamento",
-    "quote.title": "Conte suas datas — respondemos rápido",
-    "quote.sub": "Preencha e o WhatsApp abre com seus dados prontos para enviar. Sem cadastro, sem spam.",
-    "quote.p1": "Resposta em até 24 horas", "quote.p2": "Preço fechado por escrito", "quote.p3": "Pedir não compromete",
-    "form.name": "Seu nome", "form.contact": "E-mail ou WhatsApp",
-    "form.start": "Data de retirada", "form.months": "Por quanto tempo?",
-    "form.months.1": "1 mês", "form.months.2": "2 meses", "form.months.3": "3 meses", "form.months.4": "4+ meses",
-    "form.city": "Cidade de retirada", "form.ref": "Quem indicou você?", "form.optional": "(opcional)",
-    "form.msg": "Mais alguma coisa?", "form.submit": "Enviar pelo WhatsApp",
-    "form.altprefix": "Prefere e-mail?", "form.altlink": "Fale com a gente por e-mail",
-    "form.err": "Preencha seu nome e uma forma de contato.",
-
-    "faq.eyebrow": "Dúvidas", "faq.title": "Boas perguntas, respostas diretas",
-    "faq.g.reserva": "Reserva e acesso",
-    "faq.q1": "Preciso de indicação pra alugar?",
-    "faq.a1": "Não. Começamos por indicação pra crescer com confiança, mas qualquer pessoa com documentos válidos pode pedir orçamento. Conte sua situação e a gente te manda os próximos passos.",
-    "faq.q2": "Posso dirigir com a habilitação do meu país?",
-    "faq.a2": "Sim — uma habilitação estrangeira válida é aceita no Brasil para visitantes (muitas vezes com a permissão internacional). Para estadias acima de 180 dias, pode ser necessária a tradução juramentada. Confirmamos a exigência exata antes da retirada.",
-    "faq.q3": "Quais são os requisitos do condutor?",
-    "faq.a3": "Mínimo de 21 anos, CNH válida (ou equivalente estrangeira) há pelo menos 2 anos, documento com foto e comprovante de endereço. Histórico de direção limpo recente. Aprovação final após análise dos documentos.",
-    "faq.q4": "Quais cidades vocês atendem?",
-    "faq.a4": "A retirada é em Uberlândia, MG. A partir daí o carro é seu pra viajar pelo Brasil dentro do contrato. Expansão para São Paulo, Belo Horizonte, Brasília e outras cidades está no roadmap — veja a seção \"Rede\".",
-    "faq.g.pagamento": "Caução e pagamento",
-    "faq.q5": "Qual o valor da caução e como pago?",
-    "faq.a5": "A caução reembolsável é R$ 2.000 para categorias A/B, R$ 3.000 para C e R$ 5.000 para D (luxo). Pago por Pix ou pré-autorização no cartão de crédito. Devolvido em até 7 dias úteis após a devolução do carro nas mesmas condições (descontando multas/pedágios que cheguem depois).",
-    "faq.q6": "Como pago a mensalidade?",
-    "faq.a6": "Pix, transferência ou cartão de crédito (até 3× sem juros). O primeiro mês é pago antes da retirada; estadias mais longas podem pagar mês a mês com comprovante de endereço e contato estável.",
-    "faq.q7": "Qual a política de cancelamento?",
-    "faq.a7": "Cancelamento com mais de 7 dias de antecedência: reembolso integral. De 3 a 7 dias: 50%. Menos de 72h ou no-show: sem reembolso. Caso fortuito ou força maior (doença, problema com documentos) é avaliado caso a caso, com transparência.",
-    "faq.g.seguro": "Seguro e sinistros",
-    "faq.q8": "O que o seguro cobre?",
-    "faq.a8": "Todos os carros têm seguro para uso em locação cobrindo: colisão, danos a terceiros (BI/PD), roubo, incêndio e eventos da natureza. Franquia padrão de R$ 3.500–R$ 5.000 dependendo da categoria. Vidros e pneus têm franquia menor dedicada. Termos completos no contrato.",
-    "faq.q9": "E se eu tiver um acidente?",
-    "faq.a9": "Primeiro: ligue na nossa linha de emergência 24/7 (no contrato e na mensagem fixada do WhatsApp). A gente envia assistência, você faz o boletim de ocorrência (BO) se necessário, registra fotos e a gente abre o sinistro com a seguradora. Carro reserva organizado pra você não ficar na mão.",
-    "faq.q10": "Quem paga pedágios e multas?",
-    "faq.a10": "Todos os pedágios e multas durante a locação são de sua responsabilidade. Multas que chegam depois da devolução: a gente transfere os pontos pra sua CNH e a cobrança pro seu nome, com cópia do auto. Totalmente transparente — sem markup.",
-    "faq.g.entrega": "Entrega e vistoria",
-    "faq.q11": "Como funciona a vistoria?",
-    "faq.a11": "Vistoria com foto e vídeo das 4 laterais, interior, painel (km), nível de combustível e estado dos pneus na retirada — os dois lados assinam. Igual na devolução. Qualquer dano novo é comparado com as fotos da retirada. Zero surpresas.",
-    "faq.q12": "O carro tem reserva se quebrar?",
-    "faq.a12": "Sim. Problema mecânico ou acidente: organizamos um carro substituto da mesma categoria (ou crédito se você aceitar uma categoria diferente) pra seus planos não quebrarem.",
-    "faq.q13": "Posso sair da cidade / cruzar fronteiras?",
-    "faq.a13": "Sim, dentro do Brasil. Sair pra Argentina/Uruguai/Paraguai exige autorização prévia e documentação extra. O carro tem rastreador GPS — pra segurança, nunca pra espionar.",
-
-    "rmap.eyebrow": "O que vem por aí",
-    "rmap.title": "Do WhatsApp-first pra uma plataforma 100% digital",
-    "rmap.sub": "Hoje toda reserva fecha pelo WhatsApp com uma pessoa real do outro lado — isso é proposital enquanto a rede é pequena. Conforme a gente cresce, a camada digital vai entrando:",
-    "rmap.now": "Disponível hoje",
-    "rmap.now.1": "Reserva pelo WhatsApp com suporte humano de verdade",
-    "rmap.now.2": "Contrato em PDF/Excel · assinatura digital aceita",
-    "rmap.now.3": "Pix / transferência / cartão de crédito",
-    "rmap.now.4": "Página de detalhe por carro · cálculo de preço ao vivo · galeria",
-    "rmap.now.5": "Simulador de renda do dono (nesta página)",
-    "rmap.soon": "3º trim/2026",
-    "rmap.soon.1": "Reserva online com disponibilidade em tempo real",
-    "rmap.soon.2": "Conta + painel (locações ativas, km usado, histórico)",
-    "rmap.soon.3": "Bloqueio de caução no Pix · liberação automática na devolução",
-    "rmap.soon.4": "Validação automática de CNH/CRLV (anti-fraude)",
-    "rmap.soon.5": "Painel do proprietário: calendário, repasses, extratos",
-    "rmap.later": "2027",
-    "rmap.later.1": "Chat ao vivo + assistente IA 24/7",
-    "rmap.later.2": "Expansão pras 6 maiores capitais brasileiras",
-    "rmap.later.3": "App nativo iOS / Android",
-    "rmap.later.4": "Múltiplos condutores por locação (casais, famílias)",
-    "rmap.later.5": "Pacotes de seguro com corretoras parceiras",
-    "rmap.note": "A gente entrega em pequenos passos e fala o que é real hoje. Quer sugerir algo? <a href=\"#quote\">Manda uma mensagem</a>.",
-
-    "final.title": "Precisa de um carro por uns meses?",
-    "final.sub": "Garanta um preço mensal justo antes da sua estadia. Começa com uma mensagem rápida.",
-    "final.cta": "Pedir meu orçamento",
-
-    "footer.tag": "Aluguel mensal de carro justo para viajantes do exterior no Brasil.",
-    "footer.contact": "Contato", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
-    "footer.instagram": "Instagram", "footer.explore": "Navegar",
-    "footer.legal": "© 2026 NomadDrive Brasil. Site informativo — não constitui oferta vinculante. Condições de locação, seguro e contrato confirmados individualmente.",
-    "perfil.eyebrow": "Pra quem faz sentido",
-    "perfil.title": "É renda passiva pra quem?",
-    "perfil.sub": "Não é todo mundo que ganha dinheiro alugando o próprio carro. Esses são os perfis onde funciona de verdade.",
-    "perfil.occ": "Ocupação",
-    "perfil.profit": "Líquido / ano",
-    "perfil.p1.title": "Carro parado quase o ano todo",
-    "perfil.p1.detail": "2º carro da família, herança — quase não anda",
-    "perfil.p1.occ": "10–12 meses/ano",
-    "perfil.p1.profit": "R$ 12 mil – 20 mil",
-    "perfil.p1.frame": "\"O carro que vivia parado agora paga IPVA, seguro e ainda sobra.\"",
-    "perfil.p2.title": "Aposentado com carro pouco usado",
-    "perfil.p2.detail": "Dirige umas duas vezes por semana",
-    "perfil.p2.occ": "6–8 meses/ano",
-    "perfil.p2.profit": "R$ 5 mil – 12 mil",
-    "perfil.p2.frame": "\"~R$ 500–800 extras por mês na aposentadoria, sem dirigir aplicativo.\"",
-    "perfil.p3.title": "Quem ia vender o carro",
-    "perfil.p3.detail": "Vai vender em 6–12 meses de qualquer jeito",
-    "perfil.p3.occ": "6–8 meses antes de vender",
-    "perfil.p3.profit": "R$ 8 mil – 15 mil + venda",
-    "perfil.p3.frame": "\"Render 1 ano antes de vender — extra puro.\"",
-    "perfil.p4.title": "Carro de uso pessoal diário",
-    "perfil.p4.detail": "Só disponível nas próprias férias do dono",
-    "perfil.p4.occ": "1–3 meses/ano",
-    "perfil.p4.profit": "R$ 1 mil – 4 mil",
-    "perfil.p4.frame": "\"Bicada pequena. Só vale se compensar a saudade do carro.\"",
-    "perfil.warn.title": "Quando NÃO entrar na rede",
-    "perfil.warn.1": "Uso pessoal intenso — não sobra tempo do carro pra alugar",
-    "perfil.warn.2": "Financiamento alto — depreciação + parcela come a renda",
-    "perfil.warn.3": "Sem disciplina pra reservar dinheiro pra IPVA, seguro e manutenção",
-    "compromisso.eyebrow": "Nosso compromisso",
-    "compromisso.title": "O que a plataforma entrega",
-    "compromisso.sub": "Você traz o carro. A gente traz o locatário. Aqui está como cumprimos a nossa parte — sem promessa vazia.",
-    "compromisso.c1.title": "Trazemos o locatário",
-    "compromisso.c1.body": "Marketing ativo em vários canais: site multilíngue, SEO, Instagram e Reels toda semana, anúncios pagos na Meta com geo-targeting pra estrangeiros, comunidades de expats, parcerias com agências de viagem.",
-    "compromisso.c2.title": "Relatório mensal de transparência",
-    "compromisso.c2.body": "Todo mês você recebe os números: leads gerados, orçamentos enviados, contratos fechados pro SEU carro e o tempo médio entre locações.",
-    "compromisso.c3.title": "Fila justa de prioridade",
-    "compromisso.c3.body": "Quando aparece cliente novo, o carro que está parado há mais tempo entra primeiro. Sem favoritismo — todo carro da rede tem chance igual.",
-    "compromisso.c4.title": "Expectativas honestas",
-    "compromisso.c4.body": "Sem promessa de \"renda passiva mágica\". Ocupação depende da demanda — falamos o que é realista e o simulador público mostra os números.",
-    "compromisso.c5.title": "Suporte ao locatário 24/7",
-    "compromisso.c5.body": "WhatsApp durante toda a locação pra dor de cabeça operacional não chegar em você. A gente resolve primeiro — só entra se for algo que só o dono resolve.",
-    "compromisso.c6.title": "Burocracia tira do seu colo",
-    "compromisso.c6.body": "Contrato, vistoria com fotos, transferência de multa, atrito com locatário — tudo nosso. Você assina a adesão uma vez e a gente toca a operação.",
-    "compromisso.disclaimer": "Estes são compromissos de melhor esforço — não garantias financeiras. A renda real depende da demanda do mercado, da categoria do seu carro e da sua disponibilidade. As faixas realistas estão no simulador público acima.",
-    "filter.all": "Todos",
-    "filter.A": "Econômico",
-    "filter.B": "Confort",
-    "filter.C": "Premium",
-    "filter.D": "Luxo",
-    "fleet.cB": "Categoria B · Confort",
-    "fleet.cC": "Categoria C · Premium",
-    "fleet.cD": "Categoria D · Luxo",
-    "fleet.cta": "Ver detalhes",
-    "fleet.condKM": "KM",
-    "fleet.condRev": "Última revisão",
-    "fleet.condTires": "Pneus",
-    "fleet.auto": "Automático",
-    "fleet.manual": "Manual",
-    "fleet.per": "/mês",
-    "fleet.pilot": "Carro piloto",
-    "fleet.special": "Aspiracional",
-    "fleet.fipeNa": "FIPE não oficial no Brasil",
-    "fleet.cyberPrice": "Sob consulta",
-    "fleet.note": "Preços seguem FIPE × categoria, sempre abaixo das grandes locadoras. Disponibilidade e preço final são confirmados no orçamento. Fotos ilustrativas — substituídas pelas reais conforme a rede cresce.",
-    "fleet.s.cobalt": "Sedã · 5 lugares · porta-malas 560L · 120k km",
-    "fleet.s.hb20": "Hatch compacto · 5 lugares · econômico no consumo",
-    "fleet.s.cronos": "Sedã compacto · 5 lugares · econômico · multimídia",
-    "fleet.s.cruze": "Sedã médio · 5 lugares · ar digital · multimídia",
-    "fleet.s.tracker": "SUV compacto · 5 lugares · turbo · espaçoso pra viagem",
-    "fleet.s.corolla": "Sedã premium · 5 lugares · confiabilidade Toyota",
-    "fleet.s.renegade": "SUV compacto · 5 lugares · 4x2 · ideal pra viagem",
-    "fleet.s.bmw": "Sedã esportivo · 5 lugares · couro · pacote premium",
-    "fleet.s.cybertruck": "Picape elétrica · 5 lugares · ultra · disponibilidade sob consulta",
-    "divider.eyebrow": "Agora pro outro lado",
-    "divider.title": "Você tem um carro em Uberlândia?",
-    "divider.sub": "Acima foi o lado do viajante. Abaixo é o lado do host — pra donos de carro que querem gerar renda passiva pela rede.",
-    "preco.eyebrow": "Como o preço é calculado",
-    "preco.title": "Preço transparente em toda a rede",
-    "preco.sub": "Os carros da rede entram em categorias. Sempre mais barato que as grandes locadoras — e a fórmula é aberta.",
-    "preco.tA.title": "Econômico",
-    "preco.tA.car": "Hatch manual, 5–10 anos (HB20, Onix popular)",
-    "preco.tA.price": "R$ 1.400–2.000",
-    "preco.tB.title": "Confort",
-    "preco.tB.car": "Sedã / SUV pequeno automático, 5–10 anos (Cobalt, HB20S, Tracker)",
-    "preco.tB.price": "R$ 2.000–3.600",
-    "preco.tB.featured": "← o Cobalt atual",
-    "preco.tC.title": "Premium",
-    "preco.tC.car": "SUV / sedã grande automático recente (Compass, Corolla, T-Cross)",
-    "preco.tC.price": "R$ 3.500–5.500",
-    "preco.tD.title": "Luxo",
-    "preco.tD.car": "BMW, Audi, SUV premium (fase 3)",
-    "preco.tD.price": "R$ 5.500+",
-    "preco.tD.addon": "🛡️ Blindagem sob consulta",
-    "preco.vs": "vs. grande locadora",
-    "preco.formula.title": "A fórmula",
-    "preco.formula.body": "Cada carro é precificado como uma porcentagem do valor FIPE — em torno de <code>2,8% a 5,5% por mês</code>, dependendo da categoria (carros maiores e mais caros alugam por uma fatia menor — mas o preço absoluto continua subindo conforme a FIPE sobe). Uma rede P2P enxuta tem custo fixo bem menor que uma locadora corporativa — essa economia volta pra você.",
-    "preco.modsTitle": "Ajustes",
-    "preco.mod1": "Câmbio manual: −10%",
-    "preco.mod2": "0–3 anos de uso: +10–15%",
-    "preco.mod3": "7+ anos: −5–10%",
-    "preco.mod4": "Confirmação real: antes de publicar cada carro, pegamos uma cotação na Localiza/Movida e cobramos ~30% menos — comprovante sob pedido",
-    "frota.eyebrow": "Nossa frota",
-    "frota.title": "Carros atualmente na rede",
-    "frota.sub": "Carros escolhidos a dedo, bem cuidados, de donos de confiança. A rede cresce por indicação.",
-    "frota.car1.tier": "Categoria B · Confort",
-    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
-    "frota.car1.specs": "Automático · porta-malas 560 L · 120k km · branco",
-    "frota.car1.cta": "Ver disponibilidade",
-    "frota.add.title": "Seu carro aqui",
-    "frota.add.body": "Entre para a rede. Renda passiva de um carro que já é seu.",
-    "frota.add.cta": "Ver como funciona",
-    "renda.tierLabel": "Categoria do seu carro",
-    "renda.tA": "Econômico",
-    "renda.tB": "Confort",
-    "renda.tC": "Premium",
-    "renda.tD": "Luxo",
-    "renda.fipeLabel": "Ou valor FIPE do seu carro",
-    "renda.rPriceUsed": "Preço mensal",
-  },
-
-  es: {
-    "nav.about": "Nosotros", "nav.destinos": "Destinos",
-    "nav.how": "Cómo funciona", "nav.car": "El auto", "nav.pricing": "Precios",
-    "nav.safety": "Seguridad", "nav.faq": "Preguntas", "nav.cta": "Pedir presupuesto", "nav.ctaShort": "Presupuesto",
-    "nav.fleet": "Flota", "nav.renda": "Ganá",
-
-    /* ----- car detail page (car.html) ----- */
-    "car.backToFleet": "← Volver a la flota",
-    "car.back": "← Todos los autos",
-    "car.pilotBadge": "★ Auto piloto",
-    "car.notFound.title": "Auto no encontrado",
-    "car.notFound.body": "No encontramos este auto en el catálogo. Mirá la flota completa:",
-    "car.notFound.cta": "Ver la flota",
-    "car.q.body": "Tipo", "car.q.seats": "Plazas", "car.q.trunk": "Maletero", "car.q.color": "Color",
-    "car.h.condition": "Condición", "car.c.km": "Kilometraje", "car.c.rev": "Última revisión", "car.c.tires": "Neumáticos",
-    "car.h.about": "Sobre este auto",
-    "car.h.included": "Qué está incluido",
-    "car.inc.1": "✓ Seguro para uso de alquiler",
-    "car.inc.2": "✓ 3.000 km/mes incluidos · R$ 0,40 por km extra",
-    "car.inc.3": "✓ Entrega en mano en Uberlândia",
-    "car.inc.4": "✓ Auto de respaldo si algo sale mal",
-    "car.inc.5": "✓ Impuestos incluidos en el mensual",
-    "car.inc.6": "✓ Soporte EN / PT / ES en WhatsApp",
-    "car.h.location": "Lugar de retiro",
-    "car.location.body": "Entrega en mano en Uberlândia, MG. La dirección exacta se confirma después de la reserva. Encuentro en el aeropuerto es posible — solo pedilo.",
-    "car.priceUnit": "/mes",
-    "car.book.start": "Fecha de retiro",
-    "car.book.months": "¿Cuánto tiempo?",
-    "car.book.monthsHint": "Meses. ¿Más? Escribinos para un valor personalizado.",
-    "car.book.endDate": "Devolución estimada",
-    "car.book.totalLabel": "Total estimado",
-    "car.book.totalHint": "Todo incluido, impuestos incluidos. Precio final confirmado por escrito.",
-    "car.book.cta": "Reservar por WhatsApp",
-    "car.share.title": "Compartir este auto",
-    "car.share.native": "↗ Compartir",
-    "car.share.copy": "📋 Copiar link",
-    "car.share.whats": "WhatsApp",
-    "car.share.email": "Email",
-    "car.share.copied": "¡Link copiado!",
-    "car.others.title": "Otros autos de la flota",
-
-    "share.eyebrow": "Recomienda a un amigo",
-    "share.title": "¿Conoces a alguien que viaja a Brasil?",
-    "share.sub": "NomadDrive funciona por recomendación. Compártelo con un amigo en un toque — él consigue un precio justo y la confianza mantiene el círculo fuerte.",
-    "share.btn": "Compartir por WhatsApp",
-    "renda.eyebrow": "El gran diferencial",
-    "renda.title": "Más que un alquiler — una red de ingresos pasivos confiable",
-    "renda.sub": "Esto es lo que distingue a NomadDrive. No es un solo auto — es una red que crece. Pon tu propio auto a trabajar, o únete como socio. Los dos ganan, los dos quedan protegidos por la misma confianza por recomendación.",
-    "renda.ownerTitle": "Alquila tu auto",
-    "renda.ownerBody": "Convierte un auto parado en ingresos pasivos. Traemos inquilinos verificados — tú apruebas cada alquiler y tienes el control.",
-    "renda.ownerCta": "Quiero alquilar mi auto",
-    "renda.partnerTitle": "Sé un socio",
-    "renda.partnerBody": "Recomienda amigos y dueños de autos a la red. Cada recomendación que alquila te da puntos — crédito para tu propio próximo alquiler.",
-    "renda.partnerB1": "Gana puntos por cada amigo que alquila",
-    "renda.partnerB2": "Sin auto necesario — solo tu red",
-    "renda.partnerB3": "Los puntos se vuelven crédito en tu próximo viaje",
-    "renda.partnerCta": "Quiero ser socio",
-    "renda.simPartnerTitle": "Simula tus puntos de recomendación",
-    "renda.refsLabel": "Amigos que alquilan por tu recomendación",
-    "renda.rPoints": "Puntos acumulados",
-    "renda.rCredit": "Crédito para tu próximo alquiler",
-    "renda.rPctOff": "≈ de descuento en un alquiler mensual",
-    "renda.partnerSimNote": "Cada amigo que alquila te da puntos para tu propio próximo viaje. Valores de ejemplo — condiciones finales confirmadas al unirte.",
-    "photo.rendaOwner": "images/renda-owner.jpg",
-    "photo.rendaPartner": "images/renda-partner.jpg",
-    "renda.b1": "Ingresos pasivos de un auto que ya tienes",
-    "renda.b2": "Traemos inquilinos verificados — por recomendación",
-    "renda.b3": "Orientación de contrato, depósito y seguro incluida",
-    "renda.b4": "Tú tienes el control — apruebas cada alquiler",
-    "renda.steps.title": "De tu auto al primer alquiler — 5 pasos",
-    "renda.steps.s1.title": "Verificá la elegibilidad",
-    "renda.steps.s1.body": "Auto de hasta 8 años, bien cuidado, documentos al día (CRLV, IPVA, licenciamento). Kilometraje por debajo de 150 mil km es preferido.",
-    "renda.steps.s2.title": "Simulá tus ingresos",
-    "renda.steps.s2.body": "Usá el simulador abajo — ingresá la FIPE y la ocupación. Vas a ver la plata que cae en tu cuenta, el retorno sobre la FIPE y tres escenarios realistas.",
-    "renda.steps.s3.title": "Enviá los documentos",
-    "renda.steps.s3.body": "CRLV (digital está bien), fotos de los 4 lados + interior, documento, historial reciente de mantenimiento. Análisis rápido (1 a 3 días hábiles).",
-    "renda.steps.s4.title": "Rastreador + inspección",
-    "renda.steps.s4.body": "Instalamos un rastreador GPS (costo compartido — tu parte R$ 30/mes) y hacemos una inspección mecánica inicial. El seguro de alquiler empieza acá.",
-    "renda.steps.s5.title": "Recibí cada mes",
-    "renda.steps.s5.body": "El primer alquiler se cierra por WhatsApp, contrato firmado, depósito asegurado. Recibís tu parte por Pix el día 5 de cada mes, con un extracto claro (bruto − comisión − rastreador − siniestros si hubiera). 100% transparente.",
-    "renda.steps.cta": "Empezar el onboarding (WhatsApp)",
-    "renda.simtitle": "Simula tus ganancias",
-    "renda.simExample": "Los valores por defecto son de nuestro piloto — Chevrolet Cobalt Elite 2018 (FIPE ~R$57 mil). Usa el campo FIPE para tu auto.",
-    "renda.priceLabel": "Precio mensual del alquiler",
-    "renda.monthsLabel": "Meses alquilado por año",
-    "renda.rGross": "Ingreso bruto / año",
-    "renda.rFee": "Comisión de la plataforma NomadDrive",
-    "renda.rCash": "Cash en tu bolsillo / año",
-    "renda.rRoiCash": "Retorno en cash sobre la FIPE",
-    "renda.dividerLabel": "Vista opcional — descontar los costos anuales del auto",
-    "renda.dividerHint": "Estos los pagarías incluso con el auto parado en el garaje.",
-    "renda.rCarCosts": "Costos anuales del auto (IPVA, seguro, mantenimiento, desgaste extra)",
-    "renda.rNet": "Neto después de cubrir el año entero del auto",
-    "renda.rRoi": "Retorno después de costos (neto ÷ FIPE)",
-    "renda.rBreakEven": "Punto de equilibrio (meses para cubrir el año entero)",
-    "renda.rMonthly": "≈ por mes (neto después de todo)",
-    "renda.viewHelpTitle": "¿Qué vista encaja en tu situación?",
-    "renda.viewHelpA": "Usá \"Cash en bolsillo\" si…",
-    "renda.viewHelpAbody": "Ya tenés este auto (herencia, segundo auto, jubilación). IPVA, seguro y mantenimiento son costos hundidos — los pagás de todas formas. Cada R$ del alquiler es plata extra entrando, sobre tu vida normal.",
-    "renda.viewHelpB": "Usá \"Neto después de costos\" si…",
-    "renda.viewHelpBbody": "Estás pensando en comprar un auto específicamente para alquilarlo. Ahí el costo anual completo (IPVA, seguro, depreciación) es un gasto real del negocio — y solo tiene sentido si la renta del alquiler lo cubre con margen.",
-    "renda.scnTitle": "Tres escenarios realistas para este auto",
-    "renda.scnSub": "Mismo auto, misma FIPE — solo cambia la ocupación. Las dos vistas lado a lado.",
-    "renda.scnHead": "Escenario",
-    "renda.scnMonths": "Meses/año",
-    "renda.scnCash": "Cash / año<br /><small>(retorno)</small>",
-    "renda.scnNet": "Neto después de costos<br /><small>(retorno)</small>",
-    "renda.scn1.name": "Auto parado",
-    "renda.scn1.tag": "Encaje ideal",
-    "renda.scn2.name": "Poco uso personal",
-    "renda.scn2.tag": "Realista",
-    "renda.scn3.name": "Solo en tus vacaciones",
-    "renda.scn3.tag": "Margen ajustado",
-    "renda.note": "NomadDrive se queda con una pequeña comisión por alquiler. Los costos del auto (IPVA, seguro, mantenimiento) existen alquilando o con el auto parado — así que incluso un mes alquilado ya es plata extra de verdad. La vista \"neto después de costos\" solo es la correcta si compraste el auto específicamente como un negocio de alquiler. Al final es tu consciencia: solo vos sabés tu situación.",
-    "renda.cta": "Quiero participar",
-
-    "hero.badge": "Alquiler mensual de auto — directo con el dueño",
-    "hero.title": "Alquilá un auto de confianza por meses, directo con el dueño.",
-    "hero.sub": "Conectamos autos parados con quien necesita movilidad por más tiempo: profesionales en proyecto temporal, familias en tratamiento médico, mudanzas y reformas, nómadas digitales, viajeros internacionales. Un mes o más, precio justo, todo incluido.",
-    "hero.cta1": "Pedir mi presupuesto", "hero.cta2": "Ver cómo funciona",
-    "hero.avail": "🟢 Disponible desde julio/2026 — reserva con anticipación",
-    "local.eyebrow": "Punto de entrega",
-    "local.title": "Retira tu auto en Uberlândia, MG",
-    "local.sub": "Entregamos el auto en persona en Uberlândia — en el centro de Brasil, fácil de llegar por avión o carretera. El punto exacto se confirma al reservar.",
-    "hero.stat1v": "9 autos", "hero.stat1": "desde R$ 1.400/mes",
-    "hero.stat2v": "Directo con el dueño", "hero.stat2": "sin recargo de agencia",
-    "hero.stat3v": "En mano",
-    "hero.stat3": "entrega y soporte",
-    "hero.stat4v": "3.000 km/mes",
-    "hero.stat4": "incluidos · R$ 0,40/km extra",
-    "hero.pricecard.tag": "Tu precio mensual",
-    "hero.pricecard.note": "≈ $470 USD · impuestos incluidos · auto de respaldo",
-    "photo.hero": "Agrega <strong>images/hero.jpg</strong><br /><em>(foto del Cobalt blanco — ver README)</em>",
-
-    "strip.1": "✓ Seguro para alquiler", "strip.2": "✓ Solo por recomendación",
-    "strip.3": "✓ Auto de respaldo si pasa algo", "strip.4": "✓ Soporte en inglés y portugués",
-    "strip.5": "✓ En Uberlândia, MG",
-    "strip.6": "✓ 3.000 km/mes incluidos + R$ 0,40/km extra",
-    "antifit.title": "Hecho para vos si tu vida pide un auto por unos meses",
-    "antifit.sub": "No es solo para turistas. Nacimos para cualquier capítulo de la vida donde necesitás un auto de verdad, no la cinta de las diarias:",
-    "antifit.1": "🌎 Viajando a Brasil desde el exterior por 1 a 6+ meses",
-    "antifit.2": "💼 Profesional en un proyecto temporal lejos de casa",
-    "antifit.3": "🏥 Familia acompañando tratamiento médico en hospital de referencia",
-    "antifit.4": "🏡 Transición de vida — mudanza, reforma de casa, entre autos",
-    "antifit.5": "💻 Nómada digital pasando un tiempo real en Brasil",
-    "antifit.6": "👨‍👩‍👧 Visitando familia por temporada, recibiendo a un pariente",
-    "antifit.yes": "Si alguna te suena, encajamos. Cada auto de la red es compartido por un dueño en quien confiamos — tu alquiler lo ayuda y vos te llevás un auto realmente cuidado.",
-
-    "problem.eyebrow": "El problema",
-    "problem.title": "El alquiler mensual en Brasil es caro sin parecerlo",
-    "problem.sub": "Visitar Brasil por uno o dos meses no debería costar una fortuna. Pero las grandes cadenas ponen precio por su estructura — flota enorme, empleados, sucursales — no por ti.",
-    "problem.c1.title": "Un recargo escondido en la tarifa diaria",
-    "problem.c1.body": "Una tarifa diaria parece poco — pero en una estadía de uno o dos meses se acumula y queda muy por encima de lo que debería costar alquilar un auto.",
-    "problem.c2.title": "Precio por sus costos, no los tuyos",
-    "problem.c2.body": "Flota, empleados y sucursales cuestan caro. Ese costo está incluido en cada tarifa diaria que pagas.",
-    "problem.c3.title": "Nadie entiende tu situación",
-    "problem.c3.body": "Estadías largas, licencia extranjera, vacaciones lejos de casa — los mostradores genéricos no fueron hechos para el viajero internacional.",
-
-    "how.eyebrow": "Cómo funciona",
-    "how.title": "Simple, personal y por recomendación",
-    "how.sub": "Lo mantenemos pequeño a propósito. Menos autos, inquilinos de confianza y una persona real del otro lado.",
-    "how.s1.title": "Te recomiendan",
-    "how.s1.body": "Un amigo o familiar que nos conoce te conecta. Empezar por recomendación mantiene a todos seguros.",
-    "how.s2.title": "Pide un presupuesto",
-    "how.s2.body": "Cuéntanos tus fechas y la ciudad de retiro. Confirmamos disponibilidad y enviamos un precio mensual con todo incluido.",
-    "how.s3.title": "Firma y asegura",
-    "how.s3.body": "Un contrato de alquiler claro, verificación de documento/licencia, un depósito reembolsable y una inspección con fotos.",
-    "how.s4.title": "Retira y conduce",
-    "how.s4.body": "Entregamos el auto en persona en Uberlândia y seguimos disponibles durante todo tu viaje.",
-
-    "photo.car": "images/car-exterior.jpg", "photo.interior": "images/car-interior.jpg", "photo.trunk": "images/car-trunk.jpg",
-    "car.eyebrow": "El auto",
-    "car.title": "Chevrolet Cobalt Elite 2018. Bien cuidado. Listo para la ruta.",
-    "car.sub": "Un Chevrolet Cobalt Elite 2018 — automático, full, blanco. Un sedán mediano cómodo: barato de mantener y amplio para viajes y familia.",
-    "car.spec1.k": "Año", "car.spec1.v": "2018",
-    "car.spec2.k": "Transmisión", "car.spec2.v": "Automática",
-    "car.spec3.k": "Modelo", "car.spec3.v": "Chevrolet Cobalt Elite",
-    "car.spec4.k": "Color", "car.spec4.v": "Blanco",
-    "car.spec5.k": "Kilometraje", "car.spec5.v": "120.000 km",
-    "car.spec6.k": "Maletero", "car.spec6.v": "560 L — cabe equipaje grande",
-    "car.extras": "🧳 ¿Necesitas silla para niños, portaequipajes o equipo de viaje? Se puede gestionar — se alquilan aparte, a pedido.",
-    "car.editnote": "Agrega fotos reales del auto a la carpeta <strong>/images</strong> — ver el README.",
-    "car.cta": "Ver disponibilidad",
-
-    "pricing.eyebrow": "Precios",
-    "pricing.title": "Justo, todo incluido, sin sorpresas",
-    "pricing.sub": "Cada auto tiene su mensual (mirá la flota). Estadías más largas tienen mejor precio.",
-    "pricing.structureTitle": "Estructura de descuento (vale para cualquier auto)",
-    "pricing.d1.len": "1 mes",     "pricing.d1.rate": "precio mensual lleno del auto",
-    "pricing.d2.flag": "Más elegido",
-    "pricing.d2.len": "2 meses",   "pricing.d2.rate": "−5% en cada mes",
-    "pricing.d3.len": "3+ meses",  "pricing.d3.rate": "−10% en cada mes · condiciones a medida",
-    "pricing.structureNote": "Precio de cada auto en la sección de la flota abajo. Todo incluye impuestos, seguro de alquiler, auto de respaldo y 3.000 km/mes — excedente cobrado a R$ 0,40/km.",
-    "compare.title": "NomadDrive vs. una agencia local",
-    "compare.col1": "Agencia local",
-    "compare.r1": "Cronos auto · 30 días · ~3.000 km", "compare.r1v": "R$ 4.300 (con tope de km)",
-    "compare.r2": "Km incluidos", "compare.r2v": "~2.000 km tope · luego por km", "compare.r2us": "3.000 km/mes · R$ 0,40 extra/km",
-    "compare.r3": "Atención", "compare.r3v": "Mostrador + fila", "compare.r3us": "WhatsApp 24/7",
-    "compare.r4": "Idioma", "compare.r4v": "Solo portugués", "compare.r4us": "PT · EN · ES",
-    "compare.r5": "Entrega", "compare.r5v": "Local / mostrador", "compare.r5us": "En mano · hasta el aeropuerto",
-    "compare.r6": "Fianza", "compare.r6v": "R$ 3.000 – 5.000",
-    "compare.r7": "Trámite en el lugar", "compare.r7v": "Fila + papeleo", "compare.r7us": "Todo pre-hecho por WhatsApp",
-    "compare.honest": "Modelo ágil gana. Sin mostrador, sin sucursal, sin gestión de flota — solo una red chica de dueños y entrega en mano. Ese costo fijo bajo nos permite ser más barato que la agencia corporativa en el mismo auto (un Cronos sale ~R$ 790/mes más barato que el presupuesto de arriba — cerca de 18% de ahorro), manteniendo lo que hace fácil una estadía larga: soporte EN/ES, entrega al horario que llegás, 3.000 km/mes incluidos y un dueño real que cuida el auto de verdad.",
-    "compare.note": "Comparación basada en una cotización real de una agencia de Uberlândia, mayo de 2026. Los precios varían por auto y fecha — tu presupuesto siempre se confirma por escrito.",
-
-    "net.eyebrow": "Red",
-    "net.title": "Dónde está la red — y hacia dónde va",
-    "net.sub": "Empezamos en Uberlândia (MG) y crecemos ciudad por ciudad. Sé el primer auto (o el primer locatario) en tu región.",
-    "net.statusLive": "Disponible ahora",
-    "net.statusSoon": "Próxima parada",
-    "net.statusPlanned": "En el roadmap",
-    "net.uli.cars": "9 autos en la red",
-    "net.uli.handover": "Entrega en mano · posible en el aeropuerto",
-    "net.uli.support": "Equipo local en la ciudad",
-    "net.spli.demand": "Mayor demanda en nuestra lista de espera",
-    "net.spli.target": "Meta: 3er trim/2026 · primeros 5 autos socios",
-    "net.spli.owner": "Dueños: lugar prioritario si entran ahora",
-    "net.plannedTitle": "Belo Horizonte · Brasília · Goiânia · Campinas · Río",
-    "net.plli.signal": "Abre si se señala interés",
-    "net.plli.match": "Conectamos oferta (dueños) con demanda (locatarios) antes de abrir",
-    "net.plli.expand": "Meta: 5+ autos por ciudad antes del lanzamiento",
-    "net.ctaRenter": "Quiero auto en mi ciudad",
-    "net.ctaOwner": "Quiero ser el primer dueño en mi ciudad",
-
-    "safety.eyebrow": "Seguridad y confianza",
-    "safety.title": "Cómo protegemos a todos",
-    "safety.sub": "Una operación pequeña también puede ser seria. Así se maneja el riesgo de ambos lados.",
-    "safety.c1.title": "Seguro para alquiler",
-    "safety.c1.body": "Todo auto tiene seguro para uso de alquiler — no es solo póliza personal. Coberturas y franquicias detalladas abajo.",
-    "safety.c2.title": "Contrato claro",
-    "safety.c2.body": "Contrato de alquiler por escrito, verificación de documento y licencia, inspección con foto y video al retirar y al devolver.",
-    "safety.c3.title": "Rastreador GPS",
-    "safety.c3.body": "Todo auto tiene rastreador GPS para recuperación y tranquilidad — nunca usado para monitoreo rutinario.",
-    "safety.c4.title": "Línea de emergencia 24/7",
-    "safety.c4.body": "Teléfono dedicado disponible 24h para accidentes, fallas o asistencia. Número compartido al retirar y en el contrato.",
-    "safety.cov.title": "Cobertura del seguro — resumen",
-    "safety.cov.h1": "Cobertura", "safety.cov.h2": "Incluido", "safety.cov.h3": "Franquicia estándar",
-    "safety.cov.r1": "Daños por colisión al auto",
-    "safety.cov.r2": "Daños a terceros (corporales + materiales — BI/PD)", "safety.cov.r2d": "Hasta R$ 100k cada, sin franquicia para el conductor",
-    "safety.cov.r3": "Robo / pérdida total", "safety.cov.r3d": "100% cubierto (según contrato)",
-    "safety.cov.r4": "Incendio / eventos naturales", "safety.cov.r4d": "100% cubierto (según contrato)",
-    "safety.cov.r5": "Vidrios (parabrisas, espejos)",
-    "safety.cov.r6": "Neumáticos (pinchazo / daño)",
-    "safety.cov.r7": "Asistencia 24h + grúa", "safety.cov.r7d": "Incluido en todo Brasil",
-    "safety.cov.r8": "Auto de reemplazo si necesario", "safety.cov.r8d": "Misma categoría",
-    "safety.cov.note": "Coberturas y valores finales de franquicia por categoría se confirman en el contrato. El conductor sigue siendo responsable por peajes, multas y cualquier daño por uso indebido (alcohol, carreras, off-road).",
-    "safety.disclaimer": "Nota: las condiciones del seguro, el depósito y los detalles del contrato se confirman individualmente en cada alquiler. Esta página es informativa y no constituye una oferta vinculante.",
-
-    "docs.eyebrow": "Documentos y requisitos",
-    "docs.title": "Todo por escrito — leelo antes de reservar",
-    "docs.sub": "La transparencia empieza en la papelería. Abajo lo que necesitás de tu lado, y el contrato que usamos — disponible para descargar antes.",
-    "docs.req.title": "Qué necesitás para alquilar",
-    "docs.req.1": "<strong>Edad:</strong> mínimo 21 años",
-    "docs.req.2": "<strong>Licencia:</strong> CNH (o equivalente extranjera) vigente con al menos 2 años",
-    "docs.req.3": "<strong>Documento:</strong> DNI / pasaporte con foto",
-    "docs.req.4": "<strong>Comprobante de domicilio:</strong> factura reciente o contrato de alquiler",
-    "docs.req.5": "<strong>Forma de pago:</strong> tarjeta de crédito para pre-autorización del depósito, o Pix",
-    "docs.req.6": "<strong>Historial de manejo:</strong> limpio reciente",
-    "docs.contract.title": "Contrato de alquiler",
-    "docs.contract.body": "El mismo contrato que va con cada alquiler. Trilingüe (PT/EN/ES), lenguaje claro, incluye formulario de adhesión, recibo de depósito y checklist de inspección. Se firma digital — sin fax.",
-    "docs.contract.cta": "⬇ Descargar el contrato (Excel)",
-    "docs.contract.note": "7 pestañas: contrato PT/EN/ES · recibo de depósito · adhesión · simulación · inspección. El formato pasa a PDF + firma electrónica en el 3er trim/2026.",
-    "docs.fast.title": "Datos rápidos",
-    "docs.fast.1": "<strong>Depósito:</strong> R$ 2.000 (A/B) · R$ 3.000 (C) · R$ 5.000 (D)",
-    "docs.fast.2": "<strong>Pago:</strong> Pix, transferencia, tarjeta de crédito hasta 3×",
-    "docs.fast.3": "<strong>Kilometraje:</strong> 3.000 km/mes incluidos · R$ 0,40/km extra",
-    "docs.fast.4": "<strong>Cancelación:</strong> reembolso total 7+ días · 50% 3–7 días · nada bajo 72h",
-    "docs.fast.5": "<strong>Seguro:</strong> póliza de alquiler, franquicia R$ 3.500–5.000",
-    "docs.fast.6": "<strong>Retiro:</strong> en mano en Uberlândia, encuentro en el aeropuerto es posible",
-
-    "who.eyebrow": "Para quién es",
-    "who.title": "Capítulos reales de la vida que piden un auto de verdad",
-    "who.sub": "Si vas a pasar un mes o más en algún lugar — por cualquier motivo — la diaria de agencia se vuelve fortuna y el Uber también. El alquiler mensual es la opción calma y racional.",
-    "who.l1": "Querés un auto automático y cómodo sin recargo de agencia",
-    "who.l2": "Preferís tratar con una persona real, en tu idioma (EN/PT/ES)",
-    "who.l3": "Valorás un auto de respaldo y un contrato que te protege",
-    "who.l4": "Querés menos trámites — recogés el auto una vez y lo tenés todo el mes",
-    "who.l5": "Necesitás flexibilidad en fechas y tipo de auto (sedán, SUV, premium)",
-    "photo.travel": "images/travel.jpg",
-
-    "quote.eyebrow": "Pedir presupuesto",
-    "quote.title": "Cuéntanos tus fechas — respondemos rápido",
-    "quote.sub": "Completa esto y se abre WhatsApp con tus datos listos para enviar. Sin cuenta, sin spam.",
-    "quote.p1": "Respuesta en 24 horas", "quote.p2": "Precio cerrado por escrito", "quote.p3": "Preguntar no compromete",
-    "form.name": "Tu nombre", "form.contact": "Email o WhatsApp",
-    "form.start": "Fecha de retiro", "form.months": "¿Por cuánto tiempo?",
-    "form.months.1": "1 mes", "form.months.2": "2 meses", "form.months.3": "3 meses", "form.months.4": "4+ meses",
-    "form.city": "Ciudad de retiro", "form.ref": "¿Quién te recomendó?", "form.optional": "(opcional)",
-    "form.msg": "¿Algo más?", "form.submit": "Enviar por WhatsApp",
-    "form.altprefix": "¿Prefieres email?", "form.altlink": "Escríbenos por email",
-    "form.err": "Completa tu nombre y una forma de contacto.",
-
-    "faq.eyebrow": "Preguntas", "faq.title": "Buenas preguntas, respuestas directas",
-    "faq.g.reserva": "Reserva y acceso",
-    "faq.q1": "¿Necesito recomendación para alquilar?",
-    "faq.a1": "No. Empezamos por recomendación para crecer con confianza, pero cualquiera con documentos válidos puede pedir presupuesto. Cuéntanos tu situación y te enviamos los próximos pasos.",
-    "faq.q2": "¿Puedo conducir con mi licencia extranjera?",
-    "faq.a2": "Sí — una licencia extranjera válida se acepta en Brasil para visitantes (muchas veces con el permiso internacional). Para estadías mayores a 180 días puede ser necesaria la traducción jurada. Confirmamos el requisito exacto antes del retiro.",
-    "faq.q3": "¿Cuáles son los requisitos del conductor?",
-    "faq.a3": "Mínimo 21 años, CNH (o licencia extranjera equivalente) vigente con al menos 2 años, documento con foto y comprobante de domicilio. Historial de manejo limpio reciente. Aprobación final tras revisión de documentos.",
-    "faq.q4": "¿Qué ciudades atienden?",
-    "faq.a4": "El retiro es en Uberlândia, MG. Desde allí el auto es tuyo para viajar por Brasil dentro del contrato. Expansión a São Paulo, Belo Horizonte, Brasília y otras ciudades en el roadmap — mirá la sección \"Red\".",
-    "faq.g.pagamento": "Depósito y pago",
-    "faq.q5": "¿Cuánto es el depósito y cómo se paga?",
-    "faq.a5": "El depósito reembolsable es R$ 2.000 para categorías A/B, R$ 3.000 para C y R$ 5.000 para D (lujo). Se paga por Pix o pre-autorización en tarjeta de crédito. Se devuelve en hasta 7 días hábiles tras la devolución del auto en las mismas condiciones (descontando multas/peajes que lleguen después).",
-    "faq.q6": "¿Cómo pago el mensual?",
-    "faq.a6": "Pix, transferencia o tarjeta de crédito (hasta 3× sin interés). El primer mes se paga antes del retiro; estadías más largas pueden pagar mes a mes con comprobante de domicilio y contacto estable.",
-    "faq.q7": "¿Cuál es la política de cancelación?",
-    "faq.a7": "Cancelaciones con más de 7 días de anticipación: reembolso total. 3–7 días antes: 50%. Menos de 72h o no-show: sin reembolso. Caso fortuito (enfermedad, problemas con documentos) se evalúa caso por caso, con transparencia.",
-    "faq.g.seguro": "Seguro y siniestros",
-    "faq.q8": "¿Qué cubre el seguro?",
-    "faq.a8": "Todos los autos tienen seguro para uso de alquiler cubriendo: colisión, daños a terceros (BI/PD), robo, incendio y eventos naturales. Franquicia (deducible) estándar de R$ 3.500–R$ 5.000 según la categoría. Vidrios y neumáticos tienen una franquicia dedicada menor. Términos completos en el contrato.",
-    "faq.q9": "¿Y si tengo un accidente?",
-    "faq.a9": "Primero: llamá a nuestra línea de emergencia 24/7 (está en el contrato y en el mensaje fijado de WhatsApp). Despachamos asistencia, hacés el parte (BO) si es necesario, sacás fotos y abrimos el siniestro con la aseguradora. Auto de respaldo organizado para que no quedes a pie.",
-    "faq.q10": "¿Quién paga peajes y multas?",
-    "faq.a10": "Todos los peajes y multas durante el alquiler son tu responsabilidad. Multas que llegan tras la devolución: transferimos los puntos a tu CNH y el cobro a tu nombre, con copia del acta. Totalmente transparente — sin markup.",
-    "faq.g.entrega": "Entrega e inspección",
-    "faq.q11": "¿Cómo funciona la inspección?",
-    "faq.a11": "Inspección con foto y video de los 4 lados, interior, tablero (km), nivel de combustible y estado de neumáticos al retiro — ambas partes firman. Igual a la devolución. Cualquier daño nuevo se compara con las fotos del retiro. Cero sorpresas.",
-    "faq.q12": "¿El auto tiene respaldo si se rompe?",
-    "faq.a12": "Sí. Problema mecánico o accidente: organizamos un auto de reemplazo de la misma categoría (o crédito si aceptás una categoría diferente) para que tus planes no se rompan.",
-    "faq.q13": "¿Puedo salir de la ciudad / cruzar fronteras?",
-    "faq.a13": "Sí, dentro de Brasil. Cruzar a Argentina/Uruguay/Paraguay requiere autorización previa y documentación extra. El auto tiene rastreador GPS — para seguridad, nunca para espiar.",
-
-    "rmap.eyebrow": "Qué viene después",
-    "rmap.title": "De WhatsApp-first a una plataforma 100% digital",
-    "rmap.sub": "Hoy cada reserva se cierra por WhatsApp con una persona real del otro lado — es a propósito, mientras la red es chica. A medida que crecemos, la capa digital se va activando:",
-    "rmap.now": "Disponible hoy",
-    "rmap.now.1": "Reserva por WhatsApp con soporte humano real",
-    "rmap.now.2": "Contrato en PDF/Excel · firma digital aceptada",
-    "rmap.now.3": "Pix / transferencia / tarjeta de crédito",
-    "rmap.now.4": "Página de detalle por auto · cálculo de precio en vivo · galería",
-    "rmap.now.5": "Simulador de ingresos del dueño (esta página)",
-    "rmap.soon": "3er trim/2026",
-    "rmap.soon.1": "Reserva online con disponibilidad en tiempo real",
-    "rmap.soon.2": "Cuenta + panel (alquileres, km usados, historial)",
-    "rmap.soon.3": "Bloqueo de depósito en Pix · liberación automática a la devolución",
-    "rmap.soon.4": "Validación automática de CNH/CRLV (anti-fraude)",
-    "rmap.soon.5": "Panel del propietario: calendario, pagos, extractos",
-    "rmap.later": "2027",
-    "rmap.later.1": "Chat en vivo + asistente IA 24/7",
-    "rmap.later.2": "Expansión a las 6 mayores capitales brasileñas",
-    "rmap.later.3": "App nativa iOS / Android",
-    "rmap.later.4": "Múltiples conductores por alquiler (parejas, familias)",
-    "rmap.later.5": "Paquetes de seguro con corredores aliados",
-    "rmap.note": "Lanzamos en pasos chicos y te decimos qué es real hoy. ¿Querés sugerir algo? <a href=\"#quote\">Mandanos un mensaje</a>.",
-
-    "final.title": "¿Necesitás un auto por unos meses?",
-    "final.sub": "Asegurá un precio mensual justo antes de tu estadía. Empieza con un mensaje rápido.",
-    "final.cta": "Pedir mi presupuesto",
-
-    "footer.tag": "Alquiler mensual de auto justo para viajeros internacionales en Brasil.",
-    "footer.contact": "Contacto", "footer.whatsapp": "WhatsApp", "footer.email": "hello@nomaddrive.com.br",
-    "footer.instagram": "Instagram", "footer.explore": "Explorar",
-    "footer.legal": "© 2026 NomadDrive Brasil. Sitio informativo — no constituye una oferta vinculante. Condiciones de alquiler, seguro y contrato confirmados individualmente.",
-    "perfil.eyebrow": "Para quién tiene sentido",
-    "perfil.title": "Ingresos pasivos reales — ¿para quién?",
-    "perfil.sub": "No todos ganan plata alquilando su auto. Estos son los perfiles donde realmente funciona.",
-    "perfil.occ": "Ocupación",
-    "perfil.profit": "Neto / año",
-    "perfil.p1.title": "Auto parado casi todo el año",
-    "perfil.p1.detail": "2º auto familiar, herencia — casi sin uso",
-    "perfil.p1.occ": "10–12 meses/año",
-    "perfil.p1.profit": "R$ 12 mil – 20 mil",
-    "perfil.p1.frame": "\"El auto que vivía parado ahora paga su patente, seguro y todavía sobra.\"",
-    "perfil.p2.title": "Jubilado con auto de poco uso",
-    "perfil.p2.detail": "Conduce un par de veces por semana",
-    "perfil.p2.occ": "6–8 meses/año",
-    "perfil.p2.profit": "R$ 5 mil – 12 mil",
-    "perfil.p2.frame": "\"~R$ 500–800 extras por mes en la jubilación, sin manejar para apps.\"",
-    "perfil.p3.title": "El que iba a vender el auto",
-    "perfil.p3.detail": "Va a vender en 6–12 meses igual",
-    "perfil.p3.occ": "6–8 meses antes de vender",
-    "perfil.p3.profit": "R$ 8 mil – 15 mil + venta",
-    "perfil.p3.frame": "\"Que rinda 1 año antes de vender — extra puro.\"",
-    "perfil.p4.title": "Auto de uso personal diario",
-    "perfil.p4.detail": "Solo disponible en las vacaciones del dueño",
-    "perfil.p4.occ": "1–3 meses/año",
-    "perfil.p4.profit": "R$ 1 mil – 4 mil",
-    "perfil.p4.frame": "\"Mordida chica. Solo vale si compensa la nostalgia del auto.\"",
-    "perfil.warn.title": "Cuándo NO unirse a la red",
-    "perfil.warn.1": "Uso personal intenso — no queda tiempo del auto para alquilar",
-    "perfil.warn.2": "Financiación alta — depreciación + cuota se comen los ingresos",
-    "perfil.warn.3": "Sin disciplina para reservar plata para patente, seguro y mantenimiento",
-    "compromisso.eyebrow": "Nuestro compromiso",
-    "compromisso.title": "Lo que la plataforma entrega",
-    "compromisso.sub": "Vos traés el auto. Nosotros traemos al inquilino. Así cumplimos nuestra parte — sin promesas vacías.",
-    "compromisso.c1.title": "Traemos al inquilino",
-    "compromisso.c1.body": "Marketing activo en múltiples canales: sitio multilingüe, SEO, Instagram y Reels cada semana, anuncios pagos en Meta con geo-targeting para extranjeros, comunidades de expats, alianzas con agencias de viajes.",
-    "compromisso.c2.title": "Reporte mensual de transparencia",
-    "compromisso.c2.body": "Cada mes recibís los números: leads generados, presupuestos enviados, contratos cerrados por TU auto y el tiempo promedio entre alquileres.",
-    "compromisso.c3.title": "Cola justa de prioridad",
-    "compromisso.c3.body": "Cuando aparece un nuevo inquilino, el auto que está parado hace más tiempo entra primero. Sin favoritismo — cada auto de la red tiene la misma chance.",
-    "compromisso.c4.title": "Expectativas honestas",
-    "compromisso.c4.body": "Sin promesa de \"ingresos pasivos mágicos\". La ocupación depende de la demanda — te decimos qué es realista y el simulador público respalda los números.",
-    "compromisso.c5.title": "Soporte al inquilino 24/7",
-    "compromisso.c5.body": "WhatsApp durante todo el alquiler para que los problemas operacionales no te lleguen. Nosotros resolvemos primero — solo intervenís si es algo que solo el dueño puede resolver.",
-    "compromisso.c6.title": "Burocracia fuera de tu mesa",
-    "compromisso.c6.body": "Contrato, inspección con fotos, transferencia de multas, atritos con el inquilino — todo nuestro. Firmás la adhesión una vez y nosotros operamos.",
-    "compromisso.disclaimer": "Estos son compromisos de mejor esfuerzo — no garantías financieras. El ingreso real depende de la demanda del mercado, la categoría de tu auto y tu disponibilidad. Los rangos realistas están en el simulador público arriba.",
-    "filter.all": "Todos",
-    "filter.A": "Económico",
-    "filter.B": "Confort",
-    "filter.C": "Premium",
-    "filter.D": "Lujo",
-    "fleet.cB": "Categoría B · Confort",
-    "fleet.cC": "Categoría C · Premium",
-    "fleet.cD": "Categoría D · Lujo",
-    "fleet.cta": "Ver detalles",
-    "fleet.condKM": "KM",
-    "fleet.condRev": "Última revisión",
-    "fleet.condTires": "Neumáticos",
-    "fleet.auto": "Automático",
-    "fleet.manual": "Manual",
-    "fleet.per": "/mes",
-    "fleet.pilot": "Nuestro auto piloto",
-    "fleet.special": "Aspiracional",
-    "fleet.fipeNa": "FIPE no oficial en Brasil",
-    "fleet.cyberPrice": "Bajo consulta",
-    "fleet.note": "Los precios siguen FIPE × categoría, siempre por debajo de las grandes agencias. Disponibilidad y precio final se confirman en el presupuesto. Fotos ilustrativas — se reemplazan por reales a medida que la red crece.",
-    "fleet.s.cobalt": "Sedán · 5 plazas · maletero 560L · 120k km",
-    "fleet.s.hb20": "Hatch compacto · 5 plazas · económico en consumo",
-    "fleet.s.cronos": "Sedán compacto · 5 plazas · económico · multimedia",
-    "fleet.s.cruze": "Sedán mediano · 5 plazas · A/C digital · multimedia",
-    "fleet.s.tracker": "SUV compacto · 5 plazas · turbo · espacioso para viajes",
-    "fleet.s.corolla": "Sedán premium · 5 plazas · confiabilidad Toyota",
-    "fleet.s.renegade": "SUV compacto · 5 plazas · 4x2 · ideal para viajes",
-    "fleet.s.bmw": "Sedán deportivo · 5 plazas · cuero · paquete premium",
-    "fleet.s.cybertruck": "Pickup eléctrica · 5 plazas · ultra · disponibilidad bajo consulta",
-    "divider.eyebrow": "Ahora del otro lado",
-    "divider.title": "¿Tenés un auto en Uberlândia?",
-    "divider.sub": "Arriba fue el lado del viajero. Abajo es el lado del host — para dueños de auto que quieren generar ingresos pasivos por la red.",
-    "preco.eyebrow": "Cómo se calcula el precio",
-    "preco.title": "Precios transparentes en toda la red",
-    "preco.sub": "Los autos de la red se organizan por categorías. Siempre más barato que las grandes agencias — y la fórmula es abierta.",
-    "preco.tA.title": "Económico",
-    "preco.tA.car": "Hatchback manual, 5–10 años (HB20, Onix básico)",
-    "preco.tA.price": "R$ 1.400–2.000",
-    "preco.tB.title": "Confort",
-    "preco.tB.car": "Sedán / SUV pequeño automático, 5–10 años (Cobalt, HB20S, Tracker)",
-    "preco.tB.price": "R$ 2.000–3.600",
-    "preco.tB.featured": "← el Cobalt actual",
-    "preco.tC.title": "Premium",
-    "preco.tC.car": "SUV / sedán grande automático reciente (Compass, Corolla, T-Cross)",
-    "preco.tC.price": "R$ 3.500–5.500",
-    "preco.tD.title": "Lujo",
-    "preco.tD.car": "BMW, Audi, SUV premium (fase 3)",
-    "preco.tD.price": "R$ 5.500+",
-    "preco.tD.addon": "🛡️ Blindaje bajo consulta",
-    "preco.vs": "vs. gran agencia",
-    "preco.formula.title": "La fórmula",
-    "preco.formula.body": "Cada auto se precia como un porcentaje de su valor FIPE — aproximadamente <code>2,8% a 5,5% por mes</code>, según la categoría (autos más grandes y caros se alquilan a un porcentaje menor — pero el precio absoluto sigue subiendo conforme sube la FIPE). Una red P2P ágil tiene mucho menos costo fijo que una flota corporativa — ese ahorro vuelve a vos.",
-    "preco.modsTitle": "Ajustes",
-    "preco.mod1": "Caja manual: −10%",
-    "preco.mod2": "0–3 años de uso: +10–15%",
-    "preco.mod3": "7+ años: −5–10%",
-    "preco.mod4": "Verificación real: antes de listar cada auto, obtenemos una cotización de Localiza/Movida y cobramos ~30% menos — comprobante a pedido",
-    "frota.eyebrow": "Nuestra flota",
-    "frota.title": "Autos actualmente en la red",
-    "frota.sub": "Autos elegidos uno a uno, bien cuidados, de dueños de confianza. La red crece por recomendación.",
-    "frota.car1.tier": "Categoría B · Confort",
-    "frota.car1.name": "Chevrolet Cobalt Elite 2018",
-    "frota.car1.specs": "Automático · maletero 560 L · 120k km · blanco",
-    "frota.car1.cta": "Ver disponibilidad",
-    "frota.add.title": "Tu auto aquí",
-    "frota.add.body": "Únete a la red. Ingresos pasivos de un auto que ya tienes.",
-    "frota.add.cta": "Ver cómo funciona",
-    "renda.tierLabel": "Categoría de tu auto",
-    "renda.tA": "Económico",
-    "renda.tB": "Confort",
-    "renda.tC": "Premium",
-    "renda.tD": "Lujo",
-    "renda.fipeLabel": "O valor FIPE de tu auto",
-    "renda.rPriceUsed": "Precio mensual",
-
-    "about.eyebrow": "Nosotros",
-    "about.title": "Una persona real, no una agencia sin rostro",
-    "about.sub": "NomadDrive Brasil es una operación pequeña y personal en Uberlândia. Un dueño, un auto bien cuidado y una relación directa con cada viajero — basada en confianza, no en call centers.",
-    "about.l1": "Hablas directamente con el dueño — antes, durante y después de tu viaje",
-    "about.l2": "El auto se cuida personalmente, no rota en una flota",
-    "about.l3": "En Uberlândia, MG — entrega en persona",
-    "photo.founder": "images/founder.jpg",
-    "dest.eyebrow": "Adónde ir",
-    "dest.title": "Tu base para explorar Uberlândia y la región",
-    "dest.sub": "Con el auto tuyo todo el mes, Uberlândia se abre — parques, mercados, buena comida y escapadas fáciles por Minas Gerais.",
-    "dest.c1.title": "Parque do Sabiá",
-    "dest.c1.body": "El gran parque verde de Uberlândia — zoológico, lago, senderos y deporte. Un día entero en familia.",
-    "dest.c2.title": "Praça Tubal Vilela y Centro",
-    "dest.c2.body": "El corazón histórico de la ciudad — la plaza central, el comercio y la vida local.",
-    "dest.c3.title": "Mercado Municipal",
-    "dest.c3.body": "Productos de la región, quesos, dulces y los sabores de Minas — parada obligada para los amantes de la comida.",
-    "dest.c4.title": "Restaurantes y gastronomía",
-    "dest.c4.body": "De la comida minera tradicional a los bistrós modernos — en Uberlândia se come muy bien.",
-    "dest.c5.title": "Parque Vitória Régia",
-    "dest.c5.body": "Un parque tranquilo junto al lago, perfecto para caminar, correr o relajarse por la tarde.",
-    "dest.c6.title": "Escapadas por Minas",
-    "dest.c6.body": "Cascadas, pueblitos históricos y campo — todo a un viaje corto en auto.",
-    "dest.note": "Toca una dirección para abrirla en Maps, o usa el botón de compartir para enviar un destino por WhatsApp.",
-    "photo.dest1": "images/dest-parque-sabia.jpg", "photo.dest2": "images/dest-centro.jpg",
-    "photo.dest3": "images/dest-mercado.jpg", "photo.dest4": "images/dest-gastronomia.jpg",
-    "photo.dest5": "images/dest-vitoria-regia.jpg", "photo.dest6": "images/dest-passeios.jpg",
-    "testi.eyebrow": "Testimonios",
-    "testi.title": "Lo que dicen los viajeros",
-    "testi.sub": "Palabras reales de quienes alquilaron con nosotros. La confianza es lo central.",
-    "testi.q1": "\"Alquilar por dos meses fue simple y justo. El auto estaba limpio y bien cuidado, y tener a alguien disponible todo el tiempo hizo toda la diferencia.\"",
-    "testi.n1": "Nombre de tu cliente", "testi.o1": "País / ciudad",
-    "testi.q2": "\"Mucho más barato que las grandes agencias y sin complicaciones. Retiré el auto en persona, recorrí todo Minas, sin sorpresas.\"",
-    "testi.n2": "Nombre de tu cliente", "testi.o2": "País / ciudad",
-    "testi.q3": "\"Vine por recomendación de un amigo y haría lo mismo. Precio honesto, un contrato que protege a ambos lados y un auto de respaldo por las dudas.\"",
-    "testi.n3": "Nombre de tu cliente", "testi.o3": "País / ciudad",
-    "testi.note": "Testimonios de ejemplo — reemplázalos por reseñas reales de tus primeros clientes en el archivo script.js.",
-    "trust.label": "Construido con socios",
-    "trust.b1": "Aseguradora aliada",
-    "trust.b2": "Red de rastreadores GPS",
-    "trust.b3": "Póliza en conformidad con SUSEP",
-    "trust.b4": "Protección de datos LGPD",
-    "trust.b5": "Pix · tarjeta · transferencia",
-  },
-};
-
-/* ---- language ---- */
-// Default to PT (Brazilian audience). User can switch to EN/ES — choice persisted in localStorage.
-// Only Spanish browsers get auto-detected (Spanish-speaking neighbors of Brazil are part of the audience).
-function _detectLang() {
-  try {
-    const stored = localStorage.getItem("nd_lang");
-    if (stored && ["pt", "en", "es"].includes(stored)) return stored;
-  } catch (_) {}
-  const nav = (navigator.language || "pt").toLowerCase();
-  if (nav.startsWith("es")) return "es";
-  return "pt";  // PT is the principal version — EN users opt in via toggle
-}
-let currentLang = _detectLang();
-
-function applyLang(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  const dict = I18N[lang];
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.getAttribute("data-i18n");
-    if (dict[key] !== undefined) el.innerHTML = dict[key];
-  });
-  document.querySelectorAll(".lang-toggle__opt").forEach((opt) => {
-    opt.classList.toggle("is-active", opt.dataset.lang === lang);
-  });
-
-  // language-dependent WhatsApp links
-  const M = {
-    en: {
-      wa: "Hi! I saw the NomadDrive Brasil site and I'd like a quote.",
-      share: "Check out NomadDrive Brasil — monthly car rental for travelers in Brazil: ",
-      join: "Hi! I'd like to rent out my car through NomadDrive Brasil — tell me how it works.",
-      partner: "Hi! I'd like to become a NomadDrive Brasil partner — tell me how it works.",
-    },
-    pt: {
-      wa: "Olá! Vi o site da NomadDrive Brasil e quero um orçamento.",
-      share: "Conheça a NomadDrive Brasil — aluguel mensal de carro para viajantes no Brasil: ",
-      join: "Olá! Quero alugar meu carro pela NomadDrive Brasil — me conta como funciona.",
-      partner: "Olá! Quero ser parceiro da NomadDrive Brasil — me conta como funciona.",
-    },
-    es: {
-      wa: "¡Hola! Vi el sitio de NomadDrive Brasil y quiero un presupuesto.",
-      share: "Conoce NomadDrive Brasil — alquiler mensual de auto para viajeros en Brasil: ",
-      join: "¡Hola! Quiero alquilar mi auto con NomadDrive Brasil — cuéntame cómo funciona.",
-      partner: "¡Hola! Quiero ser socio de NomadDrive Brasil — cuéntame cómo funciona.",
-    },
-  };
-  const m = M[lang] || M.en;
-  document.getElementById("waFloat").href = waUrl(m.wa);
-  document.getElementById("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(m.share + CONFIG.siteUrl);
-  document.getElementById("joinWhats").href = waUrl(m.join);
-  const joinBottom = document.getElementById("joinWhatsBottom");
-  if (joinBottom) joinBottom.href = waUrl(m.join);
-  document.getElementById("partnerWhats").href = waUrl(m.partner);
-  // recompute fleet prices + calc lines (handles language switch)
-  if (typeof updateFleetPricing === "function") updateFleetPricing(lang);
+function waLink(msg) {
+  return "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(msg);
 }
 
-document.querySelectorAll(".lang-toggle__opt").forEach((opt) => {
-  opt.addEventListener("click", () => {
-    const lang = opt.dataset.lang;
-    try { localStorage.setItem("nd_lang", lang); } catch (_) {}
-    applyLang(lang);
-  });
-});
+/* ---- fleet pricing (FIPE × taxa da categoria) ---- */
+var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
+var CAT_LABEL = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
 
-/* ---- nav scroll state ---- */
-const nav = document.getElementById("nav");
-window.addEventListener("scroll", () => {
-  nav.classList.toggle("is-scrolled", window.scrollY > 10);
-});
-
-/* ---- contact links ---- */
-function waUrl(text) {
-  const base = "https://wa.me/" + CONFIG.whatsapp;
-  return text ? base + "?text=" + encodeURIComponent(text) : base;
+function brl(n) {
+  return "R$ " + Math.round(n).toLocaleString("pt-BR");
 }
-document.getElementById("footerWhats").href = waUrl("");
-document.getElementById("footerInsta").href = CONFIG.instagram;
-document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
-  a.href = "mailto:" + CONFIG.email;
-});
 
-/* ---- quote form -> WhatsApp ---- */
-const form = document.getElementById("quoteForm");
-const formErr = document.getElementById("formErr");
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(form).entries());
-
-  if (!data.name.trim() || !data.contact.trim()) {
-    formErr.classList.add("is-visible");
-    return;
-  }
-  formErr.classList.remove("is-visible");
-
-  const monthsLabel = I18N[currentLang]["form.months." + (data.months === "4+" ? "4" : data.months)] || data.months;
-  const lines = currentLang === "pt"
-    ? [
-        "*Novo pedido de orçamento — NomadDrive Brasil*",
-        "",
-        "Nome: " + data.name,
-        "Contato: " + data.contact,
-        "Retirada: " + (data.start || "a definir"),
-        "Duração: " + monthsLabel,
-        "Cidade: " + data.city,
-        data.ref ? "Indicado por: " + data.ref : null,
-        data.msg ? "Observações: " + data.msg : null,
-      ]
-    : [
-        "*New quote request — NomadDrive Brasil*",
-        "",
-        "Name: " + data.name,
-        "Contact: " + data.contact,
-        "Pick-up: " + (data.start || "to be defined"),
-        "Duration: " + monthsLabel,
-        "City: " + data.city,
-        data.ref ? "Referred by: " + data.ref : null,
-        data.msg ? "Notes: " + data.msg : null,
-      ];
-
-  window.open(waUrl(lines.filter(Boolean).join("\n")), "_blank");
-});
-
-/* ---- destinations: Maps + WhatsApp share ---- */
-document.querySelectorAll(".dest-card__foot").forEach((foot) => {
-  const q = encodeURIComponent(foot.dataset.maps || "");
-  if (!q) return;
-  const maps = "https://www.google.com/maps/search/?api=1&query=" + q;
-  const addr = foot.querySelector(".dest-card__addr");
-  const share = foot.querySelector(".dest-card__share");
-  if (addr) addr.href = maps;
-  if (share) share.href = "https://wa.me/?text=" + encodeURIComponent(foot.dataset.maps + " — " + maps);
-});
-
-/* ---- earnings simulator (owner) — tier-based + realistic FIXED annual costs ---- */
+/* ====================================================================
+   NAV — scroll state + mobile drawer
+   ==================================================================== */
 (function () {
-  const months = document.getElementById("simMonths");
-  const fipe = document.getElementById("simFipe");
-  if (!months || !fipe) return;
-  // Modelo (tudo ajustável aqui):
-  // - rate: preço mensal como % da FIPE
-  // - costRatio: custos ANUAIS FIXOS do dono (seguro+IPVA+manutenção+pneus+depreciação) como % da FIPE
-  // - repFipe: FIPE representativa do tier (usada quando o dono não preenche FIPE)
-  const TIERS = {
-    A: { price: 1650, rate: 0.055, costRatio: 0.22, repFipe: 30000 },   // Econômico
-    B: { price: 2565, rate: 0.045, costRatio: 0.18, repFipe: 57000 },   // Confort (ex: Cobalt 2018)
-    C: { price: 4800, rate: 0.040, costRatio: 0.14, repFipe: 120000 },  // Premium
-    D: { price: 7000, rate: 0.028, costRatio: 0.10, repFipe: 250000 },  // Luxo
-  };
-  const PLATFORM_RATE = 0.10; // margem da NomadDrive sobre cada locação
-  let currentTier = "B";
-  const el = (id) => document.getElementById(id);
-  const brl = (n) => (n < 0 ? "– R$ " : "R$ ") + Math.round(Math.abs(n)).toLocaleString("pt-BR");
-  const pct = (r) => Math.round(r * 100) + "%";
-  function getPrice() {
-    const f = parseFloat(fipe.value);
-    if (f && f > 0) return Math.round(f * TIERS[currentTier].rate);
-    return TIERS[currentTier].price;
-  }
-  function getAnnualCarCosts() {
-    const f = parseFloat(fipe.value);
-    const t = TIERS[currentTier];
-    return Math.round((f && f > 0 ? f : t.repFipe) * t.costRatio);
-  }
-  function getFipeForRoi() {
-    const f = parseFloat(fipe.value);
-    return f && f > 0 ? f : TIERS[currentTier].repFipe;
-  }
-  function computeScenario(monthsRented) {
-    const p = getPrice();
-    const gross = p * monthsRented;
-    const fee = gross * PLATFORM_RATE;
-    const cash = gross - fee;                        // money that hits your account
-    const carCosts = getAnnualCarCosts();
-    const net = cash - carCosts;                     // after full car ownership costs
-    const fipeRef = getFipeForRoi();
-    const roiCash = (cash / fipeRef) * 100;          // optimistic — cash in pocket / FIPE
-    const roiNet  = (net  / fipeRef) * 100;          // conservative — after costs / FIPE
-    return { p, gross, fee, cash, carCosts, net, roiCash, roiNet };
-  }
-  function fmtRoi(r) {
-    const sign = r >= 0 ? "" : "–";
-    return sign + Math.abs(r).toFixed(1).replace(".", ",") + "%";
-  }
-  function update() {
-    const m = +months.value;
-    const main = computeScenario(m);
-    const monthlyNet = main.p * (1 - PLATFORM_RATE);
-    const breakEven = monthlyNet > 0 ? main.carCosts / monthlyNet : 0;
-    el("simMonthsVal").textContent = m;
-    el("simPriceShown").textContent = brl(main.p) + " / mês";
-    el("simGross").textContent = brl(main.gross);
-    el("simFee").textContent = "– " + brl(main.fee) + "  (" + pct(PLATFORM_RATE) + ")";
-    el("simCash").textContent = brl(main.cash);
-    el("simRoiCash").textContent = fmtRoi(main.roiCash);
-    el("simCarCosts").textContent = "– " + brl(main.carCosts);
-    el("simNet").textContent = brl(main.net);
-    el("simNet").parentElement.classList.toggle("sim-row--loss", main.net < 0);
-    el("simRoi").textContent = fmtRoi(main.roiNet);
-    el("simRoi").parentElement.classList.toggle("sim-row--loss", main.roiNet < 0);
-    el("simBreakEven").textContent = breakEven.toFixed(1) + " meses/ano";
-    el("simMonthly").textContent = m > 0 ? brl(main.net / m) : "—";
-
-    // 3 scenarios — independent of slider
-    const scns = [
-      { id: "scnFull", months: 11 },
-      { id: "scnHalf", months: 7 },
-      { id: "scnLow",  months: 3 },
-    ];
-    scns.forEach((s) => {
-      const r = computeScenario(s.months);
-      const row = document.getElementById(s.id);
-      const cashCell    = document.getElementById(s.id + "Cash");
-      const cashRoiCell = document.getElementById(s.id + "CashRoi");
-      const netCell     = document.getElementById(s.id + "Net");
-      const roiCell     = document.getElementById(s.id + "Roi");
-      if (cashCell)    cashCell.textContent    = brl(r.cash);
-      if (cashRoiCell) cashRoiCell.textContent = fmtRoi(r.roiCash);
-      if (netCell)     netCell.textContent     = brl(r.net);
-      if (roiCell)     roiCell.textContent     = fmtRoi(r.roiNet);
-      if (netCell) netCell.classList.toggle("scn-cell--loss", r.net < 0);
-      if (roiCell) roiCell.classList.toggle("scn-cell--loss", r.roiNet < 0);
+  var nav = document.getElementById("nav");
+  if (nav) {
+    window.addEventListener("scroll", function () {
+      nav.classList.toggle("scrolled", window.scrollY > 10);
     });
   }
-  document.querySelectorAll(".tier-opt").forEach((b) => {
-    b.addEventListener("click", () => {
-      document.querySelectorAll(".tier-opt").forEach((x) => x.classList.remove("is-active"));
+
+  var burger = document.getElementById("navBurger");
+  var drawer = document.getElementById("mobileDrawer");
+  var overlay = document.getElementById("drawerOverlay");
+  var closeBtn = document.getElementById("drawerClose");
+
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    if (overlay) overlay.hidden = false;
+    if (burger) burger.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    if (overlay) overlay.hidden = true;
+    if (burger) burger.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+  if (burger) burger.addEventListener("click", openDrawer);
+  if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+  if (overlay) overlay.addEventListener("click", closeDrawer);
+  if (drawer) {
+    drawer.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeDrawer);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeDrawer();
+  });
+})();
+
+/* ====================================================================
+   FLEET — render cards from CAR_CATALOG + filter
+   ==================================================================== */
+(function () {
+  var grid = document.getElementById("fleet");
+  if (!grid || !window.CAR_CATALOG) return;
+
+  var order = window.CAR_ORDER || Object.keys(window.CAR_CATALOG);
+  var cards = [];
+
+  order.forEach(function (id) {
+    var c = window.CAR_CATALOG[id];
+    if (!c || id === "cybertruck") return;          // cybertruck fica na área aspiracional
+    var rate = FLEET_TIER_RATES[c.tier] || 0;
+    var mod = c.transmission === "manual" ? 0.9 : 1;
+    var price = c.fipe ? c.fipe * rate * mod : 0;
+    var trans = c.transmission === "manual" ? "Manual" : "Automático";
+    var body = (c.body && c.body.pt) ? c.body.pt : "";
+
+    var a = document.createElement("a");
+    a.className = "fleet-car";
+    a.href = "car.html?id=" + c.id;
+    a.setAttribute("data-tier", c.tier);
+    a.innerHTML =
+      '<div class="fleet-car__img"><img src="images/car-' + c.id + '-1.jpg" alt="' + c.name +
+        '" loading="lazy" onerror="this.style.display=\'none\'" /></div>' +
+      '<div class="fleet-car__body">' +
+        '<span class="fleet-car__cat">' + (CAT_LABEL[c.tier] || "") + '</span>' +
+        '<span class="fleet-car__name">' + c.name + '</span>' +
+        '<span class="fleet-car__meta">' + c.year + ' · ' + trans + (body ? ' · ' + body : '') + '</span>' +
+        (price
+          ? '<span class="fleet-car__price">≈ ' + brl(price) + '<small>/mês</small></span>' +
+            '<span class="fleet-car__est">Estimativa — confirmada por orçamento</span>'
+          : '<span class="fleet-car__price">Sob consulta</span>') +
+        '<span class="btn btn--outline btn--sm fleet-car__cta">Ver detalhes</span>' +
+      '</div>';
+    grid.appendChild(a);
+    cards.push(a);
+  });
+
+  // filter
+  document.querySelectorAll(".fleet-filter").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".fleet-filter").forEach(function (b) { b.classList.remove("is-active"); });
+      btn.classList.add("is-active");
+      var f = btn.getAttribute("data-filter");
+      cards.forEach(function (card) {
+        card.style.display = (f === "all" || card.getAttribute("data-tier") === f) ? "" : "none";
+      });
+    });
+  });
+})();
+
+/* ====================================================================
+   SIMULADOR de ganhos do proprietário
+   ==================================================================== */
+(function () {
+  var monthsEl = document.getElementById("simMonths");
+  if (!monthsEl) return;
+
+  var TIERS = {
+    A: { price: 1650, rate: 0.055, costRatio: 0.22, repFipe: 30000 },
+    B: { price: 2565, rate: 0.045, costRatio: 0.18, repFipe: 57000 },
+    C: { price: 4800, rate: 0.040, costRatio: 0.14, repFipe: 120000 },
+    D: { price: 7000, rate: 0.028, costRatio: 0.10, repFipe: 250000 }
+  };
+  var TRACKER_YEAR = 360; // R$ 30/mês
+
+  var tier = "B";
+  var fipeEl = document.getElementById("simFipe");
+  var feeEl = document.getElementById("simFee");
+  var el = function (id) { return document.getElementById(id); };
+
+  function priceMonthly() {
+    var f = parseFloat(fipeEl.value);
+    if (f && f > 0) return Math.round(f * TIERS[tier].rate);
+    return TIERS[tier].price;
+  }
+  function fipeRef() {
+    var f = parseFloat(fipeEl.value);
+    return (f && f > 0) ? f : TIERS[tier].repFipe;
+  }
+  function netFor(months, feeRate) {
+    var p = priceMonthly();
+    var gross = p * months;
+    var fee = gross * feeRate;
+    var cash = gross - fee - TRACKER_YEAR;
+    var costs = fipeRef() * TIERS[tier].costRatio;
+    return cash - costs;
+  }
+
+  function update() {
+    var months = +monthsEl.value;
+    var feeRate = (+feeEl.value) / 100;
+    var p = priceMonthly();
+    var gross = p * months;
+    var fee = gross * feeRate;
+    var cash = gross - fee - TRACKER_YEAR;
+    var costs = fipeRef() * TIERS[tier].costRatio;
+    var net = cash - costs;
+
+    el("simMonthsVal").textContent = months;
+    el("simFeeVal").textContent = (+feeEl.value) + "%";
+    el("simPrice").textContent = brl(p) + " / mês";
+    el("simGross").textContent = brl(gross);
+    el("simFeeOut").textContent = "– " + brl(fee);
+    el("simTracker").textContent = "– " + brl(TRACKER_YEAR);
+    el("simCash").textContent = brl(cash);
+    el("simCosts").textContent = "– " + brl(costs);
+    el("simNet").textContent = (net < 0 ? "– " : "") + brl(Math.abs(net));
+
+    var cons = netFor(Math.max(2, months - 3), feeRate);
+    var real = netFor(months, feeRate);
+    var otim = netFor(Math.min(12, months + 2), feeRate);
+    el("scnCons").querySelector("strong").textContent = (cons < 0 ? "– " : "") + brl(Math.abs(cons));
+    el("scnReal").querySelector("strong").textContent = (real < 0 ? "– " : "") + brl(Math.abs(real));
+    el("scnOtim").querySelector("strong").textContent = (otim < 0 ? "– " : "") + brl(Math.abs(otim));
+    el("scnReal").classList.add("sim-scn--hl");
+  }
+
+  document.querySelectorAll(".tier-opt").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".tier-opt").forEach(function (x) { x.classList.remove("is-active"); });
       b.classList.add("is-active");
-      currentTier = b.dataset.tier;
+      tier = b.getAttribute("data-tier");
       update();
     });
   });
-  fipe.addEventListener("input", update);
-  months.addEventListener("input", update);
+  fipeEl.addEventListener("input", update);
+  monthsEl.addEventListener("input", update);
+  feeEl.addEventListener("input", update);
   update();
 })();
 
-/* ---- referral points simulator (partner) ---- */
+/* ====================================================================
+   FORM TABS + WhatsApp submit
+   ==================================================================== */
 (function () {
-  const refs = document.getElementById("simRefs");
-  if (!refs) return;
-  // Modelo de pontos (ajuste aqui se quiser mudar o programa):
-  const POINTS_PER_REFERRAL = 300;  // pontos ganhos por amigo que aluga
-  const POINT_VALUE = 1;            // R$ por ponto
-  const REF_RENTAL = 3000;          // aluguel mensal de referência (para % de desconto)
-  const el = (id) => document.getElementById(id);
-  const brl = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
-  function update() {
-    const n = +refs.value;
-    const points = n * POINTS_PER_REFERRAL;
-    const credit = points * POINT_VALUE;
-    const pct = Math.round((credit / REF_RENTAL) * 100);
-    el("simRefsVal").textContent = n;
-    el("simPoints").textContent = points.toLocaleString("pt-BR");
-    el("simCredit").textContent = brl(credit);
-    el("simPctOff").textContent = pct >= 100 ? "100%+" : pct + "%";
+  var tabs = document.querySelectorAll(".form-tab");
+  var forms = document.querySelectorAll(".form");
+
+  function activateTab(name) {
+    tabs.forEach(function (t) { t.classList.toggle("is-active", t.getAttribute("data-tab") === name); });
+    forms.forEach(function (f) { f.classList.toggle("is-active", f.getAttribute("data-panel") === name); });
   }
-  refs.addEventListener("input", update);
-  update();
-})();
-
-/* ---- fleet pricing from FIPE (transparent calculation) ---- */
-const FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
-function updateFleetPricing(lang) {
-  const useComma = lang !== "en";
-  const fmtPct = (r) => {
-    const v = (r * 100).toFixed(1);
-    return (useComma ? v.replace(".", ",") : v) + "%";
-  };
-  const fmtBRL = (n) => "R$ " + Math.round(n).toLocaleString("pt-BR");
-  const manualLabel = { en: "manual", pt: "manual", es: "manual" }[lang] || "manual";
-  const catLabel = { en: "Cat.", pt: "Cat.", es: "Cat." }[lang] || "Cat.";
-  const perText = { en: "/mo", pt: "/mês", es: "/mes" }[lang] || "/mês";
-
-  document.querySelectorAll(".fleet-car[data-fipe]").forEach((card) => {
-    const fipe = +card.dataset.fipe;
-    const tier = card.dataset.tier;
-    const manual = card.dataset.manual === "true";
-    const rate = FLEET_TIER_RATES[tier] || 0;
-    const finalRate = manual ? rate * 0.9 : rate;
-    const price = fipe * finalRate;
-
-    // Rewrite price element keeping the /mês span with i18n key
-    const priceEl = card.querySelector(".fleet-car__price");
-    if (priceEl) {
-      priceEl.innerHTML = fmtBRL(price) + '<span data-i18n="fleet.per">' + perText + '</span>';
-    }
-
-    // Insert/update calc line right before the price
-    let calcEl = card.querySelector(".fleet-car__calc");
-    if (!calcEl && priceEl) {
-      calcEl = document.createElement("p");
-      calcEl.className = "fleet-car__calc";
-      priceEl.parentNode.insertBefore(calcEl, priceEl);
-    }
-    if (calcEl) {
-      const mod = manual ? ` × ${useComma ? "0,9" : "0.9"} (${manualLabel})` : "";
-      calcEl.textContent = `FIPE × ${fmtPct(rate)}${mod} · ${catLabel} ${tier}`;
-    }
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () { activateTab(t.getAttribute("data-tab")); });
   });
-}
 
-/* ---- fleet filter ---- */
-document.querySelectorAll(".fleet-filter").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".fleet-filter").forEach((b) => b.classList.remove("is-active"));
-    btn.classList.add("is-active");
-    const f = btn.dataset.filter;
-    document.querySelectorAll(".fleet .fleet-car[data-tier]").forEach((card) => {
-      card.style.display = (f === "all" || card.dataset.tier === f) ? "" : "none";
+  // botões/links com data-form-tab pré-selecionam a aba
+  document.querySelectorAll("[data-form-tab]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      activateTab(link.getAttribute("data-form-tab"));
     });
   });
-});
 
-/* ---- whole-card clickable on the homepage fleet ---- */
-document.querySelectorAll(".fleet .fleet-car[data-car-id]").forEach((card) => {
-  card.classList.add("fleet-car--linked");
-  card.addEventListener("click", (e) => {
-    // ignore clicks on the button itself (already a link) or on other interactive children
-    if (e.target.closest("a, button")) return;
-    const id = card.dataset.carId;
-    if (id) window.location.href = "car.html?id=" + id;
+  function val(form, name) {
+    var f = form.querySelector('[name="' + name + '"]');
+    return f ? f.value.trim() : "";
+  }
+
+  // LOCATÁRIO
+  var fLoc = document.getElementById("form-locatario");
+  if (fLoc) fLoc.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = val(fLoc, "nome"), contato = val(fLoc, "contato");
+    var err = document.getElementById("err-locatario");
+    if (!nome || !contato) { if (err) err.hidden = false; return; }
+    if (err) err.hidden = true;
+    var msg = "Olá! Quero alugar um carro pela NomadDrive.\n\n" +
+      "• Nome: " + nome + "\n" +
+      "• Contato: " + contato + "\n" +
+      "• Cidade de retirada: " + (val(fLoc, "cidade") || "—") + "\n" +
+      "• Data de retirada: " + (val(fLoc, "data") || "—") + "\n" +
+      "• Duração: " + val(fLoc, "duracao") + "\n" +
+      "• Categoria desejada: " + val(fLoc, "categoria") + "\n" +
+      "• Indicação: " + (val(fLoc, "indicacao") || "—") + "\n" +
+      "• Observações: " + (val(fLoc, "obs") || "—");
+    window.open(waLink(msg), "_blank");
   });
-});
 
-/* ---- init ---- */
-applyLang(currentLang);
+  // PROPRIETÁRIO
+  var fProp = document.getElementById("form-proprietario");
+  if (fProp) fProp.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = val(fProp, "nome"), contato = val(fProp, "contato");
+    var err = document.getElementById("err-proprietario");
+    if (!nome || !contato) { if (err) err.hidden = false; return; }
+    if (err) err.hidden = true;
+    var msg = "Olá! Quero cadastrar meu carro na NomadDrive.\n\n" +
+      "• Nome: " + nome + "\n" +
+      "• WhatsApp: " + contato + "\n" +
+      "• Cidade: " + (val(fProp, "cidade") || "—") + "\n" +
+      "• Modelo: " + (val(fProp, "modelo") || "—") + "\n" +
+      "• Ano: " + (val(fProp, "ano") || "—") + "\n" +
+      "• FIPE aproximada: " + (val(fProp, "fipe") || "—") + "\n" +
+      "• Disponibilidade: " + val(fProp, "disponibilidade") + "\n" +
+      "• Uso atual: " + val(fProp, "uso");
+    window.open(waLink(msg), "_blank");
+  });
+
+  // PARCEIRO
+  var fPar = document.getElementById("form-parceiro");
+  if (fPar) fPar.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = val(fPar, "nome"), contato = val(fPar, "contato");
+    var err = document.getElementById("err-parceiro");
+    if (!nome || !contato) { if (err) err.hidden = false; return; }
+    if (err) err.hidden = true;
+    var msg = "Olá! Quero ser parceiro indicador da NomadDrive.\n\n" +
+      "• Nome: " + nome + "\n" +
+      "• WhatsApp: " + contato + "\n" +
+      "• Cidade: " + (val(fPar, "cidade") || "—") + "\n" +
+      "• Tipo de rede: " + val(fPar, "rede") + "\n" +
+      "• Como pretende indicar: " + (val(fPar, "comoindica") || "—");
+    window.open(waLink(msg), "_blank");
+  });
+})();
+
+/* ====================================================================
+   WhatsApp links genéricos (float, drawer, footer)
+   ==================================================================== */
+(function () {
+  var generic = "Olá! Vim pelo site da NomadDrive Brasil e quero falar sobre aluguel mensal de carro.";
+  ["waFloat", "drawerWhats", "footerWhats"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.href = waLink(generic);
+  });
+})();

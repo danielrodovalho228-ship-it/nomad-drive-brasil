@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title id="pageTitle">NomadDrive Brasil — Car details</title>
-<meta name="description" id="pageDesc" content="Monthly car rental in Uberlândia, Brazil. See full photos, specs and book on WhatsApp." />
+<title id="pageTitle">Detalhes do veículo — NomadDrive Brasil</title>
+<meta name="description" id="pageDesc" content="Detalhes de veículo para aluguel mensal em Uberlândia. Fotos, especificações e orçamento por WhatsApp." />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <meta property="og:type" content="website" />
-<meta property="og:title" id="ogTitle" content="NomadDrive Brasil — Car details" />
-<meta property="og:description" id="ogDesc" content="Monthly car rental in Uberlândia, Brazil." />
-<meta property="og:image" id="ogImage" content="images/og-share.jpg" />
+<meta property="og:title" id="ogTitle" content="NomadDrive Brasil — Detalhes do veículo" />
+<meta property="og:description" id="ogDesc" content="Aluguel mensal de carro em Uberlândia." />
+<meta property="og:image" id="ogImage" content="images/hero.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -17,203 +17,210 @@
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
+<!-- ============ HEADER ============ -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
-    <a href="index.html" class="brand">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
       <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
       <span class="brand__name">NomadDrive <span>Brasil</span></span>
     </a>
-    <nav class="nav__links">
-      <a href="index.html#fleet" data-i18n="nav.fleet">Fleet</a>
-      <a href="index.html#how" data-i18n="nav.how">How it works</a>
-      <a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
-      <a href="index.html#renda" data-i18n="nav.renda">Earn passive income</a>
-      <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
+      <a href="index.html#precos">Preços</a>
+      <a href="index.html#seguranca">Segurança</a>
+      <a href="index.html#ganhe">Ganhe com seu carro</a>
+      <a href="index.html#faq">Dúvidas</a>
     </nav>
     <div class="nav__actions">
-      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
-        <span class="lang-toggle__opt" data-lang="en">EN</span>
-        <span class="lang-toggle__sep">/</span>
-        <span class="lang-toggle__opt is-active" data-lang="pt">PT</span>
-        <span class="lang-toggle__sep">/</span>
-        <span class="lang-toggle__opt" data-lang="es">ES</span>
-      </div>
-      <a href="index.html#fleet" class="btn btn--ghost btn--sm" data-i18n="car.backToFleet">← Back to fleet</a>
+      <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
+      <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
 
-<main id="top" class="car-page">
+<div class="drawer-overlay" id="drawerOverlay" hidden></div>
+<aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
+  <div class="drawer__head">
+    <span class="drawer__title">Menu</span>
+    <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
+  </div>
+  <nav class="drawer__nav">
+    <a href="index.html#orcamento" class="drawer__cta drawer__cta--primary">Quero alugar um carro</a>
+    <a href="index.html#simulador" class="drawer__cta">Simular ganhos do meu carro</a>
+    <a href="index.html#ganhe" class="drawer__cta">Cadastrar meu carro</a>
+    <a href="index.html#parceiro" class="drawer__cta">Tornar-se parceiro</a>
+    <a href="index.html#como" class="drawer__link">Como funciona</a>
+    <a href="index.html#frota" class="drawer__link">Frota</a>
+    <a href="index.html#precos" class="drawer__link">Preços</a>
+    <a href="index.html#seguranca" class="drawer__link">Segurança</a>
+    <a href="index.html#faq" class="drawer__link">Dúvidas frequentes</a>
+  </nav>
+  <a href="#" class="drawer__whats" id="drawerWhats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+</aside>
 
-  <!-- Fallback if id missing or unknown -->
-  <section class="car-missing" id="carMissing" hidden>
-    <div class="container">
-      <h1 data-i18n="car.notFound.title">Car not found</h1>
-      <p data-i18n="car.notFound.body">We couldn't find this car in the catalog. Browse the full fleet instead:</p>
-      <a href="index.html#fleet" class="btn btn--solid" data-i18n="car.notFound.cta">See the fleet</a>
-    </div>
-  </section>
+<main class="car-page">
+  <div class="container">
 
-  <article class="car-detail" id="carDetail" hidden>
-
-    <div class="container car-detail__top">
-      <a href="index.html#fleet" class="car-back" data-i18n="car.back">← All cars</a>
-    </div>
-
-    <!-- ===== GALLERY ===== -->
-    <section class="car-gallery container">
-      <div class="car-gallery__main">
-        <img id="galleryMain" alt="" />
-        <button type="button" class="car-gallery__nav car-gallery__nav--prev" id="galleryPrev" aria-label="Previous photo">‹</button>
-        <button type="button" class="car-gallery__nav car-gallery__nav--next" id="galleryNext" aria-label="Next photo">›</button>
-        <span class="car-gallery__counter" id="galleryCounter">1 / 3</span>
-        <span class="car-gallery__pilot" id="pilotBadge" data-i18n="car.pilotBadge" hidden>★ Pilot car</span>
-      </div>
-      <div class="car-gallery__thumbs" id="galleryThumbs"></div>
+    <!-- fallback -->
+    <section class="car-missing" id="carMissing" hidden>
+      <h1>Veículo não encontrado</h1>
+      <p>Não encontramos este veículo no catálogo. Veja a frota completa:</p>
+      <a href="index.html#frota" class="btn btn--solid">Ver a frota</a>
     </section>
 
-    <!-- ===== LAYOUT: left = info, right = sticky booking ===== -->
-    <section class="container car-detail__grid">
+    <!-- detail -->
+    <article id="carDetail" hidden>
+      <a href="index.html#frota" class="car-back">← Voltar para a frota</a>
 
-      <div class="car-info">
-
-        <header class="car-head">
-          <span class="car-head__tier" id="carTier">CATEGORIA B · Confort</span>
-          <h1 id="carName">Chevrolet Cobalt Elite</h1>
-          <p class="car-head__meta" id="carMeta">2018 · Automático · FIPE R$ 57.000</p>
-        </header>
-
-        <ul class="car-quick">
-          <li><span data-i18n="car.q.body">Body</span><strong id="qBody">—</strong></li>
-          <li><span data-i18n="car.q.seats">Seats</span><strong id="qSeats">—</strong></li>
-          <li><span data-i18n="car.q.trunk">Trunk</span><strong id="qTrunk">—</strong></li>
-          <li><span data-i18n="car.q.color">Color</span><strong id="qColor">—</strong></li>
-        </ul>
-
-        <section class="car-section">
-          <h2 data-i18n="car.h.condition">Condition</h2>
-          <div class="car-condition">
-            <div><span data-i18n="car.c.km">Mileage</span><strong id="cKm">—</strong></div>
-            <div><span data-i18n="car.c.rev">Last revision</span><strong id="cRev">—</strong></div>
-            <div><span data-i18n="car.c.tires">Tires</span><strong id="cTires">—</strong></div>
-          </div>
-        </section>
-
-        <section class="car-section">
-          <h2 data-i18n="car.h.about">About this car</h2>
-          <p id="carDescription">—</p>
-          <ul class="car-features" id="carFeatures"></ul>
-        </section>
-
-        <section class="car-section">
-          <h2 data-i18n="car.h.included">What's included</h2>
-          <ul class="car-included">
-            <li data-i18n="car.inc.1">✓ Insurance for rental use</li>
-            <li data-i18n="car.inc.2">✓ 3.000 km/month included · R$ 0,40 per extra km</li>
-            <li data-i18n="car.inc.3">✓ In-person handover in Uberlândia</li>
-            <li data-i18n="car.inc.4">✓ Backup car if anything goes wrong</li>
-            <li data-i18n="car.inc.5">✓ Tax included in the monthly rate</li>
-            <li data-i18n="car.inc.6">✓ EN / PT / ES support on WhatsApp</li>
-          </ul>
-        </section>
-
-        <section class="car-section">
-          <h2 data-i18n="car.h.location">Pickup location</h2>
-          <p data-i18n="car.location.body">In-person handover in Uberlândia, MG. The exact address is shared after booking. Airport meet-up is possible — just ask.</p>
-        </section>
-
-      </div>
-
-      <!-- ===== STICKY BOOKING CARD ===== -->
-      <aside class="car-book">
-        <div class="car-book__inner">
-          <div class="car-book__priceblock">
-            <div class="car-book__price"><strong id="bookPrice">R$ —</strong><span data-i18n="car.priceUnit">/mo</span></div>
-            <div class="car-book__usd" id="bookUsd">≈ $— USD</div>
-            <div class="car-book__formula" id="bookFormula">FIPE × — · Cat. —</div>
-          </div>
-
-          <div class="car-book__field">
-            <label for="bookStart" data-i18n="car.book.start">Pick-up date</label>
-            <input type="date" id="bookStart" />
-          </div>
-
-          <div class="car-book__field">
-            <label data-i18n="car.book.months">How long?</label>
-            <div class="months-picker" id="monthsPicker">
-              <button type="button" class="months-opt" data-months="1">1</button>
-              <button type="button" class="months-opt is-active" data-months="2">2</button>
-              <button type="button" class="months-opt" data-months="3">3</button>
-              <button type="button" class="months-opt" data-months="4">4</button>
-              <button type="button" class="months-opt" data-months="6">6</button>
-            </div>
-            <small class="months-picker__hint" data-i18n="car.book.monthsHint">Months. Need more? Talk to us for a custom rate.</small>
-          </div>
-
-          <div class="car-book__summary">
-            <div class="car-book__sumrow">
-              <span data-i18n="car.book.endDate">Estimated return</span>
-              <strong id="bookEnd">—</strong>
-            </div>
-            <div class="car-book__sumrow">
-              <span data-i18n="car.book.totalLabel">Estimated total</span>
-              <strong id="bookTotal">—</strong>
-            </div>
-            <small class="car-book__hint" data-i18n="car.book.totalHint">All-in, taxes included. Final price confirmed in writing.</small>
-          </div>
-
-          <a href="#" class="btn btn--solid btn--block" id="bookCta" data-i18n="car.book.cta">Reserve on WhatsApp</a>
-
-          <div class="car-share">
-            <strong data-i18n="car.share.title">Share this car</strong>
-            <div class="car-share__btns">
-              <button type="button" class="share-btn" id="shareNative" data-i18n="car.share.native" hidden>↗ Share</button>
-              <button type="button" class="share-btn" id="shareCopy" data-i18n="car.share.copy">📋 Copy link</button>
-              <a href="#" class="share-btn" id="shareWhats" target="_blank" rel="noopener" data-i18n="car.share.whats">WhatsApp</a>
-              <a href="#" class="share-btn" id="shareEmail" data-i18n="car.share.email">Email</a>
-            </div>
-            <span class="share-feedback" id="shareFeedback" hidden data-i18n="car.share.copied">Link copied!</span>
-          </div>
+      <div class="car-gallery">
+        <div class="car-gallery__main">
+          <img id="galleryMain" alt="" />
+          <button type="button" class="car-gallery__nav car-gallery__nav--prev" id="galPrev" aria-label="Foto anterior">‹</button>
+          <button type="button" class="car-gallery__nav car-gallery__nav--next" id="galNext" aria-label="Próxima foto">›</button>
+          <span class="car-gallery__counter" id="galCounter">1 / 3</span>
         </div>
-      </aside>
-    </section>
+        <div class="car-gallery__thumbs" id="galThumbs"></div>
+      </div>
 
-    <!-- ===== OTHER CARS ===== -->
-    <section class="container car-section car-others">
-      <h2 data-i18n="car.others.title">Other cars in the fleet</h2>
-      <div class="car-others__grid" id="otherCars"></div>
-    </section>
+      <div class="car-detail__grid">
+        <div class="car-info">
+          <header class="car-head">
+            <span class="car-pilot-badge" id="pilotBadge" hidden>Carro piloto da rede</span>
+            <span class="car-head__cat" id="carCat">Categoria</span>
+            <h1 id="carName">—</h1>
+            <p class="car-head__meta" id="carMeta">—</p>
+          </header>
 
-  </article>
+          <ul class="car-quick">
+            <li><span>Tipo</span><strong id="qBody">—</strong></li>
+            <li><span>Lugares</span><strong id="qSeats">—</strong></li>
+            <li><span>Porta-malas</span><strong id="qTrunk">—</strong></li>
+            <li><span>Cor</span><strong id="qColor">—</strong></li>
+          </ul>
+
+          <section class="car-section">
+            <h2>Condição do veículo</h2>
+            <div class="car-condition">
+              <div><span>Quilometragem</span><strong id="cKm">—</strong></div>
+              <div><span>Última revisão</span><strong id="cRev">—</strong></div>
+              <div><span>Pneus</span><strong id="cTires">—</strong></div>
+            </div>
+          </section>
+
+          <section class="car-section">
+            <h2>Sobre este carro</h2>
+            <p id="carDesc">—</p>
+            <ul class="car-features" id="carFeatures" style="margin-top:12px"></ul>
+          </section>
+
+          <section class="car-section">
+            <h2>O que está incluso</h2>
+            <ul class="car-included">
+              <li>✓ Seguro para uso em locação</li>
+              <li>✓ Vistoria com foto e vídeo</li>
+              <li>✓ Entrega em mãos em Uberlândia</li>
+              <li>✓ Rastreador GPS</li>
+              <li>✓ Suporte por WhatsApp</li>
+              <li>✓ Carro reserva (sujeito a disponibilidade)</li>
+            </ul>
+          </section>
+
+          <section class="car-section">
+            <h2>Retirada</h2>
+            <p>Entrega em mãos em Uberlândia-MG. O endereço exato é combinado após a reserva, conforme a logística. Encontro no aeroporto pode ser arranjado mediante combinação prévia.</p>
+          </section>
+        </div>
+
+        <aside class="car-book">
+          <div class="car-book__inner">
+            <div class="car-book__price" id="bookPrice">—</div>
+            <div class="car-book__est" id="bookEst">Estimativa de referência — preço final confirmado por orçamento.</div>
+
+            <div class="car-book__field">
+              <label for="bookStart">Data de retirada</label>
+              <input type="date" id="bookStart" />
+            </div>
+            <div class="car-book__field">
+              <label for="bookMonths">Duração</label>
+              <select id="bookMonths">
+                <option value="1">1 mês</option>
+                <option value="2" selected>2 meses</option>
+                <option value="3">3 meses</option>
+                <option value="4">4 meses</option>
+                <option value="6">6 meses</option>
+              </select>
+            </div>
+
+            <div class="car-book__summary">
+              <div class="car-book__sumrow"><span>Devolução estimada</span><strong id="bookEnd">—</strong></div>
+              <div class="car-book__sumrow"><span>Total estimado</span><strong id="bookTotal">—</strong></div>
+            </div>
+            <a href="#" class="btn btn--solid btn--block" id="bookCta" target="_blank" rel="noopener">Pedir orçamento no WhatsApp</a>
+            <p class="car-book__note">Tudo incluso, sob confirmação. Disponibilidade, caução, seguro e preço final são confirmados por escrito.</p>
+
+            <div class="car-share">
+              <strong>Compartilhar este carro</strong>
+              <div class="car-share__btns">
+                <button type="button" class="share-btn" id="shareCopy">Copiar link</button>
+                <a class="share-btn" id="shareWhats" target="_blank" rel="noopener">WhatsApp</a>
+                <a class="share-btn" id="shareEmail">E-mail</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="car-others">
+        <h2>Outros carros da frota</h2>
+        <div class="car-others__grid" id="otherCars"></div>
+      </section>
+    </article>
+  </div>
 </main>
 
-<!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="container footer__inner">
-    <div>
+    <div class="footer__brand">
       <a href="index.html" class="brand">
         <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
         <span class="brand__name">NomadDrive <span>Brasil</span></span>
       </a>
-      <p class="footer__tag" data-i18n="footer.tag">Fair monthly car rental for international travelers in Brazil.</p>
+      <p>Aluguel mensal de carro em Uberlândia-MG, direto com proprietários verificados. Site informativo — disponibilidade, seguro, caução e preço final confirmados individualmente por contrato.</p>
     </div>
-    <div>
-      <h4 data-i18n="footer.contact">Contact</h4>
-      <ul><li><a href="https://wa.me/5500000000000" target="_blank" rel="noopener" data-i18n="footer.whatsapp">WhatsApp</a></li>
-          <li><a href="mailto:hello@nomaddrive.com.br" data-i18n="footer.email">hello@nomaddrive.com.br</a></li>
-          <li><a href="https://instagram.com" target="_blank" rel="noopener" data-i18n="footer.instagram">Instagram</a></li></ul>
+    <div class="footer__col">
+      <h4>Navegação</h4>
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
+      <a href="index.html#precos">Preços</a>
+      <a href="index.html#ganhe">Ganhe com seu carro</a>
+      <a href="index.html#faq">Dúvidas</a>
     </div>
-    <div>
-      <h4 data-i18n="footer.explore">Explore</h4>
-      <ul><li><a href="index.html#fleet" data-i18n="nav.fleet">Fleet</a></li>
-          <li><a href="index.html#how" data-i18n="nav.how">How it works</a></li>
-          <li><a href="index.html#renda" data-i18n="nav.renda">Passive income</a></li>
-          <li><a href="index.html#faq" data-i18n="nav.faq">FAQ</a></li></ul>
+    <div class="footer__col">
+      <h4>Documentos</h4>
+      <a href="termos.html#termos">Termos e Condições</a>
+      <a href="termos.html#privacidade">Política de Privacidade</a>
+      <a href="termos.html#locacao">Regras de Locação</a>
+      <a href="termos.html#cancelamento">Política de Cancelamento</a>
+      <a href="termos.html#sinistros">Segurança e Sinistros</a>
+    </div>
+    <div class="footer__col">
+      <h4>Contato</h4>
+      <a href="#" id="footerWhats" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:contato@nomaddrive.com.br">contato@nomaddrive.com.br</a>
+      <a href="index.html#orcamento">Pedir orçamento</a>
     </div>
   </div>
-  <p class="footer__legal" data-i18n="footer.legal">© 2026 NomadDrive Brasil. Informational website — not a binding offer.</p>
+  <div class="footer__legal">
+    <p>© 2026 NomadDrive Brasil. Site informativo, não constitui oferta vinculante. Disponibilidade, seguro, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
 </footer>
+
+<a href="#" class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.042zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+</a>
 
 <script src="car-data.js"></script>
 <script src="script.js"></script>
