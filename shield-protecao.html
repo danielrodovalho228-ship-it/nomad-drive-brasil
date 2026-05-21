@@ -22,14 +22,13 @@
     </a>
     <nav class="nav__links" aria-label="Navegação principal">
       <a href="index.html#inicio">Início</a>
-      <a href="index.html#frota">Alugar</a>
-      <a href="index.html#ganhe">Ganhe com seu carro</a>
-      <a href="index.html#parceiro">Parceiros</a>
-      <a href="index.html#oficinas">Oficinas</a>
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
       <a href="shield-protecao.html" class="is-current" aria-current="page">Proteção</a>
-      <a href="seguranca-sinistros.html">Segurança/Sinistros</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="oficinas.html">Oficinas</a>
+      <a href="parceiros.html">Parceiros</a>
       <a href="index.html#faq">FAQ</a>
-      <a href="admin.html">Admin</a>
     </nav>
     <div class="nav__actions">
       <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
@@ -43,21 +42,20 @@
 <div class="drawer-overlay" id="drawerOverlay" hidden></div>
 <aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
   <div class="drawer__head">
-    <span class="drawer__title">Menu</span>
+    <span class="drawer__title">O que você quer fazer?</span>
     <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
   </div>
   <nav class="drawer__nav">
-    <a href="index.html#inicio" class="drawer__link">Início</a>
-    <a href="index.html#frota" class="drawer__cta drawer__cta--primary">Alugar um carro</a>
-    <a href="index.html#ganhe" class="drawer__cta">Ganhe com seu carro</a>
-    <a href="index.html#parceiro" class="drawer__cta">Parceiros</a>
-    <a href="index.html#oficinas" class="drawer__link">Oficinas</a>
-    <a href="shield-protecao.html" class="drawer__link">Proteção</a>
-    <a href="seguranca-sinistros.html" class="drawer__link">Segurança / Sinistros</a>
-    <a href="index.html#faq" class="drawer__link">FAQ</a>
-    <a href="admin.html" class="drawer__link">Admin</a>
+    <a href="index.html#orcamento" class="drawer__cta drawer__cta--primary"><strong>Alugar um carro</strong><span>Orçamento, requisitos e retirada</span></a>
+    <a href="proprietarios.html" class="drawer__cta"><strong>Adicionar meu veículo</strong><span>Termos, simulação e checklist</span></a>
+    <a href="parceiros.html" class="drawer__cta"><strong>Indicar e ganhar crédito</strong><span>Programa de parceiros</span></a>
+    <a href="oficinas.html" class="drawer__cta"><strong>Sou oficina</strong><span>Credenciamento e checklist</span></a>
+    <a href="shield-protecao.html" class="drawer__cta"><strong>Proteção e sinistros</strong><span>Shield, caução e cota</span></a>
+    <a href="index.html#como" class="drawer__link">Como funciona</a>
+    <a href="index.html#frota" class="drawer__link">Ver a frota</a>
+    <a href="index.html#faq" class="drawer__link">Dúvidas frequentes</a>
   </nav>
-  <a href="#" class="drawer__whats" id="drawerWhats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  <a href="#" class="drawer__whats" data-wa="Olá! Quero entender melhor a proteção da NomadDrive Brasil.">Falar no WhatsApp</a>
 </aside>
 
 <main>
@@ -185,14 +183,34 @@
   </div>
 </section>
 
+<!-- ===== O QUE PODE NÃO ESTAR COBERTO ===== -->
+<section class="section section--surface">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Transparência</span>
+      <h2>O que pode não estar coberto</h2>
+      <p>Tão importante quanto saber o que a proteção contempla é saber os limites. Algumas situações podem não estar cobertas, no todo ou em parte, conforme o plano e o contrato:</p>
+    </div>
+    <div class="cards cards--3">
+      <article class="card"><h3>Uso indevido</h3><p>Dirigir sob efeito de álcool ou substâncias, participar de competições ou rachas, ou trafegar fora de estrada não autorizada.</p></article>
+      <article class="card"><h3>Condutor não cadastrado</h3><p>Veículo conduzido por pessoa que não consta no contrato ou sem habilitação válida.</p></article>
+      <article class="card"><h3>Itens fora do plano</h3><p>Coberturas não incluídas no plano contratado, ou valores acima dos limites previstos.</p></article>
+      <article class="card"><h3>Danos não registrados</h3><p>Danos pré-existentes não apontados na vistoria de retirada podem não ser considerados.</p></article>
+      <article class="card"><h3>Multas e despesas pessoais</h3><p>Multas, pedágios e despesas pessoais são sempre de responsabilidade do condutor.</p></article>
+      <article class="card"><h3>Negligência ou dolo</h3><p>Negligência grave, dolo, subaluguel ou uso comercial não autorizado podem afastar a proteção.</p></article>
+    </div>
+    <p class="note note--center">Esta lista é informativa e não substitui o contrato. As exclusões, os limites e as condições exatas constam no contrato e na apólice da proteção contratada, conforme a análise do caso.</p>
+  </div>
+</section>
+
 <!-- ===== CTA ===== -->
 <section class="cta-final">
   <div class="container">
-    <h2>Dúvidas sobre proteção?</h2>
-    <p>Fale com a gente. Explicamos o plano, a elegibilidade do seu caso e as condições — sem letra miúda.</p>
+    <h2>Entenda a proteção antes de reservar</h2>
+    <p>Cada veículo e cada locação têm condições próprias. Vale conhecer o plano, a caução e a cota de participação antes de fechar.</p>
     <div class="cta-final__btns">
-      <a href="#" class="btn btn--solid btn--lg" id="ctaWhats">Tirar dúvidas no WhatsApp</a>
-      <a href="seguranca-sinistros.html" class="btn btn--outline btn--lg">Ver Segurança e Sinistros</a>
+      <a href="seguranca-sinistros.html" class="btn btn--solid btn--lg">Entender proteção antes de reservar</a>
+      <a href="#" class="btn btn--outline btn--lg" data-wa="Olá! Quero tirar dúvidas sobre a proteção (Shield) da NomadDrive Brasil antes de reservar.">Tirar dúvidas</a>
     </div>
   </div>
 </section>
@@ -223,7 +241,7 @@
     </div>
     <div class="footer__col">
       <h4>Contato</h4>
-      <a href="#" id="footerWhats" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#" data-wa="Olá! Quero entender melhor a proteção da NomadDrive Brasil.">WhatsApp</a>
       <a href="mailto:contato@nomaddrive.com.br">contato@nomaddrive.com.br</a>
       <a href="index.html#orcamento">Pedir orçamento</a>
     </div>
@@ -233,18 +251,10 @@
   </div>
 </footer>
 
-<a href="#" class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+<a href="#" class="wa-float" data-wa="Olá! Quero entender melhor a proteção da NomadDrive Brasil." aria-label="Falar no WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.042zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
 </a>
 
 <script src="script.js"></script>
-<script>
-  (function () {
-    var msg = "Olá! Quero entender melhor a proteção e o Shield da NomadDrive Brasil.";
-    var link = "https://wa.me/" + (typeof WA_PHONE !== "undefined" ? WA_PHONE : "5500000000000") + "?text=" + encodeURIComponent(msg);
-    var c = document.getElementById("ctaWhats");
-    if (c) c.href = link;
-  })();
-</script>
 </body>
 </html>

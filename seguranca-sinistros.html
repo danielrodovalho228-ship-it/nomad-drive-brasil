@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Segurança e Sinistros — NomadDrive Brasil</title>
-<meta name="description" content="Como a NomadDrive trata segurança e sinistros: camadas de proteção, fluxo de acionamento em caso de acidente e perguntas frequentes sobre proteção veicular." />
+<meta name="description" content="Segurança e sinistros na NomadDrive Brasil: como reportar uma ocorrência, o que enviar e as etapas de análise e resolução." />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,7 +13,6 @@
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
     <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
@@ -22,14 +21,13 @@
     </a>
     <nav class="nav__links" aria-label="Navegação principal">
       <a href="index.html#inicio">Início</a>
-      <a href="index.html#frota">Alugar</a>
-      <a href="index.html#ganhe">Ganhe com seu carro</a>
-      <a href="index.html#parceiro">Parceiros</a>
-      <a href="index.html#oficinas">Oficinas</a>
-      <a href="shield-protecao.html">Proteção</a>
-      <a href="seguranca-sinistros.html" class="is-current" aria-current="page">Segurança/Sinistros</a>
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
+      <a href="shield-protecao.html" class="is-current" aria-current="page">Proteção</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="oficinas.html">Oficinas</a>
+      <a href="parceiros.html">Parceiros</a>
       <a href="index.html#faq">FAQ</a>
-      <a href="admin.html">Admin</a>
     </nav>
     <div class="nav__actions">
       <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
@@ -43,139 +41,158 @@
 <div class="drawer-overlay" id="drawerOverlay" hidden></div>
 <aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
   <div class="drawer__head">
-    <span class="drawer__title">Menu</span>
+    <span class="drawer__title">O que você quer fazer?</span>
     <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
   </div>
   <nav class="drawer__nav">
-    <a href="index.html#inicio" class="drawer__link">Início</a>
-    <a href="index.html#frota" class="drawer__cta drawer__cta--primary">Alugar um carro</a>
-    <a href="index.html#ganhe" class="drawer__cta">Ganhe com seu carro</a>
-    <a href="index.html#parceiro" class="drawer__cta">Parceiros</a>
-    <a href="index.html#oficinas" class="drawer__link">Oficinas</a>
-    <a href="shield-protecao.html" class="drawer__link">Proteção</a>
-    <a href="seguranca-sinistros.html" class="drawer__link">Segurança / Sinistros</a>
-    <a href="index.html#faq" class="drawer__link">FAQ</a>
-    <a href="admin.html" class="drawer__link">Admin</a>
+    <a href="index.html#orcamento" class="drawer__cta drawer__cta--primary"><strong>Alugar um carro</strong><span>Orçamento, requisitos e retirada</span></a>
+    <a href="proprietarios.html" class="drawer__cta"><strong>Adicionar meu veículo</strong><span>Termos, simulação e checklist</span></a>
+    <a href="parceiros.html" class="drawer__cta"><strong>Indicar e ganhar crédito</strong><span>Programa de parceiros</span></a>
+    <a href="oficinas.html" class="drawer__cta"><strong>Sou oficina</strong><span>Credenciamento e checklist</span></a>
+    <a href="shield-protecao.html" class="drawer__cta"><strong>Proteção e sinistros</strong><span>Shield, caução e cota</span></a>
+    <a href="index.html#como" class="drawer__link">Como funciona</a>
+    <a href="index.html#frota" class="drawer__link">Ver a frota</a>
+    <a href="index.html#faq" class="drawer__link">Dúvidas frequentes</a>
   </nav>
-  <a href="#" class="drawer__whats" id="drawerWhats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  <a href="#" class="drawer__whats" data-wa="Olá! Tenho dúvidas sobre segurança e sinistros na NomadDrive Brasil.">Falar no WhatsApp</a>
 </aside>
 
 <main>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="page-hero">
   <div class="container">
     <span class="badge">Segurança e Sinistros</span>
     <h1>Segurança de verdade — e o que fazer se algo der errado</h1>
-    <p>Acidentes e imprevistos acontecem. O que faz diferença é ter um processo claro. Aqui você vê as camadas de segurança da rede e o passo a passo de um sinistro — com transparência, sem prometer que nada pode dar errado.</p>
+    <p>Acidentes e imprevistos acontecem. O que faz diferença é ter um processo claro. Aqui você vê como reportar uma ocorrência, o que enviar e as etapas de análise e resolução — com transparência, sem prometer que nada pode dar errado.</p>
   </div>
 </section>
 
-<!-- ===== CAMADAS DE SEGURANÇA ===== -->
+<!-- REPORTAR SINISTRO -->
 <section class="section">
+  <div class="container">
+    <div class="report-box">
+      <div class="report-box__copy">
+        <span class="eyebrow">Aconteceu algo agora?</span>
+        <h2>Reportar um sinistro ou ocorrência</h2>
+        <p>Em caso de acidente, roubo, furto, pane ou avaria, comunique a equipe o quanto antes. Em emergências, acione primeiro a linha 24/7 informada no contrato. Depois, registre a ocorrência pelo canal abaixo.</p>
+      </div>
+      <a href="#" class="btn btn--solid btn--lg" data-wa="Olá! Preciso reportar um sinistro/ocorrência com um veículo da NomadDrive Brasil. Tipo de ocorrência: (avaria leve / acidente / roubo ou furto / pane mecânica / multa). Posso enviar fotos, local, horário e descrição.">Reportar sinistro</a>
+    </div>
+  </div>
+</section>
+
+<!-- CAMADAS DE SEGURANÇA -->
+<section class="section section--surface">
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Camadas de segurança</span>
-      <h2>O que reduz o risco antes mesmo de qualquer problema</h2>
+      <h2>O que reduz o risco antes de qualquer problema</h2>
     </div>
     <div class="cards cards--3">
       <article class="card"><h3>Contrato e verificação</h3><p>Contrato de locação por escrito e verificação de CNH e documentos do condutor antes da retirada.</p></article>
       <article class="card"><h3>Vistoria documentada</h3><p>Vistoria com foto e vídeo na retirada e na devolução — o estado do carro fica registrado dos dois lados.</p></article>
       <article class="card"><h3>Rastreador GPS</h3><p>Veículos com rastreador para localização e recuperação. Usado para segurança, não para monitorar uso rotineiro.</p></article>
-      <article class="card"><h3>Checklist técnico</h3><p>Quando aplicável, checklist técnico em oficina parceira credenciada antes de o carro entrar na rede.</p></article>
+      <article class="card"><h3>Checklist técnico</h3><p>Quando aplicável, checklist técnico em oficina credenciada antes de o carro entrar na rede.</p></article>
       <article class="card"><h3>Caução</h3><p>Garantia reembolsável que cobre eventuais pendências ao fim da locação. Devolvida se não houver pendências.</p></article>
       <article class="card"><h3>Suporte 24/7</h3><p>Linha de emergência disponível 24h para acidentes, panes e assistência durante todo o período.</p></article>
     </div>
   </div>
 </section>
 
-<!-- ===== FLUXO DE SINISTRO ===== -->
+<!-- TIPOS DE OCORRÊNCIA -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Tipos de ocorrência</span>
+      <h2>O que fazer em cada caso</h2>
+      <p>O encaminhamento depende do tipo. Em todos, comunique a equipe e registre fotos.</p>
+    </div>
+    <div class="cards cards--3">
+      <article class="card"><h3>Avaria leve</h3><p>Riscos, amassados pequenos ou danos estéticos. Registre fotos e comunique — a análise define se há reparo e como.</p></article>
+      <article class="card"><h3>Acidente</h3><p>Colisão com ou sem terceiros. Priorize a segurança das pessoas, acione a linha 24/7 e faça o boletim de ocorrência.</p></article>
+      <article class="card"><h3>Roubo ou furto</h3><p>Comunique imediatamente, registre o boletim de ocorrência e informe a equipe — o rastreador apoia a recuperação.</p></article>
+      <article class="card"><h3>Pane mecânica</h3><p>Falha mecânica ou elétrica. Acione a assistência 24h; quando previsto, organizamos guincho e carro reserva.</p></article>
+      <article class="card"><h3>Multas e infrações</h3><p>Multas durante a locação são do condutor. Multas recebidas após a devolução têm pontuação e cobrança transferidas.</p></article>
+      <article class="card"><h3>Dúvida sobre o caso</h3><p>Não tem certeza do tipo? Reporte mesmo assim. A equipe ajuda a classificar e orienta o próximo passo.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST DO QUE ENVIAR -->
 <section class="section section--surface">
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Em caso de sinistro</span>
-      <h2>O passo a passo, com calma</h2>
-      <p>Se acontecer um acidente, roubo ou dano, este é o fluxo. A equipe orienta você em cada etapa.</p>
+      <span class="eyebrow">Ao reportar</span>
+      <h2>Checklist — o que enviar</h2>
+      <p>Quanto mais completo o registro, mais rápida a análise. Reúna o que conseguir:</p>
     </div>
-    <ol class="flow">
-      <li class="flow__step">
-        <span class="flow__num">1</span>
-        <h3>Comunique o suporte</h3>
-        <p>Acione a linha de emergência 24/7 informada no contrato. A equipe orienta os próximos passos imediatamente.</p>
-      </li>
-      <li class="flow__step">
-        <span class="flow__num">2</span>
-        <h3>Registre fotos</h3>
-        <p>Fotografe o veículo, o local e o que for relevante. O registro ajuda na análise e protege você.</p>
-      </li>
-      <li class="flow__step">
-        <span class="flow__num">3</span>
-        <h3>Boletim de ocorrência</h3>
-        <p>Quando aplicável (acidente com terceiros, roubo, furto), registre o boletim de ocorrência (BO).</p>
-      </li>
-      <li class="flow__step">
-        <span class="flow__num">4</span>
-        <h3>Análise do caso</h3>
-        <p>O caso é analisado conforme o contrato, o plano de proteção e as condições aplicáveis.</p>
-      </li>
-      <li class="flow__step">
-        <span class="flow__num">5</span>
-        <h3>Acionamento da proteção</h3>
-        <p>Se o sinistro for coberto, a proteção é acionada. Aplica-se a cota de participação prevista no plano.</p>
-      </li>
-      <li class="flow__step">
-        <span class="flow__num">6</span>
-        <h3>Resolução</h3>
-        <p>Encaminhamento do reparo ou da indenização e, quando previsto, carro reserva conforme disponibilidade.</p>
-      </li>
+    <div class="two-col">
+      <div class="card">
+        <h3>Registro da ocorrência</h3>
+        <ul class="check-list">
+          <li>Fotos do veículo (todos os ângulos)</li>
+          <li>Fotos do local</li>
+          <li>Local e horário do ocorrido</li>
+          <li>Descrição do que aconteceu</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Documentos e envolvidos</h3>
+        <ul class="check-list">
+          <li>Dados dos envolvidos (se houver terceiros)</li>
+          <li>Boletim de ocorrência (quando aplicável)</li>
+          <li>Comprovantes e recibos relacionados</li>
+          <li>Documentos do condutor e do veículo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ETAPAS -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Como o caso é tratado</span>
+      <h2>Etapas, com calma e transparência</h2>
+    </div>
+    <ol class="flow flow--5">
+      <li class="flow__step"><span class="flow__num">1</span><h3>Registro</h3><p>A ocorrência é reportada e registrada com fotos e descrição.</p></li>
+      <li class="flow__step"><span class="flow__num">2</span><h3>Triagem</h3><p>A equipe classifica o caso e orienta os próximos passos.</p></li>
+      <li class="flow__step"><span class="flow__num">3</span><h3>Análise de contrato e proteção</h3><p>O caso é avaliado conforme o contrato, o plano e as condições.</p></li>
+      <li class="flow__step"><span class="flow__num">4</span><h3>Orçamento ou oficina</h3><p>Encaminhamento para reparo em oficina credenciada ou orçamento, conforme o caso.</p></li>
+      <li class="flow__step"><span class="flow__num">5</span><h3>Resolução</h3><p>Conclusão do caso e, quando previsto, carro reserva conforme disponibilidade.</p></li>
     </ol>
     <p class="note note--center">O resultado de cada caso depende das circunstâncias, do plano e das condições do contrato. Não há promessa de cobertura automática — há um processo sério e transparente.</p>
   </div>
 </section>
 
-<!-- ===== FAQ PROTEÇÃO ===== -->
-<section class="section">
+<!-- FAQ -->
+<section class="section section--surface">
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Dúvidas sobre proteção</span>
       <h2>Perguntas frequentes</h2>
     </div>
     <div class="faq">
-      <details>
-        <summary>É seguro tradicional?</summary>
-        <p>Não exatamente. A NomadDrive combina contrato, vistoria, checklist, caução, suporte e proteção veicular conforme a elegibilidade do veículo. A proteção segue plano, regras e condições — não é uma apólice de seguro tradicional vendida como produto isolado. As condições aplicáveis são sempre confirmadas no contrato.</p>
-      </details>
-      <details>
-        <summary>O que é cota de participação?</summary>
-        <p>É o valor de participação do condutor quando um sinistro coberto acontece e a proteção é acionada — semelhante à "franquia" de um seguro. Varia conforme a categoria do veículo e o plano, e é informada no orçamento e no contrato. Se nada acontecer, não há cota de participação a pagar.</p>
-      </details>
-      <details>
-        <summary>O que a caução cobre?</summary>
-        <p>A caução é uma garantia reembolsável, bloqueada ou depositada no início da locação. Pode cobrir pendências ao fim do período — como multas, pedágios ou danos não cobertos pela proteção. É devolvida se não houver pendências. É diferente da cota de participação: a caução existe sempre; a cota de participação só incide se houver sinistro coberto.</p>
-      </details>
-      <details>
-        <summary>O que acontece em um acidente?</summary>
-        <p>Você aciona o suporte 24/7, registra fotos e faz o boletim de ocorrência quando aplicável. O caso é analisado conforme o contrato e o plano; se for coberto, a proteção é acionada e aplica-se a cota de participação. Buscamos um carro reserva quando previsto e disponível. A equipe acompanha você em cada etapa.</p>
-      </details>
-      <details>
-        <summary>Quem paga multa?</summary>
-        <p>Multas e pedágios gerados durante a locação são de responsabilidade do condutor, conforme o contrato. Multas que chegam após a devolução têm pontuação e cobrança transferidas ao condutor, com cópia do auto de infração — de forma transparente.</p>
-      </details>
-      <details>
-        <summary>E se houver mau uso do veículo?</summary>
-        <p>O uso indevido — como dirigir sob efeito de álcool, participar de competições, trafegar fora de estrada não autorizada, permitir que conduza alguém não cadastrado ou subalugar o carro — pode afastar a proteção e gerar responsabilidade integral do condutor, conforme previsto no contrato. As regras de uso são claras justamente para proteger as duas partes.</p>
-      </details>
+      <details><summary>É seguro tradicional?</summary><p>Não exatamente. A NomadDrive combina contrato, vistoria, checklist, caução, suporte e proteção veicular conforme a elegibilidade do veículo. A proteção segue plano, regras e condições — não é uma apólice de seguro tradicional vendida como produto isolado. As condições aplicáveis são confirmadas no contrato.</p></details>
+      <details><summary>O que é cota de participação?</summary><p>É o valor de participação do condutor quando um sinistro coberto acontece e a proteção é acionada — semelhante à "franquia" de um seguro. Varia conforme a categoria do veículo e o plano, e é informada no orçamento e no contrato.</p></details>
+      <details><summary>O que a caução cobre?</summary><p>A caução é uma garantia reembolsável, bloqueada ou depositada no início da locação. Pode cobrir pendências ao fim do período — como multas, pedágios ou danos não cobertos. É devolvida se não houver pendências. É diferente da cota de participação.</p></details>
+      <details><summary>O que acontece em um acidente?</summary><p>Você aciona o suporte 24/7, registra fotos e faz o boletim de ocorrência quando aplicável. O caso é analisado conforme o contrato e o plano; se for coberto, a proteção é acionada e aplica-se a cota de participação. Buscamos um carro reserva quando previsto e disponível.</p></details>
+      <details><summary>Quem paga multa?</summary><p>Multas e pedágios gerados durante a locação são de responsabilidade do condutor, conforme o contrato. Multas que chegam após a devolução têm pontuação e cobrança transferidas ao condutor, com cópia do auto de infração.</p></details>
+      <details><summary>E se houver mau uso do veículo?</summary><p>O uso indevido — dirigir sob efeito de álcool, competições, off-road não autorizado, condutor não cadastrado ou subaluguel — pode afastar a proteção e gerar responsabilidade integral do condutor, conforme o contrato.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ===== CTA ===== -->
+<!-- CTA -->
 <section class="cta-final">
   <div class="container">
-    <h2>Quer entender o seu caso?</h2>
-    <p>Cada veículo e cada locação têm condições próprias. Fale com a gente e explicamos com clareza.</p>
+    <h2>Precisa reportar ou tirar uma dúvida?</h2>
+    <p>A equipe acompanha você em cada etapa. Fale com a gente.</p>
     <div class="cta-final__btns">
-      <a href="#" class="btn btn--solid btn--lg" id="ctaWhats">Falar no WhatsApp</a>
+      <a href="#" class="btn btn--solid btn--lg" data-wa="Olá! Preciso reportar um sinistro/ocorrência com um veículo da NomadDrive Brasil.">Reportar sinistro</a>
       <a href="shield-protecao.html" class="btn btn--outline btn--lg">Ver Shield e Proteção</a>
     </div>
   </div>
@@ -190,7 +207,7 @@
         <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
         <span class="brand__name">NomadDrive <span>Brasil</span></span>
       </a>
-      <p>Aluguel mensal de carro em Uberlândia-MG. Site informativo — proteção, caução, seguro e condições confirmados individualmente por contrato.</p>
+      <p>Aluguel mensal de carro em Uberlândia-MG. Site informativo — proteção, caução e condições confirmados individualmente por contrato.</p>
     </div>
     <div class="footer__col">
       <h4>Proteção</h4>
@@ -207,7 +224,7 @@
     </div>
     <div class="footer__col">
       <h4>Contato</h4>
-      <a href="#" id="footerWhats" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#" data-wa="Olá! Tenho dúvidas sobre segurança e sinistros na NomadDrive Brasil.">WhatsApp</a>
       <a href="mailto:contato@nomaddrive.com.br">contato@nomaddrive.com.br</a>
       <a href="index.html#orcamento">Pedir orçamento</a>
     </div>
@@ -217,18 +234,10 @@
   </div>
 </footer>
 
-<a href="#" class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+<a href="#" class="wa-float" data-wa="Olá! Tenho dúvidas sobre segurança e sinistros na NomadDrive Brasil." aria-label="Falar no WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.042zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
 </a>
 
 <script src="script.js"></script>
-<script>
-  (function () {
-    var msg = "Olá! Tenho dúvidas sobre segurança e sinistros na NomadDrive Brasil.";
-    var link = "https://wa.me/" + (typeof WA_PHONE !== "undefined" ? WA_PHONE : "5500000000000") + "?text=" + encodeURIComponent(msg);
-    var c = document.getElementById("ctaWhats");
-    if (c) c.href = link;
-  })();
-</script>
 </body>
 </html>

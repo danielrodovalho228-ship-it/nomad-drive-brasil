@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NomadDrive Brasil — Aluguel mensal de carro em Uberlândia</title>
-<meta name="description" content="Aluguel mensal de carro em Uberlândia-MG, direto com proprietários verificados. Carros para longa temporada (30 dias ou mais) com contrato, vistoria, seguro e preço confirmado antes da reserva." />
-<meta name="keywords" content="aluguel mensal de carro em Uberlândia, aluguel de carro por mês, carro para longa temporada, locação mensal de veículo, renda passiva com carro parado" />
+<meta name="description" content="Aluguel mensal de carro em Uberlândia-MG com operação verificada: contrato, vistoria, checklist e proteção. Alugue, cadastre seu carro ou indique e ganhe crédito." />
+<meta name="keywords" content="aluguel mensal de carro em Uberlândia, aluguel de carro por mês, carro para longa temporada, renda passiva com carro parado" />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="NomadDrive Brasil — Aluguel mensal de carro em Uberlândia" />
-<meta property="og:description" content="Conectamos quem precisa de carro por 30 dias ou mais a veículos verificados de proprietários locais. Contrato, vistoria, seguro e suporte." />
+<meta property="og:description" content="Alugue, cadastre ou indique com uma operação verificada. Contrato, vistoria, checklist e proteção." />
 <meta property="og:image" content="images/hero.jpg" />
 <meta property="og:locale" content="pt_BR" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,26 +19,23 @@
 </head>
 <body>
 
-<!-- ============ HEADER / NAVBAR ============ -->
+<!-- ============ HEADER ============ -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
     <a href="#inicio" class="brand" aria-label="NomadDrive Brasil — início">
       <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
       <span class="brand__name">NomadDrive <span>Brasil</span></span>
     </a>
-
     <nav class="nav__links" aria-label="Navegação principal">
       <a href="#inicio">Início</a>
-      <a href="#frota">Alugar</a>
-      <a href="#ganhe">Ganhe com seu carro</a>
-      <a href="#parceiro">Parceiros</a>
-      <a href="#oficinas">Oficinas</a>
+      <a href="#como">Como funciona</a>
+      <a href="#frota">Frota</a>
       <a href="shield-protecao.html">Proteção</a>
-      <a href="seguranca-sinistros.html">Segurança/Sinistros</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="oficinas.html">Oficinas</a>
+      <a href="parceiros.html">Parceiros</a>
       <a href="#faq">FAQ</a>
-      <a href="admin.html">Admin</a>
     </nav>
-
     <div class="nav__actions">
       <a href="#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
       <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
@@ -48,25 +45,34 @@
   </div>
 </header>
 
-<!-- ============ MOBILE DRAWER ============ -->
+<!-- ============ MOBILE DRAWER (app-like) ============ -->
 <div class="drawer-overlay" id="drawerOverlay" hidden></div>
 <aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
   <div class="drawer__head">
-    <span class="drawer__title">Menu</span>
+    <span class="drawer__title">O que você quer fazer?</span>
     <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
   </div>
   <nav class="drawer__nav">
-    <a href="#inicio" class="drawer__link">Início</a>
-    <a href="#frota" class="drawer__cta drawer__cta--primary">Alugar um carro</a>
-    <a href="#ganhe" class="drawer__cta">Ganhe com seu carro</a>
-    <a href="#parceiro" class="drawer__cta">Parceiros</a>
-    <a href="#oficinas" class="drawer__link">Oficinas</a>
-    <a href="shield-protecao.html" class="drawer__link">Proteção</a>
-    <a href="seguranca-sinistros.html" class="drawer__link">Segurança / Sinistros</a>
-    <a href="#faq" class="drawer__link">FAQ</a>
-    <a href="admin.html" class="drawer__link">Admin</a>
+    <a href="#orcamento" class="drawer__cta drawer__cta--primary">
+      <strong>Alugar um carro</strong><span>Orçamento, requisitos e retirada</span>
+    </a>
+    <a href="proprietarios.html" class="drawer__cta">
+      <strong>Adicionar meu veículo</strong><span>Termos, simulação e checklist</span>
+    </a>
+    <a href="parceiros.html" class="drawer__cta">
+      <strong>Indicar e ganhar crédito</strong><span>Programa de parceiros</span>
+    </a>
+    <a href="oficinas.html" class="drawer__cta">
+      <strong>Sou oficina</strong><span>Credenciamento e checklist</span>
+    </a>
+    <a href="shield-protecao.html" class="drawer__cta">
+      <strong>Proteção e sinistros</strong><span>Shield, caução e cota</span>
+    </a>
+    <a href="#como" class="drawer__link">Como funciona</a>
+    <a href="#frota" class="drawer__link">Ver a frota</a>
+    <a href="#faq" class="drawer__link">Dúvidas frequentes</a>
   </nav>
-  <a href="#" class="drawer__whats" id="drawerWhats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  <a href="#" class="drawer__whats" data-wa="Olá! Vim pelo site da NomadDrive Brasil e quero falar sobre aluguel mensal de carro.">Falar no WhatsApp</a>
 </aside>
 
 <main>
@@ -76,17 +82,17 @@
   <div class="container hero__inner">
     <div class="hero__copy">
       <span class="badge">Aluguel mensal · Uberlândia-MG</span>
-      <h1>Aluguel mensal de carro em Uberlândia, direto com proprietários verificados.</h1>
-      <p class="hero__sub">Conectamos pessoas que precisam de carro por 30 dias ou mais a veículos bem cuidados de donos locais — com contrato, vistoria, suporte e preço confirmado antes da reserva.</p>
+      <h1>Alugue, cadastre ou indique com uma operação verificada.</h1>
+      <p class="hero__sub">Aluguel mensal de carro em Uberlândia, com contrato, vistoria, checklist e proteção. Conectamos quem precisa de um carro por 30 dias ou mais a veículos verificados de proprietários locais.</p>
       <div class="hero__cta">
-        <a href="#orcamento" class="btn btn--solid btn--lg">Pedir orçamento</a>
-        <a href="#ganhe" class="btn btn--outline btn--lg">Tenho um carro para alugar</a>
+        <a href="#orcamento" class="btn btn--solid btn--lg">Simular orçamento</a>
+        <a href="proprietarios.html" class="btn btn--outline btn--lg">Adicionar meu veículo</a>
       </div>
       <ul class="hero__badges">
-        <li>📍 Uberlândia-MG</li>
         <li>📄 Contrato e vistoria</li>
-        <li>💬 Atendimento por WhatsApp</li>
-        <li>✅ Disponibilidade sob confirmação</li>
+        <li>✅ Veículos aprovados</li>
+        <li>🛡️ Proteção por contrato</li>
+        <li>💬 Atendimento humano</li>
       </ul>
     </div>
     <div class="hero__visual">
@@ -95,27 +101,89 @@
   </div>
 </section>
 
-<!-- ============ QUICK PATHS ============ -->
+<!-- ============ BANNERS ROTATIVOS ============ -->
+<section class="banners-section" aria-label="Destaques">
+  <div class="container">
+    <div class="banner-rail" id="bannerRail">
+      <article class="banner">
+        <div class="banner__body">
+          <span class="banner__eyebrow">Operação verificada</span>
+          <h2>Contrato, vistoria, checklist e proteção</h2>
+          <p>Cada locação passa por contrato, verificação de documentos e vistoria com foto e vídeo. Sem balcão, mas com seriedade.</p>
+          <a href="#como" class="btn btn--solid btn--sm">Como funciona</a>
+        </div>
+      </article>
+      <article class="banner banner--alt">
+        <div class="banner__body">
+          <span class="banner__eyebrow">Ganhe com seu carro</span>
+          <h2>Tem um carro parado? Coloque para render.</h2>
+          <p>Simule uma faixa de ganho estimada. A renda não é garantida e o veículo passa por aprovação documental e técnica.</p>
+          <a href="proprietarios.html" class="btn btn--solid btn--sm">Cadastrar meu veículo</a>
+        </div>
+      </article>
+      <article class="banner banner--alt2">
+        <div class="banner__body">
+          <span class="banner__eyebrow">Programa de parceiros</span>
+          <h2>Indique pessoas e acompanhe seus créditos</h2>
+          <p>Indique locatários, proprietários ou empresas. Os créditos são liberados após a validação real da indicação.</p>
+          <a href="parceiros.html" class="btn btn--solid btn--sm">Ser parceiro</a>
+        </div>
+      </article>
+      <article class="banner banner--alt3">
+        <div class="banner__body">
+          <span class="banner__eyebrow">Proteção e sinistros</span>
+          <h2>Entenda a proteção antes de reservar</h2>
+          <p>Shield, caução e cota de participação são coisas diferentes. Explicamos tudo, sem promessa absoluta.</p>
+          <a href="shield-protecao.html" class="btn btn--solid btn--sm">Ver proteção</a>
+        </div>
+      </article>
+    </div>
+    <div class="banner-ctrls">
+      <button type="button" class="banner-arrow" id="bannerPrev" aria-label="Banner anterior">‹</button>
+      <div class="banner-dots" id="bannerDots"></div>
+      <button type="button" class="banner-arrow" id="bannerNext" aria-label="Próximo banner">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARDS DE DECISÃO ============ -->
 <section class="section paths-section" aria-label="Escolha seu caminho">
   <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Por onde começar</span>
+      <h2>Escolha o seu caminho</h2>
+      <p>Cada perfil tem uma página própria, com as regras e os passos certos.</p>
+    </div>
     <div class="paths">
       <a href="#orcamento" class="path-card">
         <span class="path-card__ico" aria-hidden="true">🚗</span>
-        <h3>Quero alugar um carro</h3>
-        <p>Precisa de um carro por um mês ou mais? Peça um orçamento sem compromisso.</p>
+        <h3>Quero alugar</h3>
+        <p>Ver categorias, requisitos e pedir um orçamento sem compromisso.</p>
         <span class="path-card__go">Pedir orçamento →</span>
       </a>
-      <a href="#ganhe" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">💰</span>
-        <h3>Quero colocar meu carro para render</h3>
-        <p>Carro parado pode virar renda. Veja como funciona e simule seus ganhos.</p>
+      <a href="proprietarios.html" class="path-card">
+        <span class="path-card__ico" aria-hidden="true">🔑</span>
+        <h3>Tenho um carro</h3>
+        <p>Aceitar as regras, simular ganhos e iniciar a análise do veículo.</p>
         <span class="path-card__go">Cadastrar meu carro →</span>
       </a>
-      <a href="#parceiro" class="path-card">
+      <a href="parceiros.html" class="path-card">
         <span class="path-card__ico" aria-hidden="true">🤝</span>
-        <h3>Quero indicar e ser parceiro</h3>
-        <p>Indique pessoas e proprietários para a rede e acumule pontos e crédito.</p>
-        <span class="path-card__go">Tornar-se parceiro →</span>
+        <h3>Sou parceiro</h3>
+        <p>Indicar locatários, proprietários ou empresas e ganhar crédito.</p>
+        <span class="path-card__go">Quero indicar →</span>
+      </a>
+      <a href="oficinas.html" class="path-card">
+        <span class="path-card__ico" aria-hidden="true">🔧</span>
+        <h3>Sou oficina</h3>
+        <p>Credenciar a oficina e emitir o checklist técnico padronizado.</p>
+        <span class="path-card__go">Solicitar credenciamento →</span>
+      </a>
+      <a href="shield-protecao.html" class="path-card">
+        <span class="path-card__ico" aria-hidden="true">🛡️</span>
+        <h3>Proteção e sinistros</h3>
+        <p>Entender Shield, caução, cota de participação e o que fazer em sinistro.</p>
+        <span class="path-card__go">Ver proteção →</span>
       </a>
     </div>
   </div>
@@ -125,7 +193,7 @@
 <section class="trustbar" aria-label="Garantias">
   <div class="container trustbar__inner">
     <div class="trustbar__item"><strong>Contrato</strong><span>de locação registrado</span></div>
-    <div class="trustbar__item"><strong>Seguro</strong><span>para uso em locação</span></div>
+    <div class="trustbar__item"><strong>Veículos aprovados</strong><span>análise documental e técnica</span></div>
     <div class="trustbar__item"><strong>Vistoria</strong><span>com foto e vídeo</span></div>
     <div class="trustbar__item"><strong>Atendimento humano</strong><span>por WhatsApp</span></div>
     <div class="trustbar__item"><strong>Disponibilidade</strong><span>sob confirmação</span></div>
@@ -141,26 +209,10 @@
       <p>Quatro passos, sem balcão e sem letras miúdas. Uma pessoa de verdade do outro lado da conversa.</p>
     </div>
     <ol class="steps">
-      <li class="step">
-        <span class="step__num">1</span>
-        <h3>Conte o que você precisa</h3>
-        <p>Datas, cidade de retirada, duração e a categoria de carro. Você pede um orçamento sem compromisso.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">2</span>
-        <h3>Receba a proposta por escrito</h3>
-        <p>Confirmamos disponibilidade e enviamos preço, caução, seguro e condições — tudo claro, antes de qualquer reserva.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">3</span>
-        <h3>Assine e garanta</h3>
-        <p>Contrato de locação, verificação de CNH e documentos, caução e vistoria com fotos e vídeo na retirada.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">4</span>
-        <h3>Retire e use</h3>
-        <p>Entrega em mãos em Uberlândia. Suporte por WhatsApp durante todo o período da locação.</p>
-      </li>
+      <li class="step"><span class="step__num">1</span><h3>Conte o que você precisa</h3><p>Datas, cidade de retirada, duração e a categoria de carro. Você pede um orçamento sem compromisso.</p></li>
+      <li class="step"><span class="step__num">2</span><h3>Receba a proposta por escrito</h3><p>Confirmamos disponibilidade e enviamos preço, caução, proteção e condições — tudo claro, antes de qualquer reserva.</p></li>
+      <li class="step"><span class="step__num">3</span><h3>Assine e garanta</h3><p>Contrato de locação, verificação de CNH e documentos, caução e vistoria com foto e vídeo na retirada.</p></li>
+      <li class="step"><span class="step__num">4</span><h3>Retire e use</h3><p>Entrega em mãos em Uberlândia. Suporte por WhatsApp durante todo o período da locação.</p></li>
     </ol>
   </div>
 </section>
@@ -171,9 +223,8 @@
     <div class="section__head">
       <span class="eyebrow">Frota e categorias</span>
       <h2>Exemplos de veículos da rede</h2>
-      <p>Carros bem cuidados de proprietários locais, organizados por categoria. <strong>Estes são exemplos</strong> — disponibilidade, preço final, caução e seguro são confirmados individualmente por orçamento.</p>
+      <p>Carros de proprietários locais, organizados por categoria. <strong>São exemplos</strong> — disponibilidade, preço final, caução e proteção são confirmados individualmente por orçamento e contrato.</p>
     </div>
-
     <div class="fleet-filters" id="fleetFilters" role="tablist">
       <button class="fleet-filter is-active" data-filter="all">Todos</button>
       <button class="fleet-filter" data-filter="A">Econômico</button>
@@ -181,21 +232,8 @@
       <button class="fleet-filter" data-filter="C">Premium</button>
       <button class="fleet-filter" data-filter="D">Luxo</button>
     </div>
-
-    <div class="fleet" id="fleet">
-      <!-- cards injected here by script.js from car-data.js -->
-    </div>
-
-    <p class="note note--center">Preços estimados calculados como percentual da tabela FIPE por categoria. O valor final é sempre confirmado por escrito no orçamento.</p>
-
-    <div class="aspiracional">
-      <div class="aspiracional__tag">Futuro / aspiracional</div>
-      <div class="aspiracional__body">
-        <h3>Tesla Cybertruck</h3>
-        <p>Não faz parte da operação inicial. É uma referência do que a rede pode oferecer no futuro, conforme cresce. Sem importação oficial no Brasil — disponibilidade e condições sob consulta.</p>
-        <a href="car.html?id=cybertruck" class="link-arrow">Ver detalhes →</a>
-      </div>
-    </div>
+    <div class="fleet" id="fleet"></div>
+    <p class="note note--center">Preços estimados como percentual da tabela FIPE por categoria. O valor final é sempre confirmado por escrito no orçamento.</p>
   </div>
 </section>
 
@@ -203,370 +241,127 @@
 <section class="section section--surface" id="precos">
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Preços e orçamento</span>
+      <span class="eyebrow">Preços</span>
       <h2>Faixas de referência por categoria</h2>
-      <p>Aluguel mensal, com impostos. Estadias mais longas têm desconto. O valor final depende das datas, da categoria, da quilometragem, do seguro, da disponibilidade e da análise do condutor.</p>
+      <p>O valor final depende de datas, categoria, quilometragem, caução, proteção, disponibilidade e da análise do condutor — e é confirmado por escrito.</p>
     </div>
-
     <div class="tiers">
-      <article class="tier">
-        <span class="tier__cat">Econômico</span>
-        <div class="tier__price">R$ 1.400 – 2.000<small>/mês*</small></div>
-        <p class="tier__desc">Hatch compacto, econômico no consumo. Ideal para uso urbano e quem quer o menor custo.</p>
-      </article>
-      <article class="tier tier--featured">
-        <span class="tier__cat">Confort</span>
-        <div class="tier__price">R$ 2.000 – 3.600<small>/mês*</small></div>
-        <p class="tier__desc">Sedãs e hatches médios, automáticos. O equilíbrio entre conforto e custo — categoria mais procurada.</p>
-      </article>
-      <article class="tier">
-        <span class="tier__cat">Premium</span>
-        <div class="tier__price">R$ 3.500 – 5.500<small>/mês*</small></div>
-        <p class="tier__desc">SUVs e sedãs premium. Mais espaço, conforto de estrada e posição de dirigir elevada.</p>
-      </article>
-      <article class="tier">
-        <span class="tier__cat">Luxo</span>
-        <div class="tier__price">Sob consulta</div>
-        <p class="tier__desc">Alto padrão, para quem quer uma experiência diferenciada. Condições avaliadas caso a caso.</p>
-      </article>
+      <article class="tier"><span class="tier__cat">Econômico</span><div class="tier__price">R$ 1.400 – 2.000<small>/mês*</small></div><p class="tier__desc">Hatch compacto, econômico no consumo. Ideal para uso urbano.</p></article>
+      <article class="tier tier--featured"><span class="tier__cat">Confort</span><div class="tier__price">R$ 2.000 – 3.600<small>/mês*</small></div><p class="tier__desc">Sedãs e hatches médios, automáticos. Categoria mais procurada.</p></article>
+      <article class="tier"><span class="tier__cat">Premium</span><div class="tier__price">R$ 3.500 – 5.500<small>/mês*</small></div><p class="tier__desc">SUVs e sedãs premium. Mais espaço e conforto de estrada.</p></article>
+      <article class="tier"><span class="tier__cat">Luxo</span><div class="tier__price">Sob consulta</div><p class="tier__desc">Alto padrão. Condições avaliadas caso a caso.</p></article>
     </div>
-
     <div class="discount-strip">
       <span><strong>1 mês</strong> · valor cheio da categoria</span>
       <span><strong>2 meses</strong> · cerca de 5% de desconto por mês</span>
       <span><strong>3+ meses</strong> · cerca de 10% de desconto · condições customizadas</span>
     </div>
-
-    <p class="note note--center">* Valores são exemplos de referência. O preço final depende de datas, categoria, quilometragem, seguro, disponibilidade e análise do condutor — e é sempre confirmado por escrito.</p>
-
-    <div class="precos-cta">
-      <a href="#orcamento" class="btn btn--solid btn--lg">Pedir meu orçamento</a>
-    </div>
+    <p class="note note--center">* Valores são exemplos de referência. Sujeitos a disponibilidade, categoria, caução, análise e contrato.</p>
+    <div class="precos-cta"><a href="#orcamento" class="btn btn--solid btn--lg">Pedir meu orçamento</a></div>
   </div>
 </section>
 
-<!-- ============ SEGURANÇA ============ -->
+<!-- ============ SEGURANÇA (resumo) ============ -->
 <section class="section" id="seguranca">
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Segurança e confiança</span>
-      <h2>Como protegemos os dois lados</h2>
-      <p>Uma operação enxuta também pode ser séria. Veja como o risco é tratado para quem aluga e para quem é dono.</p>
+      <span class="eyebrow">Segurança e proteção</span>
+      <h2>Uma camada séria de proteção</h2>
+      <p>Proteção conforme plano, contrato, elegibilidade e análise do caso — não uma promessa ilimitada.</p>
     </div>
-
     <div class="cards cards--3">
-      <article class="card">
-        <h3>Seguro para locação</h3>
-        <p>Cada carro tem seguro para uso em locação — não apenas apólice pessoal. Coberturas e franquia detalhadas abaixo.</p>
-      </article>
-      <article class="card">
-        <h3>Contrato claro</h3>
-        <p>Contrato de locação por escrito, verificação de CNH e documentos, vistoria com foto e vídeo na retirada e na devolução.</p>
-      </article>
-      <article class="card">
-        <h3>Rastreador GPS</h3>
-        <p>Os veículos contam com rastreador para recuperação e tranquilidade dos dois lados — nunca usado para monitorar uso rotineiro.</p>
-      </article>
-      <article class="card">
-        <h3>Caução reembolsável</h3>
-        <p>Caução definida por categoria, paga por Pix ou pré-autorização no cartão, devolvida após a vistoria de devolução.</p>
-      </article>
-      <article class="card">
-        <h3>Linha 24/7 para sinistros</h3>
-        <p>Telefone de emergência disponível 24h para acidentes, panes e assistência. Informado na retirada e no contrato.</p>
-      </article>
-      <article class="card">
-        <h3>Carro reserva</h3>
-        <p>Em caso de problema mecânico ou sinistro, organizamos um carro substituto da mesma categoria sempre que possível.</p>
-      </article>
+      <article class="card"><h3>Proteção veicular</h3><p>Proteção conforme o plano e a elegibilidade do veículo: colisão, terceiros, roubo/furto e mais.</p></article>
+      <article class="card"><h3>Contrato e vistoria</h3><p>Contrato por escrito, verificação de CNH e vistoria com foto e vídeo na retirada e devolução.</p></article>
+      <article class="card"><h3>Sinistros com processo</h3><p>Fluxo claro para acidentes: suporte, registro, análise e acionamento da proteção.</p></article>
     </div>
-
-    <div class="cover-table">
-      <h3>Cobertura do seguro — resumo</h3>
-      <table>
-        <thead>
-          <tr><th>Cobertura</th><th class="ct-mid">Incluso</th><th>Franquia padrão</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Danos por colisão no carro</td><td class="ct-mid">✓</td><td>R$ 3.500 – 5.000</td></tr>
-          <tr><td>Danos a terceiros (corporais + materiais)</td><td class="ct-mid">✓</td><td>Conforme apólice</td></tr>
-          <tr><td>Roubo / perda total</td><td class="ct-mid">✓</td><td>Conforme contrato</td></tr>
-          <tr><td>Incêndio / eventos da natureza</td><td class="ct-mid">✓</td><td>Conforme contrato</td></tr>
-          <tr><td>Vidros, retrovisores e faróis</td><td class="ct-mid">✓</td><td>Franquia reduzida</td></tr>
-          <tr><td>Assistência 24h + guincho</td><td class="ct-mid">✓</td><td>Incluso</td></tr>
-        </tbody>
-      </table>
-      <p class="note">Coberturas e valores finais de franquia por categoria são confirmados no contrato. O condutor permanece responsável por pedágios, multas e danos decorrentes de uso indevido (álcool, racha, off-road). Condições sujeitas à análise da seguradora parceira.</p>
+    <div class="precos-cta">
+      <a href="shield-protecao.html" class="btn btn--solid">Ver Shield e Proteção</a>
+      <a href="seguranca-sinistros.html" class="btn btn--outline">Segurança e Sinistros</a>
     </div>
   </div>
 </section>
 
-<!-- ============ GANHE COM SEU CARRO ============ -->
+<!-- ============ GANHE (teaser) ============ -->
 <section class="section section--surface" id="ganhe">
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Ganhe com seu carro</span>
-      <h2>Transforme um carro parado em renda</h2>
-      <p>Tem um carro que fica a maior parte do tempo na garagem? Coloque-o na rede e gere renda — você aprova cada locação e segue no controle.</p>
-    </div>
-
-    <div class="ganhe-grid">
-      <div class="ganhe-elig">
-        <h3>Quem pode cadastrar</h3>
-        <ul class="checklist">
-          <li>Carro com até cerca de 8 anos, bem conservado</li>
-          <li>Documentos em dia (CRLV, IPVA, licenciamento)</li>
-          <li>Quilometragem preferencialmente abaixo de 150 mil km</li>
-          <li>Disponibilidade de pelo menos alguns meses por ano</li>
-          <li>Disposição para instalar rastreador e fazer vistoria</li>
-        </ul>
-        <a href="#orcamento" class="btn btn--solid" data-form-tab="proprietario">Cadastrar meu carro</a>
+    <div class="teaser">
+      <div class="teaser__copy">
+        <span class="eyebrow">Ganhe com seu carro</span>
+        <h2>Tem um carro parado? Pode virar renda.</h2>
+        <p>Coloque seu veículo na rede. A renda é estimada, não garantida, e o carro entra na frota só após aprovação documental, técnica e operacional. Veja as regras, simule uma faixa de ganho e inicie a análise.</p>
+        <a href="proprietarios.html" class="btn btn--solid">Quero cadastrar meu carro</a>
       </div>
-
-      <ol class="owner-steps">
-        <li><span class="owner-steps__n">1</span><div><strong>Verifique a elegibilidade</strong><p>Ano, estado de conservação e documentos do veículo.</p></div></li>
-        <li><span class="owner-steps__n">2</span><div><strong>Simule sua renda</strong><p>Use o simulador abaixo: categoria, FIPE e meses por ano.</p></div></li>
-        <li><span class="owner-steps__n">3</span><div><strong>Envie os documentos</strong><p>CRLV, fotos do carro e histórico recente de manutenção.</p></div></li>
-        <li><span class="owner-steps__n">4</span><div><strong>Rastreador e vistoria</strong><p>Instalação do rastreador e vistoria mecânica inicial.</p></div></li>
-        <li><span class="owner-steps__n">5</span><div><strong>Receba por locação</strong><p>Repasse por Pix com extrato claro a cada locação concluída.</p></div></li>
-      </ol>
+      <ul class="teaser__list">
+        <li>Aceite das regras antes de simular</li>
+        <li>Simulador de ganhos em faixa estimada</li>
+        <li>Checklist técnico em oficina credenciada</li>
+        <li>Aprovação operacional e publicação na frota</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- ============ SIMULADOR ============ -->
-<section class="section" id="simulador">
+<!-- ============ PARCEIROS (teaser) ============ -->
+<section class="section" id="parceiro">
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Simulador de ganhos</span>
-      <h2>Estime quanto seu carro pode render</h2>
-      <p>Uma estimativa de referência — não é garantia de renda. Os números reais dependem da demanda, da categoria e da sua disponibilidade.</p>
-    </div>
-
-    <div class="sim">
-      <div class="sim__controls">
-        <div class="sim-field">
-          <label>Categoria do carro</label>
-          <div class="tier-picker" id="tierPicker">
-            <button type="button" class="tier-opt" data-tier="A">Econômico</button>
-            <button type="button" class="tier-opt is-active" data-tier="B">Confort</button>
-            <button type="button" class="tier-opt" data-tier="C">Premium</button>
-            <button type="button" class="tier-opt" data-tier="D">Luxo</button>
-          </div>
-        </div>
-        <div class="sim-field">
-          <label for="simFipe">Valor FIPE aproximado do carro <span class="opt">(opcional)</span></label>
-          <input type="number" id="simFipe" inputmode="numeric" placeholder="ex: 57000" />
-        </div>
-        <div class="sim-field">
-          <label for="simMonths">Meses alugados por ano: <strong id="simMonthsVal">8</strong></label>
-          <input type="range" id="simMonths" min="1" max="12" step="1" value="8" />
-        </div>
-        <div class="sim-field">
-          <label for="simFee">Taxa da plataforma: <strong id="simFeeVal">10%</strong></label>
-          <input type="range" id="simFee" min="8" max="20" step="1" value="10" />
-        </div>
+    <div class="teaser teaser--rev">
+      <div class="teaser__copy">
+        <span class="eyebrow">Programa de parceiros</span>
+        <h2>Indique e ganhe crédito</h2>
+        <p>Conhece quem precisa de carro ou quem tem carro parado? Indique para a rede. Cada tipo de parceiro tem benefícios próprios — e os créditos são liberados após a validação real da indicação.</p>
+        <a href="parceiros.html" class="btn btn--solid">Conhecer o programa</a>
       </div>
-
-      <div class="sim__results">
-        <div class="sim-row"><span>Preço mensal de referência</span><strong id="simPrice">—</strong></div>
-        <div class="sim-row"><span>Receita bruta / ano</span><strong id="simGross">—</strong></div>
-        <div class="sim-row sim-row--neg"><span>Taxa da plataforma</span><strong id="simFeeOut">—</strong></div>
-        <div class="sim-row sim-row--neg"><span>Rastreador (estimado)</span><strong id="simTracker">—</strong></div>
-        <div class="sim-row sim-row--cash"><span>Cash no seu bolso / ano</span><strong id="simCash">—</strong></div>
-
-        <div class="sim-divider">Visão opcional — descontando os custos anuais do carro (você pagaria mesmo com o carro parado)</div>
-        <div class="sim-row sim-row--neg"><span>Custos do carro (IPVA, seguro, manutenção, desgaste)</span><strong id="simCosts">—</strong></div>
-        <div class="sim-row sim-row--net"><span>Resultado líquido estimado / ano</span><strong id="simNet">—</strong></div>
-
-        <div class="sim-scenarios">
-          <div class="sim-scn" id="scnCons"><span>Conservador</span><strong>—</strong></div>
-          <div class="sim-scn" id="scnReal"><span>Realista</span><strong>—</strong></div>
-          <div class="sim-scn" id="scnOtim"><span>Otimista</span><strong>—</strong></div>
-        </div>
-      </div>
-    </div>
-    <p class="note note--center">Estimativa de referência, sem garantia de renda. Valores de rastreador e custos do carro são aproximados e confirmados no cadastro.</p>
-  </div>
-</section>
-
-<!-- ============ PARCEIRO ============ -->
-<section class="section section--surface" id="parceiro">
-  <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Seja parceiro / indique</span>
-      <h2>Indique pessoas e ganhe com a rede</h2>
-      <p>Conhece quem precisa de carro ou quem tem carro parado? Indique para a rede e acumule pontos que viram crédito.</p>
-    </div>
-
-    <div class="cards cards--3">
-      <article class="card">
-        <h3>1. Indique</h3>
-        <p>Apresente um locatário ou um proprietário para a NomadDrive. Sem precisar ter carro — basta a sua rede de contatos.</p>
-      </article>
-      <article class="card">
-        <h3>2. Acumule pontos</h3>
-        <p>Cada indicação que vira locação concluída gera pontos para você, conforme o programa de parceiros.</p>
-      </article>
-      <article class="card">
-        <h3>3. Vire crédito</h3>
-        <p>Os pontos se transformam em crédito para usar em uma locação ou em condições especiais.</p>
-      </article>
-    </div>
-
-    <div class="parceiro-rules">
-      <strong>Regras e limites</strong>
-      <p>Pontos são creditados apenas após a locação indicada ser concluída e paga. Há limite de pontos acumulados por período e prazo de validade do crédito. O programa pode ser ajustado a qualquer momento — as regras vigentes são confirmadas no momento da adesão.</p>
-    </div>
-
-    <div class="precos-cta">
-      <a href="#orcamento" class="btn btn--solid btn--lg" data-form-tab="parceiro">Quero ser parceiro</a>
+      <ul class="teaser__list">
+        <li>Pessoa física, empresa, oficina, influenciador e corretor</li>
+        <li>Benefícios e crédito por tipo de parceiro</li>
+        <li>Acompanhamento do status de cada indicação</li>
+        <li>Crédito liberado após a locação concluída</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- ============ OFICINAS ============ -->
-<section class="section" id="oficinas">
+<!-- ============ ORÇAMENTO ============ -->
+<section class="section section--surface" id="orcamento">
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Oficinas parceiras</span>
-      <h2>Uma rede de oficinas credenciadas cuida dos carros</h2>
-      <p>Cada veículo passa por avaliação técnica antes de entrar na rede e tem manutenção acompanhada. As oficinas parceiras são parte importante da confiança da operação.</p>
+      <span class="eyebrow">Pedir orçamento</span>
+      <h2>Conte suas datas — respondemos rápido</h2>
+      <p>Preencha e o WhatsApp abre com tudo pronto para enviar. Sem cadastro, sem compromisso. Se o WhatsApp ainda não estiver ativo, o envio segue por e-mail.</p>
     </div>
-    <ol class="steps">
-      <li class="step">
-        <span class="step__num">1</span>
-        <h3>Credenciamento</h3>
-        <p>Oficinas interessadas passam por um processo de credenciamento, com análise de estrutura e referências.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">2</span>
-        <h3>Checklist técnico</h3>
-        <p>Antes de entrar na rede, o veículo recebe um checklist técnico na oficina credenciada.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">3</span>
-        <h3>Manutenção acompanhada</h3>
-        <p>Revisões e reparos durante o uso são feitos em oficinas da rede, com registro de histórico.</p>
-      </li>
-      <li class="step">
-        <span class="step__num">4</span>
-        <h3>Vistoria e laudos</h3>
-        <p>Apoio em vistorias e laudos quando necessário — inclusive na avaliação de sinistros.</p>
-      </li>
-    </ol>
-    <div class="oficinas-cta">
-      <p>Tem uma oficina e quer fazer parte da rede credenciada?</p>
-      <a href="#" class="btn btn--solid" id="oficinaWhats">Quero credenciar minha oficina</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ORÇAMENTO / FORMULÁRIOS ============ -->
-<section class="section" id="orcamento">
-  <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Fale com a gente</span>
-      <h2>Comece agora — é por WhatsApp</h2>
-      <p>Escolha seu objetivo, preencha os campos e o WhatsApp abre com tudo pronto para enviar. Sem cadastro, sem compromisso.</p>
-    </div>
-
-    <div class="form-tabs" id="formTabs" role="tablist">
-      <button class="form-tab is-active" data-tab="locatario">Quero alugar</button>
-      <button class="form-tab" data-tab="proprietario">Tenho um carro</button>
-      <button class="form-tab" data-tab="parceiro">Quero ser parceiro</button>
-    </div>
-
-    <!-- LOCATÁRIO -->
-    <form class="form is-active" id="form-locatario" data-panel="locatario" novalidate>
+    <form class="form wa-form" id="form-orcamento" data-intent="Quero alugar um carro (pedido de orçamento)" novalidate>
       <div class="form__grid">
         <label class="field"><span>Seu nome *</span><input type="text" name="nome" required /></label>
         <label class="field"><span>WhatsApp ou e-mail *</span><input type="text" name="contato" required /></label>
         <label class="field"><span>Cidade de retirada</span><input type="text" name="cidade" placeholder="Uberlândia-MG" /></label>
         <label class="field"><span>Data de retirada</span><input type="date" name="data" /></label>
         <label class="field"><span>Duração</span>
-          <select name="duracao">
-            <option>1 mês</option><option>2 meses</option><option>3 meses</option>
-            <option>4 a 6 meses</option><option>Mais de 6 meses</option>
-          </select>
+          <select name="duracao"><option>1 mês</option><option>2 meses</option><option>3 meses</option><option>4 a 6 meses</option><option>Mais de 6 meses</option></select>
         </label>
         <label class="field"><span>Categoria desejada</span>
-          <select name="categoria">
-            <option>Econômico</option><option>Confort</option><option>Premium</option><option>Luxo</option><option>Tanto faz</option>
-          </select>
+          <select name="categoria"><option>Econômico</option><option>Confort</option><option>Premium</option><option>Luxo</option><option>Tanto faz</option></select>
         </label>
         <label class="field"><span>Quem indicou? <span class="opt">(opcional)</span></span><input type="text" name="indicacao" /></label>
         <label class="field field--full"><span>Observações <span class="opt">(opcional)</span></span><textarea name="obs" rows="2"></textarea></label>
       </div>
-      <p class="form__err" id="err-locatario" hidden>Preencha seu nome e uma forma de contato.</p>
-      <button type="submit" class="btn btn--solid btn--lg btn--block">Enviar pelo WhatsApp</button>
+      <p class="form__err" id="err-orcamento" hidden>Preencha seu nome e uma forma de contato.</p>
+      <button type="submit" class="btn btn--solid btn--lg btn--block">Enviar pedido de orçamento</button>
     </form>
-
-    <!-- PROPRIETÁRIO -->
-    <form class="form" id="form-proprietario" data-panel="proprietario" novalidate>
-      <div class="form__grid">
-        <label class="field"><span>Seu nome *</span><input type="text" name="nome" required /></label>
-        <label class="field"><span>WhatsApp *</span><input type="text" name="contato" required /></label>
-        <label class="field"><span>Cidade</span><input type="text" name="cidade" placeholder="Uberlândia-MG" /></label>
-        <label class="field"><span>Modelo do carro</span><input type="text" name="modelo" placeholder="ex: Chevrolet Onix" /></label>
-        <label class="field"><span>Ano</span><input type="text" name="ano" inputmode="numeric" placeholder="ex: 2020" /></label>
-        <label class="field"><span>FIPE aproximada <span class="opt">(opcional)</span></span><input type="text" name="fipe" inputmode="numeric" placeholder="ex: R$ 60.000" /></label>
-        <label class="field"><span>Disponibilidade por ano</span>
-          <select name="disponibilidade">
-            <option>O carro fica quase sempre parado</option>
-            <option>Posso disponibilizar boa parte do ano</option>
-            <option>Só alguns meses por ano</option>
-            <option>Só nas minhas férias</option>
-          </select>
-        </label>
-        <label class="field"><span>Uso atual do carro</span>
-          <select name="uso">
-            <option>Praticamente não uso</option>
-            <option>Uso poucas vezes por semana</option>
-            <option>Uso no dia a dia</option>
-          </select>
-        </label>
-      </div>
-      <p class="form__err" id="err-proprietario" hidden>Preencha seu nome e o WhatsApp.</p>
-      <button type="submit" class="btn btn--solid btn--lg btn--block">Enviar pelo WhatsApp</button>
-    </form>
-
-    <!-- PARCEIRO -->
-    <form class="form" id="form-parceiro" data-panel="parceiro" novalidate>
-      <div class="form__grid">
-        <label class="field"><span>Seu nome *</span><input type="text" name="nome" required /></label>
-        <label class="field"><span>WhatsApp *</span><input type="text" name="contato" required /></label>
-        <label class="field"><span>Cidade</span><input type="text" name="cidade" /></label>
-        <label class="field"><span>Tipo de rede de contatos</span>
-          <select name="rede">
-            <option>Amigos e família</option>
-            <option>Clientes / trabalho</option>
-            <option>Redes sociais / criador de conteúdo</option>
-            <option>Corretor, despachante ou área automotiva</option>
-            <option>Outro</option>
-          </select>
-        </label>
-        <label class="field field--full"><span>Como pretende indicar?</span><textarea name="comoindica" rows="2" placeholder="Conte rapidamente como você pretende divulgar"></textarea></label>
-      </div>
-      <p class="form__err" id="err-parceiro" hidden>Preencha seu nome e o WhatsApp.</p>
-      <button type="submit" class="btn btn--solid btn--lg btn--block">Enviar pelo WhatsApp</button>
-    </form>
-
-    <p class="note note--center">Site informativo. Disponibilidade, seguro, caução e preço final são confirmados individualmente por contrato.</p>
+    <p class="note note--center">Site informativo. Disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
   </div>
 </section>
 
 <!-- ============ LOCAL ============ -->
-<section class="section section--surface" id="local">
+<section class="section" id="local">
   <div class="container">
     <div class="local">
       <div class="local__copy">
         <span class="eyebrow">Retirada</span>
         <h2>Retirada em Uberlândia-MG</h2>
-        <p>A entrega é feita em mãos em Uberlândia. O ponto exato é confirmado após a reserva, conforme a disponibilidade e a logística combinadas com você. Encontro no aeroporto pode ser combinado.</p>
+        <p>A entrega é feita em mãos em Uberlândia. O ponto exato é confirmado após a reserva, conforme a disponibilidade e a logística. Encontro no aeroporto pode ser combinado.</p>
         <div class="local__btns">
           <a href="https://www.google.com/maps/place/Uberl%C3%A2ndia,+MG" target="_blank" rel="noopener" class="btn btn--outline">Ver Uberlândia no Google Maps</a>
-          <a href="#orcamento" class="btn btn--solid">Combinar retirada pelo WhatsApp</a>
+          <a href="#orcamento" class="btn btn--solid">Combinar retirada</a>
         </div>
       </div>
       <div class="local__card" aria-hidden="true">
@@ -578,8 +373,8 @@
   </div>
 </section>
 
-<!-- ============ DEPOIMENTOS (placeholder honesto) ============ -->
-<section class="section">
+<!-- ============ DEPOIMENTOS ============ -->
+<section class="section section--surface">
   <div class="container">
     <div class="testi-soon">
       <span class="eyebrow">Depoimentos</span>
@@ -590,43 +385,27 @@
 </section>
 
 <!-- ============ FAQ ============ -->
-<section class="section section--surface" id="faq">
+<section class="section" id="faq">
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Dúvidas frequentes</span>
       <h2>Perguntas e respostas diretas</h2>
     </div>
-
     <div class="faq">
       <h3 class="faq__group">Reserva e requisitos</h3>
-      <details><summary>Preciso de indicação para alugar?</summary><p>Não. Começamos por indicação para crescer com confiança, mas qualquer pessoa com documentos válidos pode pedir um orçamento. Conte sua situação e enviamos os próximos passos.</p></details>
-      <details><summary>Quais são os requisitos do condutor?</summary><p>Idade mínima de 21 anos, CNH válida há pelo menos 2 anos, documento com foto e comprovante de endereço. A aprovação final acontece após análise dos documentos. Condições confirmadas no contrato.</p></details>
-      <details><summary>Posso dirigir com habilitação estrangeira?</summary><p>Em geral, uma habilitação estrangeira válida é aceita no Brasil para visitantes, muitas vezes acompanhada da permissão internacional. Para estadias longas pode ser necessária tradução. Confirmamos o requisito exato antes da retirada.</p></details>
+      <details><summary>Preciso de indicação para alugar?</summary><p>Não. Qualquer pessoa com documentos válidos pode pedir um orçamento. Conte sua situação e enviamos os próximos passos.</p></details>
+      <details><summary>Quais são os requisitos do condutor?</summary><p>Idade mínima de 21 anos, CNH válida há pelo menos 2 anos, documento com foto e comprovante de endereço. A aprovação final acontece após análise documental — condições confirmadas no contrato.</p></details>
+      <details><summary>Quais cidades vocês atendem?</summary><p>A retirada é em Uberlândia-MG. A partir daí o carro é seu para viajar pelo Brasil dentro do contrato.</p></details>
 
-      <h3 class="faq__group">Caução e pagamento</h3>
-      <details><summary>Como funciona a caução?</summary><p>A caução é reembolsável e definida por categoria. Pode ser paga por Pix ou por pré-autorização no cartão de crédito. É devolvida após a vistoria de devolução, descontados eventuais pendências (multas, pedágios, danos). Valores finais confirmados no contrato.</p></details>
-      <details><summary>Quais formas de pagamento e parcelamento?</summary><p>Pix, transferência ou cartão de crédito. O parcelamento pode ser avaliado conforme a duração da locação. As condições são combinadas no orçamento e registradas por escrito.</p></details>
-      <details><summary>Qual a política de cancelamento?</summary><p>Cancelamento com boa antecedência tem reembolso integral; prazos mais curtos podem ter retenção parcial. Casos de força maior (saúde, problemas com documentos) são avaliados individualmente. As regras finais constam no contrato e na Política de Cancelamento.</p></details>
+      <h3 class="faq__group">Caução, proteção e pagamento</h3>
+      <details><summary>Como funciona a caução?</summary><p>A caução é reembolsável, definida por categoria, paga por Pix ou pré-autorização no cartão. É devolvida após a vistoria de devolução, descontadas eventuais pendências. Valores finais no contrato.</p></details>
+      <details><summary>O aluguel tem proteção/seguro?</summary><p>Há proteção veicular conforme plano, contrato, elegibilidade e análise do caso. Não é uma promessa ilimitada. Veja a página de <a href="shield-protecao.html">Shield e Proteção</a>.</p></details>
+      <details><summary>Quais formas de pagamento?</summary><p>Pix, transferência ou cartão de crédito. As condições são combinadas no orçamento e registradas por escrito.</p></details>
 
-      <h3 class="faq__group">Seguro e sinistros</h3>
-      <details><summary>O que o seguro cobre?</summary><p>Os carros têm seguro para uso em locação cobrindo colisão, danos a terceiros, roubo, incêndio e eventos da natureza, além de assistência 24h. Há franquia (valor de participação) que varia por categoria. Coberturas e franquia exatas constam no contrato, conforme a apólice da seguradora parceira.</p></details>
-      <details><summary>E se eu tiver um acidente?</summary><p>Acione primeiro a linha de emergência 24/7 informada no contrato. Orientamos sobre o boletim de ocorrência, registro de fotos e abertura do sinistro com a seguradora. Sempre que possível, organizamos um carro reserva. Responsabilidades e franquia seguem o contrato.</p></details>
-      <details><summary>Existe carro reserva?</summary><p>Em caso de problema mecânico ou sinistro, buscamos um carro substituto da mesma categoria sempre que houver disponibilidade na rede. As condições são confirmadas caso a caso.</p></details>
-
-      <h3 class="faq__group">Quilometragem, multas e pedágios</h3>
-      <details><summary>Tem limite de quilometragem?</summary><p>Cada locação tem uma franquia de quilometragem mensal incluída no preço. Quilômetros além disso são cobrados por km, com valor informado no orçamento. O objetivo é um uso justo, sem surpresas.</p></details>
-      <details><summary>Quem paga multas e pedágios?</summary><p>Multas e pedágios gerados durante a locação são de responsabilidade do condutor. Multas que chegam após a devolução têm a pontuação e a cobrança transferidas ao condutor, com cópia do auto. Tudo transparente, sem acréscimo.</p></details>
-
-      <h3 class="faq__group">Retirada e vistoria</h3>
-      <details><summary>Como funciona a vistoria?</summary><p>Na retirada fazemos uma vistoria com foto e vídeo das quatro laterais, interior, painel, quilometragem e estado dos pneus — assinada pelos dois lados. O mesmo é feito na devolução, e qualquer dano novo é comparado com o registro inicial.</p></details>
-      <details><summary>Onde retiro o carro?</summary><p>A retirada é em Uberlândia-MG, em mãos. O ponto exato é combinado após a reserva, conforme a logística. Encontro no aeroporto pode ser arranjado mediante combinação prévia.</p></details>
-
-      <h3 class="faq__group">Proprietários</h3>
-      <details><summary>Como cadastro meu carro?</summary><p>Você verifica a elegibilidade, simula a renda, envia os documentos (CRLV, fotos, histórico de manutenção), instala o rastreador e faz a vistoria inicial. A partir daí o carro entra na rede e você aprova cada locação.</p></details>
-      <details><summary>Como e quando recebo?</summary><p>O repasse é feito por Pix a cada locação concluída, com extrato claro (valor bruto, taxa da plataforma, rastreador e eventuais descontos). As condições são confirmadas na adesão.</p></details>
-
-      <h3 class="faq__group">Parceiros e indicação</h3>
-      <details><summary>Como funciona o programa de parceiros?</summary><p>Você indica locatários ou proprietários. Cada indicação que vira locação concluída gera pontos, que se transformam em crédito. Há limites de acúmulo e prazo de validade — as regras vigentes são confirmadas na adesão.</p></details>
+      <h3 class="faq__group">Proprietários e parceiros</h3>
+      <details><summary>Como cadastro meu carro?</summary><p>Na página de <a href="proprietarios.html">Proprietários</a> você aceita as regras, simula uma faixa de ganho e inicia a análise. O veículo entra na frota só após aprovação documental, técnica e operacional.</p></details>
+      <details><summary>A renda do meu carro é garantida?</summary><p>Não. A renda é estimada, não garantida — depende da demanda, da categoria, da disponibilidade e da aprovação do veículo.</p></details>
+      <details><summary>Como funciona o programa de parceiros?</summary><p>Você indica locatários, proprietários ou empresas. Os créditos são liberados após a validação real da indicação. Veja a página de <a href="parceiros.html">Parceiros</a>.</p></details>
     </div>
   </div>
 </section>
@@ -635,11 +414,11 @@
 <section class="cta-final">
   <div class="container">
     <h2>Pronto para o próximo passo?</h2>
-    <p>Escolha seu caminho. Em todos eles, uma pessoa de verdade responde por WhatsApp.</p>
+    <p>Escolha seu caminho. Em todos eles, uma pessoa de verdade responde.</p>
     <div class="cta-final__btns">
-      <a href="#orcamento" class="btn btn--solid btn--lg" data-form-tab="locatario">Pedir orçamento</a>
-      <a href="#orcamento" class="btn btn--outline btn--lg" data-form-tab="proprietario">Cadastrar meu carro</a>
-      <a href="#orcamento" class="btn btn--outline btn--lg" data-form-tab="parceiro">Tornar-se parceiro</a>
+      <a href="#orcamento" class="btn btn--solid btn--lg">Pedir orçamento</a>
+      <a href="proprietarios.html" class="btn btn--outline btn--lg">Cadastrar meu carro</a>
+      <a href="parceiros.html" class="btn btn--outline btn--lg">Tornar-se parceiro</a>
     </div>
   </div>
 </section>
@@ -654,37 +433,37 @@
         <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
         <span class="brand__name">NomadDrive <span>Brasil</span></span>
       </a>
-      <p>Aluguel mensal de carro em Uberlândia-MG, direto com proprietários verificados. Site informativo — disponibilidade, seguro, caução e preço final confirmados individualmente por contrato.</p>
+      <p>Aluguel mensal de carro em Uberlândia-MG, direto com proprietários verificados. Site informativo — disponibilidade, proteção, caução e preço final confirmados individualmente por contrato.</p>
     </div>
     <div class="footer__col">
       <h4>Navegação</h4>
       <a href="#como">Como funciona</a>
       <a href="#frota">Frota</a>
-      <a href="#precos">Preços</a>
-      <a href="#ganhe">Ganhe com seu carro</a>
-      <a href="#faq">Dúvidas</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="oficinas.html">Oficinas</a>
+      <a href="parceiros.html">Parceiros</a>
     </div>
     <div class="footer__col">
-      <h4>Documentos</h4>
+      <h4>Proteção e documentos</h4>
+      <a href="shield-protecao.html">Shield e Proteção</a>
+      <a href="seguranca-sinistros.html">Segurança e Sinistros</a>
       <a href="termos.html#termos">Termos e Condições</a>
       <a href="termos.html#privacidade">Política de Privacidade</a>
-      <a href="termos.html#locacao">Regras de Locação</a>
       <a href="termos.html#cancelamento">Política de Cancelamento</a>
-      <a href="termos.html#sinistros">Segurança e Sinistros</a>
     </div>
     <div class="footer__col">
       <h4>Contato</h4>
-      <a href="#" id="footerWhats" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#" data-wa="Olá! Vim pelo site da NomadDrive Brasil e quero falar sobre aluguel mensal de carro.">WhatsApp</a>
       <a href="mailto:contato@nomaddrive.com.br">contato@nomaddrive.com.br</a>
       <a href="#orcamento">Pedir orçamento</a>
     </div>
   </div>
   <div class="footer__legal">
-    <p>© 2026 NomadDrive Brasil. Site informativo, não constitui oferta vinculante. Disponibilidade, seguro, caução e preço final são confirmados individualmente por contrato.</p>
+    <p>© 2026 NomadDrive Brasil. Site informativo, não constitui oferta vinculante. Disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
   </div>
 </footer>
 
-<a href="#" class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+<a href="#" class="wa-float" data-wa="Olá! Vim pelo site da NomadDrive Brasil e quero falar sobre aluguel mensal de carro." aria-label="Falar no WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.042zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
 </a>
 

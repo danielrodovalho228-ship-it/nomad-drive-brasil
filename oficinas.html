@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oficinas — Credenciamento e checklist | NomadDrive Brasil</title>
+<meta name="description" content="Credencie sua oficina na rede técnica da NomadDrive Brasil. Checklist padronizado, laudos e validação da qualidade da frota." />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="index.html#inicio">Início</a>
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
+      <a href="shield-protecao.html">Proteção</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="oficinas.html" class="is-current" aria-current="page">Oficinas</a>
+      <a href="parceiros.html">Parceiros</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
+      <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay" hidden></div>
+<aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
+  <div class="drawer__head">
+    <span class="drawer__title">O que você quer fazer?</span>
+    <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
+  </div>
+  <nav class="drawer__nav">
+    <a href="index.html#orcamento" class="drawer__cta drawer__cta--primary"><strong>Alugar um carro</strong><span>Orçamento, requisitos e retirada</span></a>
+    <a href="proprietarios.html" class="drawer__cta"><strong>Adicionar meu veículo</strong><span>Termos, simulação e checklist</span></a>
+    <a href="parceiros.html" class="drawer__cta"><strong>Indicar e ganhar crédito</strong><span>Programa de parceiros</span></a>
+    <a href="oficinas.html" class="drawer__cta"><strong>Sou oficina</strong><span>Credenciamento e checklist</span></a>
+    <a href="shield-protecao.html" class="drawer__cta"><strong>Proteção e sinistros</strong><span>Shield, caução e cota</span></a>
+    <a href="index.html#como" class="drawer__link">Como funciona</a>
+    <a href="index.html#frota" class="drawer__link">Ver a frota</a>
+    <a href="index.html#faq" class="drawer__link">Dúvidas frequentes</a>
+  </nav>
+  <a href="#" class="drawer__whats" data-wa="Olá! Tenho uma oficina e quero solicitar credenciamento na NomadDrive Brasil.">Falar no WhatsApp</a>
+</aside>
+
+<main>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <span class="badge">Rede técnica</span>
+    <h1>Oficinas credenciadas ajudam a manter a frota segura.</h1>
+    <p>A oficina segue um checklist padronizado da NomadDrive e só entra na rede após aprovação de estrutura, responsáveis e capacidade de emitir laudos. Assim, garantimos que cada veículo da frota é avaliado com o mesmo critério.</p>
+  </div>
+</section>
+
+<!-- COMO ENTRA -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Credenciamento</span>
+      <h2>Como uma oficina entra na rede</h2>
+    </div>
+    <ol class="steps">
+      <li class="step"><span class="step__num">1</span><h3>Solicitação</h3><p>A oficina envia os dados e os serviços oferecidos pelo formulário.</p></li>
+      <li class="step"><span class="step__num">2</span><h3>Validação de CNPJ e estrutura</h3><p>Análise de CNPJ, responsável técnico, estrutura e referências.</p></li>
+      <li class="step"><span class="step__num">3</span><h3>Checklist padronizado</h3><p>A oficina passa a usar o checklist técnico da NomadDrive.</p></li>
+      <li class="step"><span class="step__num">4</span><h3>Laudo técnico</h3><p>Emissão de laudo dos veículos avaliados, com fotos.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- CHECKLIST + STATUS -->
+<section class="section section--surface">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Padrão técnico</span>
+      <h2>Checklist obrigatório e status da avaliação</h2>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>Checklist obrigatório</h3>
+        <ul class="check-list">
+          <li>Freios</li><li>Pneus</li><li>Suspensão</li><li>Iluminação</li>
+          <li>Arrefecimento</li><li>Scanner (quando aplicável)</li>
+          <li>Documentação</li><li>Fotos obrigatórias</li><li>Laudo técnico</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Status possíveis da avaliação</h3>
+        <div class="status-pills">
+          <i class="pill pill--wait">Pendente</i>
+          <i class="pill pill--info">Em análise</i>
+          <i class="pill pill--ok">Aprovada</i>
+          <i class="pill pill--no">Reprovada</i>
+          <i class="pill pill--warn">Manutenção exigida</i>
+          <i class="pill pill--no">Bloqueada</i>
+        </div>
+        <p class="note">Cada veículo e cada oficina têm um status claro no fluxo. A aprovação depende do checklist completo e do laudo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="section" id="credenciar">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Solicitar credenciamento</span>
+      <h2>Cadastre sua oficina</h2>
+      <p>Preencha os dados da oficina e entramos em contato para os próximos passos da avaliação.</p>
+    </div>
+    <form class="form wa-form" id="form-oficina" data-intent="Quero credenciar minha oficina na NomadDrive Brasil" novalidate>
+      <div class="form__grid">
+        <label class="field"><span>Nome da oficina *</span><input type="text" name="oficina" required /></label>
+        <label class="field"><span>CNPJ *</span><input type="text" name="cnpj" required /></label>
+        <label class="field"><span>Cidade / bairro</span><input type="text" name="cidade" placeholder="Uberlândia-MG" /></label>
+        <label class="field"><span>Responsável técnico</span><input type="text" name="responsavel" /></label>
+        <label class="field"><span>WhatsApp *</span><input type="text" name="contato" required /></label>
+        <label class="field"><span>Serviços oferecidos</span><input type="text" name="servicos" placeholder="ex: mecânica geral, elétrica, suspensão" /></label>
+        <label class="field field--full"><span>Observações <span class="opt">(opcional)</span></span><textarea name="obs" rows="2"></textarea></label>
+      </div>
+      <p class="form__err" id="err-oficina" hidden>Preencha o nome da oficina, o CNPJ e o WhatsApp.</p>
+      <button type="submit" class="btn btn--solid btn--lg btn--block">Solicitar credenciamento</button>
+    </form>
+    <p class="note note--center">O credenciamento está sujeito à análise de CNPJ, estrutura, responsáveis e capacidade técnica.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="index.html" class="brand">
+        <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+        <span class="brand__name">NomadDrive <span>Brasil</span></span>
+      </a>
+      <p>Aluguel mensal de carro em Uberlândia-MG, direto com proprietários verificados.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Navegação</h4>
+      <a href="index.html#como">Como funciona</a>
+      <a href="index.html#frota">Frota</a>
+      <a href="proprietarios.html">Proprietários</a>
+      <a href="parceiros.html">Parceiros</a>
+    </div>
+    <div class="footer__col">
+      <h4>Proteção e documentos</h4>
+      <a href="shield-protecao.html">Shield e Proteção</a>
+      <a href="seguranca-sinistros.html">Segurança e Sinistros</a>
+      <a href="termos.html#termos">Termos e Condições</a>
+      <a href="termos.html#privacidade">Política de Privacidade</a>
+    </div>
+    <div class="footer__col">
+      <h4>Contato</h4>
+      <a href="#" data-wa="Olá! Tenho uma oficina e quero solicitar credenciamento na NomadDrive Brasil.">WhatsApp</a>
+      <a href="mailto:contato@nomaddrive.com.br">contato@nomaddrive.com.br</a>
+    </div>
+  </div>
+  <div class="footer__legal">
+    <p>© 2026 NomadDrive Brasil. Site informativo, não constitui oferta vinculante. Credenciamento de oficinas sujeito a análise técnica e documental.</p>
+  </div>
+</footer>
+
+<a href="#" class="wa-float" data-wa="Olá! Tenho uma oficina e quero solicitar credenciamento na NomadDrive Brasil." aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.042zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>

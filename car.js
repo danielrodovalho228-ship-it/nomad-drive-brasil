@@ -4,7 +4,10 @@
 (function () {
   var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
   var CAT_LABEL = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
-  var WA = (typeof WA_PHONE !== "undefined") ? WA_PHONE : "5500000000000";
+  // link de contato seguro — usa waHref do script.js (wa.me ou e-mail, nunca número falso)
+  var link = (typeof waHref === "function")
+    ? waHref
+    : function (m) { return "mailto:contato@nomaddrive.com.br?body=" + encodeURIComponent(m); };
 
   function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
   function pt(obj) { return (obj && (obj.pt || obj.en)) || ""; }
@@ -116,7 +119,7 @@
       (price ? "• Estimativa: " + brl(price) + "/mês (a confirmar)\n" : "") +
       "• Anúncio: " + window.location.href + "\n\n" +
       "Pode me enviar um orçamento?";
-    el("bookCta").href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg);
+    el("bookCta").href = link(msg);
   }
   startInput.addEventListener("change", updateBooking);
   monthsSel.addEventListener("change", updateBooking);
