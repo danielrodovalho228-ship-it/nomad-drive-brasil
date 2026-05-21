@@ -35,6 +35,7 @@
     <nav class="admin-side__nav">
       <a href="#visao" class="is-current">Visão geral</a>
       <a href="#notificacoes">Notificações</a>
+      <a href="#cadastros">Cadastros e aprovações</a>
       <a href="#leads">Leads</a>
       <a href="#reservas">Reservas</a>
       <a href="#frota">Frota</a>
@@ -83,6 +84,18 @@
     <section class="admin-block" id="notificacoes">
       <h2>Notificações</h2>
       <div class="admin-card" id="notifList"><p class="note">Carregando notificações...</p></div>
+    </section>
+
+    <!-- CADASTROS E APROVAÇÕES -->
+    <section class="admin-block" id="cadastros">
+      <h2>Cadastros e aprovações</h2>
+      <p class="note">Toda solicitação enviada pelos onboardings aparece aqui. Altere o status para conduzir a aprovação.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Protocolo</th><th>Perfil</th><th>Nome</th><th>Cidade</th><th>Status</th></tr></thead>
+          <tbody id="cadList"><tr><td colspan="5">Carregando cadastros...</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- LEADS -->
@@ -285,6 +298,49 @@
           var t = document.createElement("strong"); t.textContent = n.title || "Notificação";
           var m = document.createElement("span"); m.textContent = n.message || "";
           d.appendChild(t); d.appendChild(m); box.appendChild(d);
+        });
+      }).catch(function () {});
+    loadCadastros();
+  }
+  function loadCadastros() {
+    var c = a.client();
+    var STATI = ["recebido", "em_analise", "aguardando_documentos", "entrevista_pendente",
+      "aprovado", "reprovado", "bloqueado", "inativo"];
+    c.from("applications").select("id,protocol,profile_type,full_name,city,status")
+      .order("created_at", { ascending: false }).limit(100).then(function (r) {
+        var rows = (r && r.data) || [], tb = document.getElementById("cadList");
+        if (!tb) return;
+        if (!rows.length) {
+          tb.innerHTML = '<tr><td colspan="5">Nenhum cadastro recebido ainda.</td></tr>';
+          return;
+        }
+        tb.innerHTML = "";
+        rows.forEach(function (app) {
+          var tr = document.createElement("tr");
+          function td(txt) { var d = document.createElement("td"); d.textContent = txt; return d; }
+          tr.appendChild(td(app.protocol || "—"));
+          tr.appendChild(td(a.roleLabel ? a.roleLabel(app.profile_type) : (app.profile_type || "—")));
+          tr.appendChild(td(app.full_name || "—"));
+          tr.appendChild(td(app.city || "—"));
+          var stTd = document.createElement("td");
+          var sel = document.createElement("select");
+          sel.className = "cad-status";
+          STATI.forEach(function (s) {
+            var o = document.createElement("option");
+            o.value = s; o.textContent = (a.statusLabel ? a.statusLabel(s) : s);
+            if (s === app.status) o.selected = true;
+            sel.appendChild(o);
+          });
+          sel.addEventListener("change", function () {
+            sel.disabled = true;
+            c.from("applications").update({ status: sel.value }).eq("id", app.id)
+              .then(function (rr) {
+                sel.disabled = false;
+                sel.style.borderColor = rr.error ? "#c0392b" : "";
+              }).catch(function () { sel.disabled = false; });
+          });
+          stTd.appendChild(sel); tr.appendChild(stTd);
+          tb.appendChild(tr);
         });
       }).catch(function () {});
   }
