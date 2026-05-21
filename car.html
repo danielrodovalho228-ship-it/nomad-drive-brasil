@@ -35,6 +35,7 @@
       <a href="index.html#faq">FAQ</a>
     </nav>
     <div class="nav__actions">
+      <a href="login.html" class="btn btn--ghost btn--sm nav__cta" id="navEntrar">Entrar / Criar conta</a>
       <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
       <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
         <span></span><span></span><span></span>
@@ -50,6 +51,7 @@
     <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
   </div>
   <nav class="drawer__nav">
+    <a href="login.html" class="drawer__cta" id="drawerEntrar"><strong>Entrar ou criar conta</strong><span>Cliente, proprietário, parceiro ou oficina</span></a>
     <a href="index.html#orcamento" class="drawer__cta drawer__cta--primary"><strong>Alugar um carro</strong><span>Orçamento, requisitos e retirada</span></a>
     <a href="proprietarios.html" class="drawer__cta"><strong>Adicionar meu veículo</strong><span>Termos, simulação e checklist</span></a>
     <a href="parceiros.html" class="drawer__cta"><strong>Indicar e ganhar crédito</strong><span>Programa de parceiros</span></a>
@@ -224,6 +226,9 @@
 </a>
 
 <script src="car-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
 <script src="script.js"></script>
 <script src="car.js"></script>
 </body>
