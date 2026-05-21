@@ -206,6 +206,18 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
   });
   rail.appendChild(dots);
 
+  function arrow(cls, label, glyph, delta) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "hero-arrow " + cls;
+    btn.setAttribute("aria-label", label);
+    btn.innerHTML = glyph;
+    btn.addEventListener("click", function () { show(i + delta); start(); });
+    return btn;
+  }
+  rail.appendChild(arrow("hero-arrow--prev", "Veículo anterior", "‹", -1));
+  rail.appendChild(arrow("hero-arrow--next", "Próximo veículo", "›", 1));
+
   var i = 0, timer;
   function show(n) {
     i = (n + slides.length) % slides.length;
