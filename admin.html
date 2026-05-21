@@ -34,6 +34,7 @@
     </div>
     <nav class="admin-side__nav">
       <a href="#visao" class="is-current">Visão geral</a>
+      <a href="#notificacoes">Notificações</a>
       <a href="#leads">Leads</a>
       <a href="#reservas">Reservas</a>
       <a href="#frota">Frota</a>
@@ -61,14 +62,27 @@
     <!-- VISÃO GERAL -->
     <section class="admin-block" id="visao">
       <h2>Visão geral</h2>
+      <p class="note" id="adminDataNote" hidden>Modo demonstração — configure o Supabase para ver os dados reais da operação.</p>
       <div class="kpi-grid">
-        <div class="kpi"><small>Leads recebidos</small><b>42</b><span>últimos 30 dias</span></div>
-        <div class="kpi"><small>Veículos em análise</small><b>11</b><span>aguardando aprovação</span></div>
-        <div class="kpi"><small>Oficinas pendentes</small><b>3</b><span>em credenciamento</span></div>
-        <div class="kpi"><small>Locações ativas</small><b>6</b><span>em andamento</span></div>
-        <div class="kpi"><small>Sinistros abertos</small><b>1</b><span>em análise</span></div>
-        <div class="kpi"><small>Parceiros ativos</small><b>9</b><span>com indicações</span></div>
+        <div class="kpi"><small>Cadastros em análise</small><b id="kCadastros">—</b><span>aguardando aprovação</span></div>
+        <div class="kpi"><small>Clientes em análise</small><b id="kClientes">—</b><span>perfis de locatário</span></div>
+        <div class="kpi"><small>Proprietários em análise</small><b id="kProprietarios">—</b><span>perfis de proprietário</span></div>
+        <div class="kpi"><small>Veículos cadastrados</small><b id="kVeiculos">—</b><span>na base</span></div>
+        <div class="kpi"><small>Veículos aprovados</small><b id="kVeicAprov">—</b><span>prontos para a frota</span></div>
+        <div class="kpi"><small>Locações</small><b id="kLocacoes">—</b><span>registradas</span></div>
+        <div class="kpi"><small>Ocorrências abertas</small><b id="kOcorrencias">—</b><span>em análise</span></div>
+        <div class="kpi"><small>Indicações de parceiros</small><b id="kParceiros">—</b><span>leads recebidos</span></div>
+        <div class="kpi"><small>Oficinas credenciadas</small><b id="kOficinas">—</b><span>cadastradas</span></div>
+        <div class="kpi"><small>Receita bruta estimada</small><b id="kReceita">—</b><span>locações registradas</span></div>
+        <div class="kpi"><small>Taxa da plataforma</small><b id="kTaxa">—</b><span>estimada</span></div>
+        <div class="kpi"><small>Notificações novas</small><b id="kNotif">—</b><span>não lidas</span></div>
       </div>
+    </section>
+
+    <!-- NOTIFICAÇÕES -->
+    <section class="admin-block" id="notificacoes">
+      <h2>Notificações</h2>
+      <div class="admin-card" id="notifList"><p class="note">Carregando notificações...</p></div>
     </section>
 
     <!-- LEADS -->
@@ -207,6 +221,8 @@
   /* Supabase não configurado: painel segue em modo demonstração */
   if (!a.configured) {
     gate.hidden = true;
+    var note = document.getElementById("adminDataNote");
+    if (note) note.hidden = false;
     return;
   }
   a.getSession().then(function (s) {
@@ -218,12 +234,60 @@
       return;
     }
     a.isAdmin().then(function (ok) {
-      if (ok) { gate.hidden = true; return; }
-      deny("Acesso restrito",
-        "Sua conta não tem permissão de administrador. Se você acredita que isso é um engano, fale com a equipe da Nomade Drive.",
-        [{ href: "index.html", text: "Voltar ao site", solid: true }]);
+      if (!ok) {
+        deny("Acesso restrito",
+          "Sua conta não tem permissão de administrador. Se você acredita que isso é um engano, fale com a equipe da Nomade Drive.",
+          [{ href: "index.html", text: "Voltar ao site", solid: true }]);
+        return;
+      }
+      gate.hidden = true;
+      loadAdminData();
     });
   });
+
+  function setK(id, v) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = (v === null || v === undefined) ? "—" : v;
+  }
+  function countOf(table, filters) {
+    var q = a.client().from(table).select("*", { count: "exact", head: true });
+    (filters || []).forEach(function (f) { q = q.eq(f[0], f[1]); });
+    return q.then(function (r) { return (r && typeof r.count === "number") ? r.count : null; })
+      .catch(function () { return null; });
+  }
+  function loadAdminData() {
+    var c = a.client();
+    if (!c) return;
+    countOf("applications", [["status", "em_analise"]]).then(function (n) { setK("kCadastros", n); });
+    countOf("applications", [["profile_type", "client"], ["status", "em_analise"]]).then(function (n) { setK("kClientes", n); });
+    countOf("applications", [["profile_type", "owner"], ["status", "em_analise"]]).then(function (n) { setK("kProprietarios", n); });
+    countOf("vehicles", []).then(function (n) { setK("kVeiculos", n); });
+    countOf("vehicles", [["status", "aprovado"]]).then(function (n) { setK("kVeicAprov", n); });
+    countOf("bookings", []).then(function (n) { setK("kLocacoes", n); });
+    countOf("protection_cases", [["status", "em_analise"]]).then(function (n) { setK("kOcorrencias", n); });
+    countOf("partners_referrals", []).then(function (n) { setK("kParceiros", n); });
+    countOf("workshops", []).then(function (n) { setK("kOficinas", n); });
+    countOf("notifications", [["status", "unread"]]).then(function (n) { setK("kNotif", n); });
+    c.from("bookings").select("monthly_price,platform_fee").then(function (r) {
+      var rows = (r && r.data) || [], bruta = 0, taxa = 0;
+      rows.forEach(function (b) { bruta += Number(b.monthly_price) || 0; taxa += Number(b.platform_fee) || 0; });
+      setK("kReceita", "R$ " + Math.round(bruta).toLocaleString("pt-BR"));
+      setK("kTaxa", "R$ " + Math.round(taxa).toLocaleString("pt-BR"));
+    }).catch(function () {});
+    c.from("notifications").select("title,message,created_at")
+      .order("created_at", { ascending: false }).limit(8).then(function (r) {
+        var rows = (r && r.data) || [], box = document.getElementById("notifList");
+        if (!box) return;
+        if (!rows.length) { box.innerHTML = '<p class="note">Nenhuma notificação ainda.</p>'; return; }
+        box.innerHTML = "";
+        rows.forEach(function (n) {
+          var d = document.createElement("div"); d.className = "admin-notif";
+          var t = document.createElement("strong"); t.textContent = n.title || "Notificação";
+          var m = document.createElement("span"); m.textContent = n.message || "";
+          d.appendChild(t); d.appendChild(m); box.appendChild(d);
+        });
+      }).catch(function () {});
+  }
 })();
 </script>
 </body>
