@@ -1,5 +1,5 @@
 -- ============================================================
--- NomadDrive Brasil — Esquema Supabase (Fase 1: autenticacao e perfis)
+-- Nomade Drive Brasil — Esquema Supabase (Fase 1: autenticacao e perfis)
 -- ============================================================
 -- COMO USAR:
 --   1. Supabase Dashboard > SQL Editor > New query.

@@ -1,5 +1,5 @@
 /* ====================================================================
-   NomadDrive Brasil — site logic (PT-only)
+   Nomade Drive Brasil — site logic (PT-only)
    ==================================================================== */
 
 /* ====================================================================
@@ -13,19 +13,19 @@
    assim o lead ainda chega, sem publicar um número inexistente.
    ==================================================================== */
 var WHATSAPP_NUMBER = "";                       // <-- PREENCHER com o número real
-var CONTACT_EMAIL   = "contato@nomaddrive.com.br";
+var CONTACT_EMAIL   = "contato@nomadedrive.com.br";
 
 function whatsappReady() {
   return /^\d{12,13}$/.test(WHATSAPP_NUMBER);
 }
 /* Retorna um link seguro: wa.me se configurado, senão mailto (nunca número falso). */
 function waHref(msg) {
-  msg = msg || "Olá! Vim pelo site da NomadDrive Brasil.";
+  msg = msg || "Olá! Vim pelo site da Nomade Drive Brasil.";
   if (whatsappReady()) {
     return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
   }
   return "mailto:" + CONTACT_EMAIL +
-    "?subject=" + encodeURIComponent("Contato — NomadDrive Brasil") +
+    "?subject=" + encodeURIComponent("Contato — Nomade Drive Brasil") +
     "&body=" + encodeURIComponent(msg);
 }
 

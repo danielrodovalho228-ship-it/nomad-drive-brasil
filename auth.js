@@ -1,5 +1,5 @@
 /* ====================================================================
-   NomadDrive Brasil — Camada de autenticação (Supabase)
+   Nomade Drive Brasil — Camada de autenticação (Supabase)
    --------------------------------------------------------------------
    Expõe window.ndAuth com helpers de login/cadastro/sessão.
    É resiliente: se o Supabase ainda não estiver configurado (ou o SDK

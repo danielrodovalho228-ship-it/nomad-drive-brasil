@@ -1,4 +1,4 @@
-# NomadDrive Brasil — MVP
+# Nomade Drive Brasil — MVP
 
 Landing page bilíngue (EN/PT) para aluguel mensal de carro voltado a **viajantes do exterior** (de qualquer país) que vêm passar férias/um tempo no Brasil. Carro-piloto: **Chevrolet Cobalt Elite 2018, automático, branco** — em Uberlândia-MG.
 
@@ -19,7 +19,7 @@ python -m http.server 8000      # depois acesse http://localhost:8000
 ```js
 const CONFIG = {
   whatsapp:  "5534999999999",            // número real, só dígitos (país+DDD+número)
-  email:     "hello@nomaddrive.com.br",  // e-mail real
+  email:     "hello@nomadedrive.com.br",  // e-mail real
   instagram: "https://instagram.com/...",// link real do Instagram
   siteUrl:   "https://seusite.netlify.app", // depois de publicar, troque pela URL real do site
 };
@@ -47,7 +47,7 @@ Procure as chaves `testi.q1/n1/o1`, `testi.q2/...`, `testi.q3/...` (nas duas lí
 - Depois de publicar, atualize `CONFIG.siteUrl` e o `og:image` no `index.html` (troque o caminho relativo pela URL completa).
 
 ## 4. Simulador de Viabilidade Financeira
-`Simulador_Viabilidade_NomadDrive.xlsx` — planilha interativa: cada custo tem menu de opções (baixo/médio/alto), soma total, impostos, lucro e ponto de equilíbrio. Você preenche só as células amarelas. Valores são estimativas — valide com contador e corretor.
+`Simulador_Viabilidade_Nomade Drive.xlsx` — planilha interativa: cada custo tem menu de opções (baixo/médio/alto), soma total, impostos, lucro e ponto de equilíbrio. Você preenche só as células amarelas. Valores são estimativas — valide com contador e corretor.
 
 ## 5. Imagens e arquivos gerados automaticamente
 - `images/favicon.svg` — ícone do site (logo em formato de carro)
@@ -61,7 +61,7 @@ App NomadesDrive Brasil/
 ├── images/         (fotos do carro, destinos, favicon, og-share)
 ├── Imagens/        (suas fotos originais — não vão pro site)
 ├── publicar/       (cópia limpa só com os arquivos do site, p/ Netlify Drop)
-├── Simulador_Viabilidade_NomadDrive.xlsx
+├── Simulador_Viabilidade_Nomade Drive.xlsx
 └── README.md
 ```
 

@@ -1,5 +1,5 @@
 /* ====================================================================
-   NomadDrive Brasil — página de detalhe do veículo (PT-only)
+   Nomade Drive Brasil — página de detalhe do veículo (PT-only)
    ==================================================================== */
 (function () {
   var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
@@ -7,7 +7,7 @@
   // link de contato seguro — usa waHref do script.js (wa.me ou e-mail, nunca número falso)
   var link = (typeof waHref === "function")
     ? waHref
-    : function (m) { return "mailto:contato@nomaddrive.com.br?body=" + encodeURIComponent(m); };
+    : function (m) { return "mailto:contato@nomadedrive.com.br?body=" + encodeURIComponent(m); };
 
   function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
   function pt(obj) { return (obj && (obj.pt || obj.en)) || ""; }
@@ -126,10 +126,10 @@
   updateBooking();
 
   /* ---- compartilhar ---- */
-  var shareText = "Olha este " + car.name + " na NomadDrive Brasil — aluguel mensal de carro em Uberlândia.";
+  var shareText = "Olha este " + car.name + " na Nomade Drive Brasil — aluguel mensal de carro em Uberlândia.";
   var shareUrl = window.location.href;
   el("shareWhats").href = "https://wa.me/?text=" + encodeURIComponent(shareText + " " + shareUrl);
-  el("shareEmail").href = "mailto:?subject=" + encodeURIComponent("NomadDrive — " + car.name) +
+  el("shareEmail").href = "mailto:?subject=" + encodeURIComponent("Nomade Drive — " + car.name) +
     "&body=" + encodeURIComponent(shareText + "\n\n" + shareUrl);
   el("shareCopy").addEventListener("click", function () {
     var btn = el("shareCopy");
@@ -145,7 +145,7 @@
   });
 
   /* ---- meta / título ---- */
-  document.title = car.name + " — NomadDrive Brasil";
+  document.title = car.name + " — Nomade Drive Brasil";
   el("pageTitle").textContent = document.title;
   var desc = pt(car.description);
   el("pageDesc").setAttribute("content", desc);

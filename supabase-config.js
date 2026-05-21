@@ -1,5 +1,5 @@
 /* ====================================================================
-   NomadDrive Brasil — Configuracao do Supabase
+   Nomade Drive Brasil — Configuracao do Supabase
    --------------------------------------------------------------------
    Preencha com os dados do SEU projeto Supabase:
    Painel do Supabase > Project Settings > API.

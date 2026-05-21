@@ -1,4 +1,4 @@
-/* ===== NomadDrive Brasil — car catalog =====
+/* ===== Nomade Drive Brasil — car catalog =====
    Single source of truth for the detail pages. Adding a car = add one entry here. */
 window.CAR_CATALOG = {
   cobalt: {
