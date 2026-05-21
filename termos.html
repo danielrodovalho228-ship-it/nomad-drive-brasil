@@ -19,11 +19,45 @@
       <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
       <span class="brand__name">NomadDrive <span>Brasil</span></span>
     </a>
-    <div class="nav__actions" style="margin-left:auto">
-      <a href="index.html" class="btn btn--outline btn--sm">← Voltar ao site</a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="index.html#inicio">Início</a>
+      <a href="index.html#frota">Alugar</a>
+      <a href="index.html#ganhe">Ganhe com seu carro</a>
+      <a href="index.html#parceiro">Parceiros</a>
+      <a href="index.html#oficinas">Oficinas</a>
+      <a href="shield-protecao.html">Proteção</a>
+      <a href="seguranca-sinistros.html">Segurança/Sinistros</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="index.html#orcamento" class="btn btn--solid btn--sm nav__cta">Pedir orçamento</a>
+      <button class="nav__burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
+
+<div class="drawer-overlay" id="drawerOverlay" hidden></div>
+<aside class="drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu">
+  <div class="drawer__head">
+    <span class="drawer__title">Menu</span>
+    <button class="drawer__close" id="drawerClose" aria-label="Fechar menu">&times;</button>
+  </div>
+  <nav class="drawer__nav">
+    <a href="index.html#inicio" class="drawer__link">Início</a>
+    <a href="index.html#frota" class="drawer__cta drawer__cta--primary">Alugar um carro</a>
+    <a href="index.html#ganhe" class="drawer__cta">Ganhe com seu carro</a>
+    <a href="index.html#parceiro" class="drawer__cta">Parceiros</a>
+    <a href="index.html#oficinas" class="drawer__link">Oficinas</a>
+    <a href="shield-protecao.html" class="drawer__link">Proteção</a>
+    <a href="seguranca-sinistros.html" class="drawer__link">Segurança / Sinistros</a>
+    <a href="index.html#faq" class="drawer__link">FAQ</a>
+    <a href="admin.html" class="drawer__link">Admin</a>
+  </nav>
+  <a href="#" class="drawer__whats" id="drawerWhats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+</aside>
 
 <main class="legal-page">
   <div class="container">
@@ -135,5 +169,6 @@
   </div>
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>

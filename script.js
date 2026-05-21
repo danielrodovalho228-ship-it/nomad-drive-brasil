@@ -292,4 +292,11 @@ function brl(n) {
     var el = document.getElementById(id);
     if (el) el.href = waLink(generic);
   });
+  // CTA específico de oficinas
+  var oficina = document.getElementById("oficinaWhats");
+  if (oficina) {
+    oficina.href = waLink("Olá! Tenho uma oficina e quero credenciá-la na rede NomadDrive Brasil.");
+    oficina.target = "_blank";
+    oficina.rel = "noopener";
+  }
 })();
