@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Onboarding do proprietário — NomadDrive Brasil</title>
+<meta name="description" content="Cadastre seu veículo na NomadDrive Brasil: veja se o carro tem perfil, conheça os critérios e avance para a simulação e o checklist." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="onb">
+  <div class="container">
+
+    <div class="onb-head">
+      <span class="eyebrow">Onboarding &middot; Proprietário</span>
+      <h1>Cadastre seu veículo e veja se ele tem perfil</h1>
+      <p>Seu carro parado pode virar oportunidade — de forma controlada e sujeita à aprovação. Aqui você confere os critérios, cadastra o veículo e avança para a simulação e o checklist técnico.</p>
+    </div>
+
+    <div class="auth-msg" id="onbNotice" hidden></div>
+
+    <div class="onb-context">
+      <div class="why-box">
+        <h3>Esse modelo é ideal para quem?</h3>
+        <p>Faz sentido para carro parado na garagem, veículo de herança ou família, segundo carro da casa, veículo subutilizado e proprietários que aceitam disponibilidade mensal ou superior a 30 dias. Pode não ser ideal para quem depende do carro diariamente, precisa dele sem aviso, está com manutenção pendente ou espera renda fixa e previsível.</p>
+        <p>Mesmo parado, um veículo continua gerando custos como IPVA, licenciamento, manutenção preventiva, pneus, bateria, seguro/proteção e depreciação. Por isso, se o carro está parado ou subutilizado, pode valer a pena analisar se ele tem perfil para gerar receita de forma controlada dentro da plataforma. <a href="proprietarios.html#perfil">Ver a análise completa</a>.</p>
+      </div>
+
+      <div class="onb-info">
+        <h3>Quem são os nossos clientes?</h3>
+        <p>Você não está alugando para qualquer pessoa. O foco da NomadDrive não é aluguel de fim de semana nem motoristas ocasionais. Atendemos principalmente pessoas que precisam de um carro por períodos mais longos e têm motivo legítimo para estar na cidade:</p>
+        <ul>
+          <li>Brasileiros e estrangeiros em viagem prolongada.</li>
+          <li>Profissionais transferidos temporariamente por empresas.</li>
+          <li>Famílias acompanhando tratamentos médicos.</li>
+          <li>Pessoas em mudança de cidade e estudantes de intercâmbio ou pós-graduação.</li>
+          <li>Nômades digitais, trabalhadores remotos e executivos em projetos temporários.</li>
+        </ul>
+        <p>A NomadDrive prioriza clientes verificados, indicados e com documentação validada.</p>
+      </div>
+    </div>
+
+    <div class="onb-layout">
+      <form class="onb-card" id="onbForm" novalidate>
+        <h2 class="block-title">Dados do proprietário e do veículo</h2>
+        <div class="onb-grid">
+          <div class="auth-field">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" autocomplete="name" required placeholder="Como no documento" />
+          </div>
+          <div class="auth-field">
+            <label for="fone">Telefone <span class="opt">(com DDD)</span></label>
+            <input type="tel" id="fone" autocomplete="tel" placeholder="+55 34 9 9999-9999" />
+          </div>
+          <div class="auth-field">
+            <label for="cidade">Cidade do veículo</label>
+            <input type="text" id="cidade" value="Uberlândia-MG" required />
+          </div>
+          <div class="auth-field">
+            <label for="categoria">Categoria do veículo</label>
+            <select id="categoria" required>
+              <option value="">Selecione...</option>
+              <option value="A">Econômico</option>
+              <option value="B">Confort</option>
+              <option value="C">Premium</option>
+              <option value="D">Luxo</option>
+            </select>
+          </div>
+          <div class="auth-field">
+            <label for="marca">Marca</label>
+            <input type="text" id="marca" required placeholder="ex: Chevrolet" />
+          </div>
+          <div class="auth-field">
+            <label for="modelo">Modelo</label>
+            <input type="text" id="modelo" required placeholder="ex: Onix" />
+          </div>
+          <div class="auth-field">
+            <label for="ano">Ano/modelo</label>
+            <input type="number" id="ano" inputmode="numeric" required placeholder="ex: 2020" />
+          </div>
+          <div class="auth-field">
+            <label for="km">Quilometragem atual</label>
+            <input type="number" id="km" inputmode="numeric" required placeholder="ex: 85000" />
+          </div>
+          <div class="auth-field">
+            <label for="fipe">Valor FIPE aproximado <span class="opt">(opcional)</span></label>
+            <input type="number" id="fipe" inputmode="numeric" placeholder="ex: 57000" />
+          </div>
+          <div class="auth-field">
+            <label for="placa">Últimos dígitos da placa <span class="opt">(opcional)</span></label>
+            <input type="text" id="placa" maxlength="4" placeholder="ex: 7B92" />
+          </div>
+        </div>
+
+        <div class="sim-alert" id="eligAlert" hidden></div>
+
+        <label class="onb-check"><input type="checkbox" id="cienteAnalise" /> <span>Entendo que o veículo passa por <strong>análise documental, fotos, checklist técnico em oficina parceira</strong> e que a aprovação não é garantida — a renda é estimada e não garantida.</span></label>
+
+        <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Cadastrar veículo para análise</button>
+      </form>
+
+      <aside class="onb-aside">
+        <div class="onb-info">
+          <h3>Critérios iniciais</h3>
+          <p>Como referência inicial, a plataforma trabalha com veículos de <strong>até 10 anos de uso</strong> e <strong>até 200.000 km</strong>, sempre sujeitos a documentação, fotos, histórico, estado de conservação e checklist técnico da oficina parceira.</p>
+          <p>Veículos mais novos, bem conservados, econômicos, automáticos e com menor quilometragem tendem a ter maior aceitação. Casos fora dos critérios podem ser analisados, mas a aprovação depende de avaliação técnica e decisão operacional da plataforma.</p>
+        </div>
+        <div class="onb-info">
+          <h3>Próximos passos</h3>
+          <p>Depois do cadastro, simule a faixa de receita e o ganho líquido prudente, e avance para o checklist técnico em oficina credenciada.</p>
+          <a href="proprietarios.html#simuladorProp" class="btn btn--outline btn--block">Abrir o simulador</a>
+        </div>
+      </aside>
+    </div>
+
+    <div class="onb-done" id="onbDone" hidden>
+      <h2>Veículo cadastrado para análise</h2>
+      <p>Recebemos os dados do seu veículo. O próximo passo é a análise documental e o checklist técnico em oficina parceira. Você pode simular a faixa de receita enquanto isso.</p>
+      <div class="onb-done__cta">
+        <a href="proprietarios.html#simuladorProp" class="btn btn--solid btn--lg">Simular a receita</a>
+        <a href="index.html" class="btn btn--outline btn--lg">Voltar ao site</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var notice = document.getElementById("onbNotice");
+  var form = document.getElementById("onbForm");
+  var elig = document.getElementById("eligAlert");
+  var session = null;
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: o Supabase ainda não foi configurado. O formulário abaixo é demonstrativo e o envio fica desativado.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    session = s;
+    if (!s) return;
+    a.getProfile().then(function (p) {
+      if (!p) return;
+      if (p.full_name) document.getElementById("nome").value = p.full_name;
+      if (p.phone) document.getElementById("fone").value = p.phone;
+      if (p.city) document.getElementById("cidade").value = p.city;
+    });
+  });
+
+  /* checagem de elegibilidade ao vivo */
+  function checkElegibilidade() {
+    var ano = parseInt(document.getElementById("ano").value, 10);
+    var km = parseInt(document.getElementById("km").value, 10);
+    var anoAtual = new Date().getFullYear();
+    var msgs = [];
+    if (ano && ano > 1950 && (anoAtual - ano) > 10) {
+      msgs.push("O veículo tem mais de 10 anos de uso.");
+    }
+    if (km && km > 200000) {
+      msgs.push("A quilometragem está acima de 200 mil km.");
+    }
+    if (msgs.length) {
+      elig.innerHTML = "<p>" + msgs.join(" ") + " Este veículo pode não se enquadrar nos critérios iniciais da NomadDrive. Casos específicos podem ser analisados, mas a aprovação dependerá de avaliação técnica, documentação e decisão operacional da plataforma.</p>";
+      elig.hidden = false;
+    } else {
+      elig.hidden = true;
+    }
+  }
+  document.getElementById("ano").addEventListener("input", checkElegibilidade);
+  document.getElementById("km").addEventListener("input", checkElegibilidade);
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = document.getElementById("nome").value.trim();
+    var cidade = document.getElementById("cidade").value.trim();
+    var categoria = document.getElementById("categoria").value;
+    var marca = document.getElementById("marca").value.trim();
+    var modelo = document.getElementById("modelo").value.trim();
+    var ano = parseInt(document.getElementById("ano").value, 10) || null;
+    var km = parseInt(document.getElementById("km").value, 10);
+    if (!nome || !cidade || !categoria || !marca || !modelo || !ano) {
+      showNotice("Preencha nome, cidade, categoria, marca, modelo e ano do veículo.", "warn"); return;
+    }
+    if (!document.getElementById("cienteAnalise").checked) {
+      showNotice("Confirme a declaração de análise para cadastrar o veículo.", "warn"); return;
+    }
+    if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
+    if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
+
+    var btn = document.getElementById("onbBtn");
+    btn.disabled = true; btn.textContent = "Cadastrando...";
+    var uid = session.user.id;
+    var fipe = parseFloat(document.getElementById("fipe").value) || null;
+    var placa = document.getElementById("placa").value.trim() || null;
+    var fone = document.getElementById("fone").value.trim();
+    var anoAtual = new Date().getFullYear();
+    var notes = [];
+    if (ano && (anoAtual - ano) > 10) notes.push("Mais de 10 anos de uso.");
+    if (km && km > 200000) notes.push("Acima de 200 mil km.");
+    var c = a.client();
+
+    c.from("profiles").update({ full_name: nome, phone: fone, city: cidade })
+      .eq("id", uid).then(function (r1) {
+        if (r1.error) throw r1.error;
+        return c.from("vehicles").insert({
+          owner_id: uid, category: categoria, make: marca, model: modelo,
+          year_model: ano, mileage: (isNaN(km) ? null : km), fipe_value: fipe,
+          plate_last_digits: placa, city: cidade, status: "rascunho",
+          eligibility_notes: notes.length ? notes.join(" ") : null
+        });
+      }).then(function (r2) {
+        if (r2.error) throw r2.error;
+        form.hidden = true;
+        document.querySelector(".onb-aside").hidden = true;
+        document.querySelector(".onb-context").hidden = true;
+        document.getElementById("onbDone").hidden = false;
+        notice.hidden = true;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }).catch(function (err) {
+        btn.disabled = false; btn.textContent = "Cadastrar veículo para análise";
+        showNotice("Não foi possível cadastrar: " + ((err && err.message) || "tente novamente."), "error");
+      });
+  });
+})();
+</script>
+</body>
+</html>

@@ -110,6 +110,37 @@
         .catch(function () { return []; });
     },
 
+    /* perfil (linha em profiles) do usuário logado */
+    getProfile: function () {
+      if (!client) return Promise.resolve(null);
+      return ndAuth.getSession().then(function (s) {
+        if (!s) return null;
+        return client.from("profiles").select("*").eq("id", s.user.id).maybeSingle()
+          .then(function (r) { return (r && r.data) || null; });
+      }).catch(function () { return null; });
+    },
+
+    /* exige sessão. Se não configurado, NÃO redireciona (página continua
+       visível com aviso). Se configurado e sem sessão, manda para o login. */
+    requireAuth: function () {
+      if (!client) return Promise.resolve(null);
+      return ndAuth.getSession().then(function (session) {
+        if (session) return session;
+        var here = window.location.pathname.split("/").pop() + window.location.search;
+        window.location.replace("login.html?redirect=" + encodeURIComponent(here));
+        return null;
+      });
+    },
+
+    /* destino após o login: ?redirect= se houver, senão o onboarding do perfil */
+    destinationAfterLogin: function () {
+      var rt = ndAuth.redirectTarget();
+      if (rt) return Promise.resolve(rt);
+      return ndAuth.getProfile().then(function (p) {
+        return ndAuth.onboardingFor((p && p.main_role) || "client");
+      }).catch(function () { return "index.html"; });
+    },
+
     signIn: function (email, password) {
       if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
       return client.auth.signInWithPassword({ email: email, password: password })

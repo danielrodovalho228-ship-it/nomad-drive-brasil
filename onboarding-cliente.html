@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Onboarding do cliente — NomadDrive Brasil</title>
+<meta name="description" content="Complete seu perfil de cliente locatário da NomadDrive Brasil: dados, motivo da locação, período desejado e documentos." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="onb">
+  <div class="container">
+
+    <div class="onb-head">
+      <span class="eyebrow">Onboarding &middot; Cliente locatário</span>
+      <h1>Complete seu perfil para alugar com a NomadDrive</h1>
+      <p>Você não está alugando de qualquer forma. A NomadDrive prioriza clientes verificados, indicados e com documentação validada. Nem toda solicitação é aprovada — quanto mais completo o seu perfil, maior a chance de aprovação.</p>
+    </div>
+
+    <div class="auth-msg" id="onbNotice" hidden></div>
+
+    <div class="onb-layout">
+      <form class="onb-card" id="onbForm" novalidate>
+        <h2 class="block-title">Seus dados e o que você procura</h2>
+        <div class="onb-grid">
+          <div class="auth-field">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" autocomplete="name" required placeholder="Como no documento" />
+          </div>
+          <div class="auth-field">
+            <label for="fone">Telefone <span class="opt">(com DDD)</span></label>
+            <input type="tel" id="fone" autocomplete="tel" placeholder="+55 34 9 9999-9999" />
+          </div>
+          <div class="auth-field">
+            <label for="cidade">Cidade de interesse</label>
+            <input type="text" id="cidade" value="Uberlândia-MG" required />
+          </div>
+          <div class="auth-field">
+            <label for="motivo">Motivo da locação</label>
+            <select id="motivo" required>
+              <option value="">Selecione...</option>
+              <option>Viagem prolongada</option>
+              <option>Transferência temporária de trabalho</option>
+              <option>Tratamento médico (paciente ou acompanhante)</option>
+              <option>Mudança de cidade</option>
+              <option>Intercâmbio ou pós-graduação</option>
+              <option>Trabalho remoto / nômade digital</option>
+              <option>Projeto temporário</option>
+              <option>Visita a familiares por vários meses</option>
+              <option>Outro motivo</option>
+            </select>
+          </div>
+          <div class="auth-field">
+            <label for="inicio">Início desejado</label>
+            <input type="date" id="inicio" />
+          </div>
+          <div class="auth-field">
+            <label for="meses">Período desejado <span class="opt">(meses)</span></label>
+            <input type="number" id="meses" inputmode="numeric" min="1" max="36" placeholder="ex: 3" />
+          </div>
+          <div class="auth-field">
+            <label for="tipo">Tipo de veículo desejado</label>
+            <select id="tipo">
+              <option value="">Sem preferência</option>
+              <option>Econômico</option>
+              <option>Confort</option>
+              <option>Premium</option>
+              <option>Luxo</option>
+            </select>
+          </div>
+          <div class="auth-field onb-field--full">
+            <label for="detalhes">Detalhes da viagem, estadia ou projeto <span class="opt">(opcional)</span></label>
+            <textarea id="detalhes" rows="3" placeholder="Conte rapidamente o contexto: trabalho, tratamento, estudo, mudança, tempo de permanência..."></textarea>
+          </div>
+        </div>
+
+        <div class="onb-declare">
+          <label class="onb-check"><input type="checkbox" id="cnh" /> <span>Declaro que possuo <strong>CNH válida e em dia</strong>.</span></label>
+          <label class="onb-check"><input type="checkbox" id="cienteDocs" /> <span>Entendo que a NomadDrive pode solicitar <strong>documento oficial, comprovante de residência, comprovação de renda ou vínculo, referências e verificação</strong> — e que <strong>nem toda solicitação é aprovada</strong>.</span></label>
+        </div>
+
+        <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Enviar perfil para análise</button>
+      </form>
+
+      <aside class="onb-aside">
+        <div class="why-box why-box--warn">
+          <h3>Nem todo mundo é aprovado</h3>
+          <p>Para proteger proprietários e clientes, a plataforma pode solicitar:</p>
+          <ul>
+            <li>Documento oficial com foto e CNH válida.</li>
+            <li>Comprovante de residência.</li>
+            <li>Comprovação de renda, contrato de trabalho ou vínculo profissional.</li>
+            <li>Dados da viagem ou estadia e referências pessoais.</li>
+            <li>Verificação por indicação e uma entrevista rápida por vídeo ou WhatsApp.</li>
+          </ul>
+          <p>A NomadDrive se reserva o direito de recusar solicitações que não atendam aos critérios mínimos da plataforma.</p>
+        </div>
+        <div class="onb-info">
+          <h3>O que acontece depois</h3>
+          <p>Seu perfil entra como <strong>em análise</strong>. A equipe pode pedir documentos adicionais antes de liberar solicitações de locação. O envio de arquivos será feito no seu painel, em uma próxima etapa.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="onb-done" id="onbDone" hidden>
+      <h2>Perfil enviado para análise</h2>
+      <p>Recebemos os seus dados. A equipe da NomadDrive vai analisar o seu perfil e pode entrar em contato para solicitar documentos. Você pode fechar esta página com segurança.</p>
+      <a href="index.html" class="btn btn--solid btn--lg">Voltar ao site</a>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var notice = document.getElementById("onbNotice");
+  var form = document.getElementById("onbForm");
+  var session = null;
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: o Supabase ainda não foi configurado. O formulário abaixo é demonstrativo e o envio fica desativado.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    session = s;
+    if (!s) return;
+    a.getProfile().then(function (p) {
+      if (!p) return;
+      if (p.full_name) document.getElementById("nome").value = p.full_name;
+      if (p.phone) document.getElementById("fone").value = p.phone;
+      if (p.city) document.getElementById("cidade").value = p.city;
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = document.getElementById("nome").value.trim();
+    var cidade = document.getElementById("cidade").value.trim();
+    var motivo = document.getElementById("motivo").value;
+    if (!nome || !cidade || !motivo) { showNotice("Preencha nome, cidade e motivo da locação.", "warn"); return; }
+    if (!document.getElementById("cnh").checked || !document.getElementById("cienteDocs").checked) {
+      showNotice("Confirme as duas declarações para enviar o perfil.", "warn"); return;
+    }
+    if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
+    if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
+
+    var btn = document.getElementById("onbBtn");
+    btn.disabled = true; btn.textContent = "Enviando...";
+    var uid = session.user.id;
+    var fone = document.getElementById("fone").value.trim();
+    var meses = parseInt(document.getElementById("meses").value, 10) || null;
+    var inicio = document.getElementById("inicio").value || null;
+    var reason = motivo;
+    var det = document.getElementById("detalhes").value.trim();
+    if (det) reason += " — " + det;
+    var c = a.client();
+
+    c.from("profiles").update({
+      full_name: nome, phone: fone, city: cidade, verification_status: "em_analise"
+    }).eq("id", uid).then(function (r1) {
+      if (r1.error) throw r1.error;
+      return c.from("rental_requests").insert({
+        client_id: uid, desired_start_date: inicio, desired_months: meses,
+        reason: reason, city: cidade, status: "em_analise"
+      });
+    }).then(function (r2) {
+      if (r2.error) throw r2.error;
+      form.hidden = true;
+      document.querySelector(".onb-aside").hidden = true;
+      document.getElementById("onbDone").hidden = false;
+      notice.hidden = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = "Enviar perfil para análise";
+      showNotice("Não foi possível enviar: " + ((err && err.message) || "tente novamente."), "error");
+    });
+  });
+})();
+</script>
+</body>
+</html>

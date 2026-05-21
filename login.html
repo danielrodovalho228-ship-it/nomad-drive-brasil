@@ -113,8 +113,9 @@
     a.getSession().then(function (s) {
       if (s) {
         showMsg("Você já está conectado. Redirecionando...", "ok");
-        var dest = a.redirectTarget() || "index.html";
-        setTimeout(function () { window.location.href = dest; }, 1200);
+        a.destinationAfterLogin().then(function (dest) {
+          setTimeout(function () { window.location.href = dest; }, 1200);
+        });
       }
     });
 
@@ -163,8 +164,9 @@
       btn.disabled = false; btn.textContent = "Entrar com segurança";
       if (!r.ok) { showMsg(r.error, "error"); return; }
       showMsg("Login confirmado. Redirecionando...", "ok");
-      var dest = a.redirectTarget() || "index.html";
-      setTimeout(function () { window.location.href = dest; }, 900);
+      a.destinationAfterLogin().then(function (dest) {
+        setTimeout(function () { window.location.href = dest; }, 900);
+      });
     });
   });
 

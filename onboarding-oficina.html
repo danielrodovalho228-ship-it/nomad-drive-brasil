@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Onboarding da oficina — NomadDrive Brasil</title>
+<meta name="description" content="Cadastre sua oficina mecânica como parceira da NomadDrive Brasil para realizar checklist técnico, fotos, laudos e aprovação de veículos." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="onb">
+  <div class="container">
+
+    <div class="onb-head">
+      <span class="eyebrow">Onboarding &middot; Oficina mecânica</span>
+      <h1>Credencie sua oficina como parceira</h1>
+      <p>Oficinas parceiras realizam checklist técnico, fotos, laudos e aprovação dos veículos. O credenciamento passa por aprovação manual da NomadDrive.</p>
+    </div>
+
+    <div class="auth-msg" id="onbNotice" hidden></div>
+
+    <div class="onb-layout">
+      <form class="onb-card" id="onbForm" novalidate>
+        <h2 class="block-title">Dados da oficina</h2>
+        <div class="onb-grid">
+          <div class="auth-field onb-field--full">
+            <label for="razao">Razão social ou nome fantasia</label>
+            <input type="text" id="razao" required placeholder="Nome da oficina" />
+          </div>
+          <div class="auth-field">
+            <label for="cnpj">CNPJ</label>
+            <input type="text" id="cnpj" required placeholder="00.000.000/0000-00" />
+          </div>
+          <div class="auth-field">
+            <label for="responsavel">Responsável técnico</label>
+            <input type="text" id="responsavel" required placeholder="Nome do responsável" />
+          </div>
+          <div class="auth-field">
+            <label for="fone">Telefone <span class="opt">(com DDD)</span></label>
+            <input type="tel" id="fone" autocomplete="tel" required placeholder="+55 34 9 9999-9999" />
+          </div>
+          <div class="auth-field">
+            <label for="capacidade">Capacidade de vistoria <span class="opt">(por semana)</span></label>
+            <input type="number" id="capacidade" inputmode="numeric" min="1" placeholder="ex: 8" />
+          </div>
+          <div class="auth-field onb-field--full">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" required placeholder="Rua, número, bairro" />
+          </div>
+          <div class="auth-field">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" value="Uberlândia" required />
+          </div>
+          <div class="auth-field">
+            <label for="uf">UF</label>
+            <select id="uf">
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option selected>MG</option><option>PA</option><option>PB</option><option>PR</option>
+              <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="onb-check"><input type="checkbox" id="cienteChecklist" /> <span>Entendo que <strong>nenhum veículo entra na frota sem checklist técnico documentado</strong> por oficina parceira aprovada, e que o credenciamento passa por <strong>aprovação manual</strong>.</span></label>
+
+        <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Enviar credenciamento</button>
+      </form>
+
+      <aside class="onb-aside">
+        <div class="onb-info">
+          <h3>Status do credenciamento</h3>
+          <p>Cadastro recebido &rarr; em análise &rarr; documentos pendentes &rarr; aprovada. A oficina também pode ser suspensa ou recusada conforme a avaliação.</p>
+        </div>
+        <div class="onb-info">
+          <h3>Checklist técnico obrigatório</h3>
+          <p>Após a aprovação, cada vistoria cobre: freios, pneus, suspensão, direção, motor, câmbio, luzes, vidros, limpadores, ar-condicionado, interior, lataria, documentação, quilometragem, itens de segurança e fotos internas e externas.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="onb-done" id="onbDone" hidden>
+      <h2>Credenciamento enviado</h2>
+      <p>Recebemos o cadastro da sua oficina. O status entra como <strong>em análise</strong> e a equipe da NomadDrive vai avaliar os dados antes da aprovação. Você pode fechar esta página com segurança.</p>
+      <a href="index.html" class="btn btn--solid btn--lg">Voltar ao site</a>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var notice = document.getElementById("onbNotice");
+  var form = document.getElementById("onbForm");
+  var session = null;
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: o Supabase ainda não foi configurado. O formulário abaixo é demonstrativo e o envio fica desativado.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    session = s;
+    if (!s) return;
+    a.getProfile().then(function (p) {
+      if (p && p.phone) document.getElementById("fone").value = p.phone;
+    });
+    a.client().from("workshops").select("*").eq("user_id", s.user.id).maybeSingle()
+      .then(function (r) {
+        var w = r && r.data;
+        if (!w) return;
+        if (w.business_name) document.getElementById("razao").value = w.business_name;
+        if (w.cnpj) document.getElementById("cnpj").value = w.cnpj;
+        if (w.responsible_name) document.getElementById("responsavel").value = w.responsible_name;
+        if (w.phone) document.getElementById("fone").value = w.phone;
+        if (w.address) document.getElementById("endereco").value = w.address;
+        if (w.city) document.getElementById("cidade").value = w.city;
+        if (w.state) document.getElementById("uf").value = w.state;
+        if (w.weekly_capacity) document.getElementById("capacidade").value = w.weekly_capacity;
+        showNotice("Você já tem um cadastro de oficina. Os campos abaixo foram preenchidos — salve para atualizar.", "ok");
+      }).catch(function () {});
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var razao = document.getElementById("razao").value.trim();
+    var cnpj = document.getElementById("cnpj").value.trim();
+    var resp = document.getElementById("responsavel").value.trim();
+    var fone = document.getElementById("fone").value.trim();
+    var endereco = document.getElementById("endereco").value.trim();
+    var cidade = document.getElementById("cidade").value.trim();
+    if (!razao || !cnpj || !resp || !fone || !endereco || !cidade) {
+      showNotice("Preencha razão social, CNPJ, responsável, telefone, endereço e cidade.", "warn"); return;
+    }
+    if (!document.getElementById("cienteChecklist").checked) {
+      showNotice("Confirme a declaração sobre o checklist obrigatório.", "warn"); return;
+    }
+    if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
+    if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
+
+    var btn = document.getElementById("onbBtn");
+    btn.disabled = true; btn.textContent = "Enviando...";
+    var uid = session.user.id;
+    var payload = {
+      business_name: razao, cnpj: cnpj, responsible_name: resp, phone: fone,
+      address: endereco, city: cidade, state: document.getElementById("uf").value,
+      weekly_capacity: parseInt(document.getElementById("capacidade").value, 10) || null
+    };
+    var c = a.client();
+
+    c.from("workshops").select("id").eq("user_id", uid).maybeSingle().then(function (r) {
+      if (r && r.data && r.data.id) {
+        return c.from("workshops").update(payload).eq("id", r.data.id);
+      }
+      payload.user_id = uid;
+      payload.status = "em_analise";
+      return c.from("workshops").insert(payload);
+    }).then(function (r2) {
+      if (r2.error) throw r2.error;
+      return c.from("profiles").update({ phone: fone, city: cidade }).eq("id", uid);
+    }).then(function () {
+      form.hidden = true;
+      document.querySelector(".onb-aside").hidden = true;
+      document.getElementById("onbDone").hidden = false;
+      notice.hidden = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = "Enviar credenciamento";
+      showNotice("Não foi possível enviar: " + ((err && err.message) || "tente novamente."), "error");
+    });
+  });
+})();
+</script>
+</body>
+</html>

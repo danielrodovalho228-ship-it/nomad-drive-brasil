@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Onboarding do parceiro de indicação — NomadDrive Brasil</title>
+<meta name="description" content="Torne-se parceiro de indicação da NomadDrive Brasil: cadastre seus dados, receba seu código e acompanhe seus leads." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="onb">
+  <div class="container">
+
+    <div class="onb-head">
+      <span class="eyebrow">Onboarding &middot; Parceiro de indicação</span>
+      <h1>Indique pessoas e acompanhe seus leads</h1>
+      <p>Cadastre seus dados, receba seu código de indicação e registre leads de clientes, proprietários, empresas ou oficinas em um painel próprio.</p>
+    </div>
+
+    <div class="auth-msg" id="onbNotice" hidden></div>
+
+    <div class="onb-layout">
+      <div>
+        <form class="onb-card" id="onbForm" novalidate>
+          <h2 class="block-title">Seus dados de parceiro</h2>
+          <div class="onb-grid">
+            <div class="auth-field">
+              <label for="nome">Nome completo</label>
+              <input type="text" id="nome" autocomplete="name" required placeholder="Como no documento" />
+            </div>
+            <div class="auth-field">
+              <label for="fone">Telefone <span class="opt">(com DDD)</span></label>
+              <input type="tel" id="fone" autocomplete="tel" placeholder="+55 34 9 9999-9999" />
+            </div>
+            <div class="auth-field">
+              <label for="cidade">Cidade de atuação</label>
+              <input type="text" id="cidade" value="Uberlândia-MG" required />
+            </div>
+            <div class="auth-field">
+              <label for="tipo">Tipo de indicação</label>
+              <select id="tipo">
+                <option value="">Selecione...</option>
+                <option>Clientes locatários</option>
+                <option>Proprietários de veículo</option>
+                <option>Empresas</option>
+                <option>Oficinas</option>
+                <option>Vários perfis</option>
+              </select>
+            </div>
+            <div class="auth-field onb-field--full">
+              <label for="origem">Origem dos seus contatos <span class="opt">(opcional)</span></label>
+              <textarea id="origem" rows="2" placeholder="ex: rede de imobiliárias, hotéis, grupos de mudança, indicação pessoal..."></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Salvar meus dados de parceiro</button>
+        </form>
+
+        <form class="onb-card" id="leadForm" novalidate>
+          <h2 class="block-title">Cadastrar uma indicação</h2>
+          <div class="auth-msg" id="leadMsg" hidden></div>
+          <div class="onb-grid">
+            <div class="auth-field">
+              <label for="leadNome">Nome do indicado</label>
+              <input type="text" id="leadNome" required placeholder="Nome de quem você está indicando" />
+            </div>
+            <div class="auth-field">
+              <label for="leadFone">Telefone do indicado</label>
+              <input type="tel" id="leadFone" placeholder="+55 34 9 9999-9999" />
+            </div>
+            <div class="auth-field">
+              <label for="leadEmail">E-mail do indicado <span class="opt">(opcional)</span></label>
+              <input type="email" id="leadEmail" placeholder="email@exemplo.com" />
+            </div>
+            <div class="auth-field">
+              <label for="leadTipo">Perfil do indicado</label>
+              <select id="leadTipo">
+                <option>Cliente locatário</option>
+                <option>Proprietário de veículo</option>
+                <option>Empresa</option>
+                <option>Oficina</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn--outline btn--lg auth-submit" id="leadBtn">Registrar indicação</button>
+        </form>
+      </div>
+
+      <aside class="onb-aside">
+        <div class="onb-info onb-code">
+          <h3>Seu código de indicação</h3>
+          <p class="onb-code__value" id="refCode">—</p>
+          <p>Use este código ao indicar pessoas. Ele identifica seus leads no painel.</p>
+        </div>
+        <div class="why-box why-box--warn">
+          <h3>Como funciona a recompensa</h3>
+          <p>As comissões aparecem sempre como <strong>estimadas</strong> ou <strong>elegíveis</strong> — nunca como garantidas.</p>
+          <p>Indicações só se tornam elegíveis a recompensa após validação, aprovação e conversão real, conforme as regras da plataforma.</p>
+        </div>
+        <div class="onb-info">
+          <h3>Status possíveis de um lead</h3>
+          <p>Recebido, em contato, documentação pendente, aprovado, convertido ou não elegível. Você acompanha cada etapa no seu painel.</p>
+        </div>
+      </aside>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var notice = document.getElementById("onbNotice");
+  var form = document.getElementById("onbForm");
+  var leadForm = document.getElementById("leadForm");
+  var leadMsg = document.getElementById("leadMsg");
+  var session = null;
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  function showLeadMsg(text, kind) {
+    leadMsg.textContent = text;
+    leadMsg.className = "auth-msg auth-msg--" + (kind || "warn");
+    leadMsg.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: o Supabase ainda não foi configurado. Os formulários abaixo são demonstrativos e o envio fica desativado.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    session = s;
+    if (!s) return;
+    document.getElementById("refCode").textContent =
+      "ND-" + String(s.user.id).replace(/-/g, "").slice(0, 6).toUpperCase();
+    a.getProfile().then(function (p) {
+      if (!p) return;
+      if (p.full_name) document.getElementById("nome").value = p.full_name;
+      if (p.phone) document.getElementById("fone").value = p.phone;
+      if (p.city) document.getElementById("cidade").value = p.city;
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var nome = document.getElementById("nome").value.trim();
+    var cidade = document.getElementById("cidade").value.trim();
+    if (!nome || !cidade) { showNotice("Preencha nome e cidade de atuação.", "warn"); return; }
+    if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
+    if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
+    var btn = document.getElementById("onbBtn");
+    btn.disabled = true; btn.textContent = "Salvando...";
+    a.client().from("profiles").update({
+      full_name: nome, phone: document.getElementById("fone").value.trim(), city: cidade
+    }).eq("id", session.user.id).then(function (r) {
+      btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
+      if (r.error) { showNotice("Não foi possível salvar: " + r.error.message, "error"); return; }
+      showNotice("Dados de parceiro salvos. Agora você pode registrar indicações abaixo.", "ok");
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = "Salvar meus dados de parceiro";
+      showNotice("Não foi possível salvar: " + ((err && err.message) || "tente novamente."), "error");
+    });
+  });
+
+  leadForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var ln = document.getElementById("leadNome").value.trim();
+    if (!ln) { showLeadMsg("Informe o nome do indicado.", "warn"); return; }
+    if (!a.ready) { showLeadMsg(a.notConfiguredMessage(), "warn"); return; }
+    if (!session) { showLeadMsg("Sessão expirada. Faça login novamente.", "warn"); return; }
+    var btn = document.getElementById("leadBtn");
+    btn.disabled = true; btn.textContent = "Registrando...";
+    a.client().from("partners_referrals").insert({
+      partner_id: session.user.id,
+      referred_name: ln,
+      referred_phone: document.getElementById("leadFone").value.trim() || null,
+      referred_email: document.getElementById("leadEmail").value.trim() || null,
+      referral_type: document.getElementById("leadTipo").value,
+      status: "em_analise",
+      commission_status: "estimada"
+    }).then(function (r) {
+      btn.disabled = false; btn.textContent = "Registrar indicação";
+      if (r.error) { showLeadMsg("Não foi possível registrar: " + r.error.message, "error"); return; }
+      showLeadMsg("Indicação registrada como “em análise”. Você pode cadastrar outra.", "ok");
+      leadForm.reset();
+    }).catch(function (err) {
+      btn.disabled = false; btn.textContent = "Registrar indicação";
+      showLeadMsg("Não foi possível registrar: " + ((err && err.message) || "tente novamente."), "error");
+    });
+  });
+})();
+</script>
+</body>
+</html>
