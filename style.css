@@ -969,3 +969,41 @@ ul, ol { list-style: none; }
   .admin-main { padding: 22px 18px 50px; }
 }
 @media (max-width: 560px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+
+/* ====================================================================
+   PROPRIETÁRIOS — "Esse modelo é ideal para quem?"
+   ==================================================================== */
+.fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.fit-col { display: flex; flex-direction: column; gap: 10px; }
+.fit-col__head {
+  font-family: var(--font-d); font-weight: 700; font-size: 14.5px;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+}
+.fit-col--yes .fit-col__head { background: var(--green-l); color: var(--green-d); border: 1px solid #bfe6cf; }
+.fit-col--no  .fit-col__head { background: #fff4e0; color: #8a6116; border: 1px solid #f0d79a; }
+.fit-card {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.fit-col--yes .fit-card { border-left: 3px solid var(--green); }
+.fit-col--no  .fit-card { border-left: 3px solid #e0a73a; }
+.fit-card__ico { font-size: 22px; line-height: 1.2; flex-shrink: 0; }
+.fit-card h4 { font-size: 14.5px; margin-bottom: 3px; }
+.fit-card p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+.why-box {
+  margin: 24px 0;
+  background: var(--green-l); border: 1px solid #bfe6cf;
+  border-radius: var(--radius); padding: 22px 26px;
+}
+.why-box h3 { font-size: 17px; color: var(--green-d); margin-bottom: 6px; }
+.why-box p { color: var(--ink); font-size: 14px; line-height: 1.6; }
+
+.perfil-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+
+@media (max-width: 760px) {
+  .fit-grid { grid-template-columns: 1fr; }
+  .perfil-cta { flex-direction: column; }
+  .perfil-cta .btn { width: 100%; }
+}
