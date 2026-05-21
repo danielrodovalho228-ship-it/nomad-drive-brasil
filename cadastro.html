@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Criar conta — NomadDrive Brasil</title>
+<meta name="description" content="Crie sua conta NomadDrive Brasil e escolha seu perfil: alugar um veículo, adicionar seu carro, ser parceiro de indicação, oficina ou parceiro de proteção." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="auth auth--signup">
+  <div class="container">
+
+    <div class="auth-head">
+      <span class="eyebrow">Passo 1 — Criar conta</span>
+      <h1>O que você quer fazer na NomadDrive?</h1>
+      <p>A experiência muda conforme o seu objetivo. Você pode adicionar outros perfis depois — papéis como oficina, parceiro de proteção e administração passam por aprovação manual.</p>
+    </div>
+
+    <div class="auth-msg" id="authMsg" hidden></div>
+
+    <form id="signupForm" novalidate>
+      <fieldset class="role-grid" id="roleGrid">
+        <legend class="sr-only">Escolha o seu perfil</legend>
+
+        <label class="role-card">
+          <input type="radio" name="perfil" value="client" />
+          <span class="role-card__body">
+            <span class="role-card__tag">Cliente locatário</span>
+            <strong>Quero alugar um veículo</strong>
+            <span class="role-card__desc">Busque veículos para locações mensais ou de longa duração, envie seus documentos e acompanhe suas solicitações.</span>
+          </span>
+          <span class="role-card__check" aria-hidden="true">&#10003;</span>
+        </label>
+
+        <label class="role-card">
+          <input type="radio" name="perfil" value="owner" />
+          <span class="role-card__body">
+            <span class="role-card__tag">Proprietário</span>
+            <strong>Quero adicionar meu carro</strong>
+            <span class="role-card__desc">Veja se o seu veículo tem perfil, simule meses alugados por ano, aceite os termos e avance para o checklist.</span>
+          </span>
+          <span class="role-card__check" aria-hidden="true">&#10003;</span>
+        </label>
+
+        <label class="role-card">
+          <input type="radio" name="perfil" value="referral_partner" />
+          <span class="role-card__body">
+            <span class="role-card__tag">Parceiro de indicação</span>
+            <strong>Quero ser parceiro de indicação</strong>
+            <span class="role-card__desc">Indique clientes, proprietários ou empresas e acompanhe seus leads em um painel próprio.</span>
+          </span>
+          <span class="role-card__check" aria-hidden="true">&#10003;</span>
+        </label>
+
+        <label class="role-card">
+          <input type="radio" name="perfil" value="workshop" />
+          <span class="role-card__body">
+            <span class="role-card__tag">Oficina &middot; aprovação manual</span>
+            <strong>Sou oficina mecânica</strong>
+            <span class="role-card__desc">Cadastre sua oficina para realizar checklist, fotos, laudos e aprovação técnica dos veículos.</span>
+          </span>
+          <span class="role-card__check" aria-hidden="true">&#10003;</span>
+        </label>
+
+        <label class="role-card">
+          <input type="radio" name="perfil" value="protection_partner" />
+          <span class="role-card__body">
+            <span class="role-card__tag">Proteção &middot; aprovação manual</span>
+            <strong>Sou parceiro de proteção/seguro</strong>
+            <span class="role-card__desc">Cadastre regras, coberturas, documentos e fluxo de análise para a proteção dos veículos.</span>
+          </span>
+          <span class="role-card__check" aria-hidden="true">&#10003;</span>
+        </label>
+      </fieldset>
+
+      <div class="auth-signup-card">
+        <h2 class="block-title">Passo 2 — Seus dados</h2>
+        <div class="auth-form">
+          <div class="auth-field">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" name="nome" autocomplete="name" required placeholder="Como no documento" />
+          </div>
+          <div class="auth-field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required placeholder="voce@email.com" />
+          </div>
+          <div class="auth-field">
+            <label for="fone">Telefone <span class="opt">(com DDD)</span></label>
+            <input type="tel" id="fone" name="fone" autocomplete="tel" placeholder="+55 34 9 9999-9999" />
+          </div>
+          <div class="auth-field">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" autocomplete="new-password" minlength="6" required placeholder="Mínimo de 6 caracteres" />
+          </div>
+          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="signupBtn">Criar minha conta</button>
+        </div>
+        <p class="auth-note">Ao criar a conta você receberá um e-mail de confirmação. A verificação de e-mail é obrigatória. A NomadDrive prioriza usuários verificados e pode recusar solicitações que não atendam aos critérios da plataforma.</p>
+        <p class="auth-alt">Já tem conta? <a href="login.html">Entrar</a></p>
+      </div>
+    </form>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var msg = document.getElementById("authMsg");
+  function showMsg(text, kind) {
+    msg.textContent = text;
+    msg.className = "auth-msg auth-msg--" + (kind || "error");
+    msg.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a || !a.configured) {
+    showMsg(a ? a.notConfiguredMessage() : "Cadastro indisponível nesta página.", "warn");
+  }
+
+  /* destaca visualmente o card do perfil selecionado */
+  var roleGrid = document.getElementById("roleGrid");
+  function syncCards() {
+    var cards = roleGrid.querySelectorAll(".role-card");
+    cards.forEach(function (card) {
+      var input = card.querySelector('input[type="radio"]');
+      card.classList.toggle("is-selected", !!(input && input.checked));
+    });
+  }
+  roleGrid.addEventListener("change", syncCards);
+
+  /* pré-seleção do perfil via ?perfil= */
+  var PERFIL_MAP = {
+    cliente: "client", proprietario: "owner", parceiro: "referral_partner",
+    oficina: "workshop", protecao: "protection_partner"
+  };
+  try {
+    var p = new URLSearchParams(window.location.search).get("perfil");
+    var role = PERFIL_MAP[(p || "").toLowerCase()];
+    if (role) {
+      var input = document.querySelector('#roleGrid input[value="' + role + '"]');
+      if (input) input.checked = true;
+    }
+  } catch (e) {}
+  syncCards();
+
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var checked = document.querySelector('#roleGrid input[name="perfil"]:checked');
+    if (!checked) {
+      showMsg("Escolha primeiro o que você quer fazer na NomadDrive.", "warn");
+      document.getElementById("roleGrid").scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    var nome = document.getElementById("nome").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var fone = document.getElementById("fone").value.trim();
+    var senha = document.getElementById("senha").value;
+    if (!nome || !email || !senha) { showMsg("Preencha nome, e-mail e senha.", "warn"); return; }
+    if (senha.length < 6) { showMsg("A senha deve ter pelo menos 6 caracteres.", "warn"); return; }
+    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Cadastro indisponível.", "warn"); return; }
+
+    var btn = document.getElementById("signupBtn");
+    btn.disabled = true; btn.textContent = "Criando conta...";
+    a.signUp({ email: email, password: senha, fullName: nome, phone: fone, role: checked.value })
+      .then(function (r) {
+        btn.disabled = false; btn.textContent = "Criar minha conta";
+        if (!r.ok) { showMsg(r.error, "error"); return; }
+        if (r.needsConfirmation) {
+          showMsg("Conta criada! Enviamos um e-mail de confirmação para " + email +
+            ". Confirme o e-mail e depois faça login para continuar o cadastro do seu perfil.", "ok");
+          document.getElementById("signupForm").reset();
+        } else {
+          showMsg("Conta criada! Redirecionando para o login...", "ok");
+          setTimeout(function () { window.location.href = "login.html"; }, 1200);
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+  });
+})();
+</script>
+</body>
+</html>

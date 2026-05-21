@@ -1,0 +1,205 @@
+/* ====================================================================
+   NomadDrive Brasil — Camada de autenticação (Supabase)
+   --------------------------------------------------------------------
+   Expõe window.ndAuth com helpers de login/cadastro/sessão.
+   É resiliente: se o Supabase ainda não estiver configurado (ou o SDK
+   não tiver carregado), window.ndAuth continua existindo, mas as ações
+   retornam um aviso amigável em vez de quebrar a página.
+   ==================================================================== */
+(function () {
+  "use strict";
+
+  var cfg = window.NOMADDRIVE_SUPABASE || {};
+  var hasPlaceholder =
+    !cfg.url || !cfg.anonKey ||
+    cfg.url.indexOf("SEU-PROJETO") !== -1 ||
+    cfg.anonKey.indexOf("COLE_AQUI") !== -1;
+  var configured = !hasPlaceholder;
+
+  var sdk = (window.supabase && window.supabase.createClient) ? window.supabase : null;
+  var client = (configured && sdk) ? sdk.createClient(cfg.url, cfg.anonKey) : null;
+
+  var ROLE_LABELS = {
+    client: "Cliente locatário",
+    owner: "Proprietário",
+    referral_partner: "Parceiro de indicação",
+    workshop: "Oficina mecânica",
+    protection_partner: "Parceiro de proteção",
+    admin: "Administrador",
+    super_admin: "Super admin"
+  };
+  var ROLE_DASHBOARD = {
+    client: "dashboard-cliente.html",
+    owner: "dashboard-proprietario.html",
+    referral_partner: "dashboard-parceiro.html",
+    workshop: "dashboard-oficina.html",
+    protection_partner: "dashboard-protecao.html",
+    admin: "admin.html",
+    super_admin: "admin.html"
+  };
+  var ROLE_ONBOARDING = {
+    client: "onboarding-cliente.html",
+    owner: "onboarding-proprietario.html",
+    referral_partner: "onboarding-parceiro.html",
+    workshop: "onboarding-oficina.html",
+    protection_partner: "onboarding-protecao.html"
+  };
+  var VALID_ROLES = ["client", "owner", "referral_partner", "workshop", "protection_partner"];
+
+  function locationDir() {
+    var p = window.location.pathname;
+    return p.substring(0, p.lastIndexOf("/") + 1);
+  }
+  function pageUrl(file) {
+    return window.location.origin + locationDir() + file;
+  }
+  function safeRedirect(value) {
+    /* aceita apenas caminhos relativos do próprio site (evita open redirect) */
+    if (!value) return "";
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.indexOf("//") === 0) return "";
+    return value.replace(/[^a-zA-Z0-9_./?=&#-]/g, "");
+  }
+  function notConfiguredMsg() {
+    return "Login indisponível: o Supabase ainda não foi configurado. " +
+      "Preencha o arquivo supabase-config.js com a URL e a anon key do projeto.";
+  }
+  function translateError(err) {
+    var m = (err && err.message) || "Não foi possível concluir. Tente novamente.";
+    if (/invalid login credentials/i.test(m)) return "E-mail ou senha incorretos.";
+    if (/email not confirmed/i.test(m)) return "Confirme seu e-mail antes de entrar — verifique sua caixa de entrada.";
+    if (/user already registered|already been registered/i.test(m)) return "Já existe uma conta com este e-mail. Tente entrar.";
+    if (/password should be at least/i.test(m)) return "A senha deve ter pelo menos 6 caracteres.";
+    if (/rate limit|too many requests/i.test(m)) return "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
+    if (/unable to validate email|invalid email/i.test(m)) return "E-mail inválido.";
+    if (/network|fetch/i.test(m)) return "Falha de conexão. Verifique sua internet e tente novamente.";
+    return m;
+  }
+  function logoutHandler(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    ndAuth.signOut().then(function () { window.location.href = "index.html"; });
+  }
+
+  var ndAuth = {
+    configured: configured,
+    ready: !!client,
+    googleEnabled: configured && cfg.googleOAuth === true,
+    roleLabels: ROLE_LABELS,
+    validRoles: VALID_ROLES,
+    client: function () { return client; },
+    dashboardFor: function (role) { return ROLE_DASHBOARD[role] || "index.html"; },
+    onboardingFor: function (role) { return ROLE_ONBOARDING[role] || "index.html"; },
+    notConfiguredMessage: notConfiguredMsg,
+
+    redirectTarget: function () {
+      try {
+        return safeRedirect(new URLSearchParams(window.location.search).get("redirect"));
+      } catch (e) { return ""; }
+    },
+
+    getSession: function () {
+      if (!client) return Promise.resolve(null);
+      return client.auth.getSession()
+        .then(function (r) { return (r && r.data && r.data.session) || null; })
+        .catch(function () { return null; });
+    },
+
+    getRoles: function () {
+      if (!client) return Promise.resolve([]);
+      return client.from("user_roles").select("role,status")
+        .then(function (r) { return (r && r.data) || []; })
+        .catch(function () { return []; });
+    },
+
+    signIn: function (email, password) {
+      if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
+      return client.auth.signInWithPassword({ email: email, password: password })
+        .then(function (r) {
+          if (r.error) return { ok: false, error: translateError(r.error) };
+          return { ok: true, session: r.data.session };
+        })
+        .catch(function (err) { return { ok: false, error: translateError(err) }; });
+    },
+
+    signUp: function (opts) {
+      opts = opts || {};
+      if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
+      var role = VALID_ROLES.indexOf(opts.role) !== -1 ? opts.role : "client";
+      return client.auth.signUp({
+        email: opts.email,
+        password: opts.password,
+        options: {
+          emailRedirectTo: pageUrl("login.html"),
+          data: {
+            full_name: opts.fullName || "",
+            phone: opts.phone || "",
+            initial_role: role
+          }
+        }
+      }).then(function (r) {
+        if (r.error) return { ok: false, error: translateError(r.error) };
+        var hasSession = !!(r.data && r.data.session);
+        return { ok: true, needsConfirmation: !hasSession, role: role };
+      }).catch(function (err) { return { ok: false, error: translateError(err) }; });
+    },
+
+    signOut: function () {
+      if (!client) return Promise.resolve();
+      return client.auth.signOut().catch(function () {});
+    },
+
+    resetPassword: function (email) {
+      if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
+      return client.auth.resetPasswordForEmail(email, { redirectTo: pageUrl("login.html") })
+        .then(function (r) {
+          if (r.error) return { ok: false, error: translateError(r.error) };
+          return { ok: true };
+        })
+        .catch(function (err) { return { ok: false, error: translateError(err) }; });
+    },
+
+    signInWithGoogle: function () {
+      if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
+      return client.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: pageUrl("login.html") }
+      }).then(function (r) {
+        if (r.error) return { ok: false, error: translateError(r.error) };
+        return { ok: true };
+      }).catch(function (err) { return { ok: false, error: translateError(err) }; });
+    },
+
+    /* Atualiza o botão "Entrar / Criar conta" do site conforme a sessão. */
+    applyNavState: function () {
+      var btn = document.getElementById("navEntrar");
+      var drawerBtn = document.getElementById("drawerEntrar");
+      if (!btn && !drawerBtn) return;
+      ndAuth.getSession().then(function (session) {
+        if (!session) return;
+        var meta = (session.user && session.user.user_metadata) || {};
+        var first = meta.full_name ? String(meta.full_name).split(" ")[0] : "sua conta";
+        if (btn) {
+          btn.textContent = "Sair";
+          btn.setAttribute("href", "#");
+          btn.addEventListener("click", logoutHandler);
+        }
+        if (drawerBtn) {
+          var strong = drawerBtn.querySelector("strong");
+          var span = drawerBtn.querySelector("span");
+          if (strong) strong.textContent = "Sair da conta";
+          if (span) span.textContent = "Conectado como " + first;
+          drawerBtn.setAttribute("href", "#");
+          drawerBtn.addEventListener("click", logoutHandler);
+        }
+      });
+    }
+  };
+
+  window.ndAuth = ndAuth;
+
+  /* aplica o estado de sessão ao menu assim que o DOM estiver pronto */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () { ndAuth.applyNavState(); });
+  } else {
+    ndAuth.applyNavState();
+  }
+})();

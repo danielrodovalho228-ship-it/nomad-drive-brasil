@@ -22,6 +22,14 @@ publicar/
 node_modules/
 *.log
 
+# --- Segredos / variáveis de ambiente ---
+# NUNCA versionar a service_role key nem arquivos .env reais.
+# A anon key fica em supabase-config.js (é pública e protegida por RLS).
+.env
+.env.*
+!.env.example
+supabase-secrets.*
+
 # --- OS junk ---
 .DS_Store
 Thumbs.db

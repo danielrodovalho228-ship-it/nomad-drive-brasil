@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrar — NomadDrive Brasil</title>
+<meta name="description" content="Acesse sua conta NomadDrive Brasil: uma conta única para alugar veículos, cadastrar seu carro, indicar ou operar como parceiro verificado." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+<section class="auth">
+  <div class="container">
+    <div class="auth-grid">
+
+      <!-- VISUAL -->
+      <aside class="auth-visual" aria-hidden="true">
+        <span class="auth-visual__badge">Acesso verificado</span>
+        <div class="auth-visual__caption">
+          <strong>Mobilidade mensal com confiança</strong>
+          <span>Clientes, proprietários, parceiros e oficinas em uma única plataforma verificada — contrato, vistoria, checklist e proteção.</span>
+        </div>
+      </aside>
+
+      <!-- CARD -->
+      <div class="auth-card">
+        <span class="eyebrow">Acesso seguro</span>
+        <h1 class="auth-card__title">Entrar na sua conta</h1>
+        <p class="auth-card__sub">Use a mesma conta para qualquer perfil: cliente, proprietário, parceiro de indicação, oficina ou administração.</p>
+
+        <div class="auth-msg" id="authMsg" hidden></div>
+
+        <form class="auth-form" id="loginForm" novalidate>
+          <div class="auth-field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required placeholder="voce@email.com" />
+          </div>
+          <div class="auth-field">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Sua senha" />
+          </div>
+          <div class="auth-row">
+            <a href="#" id="forgotLink" class="auth-link">Esqueci minha senha</a>
+          </div>
+          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="loginBtn">Entrar com segurança</button>
+        </form>
+
+        <!-- redefinição de senha (aparece ao voltar do e-mail de recuperação) -->
+        <form class="auth-form" id="recoveryForm" hidden>
+          <div class="auth-field">
+            <label for="newPassword">Nova senha</label>
+            <input type="password" id="newPassword" autocomplete="new-password" minlength="6" placeholder="Mínimo de 6 caracteres" />
+          </div>
+          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="recoveryBtn">Salvar nova senha</button>
+        </form>
+
+        <button type="button" class="btn btn--outline btn--lg auth-google" id="googleBtn" hidden>Continuar com Google</button>
+
+        <div class="auth-divider"><span>ou</span></div>
+
+        <a href="cadastro.html" class="btn btn--ghost btn--lg auth-secondary">Criar conta e escolher meu perfil</a>
+
+        <p class="auth-note">Verificação de e-mail obrigatória. Oficinas, parceiros de proteção e administração passam por aprovação manual da plataforma.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var msg = document.getElementById("authMsg");
+  function showMsg(text, kind) {
+    msg.textContent = text;
+    msg.className = "auth-msg auth-msg--" + (kind || "error");
+    msg.hidden = false;
+  }
+  var a = window.ndAuth;
+  if (!a || !a.configured) {
+    showMsg(a ? a.notConfiguredMessage() : "Autenticação indisponível nesta página.", "warn");
+  }
+
+  /* já conectado: oferece redirecionamento */
+  if (a && a.ready) {
+    a.getSession().then(function (s) {
+      if (s) {
+        showMsg("Você já está conectado. Redirecionando...", "ok");
+        var dest = a.redirectTarget() || "index.html";
+        setTimeout(function () { window.location.href = dest; }, 1200);
+      }
+    });
+
+    /* fluxo de recuperação de senha (link do e-mail) */
+    var client = a.client();
+    client.auth.onAuthStateChange(function (event) {
+      if (event === "PASSWORD_RECOVERY") {
+        document.getElementById("loginForm").hidden = true;
+        document.getElementById("recoveryForm").hidden = false;
+        showMsg("Defina uma nova senha para concluir a recuperação da conta.", "ok");
+      }
+    });
+  }
+
+  /* botão Google (somente se OAuth estiver configurado) */
+  if (a && a.googleEnabled) {
+    var gb = document.getElementById("googleBtn");
+    gb.hidden = false;
+    gb.addEventListener("click", function () {
+      a.signInWithGoogle().then(function (r) { if (!r.ok) showMsg(r.error, "error"); });
+    });
+  }
+
+  /* esqueci a senha */
+  document.getElementById("forgotLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    if (!email) { showMsg("Digite seu e-mail no campo acima para receber o link de redefinição.", "warn"); return; }
+    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Indisponível.", "warn"); return; }
+    a.resetPassword(email).then(function (r) {
+      if (r.ok) showMsg("Se houver uma conta com este e-mail, enviamos um link para redefinir a senha.", "ok");
+      else showMsg(r.error, "error");
+    });
+  });
+
+  /* login */
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    var pass = document.getElementById("password").value;
+    if (!email || !pass) { showMsg("Preencha e-mail e senha.", "warn"); return; }
+    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Indisponível.", "warn"); return; }
+    var btn = document.getElementById("loginBtn");
+    btn.disabled = true; btn.textContent = "Entrando...";
+    a.signIn(email, pass).then(function (r) {
+      btn.disabled = false; btn.textContent = "Entrar com segurança";
+      if (!r.ok) { showMsg(r.error, "error"); return; }
+      showMsg("Login confirmado. Redirecionando...", "ok");
+      var dest = a.redirectTarget() || "index.html";
+      setTimeout(function () { window.location.href = dest; }, 900);
+    });
+  });
+
+  /* salvar nova senha (recuperação) */
+  document.getElementById("recoveryForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var np = document.getElementById("newPassword").value;
+    if (!np || np.length < 6) { showMsg("A nova senha deve ter pelo menos 6 caracteres.", "warn"); return; }
+    if (!a || !a.ready) { showMsg("Indisponível.", "warn"); return; }
+    var btn = document.getElementById("recoveryBtn");
+    btn.disabled = true; btn.textContent = "Salvando...";
+    a.client().auth.updateUser({ password: np }).then(function (r) {
+      btn.disabled = false; btn.textContent = "Salvar nova senha";
+      if (r.error) { showMsg(r.error.message || "Não foi possível salvar.", "error"); return; }
+      showMsg("Senha atualizada. Redirecionando...", "ok");
+      setTimeout(function () { window.location.href = "index.html"; }, 1100);
+    });
+  });
+})();
+</script>
+</body>
+</html>
