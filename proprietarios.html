@@ -237,14 +237,27 @@
       </div>
       <div class="sim__results">
         <div class="sim-row"><span>Preço mensal de referência</span><strong id="simPrice">—</strong></div>
-        <div class="sim-row"><span>Parte estimada do proprietário por mês alugado</span><strong id="simMonthly">—</strong></div>
+        <div class="sim-row"><span>Parte estimada do proprietário por mês alugado <em class="sim-row__note">(antes do desconto da proteção Shield)</em></span><strong id="simMonthly">—</strong></div>
         <div class="sim-result-card">
           <div class="sim-result-line"><span>Receita estimada do proprietário <em id="simMesesNote">(6 meses no ano)</em></span><strong id="simGross">—</strong></div>
           <div class="sim-result-line sim-result-line--reserve"><span>Reservas recomendadas para custos <em>(~40%)</em></span><strong id="simReserve">—</strong></div>
           <div class="sim-result-line sim-result-line--cash"><span>Valor prudente para colocar no bolso</span><strong id="simNet">—</strong></div>
         </div>
-        <p class="note">Faixa estimada e <strong>não garantida</strong>, sujeita à aprovação do veículo. Custos do carro (IPVA, seguro, manutenção, pneus, desgaste) são por conta do proprietário — por isso recomendamos separar reservas antes de considerar o valor como ganho.</p>
+        <p class="note">Faixa estimada e <strong>não garantida</strong>, sujeita à aprovação do veículo. Nos meses alugados, a plataforma desconta a <strong>proteção Shield</strong> do mês antes do repasse — entenda como funciona logo abaixo. Os demais custos (IPVA, manutenção, pneus, desgaste) ficam por conta do proprietário.</p>
       </div>
+    </div>
+
+    <!-- TRANSPARÊNCIA: PROTEÇÃO SHIELD -->
+    <div class="why-box why-box--warn" id="shieldOwner">
+      <h3>Como funciona a proteção Shield para o proprietário</h3>
+      <p>Para que o simulador seja totalmente transparente, veja como o seguro entra na conta:</p>
+      <ul>
+        <li><strong>É obrigatória.</strong> Ao entrar na frota, o veículo passa a ser coberto pelo modelo de proteção da plataforma (Shield). Um seguro particular anterior, se houver, deve ser cancelado, e a plataforma confirma que o veículo está efetivamente coberto.</li>
+        <li><strong>Tem um custo inicial.</strong> Há um valor inicial para incluir o veículo e ativar a cobertura. Esse custo inicial <strong>não está incluído</strong> nos números deste simulador.</li>
+        <li><strong>Meses com locação.</strong> A plataforma garante o pagamento da proteção do mês vigente e desconta esse valor do repasse ao proprietário. A “parte estimada do proprietário” acima é uma referência <strong>antes</strong> desse desconto.</li>
+        <li><strong>Meses sem locação.</strong> O veículo continua coberto e o proprietário mantém o pagamento da proteção diretamente, como em qualquer seguro — mesmo sem receber aluguel naquele mês.</li>
+      </ul>
+      <p>Os valores da proteção Shield são definidos conforme avaliação, perfil do veículo, contrato e regras vigentes da plataforma. <a href="shield-protecao.html">Veja a página Shield e Proteção</a>.</p>
     </div>
 
     <!-- RESERVAS RECOMENDADAS -->
@@ -254,7 +267,7 @@
       <article class="card"><span class="reserve-pct">5%</span><h3>IPVA e licenciamento</h3><p>Imposto anual e taxas obrigatórias para manter a documentação em dia.</p></article>
       <article class="card"><span class="reserve-pct">8%</span><h3>Manutenção preventiva</h3><p>Revisões, óleo, filtros e itens de desgaste que evitam problemas maiores.</p></article>
       <article class="card"><span class="reserve-pct">5%</span><h3>Pneus</h3><p>Troca e rodízio de pneus conforme o uso e a quilometragem do veículo.</p></article>
-      <article class="card"><span class="reserve-pct">5%</span><h3>Seguro e proteção</h3><p>Custo de seguro próprio e participação em proteção, conforme o contrato.</p></article>
+      <article class="card"><span class="reserve-pct">5%</span><h3>Proteção Shield (obrigatória)</h3><p>Reserva para manter a proteção Shield ativa, principalmente nos meses sem locação. Nos meses alugados, a plataforma já desconta esse valor do repasse.</p></article>
       <article class="card"><span class="reserve-pct">12%</span><h3>Depreciação e desgaste</h3><p>Perda natural de valor do veículo e desgaste ao longo do tempo de uso.</p></article>
       <article class="card"><span class="reserve-pct">5%</span><h3>Imprevistos</h3><p>Margem para reparos não programados e situações fora do previsto.</p></article>
     </div>
