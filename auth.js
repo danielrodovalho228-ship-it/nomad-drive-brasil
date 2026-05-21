@@ -80,6 +80,7 @@
     if (/email not confirmed/i.test(m)) return "Confirme seu e-mail antes de entrar — verifique sua caixa de entrada.";
     if (/user already registered|already been registered/i.test(m)) return "Já existe uma conta com este e-mail. Tente entrar.";
     if (/password should be at least/i.test(m)) return "A senha deve ter pelo menos 6 caracteres.";
+    if (/email rate limit/i.test(m)) return "O envio de e-mails atingiu o limite temporário do servidor. Aguarde alguns minutos e tente novamente — ou configure um servidor SMTP próprio.";
     if (/rate limit|too many requests/i.test(m)) return "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
     if (/unable to validate email|invalid email/i.test(m)) return "E-mail inválido.";
     if (/network|fetch/i.test(m)) return "Falha de conexão. Verifique sua internet e tente novamente.";
