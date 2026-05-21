@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel do cliente — NomadDrive Brasil</title>
+<meta name="description" content="Painel do cliente locatário da NomadDrive Brasil: status do perfil, solicitações de locação, documentos e suporte." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="index.html">Ver o site</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="dash">
+  <div class="container">
+    <div class="auth-msg" id="dashNotice" hidden></div>
+    <div class="dash-shell">
+
+      <aside class="dash-side">
+        <p class="dash-side__title">Painel do cliente</p>
+        <nav class="dash-side__nav">
+          <a href="#visao">Visão geral</a>
+          <a href="#solicitacoes">Solicitações</a>
+          <a href="#documentos">Documentos</a>
+          <a href="#checklist">Retirada e devolução</a>
+          <a href="#suporte">Suporte</a>
+        </nav>
+      </aside>
+
+      <div class="dash-main">
+        <div class="dash-topline">
+          <h1 id="dashGreet">Olá!</h1>
+          <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
+        </div>
+
+        <div class="dash-cards" id="visao">
+          <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
+          <div class="dash-kpi"><span>Solicitações enviadas</span><strong id="kpiReqs">0</strong></div>
+          <div class="dash-kpi"><span>Cidade de interesse</span><strong id="kpiCidade">—</strong></div>
+        </div>
+
+        <section class="dash-panel" id="solicitacoes">
+          <h2>Solicitações de locação</h2>
+          <p>Acompanhe aqui o andamento de cada pedido. Toda solicitação passa por análise — a aprovação não é automática.</p>
+          <div class="dash-list" id="reqList"></div>
+          <div class="dash-empty" id="reqEmpty">Você ainda não enviou solicitações. Comece pelo seu perfil de cliente.</div>
+          <a href="onboarding-cliente.html" class="btn btn--solid btn--sm dash-cta">Nova solicitação de locação</a>
+        </section>
+
+        <section class="dash-panel" id="documentos">
+          <h2>Documentos</h2>
+          <p>A NomadDrive pode solicitar os documentos abaixo para validar o seu perfil. O envio de arquivos será habilitado nesta área em uma próxima etapa.</p>
+          <div class="dash-list">
+            <div class="dash-row"><div class="dash-row__main"><strong>CNH válida</strong><span>Obrigatória para dirigir</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Documento oficial com foto</strong><span>RG ou equivalente</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Comprovante de residência</strong><span>Atualizado</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Comprovação de renda ou vínculo</strong><span>Quando solicitado</span></div><span class="dash-pill dash-pill--neutral">Se solicitado</span></div>
+          </div>
+        </section>
+
+        <section class="dash-panel" id="checklist">
+          <h2>Checklist de retirada e devolução</h2>
+          <p>Na retirada e na devolução, o veículo passa por vistoria com fotos. Devolva o carro limpo e em condições adequadas de uso — situações de mau uso podem gerar cobrança.</p>
+          <a href="seguranca-sinistros.html#limpeza" class="btn btn--outline btn--sm dash-cta">Ver a política de limpeza e devolução</a>
+        </section>
+
+        <section class="dash-panel" id="suporte">
+          <h2>Ocorrências, limpeza e suporte</h2>
+          <p>Precisa relatar uma ocorrência, tirar dúvidas sobre proteção ou falar com a equipe? Use os canais abaixo.</p>
+          <div class="dash-links">
+            <a href="seguranca-sinistros.html">Segurança e sinistros</a>
+            <a href="shield-protecao.html">Shield e proteção</a>
+            <a href="#" data-wa="Olá! Sou cliente da NomadDrive Brasil e preciso de suporte.">Falar com o suporte</a>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var PAGE_ROLE = "client";
+  var notice = document.getElementById("dashNotice");
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  function pillKind(status) {
+    if (status === "aprovado" || status === "aprovado_com_ressalvas") return "ok";
+    if (status === "recusado" || status === "suspenso" || status === "bloqueado_para_revisao") return "bad";
+    if (status === "em_analise" || status === "documentos_pendentes") return "warn";
+    return "neutral";
+  }
+  function fmtDate(d) {
+    if (!d) return "data a definir";
+    var p = String(d).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function rowEl(title, sub, pillText, kind) {
+    var row = document.createElement("div"); row.className = "dash-row";
+    var main = document.createElement("div"); main.className = "dash-row__main";
+    var s = document.createElement("strong"); s.textContent = title;
+    var sp = document.createElement("span"); sp.textContent = sub;
+    main.appendChild(s); main.appendChild(sp); row.appendChild(main);
+    if (pillText) {
+      var pill = document.createElement("span");
+      pill.className = "dash-pill dash-pill--" + (kind || "neutral");
+      pill.textContent = pillText;
+      row.appendChild(pill);
+    }
+    return row;
+  }
+
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: configure o supabase-config.js para carregar os seus dados reais.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    if (!s) return;
+    a.getProfile().then(function (p) {
+      if (!p) return;
+      var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
+      document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
+      var st = document.getElementById("dashStatus");
+      st.textContent = "Perfil: " + a.statusLabel(p.verification_status);
+      st.className = "dash-pill dash-pill--" + pillKind(p.verification_status);
+      document.getElementById("kpiStatus").textContent = a.statusLabel(p.verification_status);
+      document.getElementById("kpiCidade").textContent = p.city || "—";
+      if (p.main_role && p.main_role !== PAGE_ROLE) {
+        showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
+          ". Este é o painel do cliente — você pode usá-lo se também aluga veículos.", "warn");
+      }
+    });
+    a.client().from("rental_requests").select("*").order("created_at", { ascending: false })
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        document.getElementById("kpiReqs").textContent = rows.length;
+        if (!rows.length) return;
+        document.getElementById("reqEmpty").hidden = true;
+        var list = document.getElementById("reqList");
+        rows.forEach(function (req) {
+          var sub = (req.desired_months ? req.desired_months + " meses · " : "") +
+            "início " + fmtDate(req.desired_start_date);
+          list.appendChild(rowEl(req.reason || "Solicitação de locação", sub,
+            a.statusLabel(req.status), pillKind(req.status)));
+        });
+      }).catch(function () {});
+  });
+})();
+</script>
+</body>
+</html>

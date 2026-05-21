@@ -45,6 +45,17 @@
     protection_partner: "onboarding-protecao.html"
   };
   var VALID_ROLES = ["client", "owner", "referral_partner", "workshop", "protection_partner"];
+  var STATUS_LABELS = {
+    rascunho: "Rascunho",
+    email_verificado: "E-mail verificado",
+    em_analise: "Em análise",
+    documentos_pendentes: "Documentos pendentes",
+    aprovado: "Aprovado",
+    aprovado_com_ressalvas: "Aprovado com ressalvas",
+    recusado: "Recusado",
+    suspenso: "Suspenso",
+    bloqueado_para_revisao: "Bloqueado para revisão"
+  };
 
   function locationDir() {
     var p = window.location.pathname;
@@ -88,6 +99,8 @@
     client: function () { return client; },
     dashboardFor: function (role) { return ROLE_DASHBOARD[role] || "index.html"; },
     onboardingFor: function (role) { return ROLE_ONBOARDING[role] || "index.html"; },
+    roleLabel: function (role) { return ROLE_LABELS[role] || role || "—"; },
+    statusLabel: function (status) { return STATUS_LABELS[status] || status || "—"; },
     notConfiguredMessage: notConfiguredMsg,
 
     redirectTarget: function () {
@@ -199,28 +212,35 @@
       }).catch(function (err) { return { ok: false, error: translateError(err) }; });
     },
 
-    /* Atualiza o botão "Entrar / Criar conta" do site conforme a sessão. */
+    /* Atualiza o botão "Entrar / Criar conta" do site conforme a sessão:
+       logado => "Minha conta" apontando para o painel do perfil. */
     applyNavState: function () {
       var btn = document.getElementById("navEntrar");
       var drawerBtn = document.getElementById("drawerEntrar");
       if (!btn && !drawerBtn) return;
       ndAuth.getSession().then(function (session) {
         if (!session) return;
-        var meta = (session.user && session.user.user_metadata) || {};
-        var first = meta.full_name ? String(meta.full_name).split(" ")[0] : "sua conta";
-        if (btn) {
-          btn.textContent = "Sair";
-          btn.setAttribute("href", "#");
-          btn.addEventListener("click", logoutHandler);
-        }
-        if (drawerBtn) {
-          var strong = drawerBtn.querySelector("strong");
-          var span = drawerBtn.querySelector("span");
-          if (strong) strong.textContent = "Sair da conta";
-          if (span) span.textContent = "Conectado como " + first;
-          drawerBtn.setAttribute("href", "#");
-          drawerBtn.addEventListener("click", logoutHandler);
-        }
+        ndAuth.getProfile().then(function (p) {
+          var dash = ndAuth.dashboardFor((p && p.main_role) || "client");
+          if (btn) { btn.textContent = "Minha conta"; btn.setAttribute("href", dash); }
+          if (drawerBtn) {
+            var strong = drawerBtn.querySelector("strong");
+            var span = drawerBtn.querySelector("span");
+            if (strong) strong.textContent = "Minha conta";
+            if (span) span.textContent = "Acessar o meu painel";
+            drawerBtn.setAttribute("href", dash);
+          }
+        });
+      });
+    },
+
+    /* Liga qualquer elemento [data-logout] para encerrar a sessão. */
+    wireLogout: function () {
+      var els = document.querySelectorAll("[data-logout]");
+      [].forEach.call(els, function (el) {
+        if (el.getAttribute("data-logout-wired")) return;
+        el.setAttribute("data-logout-wired", "1");
+        el.addEventListener("click", logoutHandler);
       });
     }
   };
@@ -228,9 +248,13 @@
   window.ndAuth = ndAuth;
 
   /* aplica o estado de sessão ao menu assim que o DOM estiver pronto */
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () { ndAuth.applyNavState(); });
-  } else {
+  function initAuthUI() {
     ndAuth.applyNavState();
+    ndAuth.wireLogout();
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAuthUI);
+  } else {
+    initAuthUI();
   }
 })();

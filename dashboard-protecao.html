@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel do parceiro de proteção — NomadDrive Brasil</title>
+<meta name="description" content="Painel do parceiro de proteção da NomadDrive Brasil: regras, coberturas, processo de sinistro e tipos de caso." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="NomadDrive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">NomadDrive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="index.html">Ver o site</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="dash">
+  <div class="container">
+    <div class="auth-msg" id="dashNotice" hidden></div>
+    <div class="dash-shell">
+
+      <aside class="dash-side">
+        <p class="dash-side__title">Painel de proteção</p>
+        <nav class="dash-side__nav">
+          <a href="#visao">Visão geral</a>
+          <a href="#coberturas">Coberturas</a>
+          <a href="#sinistro">Processo de sinistro</a>
+          <a href="#casos">Tipos de caso</a>
+        </nav>
+      </aside>
+
+      <div class="dash-main">
+        <div class="dash-topline">
+          <h1 id="dashGreet">Olá!</h1>
+          <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
+        </div>
+
+        <div class="dash-cards" id="visao">
+          <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
+          <div class="dash-kpi"><span>Tipos de caso atendidos</span><strong>8</strong></div>
+          <div class="dash-kpi"><span>Painel de casos</span><strong>Após aprovação</strong></div>
+        </div>
+
+        <section class="dash-panel" id="aprovacao">
+          <h2>Acesso do parceiro de proteção</h2>
+          <p>O papel de parceiro de proteção passa por aprovação manual da NomadDrive. Após a aprovação, esta área dá acesso à gestão de regras, documentos e ao acompanhamento dos casos. Até lá, use as referências abaixo.</p>
+          <div class="why-box why-box--warn">
+            <h3>Proteção não é autorização para mau uso</h3>
+            <p>Sujeira excessiva, drogas, cigarro, negligência, danos internos, manchas, odores fortes, multas ou uso fora do contrato podem gerar cobrança adicional e análise separada. Veja a <a href="seguranca-sinistros.html#limpeza">política de limpeza e devolução</a>.</p>
+          </div>
+        </section>
+
+        <section class="dash-panel" id="coberturas">
+          <h2>Coberturas e exclusões</h2>
+          <p>O parceiro de proteção mantém atualizadas as regras de cobertura, os documentos exigidos e as exclusões aplicáveis. Cada plano, caução e cota de participação é confirmado individualmente por contrato.</p>
+          <div class="dash-links">
+            <a href="shield-protecao.html">Página Shield e Proteção</a>
+            <a href="shield-protecao.html#cobertura">O que pode não estar coberto</a>
+          </div>
+        </section>
+
+        <section class="dash-panel" id="sinistro">
+          <h2>Processo de sinistro</h2>
+          <p>O fluxo de um caso passa por registro da ocorrência, envio de evidências (fotos e descrição), análise administrativa e resolução. Cada etapa é documentada para proteger cliente, proprietário e plataforma.</p>
+          <a href="seguranca-sinistros.html" class="btn btn--outline btn--sm dash-cta">Ver segurança e sinistros</a>
+        </section>
+
+        <section class="dash-panel" id="casos">
+          <h2>Tipos de caso</h2>
+          <p>A área de proteção acompanha os seguintes tipos de ocorrência:</p>
+          <div class="dash-list">
+            <div class="dash-row"><div class="dash-row__main"><strong>Sinistro</strong><span>Colisão e danos cobertos pelo plano</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Limpeza especial</strong><span>Higienização acima do uso normal</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Mau uso</strong><span>Uso em desacordo com o contrato</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Multa</strong><span>Infrações de trânsito durante a locação</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Pane</strong><span>Falhas mecânicas e assistência</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Roubo ou furto</strong><span>Subtração do veículo</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Dano interno</strong><span>Bancos, painel, porta-malas</span></div></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Dano externo</strong><span>Lataria, vidros, faróis e lanternas</span></div></div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 NomadDrive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var PAGE_ROLE = "protection_partner";
+  var notice = document.getElementById("dashNotice");
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  function pillKind(status) {
+    if (status === "aprovado" || status === "aprovado_com_ressalvas") return "ok";
+    if (status === "recusado" || status === "suspenso" || status === "bloqueado_para_revisao") return "bad";
+    if (status === "em_analise" || status === "documentos_pendentes") return "warn";
+    return "neutral";
+  }
+
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: configure o supabase-config.js para carregar os seus dados reais.", "warn");
+  }
+
+  a.requireAuth().then(function (s) {
+    if (!s) return;
+    a.getProfile().then(function (p) {
+      if (!p) return;
+      var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
+      document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
+      var st = document.getElementById("dashStatus");
+      st.textContent = "Perfil: " + a.statusLabel(p.verification_status);
+      st.className = "dash-pill dash-pill--" + pillKind(p.verification_status);
+      document.getElementById("kpiStatus").textContent = a.statusLabel(p.verification_status);
+      if (p.main_role && p.main_role !== PAGE_ROLE) {
+        showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
+          ". Este é o painel do parceiro de proteção.", "warn");
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
