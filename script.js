@@ -166,6 +166,62 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 })();
 
 /* ====================================================================
+   HERO — carrossel automático dos carros do portfólio
+   ==================================================================== */
+(function () {
+  var rail = document.getElementById("heroRail");
+  if (!rail || !window.CAR_CATALOG) return;
+  var order = window.CAR_ORDER || Object.keys(window.CAR_CATALOG);
+  var slides = [];
+
+  rail.innerHTML = "";
+  order.forEach(function (id) {
+    var c = window.CAR_CATALOG[id];
+    if (!c || id === "cybertruck") return;
+    var slide = document.createElement("div");
+    slide.className = "hero-slide";
+    var img = document.createElement("img");
+    img.src = "images/car-" + c.id + "-1.jpg";
+    img.alt = c.name;
+    img.loading = "lazy";
+    img.onerror = function () { slide.style.display = "none"; };
+    var cap = document.createElement("span");
+    cap.className = "hero-slide__cap";
+    cap.textContent = c.name;
+    slide.appendChild(img);
+    slide.appendChild(cap);
+    rail.appendChild(slide);
+    slides.push(slide);
+  });
+  if (!slides.length) return;
+
+  var dots = document.createElement("div");
+  dots.className = "hero-dots";
+  slides.forEach(function (_, k) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", "Mostrar veículo " + (k + 1));
+    b.addEventListener("click", function () { show(k); start(); });
+    dots.appendChild(b);
+  });
+  rail.appendChild(dots);
+
+  var i = 0, timer;
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach(function (s, k) { s.classList.toggle("is-active", k === i); });
+    [].forEach.call(dots.children, function (d, k) { d.classList.toggle("is-active", k === i); });
+  }
+  function start() { stop(); timer = setInterval(function () { show(i + 1); }, 3800); }
+  function stop() { if (timer) clearInterval(timer); }
+  rail.addEventListener("mouseenter", stop);
+  rail.addEventListener("mouseleave", start);
+
+  show(0);
+  start();
+})();
+
+/* ====================================================================
    SIMULADOR de ganhos do proprietário (proprietarios.html)
    ==================================================================== */
 (function () {

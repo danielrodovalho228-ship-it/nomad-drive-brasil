@@ -154,6 +154,16 @@
       }).catch(function () { return "index.html"; });
     },
 
+    /* true se o usuário logado tem papel admin/super_admin aprovado */
+    isAdmin: function () {
+      if (!client) return Promise.resolve(false);
+      return ndAuth.getRoles().then(function (roles) {
+        return roles.some(function (r) {
+          return (r.role === "admin" || r.role === "super_admin") && r.status === "aprovado";
+        });
+      }).catch(function () { return false; });
+    },
+
     signIn: function (email, password) {
       if (!client) return Promise.resolve({ ok: false, error: notConfiguredMsg() });
       return client.auth.signInWithPassword({ email: email, password: password })

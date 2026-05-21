@@ -14,6 +14,16 @@
 </head>
 <body class="admin-body">
 
+<!-- GATE DE ACESSO — exige login + papel admin/super_admin -->
+<div class="admin-gate" id="adminGate">
+  <div class="admin-gate__card">
+    <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+    <h1 id="adminGateTitle">Verificando acesso…</h1>
+    <p id="adminGateMsg">Aguarde um instante.</p>
+    <div class="admin-gate__actions" id="adminGateActions" hidden></div>
+  </div>
+</div>
+
 <div class="admin-shell">
 
   <!-- SIDEBAR -->
@@ -35,6 +45,7 @@
       <a href="#config">Configurações</a>
     </nav>
     <a href="index.html" class="admin-side__back">← Voltar ao site</a>
+    <button type="button" class="admin-side__logout" data-logout>Sair da conta</button>
   </aside>
 
   <!-- MAIN -->
@@ -162,6 +173,58 @@
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
 <script src="script.js"></script>
+<script>
+(function () {
+  var gate = document.getElementById("adminGate");
+  var title = document.getElementById("adminGateTitle");
+  var msg = document.getElementById("adminGateMsg");
+  var actions = document.getElementById("adminGateActions");
+
+  function btn(href, text, solid) {
+    var a = document.createElement("a");
+    a.href = href; a.textContent = text;
+    a.className = "btn btn--" + (solid ? "solid" : "outline");
+    return a;
+  }
+  function deny(t, m, links) {
+    title.textContent = t;
+    msg.textContent = m;
+    actions.innerHTML = "";
+    links.forEach(function (l) { actions.appendChild(btn(l.href, l.text, l.solid)); });
+    actions.hidden = false;
+  }
+
+  var a = window.ndAuth;
+  if (!a) {
+    deny("Acesso indisponível", "Não foi possível carregar a camada de autenticação.",
+      [{ href: "index.html", text: "Voltar ao site", solid: true }]);
+    return;
+  }
+  /* Supabase não configurado: painel segue em modo demonstração */
+  if (!a.configured) {
+    gate.hidden = true;
+    return;
+  }
+  a.getSession().then(function (s) {
+    if (!s) {
+      deny("Acesso restrito",
+        "Esta área é exclusiva para administradores autorizados. Faça login para continuar.",
+        [{ href: "login.html?redirect=admin.html", text: "Entrar", solid: true },
+         { href: "index.html", text: "Voltar ao site" }]);
+      return;
+    }
+    a.isAdmin().then(function (ok) {
+      if (ok) { gate.hidden = true; return; }
+      deny("Acesso restrito",
+        "Sua conta não tem permissão de administrador. Se você acredita que isso é um engano, fale com a equipe da NomadDrive.",
+        [{ href: "index.html", text: "Voltar ao site", solid: true }]);
+    });
+  });
+})();
+</script>
 </body>
 </html>
