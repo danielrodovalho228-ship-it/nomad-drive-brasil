@@ -21,7 +21,7 @@
      o botao "Continuar com Google" aparece nas telas de login/cadastro.
    ==================================================================== */
 window.NOMADDRIVE_SUPABASE = {
-  url: "https://SEU-PROJETO.supabase.co",
-  anonKey: "COLE_AQUI_SUA_ANON_PUBLISHABLE_KEY",
+  url: "https://zeexmbgacvsaciojcrwr.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8",
   googleOAuth: false
 };
