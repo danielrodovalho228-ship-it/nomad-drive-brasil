@@ -38,6 +38,9 @@
         <nav class="dash-side__nav">
           <a href="#visao">Visão geral</a>
           <a href="#veiculos">Meus veículos</a>
+          <a href="#locacao">Em locação</a>
+          <a href="#rastreamento">Segurança e rastreamento</a>
+          <a href="#alertas">Alertas</a>
           <a href="#simulador">Simulação</a>
           <a href="#checklist">Checklist</a>
           <a href="#reservas">Reservas e termos</a>
@@ -62,6 +65,149 @@
           <div class="dash-list" id="veicList"></div>
           <div class="dash-empty" id="veicEmpty">Você ainda não cadastrou veículos.</div>
           <a href="onboarding-proprietario.html" class="btn btn--solid btn--sm dash-cta">Cadastrar um veículo</a>
+        </section>
+
+        <section class="dash-panel" id="locacao">
+          <h2>Meu veículo em locação</h2>
+          <p>Acompanhe o status operacional do seu veículo durante a locação — sem ficar no escuro e sem expor a privacidade do locatário.</p>
+
+          <div class="why-box">
+            <h3>Seu carro está em locação</h3>
+            <p>Seu carro está em locação. A NomadDrive acompanha o contrato, checklists, pagamentos, proteção e ocorrências operacionais. Você receberá atualizações importantes durante o período da locação. Por privacidade do locatário, a localização exata e rotas pessoais não são exibidas ao proprietário, salvo procedimentos de segurança previstos em contrato.</p>
+          </div>
+
+          <div class="loc-legend">
+            <span class="loc-legend__label">Ciclo operacional do veículo</span>
+            <div class="status-pills">
+              <span class="pill">Disponível</span>
+              <span class="pill">Reservado</span>
+              <span class="pill">Em vistoria</span>
+              <span class="pill">Em locação</span>
+              <span class="pill">Em renovação</span>
+              <span class="pill">Em devolução</span>
+              <span class="pill">Em manutenção</span>
+              <span class="pill">Ocorrência em análise</span>
+            </div>
+          </div>
+
+          <div class="dash-empty" id="locEmpty">Nenhum veículo em locação ativa no momento. Quando uma locação começar, o acompanhamento completo aparece aqui.</div>
+
+          <div id="locActive" hidden>
+            <div class="loc-cards">
+              <div class="loc-card">
+                <span class="loc-card__label">Status atual</span>
+                <strong class="dash-pill dash-pill--ok loc-card__status" id="locStatus">—</strong>
+                <span class="loc-card__note" id="locVeic">—</span>
+              </div>
+              <div class="loc-card">
+                <span class="loc-card__label">Período da locação</span>
+                <p class="loc-card__line">Início: <strong id="locInicio">—</strong></p>
+                <p class="loc-card__line">Previsão de devolução: <strong id="locFim">—</strong></p>
+                <p class="loc-card__note">Renovação possível, sujeita a novo acordo entre as partes.</p>
+              </div>
+              <div class="loc-card">
+                <span class="loc-card__label">Última atualização operacional</span>
+                <strong id="locUpdate">—</strong>
+                <span class="loc-card__note">Data e hora do último status registrado.</span>
+              </div>
+            </div>
+
+            <div class="block-title">Resumo financeiro da locação</div>
+            <div class="dash-list">
+              <div class="dash-row"><div class="dash-row__main"><strong>Receita bruta da locação</strong><span>Valor mensal contratado</span></div><span class="loc-fin-val" id="finBruta">—</span></div>
+              <div class="dash-row"><div class="dash-row__main"><strong>Taxa da plataforma</strong><span>Operação, suporte e intermediação</span></div><span class="loc-fin-val" id="finTaxa">—</span></div>
+              <div class="dash-row"><div class="dash-row__main"><strong>Reservas sugeridas (~40%)</strong><span>IPVA, manutenção, pneus, proteção e depreciação</span></div><span class="loc-fin-val" id="finReserva">—</span></div>
+              <div class="dash-row dash-row--hl"><div class="dash-row__main"><strong>Valor líquido prudente</strong><span>Estimativa — não garantida</span></div><span class="loc-fin-val" id="finLiquido">—</span></div>
+            </div>
+          </div>
+
+          <div class="block-title">Checklists de retirada e devolução</div>
+          <div class="loc-checklists">
+            <div class="loc-check">
+              <h3>Checklist de retirada</h3>
+              <ul class="loc-check__list">
+                <li><span>Fotos do veículo</span><b>a registrar</b></li>
+                <li><span>Quilometragem inicial</span><b>a registrar</b></li>
+                <li><span>Nível de combustível</span><b>a registrar</b></li>
+                <li><span>Condição geral</span><b>a registrar</b></li>
+                <li><span>Observações</span><b>a registrar</b></li>
+              </ul>
+            </div>
+            <div class="loc-check">
+              <h3>Checklist de devolução</h3>
+              <ul class="loc-check__list">
+                <li><span>Fotos do veículo</span><b>a registrar</b></li>
+                <li><span>Quilometragem final</span><b>a registrar</b></li>
+                <li><span>Nível de combustível</span><b>a registrar</b></li>
+                <li><span>Limpeza</span><b>a registrar</b></li>
+                <li><span>Danos</span><b>a registrar</b></li>
+                <li><span>Pendências</span><b>a registrar</b></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="block-title">Segurança do veículo</div>
+          <div class="dash-list">
+            <div class="dash-row"><div class="dash-row__main"><strong>Proteção ativa</strong><span>Cobertura conforme contrato</span></div><span class="dash-pill dash-pill--neutral">Confirmada por contrato</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Rastreador</strong><span>Informado e validado</span></div><span class="dash-pill dash-pill--neutral">Ver "Segurança e rastreamento"</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Oficina parceira responsável</strong><span>Checklist técnico do veículo</span></div><span class="dash-pill dash-pill--neutral">Definida na vistoria</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Situação documental</strong><span>CRLV e documentos do veículo</span></div><span class="dash-pill dash-pill--neutral">Em acompanhamento</span></div>
+          </div>
+
+          <a href="#" class="btn btn--outline btn--sm dash-cta" data-wa="Olá! Sou proprietário na NomadDrive Brasil e tenho uma preocupação com o meu veículo em locação.">Tenho uma preocupação com meu veículo</a>
+
+          <div class="block-title">Dúvidas do proprietário</div>
+          <div class="dash-faq">
+            <details>
+              <summary>Vou saber onde meu carro está?</summary>
+              <p>Você acompanhará o status operacional do veículo, contrato, checklists e alertas. A localização exata pode ser usada pela operação em caso de necessidade de segurança, mas não é exibida livremente para preservar a privacidade do locatário.</p>
+            </details>
+            <details>
+              <summary>E se o carro for roubado?</summary>
+              <p>O caso entra em protocolo de ocorrência, com acionamento da equipe, proteção contratada, rastreador quando aplicável, boletim de ocorrência e procedimentos previstos em contrato.</p>
+            </details>
+            <details>
+              <summary>Receberei atualização durante a locação?</summary>
+              <p>Sim. O painel exibirá o status e a plataforma poderá enviar atualizações periódicas ou alertas em caso de ocorrência.</p>
+            </details>
+            <details>
+              <summary>Posso pedir meu carro de volta antes do fim?</summary>
+              <p>Não como regra. O veículo fica comprometido pelo período contratado, normalmente 30 dias ou mais, salvo situações previstas em contrato.</p>
+            </details>
+          </div>
+        </section>
+
+        <section class="dash-panel" id="rastreamento">
+          <h2>Segurança e rastreamento</h2>
+          <p>A NomadDrive recomenda fortemente rastreador nos veículos cadastrados e pode exigir rastreador para veículos de maior valor, locações longas ou perfis de maior risco.</p>
+          <div class="dash-list">
+            <div class="dash-row"><div class="dash-row__main"><strong>Rastreador informado</strong><span>Declarado pelo proprietário</span></div><span class="dash-pill dash-pill--warn" id="trkInformado">Não informado</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Rastreador validado</strong><span>Verificado pela operação</span></div><span class="dash-pill dash-pill--warn" id="trkValidado">Não validado</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Empresa parceira ou dispositivo</strong><span>Tipo de rastreador</span></div><span class="dash-pill dash-pill--neutral" id="trkTipo">A informar</span></div>
+            <div class="dash-row"><div class="dash-row__main"><strong>Último status</strong><span>Ativo, pendente, em validação ou indisponível</span></div><span class="dash-pill dash-pill--neutral" id="trkStatus">Indisponível</span></div>
+          </div>
+          <div class="why-box why-box--warn">
+            <h3>Para que serve o rastreador — e a privacidade do locatário</h3>
+            <p>Quando há rastreador, ele é usado para <strong>segurança patrimonial, suporte em emergência, prevenção de roubo/furto e gestão operacional</strong>, conforme o contrato e a política de privacidade. A <strong>localização exata do veículo não é exibida ao proprietário por padrão</strong>, para preservar a privacidade do locatário — não são mostradas rotas pessoais, endereço residencial nem local de trabalho.</p>
+          </div>
+        </section>
+
+        <section class="dash-panel" id="alertas">
+          <h2>Alertas do proprietário</h2>
+          <p>Durante a locação, a plataforma poderá enviar alertas operacionais. Veja os tipos de alerta que você pode receber:</p>
+          <div class="loc-alerts">
+            <div class="loc-alert"><strong>Locação iniciada</strong><span>O período de locação começou.</span></div>
+            <div class="loc-alert"><strong>Locação renovada</strong><span>O contrato foi estendido por um novo período.</span></div>
+            <div class="loc-alert"><strong>Devolução prevista em X dias</strong><span>Lembrete da data prevista de devolução.</span></div>
+            <div class="loc-alert"><strong>Checklist de devolução pendente</strong><span>A vistoria de devolução ainda não foi concluída.</span></div>
+            <div class="loc-alert"><strong>Ocorrência em análise</strong><span>Uma situação operacional está sendo avaliada.</span></div>
+            <div class="loc-alert"><strong>Multa registrada</strong><span>Uma infração foi registrada durante o período.</span></div>
+            <div class="loc-alert"><strong>Manutenção solicitada</strong><span>O veículo precisa de manutenção.</span></div>
+            <div class="loc-alert"><strong>Limpeza especial em análise</strong><span>Possível higienização acima do uso normal.</span></div>
+            <div class="loc-alert"><strong>Sinistro comunicado</strong><span>Um sinistro foi reportado e está em protocolo.</span></div>
+            <div class="loc-alert"><strong>Atraso na devolução</strong><span>O veículo não foi devolvido na data prevista.</span></div>
+          </div>
+          <p class="note">Estes são exemplos dos alertas previstos. Os alertas reais dependem do andamento de cada locação.</p>
         </section>
 
         <section class="dash-panel" id="simulador">
@@ -131,6 +277,18 @@
     }
     return row;
   }
+  function fmtDate(d) {
+    if (!d) return "a definir";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function fmtDateTime(d) {
+    if (!d) return "—";
+    var dt = new Date(d);
+    if (isNaN(dt.getTime())) return fmtDate(d);
+    return fmtDate(dt.toISOString()) + " às " +
+      ("0" + dt.getHours()).slice(-2) + ":" + ("0" + dt.getMinutes()).slice(-2);
+  }
 
   var a = window.ndAuth;
   if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
@@ -171,6 +329,44 @@
             .filter(Boolean).join(" · ") || "Dados do veículo";
           list.appendChild(rowEl(title, sub, a.statusLabel(v.status), pillKind(v.status)));
         });
+      }).catch(function () {});
+
+    /* acompanhamento da locação — bookings do proprietário (RLS: só os seus) */
+    a.client().from("bookings").select("*, vehicles(make,model,year_model)")
+      .order("created_at", { ascending: false })
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        var today = new Date().toISOString().slice(0, 10);
+        var active = null;
+        for (var n = 0; n < rows.length; n++) {
+          var bs = rows[n].status;
+          if (bs === "rascunho" || bs === "recusado" || bs === "suspenso") continue;
+          active = rows[n]; break;
+        }
+        if (!active) return;
+        document.getElementById("locEmpty").hidden = true;
+        document.getElementById("locActive").hidden = false;
+        var label = "Em locação";
+        if (active.start_date && active.start_date > today) label = "Reservado";
+        else if (active.end_date && active.end_date < today) label = "Em devolução";
+        document.getElementById("locStatus").textContent = label;
+        var v = active.vehicles || {};
+        var vt = [v.make, v.model].filter(Boolean).join(" ");
+        if (v.year_model) vt += " (" + v.year_model + ")";
+        document.getElementById("locVeic").textContent = vt || "Veículo da locação";
+        document.getElementById("locInicio").textContent = fmtDate(active.start_date);
+        document.getElementById("locFim").textContent = fmtDate(active.end_date);
+        document.getElementById("locUpdate").textContent =
+          fmtDateTime(active.updated_at || active.created_at);
+        var bruta = Number(active.monthly_price) || 0;
+        var taxa = Number(active.platform_fee) || 0;
+        var ownerAmt = Number(active.owner_estimated_amount) || (bruta - taxa);
+        var reserva = ownerAmt * 0.40;
+        document.getElementById("finBruta").textContent = bruta ? brl(bruta) : "—";
+        document.getElementById("finTaxa").textContent = taxa ? "− " + brl(taxa) : "—";
+        document.getElementById("finReserva").textContent = ownerAmt > 0 ? "− " + brl(reserva) : "—";
+        document.getElementById("finLiquido").textContent =
+          ownerAmt > 0 ? "≈ " + brl(ownerAmt - reserva) : "—";
       }).catch(function () {});
   });
 })();
