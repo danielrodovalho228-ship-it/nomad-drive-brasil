@@ -119,7 +119,7 @@ ul, ol { list-style: none; }
 }
 
 /* ---------- hero ---------- */
-.hero { padding: 116px 0 56px; background: linear-gradient(180deg, var(--green-l), #fff 70%); }
+.hero { padding: 104px 0 38px; background: linear-gradient(180deg, var(--green-l), #fff 70%); }
 .hero__inner { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
 .badge {
   display: inline-block; background: #fff; color: var(--green-d);
@@ -141,9 +141,9 @@ ul, ol { list-style: none; }
 .hero__visual.is-empty::after { content: "NomadDrive Brasil"; color: var(--muted); font-family: var(--font-d); }
 
 /* ---------- sections ---------- */
-.section { padding: 72px 0; }
+.section { padding: 52px 0; }
 .section--surface { background: var(--surface); }
-.section__head { max-width: 680px; margin: 0 auto 40px; text-align: center; }
+.section__head { max-width: 680px; margin: 0 auto 30px; text-align: center; }
 .eyebrow {
   display: inline-block; font-family: var(--font-d); font-weight: 700;
   font-size: 12.5px; letter-spacing: 1px; text-transform: uppercase;
@@ -157,7 +157,7 @@ ul, ol { list-style: none; }
 .link-arrow:hover { text-decoration: underline; }
 
 /* ---------- quick paths ---------- */
-.paths-section { padding: 56px 0; }
+.paths-section { padding: 44px 0; }
 .paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .path-card {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
@@ -451,7 +451,7 @@ ul, ol { list-style: none; }
 .faq details p { color: var(--muted); font-size: 14px; padding: 0 0 16px; }
 
 /* ---------- cta final ---------- */
-.cta-final { background: var(--dark); padding: 72px 0; text-align: center; color: #fff; }
+.cta-final { background: var(--dark); padding: 58px 0; text-align: center; color: #fff; }
 .cta-final h2 { font-size: clamp(24px, 3.4vw, 34px); }
 .cta-final p { color: #9fb3a8; margin: 12px 0 26px; font-size: 16px; }
 .cta-final__btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -501,8 +501,8 @@ ul, ol { list-style: none; }
 }
 @media (max-width: 620px) {
   .container { padding: 0 18px; }
-  .section { padding: 56px 0; }
-  .hero { padding: 100px 0 44px; }
+  .section { padding: 40px 0; }
+  .hero { padding: 90px 0 32px; }
   .hero__cta { flex-direction: column; }
   .hero__cta .btn { width: 100%; }
   .steps { grid-template-columns: 1fr; }
@@ -681,7 +681,7 @@ ul, ol { list-style: none; }
    PÁGINAS INTERNAS — hero
    ==================================================================== */
 .page-hero {
-  padding: 116px 0 44px;
+  padding: 100px 0 22px;
   background: linear-gradient(180deg, var(--green-l), #fff);
 }
 .page-hero h1 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; margin: 14px 0 12px; max-width: 780px; }
@@ -763,7 +763,7 @@ ul, ol { list-style: none; }
 }
 @media (max-width: 620px) {
   .prot-cards, .flow, .admin-grid { grid-template-columns: 1fr; }
-  .page-hero { padding: 100px 0 36px; }
+  .page-hero { padding: 86px 0 18px; }
 }
 
 /* ====================================================================
