@@ -344,7 +344,28 @@
       var when = form.elements["scheduled_at"].value;
       var loc = (form.elements["location"].value || "").trim();
       if (!when || !loc || !form.elements["accept"].checked) {
-        if (err) err.hidden = false; return;
+        if (err) { err.textContent = "Preencha a data e o local e marque o aceite."; err.hidden = false; }
+        return;
+      }
+      /* antifraude: o km do check-out não pode ser menor que o do check-in */
+      var kind = form.getAttribute("data-kind");
+      var bookingId = form.getAttribute("data-booking");
+      var mileageVal = form.elements["mileage"].value ? Number(form.elements["mileage"].value) : null;
+      if (kind === "checkout" && mileageVal != null) {
+        var insps = inspByBooking[bookingId] || [];
+        var checkinKm = null;
+        for (var n = 0; n < insps.length; n++) {
+          if (insps[n].kind === "checkin" && insps[n].mileage != null) {
+            checkinKm = Number(insps[n].mileage); break;
+          }
+        }
+        if (checkinKm != null && mileageVal < checkinKm) {
+          if (err) {
+            err.textContent = "O km do check-out não pode ser menor que o km do check-in (" + checkinKm + " km).";
+            err.hidden = false;
+          }
+          return;
+        }
       }
       if (err) err.hidden = true;
       var c = a.client();
