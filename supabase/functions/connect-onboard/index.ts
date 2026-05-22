@@ -98,7 +98,12 @@ Deno.serve(async (req) => {
         type: "express",
         country: "BR",
         email: user.email ?? undefined,
-        capabilities: { transfers: { requested: true } },
+        // No Brasil, a Stripe exige card_payments junto de transfers —
+        // pedir só transfers gera erro na criação da conta.
+        capabilities: {
+          transfers: { requested: true },
+          card_payments: { requested: true },
+        },
       });
       accountId = acct.id;
       await admin.from("payout_accounts").upsert({
