@@ -117,6 +117,16 @@ Deno.serve(async (req) => {
     });
     return json({ url: link.url });
   } catch (e) {
-    return json({ error: (e as Error)?.message ?? String(e) }, 500);
+    const msg = (e as Error)?.message ?? String(e);
+    // Estado conhecido: a conta Stripe da plataforma ainda não habilitou
+    // o Connect. Não é falha do app — devolve um código tratável para o
+    // front-end exibir mensagem clara em vez de erro genérico.
+    if (/signed up for Connect/i.test(msg) || /enable Connect/i.test(msg)) {
+      return json({
+        code: "connect_indisponivel",
+        error: "O recebimento via Stripe ainda não está disponível: o Stripe Connect precisa ser ativado na conta da plataforma.",
+      });
+    }
+    return json({ error: msg }, 500);
   }
 });

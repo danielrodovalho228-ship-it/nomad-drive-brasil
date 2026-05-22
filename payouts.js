@@ -57,7 +57,9 @@
     return c.functions.invoke("connect-onboard", {
       body: { action: action, return_path: returnPath }
     }).then(function (r) {
-      return (r && !r.error && r.data) ? r.data : null;
+      // devolve o corpo da resposta — inclui { url }, { status } ou
+      // { code, error } para o estado "Connect ainda não habilitado".
+      return (r && r.data) ? r.data : null;
     }, function () { return null; });
   }
 
@@ -78,7 +80,14 @@
       call("onboard").then(function (d) {
         if (d && d.url) { window.location.href = d.url; return; }
         btn.disabled = false; btn.textContent = label;
-        setNote("Não foi possível abrir o cadastro agora. Tente novamente.", "error");
+        if (d && d.code === "connect_indisponivel") {
+          // a plataforma ainda não ativou o Stripe Connect — não é falha
+          // de cadastro do usuário; o botão fica indisponível por ora.
+          btn.disabled = true;
+          setNote("O recebimento via Stripe ainda não foi ativado pela plataforma. Assim que o Stripe Connect estiver disponível, você poderá configurar sua conta de recebimento aqui.", "warn");
+        } else {
+          setNote("Não foi possível abrir o cadastro agora. Tente novamente.", "error");
+        }
       });
     });
   }
