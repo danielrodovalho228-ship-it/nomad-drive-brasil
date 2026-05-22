@@ -811,6 +811,10 @@
       }
       if (err) err.hidden = true;
       var priceRaw = document.getElementById("nbPrice").value;
+      var price = priceRaw ? Number(priceRaw) : null;
+      /* taxa da plataforma: 10% de todo aluguel */
+      var platformFee = price != null ? Math.round(price * 0.10 * 100) / 100 : null;
+      var ownerAmount = price != null ? Math.round(price * 0.90 * 100) / 100 : null;
       var btn = form.querySelector('button[type="submit"]');
       btn.disabled = true; btn.textContent = "Criando...";
       c.from("bookings").insert({
@@ -819,7 +823,9 @@
         vehicle_id: vehicleId,
         start_date: start,
         end_date: end,
-        monthly_price: priceRaw ? Number(priceRaw) : null,
+        monthly_price: price,
+        platform_fee: platformFee,
+        owner_estimated_amount: ownerAmount,
         status: "aprovado"
       }).then(function (rr) {
         btn.disabled = false; btn.textContent = "Criar reserva";

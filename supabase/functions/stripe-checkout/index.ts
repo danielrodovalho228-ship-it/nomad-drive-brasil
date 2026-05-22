@@ -103,10 +103,9 @@ Deno.serve(async (req) => {
       const ownerReady = !!(ownerAcct && ownerAcct.stripe_account_id &&
         (ownerAcct.status === "ativo" || ownerAcct.payouts_enabled === true));
       if (ownerReady) {
-        const DEFAULT_FEE_PCT = 0.20; // taxa padrão da plataforma (ajuste se desejar)
-        const feeCents = booking.platform_fee != null
-          ? Math.round(Number(booking.platform_fee) * 100)
-          : Math.round(amountCents * DEFAULT_FEE_PCT);
+        // taxa da plataforma: 10% de todo aluguel
+        const PLATFORM_FEE_PCT = 0.10;
+        const feeCents = Math.round(amountCents * PLATFORM_FEE_PCT);
         // a taxa nunca é negativa nem maior/igual ao total
         piData.application_fee_amount = Math.min(Math.max(feeCents, 0), amountCents - 1);
         piData.transfer_data = { destination: ownerAcct.stripe_account_id };

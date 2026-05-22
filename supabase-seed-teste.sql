@@ -113,7 +113,7 @@ begin
   insert into public.bookings (id, client_id, owner_id, vehicle_id, start_date, end_date,
                                monthly_price, platform_fee, owner_estimated_amount, status)
   select gen_random_uuid(), uid_cliente, uid_owner, v_vehicle_id,
-         current_date, current_date + 30, 2500, 500, 2000, 'aprovado'
+         current_date, current_date + 30, 2500, 250, 2250, 'aprovado'
   where not exists (
     select 1 from public.bookings where client_id = uid_cliente and vehicle_id = v_vehicle_id
   );
