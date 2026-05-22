@@ -36,6 +36,7 @@
       <a href="#visao" class="is-current">Visão geral</a>
       <a href="#notificacoes">Notificações</a>
       <a href="#cadastros">Cadastros e aprovações</a>
+      <a href="#documentos">Documentos (KYC)</a>
       <a href="#leads">Leads</a>
       <a href="#reservas">Reservas</a>
       <a href="#frota">Frota</a>
@@ -95,6 +96,18 @@
         <table class="admin-table">
           <thead><tr><th>Protocolo</th><th>Perfil</th><th>Nome</th><th>Cidade</th><th>Status</th></tr></thead>
           <tbody id="cadList"><tr><td colspan="5">Carregando cadastros...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DOCUMENTOS (KYC) -->
+    <section class="admin-block" id="documentos">
+      <h2>Documentos (KYC)</h2>
+      <p class="note">Documentos enviados pelos clientes (CNH, identidade e comprovantes). Confira o arquivo e altere o status para aprovar ou recusar. O arquivo abre por link temporário e privado.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Pessoa</th><th>Documento</th><th>Arquivo</th><th>Enviado em</th><th>Status</th></tr></thead>
+          <tbody id="kycList"><tr><td colspan="5">Carregando documentos...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -337,6 +350,7 @@
         });
       }).catch(function () {});
     loadCadastros();
+    loadUserDocuments();
     loadSections();
     loadNewBookingForm();
   }
@@ -381,6 +395,69 @@
           tb.appendChild(tr);
         });
       }).catch(function () {});
+  }
+
+  /* ---- Fase 9: revisão de documentos (KYC) ---- */
+  function docTypeLabel(t) {
+    var map = {
+      cnh: "CNH",
+      identidade: "Documento com foto",
+      comprovante_residencia: "Comprovante de residência",
+      comprovante_renda: "Comprovação de renda"
+    };
+    return map[t] || (t || "Documento");
+  }
+  function loadUserDocuments() {
+    var c = a.client();
+    var tb = document.getElementById("kycList");
+    if (!c || !tb) return;
+    c.from("profiles").select("id,full_name").then(function (rp) {
+      var names = {};
+      ((rp && rp.data) || []).forEach(function (p) { names[p.id] = p.full_name; });
+      c.from("user_documents").select("*").order("created_at", { ascending: false })
+        .limit(100).then(function (r) {
+          if (!r || r.error) {
+            tb.innerHTML = '<tr><td colspan="5">Não foi possível carregar agora.</td></tr>';
+            return;
+          }
+          var rows = r.data || [];
+          if (!rows.length) {
+            tb.innerHTML = '<tr><td colspan="5">Nenhum documento enviado ainda.</td></tr>';
+            return;
+          }
+          tb.innerHTML = "";
+          rows.forEach(function (d) {
+            var tr = document.createElement("tr");
+            function td(txt) { var x = document.createElement("td"); x.textContent = txt; return x; }
+            tr.appendChild(td(names[d.user_id] || "—"));
+            tr.appendChild(td(docTypeLabel(d.document_type)));
+            var fileTd = document.createElement("td");
+            var fn = document.createElement("span");
+            fn.textContent = (d.file_name || "arquivo") + " ";
+            fileTd.appendChild(fn);
+            var view = document.createElement("button");
+            view.type = "button";
+            view.className = "btn btn--outline btn--sm";
+            view.textContent = "Ver";
+            view.addEventListener("click", function () {
+              view.disabled = true;
+              c.storage.from("kyc-docs").createSignedUrl(d.file_path, 120).then(function (sr) {
+                view.disabled = false;
+                if (sr && sr.data && sr.data.signedUrl) {
+                  window.open(sr.data.signedUrl, "_blank", "noopener");
+                }
+              }).catch(function () { view.disabled = false; });
+            });
+            fileTd.appendChild(view);
+            tr.appendChild(fileTd);
+            tr.appendChild(td(fmtDate(d.created_at)));
+            tr.appendChild(statusCell("user_documents", "status", d));
+            tb.appendChild(tr);
+          });
+        }).catch(function () {
+          tb.innerHTML = '<tr><td colspan="5">Não foi possível carregar agora.</td></tr>';
+        });
+    }).catch(function () {});
   }
 
   /* ---- Fase 2c: módulos do admin ligados aos dados reais do Supabase ---- */

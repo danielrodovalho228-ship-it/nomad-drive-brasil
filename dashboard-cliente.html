@@ -67,13 +67,9 @@
 
         <section class="dash-panel" id="documentos">
           <h2>Documentos</h2>
-          <p>A Nomade Drive pode solicitar os documentos abaixo para validar o seu perfil. O envio de arquivos será habilitado nesta área em uma próxima etapa.</p>
-          <div class="dash-list">
-            <div class="dash-row"><div class="dash-row__main"><strong>CNH válida</strong><span>Obrigatória para dirigir</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
-            <div class="dash-row"><div class="dash-row__main"><strong>Documento oficial com foto</strong><span>RG ou equivalente</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
-            <div class="dash-row"><div class="dash-row__main"><strong>Comprovante de residência</strong><span>Atualizado</span></div><span class="dash-pill dash-pill--warn">A enviar</span></div>
-            <div class="dash-row"><div class="dash-row__main"><strong>Comprovação de renda ou vínculo</strong><span>Quando solicitado</span></div><span class="dash-pill dash-pill--neutral">Se solicitado</span></div>
-          </div>
+          <p>Envie os documentos abaixo para validar o seu perfil. Aceitamos imagem (JPG, PNG ou WEBP) ou PDF, até 8 MB por arquivo. Os arquivos ficam em área privada e só são acessados pela equipe de análise.</p>
+          <div class="dash-list" id="docList"></div>
+          <p class="form__err" id="docErr" hidden></p>
         </section>
 
         <section class="dash-panel" id="checklist">
@@ -221,6 +217,7 @@
       }).catch(function () {});
 
     loadCheckInOut();
+    loadDocuments();
   });
 
   /* ---- Fase 5: check-in / check-out ---- */
@@ -438,6 +435,160 @@
       });
     });
   })();
+
+  /* ---- Fase 9: documentos / KYC ---- */
+  var KYC_TYPES = [
+    { key: "cnh", label: "CNH válida", note: "Obrigatória para dirigir" },
+    { key: "identidade", label: "Documento oficial com foto", note: "RG ou equivalente" },
+    { key: "comprovante_residencia", label: "Comprovante de residência", note: "Emitido nos últimos 3 meses" },
+    { key: "comprovante_renda", label: "Comprovação de renda ou vínculo", note: "Quando solicitada pela análise" }
+  ];
+  var KYC_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+  var KYC_MAX = 8 * 1024 * 1024;
+
+  function docError(msg) {
+    var e = document.getElementById("docErr");
+    if (!e) return;
+    e.textContent = msg || "";
+    e.hidden = !msg;
+  }
+  function docStatusInfo(doc) {
+    if (!doc) return { text: "Ainda não enviado", pill: "A enviar", kind: "warn" };
+    var s = doc.status;
+    if (s === "aprovado" || s === "aprovado_com_ressalvas")
+      return { text: "Documento aprovado pela equipe", pill: "Aprovado", kind: "ok" };
+    if (s === "recusado")
+      return {
+        text: doc.review_notes ? "Recusado — " + doc.review_notes : "Recusado — reenvie o documento",
+        pill: "Recusado", kind: "bad"
+      };
+    return { text: "Recebido — em análise pela equipe", pill: "Em análise", kind: "warn" };
+  }
+  function renderDocs(docs) {
+    var list = document.getElementById("docList");
+    if (!list) return;
+    var latest = {};
+    docs.forEach(function (d) {
+      if (!latest[d.document_type]) latest[d.document_type] = d;
+    });
+    list.innerHTML = "";
+    KYC_TYPES.forEach(function (t) { list.appendChild(docCard(t, latest[t.key])); });
+  }
+  function docCard(t, doc) {
+    var card = document.createElement("div");
+    card.className = "insp-card";
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var strong = document.createElement("strong"); strong.textContent = t.label;
+    var span = document.createElement("span");
+    var info = docStatusInfo(doc);
+    span.textContent = doc
+      ? (doc.file_name || "Arquivo enviado") + " · " + info.text
+      : t.note;
+    head.appendChild(strong); head.appendChild(span);
+    card.appendChild(head);
+
+    var actions = document.createElement("div");
+    actions.className = "insp-card__actions";
+    var pill = document.createElement("span");
+    pill.className = "dash-pill dash-pill--" + info.kind;
+    pill.textContent = info.pill;
+    actions.appendChild(pill);
+
+    var c = a.client();
+    var input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/jpeg,image/png,image/webp,application/pdf";
+    input.style.display = "none";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn--solid btn--sm";
+    btn.textContent = doc ? "Substituir" : "Enviar documento";
+    if (!c) { btn.disabled = true; btn.title = "Conecte o Supabase para enviar."; }
+    btn.addEventListener("click", function () { input.click(); });
+    input.addEventListener("change", function () {
+      if (input.files && input.files[0]) uploadDoc(t, input.files[0], doc);
+    });
+    actions.appendChild(btn);
+    actions.appendChild(input);
+
+    if (doc && c) {
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "btn btn--ghost btn--sm";
+      rm.textContent = "Remover";
+      rm.addEventListener("click", function () { removeDoc(doc); });
+      actions.appendChild(rm);
+    }
+    card.appendChild(actions);
+    return card;
+  }
+  function loadDocuments() {
+    var c = a.client();
+    if (!c) { renderDocs([]); return; }
+    c.from("user_documents").select("*").order("created_at", { ascending: false })
+      .then(function (r) { renderDocs((r && r.data) || []); })
+      .catch(function () { renderDocs([]); });
+  }
+  function uploadDoc(t, file, existing) {
+    docError("");
+    if (KYC_MIME.indexOf(file.type) === -1) {
+      docError("Formato não aceito em \"" + t.label + "\". Envie imagem JPG, PNG, WEBP ou PDF.");
+      return;
+    }
+    if (file.size > KYC_MAX) {
+      docError("O arquivo de \"" + t.label + "\" passa de 8 MB. Envie um arquivo menor.");
+      return;
+    }
+    var c = a.client();
+    if (!c) { docError("Conecte o Supabase para enviar documentos."); return; }
+    a.getSession().then(function (s) {
+      if (!s) { docError("Sua sessão expirou. Entre novamente para enviar."); return; }
+      var ext = (String(file.name).split(".").pop() || "dat")
+        .toLowerCase().replace(/[^a-z0-9]/g, "") || "dat";
+      var path = s.user.id + "/" + t.key + "-" + Date.now() + "." + ext;
+      showNotice("Enviando \"" + t.label + "\"...", "warn");
+      c.storage.from("kyc-docs").upload(path, file, { upsert: false }).then(function (up) {
+        if (up && up.error) {
+          showNotice("Não foi possível enviar o arquivo agora. Tente novamente.", "error");
+          return;
+        }
+        c.from("user_documents").insert({
+          user_id: s.user.id,
+          document_type: t.key,
+          file_path: path,
+          file_name: String(file.name).slice(0, 180),
+          status: "em_analise"
+        }).then(function (ins) {
+          if (ins && ins.error) {
+            showNotice("Arquivo enviado, mas houve falha ao registrar. Tente novamente.", "error");
+            return;
+          }
+          if (existing && existing.id) {
+            c.storage.from("kyc-docs").remove([existing.file_path]).catch(function () {});
+            c.from("user_documents").delete().eq("id", existing.id).catch(function () {});
+          }
+          showNotice("Documento enviado. A equipe vai analisar e atualizar o status.", "ok");
+          loadDocuments();
+        }).catch(function () {
+          showNotice("Não foi possível registrar o documento. Tente novamente.", "error");
+        });
+      }).catch(function () {
+        showNotice("Não foi possível enviar o arquivo agora. Tente novamente.", "error");
+      });
+    });
+  }
+  function removeDoc(doc) {
+    var c = a.client();
+    if (!c) return;
+    c.storage.from("kyc-docs").remove([doc.file_path]).catch(function () {});
+    c.from("user_documents").delete().eq("id", doc.id).then(function (r) {
+      if (r && r.error) { showNotice("Não foi possível remover agora. Tente novamente.", "error"); return; }
+      showNotice("Documento removido.", "ok");
+      loadDocuments();
+    }).catch(function () {});
+  }
+  renderDocs([]);
 })();
 </script>
 </body>
