@@ -263,13 +263,18 @@
     btn.disabled = true; btn.textContent = "Abrindo pagamento...";
     c.functions.invoke("stripe-checkout", { body: { booking_id: bookingId, kind: kind } })
       .then(function (r) {
-        if (r.error || !r.data || !r.data.url) {
+        if (r && r.error) {
+          console.error("stripe-checkout — erro:", r.error.name, "|",
+            r.error.message, "|", r.error.context || r.error.status || "");
+        }
+        if (!r || r.error || !r.data || !r.data.url) {
           btn.disabled = false; btn.textContent = label;
           payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
           return;
         }
         window.location.href = r.data.url;
-      }).catch(function () {
+      }).catch(function (e) {
+        console.error("stripe-checkout — exceção:", e);
         btn.disabled = false; btn.textContent = label;
         payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
       });
