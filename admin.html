@@ -44,6 +44,7 @@
       <a href="#parceiros">Parceiros</a>
       <a href="#sinistros">Proteção / Sinistros</a>
       <a href="#financeiro">Financeiro estimado</a>
+      <a href="#log">Log de atividades</a>
       <a href="#config">Configurações</a>
     </nav>
     <a href="index.html" class="admin-side__back">← Voltar ao site</a>
@@ -57,7 +58,7 @@
         <h1>Painel Administrativo</h1>
         <p>Área restrita · Super admin</p>
       </div>
-      <span class="admin-demo">Demonstração — dados fictícios, sem backend</span>
+      <span class="admin-demo" id="adminDemoBadge">Modo demonstração</span>
     </header>
 
     <!-- VISÃO GERAL -->
@@ -101,79 +102,85 @@
     <!-- LEADS -->
     <section class="admin-block" id="leads">
       <h2>Leads de locação</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Lead</span><span>Categoria</span><span>Duração</span><span>Status</span></div>
-        <div class="admin-row"><span>Marina A.</span><span>Confort</span><span>2 meses</span><span><i class="pill pill--info">Em contato</i></span></div>
-        <div class="admin-row"><span>Ricardo P.</span><span>Premium</span><span>3 meses</span><span><i class="pill pill--wait">Orçamento enviado</i></span></div>
-        <div class="admin-row"><span>Júlia M.</span><span>Econômico</span><span>1 mês</span><span><i class="pill pill--ok">Convertido</i></span></div>
-        <div class="admin-row"><span>Tiago R.</span><span>Confort</span><span>4 meses</span><span><i class="pill pill--info">Em análise</i></span></div>
+      <p class="note">Solicitações de orçamento enviadas pelos clientes. Altere o status para conduzir o atendimento.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Data</th><th>Cidade</th><th>Duração</th><th>Início desejado</th><th>Status</th></tr></thead>
+          <tbody id="leadsList"><tr><td colspan="5">Carregando leads...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- RESERVAS -->
     <section class="admin-block" id="reservas">
       <h2>Reservas</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Veículo</span><span>Cliente</span><span>Período</span><span>Status</span></div>
-        <div class="admin-row"><span>Fiat Cronos 2023</span><span>Júlia M.</span><span>Mai–Jun</span><span><i class="pill pill--ok">Ativa</i></span></div>
-        <div class="admin-row"><span>Chevrolet Cobalt 2018</span><span>André S.</span><span>Abr–Jul</span><span><i class="pill pill--ok">Ativa</i></span></div>
-        <div class="admin-row"><span>Toyota Corolla 2021</span><span>Empresa Lmisa</span><span>Jun–Set</span><span><i class="pill pill--wait">A confirmar</i></span></div>
+      <p class="note">Locações registradas na plataforma. Altere o status conforme a reserva avança.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Veículo</th><th>Período</th><th>Valor mensal</th><th>Status</th></tr></thead>
+          <tbody id="reservasList"><tr><td colspan="4">Carregando reservas...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- FROTA -->
     <section class="admin-block" id="frota">
-      <h2>Frota — veículos aguardando checklist</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Veículo</span><span>Proprietário</span><span>Etapa</span><span>Status</span></div>
-        <div class="admin-row"><span>Hyundai HB20 2019</span><span>Carlos T.</span><span>Checklist em oficina</span><span><i class="pill pill--warn">Aguardando laudo</i></span></div>
-        <div class="admin-row"><span>Jeep Renegade 2020</span><span>Patrícia L.</span><span>Documentos</span><span><i class="pill pill--info">Em análise</i></span></div>
-        <div class="admin-row"><span>Chevrolet Onix 2021</span><span>Bruno F.</span><span>Aprovação operacional</span><span><i class="pill pill--wait">Pendente</i></span></div>
+      <h2>Frota</h2>
+      <p class="note">Veículos cadastrados na plataforma. Altere o status para conduzir a aprovação.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Veículo</th><th>Categoria</th><th>Km</th><th>Cidade</th><th>Status</th></tr></thead>
+          <tbody id="frotaList"><tr><td colspan="5">Carregando frota...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- PROPRIETÁRIOS -->
     <section class="admin-block" id="proprietarios">
-      <h2>Proprietários — funil de aprovação</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Proprietário</span><span>Veículo</span><span>Etapa</span><span>Status</span></div>
-        <div class="admin-row"><span>Carlos T.</span><span>HB20 2019</span><span>Checklist técnico</span><span><i class="pill pill--warn">Em oficina</i></span></div>
-        <div class="admin-row"><span>Patrícia L.</span><span>Renegade 2020</span><span>Documentos</span><span><i class="pill pill--info">Em análise</i></span></div>
-        <div class="admin-row"><span>Eduardo N.</span><span>Corolla 2020</span><span>Simulação</span><span><i class="pill pill--wait">Aceite pendente</i></span></div>
-        <div class="admin-row"><span>Sandra V.</span><span>Argo 2022</span><span>Aprovação</span><span><i class="pill pill--ok">Aprovado</i></span></div>
+      <h2>Proprietários</h2>
+      <p class="note">Pessoas cadastradas como proprietárias de veículo. Altere o status da verificação.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Nome</th><th>Cidade</th><th>Telefone</th><th>Status</th></tr></thead>
+          <tbody id="proprietariosList"><tr><td colspan="4">Carregando proprietários...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- OFICINAS -->
     <section class="admin-block" id="oficinas">
       <h2>Oficinas em credenciamento</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Oficina</span><span>Cidade</span><span>Etapa</span><span>Status</span></div>
-        <div class="admin-row"><span>Oficina Centro</span><span>Uberlândia</span><span>Validação CNPJ</span><span><i class="pill pill--info">Em análise</i></span></div>
-        <div class="admin-row"><span>AutoTécnica Sul</span><span>Uberlândia</span><span>Estrutura</span><span><i class="pill pill--wait">Pendente</i></span></div>
-        <div class="admin-row"><span>Mecânica Aurora</span><span>Araguari</span><span>Checklist padrão</span><span><i class="pill pill--ok">Aprovada</i></span></div>
+      <p class="note">Oficinas cadastradas na plataforma. Altere o status para conduzir o credenciamento.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Oficina</th><th>Cidade</th><th>Responsável</th><th>Status</th></tr></thead>
+          <tbody id="oficinasList"><tr><td colspan="4">Carregando oficinas...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- PARCEIROS -->
     <section class="admin-block" id="parceiros">
       <h2>Indicações de parceiros</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Parceiro</span><span>Tipo</span><span>Indicação</span><span>Status</span></div>
-        <div class="admin-row"><span>Lucas (corretor)</span><span>Corretor</span><span>Proprietário</span><span><i class="pill pill--ok">Crédito liberado</i></span></div>
-        <div class="admin-row"><span>Imob. Vista</span><span>Empresa</span><span>Locatário</span><span><i class="pill pill--info">Em contato</i></span></div>
-        <div class="admin-row"><span>@uberlandia.car</span><span>Influenciador</span><span>Locatário</span><span><i class="pill pill--wait">Em análise</i></span></div>
+      <p class="note">Indicações enviadas pelos parceiros. Altere o status conforme a análise.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Indicado</th><th>Tipo</th><th>Comissão</th><th>Status</th></tr></thead>
+          <tbody id="parceirosList"><tr><td colspan="4">Carregando indicações...</td></tr></tbody>
+        </table>
       </div>
     </section>
 
     <!-- SINISTROS -->
     <section class="admin-block" id="sinistros">
       <h2>Proteção e sinistros</h2>
-      <div class="admin-table">
-        <div class="admin-row admin-row--head"><span>Caso</span><span>Veículo</span><span>Tipo</span><span>Status</span></div>
-        <div class="admin-row"><span>SIN-0007</span><span>Cobalt 2018</span><span>Avaria leve</span><span><i class="pill pill--info">Análise de contrato</i></span></div>
-      </div>
       <p class="note">Casos seguem o fluxo: registro, triagem, análise de contrato/proteção, orçamento ou oficina e resolução.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Tipo</th><th>Veículo</th><th>Valor estimado</th><th>Status</th></tr></thead>
+          <tbody id="sinistrosList"><tr><td colspan="4">Carregando casos...</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- FINANCEIRO -->
@@ -186,6 +193,18 @@
         <div class="kpi"><small>Ticket médio</small><b>R$ 3,5 mil</b><span>por locação</span></div>
       </div>
       <p class="note">Valores estimados e demonstrativos. Não refletem dados reais da operação.</p>
+    </section>
+
+    <!-- LOG DE ATIVIDADES -->
+    <section class="admin-block" id="log">
+      <h2>Log de atividades</h2>
+      <p class="note">Registro de ações administrativas sobre cadastros, veículos e operações.</p>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead><tr><th>Data</th><th>Ação</th><th>Alvo</th></tr></thead>
+          <tbody id="logList"><tr><td colspan="3">Carregando registros...</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- CONFIG -->
@@ -254,6 +273,8 @@
         return;
       }
       gate.hidden = true;
+      var demoBadge = document.getElementById("adminDemoBadge");
+      if (demoBadge) demoBadge.hidden = true;
       loadAdminData();
     });
   });
@@ -301,6 +322,7 @@
         });
       }).catch(function () {});
     loadCadastros();
+    loadSections();
   }
   function loadCadastros() {
     var c = a.client();
@@ -343,6 +365,162 @@
           tb.appendChild(tr);
         });
       }).catch(function () {});
+  }
+
+  /* ---- Fase 2c: módulos do admin ligados aos dados reais do Supabase ---- */
+  var ENTITY_STATI = ["rascunho", "email_verificado", "em_analise", "documentos_pendentes",
+    "aprovado", "aprovado_com_ressalvas", "recusado", "suspenso", "bloqueado_para_revisao"];
+
+  function fmtDate(v) {
+    if (!v) return "—";
+    var d = new Date(v);
+    return isNaN(d.getTime()) ? "—" : d.toLocaleDateString("pt-BR");
+  }
+  function fmtMoney(v) {
+    if (v === null || v === undefined || v === "") return "—";
+    var n = Number(v);
+    return isNaN(n) ? "—" : "R$ " + n.toLocaleString("pt-BR");
+  }
+  function fmtKm(v) {
+    if (v === null || v === undefined || v === "") return "—";
+    var n = Number(v);
+    return isNaN(n) ? "—" : n.toLocaleString("pt-BR") + " km";
+  }
+  function vehLabel(v) {
+    if (!v) return "—";
+    var parts = [v.make, v.model, v.year_model].filter(function (x) { return x; });
+    return parts.length ? parts.join(" ") : "—";
+  }
+
+  /* célula de status: <select> que grava a mudança no Supabase */
+  function statusCell(table, field, row) {
+    var td = document.createElement("td");
+    var sel = document.createElement("select");
+    sel.className = "cad-status";
+    ENTITY_STATI.forEach(function (s) {
+      var o = document.createElement("option");
+      o.value = s;
+      o.textContent = a.statusLabel ? a.statusLabel(s) : s;
+      if (s === row[field]) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", function () {
+      var c = a.client();
+      if (!c) return;
+      sel.disabled = true;
+      var patch = {};
+      patch[field] = sel.value;
+      c.from(table).update(patch).eq("id", row.id).then(function (rr) {
+        sel.disabled = false;
+        sel.style.borderColor = (rr && rr.error) ? "#c0392b" : "";
+      }).catch(function () { sel.disabled = false; });
+    });
+    td.appendChild(sel);
+    return td;
+  }
+
+  /* carrega uma seção no mesmo padrão de "Cadastros e aprovações" */
+  function loadSection(opts) {
+    var c = a.client();
+    var tb = document.getElementById(opts.tbodyId);
+    if (!c || !tb) return;
+    var span = opts.columns.length + (opts.statusField ? 1 : 0);
+    function fail() {
+      tb.innerHTML = '<tr><td colspan="' + span + '">Não foi possível carregar agora.</td></tr>';
+    }
+    var q = c.from(opts.table).select(opts.select || "*");
+    if (opts.filter) q = q.eq(opts.filter[0], opts.filter[1]);
+    q.order("created_at", { ascending: false }).limit(100).then(function (r) {
+      if (!r || r.error) { fail(); return; }
+      var rows = r.data || [];
+      if (!rows.length) {
+        tb.innerHTML = '<tr><td colspan="' + span + '">Nada por aqui ainda.</td></tr>';
+        return;
+      }
+      tb.innerHTML = "";
+      rows.forEach(function (row) {
+        var tr = document.createElement("tr");
+        opts.columns.forEach(function (get) {
+          var td = document.createElement("td");
+          td.textContent = get(row);
+          tr.appendChild(td);
+        });
+        if (opts.statusField) tr.appendChild(statusCell(opts.table, opts.statusField, row));
+        tb.appendChild(tr);
+      });
+    }).catch(fail);
+  }
+
+  function loadSections() {
+    loadSection({
+      table: "rental_requests", tbodyId: "leadsList", statusField: "status",
+      columns: [
+        function (r) { return fmtDate(r.created_at); },
+        function (r) { return r.city || "—"; },
+        function (r) { return r.desired_months ? (r.desired_months + " mês(es)") : "—"; },
+        function (r) { return fmtDate(r.desired_start_date); }
+      ]
+    });
+    loadSection({
+      table: "bookings", tbodyId: "reservasList", statusField: "status",
+      select: "*, vehicles(make,model,year_model)",
+      columns: [
+        function (r) { return vehLabel(r.vehicles); },
+        function (r) { return fmtDate(r.start_date) + " – " + fmtDate(r.end_date); },
+        function (r) { return fmtMoney(r.monthly_price); }
+      ]
+    });
+    loadSection({
+      table: "vehicles", tbodyId: "frotaList", statusField: "status",
+      columns: [
+        function (r) { return vehLabel(r); },
+        function (r) { return r.category || "—"; },
+        function (r) { return fmtKm(r.mileage); },
+        function (r) { return r.city || "—"; }
+      ]
+    });
+    loadSection({
+      table: "profiles", tbodyId: "proprietariosList", statusField: "verification_status",
+      filter: ["main_role", "owner"],
+      columns: [
+        function (r) { return r.full_name || "—"; },
+        function (r) { return r.city || "—"; },
+        function (r) { return r.phone || "—"; }
+      ]
+    });
+    loadSection({
+      table: "workshops", tbodyId: "oficinasList", statusField: "status",
+      columns: [
+        function (r) { return r.business_name || "—"; },
+        function (r) { return r.city || "—"; },
+        function (r) { return r.responsible_name || "—"; }
+      ]
+    });
+    loadSection({
+      table: "partners_referrals", tbodyId: "parceirosList", statusField: "status",
+      columns: [
+        function (r) { return r.referred_name || "—"; },
+        function (r) { return r.referral_type || "—"; },
+        function (r) { return r.commission_status || "—"; }
+      ]
+    });
+    loadSection({
+      table: "protection_cases", tbodyId: "sinistrosList", statusField: "status",
+      select: "*, vehicles(make,model,year_model)",
+      columns: [
+        function (r) { return r.case_type || "—"; },
+        function (r) { return vehLabel(r.vehicles); },
+        function (r) { return fmtMoney(r.estimated_amount); }
+      ]
+    });
+    loadSection({
+      table: "admin_audit_logs", tbodyId: "logList",
+      columns: [
+        function (r) { return fmtDate(r.created_at); },
+        function (r) { return r.action || "—"; },
+        function (r) { return r.target_type || "—"; }
+      ]
+    });
   }
 })();
 </script>
