@@ -121,30 +121,10 @@
             </div>
           </div>
 
-          <div class="block-title">Checklists de retirada e devolução</div>
-          <div class="loc-checklists">
-            <div class="loc-check">
-              <h3>Checklist de retirada</h3>
-              <ul class="loc-check__list">
-                <li><span>Fotos do veículo</span><b>a registrar</b></li>
-                <li><span>Quilometragem inicial</span><b>a registrar</b></li>
-                <li><span>Nível de combustível</span><b>a registrar</b></li>
-                <li><span>Condição geral</span><b>a registrar</b></li>
-                <li><span>Observações</span><b>a registrar</b></li>
-              </ul>
-            </div>
-            <div class="loc-check">
-              <h3>Checklist de devolução</h3>
-              <ul class="loc-check__list">
-                <li><span>Fotos do veículo</span><b>a registrar</b></li>
-                <li><span>Quilometragem final</span><b>a registrar</b></li>
-                <li><span>Nível de combustível</span><b>a registrar</b></li>
-                <li><span>Limpeza</span><b>a registrar</b></li>
-                <li><span>Danos</span><b>a registrar</b></li>
-                <li><span>Pendências</span><b>a registrar</b></li>
-              </ul>
-            </div>
-          </div>
+          <div class="block-title">Check-in e check-out</div>
+          <p class="note">Quando o cliente solicita a retirada (check-in) ou a devolução (check-out) do veículo, o pedido aparece aqui para você aprovar ou recusar.</p>
+          <div class="dash-list" id="ownerInspList"></div>
+          <div class="dash-empty" id="ownerInspEmpty">Nenhuma solicitação de check-in ou check-out no momento.</div>
 
           <div class="block-title">Segurança do veículo</div>
           <div class="dash-list">
@@ -368,7 +348,84 @@
         document.getElementById("finLiquido").textContent =
           ownerAmt > 0 ? "≈ " + brl(ownerAmt - reserva) : "—";
       }).catch(function () {});
+
+    loadOwnerInspections();
   });
+
+  /* ---- Fase 5: validação de check-in / check-out ---- */
+  function inspKindLabel(k) { return k === "checkout" ? "Check-out" : "Check-in"; }
+
+  function loadOwnerInspections() {
+    var c = a.client();
+    var list = document.getElementById("ownerInspList");
+    var empty = document.getElementById("ownerInspEmpty");
+    if (!c || !list) return;
+    c.from("rental_inspections").select("*")
+      .order("created_at", { ascending: false }).then(function (r) {
+        var rows = (r && r.data) || [];
+        list.innerHTML = "";
+        if (!rows.length) { if (empty) empty.hidden = false; return; }
+        if (empty) empty.hidden = true;
+        rows.forEach(function (i) { list.appendChild(ownerInspCard(i)); });
+      }).catch(function () {});
+  }
+
+  function ownerInspCard(i) {
+    var card = document.createElement("div");
+    card.className = "insp-card";
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    t.textContent = inspKindLabel(i.kind) + " — " + fmtDateTime(i.scheduled_at);
+    var sub = document.createElement("span");
+    var bits = [];
+    if (i.location) bits.push(i.location);
+    if (i.mileage != null && i.mileage !== "") bits.push(i.mileage + " km");
+    if (i.fuel_level) bits.push("combustível: " + i.fuel_level);
+    sub.textContent = bits.join(" · ") || "Sem detalhes adicionais";
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+    if (i.notes) {
+      var note = document.createElement("p");
+      note.className = "insp-card__msg";
+      note.textContent = "Observações: " + i.notes;
+      card.appendChild(note);
+    }
+    var actions = document.createElement("div");
+    actions.className = "insp-card__actions";
+    if (i.status === "solicitado") {
+      actions.appendChild(validateBtn(i, "aprovado", "Aprovar", "btn--solid"));
+      actions.appendChild(validateBtn(i, "recusado", "Recusar", "btn--ghost"));
+    } else {
+      var pill = document.createElement("span");
+      pill.className = "dash-pill dash-pill--" + (i.status === "aprovado" ? "ok" : "bad");
+      pill.textContent = i.status === "aprovado" ? "Aprovado" : "Recusado";
+      actions.appendChild(pill);
+    }
+    card.appendChild(actions);
+    return card;
+  }
+
+  function validateBtn(i, newStatus, label, variant) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn " + variant + " btn--sm";
+    btn.textContent = label;
+    btn.addEventListener("click", function () {
+      var c = a.client();
+      if (!c) return;
+      btn.disabled = true;
+      c.from("rental_inspections").update({
+        status: newStatus,
+        validated_at: new Date().toISOString()
+      }).eq("id", i.id).then(function (r) {
+        btn.disabled = false;
+        if (r && r.error) { showNotice("Não foi possível salvar agora. Tente novamente.", "error"); return; }
+        loadOwnerInspections();
+      }).catch(function () { btn.disabled = false; });
+    });
+    return btn;
+  }
 })();
 </script>
 </body>

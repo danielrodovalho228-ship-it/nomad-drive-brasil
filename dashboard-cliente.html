@@ -39,7 +39,7 @@
           <a href="#visao">Visão geral</a>
           <a href="#solicitacoes">Solicitações</a>
           <a href="#documentos">Documentos</a>
-          <a href="#checklist">Retirada e devolução</a>
+          <a href="#checklist">Check-in / check-out</a>
           <a href="#suporte">Suporte</a>
         </nav>
       </aside>
@@ -76,8 +76,37 @@
         </section>
 
         <section class="dash-panel" id="checklist">
-          <h2>Checklist de retirada e devolução</h2>
-          <p>Na retirada e na devolução, o veículo passa por vistoria com fotos. Devolva o carro limpo e em condições adequadas de uso — situações de mau uso podem gerar cobrança.</p>
+          <h2>Check-in e check-out</h2>
+          <p>Quando estiver perto de retirar ou devolver o veículo, solicite o check-in ou o check-out aqui. Cada solicitação é validada pelo proprietário.</p>
+          <div class="dash-list" id="bookingsList"></div>
+          <div class="dash-empty" id="bookingsEmpty">Você ainda não tem uma reserva confirmada. O check-in fica disponível quando uma locação é confirmada.</div>
+
+          <form class="form insp-form" id="inspForm" hidden>
+            <h3 id="inspFormTitle">Solicitar check-in</h3>
+            <div class="form__grid">
+              <label class="field"><span>Data e hora *</span><input type="datetime-local" name="scheduled_at" required /></label>
+              <label class="field"><span>Local *</span><input type="text" name="location" required placeholder="Uberlândia-MG" /></label>
+              <label class="field"><span>Quilometragem (km)</span><input type="number" name="mileage" min="0" inputmode="numeric" /></label>
+              <label class="field"><span>Combustível</span>
+                <select name="fuel_level">
+                  <option value="">Selecione</option>
+                  <option value="vazio">Vazio</option>
+                  <option value="1/4">1/4</option>
+                  <option value="1/2">1/2</option>
+                  <option value="3/4">3/4</option>
+                  <option value="cheio">Cheio</option>
+                </select>
+              </label>
+              <label class="field field--full"><span>Observações</span><textarea name="notes" rows="2"></textarea></label>
+            </div>
+            <label class="insp-accept"><input type="checkbox" name="accept" /> <span>Confirmo que as informações acima estão corretas.</span></label>
+            <p class="form__err" id="inspErr" hidden>Preencha a data e o local e marque o aceite.</p>
+            <div class="insp-actions">
+              <button type="submit" class="btn btn--solid btn--sm">Enviar solicitação</button>
+              <button type="button" class="btn btn--ghost btn--sm" id="inspCancel">Cancelar</button>
+            </div>
+          </form>
+
           <a href="seguranca-sinistros.html#limpeza" class="btn btn--outline btn--sm dash-cta">Ver a política de limpeza e devolução</a>
         </section>
 
@@ -178,7 +207,172 @@
             a.statusLabel(req.status), pillKind(req.status)));
         });
       }).catch(function () {});
+
+    loadCheckInOut();
   });
+
+  /* ---- Fase 5: check-in / check-out ---- */
+  var inspByBooking = {};
+
+  function vehText(v) {
+    if (!v) return "Veículo da reserva";
+    var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) t += " (" + v.year_model + ")";
+    return t;
+  }
+  function fmtDateTime(v) {
+    if (!v) return "data a definir";
+    var dt = new Date(v);
+    if (isNaN(dt.getTime())) return fmtDate(v);
+    return ("0" + dt.getDate()).slice(-2) + "/" + ("0" + (dt.getMonth() + 1)).slice(-2) +
+      "/" + dt.getFullYear() + " " + ("0" + dt.getHours()).slice(-2) +
+      ":" + ("0" + dt.getMinutes()).slice(-2);
+  }
+  function inspKindLabel(k) { return k === "checkout" ? "Check-out" : "Check-in"; }
+  function inspPillKind(s) {
+    return s === "aprovado" ? "ok" : (s === "recusado" ? "bad" : "warn");
+  }
+  function inspStatusLabel(s) {
+    return s === "aprovado" ? "Aprovado"
+      : (s === "recusado" ? "Recusado" : "Aguardando aprovação");
+  }
+
+  function loadCheckInOut() {
+    var c = a.client();
+    if (!c) return;
+    c.from("bookings").select("*, vehicles(make,model,year_model)")
+      .order("created_at", { ascending: false }).then(function (rb) {
+        var bookings = (rb && rb.data) || [];
+        c.from("rental_inspections").select("*")
+          .order("created_at", { ascending: false }).then(function (ri) {
+            inspByBooking = {};
+            ((ri && ri.data) || []).forEach(function (i) {
+              (inspByBooking[i.booking_id] = inspByBooking[i.booking_id] || []).push(i);
+            });
+            renderBookings(bookings);
+          }).catch(function () { renderBookings(bookings); });
+      }).catch(function () {});
+  }
+
+  function renderBookings(bookings) {
+    var list = document.getElementById("bookingsList");
+    var empty = document.getElementById("bookingsEmpty");
+    if (!list) return;
+    list.innerHTML = "";
+    var usable = bookings.filter(function (b) {
+      return b.status !== "rascunho" && b.status !== "recusado";
+    });
+    if (!usable.length) { if (empty) empty.hidden = false; return; }
+    if (empty) empty.hidden = true;
+    usable.forEach(function (b) { list.appendChild(bookingCard(b)); });
+  }
+
+  function bookingCard(b) {
+    var card = document.createElement("div");
+    card.className = "insp-card";
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong"); t.textContent = vehText(b.vehicles);
+    var per = document.createElement("span");
+    per.textContent = "Período: " + fmtDate(b.start_date) + " — " + fmtDate(b.end_date);
+    head.appendChild(t); head.appendChild(per);
+    card.appendChild(head);
+
+    var insps = inspByBooking[b.id] || [];
+    insps.slice().reverse().forEach(function (i) {
+      var sub = fmtDateTime(i.scheduled_at) +
+        (i.mileage != null && i.mileage !== "" ? " · " + i.mileage + " km" : "");
+      card.appendChild(rowEl(inspKindLabel(i.kind), sub,
+        inspStatusLabel(i.status), inspPillKind(i.status)));
+    });
+
+    var approvedIn = insps.some(function (i) { return i.kind === "checkin" && i.status === "aprovado"; });
+    var pendingIn = insps.some(function (i) { return i.kind === "checkin" && i.status === "solicitado"; });
+    var approvedOut = insps.some(function (i) { return i.kind === "checkout" && i.status === "aprovado"; });
+    var pendingOut = insps.some(function (i) { return i.kind === "checkout" && i.status === "solicitado"; });
+
+    var actions = document.createElement("div");
+    actions.className = "insp-card__actions";
+    if (!approvedIn && !pendingIn) {
+      actions.appendChild(actionBtn(b, "checkin", "Solicitar check-in"));
+    } else if (approvedIn && !approvedOut && !pendingOut) {
+      actions.appendChild(actionBtn(b, "checkout", "Solicitar check-out"));
+    } else {
+      var msg = document.createElement("span");
+      msg.className = "insp-card__msg";
+      if (pendingIn) msg.textContent = "Check-in enviado — aguardando o proprietário.";
+      else if (pendingOut) msg.textContent = "Check-out enviado — aguardando o proprietário.";
+      else if (approvedOut) msg.textContent = "Locação encerrada — check-out aprovado.";
+      else msg.textContent = "Locação ativa.";
+      actions.appendChild(msg);
+    }
+    card.appendChild(actions);
+    return card;
+  }
+
+  function actionBtn(b, kind, label) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn--solid btn--sm";
+    btn.textContent = label;
+    btn.addEventListener("click", function () { openInspForm(b, kind); });
+    return btn;
+  }
+
+  function openInspForm(b, kind) {
+    var form = document.getElementById("inspForm");
+    if (!form) return;
+    form.reset();
+    form.setAttribute("data-booking", b.id);
+    form.setAttribute("data-kind", kind);
+    document.getElementById("inspFormTitle").textContent =
+      (kind === "checkout" ? "Solicitar check-out — " : "Solicitar check-in — ") + vehText(b.vehicles);
+    var err = document.getElementById("inspErr");
+    if (err) err.hidden = true;
+    form.hidden = false;
+    form.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  (function () {
+    var form = document.getElementById("inspForm");
+    if (!form) return;
+    var cancel = document.getElementById("inspCancel");
+    if (cancel) cancel.addEventListener("click", function () { form.hidden = true; });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var err = document.getElementById("inspErr");
+      var when = form.elements["scheduled_at"].value;
+      var loc = (form.elements["location"].value || "").trim();
+      if (!when || !loc || !form.elements["accept"].checked) {
+        if (err) err.hidden = false; return;
+      }
+      if (err) err.hidden = true;
+      var c = a.client();
+      if (!c) { showNotice("Conecte o Supabase para enviar a solicitação.", "warn"); return; }
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = "Enviando...";
+      c.from("rental_inspections").insert({
+        booking_id: form.getAttribute("data-booking"),
+        kind: form.getAttribute("data-kind"),
+        status: "solicitado",
+        scheduled_at: when,
+        location: loc,
+        mileage: form.elements["mileage"].value ? Number(form.elements["mileage"].value) : null,
+        fuel_level: form.elements["fuel_level"].value || null,
+        notes: (form.elements["notes"].value || "").trim() || null,
+        client_accepted: true
+      }).then(function (r) {
+        btn.disabled = false; btn.textContent = "Enviar solicitação";
+        if (r && r.error) { showNotice("Não foi possível enviar agora. Tente novamente.", "error"); return; }
+        form.hidden = true;
+        showNotice("Solicitação enviada. O proprietário vai validar o seu pedido.", "ok");
+        loadCheckInOut();
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = "Enviar solicitação";
+        showNotice("Não foi possível enviar agora. Tente novamente.", "error");
+      });
+    });
+  })();
 })();
 </script>
 </body>
