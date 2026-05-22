@@ -1602,3 +1602,172 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 .admin-notif:last-child { border-bottom: none; }
 .admin-notif strong { font-size: 13.5px; color: var(--ink); }
 .admin-notif span { font-size: 12.5px; color: var(--muted); }
+
+/* ====================================================================
+   DASHBOARDS — polimento visual: hero, ícones, KPI cards (refresh)
+   --------------------------------------------------------------------
+   Adições não-destrutivas. Todas as classes novas têm prefixo claro
+   e não tocam o layout/JS existente.
+   ==================================================================== */
+
+/* HERO BANNER ------------------------------------------------------- */
+.dash-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 22px;
+  align-items: center;
+  padding: 30px 34px;
+  margin-bottom: 22px;
+  border-radius: 22px;
+  color: #fff;
+  background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 55%, #2da473 100%);
+  box-shadow: 0 20px 48px -22px rgba(20,40,30,.45);
+  overflow: hidden;
+  isolation: isolate;
+}
+.dash-hero__icon {
+  position: relative; z-index: 2;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.22);
+  flex-shrink: 0;
+}
+.dash-hero__icon svg { width: 32px; height: 32px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dash-hero__text { position: relative; z-index: 2; min-width: 0; }
+.dash-hero__eyebrow {
+  font-family: var(--font-d); font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.6px;
+  opacity: 0.85; margin-bottom: 6px;
+}
+.dash-hero__title {
+  font-family: var(--font-d); font-size: 27px; font-weight: 800;
+  color: #fff; margin-bottom: 6px; line-height: 1.15;
+}
+.dash-hero__sub {
+  font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.92);
+  max-width: 720px;
+}
+.dash-hero::before {
+  content: ""; position: absolute; z-index: 1;
+  top: -80px; right: -60px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 65%);
+  pointer-events: none;
+}
+.dash-hero::after {
+  content: ""; position: absolute; z-index: 1;
+  bottom: -90px; right: 100px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+}
+
+/* Variants por papel */
+.dash-hero--cliente      { background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 55%, #2da473 100%); }
+.dash-hero--proprietario { background: linear-gradient(135deg, #0d4a2f 0%, #1f7050 55%, #4ba37e 100%); }
+.dash-hero--parceiro     { background: linear-gradient(135deg, #2a2470 0%, #4742a6 55%, #7e7ad4 100%); }
+.dash-hero--oficina      { background: linear-gradient(135deg, #7a3d0a 0%, #c47012 55%, #e29945 100%); }
+.dash-hero--protecao     { background: linear-gradient(135deg, #133e62 0%, #2a6a9e 55%, #5ea1cc 100%); }
+.dash-hero--admin        { background: linear-gradient(135deg, #16202a 0%, #2d3d4f 55%, #506677 100%); }
+
+@media (max-width: 720px) {
+  .dash-hero { padding: 22px 22px; gap: 16px; border-radius: 18px; }
+  .dash-hero__icon { width: 52px; height: 52px; border-radius: 14px; }
+  .dash-hero__icon svg { width: 26px; height: 26px; }
+  .dash-hero__title { font-size: 22px; }
+  .dash-hero__sub { font-size: 13.5px; }
+  .dash-hero::before { width: 240px; height: 240px; }
+}
+
+/* SIDEBAR — ícones nos links ---------------------------------------- */
+.dash-side__nav a {
+  display: flex; align-items: center; gap: 10px;
+}
+.dash-side__nav svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.7;
+  transition: opacity .14s, transform .14s;
+}
+.dash-side__nav a:hover svg { opacity: 1; transform: translateX(1px); }
+
+/* KPI CARDS — polimento e variante com ícone ------------------------ */
+.dash-kpi {
+  position: relative;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  box-shadow: 0 1px 0 rgba(20,40,30,.02);
+}
+.dash-kpi:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -16px rgba(20,40,30,.22);
+  border-color: #d8e4dd;
+}
+.dash-kpi__icon {
+  position: absolute; top: 14px; right: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 11px;
+  background: var(--green-l); color: var(--green-d);
+}
+.dash-kpi__icon svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.dash-kpi__icon[data-tone="green"]  { background: #e8f3ed; color: #145f3e; }
+.dash-kpi__icon[data-tone="amber"]  { background: #fff4e0; color: #8a6116; }
+.dash-kpi__icon[data-tone="blue"]   { background: #e6f0fb; color: #1f4f7a; }
+.dash-kpi__icon[data-tone="violet"] { background: #ece9fb; color: #4742a6; }
+.dash-kpi__icon[data-tone="red"]    { background: #fdecea; color: #a3372b; }
+.dash-kpi__icon[data-tone="slate"]  { background: #e8eced; color: #364859; }
+
+/* PILLS — variantes coloridas extras -------------------------------- */
+.dash-pill--accent { background: #e6f3ec; color: var(--green-d); }
+.dash-pill--violet { background: #ece9fb; color: #4742a6; }
+.dash-pill--amber  { background: #fff4e0; color: #8a6116; }
+.dash-pill--blue   { background: #e6f0fb; color: #1f4f7a; }
+
+/* EMPTY STATE com ilustração SVG ------------------------------------ */
+.dash-empty--illus {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 28px 18px;
+}
+.dash-empty--illus svg {
+  width: 48px; height: 48px;
+  stroke: var(--muted); fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.55;
+}
+
+/* SIDE — polimento sutil do título ---------------------------------- */
+.dash-side__title {
+  display: flex; align-items: center; gap: 8px;
+}
+.dash-side__title::before {
+  content: ""; display: inline-block;
+  width: 18px; height: 2px; border-radius: 2px;
+  background: var(--green);
+}
+
+/* ADMIN SIDEBAR — ícones nos links ---------------------------------- */
+.admin-side__nav a {
+  display: flex; align-items: center; gap: 10px;
+}
+.admin-side__nav svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.75;
+  transition: opacity .14s, transform .14s;
+}
+.admin-side__nav a:hover svg { opacity: 1; transform: translateX(1px); }
+.admin-side__nav a.is-current svg { opacity: 1; }
+
+/* HERO dentro do admin (espaçamento e margem específicos) */
+.admin-main .dash-hero { margin-top: 0; margin-bottom: 24px; }
