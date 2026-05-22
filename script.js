@@ -393,6 +393,30 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 })();
 
 /* ====================================================================
+   ORÇAMENTO — data de devolução preenchida conforme retirada + duração
+   ==================================================================== */
+(function () {
+  var form = document.getElementById("form-orcamento");
+  if (!form) return;
+  var retirada = form.querySelector('[name="data"]');
+  var duracao = form.querySelector('[name="duracao"]');
+  var devolucao = form.querySelector('[name="devolucao"]');
+  if (!retirada || !duracao || !devolucao) return;
+  function update() {
+    var meses = parseInt(duracao.value, 10);
+    var raw = retirada.value;
+    if (!raw || !meses) { devolucao.value = ""; return; }
+    var d = new Date(raw + "T12:00:00");
+    if (isNaN(d.getTime())) { devolucao.value = ""; return; }
+    d.setMonth(d.getMonth() + meses);
+    devolucao.value = d.toISOString().slice(0, 10);
+  }
+  retirada.addEventListener("change", update);
+  duracao.addEventListener("change", update);
+  update();
+})();
+
+/* ====================================================================
    LINKS de contato — qualquer elemento com [data-wa]
    ==================================================================== */
 (function () {
