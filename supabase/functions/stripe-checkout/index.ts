@@ -109,18 +109,44 @@ Deno.serve(async (req) => {
         : session.payment_intent?.id;
       if (pi) patch.stripe_payment_intent_id = pi;
 
-      // atualiza a linha do pagamento pela sessão da Stripe
-      const { data: updated } = await admin
+      // 1ª tentativa: casa a linha exatamente pela sessão da Stripe
+      let { data: updated } = await admin
         .from("payments")
         .update(patch)
         .eq("stripe_checkout_session_id", sessionId)
-        .select("id, kind, status")
-        .maybeSingle();
+        .select("id, kind, status");
+
+      // fallback: a linha pendente pode ter sido reaproveitada por uma
+      // sessão mais nova (clique duplo). Casa pela reserva + tipo ainda
+      // pendente — assim o pagamento concluído nunca fica preso pendente.
+      if ((!updated || !updated.length) && session.metadata?.booking_id) {
+        patch.stripe_checkout_session_id = sessionId;
+        const r2 = await admin
+          .from("payments")
+          .update(patch)
+          .eq("booking_id", session.metadata.booking_id)
+          .eq("kind", kind)
+          .eq("status", "pendente")
+          .select("id, kind, status");
+        updated = r2.data;
+      }
+
+      const row = updated && updated[0];
+      if (!row) {
+        // atualização silenciosa de 0 linhas — registra para auditoria
+        console.error("stripe-checkout confirm — 0 linhas atualizadas",
+          JSON.stringify({
+            session_id: sessionId,
+            payment_intent: pi,
+            booking_id: session.metadata?.booking_id,
+            kind,
+          }));
+      }
 
       return json({
-        status: newStatus,
-        kind: updated?.kind ?? kind ?? null,
-        reconciled: true,
+        status: row ? row.status : newStatus,
+        kind: (row && row.kind) || kind || null,
+        reconciled: !!row,
       });
     }
 
