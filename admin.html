@@ -452,7 +452,20 @@
         win.location = sr.data.signedUrl;
         kycMsg("Documento aberto em uma aba por link temporário privado.", "ok");
       } else {
-        kycMsg("O navegador bloqueou a nova aba. Permita pop-ups para este site e clique em Ver de novo.", "warn");
+        /* pop-up bloqueado: oferece um link clicável (gesto direto do usuário) */
+        var mEl = document.getElementById("kycMsg");
+        if (mEl) {
+          mEl.className = "auth-msg auth-msg--warn";
+          mEl.hidden = false;
+          mEl.textContent = "O navegador bloqueou a aba. Abra o documento por este link temporário: ";
+          var lk = document.createElement("a");
+          lk.href = sr.data.signedUrl;
+          lk.target = "_blank";
+          lk.rel = "noopener";
+          lk.style.fontWeight = "bold";
+          lk.textContent = "abrir documento";
+          mEl.appendChild(lk);
+        }
       }
       logKycView(doc);
     }).catch(function () {
