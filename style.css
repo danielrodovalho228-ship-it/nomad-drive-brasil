@@ -1325,6 +1325,7 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 .auth-field select:focus, .auth-field textarea:focus {
   outline: none; border-color: var(--green); background: #fff;
 }
+.auth-hint { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
 
 .onb-check {
   display: flex; gap: 10px; align-items: flex-start;
