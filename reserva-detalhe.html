@@ -62,6 +62,18 @@
         <div class="dash-list" id="resvInsp"></div>
         <div class="dash-empty" id="resvInspEmpty">Nenhum check-in ou check-out registrado nesta reserva ainda.</div>
       </section>
+
+      <section class="dash-panel" id="resvPayPanel">
+        <h2>Pagamentos</h2>
+        <p>Pague a mensalidade ou autorize a caução pela Stripe. A tela de cartão é hospedada pela Stripe — os dados do seu cartão não passam pela Nomade Drive.</p>
+        <div class="auth-msg" id="payNotice" hidden></div>
+        <div class="insp-actions">
+          <button type="button" class="btn btn--solid btn--sm" id="payMensal">Pagar mensalidade</button>
+          <button type="button" class="btn btn--outline btn--sm" id="payCaucao">Autorizar caução</button>
+        </div>
+        <div class="dash-list" id="payList"></div>
+        <div class="dash-empty" id="payEmpty">Nenhum pagamento registrado nesta reserva ainda.</div>
+      </section>
     </div>
 
   </div>
@@ -162,6 +174,10 @@
           (b.monthly_price != null) ? "R$ " + Number(b.monthly_price).toLocaleString("pt-BR") : "—";
         document.getElementById("resvVehicle").textContent = vehText(b.vehicles);
 
+        loadPayments(c, id);
+        wirePayButtons(c, id);
+        showPayReturnNotice();
+
         c.from("rental_inspections").select("*").eq("booking_id", id)
           .order("created_at", { ascending: true }).then(function (ri) {
             var insps = (ri && ri.data) || [];
@@ -193,6 +209,85 @@
     steps.forEach(function (st) {
       tl.appendChild(row(st[0], st[1], st[2] ? "Concluído" : "Pendente", st[2] ? "ok" : "neutral"));
     });
+  }
+
+  /* ---- Fase 12: pagamentos (Stripe) ---- */
+  function payNotice(text, kind) {
+    var el = document.getElementById("payNotice");
+    if (!el) return;
+    el.textContent = text || "";
+    el.className = "auth-msg auth-msg--" + (kind || "warn");
+    el.hidden = !text;
+  }
+  function payKindLabel(k) { return k === "caucao" ? "Caução" : "Mensalidade"; }
+  function payStatusInfo(s) {
+    var map = {
+      pendente: ["Aguardando pagamento", "warn"],
+      pago: ["Pago", "ok"],
+      autorizado: ["Caução autorizada", "ok"],
+      capturado: ["Caução capturada", "ok"],
+      liberado: ["Caução liberada", "neutral"],
+      falhou: ["Pagamento falhou", "bad"],
+      expirado: ["Link de pagamento expirado", "bad"],
+      estornado: ["Estornado", "neutral"]
+    };
+    return map[s] || [s || "—", "neutral"];
+  }
+  function brlv(n) {
+    var v = Number(n);
+    return isNaN(v) ? "—"
+      : "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function loadPayments(c, bookingId) {
+    var list = document.getElementById("payList");
+    var empty = document.getElementById("payEmpty");
+    if (!c || !list) return;
+    c.from("payments").select("*").eq("booking_id", bookingId)
+      .order("created_at", { ascending: false }).then(function (r) {
+        var rows = (r && r.data) || [];
+        list.innerHTML = "";
+        if (!rows.length) { if (empty) empty.hidden = false; return; }
+        if (empty) empty.hidden = true;
+        rows.forEach(function (p) {
+          var info = payStatusInfo(p.status);
+          list.appendChild(row(
+            payKindLabel(p.kind) + " · " + brlv(p.amount),
+            "Registrado em " + fmtDate(p.created_at),
+            info[0], info[1]));
+        });
+      }).catch(function () {});
+  }
+  function startCheckout(c, bookingId, kind, btn) {
+    if (!c || !c.functions) { payNotice("Pagamento indisponível nesta pré-visualização.", "warn"); return; }
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = "Abrindo pagamento...";
+    c.functions.invoke("stripe-checkout", { body: { booking_id: bookingId, kind: kind } })
+      .then(function (r) {
+        if (r.error || !r.data || !r.data.url) {
+          btn.disabled = false; btn.textContent = label;
+          payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
+          return;
+        }
+        window.location.href = r.data.url;
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = label;
+        payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
+      });
+  }
+  function wirePayButtons(c, bookingId) {
+    var m = document.getElementById("payMensal");
+    var d = document.getElementById("payCaucao");
+    if (m) m.addEventListener("click", function () { startCheckout(c, bookingId, "mensalidade", m); });
+    if (d) d.addEventListener("click", function () { startCheckout(c, bookingId, "caucao", d); });
+  }
+  function showPayReturnNotice() {
+    var p = "";
+    try { p = new URLSearchParams(window.location.search).get("pagamento") || ""; } catch (e) {}
+    if (p === "ok") {
+      payNotice("Pagamento concluído. A confirmação aparece na lista abaixo assim que a Stripe processar — atualize a página em alguns segundos.", "ok");
+    } else if (p === "cancelado") {
+      payNotice("Pagamento cancelado. Você pode tentar novamente quando quiser.", "warn");
+    }
   }
 
   function renderInsp(insps) {
