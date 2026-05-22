@@ -450,7 +450,7 @@ ul, ol { list-style: none; }
 .form-tab:hover { border-color: var(--green); }
 .form-tab.is-active { background: var(--green); color: #fff; border-color: var(--green); }
 .form {
-  display: none; max-width: 760px; margin: 0 auto;
+  display: block; max-width: 760px; margin: 0 auto;
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 28px;
 }
 .form.is-active { display: block; }
