@@ -123,6 +123,39 @@
     }
     return row;
   }
+  var ENTITY_STATI = ["em_analise", "documentos_pendentes", "aprovado",
+    "aprovado_com_ressalvas", "recusado", "suspenso", "bloqueado_para_revisao"];
+  /* linha da fila com select de status — a oficina emite o laudo aqui */
+  function inspRow(i, title) {
+    var row = document.createElement("div"); row.className = "dash-row";
+    var main = document.createElement("div"); main.className = "dash-row__main";
+    var s = document.createElement("strong"); s.textContent = title;
+    var sp = document.createElement("span"); sp.textContent = "Checklist técnico — emita o laudo ao lado";
+    main.appendChild(s); main.appendChild(sp); row.appendChild(main);
+    var sel = document.createElement("select");
+    sel.className = "cad-status";
+    ENTITY_STATI.forEach(function (st) {
+      var o = document.createElement("option");
+      o.value = st;
+      o.textContent = a.statusLabel ? a.statusLabel(st) : st;
+      if (st === i.inspection_status) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", function () {
+      var c = a.client();
+      if (!c) return;
+      sel.disabled = true;
+      c.from("vehicle_inspections").update({
+        inspection_status: sel.value,
+        approved: (sel.value === "aprovado" || sel.value === "aprovado_com_ressalvas")
+      }).eq("id", i.id).then(function (rr) {
+        sel.disabled = false;
+        sel.style.borderColor = (rr && rr.error) ? "#c0392b" : "";
+      }).catch(function () { sel.disabled = false; });
+    });
+    row.appendChild(sel);
+    return row;
+  }
 
   var a = window.ndAuth;
   if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
@@ -181,8 +214,7 @@
           var v = i.vehicles || {};
           var title = [v.make, v.model].filter(Boolean).join(" ") || "Veículo para vistoria";
           if (v.year_model) title += " (" + v.year_model + ")";
-          list.appendChild(rowEl(title, "Checklist técnico",
-            a.statusLabel(i.inspection_status), pillKind(i.inspection_status)));
+          list.appendChild(inspRow(i, title));
         });
       }).catch(function () {});
   });
