@@ -633,7 +633,12 @@
       ocorrencia_status_alterado: "Ocorrência — status alterado",
       papel_status_alterado: "Papel — status alterado",
       perfil_status_alterado: "Perfil — verificação alterada",
-      cadastro_status_alterado: "Cadastro — status alterado"
+      cadastro_status_alterado: "Cadastro — status alterado",
+      pagamento_criado: "Pagamento iniciado",
+      pagamento_status_alterado: "Pagamento — status alterado",
+      indicacao_criado: "Indicação registrada",
+      indicacao_status_alterado: "Indicação — status alterado",
+      comissao_status_alterado: "Comissão — etapa alterada"
     };
     return map[act] || (act || "—");
   }
@@ -641,7 +646,8 @@
     var map = {
       reserva: "Reserva", veiculo: "Veículo", vistoria: "Vistoria",
       documento: "Documento", ocorrencia: "Ocorrência", papel: "Papel",
-      perfil: "Perfil", cadastro: "Cadastro", vehicle: "Veículo"
+      perfil: "Perfil", cadastro: "Cadastro", vehicle: "Veículo",
+      pagamento: "Pagamento", indicacao: "Indicação", comissao: "Comissão"
     };
     return map[t] || (t || "—");
   }

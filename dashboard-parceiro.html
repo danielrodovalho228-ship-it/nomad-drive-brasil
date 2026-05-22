@@ -40,6 +40,7 @@
           <a href="#indicacoes">Indicações</a>
           <a href="#codigo">Código</a>
           <a href="#comissoes">Comissões</a>
+          <a href="#historico">Histórico</a>
         </nav>
       </aside>
 
@@ -74,6 +75,13 @@
           <p>As comissões aparecem sempre como <strong>estimadas</strong> ou <strong>elegíveis</strong> — nunca como garantidas. O valor só se confirma após a aprovação e a conversão real da indicação, conforme as regras vigentes da plataforma.</p>
           <div class="dash-list" id="commList"></div>
           <div class="dash-empty" id="commEmpty">Você ainda não tem indicações com comissão registrada. As etapas aparecem aqui conforme suas indicações avançam.</div>
+        </section>
+
+        <section class="dash-panel" id="historico">
+          <h2>Histórico</h2>
+          <p>Linha do tempo das suas indicações — da mais antiga à mais recente, com a etapa atual de cada uma.</p>
+          <div class="dash-list" id="histList"></div>
+          <div class="dash-empty" id="histEmpty">Sem histórico ainda. Ele aparece conforme você registra indicações.</div>
         </section>
       </div>
 
@@ -153,6 +161,7 @@
         document.getElementById("kpiAprov").textContent =
           rows.filter(function (x) { return x.status === "aprovado"; }).length;
         renderCommissions(rows);
+        renderHistory(rows);
         if (!rows.length) return;
         document.getElementById("refEmpty").hidden = true;
         var list = document.getElementById("refList");
@@ -184,6 +193,31 @@
     if (s === "cancelada") return "bad";
     return "neutral";
   }
+  /* ---- Histórico: linha do tempo das indicações ---- */
+  function fmtD(d) {
+    if (!d) return "—";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function renderHistory(rows) {
+    var list = document.getElementById("histList");
+    var empty = document.getElementById("histEmpty");
+    if (!list) return;
+    if (!rows.length) { if (empty) empty.hidden = false; return; }
+    if (empty) empty.hidden = true;
+    var ordered = rows.slice().sort(function (x, y) {
+      return String(x.created_at).localeCompare(String(y.created_at));
+    });
+    list.innerHTML = "";
+    ordered.forEach(function (ref) {
+      var sub = "Registrada em " + fmtD(ref.created_at) +
+        " · comissão " + (ref.commission_status || "estimada");
+      list.appendChild(rowEl(
+        "Indicação — " + (ref.referred_name || "lead"),
+        sub, a.statusLabel(ref.status), pillKind(ref.status)));
+    });
+  }
+
   function renderCommissions(rows) {
     var list = document.getElementById("commList");
     var empty = document.getElementById("commEmpty");
