@@ -13,6 +13,16 @@
 //   SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
 //
 // "Verify JWT": MANTENHA LIGADO nesta função (o cliente chama logado).
+//
+// AÇÕES (campo "action" do corpo):
+//   "checkout" (padrão) -> cria/reaproveita a sessão e devolve { url }
+//   "confirm"           -> reconcilia o pagamento no retorno da Stripe,
+//                          sem depender do webhook. Devolve { status }.
+//
+// SEM DUPLICIDADE: a função reaproveita a linha "pendente" existente em
+// payments (1 por booking_id+kind) em vez de inserir uma nova a cada
+// clique. O índice único parcial uniq_payments_pending_booking_kind
+// (ver supabase-fase19.sql) garante isso também no banco.
 // ====================================================================
 import Stripe from "https://esm.sh/stripe@17.5.0?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -53,7 +63,70 @@ Deno.serve(async (req) => {
     const user = userData?.user;
     if (!user) return json({ error: "Não autenticado." }, 401);
 
+    // service role: lê payout_accounts e registra o pagamento
+    const admin = createClient(url, serviceKey);
+
     const payload = await req.json().catch(() => ({}));
+    const action = payload.action === "confirm" ? "confirm" : "checkout";
+
+    // ================================================================
+    // AÇÃO "confirm" — reconciliação no retorno (não depende do webhook)
+    // ================================================================
+    if (action === "confirm") {
+      const sessionId = payload.session_id;
+      if (!sessionId || typeof sessionId !== "string") {
+        return json({ error: "session_id ausente." }, 400);
+      }
+
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      // a sessão precisa ser deste usuário
+      if (!session || session.metadata?.client_id !== user.id) {
+        return json({ error: "Sessão de pagamento não reconhecida." }, 403);
+      }
+
+      const kind = session.metadata?.kind;
+      const isDeposit = kind === "caucao";
+
+      // mensalidade: pago quando payment_status === "paid"
+      // caução: autorizado (capture manual) quando status === "complete"
+      let newStatus: string | null = null;
+      if (isDeposit) {
+        if (session.status === "complete") newStatus = "autorizado";
+        else if (session.status === "expired") newStatus = "expirado";
+      } else {
+        if (session.payment_status === "paid") newStatus = "pago";
+        else if (session.status === "expired") newStatus = "expirado";
+      }
+
+      if (!newStatus) {
+        // ainda não concluído — não altera o registro
+        return json({ status: "pendente", reconciled: false });
+      }
+
+      const patch: Record<string, unknown> = { status: newStatus };
+      const pi = typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id;
+      if (pi) patch.stripe_payment_intent_id = pi;
+
+      // atualiza a linha do pagamento pela sessão da Stripe
+      const { data: updated } = await admin
+        .from("payments")
+        .update(patch)
+        .eq("stripe_checkout_session_id", sessionId)
+        .select("id, kind, status")
+        .maybeSingle();
+
+      return json({
+        status: newStatus,
+        kind: updated?.kind ?? kind ?? null,
+        reconciled: true,
+      });
+    }
+
+    // ================================================================
+    // AÇÃO "checkout" — cria/reaproveita a sessão de pagamento
+    // ================================================================
     const bookingId = payload.booking_id;
     const kind = payload.kind;
     if (!bookingId || (kind !== "mensalidade" && kind !== "caucao")) {
@@ -71,6 +144,18 @@ Deno.serve(async (req) => {
       return json({ error: "Esta reserva não é da sua conta." }, 403);
     }
 
+    // ---- já está pago/autorizado? não cria nova sessão ----
+    const { data: already } = await admin
+      .from("payments")
+      .select("id, status")
+      .eq("booking_id", bookingId)
+      .eq("kind", kind)
+      .in("status", ["pago", "autorizado", "capturado", "liberado"])
+      .maybeSingle();
+    if (already) {
+      return json({ error: "Este pagamento já foi concluído.", status: already.status }, 409);
+    }
+
     const monthly = Number(booking.monthly_price) || 0;
     const deposit = booking.deposit_amount != null
       ? Number(booking.deposit_amount)
@@ -84,9 +169,6 @@ Deno.serve(async (req) => {
     const label = isDeposit
       ? "Caução da locação — Nomade Drive Brasil"
       : "Mensalidade da locação — Nomade Drive Brasil";
-
-    // service role: lê payout_accounts e registra o pagamento
-    const admin = createClient(url, serviceKey);
 
     // ---- Fase B — split do pagamento ----
     // A MENSALIDADE é dividida: parte vai ao proprietário (conta conectada)
@@ -125,21 +207,43 @@ Deno.serve(async (req) => {
         },
       }],
       payment_intent_data: Object.keys(piData).length ? piData : undefined,
-      success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok`,
+      success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
       client_reference_id: bookingId,
       metadata: { booking_id: bookingId, kind, client_id: user.id },
     });
 
-    await admin.from("payments").insert({
-      booking_id: bookingId,
-      client_id: user.id,
-      kind,
-      amount,
-      currency: "brl",
-      status: "pendente",
-      stripe_checkout_session_id: session.id,
-    });
+    // ---- registra o pagamento SEM DUPLICAR ----
+    // Reaproveita a linha "pendente" existente (1 por booking_id+kind):
+    // a cada clique a sessão muda, mas a linha é a mesma.
+    const { data: pending } = await admin
+      .from("payments")
+      .select("id")
+      .eq("booking_id", bookingId)
+      .eq("kind", kind)
+      .eq("status", "pendente")
+      .maybeSingle();
+
+    if (pending) {
+      await admin
+        .from("payments")
+        .update({
+          amount,
+          stripe_checkout_session_id: session.id,
+          stripe_payment_intent_id: null,
+        })
+        .eq("id", pending.id);
+    } else {
+      await admin.from("payments").insert({
+        booking_id: bookingId,
+        client_id: user.id,
+        kind,
+        amount,
+        currency: "brl",
+        status: "pendente",
+        stripe_checkout_session_id: session.id,
+      });
+    }
 
     return json({ url: session.url });
   } catch (e) {

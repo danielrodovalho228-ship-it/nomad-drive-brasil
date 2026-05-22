@@ -176,7 +176,7 @@
 
         loadPayments(c, id);
         wirePayButtons(c, id);
-        showPayReturnNotice();
+        handlePayReturn(c, id);
 
         c.from("rental_inspections").select("*").eq("booking_id", id)
           .order("created_at", { ascending: true }).then(function (ri) {
@@ -238,23 +238,54 @@
     return isNaN(v) ? "—"
       : "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  var PAY_RANK = {
+    capturado: 6, liberado: 6, pago: 5, autorizado: 5,
+    estornado: 4, falhou: 3, expirado: 2, pendente: 1
+  };
+  function payRank(s) { return PAY_RANK[s] || 0; }
+  var PAID_MENSAL = { pago: 1, capturado: 1, liberado: 1 };
+  var PAID_CAUCAO = { autorizado: 1, capturado: 1, liberado: 1 };
+
   function loadPayments(c, bookingId) {
     var list = document.getElementById("payList");
     var empty = document.getElementById("payEmpty");
-    if (!c || !list) return;
-    c.from("payments").select("*").eq("booking_id", bookingId)
+    if (!c || !list) return Promise.resolve();
+    return c.from("payments").select("*").eq("booking_id", bookingId)
       .order("created_at", { ascending: false }).then(function (r) {
         var rows = (r && r.data) || [];
-        list.innerHTML = "";
-        if (!rows.length) { if (empty) empty.hidden = false; return; }
-        if (empty) empty.hidden = true;
+        // 1 linha por tipo (kind): a de "melhor" status; empate -> mais recente.
+        // Evita exibir duplicatas de uma mesma reserva.
+        var best = {};
         rows.forEach(function (p) {
-          var info = payStatusInfo(p.status);
-          list.appendChild(row(
-            payKindLabel(p.kind) + " · " + brlv(p.amount),
-            "Registrado em " + fmtDate(p.created_at),
-            info[0], info[1]));
+          var cur = best[p.kind];
+          if (!cur || payRank(p.status) > payRank(cur.status)) best[p.kind] = p;
         });
+        var shown = [];
+        ["mensalidade", "caucao"].forEach(function (k) {
+          if (best[k]) shown.push(best[k]);
+        });
+        list.innerHTML = "";
+        if (!shown.length) {
+          if (empty) empty.hidden = false;
+        } else {
+          if (empty) empty.hidden = true;
+          shown.forEach(function (p) {
+            var info = payStatusInfo(p.status);
+            list.appendChild(row(
+              payKindLabel(p.kind) + " · " + brlv(p.amount),
+              "Registrado em " + fmtDate(p.created_at),
+              info[0], info[1]));
+          });
+        }
+        // desabilita o botão do que já foi pago/autorizado
+        var m = document.getElementById("payMensal");
+        var d = document.getElementById("payCaucao");
+        if (m && best.mensalidade && PAID_MENSAL[best.mensalidade.status]) {
+          m.disabled = true; m.textContent = "Mensalidade paga";
+        }
+        if (d && best.caucao && PAID_CAUCAO[best.caucao.status]) {
+          d.disabled = true; d.textContent = "Caução autorizada";
+        }
       }).catch(function () {});
   }
   function startCheckout(c, bookingId, kind, btn) {
@@ -285,14 +316,61 @@
     if (m) m.addEventListener("click", function () { startCheckout(c, bookingId, "mensalidade", m); });
     if (d) d.addEventListener("click", function () { startCheckout(c, bookingId, "caucao", d); });
   }
-  function showPayReturnNotice() {
-    var p = "";
-    try { p = new URLSearchParams(window.location.search).get("pagamento") || ""; } catch (e) {}
-    if (p === "ok") {
-      payNotice("Pagamento concluído. A confirmação aparece na lista abaixo assim que a Stripe processar — atualize a página em alguns segundos.", "ok");
-    } else if (p === "cancelado") {
+  function cleanPayQuery(bookingId) {
+    // remove ?pagamento e ?session_id da URL — assim atualizar a página
+    // não dispara a reconciliação de novo.
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, "",
+          "reserva-detalhe.html?id=" + encodeURIComponent(bookingId));
+      }
+    } catch (e) {}
+  }
+  function handlePayReturn(c, bookingId) {
+    var p = "", sid = "";
+    try {
+      var qs = new URLSearchParams(window.location.search);
+      p = qs.get("pagamento") || "";
+      sid = qs.get("session_id") || "";
+    } catch (e) {}
+
+    if (p === "cancelado") {
       payNotice("Pagamento cancelado. Você pode tentar novamente quando quiser.", "warn");
+      cleanPayQuery(bookingId);
+      return;
     }
+    if (p !== "ok") return;
+
+    cleanPayQuery(bookingId);
+
+    // sem session_id (ou pré-visualização): cai para a mensagem antiga
+    if (!sid || !c || !c.functions) {
+      payNotice("Pagamento concluído. A confirmação aparece na lista abaixo assim que a Stripe processar — atualize a página em alguns segundos.", "ok");
+      return;
+    }
+
+    // reconciliação direta com a Stripe — não depende do webhook
+    payNotice("Confirmando o pagamento com a Stripe...", "warn");
+    c.functions.invoke("stripe-checkout", { body: { action: "confirm", session_id: sid } })
+      .then(function (r) {
+        var d = r && r.data;
+        if (!d || (r && r.error)) {
+          payNotice("Pagamento concluído. A confirmação aparece na lista abaixo assim que a Stripe processar — atualize a página em alguns segundos.", "ok");
+          return;
+        }
+        if (d.status === "pago") {
+          payNotice("Mensalidade paga e confirmada. Obrigado!", "ok");
+        } else if (d.status === "autorizado") {
+          payNotice("Caução autorizada. O valor fica retido e não é cobrado agora.", "ok");
+        } else if (d.status === "expirado") {
+          payNotice("O link de pagamento expirou. Inicie o pagamento novamente.", "bad");
+        } else {
+          payNotice("Pagamento recebido. A confirmação aparece na lista abaixo em instantes.", "ok");
+        }
+        loadPayments(c, bookingId);
+      }).catch(function () {
+        payNotice("Pagamento concluído. A confirmação aparece na lista abaixo assim que a Stripe processar — atualize a página em alguns segundos.", "ok");
+      });
   }
 
   function renderInsp(insps) {
