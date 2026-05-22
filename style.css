@@ -33,6 +33,8 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
+/* o atributo hidden deve sempre vencer regras de display de classes (.btn, .auth-form, etc.) */
+[hidden] { display: none !important; }
 h1, h2, h3, h4 { font-family: var(--font-d); line-height: 1.2; font-weight: 700; }
 ul, ol { list-style: none; }
 
