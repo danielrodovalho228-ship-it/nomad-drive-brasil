@@ -56,18 +56,23 @@ begin
   -- 1. PERFIL E PAPEL DE CADA CONTA
   -- ----------------------------------------------------------
   update public.profiles set main_role = 'client',
+         full_name = coalesce(nullif(trim(full_name), ''), 'Cliente Teste'),
          verification_status = 'aprovado', city = coalesce(city,'Uberlândia'), state = coalesce(state,'MG')
    where id = uid_cliente;
   update public.profiles set main_role = 'owner',
+         full_name = coalesce(nullif(trim(full_name), ''), 'Proprietário Teste'),
          verification_status = 'aprovado', city = coalesce(city,'Uberlândia'), state = coalesce(state,'MG')
    where id = uid_owner;
   update public.profiles set main_role = 'referral_partner',
+         full_name = coalesce(nullif(trim(full_name), ''), 'Parceiro Teste'),
          verification_status = 'aprovado', city = coalesce(city,'Uberlândia'), state = coalesce(state,'MG')
    where id = uid_parceiro;
   update public.profiles set main_role = 'workshop',
+         full_name = coalesce(nullif(trim(full_name), ''), 'Oficina Teste'),
          verification_status = 'aprovado', city = coalesce(city,'Uberlândia'), state = coalesce(state,'MG')
    where id = uid_oficina;
   update public.profiles set main_role = 'protection_partner',
+         full_name = coalesce(nullif(trim(full_name), ''), 'Proteção Teste'),
          verification_status = 'aprovado', city = coalesce(city,'Uberlândia'), state = coalesce(state,'MG')
    where id = uid_protecao;
 

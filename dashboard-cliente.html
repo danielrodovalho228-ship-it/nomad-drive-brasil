@@ -196,7 +196,7 @@
   }
   function fmtDate(d) {
     if (!d) return "data a definir";
-    var p = String(d).split("-");
+    var p = String(d).slice(0, 10).split("-");
     return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
   }
   function rowEl(title, sub, pillText, kind) {
@@ -666,7 +666,7 @@
         if (empty) empty.hidden = true;
         rows.forEach(function (cs) {
           var sub = (cs.description ? String(cs.description).slice(0, 90) : "Sem descrição") +
-            " · aberto em " + fmtDate(cs.created_at);
+            " · aberto em " + fmtDateTime(cs.created_at);
           list.appendChild(rowEl(caseLabel(cs.case_type), sub,
             a.statusLabel(cs.status), pillKind(cs.status)));
         });

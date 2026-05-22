@@ -103,7 +103,8 @@
     <!-- DOCUMENTOS (KYC) -->
     <section class="admin-block" id="documentos">
       <h2>Documentos (KYC)</h2>
-      <p class="note">Documentos enviados pelos clientes (CNH, identidade e comprovantes). Confira o arquivo e altere o status para aprovar ou recusar. O arquivo abre por link temporário e privado.</p>
+      <p class="note">Documentos enviados pelos clientes (CNH, identidade e comprovantes). Confira o arquivo e altere o status para aprovar ou recusar. O arquivo abre por link temporário e privado. Recusar, suspender ou bloquear exige um motivo.</p>
+      <div class="auth-msg" id="kycMsg" hidden></div>
       <div class="admin-card">
         <table class="admin-table">
           <thead><tr><th>Pessoa</th><th>Documento</th><th>Arquivo</th><th>Enviado em</th><th>Status</th></tr></thead>
@@ -407,13 +408,119 @@
     };
     return map[t] || (t || "Documento");
   }
+  var KYC_STATI = ["em_analise", "documentos_pendentes", "aprovado",
+    "aprovado_com_ressalvas", "recusado", "suspenso", "bloqueado_para_revisao"];
+
+  function kycMsg(text, kind) {
+    var el = document.getElementById("kycMsg");
+    if (!el) return;
+    el.textContent = text || "";
+    el.className = "auth-msg auth-msg--" + (kind || "warn");
+    el.hidden = !text;
+  }
+  function kycPersonLabel(profile, userId) {
+    var name = (profile && profile.full_name) ? String(profile.full_name).trim() : "";
+    if (name) return name;
+    return "Cliente sem nome · " + String(userId || "—").slice(0, 8);
+  }
+  function logKycView(doc) {
+    var c = a.client();
+    if (!c) return;
+    c.from("admin_audit_logs").insert({
+      action: "kyc_document_viewed",
+      target_type: "documento",
+      target_id: doc.id,
+      metadata_json: { arquivo: doc.file_name || "", tipo: doc.document_type || "" }
+    }).then(function () {}, function () {});
+  }
+  function openKycDocument(doc) {
+    var c = a.client();
+    if (!c) return;
+    if (!doc.file_path) {
+      kycMsg("Este documento não tem arquivo vinculado no Storage.", "error");
+      return;
+    }
+    /* abre a aba JÁ no gesto do clique — evita o bloqueio de pop-up */
+    var win = window.open("", "_blank");
+    c.storage.from("kyc-docs").createSignedUrl(doc.file_path, 120).then(function (sr) {
+      if (!sr || sr.error || !sr.data || !sr.data.signedUrl) {
+        if (win) win.close();
+        kycMsg("Não foi possível abrir o documento. Verifique o arquivo no Storage.", "error");
+        return;
+      }
+      if (win) {
+        win.location = sr.data.signedUrl;
+        kycMsg("Documento aberto em uma aba por link temporário privado.", "ok");
+      } else {
+        kycMsg("O navegador bloqueou a nova aba. Permita pop-ups para este site e clique em Ver de novo.", "warn");
+      }
+      logKycView(doc);
+    }).catch(function () {
+      if (win) win.close();
+      kycMsg("Não foi possível abrir o documento agora. Tente novamente.", "error");
+    });
+  }
+  function updateKycStatus(doc, newStatus, sel) {
+    var c = a.client();
+    if (!c) return;
+    var notes = null;
+    if (newStatus === "recusado" || newStatus === "suspenso" || newStatus === "bloqueado_para_revisao") {
+      notes = window.prompt("Informe o motivo (obrigatório para recusar, suspender ou bloquear):", "");
+      if (notes == null || !String(notes).trim()) {
+        kycMsg("Ação cancelada — informar o motivo é obrigatório.", "warn");
+        sel.value = doc.status;
+        return;
+      }
+      notes = String(notes).trim();
+    }
+    sel.disabled = true;
+    a.getSession().then(function (s) {
+      var patch = { status: newStatus, reviewed_at: new Date().toISOString() };
+      if (s) patch.reviewed_by = s.user.id;
+      if (notes) patch.review_notes = notes;
+      c.from("user_documents").update(patch).eq("id", doc.id).select().then(function (rr) {
+        sel.disabled = false;
+        if (rr && rr.error) {
+          kycMsg("Não foi possível atualizar: " + (rr.error.message || "verifique as permissões."), "error");
+          sel.value = doc.status;
+          return;
+        }
+        if (!rr || !rr.data || !rr.data.length) {
+          kycMsg("A atualização não foi aplicada (sem permissão ou documento não encontrado). Rode o supabase-fase15.sql.", "error");
+          sel.value = doc.status;
+          return;
+        }
+        doc.status = newStatus;
+        kycMsg("Status do documento atualizado com sucesso.", "ok");
+      }).catch(function () {
+        sel.disabled = false;
+        kycMsg("Falha ao atualizar o status. Tente novamente.", "error");
+        sel.value = doc.status;
+      });
+    });
+  }
+  function kycStatusCell(doc) {
+    var td = document.createElement("td");
+    var sel = document.createElement("select");
+    sel.className = "cad-status";
+    KYC_STATI.forEach(function (st) {
+      var o = document.createElement("option");
+      o.value = st;
+      o.textContent = a.statusLabel ? a.statusLabel(st) : st;
+      if (st === doc.status) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", function () { updateKycStatus(doc, sel.value, sel); });
+    td.appendChild(sel);
+    return td;
+  }
   function loadUserDocuments() {
     var c = a.client();
     var tb = document.getElementById("kycList");
     if (!c || !tb) return;
     c.from("profiles").select("id,full_name").then(function (rp) {
-      var names = {};
-      ((rp && rp.data) || []).forEach(function (p) { names[p.id] = p.full_name; });
+      var byId = {};
+      ((rp && rp.data) || []).forEach(function (p) { byId[p.id] = p; });
       c.from("user_documents").select("*").order("created_at", { ascending: false })
         .limit(100).then(function (r) {
           if (!r || r.error) {
@@ -429,7 +536,7 @@
           rows.forEach(function (d) {
             var tr = document.createElement("tr");
             function td(txt) { var x = document.createElement("td"); x.textContent = txt; return x; }
-            tr.appendChild(td(names[d.user_id] || "—"));
+            tr.appendChild(td(kycPersonLabel(byId[d.user_id], d.user_id)));
             tr.appendChild(td(docTypeLabel(d.document_type)));
             var fileTd = document.createElement("td");
             var fn = document.createElement("span");
@@ -439,19 +546,11 @@
             view.type = "button";
             view.className = "btn btn--outline btn--sm";
             view.textContent = "Ver";
-            view.addEventListener("click", function () {
-              view.disabled = true;
-              c.storage.from("kyc-docs").createSignedUrl(d.file_path, 120).then(function (sr) {
-                view.disabled = false;
-                if (sr && sr.data && sr.data.signedUrl) {
-                  window.open(sr.data.signedUrl, "_blank", "noopener");
-                }
-              }).catch(function () { view.disabled = false; });
-            });
+            view.addEventListener("click", function () { openKycDocument(d); });
             fileTd.appendChild(view);
             tr.appendChild(fileTd);
             tr.appendChild(td(fmtDate(d.created_at)));
-            tr.appendChild(statusCell("user_documents", "status", d));
+            tr.appendChild(kycStatusCell(d));
             tb.appendChild(tr);
           });
         }).catch(function () {
@@ -638,7 +737,8 @@
       pagamento_status_alterado: "Pagamento — status alterado",
       indicacao_criado: "Indicação registrada",
       indicacao_status_alterado: "Indicação — status alterado",
-      comissao_status_alterado: "Comissão — etapa alterada"
+      comissao_status_alterado: "Comissão — etapa alterada",
+      kyc_document_viewed: "Documento KYC — visualizado"
     };
     return map[act] || (act || "—");
   }
