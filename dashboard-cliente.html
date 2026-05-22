@@ -41,6 +41,7 @@
           <a href="#documentos">Documentos</a>
           <a href="#checklist">Check-in / check-out</a>
           <a href="#financeiro">Financeiro</a>
+          <a href="#protecao">Ocorrências</a>
           <a href="#suporte">Suporte</a>
         </nav>
       </aside>
@@ -116,6 +117,40 @@
           </div>
           <div class="dash-list" id="finList"></div>
           <div class="dash-empty" id="finEmpty">Nenhuma reserva com valor registrado ainda. Os valores aparecem aqui quando uma locação é confirmada.</div>
+        </section>
+
+        <section class="dash-panel" id="protecao">
+          <h2>Proteção e ocorrências</h2>
+          <p>Aconteceu algo com o veículo durante a locação — colisão, pane, multa, dano? Registre a ocorrência aqui. A equipe de proteção faz a triagem e acompanha cada caso. Cobertura, caução e participação são definidos por contrato.</p>
+          <form class="insp-form" id="caseForm">
+            <h3>Registrar uma ocorrência</h3>
+            <div class="form__grid">
+              <label class="field"><span>Reserva *</span>
+                <select name="booking_id" required>
+                  <option value="">Selecione a reserva</option>
+                </select>
+              </label>
+              <label class="field"><span>Tipo de ocorrência *</span>
+                <select name="case_type" required>
+                  <option value="">Selecione</option>
+                  <option value="sinistro">Sinistro / colisão</option>
+                  <option value="dano_externo">Dano externo</option>
+                  <option value="dano_interno">Dano interno</option>
+                  <option value="pane">Pane mecânica</option>
+                  <option value="multa">Multa de trânsito</option>
+                  <option value="roubo_furto">Roubo ou furto</option>
+                  <option value="limpeza_especial">Limpeza especial</option>
+                  <option value="mau_uso">Mau uso</option>
+                </select>
+              </label>
+              <label class="field field--full"><span>Descrição *</span><textarea name="description" rows="3" required placeholder="Conte o que aconteceu, quando e onde."></textarea></label>
+            </div>
+            <p class="form__err" id="caseErr" hidden>Selecione a reserva, o tipo e descreva a ocorrência.</p>
+            <button type="submit" class="btn btn--solid btn--sm">Registrar ocorrência</button>
+          </form>
+          <div class="block-title">Minhas ocorrências</div>
+          <div class="dash-list" id="caseList"></div>
+          <div class="dash-empty" id="caseEmpty">Nenhuma ocorrência registrada nesta conta.</div>
         </section>
 
         <section class="dash-panel" id="suporte">
@@ -218,6 +253,7 @@
 
     loadCheckInOut();
     loadDocuments();
+    loadCases();
   });
 
   /* ---- Fase 5: check-in / check-out ---- */
@@ -253,6 +289,7 @@
       .order("created_at", { ascending: false }).then(function (rb) {
         var bookings = (rb && rb.data) || [];
         renderFinance(bookings);
+        fillCaseBookings(bookings);
         c.from("rental_inspections").select("*")
           .order("created_at", { ascending: false }).then(function (ri) {
             inspByBooking = {};
@@ -589,6 +626,100 @@
     }).catch(function () {});
   }
   renderDocs([]);
+
+  /* ---- Fase 10: ocorrências / proteção ---- */
+  var caseBookings = [];
+  function caseLabel(t) {
+    var map = {
+      sinistro: "Sinistro / colisão", dano_externo: "Dano externo",
+      dano_interno: "Dano interno", pane: "Pane mecânica", multa: "Multa de trânsito",
+      roubo_furto: "Roubo ou furto", limpeza_especial: "Limpeza especial",
+      mau_uso: "Mau uso"
+    };
+    return map[t] || (t || "Ocorrência");
+  }
+  function fillCaseBookings(bookings) {
+    caseBookings = bookings || [];
+    var sel = document.querySelector('#caseForm select[name="booking_id"]');
+    if (!sel) return;
+    var usable = caseBookings.filter(function (b) {
+      return b.status !== "rascunho" && b.status !== "recusado";
+    });
+    sel.innerHTML = '<option value="">Selecione a reserva</option>';
+    usable.forEach(function (b) {
+      var o = document.createElement("option");
+      o.value = b.id;
+      o.textContent = vehText(b.vehicles) + " · " + fmtDate(b.start_date);
+      sel.appendChild(o);
+    });
+  }
+  function loadCases() {
+    var c = a.client();
+    var list = document.getElementById("caseList");
+    var empty = document.getElementById("caseEmpty");
+    if (!c || !list) return;
+    c.from("protection_cases").select("*").order("created_at", { ascending: false })
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        list.innerHTML = "";
+        if (!rows.length) { if (empty) empty.hidden = false; return; }
+        if (empty) empty.hidden = true;
+        rows.forEach(function (cs) {
+          var sub = (cs.description ? String(cs.description).slice(0, 90) : "Sem descrição") +
+            " · aberto em " + fmtDate(cs.created_at);
+          list.appendChild(rowEl(caseLabel(cs.case_type), sub,
+            a.statusLabel(cs.status), pillKind(cs.status)));
+        });
+      }).catch(function () {});
+  }
+  (function () {
+    var form = document.getElementById("caseForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var err = document.getElementById("caseErr");
+      var bookingId = form.elements["booking_id"].value;
+      var caseType = form.elements["case_type"].value;
+      var desc = (form.elements["description"].value || "").trim();
+      if (!bookingId || !caseType || !desc) {
+        if (err) { err.textContent = "Selecione a reserva, o tipo e descreva a ocorrência."; err.hidden = false; }
+        return;
+      }
+      if (err) err.hidden = true;
+      var c = a.client();
+      if (!c) { showNotice("Conecte o Supabase para registrar a ocorrência.", "warn"); return; }
+      var booking = null;
+      for (var i = 0; i < caseBookings.length; i++) {
+        if (caseBookings[i].id === bookingId) { booking = caseBookings[i]; break; }
+      }
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = "Registrando...";
+      a.getSession().then(function (s) {
+        if (!s) {
+          btn.disabled = false; btn.textContent = "Registrar ocorrência";
+          showNotice("Sua sessão expirou. Entre novamente.", "error");
+          return;
+        }
+        c.from("protection_cases").insert({
+          booking_id: bookingId,
+          vehicle_id: booking ? booking.vehicle_id : null,
+          case_type: caseType,
+          description: desc,
+          reported_by: s.user.id,
+          status: "em_analise"
+        }).then(function (r) {
+          btn.disabled = false; btn.textContent = "Registrar ocorrência";
+          if (r && r.error) { showNotice("Não foi possível registrar agora. Tente novamente.", "error"); return; }
+          form.reset();
+          showNotice("Ocorrência registrada. A equipe de proteção vai analisar.", "ok");
+          loadCases();
+        }).catch(function () {
+          btn.disabled = false; btn.textContent = "Registrar ocorrência";
+          showNotice("Não foi possível registrar agora. Tente novamente.", "error");
+        });
+      });
+    });
+  })();
 })();
 </script>
 </body>

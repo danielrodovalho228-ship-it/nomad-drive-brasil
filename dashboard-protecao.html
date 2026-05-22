@@ -37,6 +37,7 @@
         <p class="dash-side__title">Painel de proteção</p>
         <nav class="dash-side__nav">
           <a href="#visao">Visão geral</a>
+          <a href="#triagem">Casos abertos</a>
           <a href="#coberturas">Coberturas</a>
           <a href="#sinistro">Processo de sinistro</a>
           <a href="#casos">Tipos de caso</a>
@@ -62,6 +63,13 @@
             <h3>Proteção não é autorização para mau uso</h3>
             <p>Sujeira excessiva, drogas, cigarro, negligência, danos internos, manchas, odores fortes, multas ou uso fora do contrato podem gerar cobrança adicional e análise separada. Veja a <a href="seguranca-sinistros.html#limpeza">política de limpeza e devolução</a>.</p>
           </div>
+        </section>
+
+        <section class="dash-panel" id="triagem">
+          <h2>Casos abertos — triagem</h2>
+          <p>Ocorrências registradas pelos clientes e proprietários. Confira a descrição, ajuste o status e registre a resolução. A triagem só é gravada após a aprovação do seu acesso de parceiro de proteção.</p>
+          <div class="dash-list" id="caseList"></div>
+          <div class="dash-empty" id="caseEmpty">Nenhum caso aberto para triagem no momento.</div>
         </section>
 
         <section class="dash-panel" id="coberturas">
@@ -147,7 +155,111 @@
           ". Este é o painel do parceiro de proteção.", "warn");
       }
     });
+    loadProtectionCases();
   });
+
+  /* ---- Fase 10: triagem dos casos de proteção ---- */
+  var CASE_LABEL = {
+    sinistro: "Sinistro / colisão", dano_externo: "Dano externo",
+    dano_interno: "Dano interno", pane: "Pane mecânica", multa: "Multa de trânsito",
+    roubo_furto: "Roubo ou furto", limpeza_especial: "Limpeza especial", mau_uso: "Mau uso"
+  };
+  var CASE_STATI = ["em_analise", "documentos_pendentes", "aprovado",
+    "aprovado_com_ressalvas", "recusado"];
+
+  function fmtDate(d) {
+    if (!d) return "—";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function vehText(v) {
+    if (!v) return "Veículo do caso";
+    var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) t += " (" + v.year_model + ")";
+    return t;
+  }
+  function loadProtectionCases() {
+    var c = a.client();
+    var list = document.getElementById("caseList");
+    var empty = document.getElementById("caseEmpty");
+    if (!c || !list) return;
+    c.from("protection_cases").select("*, vehicles(make,model,year_model)")
+      .order("created_at", { ascending: false }).then(function (r) {
+        var rows = (r && r.data) || [];
+        list.innerHTML = "";
+        if (!rows.length) { if (empty) empty.hidden = false; return; }
+        if (empty) empty.hidden = true;
+        rows.forEach(function (cs) { list.appendChild(caseCard(cs)); });
+      }).catch(function () {});
+  }
+  function caseCard(cs) {
+    var card = document.createElement("div");
+    card.className = "insp-card";
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    t.textContent = (CASE_LABEL[cs.case_type] || cs.case_type || "Ocorrência") +
+      " — " + vehText(cs.vehicles);
+    var sub = document.createElement("span");
+    sub.textContent = "Aberto em " + fmtDate(cs.created_at);
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+
+    if (cs.description) {
+      var desc = document.createElement("p");
+      desc.className = "insp-card__msg";
+      desc.textContent = cs.description;
+      card.appendChild(desc);
+    }
+
+    var sel = document.createElement("select");
+    sel.className = "cad-status";
+    CASE_STATI.forEach(function (st) {
+      var o = document.createElement("option");
+      o.value = st; o.textContent = a.statusLabel(st);
+      if (st === cs.status) o.selected = true;
+      sel.appendChild(o);
+    });
+
+    var notes = document.createElement("textarea");
+    notes.rows = 2;
+    notes.className = "case-notes";
+    notes.placeholder = "Resolução / parecer da triagem";
+    if (cs.resolution_notes) notes.value = cs.resolution_notes;
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn--solid btn--sm";
+    btn.textContent = "Salvar triagem";
+    btn.addEventListener("click", function () {
+      var c = a.client();
+      if (!c) { showNotice("Conecte o Supabase para salvar a triagem.", "warn"); return; }
+      btn.disabled = true; btn.textContent = "Salvando...";
+      c.from("protection_cases").update({
+        status: sel.value,
+        resolution_notes: (notes.value || "").trim() || null
+      }).eq("id", cs.id).then(function (r) {
+        btn.disabled = false; btn.textContent = "Salvar triagem";
+        if (r && r.error) {
+          showNotice("Não foi possível salvar. Verifique se o seu acesso de proteção já foi aprovado.", "error");
+          return;
+        }
+        showNotice("Triagem atualizada.", "ok");
+        loadProtectionCases();
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = "Salvar triagem";
+        showNotice("Não foi possível salvar agora. Tente novamente.", "error");
+      });
+    });
+
+    var actions = document.createElement("div");
+    actions.className = "insp-card__actions";
+    actions.appendChild(sel);
+    actions.appendChild(btn);
+    card.appendChild(notes);
+    card.appendChild(actions);
+    return card;
+  }
 })();
 </script>
 </body>
