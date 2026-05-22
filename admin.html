@@ -226,11 +226,11 @@
     <!-- LOG DE ATIVIDADES -->
     <section class="admin-block" id="log">
       <h2>Log de atividades</h2>
-      <p class="note">Registro de ações administrativas sobre cadastros, veículos e operações.</p>
+      <p class="note">Auditoria automática: cada criação e cada mudança de status em reservas, veículos, vistorias, documentos, ocorrências, papéis, perfis e cadastros é registrada pelo banco de dados — não pode ser burlada pelo front-end.</p>
       <div class="admin-card">
         <table class="admin-table">
-          <thead><tr><th>Data</th><th>Ação</th><th>Alvo</th></tr></thead>
-          <tbody id="logList"><tr><td colspan="3">Carregando registros...</td></tr></tbody>
+          <thead><tr><th>Data</th><th>Ação</th><th>Alvo</th><th>Detalhe</th></tr></thead>
+          <tbody id="logList"><tr><td colspan="4">Carregando registros...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -610,10 +610,50 @@
       table: "admin_audit_logs", tbodyId: "logList",
       columns: [
         function (r) { return fmtDate(r.created_at); },
-        function (r) { return r.action || "—"; },
-        function (r) { return r.target_type || "—"; }
+        function (r) { return auditActionLabel(r.action); },
+        function (r) { return auditTargetLabel(r.target_type); },
+        function (r) { return auditDetail(r.metadata_json); }
       ]
     });
+  }
+
+  /* ---- Fase 11: leitura amigável da auditoria ---- */
+  function auditActionLabel(act) {
+    var map = {
+      km_regressao_bloqueada: "Km bloqueado (regressão)",
+      reserva_criado: "Reserva criada",
+      reserva_status_alterado: "Reserva — status alterado",
+      veiculo_criado: "Veículo cadastrado",
+      veiculo_status_alterado: "Veículo — status alterado",
+      vistoria_criado: "Vistoria solicitada",
+      vistoria_status_alterado: "Vistoria — status alterado",
+      documento_criado: "Documento enviado",
+      documento_status_alterado: "Documento — status alterado",
+      ocorrencia_criado: "Ocorrência aberta",
+      ocorrencia_status_alterado: "Ocorrência — status alterado",
+      papel_status_alterado: "Papel — status alterado",
+      perfil_status_alterado: "Perfil — verificação alterada",
+      cadastro_status_alterado: "Cadastro — status alterado"
+    };
+    return map[act] || (act || "—");
+  }
+  function auditTargetLabel(t) {
+    var map = {
+      reserva: "Reserva", veiculo: "Veículo", vistoria: "Vistoria",
+      documento: "Documento", ocorrencia: "Ocorrência", papel: "Papel",
+      perfil: "Perfil", cadastro: "Cadastro", vehicle: "Veículo"
+    };
+    return map[t] || (t || "—");
+  }
+  function auditDetail(m) {
+    if (!m) return "—";
+    if (m.de != null || m.para != null) {
+      return (a.statusLabel ? a.statusLabel(m.de) : (m.de || "—")) +
+        " → " + (a.statusLabel ? a.statusLabel(m.para) : (m.para || "—"));
+    }
+    if (m.km_anterior != null) return "km " + m.km_anterior + " → " + m.km_tentado;
+    if (m.status != null) return a.statusLabel ? a.statusLabel(m.status) : String(m.status);
+    return "—";
   }
 
   /* ---- Criar reserva (admin) — conecta um cliente a um veículo ---- */
