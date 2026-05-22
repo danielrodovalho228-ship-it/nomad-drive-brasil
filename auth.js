@@ -146,12 +146,24 @@
       });
     },
 
-    /* destino após o login: ?redirect= se houver, senão o onboarding do perfil */
+    /* destino após o login:
+       1) ?redirect= se houver;
+       2) admin/super_admin -> admin.html;
+       3) perfil já onboardado (verification_status além de rascunho/
+          email_verificado) -> painel do perfil;
+       4) caso contrário -> onboarding do perfil. */
     destinationAfterLogin: function () {
       var rt = ndAuth.redirectTarget();
       if (rt) return Promise.resolve(rt);
-      return ndAuth.getProfile().then(function (p) {
-        return ndAuth.onboardingFor((p && p.main_role) || "client");
+      return ndAuth.isAdmin().then(function (isAdm) {
+        if (isAdm) return "admin.html";
+        return ndAuth.getProfile().then(function (p) {
+          var role = (p && p.main_role) || "client";
+          if (role === "admin" || role === "super_admin") return "admin.html";
+          var st = p && p.verification_status;
+          var onboarded = !!st && st !== "rascunho" && st !== "email_verificado";
+          return onboarded ? ndAuth.dashboardFor(role) : ndAuth.onboardingFor(role);
+        });
       }).catch(function () { return "index.html"; });
     },
 
@@ -181,7 +193,18 @@
           status: "em_analise"
         }).select("protocol").maybeSingle().then(function (r) {
           if (r.error) return { ok: false, error: translateError(r.error) };
-          return { ok: true, protocol: (r.data && r.data.protocol) || null };
+          var done = { ok: true, protocol: (r.data && r.data.protocol) || null };
+          /* marca o perfil como "em análise" — assim o pós-login leva ao
+             painel, e não ao onboarding de novo. O filtro .in() evita
+             rebaixar um perfil que já esteja aprovado ou em outro status. */
+          if (s) {
+            return client.from("profiles")
+              .update({ verification_status: "em_analise" })
+              .eq("id", s.user.id)
+              .in("verification_status", ["rascunho", "email_verificado"])
+              .then(function () { return done; }, function () { return done; });
+          }
+          return done;
         });
       }).catch(function (e) { return { ok: false, error: translateError(e) }; });
     },

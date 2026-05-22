@@ -1330,9 +1330,14 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 .onb-check {
   display: flex; gap: 10px; align-items: flex-start;
   font-size: 13px; color: var(--ink); line-height: 1.5;
+  cursor: pointer; padding: 6px 0;
 }
-.onb-check + .onb-check { margin-top: 10px; }
-.onb-check input { margin-top: 2px; width: 16px; height: 16px; accent-color: var(--green); flex-shrink: 0; }
+.onb-check + .onb-check { margin-top: 4px; }
+.onb-check input {
+  margin-top: 1px; width: 18px; height: 18px;
+  accent-color: var(--green); flex-shrink: 0; cursor: pointer;
+}
+.onb-check span { cursor: pointer; }
 .onb-card .onb-check { margin-top: 16px; }
 
 .onb-aside { display: flex; flex-direction: column; gap: 16px; }

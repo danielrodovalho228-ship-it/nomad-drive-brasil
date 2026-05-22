@@ -93,8 +93,8 @@
         </div>
 
         <div class="onb-declare">
-          <label class="onb-check"><input type="checkbox" id="cnh" /> <span>Declaro que possuo <strong>CNH válida e em dia</strong>.</span></label>
-          <label class="onb-check"><input type="checkbox" id="cienteDocs" /> <span>Entendo que a Nomade Drive pode solicitar <strong>documento oficial, comprovante de residência, comprovação de renda ou vínculo, referências e verificação</strong> — e que <strong>nem toda solicitação é aprovada</strong>.</span></label>
+          <label class="onb-check"><input type="checkbox" id="cnh" name="cnh" /> <span>Declaro que possuo <strong>CNH válida e em dia</strong>.</span></label>
+          <label class="onb-check"><input type="checkbox" id="cienteDocs" name="cienteDocs" /> <span>Entendo que a Nomade Drive pode solicitar <strong>documento oficial, comprovante de residência, comprovação de renda ou vínculo, referências e verificação</strong> — e que <strong>nem toda solicitação é aprovada</strong>.</span></label>
         </div>
 
         <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Enviar perfil para análise</button>
@@ -125,7 +125,8 @@
       <p>Recebemos os seus dados e criamos o seu protocolo. O perfil está <strong>em análise</strong> pela equipe Nomade Drive — normalmente em até 1 a 3 dias úteis. O envio não garante aprovação automática: a liberação depende de análise, documentação e regras da plataforma.</p>
       <p class="onb-proto">Protocolo: <strong id="onbProtocolo">—</strong></p>
       <div class="onb-done__cta">
-        <a href="status-cadastro.html" id="onbAcompanhar" class="btn btn--solid btn--lg">Acompanhar meu cadastro</a>
+        <a href="dashboard-cliente.html" class="btn btn--solid btn--lg">Ir para o meu painel</a>
+        <a href="status-cadastro.html" id="onbAcompanhar" class="btn btn--outline btn--lg">Acompanhar meu cadastro</a>
         <a href="#" class="btn btn--outline btn--lg" data-wa="Olá! Enviei meu cadastro de cliente na Nomade Drive Brasil e quero acompanhar.">Falar no WhatsApp</a>
         <a href="index.html" class="btn btn--ghost btn--lg">Voltar ao site</a>
       </div>
@@ -178,8 +179,16 @@
     var cidade = document.getElementById("cidade").value.trim();
     var motivo = document.getElementById("motivo").value;
     if (!nome || !cidade || !motivo) { showNotice("Preencha nome, cidade e motivo da locação.", "warn"); return; }
-    if (!document.getElementById("cnh").checked || !document.getElementById("cienteDocs").checked) {
-      showNotice("Confirme as duas declarações para enviar o perfil.", "warn"); return;
+    var cnhOk = document.getElementById("cnh").checked === true;
+    var docsOk = document.getElementById("cienteDocs").checked === true;
+    if (!cnhOk && !docsOk) {
+      showNotice("Marque as duas declarações (CNH e documentos) para enviar o perfil.", "warn"); return;
+    }
+    if (!cnhOk) {
+      showNotice("Marque a primeira declaração: que você possui CNH válida e em dia.", "warn"); return;
+    }
+    if (!docsOk) {
+      showNotice("Marque a segunda declaração: ciência sobre documentos e análise.", "warn"); return;
     }
     if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
     if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
