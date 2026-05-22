@@ -116,6 +116,21 @@
       <h2>Reservas</h2>
       <p class="note">Locações registradas na plataforma. Altere o status conforme a reserva avança.</p>
       <div class="admin-card">
+        <h3 class="block-title">Criar nova reserva</h3>
+        <p class="note">Conecta um cliente a um veículo — é o que libera o check-in e o check-out para o cliente.</p>
+        <form id="newBookingForm">
+          <div class="form__grid">
+            <label class="field"><span>Cliente</span><select id="nbClient"><option value="">Carregando...</option></select></label>
+            <label class="field"><span>Veículo</span><select id="nbVehicle"><option value="">Carregando...</option></select></label>
+            <label class="field"><span>Data de início</span><input type="date" id="nbStart" /></label>
+            <label class="field"><span>Data de fim</span><input type="date" id="nbEnd" /></label>
+            <label class="field"><span>Valor mensal (R$)</span><input type="number" id="nbPrice" min="0" inputmode="numeric" /></label>
+          </div>
+          <p class="form__err" id="nbErr" hidden>Selecione cliente, veículo e as datas.</p>
+          <button type="submit" class="btn btn--solid btn--sm dash-cta">Criar reserva</button>
+        </form>
+      </div>
+      <div class="admin-card">
         <table class="admin-table">
           <thead><tr><th>Veículo</th><th>Período</th><th>Valor mensal</th><th>Status</th></tr></thead>
           <tbody id="reservasList"><tr><td colspan="4">Carregando reservas...</td></tr></tbody>
@@ -323,6 +338,7 @@
       }).catch(function () {});
     loadCadastros();
     loadSections();
+    loadNewBookingForm();
   }
   function loadCadastros() {
     var c = a.client();
@@ -520,6 +536,79 @@
         function (r) { return r.action || "—"; },
         function (r) { return r.target_type || "—"; }
       ]
+    });
+  }
+
+  /* ---- Criar reserva (admin) — conecta um cliente a um veículo ---- */
+  function loadNewBookingForm() {
+    var c = a.client();
+    var clientSel = document.getElementById("nbClient");
+    var vehSel = document.getElementById("nbVehicle");
+    var form = document.getElementById("newBookingForm");
+    if (!c || !clientSel || !vehSel || !form) return;
+    var vehicleOwner = {};
+
+    c.from("profiles").select("id,full_name").eq("main_role", "client").then(function (r) {
+      var rows = (r && r.data) || [];
+      clientSel.innerHTML = '<option value="">Selecione o cliente</option>';
+      rows.forEach(function (p) {
+        var o = document.createElement("option");
+        o.value = p.id;
+        o.textContent = p.full_name || "Cliente sem nome";
+        clientSel.appendChild(o);
+      });
+    }).catch(function () {});
+
+    c.from("vehicles").select("id,make,model,year_model,owner_id").then(function (r) {
+      var rows = (r && r.data) || [];
+      vehSel.innerHTML = '<option value="">Selecione o veículo</option>';
+      rows.forEach(function (v) {
+        vehicleOwner[v.id] = v.owner_id;
+        var o = document.createElement("option");
+        o.value = v.id;
+        var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+        if (v.year_model) t += " (" + v.year_model + ")";
+        o.textContent = t;
+        vehSel.appendChild(o);
+      });
+    }).catch(function () {});
+
+    if (form.getAttribute("data-wired")) return;
+    form.setAttribute("data-wired", "1");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var err = document.getElementById("nbErr");
+      var clientId = clientSel.value;
+      var vehicleId = vehSel.value;
+      var start = document.getElementById("nbStart").value;
+      var end = document.getElementById("nbEnd").value;
+      if (!clientId || !vehicleId || !start || !end) {
+        if (err) { err.textContent = "Selecione cliente, veículo e as datas."; err.hidden = false; }
+        return;
+      }
+      if (err) err.hidden = true;
+      var priceRaw = document.getElementById("nbPrice").value;
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = "Criando...";
+      c.from("bookings").insert({
+        client_id: clientId,
+        owner_id: vehicleOwner[vehicleId] || null,
+        vehicle_id: vehicleId,
+        start_date: start,
+        end_date: end,
+        monthly_price: priceRaw ? Number(priceRaw) : null,
+        status: "aprovado"
+      }).then(function (rr) {
+        btn.disabled = false; btn.textContent = "Criar reserva";
+        if (rr && rr.error) {
+          if (err) { err.textContent = "Não foi possível criar a reserva. Verifique os dados."; err.hidden = false; }
+          return;
+        }
+        form.reset();
+        loadSections();
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = "Criar reserva";
+      });
     });
   }
 })();
