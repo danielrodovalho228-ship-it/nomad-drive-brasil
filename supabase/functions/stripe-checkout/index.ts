@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
     // a reserva — o RLS garante que o usuário só enxerga as próprias
     const { data: booking } = await userClient
       .from("bookings")
-      .select("id, client_id, monthly_price, deposit_amount")
+      .select("id, client_id, owner_id, monthly_price, deposit_amount, platform_fee")
       .eq("id", bookingId)
       .maybeSingle();
     if (!booking) return json({ error: "Reserva não encontrada." }, 404);
@@ -79,10 +79,41 @@ Deno.serve(async (req) => {
     const isDeposit = kind === "caucao";
     const amount = isDeposit ? deposit : monthly;
     if (!(amount > 0)) return json({ error: "Valor da reserva ainda não definido." }, 400);
+    const amountCents = Math.round(amount * 100);
 
     const label = isDeposit
       ? "Caução da locação — Nomade Drive Brasil"
       : "Mensalidade da locação — Nomade Drive Brasil";
+
+    // service role: lê payout_accounts e registra o pagamento
+    const admin = createClient(url, serviceKey);
+
+    // ---- Fase B — split do pagamento ----
+    // A MENSALIDADE é dividida: parte vai ao proprietário (conta conectada)
+    // e a taxa fica com a plataforma. A CAUÇÃO não é dividida (fica retida).
+    const piData: Record<string, unknown> = {};
+    if (isDeposit) {
+      piData.capture_method = "manual"; // autoriza sem capturar
+    } else {
+      const { data: ownerAcct } = await admin
+        .from("payout_accounts")
+        .select("stripe_account_id, status, payouts_enabled")
+        .eq("user_id", booking.owner_id)
+        .maybeSingle();
+      const ownerReady = !!(ownerAcct && ownerAcct.stripe_account_id &&
+        (ownerAcct.status === "ativo" || ownerAcct.payouts_enabled === true));
+      if (ownerReady) {
+        const DEFAULT_FEE_PCT = 0.20; // taxa padrão da plataforma (ajuste se desejar)
+        const feeCents = booking.platform_fee != null
+          ? Math.round(Number(booking.platform_fee) * 100)
+          : Math.round(amountCents * DEFAULT_FEE_PCT);
+        // a taxa nunca é negativa nem maior/igual ao total
+        piData.application_fee_amount = Math.min(Math.max(feeCents, 0), amountCents - 1);
+        piData.transfer_data = { destination: ownerAcct.stripe_account_id };
+      }
+      // se o proprietário ainda não tiver conta de recebimento ativa, a
+      // cobrança ocorre sem split — o repasse é acertado depois.
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -90,20 +121,17 @@ Deno.serve(async (req) => {
         quantity: 1,
         price_data: {
           currency: "brl",
-          unit_amount: Math.round(amount * 100),
+          unit_amount: amountCents,
           product_data: { name: label },
         },
       }],
-      // caução: autoriza no cartão SEM capturar (captura/liberação depois)
-      payment_intent_data: isDeposit ? { capture_method: "manual" } : undefined,
+      payment_intent_data: Object.keys(piData).length ? piData : undefined,
       success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok`,
       cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
       client_reference_id: bookingId,
       metadata: { booking_id: bookingId, kind, client_id: user.id },
     });
 
-    // registra o pagamento (service role — contorna o RLS)
-    const admin = createClient(url, serviceKey);
     await admin.from("payments").insert({
       booking_id: bookingId,
       client_id: user.id,
