@@ -55,6 +55,7 @@ ul, ol { list-style: none; }
 .btn--sm { padding: 9px 18px; font-size: 14px; }
 .btn--lg { padding: 15px 30px; font-size: 16px; }
 .btn--block { width: 100%; }
+.btn.is-disabled { opacity: .55; pointer-events: none; cursor: not-allowed; }
 
 /* ---------- nav ---------- */
 .nav {

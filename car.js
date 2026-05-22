@@ -105,8 +105,24 @@
   function fmtDate(d) { return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" }); }
 
   function updateBooking() {
-    var months = +monthsSel.value;
-    var s = startInput.value ? new Date(startInput.value + "T12:00:00") : tomorrow;
+    var cta = el("bookCta");
+    var months = parseInt(monthsSel.value, 10);
+    if (!months || months < 1) months = 1;
+    var raw = startInput.value;
+    var s = raw ? new Date(raw + "T12:00:00") : null;
+    var hoje = iso(new Date());
+
+    /* data vazia, inválida (ex.: ano digitado errado) ou no passado: bloqueia o CTA */
+    if (!raw || !s || isNaN(s.getTime()) || raw < hoje) {
+      el("bookEnd").textContent = "—";
+      el("bookTotal").textContent = "—";
+      cta.textContent = "Corrija a data para pedir orçamento";
+      cta.classList.add("is-disabled");
+      cta.setAttribute("aria-disabled", "true");
+      cta.removeAttribute("href");
+      return;
+    }
+
     var end = addMonths(s, months);
     el("bookEnd").textContent = fmtDate(end);
     el("bookTotal").textContent = price
@@ -116,10 +132,14 @@
     var msg = "Olá! Tenho interesse no " + car.name + " (aluguel mensal).\n\n" +
       "• Retirada: " + fmtDate(s) + "\n" +
       "• Duração: " + months + (months === 1 ? " mês" : " meses") + "\n" +
+      "• Devolução estimada: " + fmtDate(end) + "\n" +
       (price ? "• Estimativa: " + brl(price) + "/mês (a confirmar)\n" : "") +
       "• Anúncio: " + window.location.href + "\n\n" +
       "Pode me enviar um orçamento?";
-    el("bookCta").href = link(msg);
+    cta.href = link(msg);
+    cta.textContent = "Pedir orçamento no WhatsApp";
+    cta.classList.remove("is-disabled");
+    cta.removeAttribute("aria-disabled");
   }
   startInput.addEventListener("change", updateBooking);
   monthsSel.addEventListener("change", updateBooking);
