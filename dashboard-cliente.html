@@ -306,6 +306,11 @@
       else msg.textContent = "Locação ativa.";
       actions.appendChild(msg);
     }
+    var detail = document.createElement("a");
+    detail.className = "btn btn--outline btn--sm";
+    detail.href = "reserva-detalhe.html?id=" + encodeURIComponent(b.id);
+    detail.textContent = "Ver detalhes";
+    actions.appendChild(detail);
     card.appendChild(actions);
     return card;
   }

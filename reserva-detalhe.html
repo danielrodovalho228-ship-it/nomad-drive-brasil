@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Detalhe da reserva — Nomade Drive Brasil</title>
+<meta name="description" content="Detalhe de uma reserva da Nomade Drive Brasil: veículo, período, status, linha do tempo e check-in/check-out." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="index.html">Ver o site</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="dash">
+  <div class="container">
+    <div class="auth-msg" id="dashNotice" hidden></div>
+    <a href="#" id="resvBack" class="car-back">&larr; Voltar</a>
+
+    <div id="resvNotFound" hidden>
+      <h1>Reserva não encontrada</h1>
+      <p>Não encontramos esta reserva, ou ela não está disponível para a sua conta.</p>
+      <a href="dashboard-cliente.html" class="btn btn--solid btn--sm">Ir para o painel</a>
+    </div>
+
+    <div id="resvDetail" hidden>
+      <div class="dash-topline">
+        <h1 id="resvTitle">Reserva</h1>
+        <span class="dash-pill dash-pill--neutral" id="resvStatus">—</span>
+      </div>
+
+      <div class="dash-cards">
+        <div class="dash-kpi"><span>Período</span><strong id="resvPeriod">—</strong></div>
+        <div class="dash-kpi"><span>Valor mensal</span><strong id="resvPrice">—</strong></div>
+        <div class="dash-kpi"><span>Veículo</span><strong id="resvVehicle">—</strong></div>
+      </div>
+
+      <section class="dash-panel">
+        <h2>Linha do tempo da reserva</h2>
+        <p>Acompanhe cada etapa, do orçamento ao encerramento.</p>
+        <div class="dash-list" id="resvTimeline"></div>
+      </section>
+
+      <section class="dash-panel">
+        <h2>Check-in e check-out</h2>
+        <div class="dash-list" id="resvInsp"></div>
+        <div class="dash-empty" id="resvInspEmpty">Nenhum check-in ou check-out registrado nesta reserva ainda.</div>
+      </section>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var notice = document.getElementById("dashNotice");
+  function showNotice(text, kind) {
+    notice.textContent = text;
+    notice.className = "auth-msg auth-msg--" + (kind || "warn");
+    notice.hidden = false;
+  }
+  function pillKind(s) {
+    if (s === "aprovado" || s === "aprovado_com_ressalvas") return "ok";
+    if (s === "recusado" || s === "suspenso" || s === "bloqueado_para_revisao") return "bad";
+    if (s === "em_analise" || s === "documentos_pendentes" || s === "solicitado") return "warn";
+    return "neutral";
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function vehText(v) {
+    if (!v) return "Veículo da reserva";
+    var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) t += " (" + v.year_model + ")";
+    return t;
+  }
+  function inspLabel(s) {
+    return s === "aprovado" ? "Aprovado" : (s === "recusado" ? "Recusado" : "Aguardando aprovação");
+  }
+  function row(title, sub, pillText, kind) {
+    var r = document.createElement("div"); r.className = "dash-row";
+    var m = document.createElement("div"); m.className = "dash-row__main";
+    var s = document.createElement("strong"); s.textContent = title;
+    var sp = document.createElement("span"); sp.textContent = sub;
+    m.appendChild(s); m.appendChild(sp); r.appendChild(m);
+    if (pillText) {
+      var p = document.createElement("span");
+      p.className = "dash-pill dash-pill--" + (kind || "neutral");
+      p.textContent = pillText;
+      r.appendChild(p);
+    }
+    return r;
+  }
+  function findInsp(insps, kind, status) {
+    for (var i = 0; i < insps.length; i++) {
+      if (insps[i].kind === kind && (!status || insps[i].status === status)) return insps[i];
+    }
+    return null;
+  }
+
+  var back = document.getElementById("resvBack");
+  if (back) back.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (history.length > 1) history.back();
+    else window.location.href = "dashboard-cliente.html";
+  });
+
+  var a = window.ndAuth;
+  if (!a) { showNotice("Autenticação indisponível nesta página.", "error"); return; }
+  if (!a.configured) {
+    showNotice("Pré-visualização: configure o supabase-config.js para carregar os dados reais.", "warn");
+  }
+  var id = "";
+  try { id = new URLSearchParams(window.location.search).get("id") || ""; } catch (e) {}
+
+  a.requireAuth().then(function (s) {
+    if (!s) return;
+    var c = a.client();
+    if (!c || !id) { document.getElementById("resvNotFound").hidden = false; return; }
+
+    c.from("bookings").select("*, vehicles(make,model,year_model,category)")
+      .eq("id", id).maybeSingle().then(function (rb) {
+        var b = rb && rb.data;
+        if (!b) { document.getElementById("resvNotFound").hidden = false; return; }
+        document.getElementById("resvDetail").hidden = false;
+        document.getElementById("resvTitle").textContent = "Reserva — " + vehText(b.vehicles);
+        var st = document.getElementById("resvStatus");
+        st.textContent = a.statusLabel(b.status);
+        st.className = "dash-pill dash-pill--" + pillKind(b.status);
+        document.getElementById("resvPeriod").textContent =
+          fmtDate(b.start_date) + " — " + fmtDate(b.end_date);
+        document.getElementById("resvPrice").textContent =
+          (b.monthly_price != null) ? "R$ " + Number(b.monthly_price).toLocaleString("pt-BR") : "—";
+        document.getElementById("resvVehicle").textContent = vehText(b.vehicles);
+
+        c.from("rental_inspections").select("*").eq("booking_id", id)
+          .order("created_at", { ascending: true }).then(function (ri) {
+            var insps = (ri && ri.data) || [];
+            renderTimeline(b, insps);
+            renderInsp(insps);
+          }).catch(function () { renderTimeline(b, []); });
+      }).catch(function () {
+        document.getElementById("resvNotFound").hidden = false;
+      });
+  });
+
+  function renderTimeline(b, insps) {
+    var tl = document.getElementById("resvTimeline");
+    if (!tl) return;
+    var confirmada = b.status !== "rascunho" && b.status !== "recusado";
+    var ckinReq = findInsp(insps, "checkin", null);
+    var ckinOk = findInsp(insps, "checkin", "aprovado");
+    var ckoutReq = findInsp(insps, "checkout", null);
+    var ckoutOk = findInsp(insps, "checkout", "aprovado");
+    var steps = [
+      ["Reserva criada", fmtDate(b.created_at), true],
+      ["Reserva confirmada", confirmada ? "confirmada" : "aguardando confirmação", confirmada],
+      ["Check-in solicitado", ckinReq ? fmtDate(ckinReq.scheduled_at || ckinReq.created_at) : "pendente", !!ckinReq],
+      ["Check-in aprovado — em uso", ckinOk ? fmtDate(ckinOk.validated_at || ckinOk.created_at) : "pendente", !!ckinOk],
+      ["Check-out solicitado", ckoutReq ? fmtDate(ckoutReq.scheduled_at || ckoutReq.created_at) : "pendente", !!ckoutReq],
+      ["Locação encerrada", ckoutOk ? fmtDate(ckoutOk.validated_at || ckoutOk.created_at) : "pendente", !!ckoutOk]
+    ];
+    tl.innerHTML = "";
+    steps.forEach(function (st) {
+      tl.appendChild(row(st[0], st[1], st[2] ? "Concluído" : "Pendente", st[2] ? "ok" : "neutral"));
+    });
+  }
+
+  function renderInsp(insps) {
+    var box = document.getElementById("resvInsp");
+    var empty = document.getElementById("resvInspEmpty");
+    if (!box) return;
+    if (!insps.length) { if (empty) empty.hidden = false; return; }
+    if (empty) empty.hidden = true;
+    box.innerHTML = "";
+    insps.slice().reverse().forEach(function (i) {
+      var label = (i.kind === "checkout" ? "Check-out" : "Check-in");
+      var bits = [fmtDate(i.scheduled_at)];
+      if (i.mileage != null && i.mileage !== "") bits.push(i.mileage + " km");
+      if (i.fuel_level) bits.push("combustível: " + i.fuel_level);
+      box.appendChild(row(label, bits.join(" · "), inspLabel(i.status), pillKind(i.status)));
+    });
+  }
+})();
+</script>
+</body>
+</html>
