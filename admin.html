@@ -541,6 +541,16 @@
             return;
           }
           var rows = r.data || [];
+          /* defesa: 1 linha por (usuário + tipo) — mantém a mais recente
+             (a query já vem ordenada por created_at desc) */
+          var seenKyc = {}, uniqRows = [];
+          rows.forEach(function (d) {
+            var k = d.user_id + "|" + String(d.document_type || "").toLowerCase().trim();
+            if (seenKyc[k]) return;
+            seenKyc[k] = 1;
+            uniqRows.push(d);
+          });
+          rows = uniqRows;
           if (!rows.length) {
             tb.innerHTML = '<tr><td colspan="5">Nenhum documento enviado ainda.</td></tr>';
             return;
