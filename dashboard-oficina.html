@@ -39,6 +39,7 @@
           <a href="#visao">Visão geral</a>
           <a href="#fila">Fila de vistorias</a>
           <a href="#checklist">Checklist técnico</a>
+          <a href="#recebimentos">Recebimentos</a>
           <a href="#historico">Histórico</a>
         </nav>
       </aside>
@@ -73,6 +74,14 @@
           <p>Cada vistoria documentada cobre: freios, pneus, suspensão, direção, motor, câmbio, luzes, vidros, limpadores, ar-condicionado, interior, lataria, documentação, quilometragem, itens de segurança e fotos internas e externas. Nenhum veículo entra na frota sem checklist técnico documentado.</p>
         </section>
 
+        <section class="dash-panel" id="recebimentos" data-return="dashboard-oficina.html">
+          <h2>Recebimentos</h2>
+          <p>Configure sua conta de recebimento para receber pela Stripe os valores devidos pelos serviços. A Stripe cuida da verificação de identidade e dos dados bancários — a Nomade Drive não os armazena.</p>
+          <div class="auth-msg" id="payoutNote" hidden></div>
+          <div class="dash-list" id="payoutStatus"></div>
+          <button type="button" class="btn btn--solid btn--sm dash-cta" id="payoutBtn">Configurar conta de recebimento</button>
+        </section>
+
         <section class="dash-panel" id="historico">
           <h2>Histórico de vistorias</h2>
           <p>O histórico completo das vistorias realizadas pela sua oficina ficará disponível nesta área conforme as vistorias forem concluídas.</p>
@@ -94,6 +103,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="script.js"></script>
+<script src="payouts.js"></script>
 <script>
 (function () {
   var PAGE_ROLE = "workshop";

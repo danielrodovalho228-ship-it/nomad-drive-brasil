@@ -96,6 +96,24 @@ Deno.serve(async (req) => {
         if (pi) await patchByIntent(pi, { status: "estornado" });
         break;
       }
+      case "account.updated": {
+        // Stripe Connect — status da conta conectada (recebimento)
+        const acct = event.data.object as Stripe.Account;
+        const status = acct.payouts_enabled && acct.details_submitted
+          ? "ativo"
+          : acct.requirements?.disabled_reason
+            ? "restrito"
+            : acct.details_submitted
+              ? "em_analise"
+              : "pendente";
+        await admin.from("payout_accounts").update({
+          status,
+          charges_enabled: !!acct.charges_enabled,
+          payouts_enabled: !!acct.payouts_enabled,
+          details_submitted: !!acct.details_submitted,
+        }).eq("stripe_account_id", acct.id);
+        break;
+      }
       default:
         // eventos não tratados são apenas registrados (em stripe_events)
         break;

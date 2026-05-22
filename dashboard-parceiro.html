@@ -41,6 +41,7 @@
           <a href="#codigo">Código</a>
           <a href="#comissoes">Comissões</a>
           <a href="#historico">Histórico</a>
+          <a href="#recebimentos">Recebimentos</a>
         </nav>
       </aside>
 
@@ -83,6 +84,14 @@
           <div class="dash-list" id="histList"></div>
           <div class="dash-empty" id="histEmpty">Sem histórico ainda. Ele aparece conforme você registra indicações.</div>
         </section>
+
+        <section class="dash-panel" id="recebimentos" data-return="dashboard-parceiro.html">
+          <h2>Recebimentos</h2>
+          <p>Configure sua conta de recebimento para receber pela Stripe as comissões a que tiver direito. A Stripe cuida da verificação de identidade e dos dados bancários — a Nomade Drive não os armazena.</p>
+          <div class="auth-msg" id="payoutNote" hidden></div>
+          <div class="dash-list" id="payoutStatus"></div>
+          <button type="button" class="btn btn--solid btn--sm dash-cta" id="payoutBtn">Configurar conta de recebimento</button>
+        </section>
       </div>
 
     </div>
@@ -100,6 +109,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="script.js"></script>
+<script src="payouts.js"></script>
 <script>
 (function () {
   var PAGE_ROLE = "referral_partner";
