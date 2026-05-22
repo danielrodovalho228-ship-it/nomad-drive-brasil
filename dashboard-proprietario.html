@@ -41,6 +41,7 @@
           <a href="#locacao">Em locação</a>
           <a href="#rastreamento">Segurança e rastreamento</a>
           <a href="#alertas">Alertas</a>
+          <a href="#financeiro">Financeiro</a>
           <a href="#simulador">Simulação</a>
           <a href="#checklist">Checklist</a>
           <a href="#manutencao">Manutenção</a>
@@ -191,6 +192,18 @@
           <p class="note">Estes são exemplos dos alertas previstos. Os alertas reais dependem do andamento de cada locação.</p>
         </section>
 
+        <section class="dash-panel" id="financeiro">
+          <h2>Financeiro — receita e repasse</h2>
+          <p>Consolidado de todas as suas locações. A taxa da plataforma cobre operação, suporte e intermediação; o repasse é o valor estimado ao proprietário antes das reservas prudentes (IPVA, manutenção, pneus, proteção e depreciação). Os valores são estimativas conforme o contrato — repasse e prazos não são garantidos.</p>
+          <div class="dash-cards">
+            <div class="dash-kpi"><span>Receita bruta mensal</span><strong id="finOwnerBruta">—</strong></div>
+            <div class="dash-kpi"><span>Repasse mensal estimado</span><strong id="finOwnerRepasse">—</strong></div>
+            <div class="dash-kpi"><span>Locações ativas</span><strong id="finOwnerCount">0</strong></div>
+          </div>
+          <div class="dash-list" id="finOwnerList"></div>
+          <div class="dash-empty" id="finOwnerEmpty">Nenhuma locação com valor registrado ainda. Os valores aparecem aqui quando uma locação é confirmada.</div>
+        </section>
+
         <section class="dash-panel" id="simulador">
           <h2>Simulação de receita</h2>
           <p>Estime a faixa de receita e o valor líquido prudente conforme a categoria, os meses alugados e as reservas recomendadas. A simulação é educativa e não garante renda nem aprovação.</p>
@@ -324,6 +337,7 @@
       .order("created_at", { ascending: false })
       .then(function (r) {
         var rows = (r && r.data) || [];
+        renderOwnerFinance(rows);
         var today = new Date().toISOString().slice(0, 10);
         var active = null;
         for (var n = 0; n < rows.length; n++) {
@@ -360,6 +374,41 @@
     loadOwnerInspections();
     loadMaintenance();
   });
+
+  /* ---- Financeiro: receita e repasse consolidados ---- */
+  function renderOwnerFinance(rows) {
+    var list = document.getElementById("finOwnerList");
+    var empty = document.getElementById("finOwnerEmpty");
+    if (!list) return;
+    var today = new Date().toISOString().slice(0, 10);
+    var priced = rows.filter(function (b) {
+      return b.status !== "rascunho" && b.status !== "recusado" && b.monthly_price != null;
+    });
+    list.innerHTML = "";
+    var brutaAtiva = 0, repasseAtiva = 0, ativos = 0;
+    priced.forEach(function (b) {
+      var bruta = Number(b.monthly_price) || 0;
+      var taxa = Number(b.platform_fee) || 0;
+      var repasse = (b.owner_estimated_amount != null)
+        ? Number(b.owner_estimated_amount) : (bruta - taxa);
+      var ativa = b.status !== "suspenso" && (!b.end_date || b.end_date >= today);
+      if (ativa) { brutaAtiva += bruta; repasseAtiva += repasse; ativos++; }
+      var v = b.vehicles || {};
+      var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+      if (v.year_model) vt += " (" + v.year_model + ")";
+      var sub = "Bruta " + brl(bruta) +
+        " · taxa " + (taxa ? "− " + brl(taxa) : brl(0)) +
+        " · repasse ≈ " + brl(repasse);
+      list.appendChild(rowEl(vt, sub, ativa ? "Ativa" : "Encerrada", ativa ? "ok" : "neutral"));
+    });
+    var kB = document.getElementById("finOwnerBruta");
+    var kR = document.getElementById("finOwnerRepasse");
+    var kC = document.getElementById("finOwnerCount");
+    if (kB) kB.textContent = brutaAtiva > 0 ? brl(brutaAtiva) : "—";
+    if (kR) kR.textContent = repasseAtiva > 0 ? "≈ " + brl(repasseAtiva) : "—";
+    if (kC) kC.textContent = ativos;
+    if (empty) empty.hidden = priced.length > 0;
+  }
 
   /* ---- Fase 5: validação de check-in / check-out ---- */
   function inspKindLabel(k) { return k === "checkout" ? "Check-out" : "Check-in"; }

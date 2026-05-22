@@ -40,6 +40,7 @@
           <a href="#solicitacoes">Solicitações</a>
           <a href="#documentos">Documentos</a>
           <a href="#checklist">Check-in / check-out</a>
+          <a href="#financeiro">Financeiro</a>
           <a href="#suporte">Suporte</a>
         </nav>
       </aside>
@@ -108,6 +109,17 @@
           </form>
 
           <a href="seguranca-sinistros.html#limpeza" class="btn btn--outline btn--sm dash-cta">Ver a política de limpeza e devolução</a>
+        </section>
+
+        <section class="dash-panel" id="financeiro">
+          <h2>Financeiro</h2>
+          <p>Resumo dos valores das suas locações. Mensalidade, caução e preço final são confirmados individualmente por contrato — os números abaixo refletem o que está registrado em cada reserva.</p>
+          <div class="dash-cards">
+            <div class="dash-kpi"><span>Mensalidade ativa</span><strong id="finMensal">—</strong></div>
+            <div class="dash-kpi"><span>Reservas com valor</span><strong id="finCount">0</strong></div>
+          </div>
+          <div class="dash-list" id="finList"></div>
+          <div class="dash-empty" id="finEmpty">Nenhuma reserva com valor registrado ainda. Os valores aparecem aqui quando uma locação é confirmada.</div>
         </section>
 
         <section class="dash-panel" id="suporte">
@@ -243,6 +255,7 @@
     c.from("bookings").select("*, vehicles(make,model,year_model)")
       .order("created_at", { ascending: false }).then(function (rb) {
         var bookings = (rb && rb.data) || [];
+        renderFinance(bookings);
         c.from("rental_inspections").select("*")
           .order("created_at", { ascending: false }).then(function (ri) {
             inspByBooking = {};
@@ -252,6 +265,32 @@
             renderBookings(bookings);
           }).catch(function () { renderBookings(bookings); });
       }).catch(function () {});
+  }
+
+  /* ---- Financeiro: valores das locações do cliente ---- */
+  function renderFinance(bookings) {
+    var list = document.getElementById("finList");
+    var empty = document.getElementById("finEmpty");
+    if (!list) return;
+    var today = new Date().toISOString().slice(0, 10);
+    var priced = bookings.filter(function (b) {
+      return b.status !== "rascunho" && b.status !== "recusado" && b.monthly_price != null;
+    });
+    list.innerHTML = "";
+    var ativaTotal = 0;
+    priced.forEach(function (b) {
+      var ativa = b.status !== "suspenso" && (!b.end_date || b.end_date >= today);
+      if (ativa) ativaTotal += Number(b.monthly_price) || 0;
+      var sub = brl(b.monthly_price) + "/mês · " +
+        fmtDate(b.start_date) + " — " + fmtDate(b.end_date);
+      list.appendChild(rowEl(vehText(b.vehicles), sub,
+        ativa ? "Ativa" : "Encerrada", ativa ? "ok" : "neutral"));
+    });
+    var kMensal = document.getElementById("finMensal");
+    var kCount = document.getElementById("finCount");
+    if (kMensal) kMensal.textContent = ativaTotal > 0 ? brl(ativaTotal) : "—";
+    if (kCount) kCount.textContent = priced.length;
+    if (empty) empty.hidden = priced.length > 0;
   }
 
   function renderBookings(bookings) {

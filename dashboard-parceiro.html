@@ -72,6 +72,8 @@
         <section class="dash-panel" id="comissoes">
           <h2>Comissões</h2>
           <p>As comissões aparecem sempre como <strong>estimadas</strong> ou <strong>elegíveis</strong> — nunca como garantidas. O valor só se confirma após a aprovação e a conversão real da indicação, conforme as regras vigentes da plataforma.</p>
+          <div class="dash-list" id="commList"></div>
+          <div class="dash-empty" id="commEmpty">Você ainda não tem indicações com comissão registrada. As etapas aparecem aqui conforme suas indicações avançam.</div>
         </section>
       </div>
 
@@ -150,6 +152,7 @@
           rows.filter(function (x) { return x.status === "em_analise"; }).length;
         document.getElementById("kpiAprov").textContent =
           rows.filter(function (x) { return x.status === "aprovado"; }).length;
+        renderCommissions(rows);
         if (!rows.length) return;
         document.getElementById("refEmpty").hidden = true;
         var list = document.getElementById("refList");
@@ -161,6 +164,45 @@
         });
       }).catch(function () {});
   });
+
+  /* ---- Comissões: indicações agrupadas por etapa ---- */
+  function commLabel(s) {
+    if (s === "elegivel" || s === "elegível") return "Elegível";
+    if (s === "paga") return "Paga";
+    if (s === "cancelada") return "Cancelada";
+    return "Estimada";
+  }
+  function commDesc(s) {
+    if (s === "elegivel" || s === "elegível") return "Indicação convertida — em apuração";
+    if (s === "paga") return "Comissão liberada";
+    if (s === "cancelada") return "Não elegível a comissão";
+    return "Aguardando validação e conversão";
+  }
+  function commKind(s) {
+    if (s === "paga") return "ok";
+    if (s === "elegivel" || s === "elegível") return "warn";
+    if (s === "cancelada") return "bad";
+    return "neutral";
+  }
+  function renderCommissions(rows) {
+    var list = document.getElementById("commList");
+    var empty = document.getElementById("commEmpty");
+    if (!list) return;
+    var byStatus = {};
+    rows.forEach(function (x) {
+      var k = x.commission_status || "estimada";
+      byStatus[k] = (byStatus[k] || 0) + 1;
+    });
+    var keys = Object.keys(byStatus);
+    list.innerHTML = "";
+    if (!keys.length) { if (empty) empty.hidden = false; return; }
+    if (empty) empty.hidden = true;
+    keys.forEach(function (k) {
+      var n = byStatus[k];
+      list.appendChild(rowEl(commLabel(k), commDesc(k),
+        n + (n === 1 ? " indicação" : " indicações"), commKind(k)));
+    });
+  }
 })();
 </script>
 </body>
