@@ -646,11 +646,80 @@
     });
   }
 
+  /* ============================================================
+   * TOAST DE DEBUG VISÍVEL — mostra cada tentativa de envio
+   * ============================================================
+   * Cria um toast fixo no canto superior direito que aparece
+   * sempre que um e-mail é enviado (sucesso ou falha). Em produção
+   * desliga setando window.ND_EMAIL_TOAST = false.
+   * ============================================================ */
+  function ensureToastEl() {
+    var el = document.getElementById("nd-email-toast");
+    if (el) return el;
+    el = document.createElement("div");
+    el.id = "nd-email-toast";
+    el.style.cssText =
+      "position:fixed;top:16px;right:16px;z-index:99999;max-width:380px;" +
+      "padding:14px 18px;border-radius:10px;box-shadow:0 8px 24px -8px rgba(0,0,0,.25);" +
+      "font:13.5px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;" +
+      "color:#fff;display:none;transition:opacity .25s ease;opacity:0;";
+    document.body.appendChild(el);
+    return el;
+  }
+  var toastTimer = null;
+  function showToast(text, kind) {
+    if (window.ND_EMAIL_TOAST === false) return;
+    var el = ensureToastEl();
+    el.textContent = text;
+    el.style.background =
+      kind === "ok"      ? "#1a7a4f" :
+      kind === "warn"    ? "#cf7a1c" :
+      kind === "loading" ? "#475569" :
+                           "#b00020";   // error default
+    el.style.display = "block";
+    requestAnimationFrame(function () { el.style.opacity = "1"; });
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      el.style.opacity = "0";
+      setTimeout(function () { el.style.display = "none"; }, 250);
+    }, kind === "loading" ? 30000 : 7000);   // loading fica até substituir
+  }
+
+  /* notifyVerbose: igual a notify(), mas com toast visível em
+     cada etapa. Use no admin quando quiser ver o pipeline. */
+  function notifyVerbose(client, userId, templateKey, payload) {
+    showToast("Enviando e-mail '" + templateKey + "'...", "loading");
+    return notify(client, userId, templateKey, payload).then(function (r) {
+      if (r && r.ok) {
+        showToast("E-mail '" + templateKey + "' enviado para " + (r.to || "destinatário"), "ok");
+      } else {
+        showToast("FALHA '" + templateKey + "': " + (r && r.error || "erro desconhecido") +
+          (r && r.to ? " (to: " + r.to + ")" : ""), "error");
+      }
+      return r;
+    });
+  }
+  function notifyEmailVerbose(client, toEmail, templateKey, payload) {
+    showToast("Enviando e-mail '" + templateKey + "' para " + toEmail + "...", "loading");
+    return notifyEmail(client, toEmail, templateKey, payload).then(function (r) {
+      if (r && r.ok) {
+        showToast("E-mail '" + templateKey + "' enviado para " + toEmail, "ok");
+      } else {
+        showToast("FALHA '" + templateKey + "' para " + toEmail + ": " +
+          (r && r.error || "erro desconhecido"), "error");
+      }
+      return r;
+    });
+  }
+
   window.ndEmails = {
     notify: notify,
     notifyEmail: notifyEmail,
-    templates: templates,   // exposto pra debug / preview
-    _base: baseTemplate,    // exposto pra testes
+    notifyVerbose: notifyVerbose,             // versões com toast
+    notifyEmailVerbose: notifyEmailVerbose,
+    showToast: showToast,                     // exposto pra reuso
+    templates: templates,
+    _base: baseTemplate,
     TEAM_PROTECTION: "suporte@nomadedrive.com.br"
   };
 })();

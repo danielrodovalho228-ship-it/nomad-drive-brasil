@@ -631,7 +631,7 @@
                   var roleLbl = a.roleLabel
                     ? a.roleLabel(app.profile_type) : (app.profile_type || "perfil");
                   if (newStatus === "aprovado" && oldStatus !== "aprovado") {
-                    window.ndEmails.notifyEmail(c, app.email, "profile_approved", {
+                    window.ndEmails.notifyEmailVerbose(c, app.email, "profile_approved", {
                       full_name: app.full_name || "",
                       role_label: roleLbl,
                       dashboard_path: dashPath
@@ -641,7 +641,7 @@
                       "(Opcional) Motivo da recusa — vai no e-mail ao candidato:",
                       ""
                     ) || "Cadastro reprovado pela equipe Nomade Drive.";
-                    window.ndEmails.notifyEmail(c, app.email, "profile_rejected", {
+                    window.ndEmails.notifyEmailVerbose(c, app.email, "profile_rejected", {
                       full_name: app.full_name || "",
                       reason: motivo
                     }).catch(function (e) { console.warn("profile_rejected (app):", e); });
@@ -766,12 +766,12 @@
         // #6: notifica o cliente quando aprovamos/recusamos o documento
         if (window.ndEmails && doc.user_id) {
           if (newStatus === "aprovado" || newStatus === "aprovado_com_ressalvas") {
-            window.ndEmails.notify(c, doc.user_id, "kyc_approved", {}).then(function (r) {
+            window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_approved", {}).then(function (r) {
               if (r && r.ok) kycMsg("Documento aprovado e e-mail enviado ao cliente.", "ok");
               else console.warn("kyc_approved email falhou:", r && r.error);
             });
           } else if (newStatus === "recusado" || newStatus === "documentos_pendentes") {
-            window.ndEmails.notify(c, doc.user_id, "kyc_rejected",
+            window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_rejected",
               { reason: notes || "Sem motivo registrado." }
             ).then(function (r) {
               if (r && r.ok) kycMsg("Documento recusado e e-mail enviado ao cliente.", "ok");
@@ -914,7 +914,7 @@
               oldVal !== "aprovado" && oldVal !== "aprovado_com_ressalvas") {
             var roleLbl = a.roleLabel ? a.roleLabel(row.main_role) : (row.main_role || "perfil");
             var dashPath = a.dashboardFor ? a.dashboardFor(row.main_role) : "dashboard-cliente.html";
-            window.ndEmails.notify(c, row.id, "profile_approved", {
+            window.ndEmails.notifyVerbose(c, row.id, "profile_approved", {
               role_label: roleLbl,
               dashboard_path: dashPath
             }).catch(function (e) { console.warn("profile_approved email:", e); });
@@ -923,7 +923,7 @@
               "(Opcional) Motivo da recusa do cadastro — vai no e-mail ao usuário:",
               ""
             ) || "Cadastro recusado pela equipe Nomade Drive.";
-            window.ndEmails.notify(c, row.id, "profile_rejected", {
+            window.ndEmails.notifyVerbose(c, row.id, "profile_rejected", {
               reason: motivo
             }).catch(function (e) { console.warn("profile_rejected email:", e); });
           }
@@ -934,7 +934,7 @@
         if (window.ndEmails && table === "partners_referrals" &&
             field === "commission_status" && newVal === "paga" && oldVal !== "paga" &&
             row.partner_id) {
-          window.ndEmails.notify(c, row.partner_id, "referral_commission_paid", {
+          window.ndEmails.notifyVerbose(c, row.partner_id, "referral_commission_paid", {
             referred_name: row.referred_name,
             commission_amount: row.commission_amount || 200
           }).catch(function (e) { console.warn("referral_commission_paid email:", e); });
@@ -946,7 +946,7 @@
         if (window.ndEmails && table === "rental_requests" &&
             field === "status" && row.client_id && newVal !== oldVal &&
             ["aprovado", "aprovado_com_ressalvas", "recusado", "suspenso"].indexOf(newVal) !== -1) {
-          window.ndEmails.notify(c, row.client_id, "lead_status_updated", {
+          window.ndEmails.notifyVerbose(c, row.client_id, "lead_status_updated", {
             status: newVal,
             status_label: a.statusLabel ? a.statusLabel(newVal) : newVal,
             cidade: row.city,
@@ -1521,10 +1521,10 @@
                 booking_id: booking.id,
                 owner_amount: ownerAmount
               };
-              window.ndEmails.notify(c, clientId,
+              window.ndEmails.notifyVerbose(c, clientId,
                 "booking_confirmed_client", commonPayload);
               if (booking.owner_id) {
-                window.ndEmails.notify(c, booking.owner_id,
+                window.ndEmails.notifyVerbose(c, booking.owner_id,
                   "booking_confirmed_owner", commonPayload);
               }
             }).catch(function () {});
@@ -1626,7 +1626,7 @@
 
           // E-mail pra oficina via profiles.email (Fase 24)
           if (window.ndEmails && workshopUserId[workshopId]) {
-            window.ndEmails.notify(c, workshopUserId[workshopId],
+            window.ndEmails.notifyVerbose(c, workshopUserId[workshopId],
               "inspection_assigned_workshop", {
                 workshop_name: workshopNames[workshopId] || "sua oficina",
                 veiculo: vehicleLabel[vehicleId] || "Veículo"
