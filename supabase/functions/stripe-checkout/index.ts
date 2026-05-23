@@ -443,9 +443,26 @@ Deno.serve(async (req) => {
         subData.transfer_data = { destination: ownerAcct2.stripe_account_id };
       }
 
+      // B2-v2 (Fase 31): Pix Automático agora aceita subscription mensal.
+      // Stripe BR lançou Pix Automático que cria mandato autorizado pelo cliente
+      // pra cobrança recorrente. Atualiza:
+      //   payment_method_types: ["card", "pix"]
+      //   payment_method_options.pix.mandate_options:
+      //     amount: valor máximo autorizado (usamos monthly_price)
+      //     payment_schedule: "monthly"
+      // Cartão continua sendo a opção principal; PIX é alternativa.
       session = await stripe.checkout.sessions.create({
         mode: "subscription",
         customer: customerId!,
+        payment_method_types: ["card", "pix"],
+        payment_method_options: {
+          pix: {
+            mandate_options: {
+              amount: amountCents,
+              payment_schedule: "monthly",
+            },
+          } as any,  // Pix Automático mandate_options ainda não no tipo oficial
+        },
         line_items: [{
           quantity: 1,
           price_data: {

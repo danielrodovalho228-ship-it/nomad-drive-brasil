@@ -474,6 +474,27 @@ Deno.serve(async (req) => {
         }).eq("stripe_account_id", acct.id);
         break;
       }
+      case "mandate.updated": {
+        // Fase 31 / B2-v2: cliente revogou (ou alterou) mandato Pix
+        // Automático no app do banco. Loga o evento — se for revogação,
+        // a próxima cobrança vai falhar via invoice.payment_failed e
+        // o cliente já vai receber o e-mail de falha. UI opcional
+        // pode oferecer "Re-autorizar PIX" nesse momento.
+        const mandate: any = event.data.object;
+        const status = mandate?.status || "unknown";
+        const isRevoked = status === "inactive";
+        console.log("mandate.updated:", {
+          mandate_id: mandate?.id,
+          status,
+          payment_method: mandate?.payment_method,
+          customer: mandate?.customer,
+          revoked: isRevoked,
+        });
+        // (Opcional, futuro) atualizar tabela bookings com flag
+        // tipo "pix_mandate_status" pra UI alertar o cliente.
+        break;
+      }
+
       default:
         // eventos não tratados são apenas registrados (em stripe_events)
         break;
