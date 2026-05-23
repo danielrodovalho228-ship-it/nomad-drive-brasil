@@ -167,8 +167,8 @@
       </div>
       <div class="admin-card">
         <table class="admin-table">
-          <thead><tr><th>Veículo</th><th>Cliente</th><th>Período</th><th>Valor mensal</th><th>Status</th></tr></thead>
-          <tbody id="reservasList"><tr><td colspan="5">Carregando reservas...</td></tr></tbody>
+          <thead><tr><th>Veículo</th><th>Cliente</th><th>Período</th><th>Valor mensal</th><th>Assinatura</th><th>Status</th></tr></thead>
+          <tbody id="reservasList"><tr><td colspan="6">Carregando reservas...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -903,6 +903,50 @@
     }).catch(function () { /* sem nomes, tabela mostra UUID curto */ });
   }
 
+  /* #8: botão "Cancelar assinatura" pra cada reserva com subscription
+     ativa. Admin clica → confirma → invoca stripe-subscription cancel.
+     O e-mail "Assinatura cancelada" é enviado pela Edge Function. */
+  function makeCancelSubButton(booking) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn--ghost btn--sm";
+    btn.textContent = "Cancelar assinatura";
+    btn.title = "Cancela a subscription Stripe e dispara e-mail ao cliente.";
+    btn.addEventListener("click", function () {
+      var c = a.client();
+      if (!c || !c.functions) return;
+      var ok = window.confirm(
+        "Cancelar a assinatura mensal desta reserva?\n\n" +
+        "• Stripe para de cobrar automaticamente.\n" +
+        "• O cliente recebe e-mail \"Assinatura cancelada\".\n" +
+        "• A reserva fica ativa até o fim do período atual.\n\n" +
+        "Esta ação é registrada no log de auditoria."
+      );
+      if (!ok) return;
+      btn.disabled = true; var orig = btn.textContent;
+      btn.textContent = "Cancelando...";
+      c.functions.invoke("stripe-subscription", {
+        body: { booking_id: booking.id, action: "cancel" }
+      }).then(function (r) {
+        var d = r && r.data;
+        if (d && d.ok) {
+          btn.textContent = "Cancelada";
+          btn.disabled = true;
+          btn.classList.remove("btn--ghost");
+          btn.classList.add("btn--outline");
+        } else {
+          btn.disabled = false; btn.textContent = orig;
+          window.alert("Não foi possível cancelar agora: " +
+            ((r && r.error && r.error.message) || (d && d.error) || "tente novamente."));
+        }
+      }).catch(function (e) {
+        btn.disabled = false; btn.textContent = orig;
+        window.alert("Erro de rede: " + (e && e.message || e));
+      });
+    });
+    return btn;
+  }
+
   function loadSection(opts) {
     var c = a.client();
     var tb = document.getElementById(opts.tbodyId);
@@ -941,7 +985,13 @@
         var tr = document.createElement("tr");
         opts.columns.forEach(function (get) {
           var td = document.createElement("td");
-          td.textContent = get(row);
+          var val = get(row);
+          // #8: coluna pode devolver string OU Node — suporta ambos
+          if (val && typeof val === "object" && val.nodeType === 1) {
+            td.appendChild(val);
+          } else {
+            td.textContent = val == null ? "" : String(val);
+          }
           tr.appendChild(td);
         });
         if (opts.statusField) tr.appendChild(statusCell(opts.table, opts.statusField, row));
@@ -971,7 +1021,13 @@
           return r.client_id ? (r.client_id.slice(0, 8) + "…") : "—";
         },
         function (r) { return fmtDate(r.start_date) + " – " + fmtDate(r.end_date); },
-        function (r) { return fmtMoney(r.monthly_price); }
+        function (r) { return fmtMoney(r.monthly_price); },
+        // #8: coluna "Assinatura" — botão pra admin cancelar
+        function (r) {
+          if (!r.stripe_subscription_id) return "—";
+          // retorna elemento DOM (loadSection aceita string OU node)
+          return makeCancelSubButton(r);
+        }
       ]
     });
     loadSection({

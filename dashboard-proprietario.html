@@ -559,7 +559,18 @@
         if (newStatus === "aprovado" && i.kind === "checkout" && i.mileage != null &&
             i.bookings && i.bookings.vehicle_id) {
           c.from("vehicles").update({ mileage: i.mileage }).eq("id", i.bookings.vehicle_id)
-            .then(function () { loadMaintenance(); }).catch(function () {});
+            .then(function (rr) {
+              if (rr && rr.error) {
+                // #9: bloqueio de regressão de km — mostra mensagem clara
+                if (String(rr.error.message || "").indexOf("KM_REGRESSAO") !== -1) {
+                  showNotice("Atenção: o km informado (" + i.mileage +
+                    ") é menor que o registrado para o veículo. " +
+                    "Reabra o check-out com o km correto ou peça pra equipe Nomade Drive corrigir.", "error");
+                }
+                return;
+              }
+              loadMaintenance();
+            }).catch(function () {});
         }
 
         // #6 parte 2: notifica o cliente da decisão.
@@ -851,10 +862,19 @@
       }
 
       // 2) Atualiza km do veículo (regra anterior)
+      //    #9: se o trigger bloquear por regressão, exibe aviso e
+      //    deixa o fluxo seguir (avaria + close-rental rodam normal)
       var kmPromise = Promise.resolve();
       if (i.mileage != null && i.bookings && i.bookings.vehicle_id) {
         kmPromise = c.from("vehicles").update({ mileage: i.mileage })
-          .eq("id", i.bookings.vehicle_id);
+          .eq("id", i.bookings.vehicle_id)
+          .then(function (rr) {
+            if (rr && rr.error && String(rr.error.message || "").indexOf("KM_REGRESSAO") !== -1) {
+              showNotice("Atenção: o km informado é menor que o registrado para o veículo. " +
+                "O km do veículo NÃO foi atualizado, mas a vistoria e a avaria seguem registradas. " +
+                "Peça pra equipe Nomade Drive corrigir.", "warn");
+            }
+          });
       }
 
       // 3) Para cada avaria: sobe fotos → insere em damages
