@@ -68,7 +68,9 @@ drop policy if exists vehicle_fines_admin_write on public.vehicle_fines;
 create policy vehicle_fines_admin_write on public.vehicle_fines
   for all using (public.is_admin()) with check (public.is_admin());
 
--- Coluna em vehicles pra cachear placa + renavam (lookup rápido na Edge Function)
+-- Colunas em vehicles pra consulta Senatran (placa + renavam)
+-- plate_last_digits (existente) é só pra LGPD/UX. license_plate é
+-- a placa COMPLETA, usada internamente pra consultar Infosimples.
 do $$
 begin
   if not exists (
@@ -77,12 +79,20 @@ begin
   ) then
     alter table public.vehicles add column renavam text;
   end if;
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='vehicles' and column_name='license_plate'
+  ) then
+    alter table public.vehicles add column license_plate text;
+  end if;
 end $$;
 
 comment on table public.vehicle_fines is
   'Multas de trânsito do veículo durante locações — Fase 30 (C6 Infosimples).';
 comment on column public.vehicles.renavam is
   'Renavam do veículo (necessário pra consulta de multas Senatran via Infosimples)';
+comment on column public.vehicles.license_plate is
+  'Placa COMPLETA do veículo (uso interno: consulta Senatran/multas). Para exibição ao cliente, use plate_last_digits (LGPD).';
 
 -- Verificação
 do $$
