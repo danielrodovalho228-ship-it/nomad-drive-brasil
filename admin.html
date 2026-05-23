@@ -586,7 +586,7 @@
     var c = a.client();
     var STATI = ["recebido", "em_analise", "aguardando_documentos", "entrevista_pendente",
       "aprovado", "reprovado", "bloqueado", "inativo"];
-    c.from("applications").select("id,protocol,profile_type,full_name,city,status")
+    c.from("applications").select("id,protocol,profile_type,full_name,city,status,email,user_id")
       .order("created_at", { ascending: false }).limit(100).then(function (r) {
         var rows = (r && r.data) || [], tb = document.getElementById("cadList");
         if (!tb) return;
@@ -622,30 +622,47 @@
                 if (rr && rr.error) return;
                 app.status = newStatus;
 
-                // Fix #6: dispara e-mail de cadastro aprovado/recusado
-                // Applications tem 'email' direto na própria tabela, então
-                // usamos notifyEmail() sem precisar lookup em profiles.
-                if (window.ndEmails && app.email) {
-                  var dashPath = a.dashboardFor
-                    ? a.dashboardFor(app.profile_type) : "dashboard-cliente.html";
-                  var roleLbl = a.roleLabel
-                    ? a.roleLabel(app.profile_type) : (app.profile_type || "perfil");
-                  if (newStatus === "aprovado" && oldStatus !== "aprovado") {
-                    window.ndEmails.notifyEmailVerbose(c, app.email, "profile_approved", {
-                      full_name: app.full_name || "",
-                      role_label: roleLbl,
-                      dashboard_path: dashPath
-                    }).catch(function (e) { console.warn("profile_approved (app):", e); });
-                  } else if (newStatus === "reprovado" && oldStatus !== "reprovado") {
-                    var motivo = window.prompt(
-                      "(Opcional) Motivo da recusa — vai no e-mail ao candidato:",
-                      ""
-                    ) || "Cadastro reprovado pela equipe Nomade Drive.";
-                    window.ndEmails.notifyEmailVerbose(c, app.email, "profile_rejected", {
-                      full_name: app.full_name || "",
-                      reason: motivo
-                    }).catch(function (e) { console.warn("profile_rejected (app):", e); });
-                  }
+                // Fix #6 + fix QA d803285: dispara e-mail de cadastro
+                // aprovado/recusado. Estratégia de resolução do destinatário:
+                //   1) usa applications.email se preenchido (caminho rápido)
+                //   2) fallback: notify() via app.user_id → profiles.email
+                //   3) último: mostra toast vermelho explicando o que faltou
+                if (!window.ndEmails) return;
+                var emailTransitionFinal =
+                  (newStatus === "aprovado" && oldStatus !== "aprovado") ? "approved" :
+                  (newStatus === "reprovado" && oldStatus !== "reprovado") ? "rejected" : null;
+                if (!emailTransitionFinal) return;  // outras transições não notificam
+
+                var dashPath = a.dashboardFor
+                  ? a.dashboardFor(app.profile_type) : "dashboard-cliente.html";
+                var roleLbl = a.roleLabel
+                  ? a.roleLabel(app.profile_type) : (app.profile_type || "perfil");
+                var tplKey = emailTransitionFinal === "approved"
+                  ? "profile_approved" : "profile_rejected";
+                var payload = {
+                  full_name: app.full_name || "",
+                  role_label: roleLbl,
+                  dashboard_path: dashPath
+                };
+                if (emailTransitionFinal === "rejected") {
+                  payload.reason = window.prompt(
+                    "(Opcional) Motivo da recusa — vai no e-mail ao candidato:",
+                    ""
+                  ) || "Cadastro reprovado pela equipe Nomade Drive.";
+                }
+
+                if (app.email) {
+                  window.ndEmails.notifyEmailVerbose(c, app.email, tplKey, payload);
+                } else if (app.user_id) {
+                  // Fallback: tenta via profiles.email do user_id
+                  window.ndEmails.notifyVerbose(c, app.user_id, tplKey, payload);
+                } else {
+                  window.ndEmails.showToast(
+                    "Cadastro " + (app.protocol || "—") +
+                    " sem e-mail registrado — nada foi enviado. " +
+                    "Edite o cadastro pra adicionar o e-mail antes de aprovar.",
+                    "warn"
+                  );
                 }
               }).catch(function () { sel.disabled = false; });
           });
