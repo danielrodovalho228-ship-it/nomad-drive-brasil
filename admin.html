@@ -44,7 +44,8 @@
       <a href="#oficinas"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Oficinas</a>
       <a href="#parceiros"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Parceiros</a>
       <a href="#sinistros"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6"/></svg>Proteção / Sinistros</a>
-      <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro estimado</a>
+      <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro</a>
+      <a href="#nfs"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Notas fiscais</a>
       <a href="#log"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Log de atividades</a>
       <a href="#config"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07 4.25 4.25M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07 4.25-4.25"/></svg>Configurações</a>
     </nav>
@@ -264,6 +265,39 @@
       </p>
     </section>
 
+    <!-- NOTAS FISCAIS -->
+    <section class="admin-block" id="nfs">
+      <h2>Notas fiscais</h2>
+      <p class="note">Upload manual de NF emitida fora da plataforma (eNotas, contador, etc.) e disponibilização no painel do cliente correspondente. Recibo simples é gerado automaticamente (recibo.html?payment_id=…) sem precisar de upload — esta seção é só para a NF legal.</p>
+
+      <div class="admin-card">
+        <h3 class="block-title">Anexar NF a um pagamento</h3>
+        <form id="nfUploadForm">
+          <div class="form__grid">
+            <label class="field"><span>Pagamento (mais recentes primeiro)</span>
+              <select id="nfPayment"><option value="">Carregando…</option></select>
+            </label>
+            <label class="field"><span>Número da NF (opcional)</span>
+              <input type="text" id="nfNumber" placeholder="Ex: 000123" />
+            </label>
+            <label class="field"><span>Arquivo PDF</span>
+              <input type="file" id="nfFile" accept="application/pdf" />
+            </label>
+          </div>
+          <p class="form__err" id="nfErr" hidden></p>
+          <button type="submit" class="btn btn--solid btn--sm dash-cta">Anexar NF</button>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3 class="block-title">NFs anexadas</h3>
+        <table class="admin-table">
+          <thead><tr><th>Arquivo</th><th>Pagamento</th><th>Número</th><th>Emitida em</th><th>Ações</th></tr></thead>
+          <tbody id="nfList"><tr><td colspan="5">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- LOG DE ATIVIDADES -->
     <section class="admin-block" id="log">
       <h2>Log de atividades</h2>
@@ -442,6 +476,7 @@
     loadProfileNames().then(loadSections);
     loadNewBookingForm();
     loadFinanceiroDetalhado();
+    loadNotasFiscais();
   }
 
   /* ====== FINANCEIRO DETALHADO (dados reais do banco) ====== */
@@ -964,6 +999,150 @@
     if (m.km_anterior != null) return "km " + m.km_anterior + " → " + m.km_tentado;
     if (m.status != null) return a.statusLabel ? a.statusLabel(m.status) : String(m.status);
     return "—";
+  }
+
+  /* ====== NOTAS FISCAIS (Fase 22b) — upload e listagem ====== */
+  function loadNotasFiscais() {
+    var c = a.client();
+    if (!c) return;
+    var sel = document.getElementById("nfPayment");
+    if (sel) {
+      c.from("payments")
+        .select("id, kind, amount, installment_number, created_at, booking_id")
+        .in("status", ["pago", "autorizado", "capturado"])
+        .order("created_at", { ascending: false })
+        .limit(50)
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          sel.innerHTML = '<option value="">Selecione um pagamento</option>';
+          rows.forEach(function (p) {
+            var o = document.createElement("option");
+            o.value = p.id;
+            o.setAttribute("data-booking", p.booking_id);
+            var label = (p.kind === "caucao" ? "Caução" : "Mensalidade") +
+              (p.installment_number ? " #" + p.installment_number : "") +
+              " — R$ " + Number(p.amount).toLocaleString("pt-BR") +
+              " — " + fmtDate(p.created_at);
+            o.textContent = label;
+            sel.appendChild(o);
+          });
+        }).catch(function () {
+          sel.innerHTML = '<option value="">Erro ao carregar</option>';
+        });
+    }
+    refreshNfList();
+
+    var form = document.getElementById("nfUploadForm");
+    if (form && !form.getAttribute("data-wired")) {
+      form.setAttribute("data-wired", "1");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var err = document.getElementById("nfErr");
+        if (err) err.hidden = true;
+        var paymentSel = document.getElementById("nfPayment");
+        var nfNumber = document.getElementById("nfNumber").value.trim();
+        var fileInput = document.getElementById("nfFile");
+        var paymentId = paymentSel.value;
+        var file = fileInput.files && fileInput.files[0];
+        if (!paymentId || !file) {
+          if (err) { err.textContent = "Selecione o pagamento e o arquivo PDF."; err.hidden = false; }
+          return;
+        }
+        if (file.type !== "application/pdf") {
+          if (err) { err.textContent = "Apenas PDF é aceito."; err.hidden = false; }
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          if (err) { err.textContent = "Arquivo passa de 10 MB."; err.hidden = false; }
+          return;
+        }
+        var bookingId = paymentSel.options[paymentSel.selectedIndex].getAttribute("data-booking");
+        // descobre o client_id da booking pra montar o path
+        c.from("bookings").select("client_id").eq("id", bookingId).maybeSingle().then(function (rb) {
+          var clientId = rb && rb.data && rb.data.client_id;
+          if (!clientId) {
+            if (err) { err.textContent = "Cliente da reserva não encontrado."; err.hidden = false; }
+            return;
+          }
+          var path = clientId + "/" + paymentId + "-" + Date.now() + ".pdf";
+          var btn = form.querySelector('button[type="submit"]');
+          btn.disabled = true; btn.textContent = "Enviando…";
+          c.storage.from("invoices").upload(path, file, {
+            contentType: "application/pdf",
+            upsert: false,
+          }).then(function (up) {
+            if (up && up.error) {
+              btn.disabled = false; btn.textContent = "Anexar NF";
+              if (err) { err.textContent = "Falha no upload: " + up.error.message; err.hidden = false; }
+              return;
+            }
+            // pega o id do usuário corrente (super-admin)
+            c.auth.getUser().then(function (uu) {
+              var uid = uu && uu.data && uu.data.user && uu.data.user.id;
+              if (!uid) {
+                btn.disabled = false; btn.textContent = "Anexar NF";
+                if (err) { err.textContent = "Sessão expirada — recarregue a página."; err.hidden = false; }
+                return;
+              }
+              c.from("invoices").insert({
+                payment_id: paymentId,
+                booking_id: bookingId,
+                file_path: path,
+                file_name: file.name.slice(0, 180),
+                number: nfNumber || null,
+                issued_by: uid,
+              }).then(function (ins) {
+              btn.disabled = false; btn.textContent = "Anexar NF";
+              if (ins && ins.error) {
+                if (err) { err.textContent = "Falha ao registrar: " + ins.error.message; err.hidden = false; }
+                return;
+              }
+                form.reset();
+                refreshNfList();
+              }).catch(function () { btn.disabled = false; btn.textContent = "Anexar NF"; });
+            });
+          });
+        });
+      });
+    }
+  }
+  function refreshNfList() {
+    var c = a.client();
+    var tb = document.getElementById("nfList");
+    if (!c || !tb) return;
+    c.from("invoices")
+      .select("id, file_path, file_name, number, issued_at, payment_id, booking_id")
+      .order("issued_at", { ascending: false }).limit(50).then(function (r) {
+        var rows = (r && r.data) || [];
+        if (!rows.length) {
+          tb.innerHTML = '<tr><td colspan="5">Nenhuma NF anexada ainda.</td></tr>';
+          return;
+        }
+        tb.innerHTML = "";
+        rows.forEach(function (nf) {
+          var tr = document.createElement("tr");
+          var tdFile = document.createElement("td"); tdFile.textContent = nf.file_name || "—";
+          var tdPay = document.createElement("td"); tdPay.textContent = (nf.payment_id || "").slice(0, 8) + "…";
+          var tdNum = document.createElement("td"); tdNum.textContent = nf.number || "—";
+          var tdDate = document.createElement("td"); tdDate.textContent = fmtDate(nf.issued_at);
+          var tdAct = document.createElement("td");
+          var btn = document.createElement("button"); btn.type = "button";
+          btn.className = "btn btn--outline btn--sm"; btn.textContent = "Abrir";
+          btn.addEventListener("click", function () {
+            btn.disabled = true;
+            c.storage.from("invoices").createSignedUrl(nf.file_path, 60).then(function (rr) {
+              btn.disabled = false;
+              if (rr && rr.data && rr.data.signedUrl) window.open(rr.data.signedUrl, "_blank");
+            });
+          });
+          tdAct.appendChild(btn);
+          tr.appendChild(tdFile); tr.appendChild(tdPay); tr.appendChild(tdNum);
+          tr.appendChild(tdDate); tr.appendChild(tdAct);
+          tb.appendChild(tr);
+        });
+      }).catch(function () {
+        tb.innerHTML = '<tr><td colspan="5">Erro ao carregar.</td></tr>';
+      });
   }
 
   /* ---- Criar reserva (admin) — conecta um cliente a um veículo ---- */

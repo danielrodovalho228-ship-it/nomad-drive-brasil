@@ -53,6 +53,7 @@
           <a href="#documentos"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Documentos</a>
           <a href="#checklist"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Check-in / check-out</a>
           <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro</a>
+          <a href="#recibos"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Recibos e NF</a>
           <a href="#protecao"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Ocorrências</a>
           <a href="#suporte"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5"/></svg>Suporte</a>
         </nav>
@@ -141,6 +142,13 @@
           </div>
           <div class="dash-list" id="finList"></div>
           <div class="dash-empty" id="finEmpty">Nenhuma reserva com valor registrado ainda. Os valores aparecem aqui quando uma locação é confirmada.</div>
+        </section>
+
+        <section class="dash-panel" id="recibos">
+          <h2>Recibos e notas fiscais</h2>
+          <p>Cada pagamento confirmado gera um <strong>recibo</strong> automaticamente — você pode visualizar, imprimir ou salvar em PDF. A <strong>nota fiscal</strong> (NF) é emitida pela equipe Nomade Drive e aparece aqui quando disponível.</p>
+          <div class="dash-list" id="recibosList"></div>
+          <div class="dash-empty" id="recibosEmpty">Você ainda não tem pagamentos confirmados — recibos aparecem aqui após cada cobrança.</div>
         </section>
 
         <section class="dash-panel" id="protecao">
@@ -360,6 +368,7 @@
     loadCheckInOut();
     loadDocuments();
     loadCases();
+    loadRecibos();
   });
 
   /* ---- Fase 5: check-in / check-out ---- */
@@ -774,6 +783,93 @@
       sel.appendChild(o);
     });
   }
+  /* ---- Fase 22b: recibos e NFs do cliente ---- */
+  function loadRecibos() {
+    var c = a.client();
+    var list = document.getElementById("recibosList");
+    var empty = document.getElementById("recibosEmpty");
+    if (!c || !list) return;
+    // 1) Busca pagamentos efetivados (pago, autorizado, capturado)
+    c.from("payments")
+      .select("id, kind, status, amount, installment_number, created_at, bookings(vehicles(make,model,year_model))")
+      .in("status", ["pago", "autorizado", "capturado"])
+      .order("created_at", { ascending: false }).then(function (rp) {
+        var pays = (rp && rp.data) || [];
+        // 2) Busca NFs anexadas (via invoices)
+        c.from("invoices").select("id, payment_id, booking_id, file_path, file_name, number, issued_at")
+          .order("issued_at", { ascending: false }).then(function (ri) {
+            var nfs = (ri && ri.data) || [];
+            renderRecibosList(c, pays, nfs);
+          }).catch(function () { renderRecibosList(c, pays, []); });
+      }).catch(function () {
+        if (empty) empty.hidden = false;
+      });
+  }
+  function renderRecibosList(c, pays, nfs) {
+    var list = document.getElementById("recibosList");
+    var empty = document.getElementById("recibosEmpty");
+    if (!list) return;
+    list.innerHTML = "";
+    if (!pays.length) { if (empty) empty.hidden = false; return; }
+    if (empty) empty.hidden = true;
+    var nfByPay = {};
+    nfs.forEach(function (n) { if (n.payment_id) nfByPay[n.payment_id] = n; });
+    pays.forEach(function (p) {
+      var v = p.bookings && p.bookings.vehicles;
+      var vehLabel = v ? ([v.make, v.model].filter(Boolean).join(" ") +
+        (v.year_model ? " (" + v.year_model + ")" : "")) : "Reserva";
+      var label = (p.kind === "caucao" ? "Caução autorizada — " : "Mensalidade ") +
+                  (p.installment_number ? "#" + p.installment_number + " — " : "") +
+                  vehLabel;
+      var sub = "R$ " + Number(p.amount).toLocaleString("pt-BR",
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+        " · " + fmtDateTime(p.created_at);
+
+      var card = document.createElement("div");
+      card.className = "insp-card";
+      var head = document.createElement("div"); head.className = "insp-card__head";
+      var t = document.createElement("strong"); t.textContent = label;
+      var s = document.createElement("span"); s.textContent = sub;
+      head.appendChild(t); head.appendChild(s);
+
+      var actions = document.createElement("div"); actions.className = "insp-actions";
+      var recBtn = document.createElement("a");
+      recBtn.href = "recibo.html?payment_id=" + encodeURIComponent(p.id);
+      recBtn.target = "_blank";
+      recBtn.rel = "noopener";
+      recBtn.className = "btn btn--solid btn--sm";
+      recBtn.textContent = "Ver recibo";
+      actions.appendChild(recBtn);
+
+      var nf = nfByPay[p.id];
+      if (nf) {
+        var nfBtn = document.createElement("button");
+        nfBtn.type = "button";
+        nfBtn.className = "btn btn--outline btn--sm";
+        nfBtn.textContent = "Baixar NF" + (nf.number ? " (" + nf.number + ")" : "");
+        nfBtn.addEventListener("click", function () {
+          nfBtn.disabled = true;
+          c.storage.from("invoices").createSignedUrl(nf.file_path, 60).then(function (rr) {
+            nfBtn.disabled = false;
+            if (rr && rr.data && rr.data.signedUrl) window.open(rr.data.signedUrl, "_blank");
+            else alert("Não foi possível abrir a NF agora.");
+          });
+        });
+        actions.appendChild(nfBtn);
+      } else {
+        var pending = document.createElement("span");
+        pending.className = "dash-pill dash-pill--neutral";
+        pending.style.alignSelf = "center";
+        pending.textContent = "NF: aguardando emissão";
+        actions.appendChild(pending);
+      }
+
+      card.appendChild(head);
+      card.appendChild(actions);
+      list.appendChild(card);
+    });
+  }
+
   function loadCases() {
     var c = a.client();
     var list = document.getElementById("caseList");

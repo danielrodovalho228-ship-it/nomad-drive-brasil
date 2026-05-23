@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recibo de pagamento — Nomade Drive Brasil</title>
+<meta name="description" content="Recibo de pagamento da Nomade Drive Brasil." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+.receipt-wrap { max-width: 800px; margin: 110px auto 60px; padding: 0 18px; }
+.receipt {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 12px 32px -18px rgba(20,40,30,.22);
+}
+.receipt__hd {
+  background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 55%, #2da473 100%);
+  color: #fff; padding: 26px 32px;
+  display: flex; justify-content: space-between; align-items: center; gap: 18px;
+}
+.receipt__hd img {
+  background: #fff; padding: 6px 10px; border-radius: 8px;
+  height: 38px; width: auto; display: block;
+}
+.receipt__hd-badge {
+  font-family: var(--font-d); font-size: 12px; letter-spacing: 1.4px;
+  text-transform: uppercase; font-weight: 700; opacity: .94;
+}
+.receipt__title {
+  font-family: var(--font-d); font-size: 26px; font-weight: 800;
+  margin: 24px 32px 6px; color: var(--ink);
+}
+.receipt__sub { margin: 0 32px 22px; color: var(--muted); font-size: 13.5px; }
+.receipt__body { padding: 0 32px 26px; }
+.receipt__row { display: grid; grid-template-columns: 180px 1fr; padding: 10px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+.receipt__row:last-child { border-bottom: none; }
+.receipt__row strong { color: var(--ink); font-weight: 600; }
+.receipt__row span { color: var(--muted); }
+.receipt__totals {
+  margin-top: 16px; padding: 16px 18px;
+  background: var(--green-l); border-radius: var(--radius-sm);
+}
+.receipt__totals div {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14.5px; color: var(--ink); margin: 4px 0;
+}
+.receipt__totals .receipt__tot-main {
+  font-family: var(--font-d); font-size: 20px; font-weight: 800; color: var(--green-d);
+  padding-top: 8px; margin-top: 8px; border-top: 1px solid #bfe6cf;
+}
+.receipt__ft {
+  padding: 18px 32px; background: var(--surface);
+  border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--muted); line-height: 1.6;
+}
+.receipt-actions { margin: 18px 0 0; display: flex; gap: 10px; flex-wrap: wrap; }
+.receipt-disclaimer {
+  margin-top: 14px; padding: 12px 14px;
+  background: #fff4e0; border: 1px dashed #d8b06a; color: #6e4a10;
+  border-radius: var(--radius-sm); font-size: 12.5px; line-height: 1.55;
+}
+@media print {
+  body { background: #fff; }
+  .nav, .footer, .receipt-actions, .receipt-disclaimer { display: none !important; }
+  .receipt-wrap { margin: 0; padding: 0; max-width: 100%; }
+  .receipt { border: none; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="dashboard-cliente.html">Voltar ao painel</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="receipt-wrap">
+  <div class="auth-msg" id="msg" hidden></div>
+
+  <div class="receipt" id="receipt" hidden>
+    <div class="receipt__hd">
+      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" />
+      <span class="receipt__hd-badge">Recibo de pagamento</span>
+    </div>
+    <h1 class="receipt__title" id="rTitle">Recibo</h1>
+    <p class="receipt__sub" id="rSub">—</p>
+
+    <div class="receipt__body">
+      <div class="receipt__row"><strong>Pagador</strong><span id="rPagador">—</span></div>
+      <div class="receipt__row"><strong>CPF / E-mail</strong><span id="rDoc">—</span></div>
+      <div class="receipt__row"><strong>Recebedor</strong><span>Nomade Drive Brasil — Uberlândia/MG</span></div>
+      <div class="receipt__row"><strong>Reserva</strong><span id="rReserva">—</span></div>
+      <div class="receipt__row"><strong>Veículo</strong><span id="rVeiculo">—</span></div>
+      <div class="receipt__row"><strong>Período da locação</strong><span id="rPeriodo">—</span></div>
+      <div class="receipt__row"><strong>Tipo do pagamento</strong><span id="rTipo">—</span></div>
+      <div class="receipt__row"><strong>Data do pagamento</strong><span id="rData">—</span></div>
+      <div class="receipt__row"><strong>ID Stripe</strong><span id="rStripe">—</span></div>
+
+      <div class="receipt__totals">
+        <div><span>Valor bruto</span><strong id="rBruto">R$ —</strong></div>
+        <div><span>Taxa da plataforma (10%)</span><strong id="rTaxa">R$ —</strong></div>
+        <div><span>Repasse ao proprietário (90%)</span><strong id="rRepasse">R$ —</strong></div>
+        <div class="receipt__tot-main"><span>Total pago</span><span id="rTotal">R$ —</span></div>
+      </div>
+
+      <div class="receipt-disclaimer">
+        <strong>Atenção:</strong> este recibo é um comprovante de pagamento gerado pelo
+        sistema da Nomade Drive Brasil — <em>não substitui Nota Fiscal</em>. Para a NF,
+        verifique a seção "Notas fiscais" no seu painel.
+      </div>
+
+      <div class="receipt-actions">
+        <button type="button" class="btn btn--solid btn--sm" id="btnPrint">Imprimir / Salvar como PDF</button>
+        <a href="dashboard-cliente.html" class="btn btn--outline btn--sm">Voltar ao painel</a>
+      </div>
+    </div>
+
+    <div class="receipt__ft">
+      Nomade Drive Brasil · CNPJ a confirmar · Uberlândia/MG ·
+      <a href="https://nomadedrive.com.br" style="color:var(--green-d);">nomadedrive.com.br</a> ·
+      <a href="mailto:pagamentos@nomadedrive.com.br" style="color:var(--green-d);">pagamentos@nomadedrive.com.br</a><br>
+      <span style="color:#8a9591;">Valores, disponibilidade e condições são confirmados individualmente por contrato.</span>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil. Recibo emitido automaticamente pelo sistema.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+(function () {
+  "use strict";
+  var msg = document.getElementById("msg");
+  function show(text, kind) {
+    msg.textContent = text;
+    msg.className = "auth-msg auth-msg--" + (kind || "warn");
+    msg.hidden = false;
+  }
+  function fmtBRL(n) {
+    var v = Number(n) || 0;
+    return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(d);
+  }
+  function fmtDateTime(v) {
+    if (!v) return "—";
+    var dt = new Date(v);
+    if (isNaN(dt.getTime())) return fmtDate(v);
+    return ("0" + dt.getDate()).slice(-2) + "/" + ("0" + (dt.getMonth() + 1)).slice(-2) +
+      "/" + dt.getFullYear() + " " + ("0" + dt.getHours()).slice(-2) +
+      ":" + ("0" + dt.getMinutes()).slice(-2);
+  }
+  function vehText(v) {
+    if (!v) return "Veículo da reserva";
+    var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) t += " (" + v.year_model + ")";
+    return t;
+  }
+
+  var a = window.ndAuth;
+  if (!a) { show("Autenticação indisponível.", "error"); return; }
+
+  var paymentId = "";
+  try { paymentId = new URLSearchParams(window.location.search).get("payment_id") || ""; } catch (e) {}
+  if (!paymentId) { show("Pagamento não informado na URL (?payment_id=...).", "error"); return; }
+
+  a.requireAuth().then(function (s) {
+    if (!s) return;
+    var c = a.client();
+    if (!c) { show("Configure o Supabase para visualizar o recibo.", "warn"); return; }
+
+    c.from("payments")
+      .select("*, bookings(id, monthly_price, start_date, end_date, client_id, vehicles(make,model,year_model))")
+      .eq("id", paymentId).maybeSingle().then(function (r) {
+        var p = r && r.data;
+        if (!p) { show("Recibo não encontrado ou você não tem permissão para vê-lo.", "error"); return; }
+        if (p.status !== "pago" && p.status !== "autorizado" && p.status !== "capturado") {
+          show("Este pagamento ainda não foi efetivado — recibo só está disponível após confirmação.", "warn");
+          return;
+        }
+
+        var b = p.bookings || {};
+        var renderAll = function (profName) {
+          // título e subtítulo
+          var kindLabel = p.kind === "caucao" ? "Caução autorizada" :
+                          (p.installment_number ? "Mensalidade #" + p.installment_number : "Mensalidade");
+          document.getElementById("rTitle").textContent = kindLabel + " — " + vehText(b.vehicles);
+          document.getElementById("rSub").textContent =
+            "Comprovante de pagamento emitido em " + fmtDateTime(new Date().toISOString());
+          document.getElementById("rPagador").textContent = profName || "Cliente Nomade Drive";
+          document.getElementById("rDoc").textContent = (s && s.user && s.user.email) || "—";
+
+          document.getElementById("rReserva").textContent = (b.id || "").slice(0, 8) + "…";
+          document.getElementById("rVeiculo").textContent = vehText(b.vehicles);
+          document.getElementById("rPeriodo").textContent =
+            fmtDate(b.start_date) + " — " + fmtDate(b.end_date);
+          document.getElementById("rTipo").textContent = kindLabel;
+          document.getElementById("rData").textContent = fmtDateTime(p.created_at);
+          document.getElementById("rStripe").textContent =
+            (p.stripe_invoice_id ? "invoice " + p.stripe_invoice_id : "") ||
+            (p.stripe_payment_intent_id ? "intent " + p.stripe_payment_intent_id : "") ||
+            (p.stripe_checkout_session_id ? "session " + p.stripe_checkout_session_id : "—");
+
+          var total = Number(p.amount) || 0;
+          if (p.kind === "mensalidade") {
+            var taxa = total * 0.10;
+            var rep = total * 0.90;
+            document.getElementById("rBruto").textContent = fmtBRL(total);
+            document.getElementById("rTaxa").textContent = fmtBRL(taxa);
+            document.getElementById("rRepasse").textContent = fmtBRL(rep);
+          } else {
+            document.getElementById("rBruto").textContent = fmtBRL(total);
+            document.getElementById("rTaxa").textContent = "— (caução)";
+            document.getElementById("rRepasse").textContent = "— (caução retida)";
+          }
+          document.getElementById("rTotal").textContent = fmtBRL(total);
+          document.getElementById("receipt").hidden = false;
+        };
+
+        // busca o nome do cliente separadamente (evita PostgREST embed quebrar)
+        if (b.client_id) {
+          c.from("profiles").select("full_name").eq("id", b.client_id).maybeSingle()
+            .then(function (rp) { renderAll(rp && rp.data && rp.data.full_name); })
+            .catch(function () { renderAll(null); });
+        } else { renderAll(null); }
+      }).catch(function (e) {
+        show("Erro ao carregar o recibo: " + (e && e.message), "error");
+      });
+  });
+
+  var btn = document.getElementById("btnPrint");
+  if (btn) btn.addEventListener("click", function () { window.print(); });
+})();
+</script>
+</body>
+</html>
