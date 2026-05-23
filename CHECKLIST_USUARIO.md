@@ -1,0 +1,146 @@
+# Checklist Pessoal — Daniel / Nomade Drive Brasil
+
+> **Última atualização:** 2026-05-23 (commit `3ae3b40`)
+> Marque cada item conforme for fazendo.
+
+---
+
+## 🔴 URGENTE — Próximos 10 minutos
+
+### Setup final do MVP
+
+- [ ] **1. Verificar Edge Function `consulta-multas`**
+  - Supabase Dashboard → Edge Functions → `consulta-multas`
+  - Buscar no código (Ctrl+F): `const INFOSIMPLES_URL`
+  - Se NÃO encontrar: colar conteúdo de [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/consulta-multas/index.ts) → Deploy
+
+- [ ] **2. Verificar Edge Function `installation-checkout`**
+  - Supabase Dashboard → Edge Functions → `installation-checkout`
+  - Buscar: `const SUPER_ADMIN_EMAIL`
+  - Se NÃO encontrar: colar [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/installation-checkout/index.ts) → Deploy
+
+- [ ] **3. Ativar PIX no Stripe**
+  - Stripe Dashboard → Settings → Payment methods → Brazil → PIX → **Enable**
+
+- [ ] **4. Validar login**
+  - Aba anônima (Ctrl+Shift+N)
+  - `nomadedrive.com.br/login.html`
+  - `qa-cliente@nomadedrive.com.br` / `Teste123`
+  - Esperado: cair no painel cliente "Olá Carlos!"
+
+---
+
+## 🟡 ESTA SEMANA — Validação + planejamento
+
+### Testar fluxos end-to-end (1-2h)
+
+- [ ] **5. Fluxo A — Pagar mensalidade** (3 min)
+  - Login como `qa-cliente` → `/reserva-detalhe?id=<booking>` → "Pagar mensalidade"
+  - Stripe Checkout: cartão `4242 4242 4242 4242`, CVC `123`, data `12/30`, CEP `01310-100`
+  - Verificar: e-mail "Mensalidade confirmada" em `contato@nomadedrive.com.br` (webmail Hostinger)
+
+- [ ] **6. Fluxo B — Check-in / check-out** (5 min)
+  - Cliente solicita retirada → Proprietário aprova → cliente vê "Em uso"
+  - Cliente solicita devolução → Proprietário aprova
+  - Verificar: e-mail "Locação encerrada"
+
+- [ ] **7. Fluxo C — Avaria (mais complexo)** (10 min)
+  - Proprietário aprova devolução COM avaria (fotos dummy + descrição)
+  - Logar como Proteção → validar avaria → "Aprovar captura R$ 300"
+  - Verificar: Stripe captura parcial + e-mail "Avaria — decisão da Proteção"
+  - Logar como cliente → ver avaria → testar "Contestar"
+
+- [ ] **8. Fluxo D — Cancelar assinatura** (1 min)
+  - Cliente clica "Cancelar assinatura"
+  - Verificar: e-mail "Assinatura cancelada" + card atualizado
+
+### Contatar Cobli (sem urgência)
+
+- [ ] **9. Preencher formulário Cobli**
+  - `https://www.cobli.co/` → "Fale com vendas"
+  - Usar mensagem sugerida no doc anterior
+  - Aguardar contato (1-3 dias)
+
+- [ ] **10. Quando Cobli ligar**
+  - Fazer as 23 perguntas listadas no guia (preço, API, SLA, etc.)
+  - Pedir teste com 1-2 dispositivos antes de escalar
+  - Me avisar quando tiver API key
+
+---
+
+## 🟢 QUANDO QUISER — Sem urgência
+
+### Documentos para passar pra equipe
+
+- [ ] **11. Compartilhar `ROTEIRO_TESTE_GERAL.md`** com QA (61 itens de teste)
+- [ ] **12. Compartilhar `ROTEIRO_QA_EMAILS.md`** com QA (21 e-mails)
+- [ ] **13. Compartilhar `ROTEIRO_CRIAR_USUARIOS_TESTE.md`** (caso queira que outras pessoas façam onboarding manual)
+
+### Migração futura
+
+- [ ] **14. Abrir MEI / CNPJ** (quando decidir)
+  - Atualizar dados em: Infosimples, Stripe, Hostinger, Resend
+- [ ] **15. Renovar trial Hostinger** (expira 22/06/2026)
+  - Fazer upgrade pra plano pago
+
+### Polimento opcional (P3)
+
+- [ ] **16. Trocar `window.confirm()` por modal não-bloqueante** (UX)
+- [ ] **17. UI admin "Multas pendentes de cobrança"**
+  - Dados já são coletados em `vehicle_fines` via Infosimples
+  - Falta só a tela
+
+---
+
+## ✅ JÁ FEITO (parabéns pelo progresso!)
+
+### Configuração inicial
+- [x] Resend domain `nomadedrive.com.br` verificado
+- [x] `EMAIL_FROM` configurada no Supabase
+- [x] `INFOSIMPLES_TOKEN` configurada no Supabase
+- [x] Hostinger: 5 aliases `qa-*@nomadedrive.com.br` criados
+- [x] Subscription Claude upgrade
+- [x] Account Infosimples criada (R$ 100 crédito)
+
+### SQLs rodadas no Supabase
+- [x] `supabase-qa-aliases-emails.sql`
+- [x] `supabase-fase24-profiles-email.sql`
+- [x] `supabase-fase26-km-audit.sql`
+- [x] `supabase-fase28-installation.sql` (marketplace instalação)
+- [x] `supabase-fase28b-papel-proprietario.sql` (correção papel + gate)
+- [x] `supabase-fase29-gate-proprietario.sql` (gate proprietário recusado)
+- [x] `supabase-fase30-multas.sql` (multas + license_plate)
+- [x] `supabase-qa-seed-completo.sql` (popular tudo)
+
+### Edge Functions deployadas
+- [x] `close-rental` re-deployada com código novo
+
+### Validações QA já feitas
+- [x] Smoke test: handler de cadastros dispara e-mail
+- [x] Bug crítico de cancelamento de assinatura corrigido (Fase 22)
+- [x] Reset de senhas pra Teste123 (via SQL)
+
+---
+
+## 📊 Resumo
+
+| Categoria | Total | Feito | Falta |
+|---|---|---|---|
+| 🔴 Urgente | 4 | 0 | 4 |
+| 🟡 Esta semana | 6 | 0 | 6 |
+| 🟢 Quando quiser | 7 | 0 | 7 |
+| ✅ Já feito | 15 | 15 | 0 |
+
+**Próxima ação:** Item 1 acima (verificar `consulta-multas` no Supabase).
+
+---
+
+## 📞 Quando me chamar de novo
+
+Quando voltar, é só me dizer:
+- **"Item N feito"** → marco e indico próximo
+- **"Item N deu erro Y"** → corrijo
+- **"Fechei Cobli, aqui está a API key"** → começo integração técnica
+- **"Encontrei bug X"** → atendo
+
+Tudo versionado no Git. Nada se perde.
