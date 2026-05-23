@@ -36,15 +36,20 @@ function fmtBRL(amount: number | null | undefined, isCents = false): string {
   const v = amount == null ? 0 : (isCents ? amount / 100 : amount);
   return v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-async function sendEmail(to: string | string[], subject: string, html: string, text: string) {
+// Endereços canônicos pra reply_to (categoria do e-mail).
+// Quando o domínio nomadedrive.com.br for verificado no Resend,
+// esses mesmos viram FROM também (via EMAIL_FROM).
+const REPLY_PAGAMENTOS = "pagamentos@nomadedrive.com.br";
+async function sendEmail(to: string | string[], subject: string, html: string, text: string, replyTo?: string) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
   if (!apiKey || !to) return { ok: false, error: "RESEND_API_KEY ausente ou destinatário vazio" };
   const from = Deno.env.get("EMAIL_FROM") || "Nomade Drive Brasil <onboarding@resend.dev>";
+  const reply_to = replyTo || Deno.env.get("EMAIL_REPLY_TO") || "contato@nomadedrive.com.br";
   try {
     const resp = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to: Array.isArray(to) ? to : [to], subject, html, text }),
+      body: JSON.stringify({ from, to: Array.isArray(to) ? to : [to], subject, html, text, reply_to }),
     });
     if (!resp.ok) {
       const detail = await resp.text();
@@ -112,6 +117,7 @@ function emailMensalidade(d: { valor: string; veiculo: string }) {
       + "Recebemos o pagamento da sua mensalidade.\n\n"
       + "Valor:   R$ " + d.valor + "\nReserva: " + d.veiculo + "\n\n"
       + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
 function emailCaucao(d: { valor: string; veiculo: string }) {
@@ -132,6 +138,7 @@ function emailCaucao(d: { valor: string; veiculo: string }) {
       + "em caso de dano, multa ou outro custo previsto em contrato.\n\n"
       + "Caução:  R$ " + d.valor + "\nReserva: " + d.veiculo + "\n\n"
       + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
 function emailMensalidadeRecorrente(d: { valor: string; veiculo: string; numero: number }) {
@@ -156,6 +163,7 @@ function emailMensalidadeRecorrente(d: { valor: string; veiculo: string; numero:
       + "Mensalidade: #" + d.numero + "\n"
       + "Reserva:     " + d.veiculo + "\n\n"
       + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
 function emailPagamentoFalhou(d: { valor: string; veiculo: string; numero?: number }) {
@@ -181,6 +189,7 @@ function emailPagamentoFalhou(d: { valor: string; veiculo: string; numero?: numb
       + "Atualize o cartão no painel para evitar suspensão da locação.\n\n"
       + "Valor:    R$ " + d.valor + "\nReserva:  " + d.veiculo + "\n\n"
       + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
 
@@ -246,7 +255,7 @@ Deno.serve(async (req) => {
     const tpl = isDeposit
       ? emailCaucao({ valor, veiculo: veh })
       : emailMensalidade({ valor, veiculo: veh });
-    const result = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+    const result = await sendEmail(to, tpl.subject, tpl.html, tpl.text, (tpl as any).replyTo);
     if (!result.ok) console.error("Falha ao enviar e-mail (webhook):", result.error);
     else console.log("E-mail enviado (webhook):", result.id);
   }
@@ -373,7 +382,7 @@ Deno.serve(async (req) => {
             veiculo: veh,
             numero,
           });
-          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text, (tpl as any).replyTo);
           if (!r.ok) console.error("E-mail recorrente:", r.error);
           else console.log("E-mail recorrente enviado:", r.id, "mensalidade #", numero);
         }
@@ -402,7 +411,7 @@ Deno.serve(async (req) => {
             valor: fmtBRL(valorCents, true),
             veiculo: veh,
           });
-          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text, (tpl as any).replyTo);
           if (!r.ok) console.error("E-mail falhou:", r.error);
           else console.log("E-mail falhou enviado:", r.id);
         }

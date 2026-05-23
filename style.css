@@ -1925,3 +1925,20 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
   filter: grayscale(0.4);
   pointer-events: auto; /* permite clique pra disparar a mensagem */
 }
+
+/* Lista de contatos por e-mail (suporte, pagamentos, contato) */
+.dash-contact-list {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.dash-contact-list strong { color: var(--ink); font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
+.dash-contact-list a {
+  color: var(--green-d);
+  font-weight: 600;
+}
+.dash-contact-list a:hover { text-decoration: underline; }

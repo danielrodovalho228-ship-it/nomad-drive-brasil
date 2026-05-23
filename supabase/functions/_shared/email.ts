@@ -27,12 +27,16 @@ export async function sendEmail(
   subject: string,
   html: string,
   text: string,
+  replyTo?: string,
 ): Promise<{ ok: boolean; id?: string; error?: string }> {
   const apiKey = env("RESEND_API_KEY");
   if (!apiKey) return { ok: false, error: "RESEND_API_KEY ausente" };
   if (!to) return { ok: false, error: "destinatário vazio" };
   const from = env("EMAIL_FROM") ||
     "Nomade Drive Brasil <onboarding@resend.dev>";
+  // reply_to default = contato@. Cada template pode sobrescrever
+  // (pagamentos@ para mensalidade/caução; suporte@ para erros, etc.)
+  const reply_to = replyTo || env("EMAIL_REPLY_TO") || "contato@nomadedrive.com.br";
   try {
     const resp = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -46,6 +50,7 @@ export async function sendEmail(
         subject,
         html,
         text,
+        reply_to,
       }),
     });
     if (!resp.ok) {
@@ -152,6 +157,12 @@ export interface PagamentoData {
   veiculo: string;   // ex.: "Chevrolet Onix (2022)"
 }
 
+// Endereços canônicos por categoria (replied_to dos templates).
+// Quando o domínio for verificado no Resend, esses mesmos viram FROM.
+export const REPLY_PAGAMENTOS = "pagamentos@nomadedrive.com.br";
+export const REPLY_SUPORTE    = "suporte@nomadedrive.com.br";
+export const REPLY_CONTATO    = "contato@nomadedrive.com.br";
+
 export function emailMensalidade(d: PagamentoData) {
   const html = baseTemplate({
     preheader: "Recebemos R$ " + d.valor + " da sua mensalidade. Tudo confirmado.",
@@ -175,11 +186,12 @@ export function emailMensalidade(d: PagamentoData) {
     "",
     "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
     "",
-    "Mensagem automática — Nomade Drive Brasil, Uberlândia/MG.",
+    "Mensagem automática — em caso de dúvida, responda a este e-mail.",
   ].join("\n");
   return {
     subject: "Mensalidade confirmada — Nomade Drive Brasil",
     html, text,
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
 
@@ -213,5 +225,6 @@ export function emailCaucao(d: PagamentoData) {
   return {
     subject: "Caução autorizada — Nomade Drive Brasil",
     html, text,
+    replyTo: REPLY_PAGAMENTOS,
   };
 }
