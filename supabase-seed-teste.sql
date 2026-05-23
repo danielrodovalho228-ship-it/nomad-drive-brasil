@@ -24,12 +24,15 @@
 
 do $$
 declare
-  -- >>> TROQUE PELOS E-MAILS QUE VOCÊ USOU <<<
-  email_cliente  text := 'teste-cliente@exemplo.com';
-  email_owner    text := 'teste-proprietario@exemplo.com';
-  email_parceiro text := 'teste-parceiro@exemplo.com';
-  email_oficina  text := 'teste-oficina@exemplo.com';
-  email_protecao text := 'teste-protecao@exemplo.com';
+  -- E-mails dos perfis de teste — TODOS são aliases reais no
+  -- Hostinger apontando pra contato@nomadedrive.com.br.
+  -- Permite QA receber TODOS os e-mails em uma única caixa.
+  -- Se você cria em outro domínio, ajuste aqui.
+  email_cliente  text := 'qa-cliente@nomadedrive.com.br';
+  email_owner    text := 'qa-proprietario@nomadedrive.com.br';
+  email_parceiro text := 'qa-parceiro@nomadedrive.com.br';
+  email_oficina  text := 'qa-oficina@nomadedrive.com.br';
+  email_protecao text := 'qa-protecao@nomadedrive.com.br';
 
   uid_cliente   uuid;
   uid_owner     uuid;

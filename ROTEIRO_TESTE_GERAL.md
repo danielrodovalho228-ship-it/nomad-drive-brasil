@@ -11,13 +11,15 @@ Objetivo: validar **todas as funcionalidades** do MVP de produção.
 
 Senha: `Teste123` em todas.
 
+**Todos os e-mails `qa-*@nomadedrive.com.br` são aliases reais** apontando para `contato@nomadedrive.com.br`. Assim você recebe TODOS os e-mails de teste em uma única caixa.
+
 | Papel | Login | Tem onboarding completo? |
 |---|---|---|
-| Cliente | `teste-cliente@nomadedrive.com.br` | Sim |
-| Proprietário | `teste-proprietario@nomadedrive.com.br` | Sim |
-| Parceiro | `teste-parceiro@nomadedrive.com.br` | Sim |
-| Oficina | `teste-oficina@nomadedrive.com.br` | Sim |
-| Proteção | `teste-protecao@nomadedrive.com.br` | Sim |
+| Cliente | `qa-cliente@nomadedrive.com.br` | Sim |
+| Proprietário | `qa-proprietario@nomadedrive.com.br` | Sim |
+| Parceiro | `qa-parceiro@nomadedrive.com.br` | Sim |
+| Oficina | `qa-oficina@nomadedrive.com.br` | Sim |
+| Proteção | `qa-protecao@nomadedrive.com.br` | Sim |
 | Super-admin | `dtrodovalho40@gmail.com` | — |
 
 ## 💳 Cartões de teste Stripe
