@@ -270,6 +270,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="statuses.js"></script>
+<script src="emails-runtime.js"></script>
 <script src="script.js"></script>
 <script src="payouts.js"></script>
 <script>
@@ -559,6 +560,39 @@
             i.bookings && i.bookings.vehicle_id) {
           c.from("vehicles").update({ mileage: i.mileage }).eq("id", i.bookings.vehicle_id)
             .then(function () { loadMaintenance(); }).catch(function () {});
+        }
+
+        // #6 parte 2: notifica o cliente da decisão.
+        // Check-in: e-mail bonito de "em uso" / "recusado".
+        // Check-out: o close-rental já manda "Locação encerrada" /
+        // "Avaria em análise" no caminho do "Aprovar com avaria",
+        // então só notificamos cliente aqui se for RECUSA do check-out
+        // OU APROVAÇÃO direta de check-in.
+        if (window.ndEmails && i.booking_id) {
+          var shouldNotify =
+            (i.kind === "checkin") ||
+            (i.kind === "checkout" && newStatus === "recusado");
+          if (shouldNotify) {
+            c.from("bookings").select("client_id, vehicles(make,model,year_model)")
+              .eq("id", i.booking_id).maybeSingle()
+              .then(function (br) {
+                var b = br && br.data;
+                if (!b || !b.client_id) return;
+                var v = b.vehicles || {};
+                var veiculo = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+                if (v.year_model) veiculo += " (" + v.year_model + ")";
+                var payload = {
+                  kind: i.kind, veiculo: veiculo,
+                  scheduled_at: i.scheduled_at ? new Date(i.scheduled_at).toLocaleString("pt-BR") : "—",
+                  location: i.location
+                };
+                var tplKey = newStatus === "aprovado"
+                  ? "inspection_approved_client"
+                  : "inspection_rejected_client";
+                window.ndEmails.notify(c, b.client_id, tplKey, payload)
+                  .catch(function (e) { console.warn(tplKey + ":", e); });
+              }).catch(function () {});
+          }
         }
         // Fase 22a: check-out aprovado → fecha a locação (cancela
         // subscription + libera caução + e-mail "Locação encerrada").

@@ -291,6 +291,187 @@
           " liberada pela indicação " + (p.referred_name || "—") + ".\n\n" +
           "Painel: " + SITE + "/dashboard-parceiro.html#comissoes"
       };
+    },
+
+    /* ----- Parte 2: check-in/out + ocorrências ----- */
+
+    inspection_requested_owner: function (p) {
+      var kindLabel = p.kind === "checkout" ? "Check-out" : "Check-in";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: kindLabel + " solicitado — " + (p.veiculo || "Nomade Drive Brasil"),
+        html: baseTemplate({
+          badge: kindLabel + " pendente",
+          title: kindLabel + " solicitado pelo cliente",
+          preheader: "Há um " + kindLabel.toLowerCase() + " aguardando sua aprovação.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "O cliente <strong>" + escapeHtml(p.client_name || "da reserva") + "</strong> acabou de solicitar um " + kindLabel.toLowerCase() + " para o seu veículo <strong>" + escapeHtml(p.veiculo || "") + "</strong>. Aprove ou recuse pelo seu painel."
+          ],
+          sections: [
+            ["Data e hora", escapeHtml(p.scheduled_at || "a confirmar")],
+            ["Local", escapeHtml(p.location || "—")],
+            (p.mileage != null ? ["Quilometragem", escapeHtml(String(p.mileage) + " km")] : null),
+            (p.fuel_level ? ["Combustível", escapeHtml(p.fuel_level)] : null),
+            (p.notes ? ["Observações do cliente", escapeHtml(p.notes)] : null)
+          ].filter(Boolean),
+          ctaText: "Abrir no painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#locacao"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          kindLabel + " solicitado pelo cliente " + (p.client_name || "") + ".\n" +
+          "Veículo: " + (p.veiculo || "") + "\n" +
+          "Data: " + (p.scheduled_at || "a confirmar") + "\n" +
+          "Local: " + (p.location || "—") + "\n\n" +
+          "Aprove em: " + SITE + "/dashboard-proprietario.html#locacao"
+      };
+    },
+
+    inspection_approved_client: function (p) {
+      var kindLabel = p.kind === "checkout" ? "Check-out" : "Check-in";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: kindLabel + " aprovado — sua locação está ativa",
+        html: baseTemplate({
+          badge: kindLabel + " aprovado",
+          title: kindLabel + " aprovado pelo proprietário",
+          preheader: "Seu " + kindLabel.toLowerCase() + " foi confirmado pelo proprietário.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ", tudo certo!",
+            "O proprietário aprovou o seu <strong>" + kindLabel.toLowerCase() + "</strong> do veículo <strong>" + escapeHtml(p.veiculo || "") + "</strong>.",
+            (p.kind === "checkin"
+              ? "Sua locação está oficialmente ativa. Bom uso!"
+              : "Acompanhe pelo painel o status da caução e da liberação do veículo.")
+          ],
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            ["Data registrada", escapeHtml(p.scheduled_at || "—")],
+            (p.location ? ["Local", escapeHtml(p.location)] : null)
+          ].filter(Boolean),
+          ctaText: "Ver no meu painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#checklist"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          kindLabel + " aprovado pelo proprietário.\n" +
+          "Veículo: " + (p.veiculo || "") + "\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#checklist"
+      };
+    },
+
+    inspection_rejected_client: function (p) {
+      var kindLabel = p.kind === "checkout" ? "Check-out" : "Check-in";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: kindLabel + " recusado — entre em contato",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: "#a8580e",
+          badge: kindLabel + " recusado",
+          title: "Seu " + kindLabel.toLowerCase() + " precisa de ajustes",
+          preheader: "O proprietário recusou — entre em contato.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "O proprietário <strong>recusou</strong> sua solicitação de " + kindLabel.toLowerCase() + " no veículo " + escapeHtml(p.veiculo || "") + ". Entre em contato pelo painel ou pelo WhatsApp da Nomade Drive para resolver a situação."
+          ],
+          ctaText: "Falar com a equipe",
+          ctaUrl: SITE + "/dashboard-cliente.html#suporte",
+          footerNote: "Resposta direta neste e-mail vai pro nosso time de suporte."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          kindLabel + " RECUSADO pelo proprietário.\n" +
+          "Veículo: " + (p.veiculo || "") + "\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#suporte"
+      };
+    },
+
+    case_opened_client: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Recebemos sua ocorrência — Nomade Drive Brasil",
+        html: baseTemplate({
+          badge: "Ocorrência registrada",
+          title: "Recebemos sua ocorrência",
+          preheader: "A equipe Proteção vai analisar.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "Recebemos sua ocorrência do tipo <strong>" + escapeHtml(p.case_type_label || p.case_type || "—") + "</strong> e ela já está na fila da equipe de Proteção.",
+            "Você pode acompanhar o andamento pelo painel ou responder a este e-mail caso queira complementar com mais informações ou fotos."
+          ],
+          sections: [
+            ["Tipo", escapeHtml(p.case_type_label || p.case_type || "—")],
+            (p.veiculo ? ["Veículo", escapeHtml(p.veiculo)] : null),
+            ["Aberta em", escapeHtml(p.created_at_fmt || new Date().toLocaleString("pt-BR"))]
+          ].filter(Boolean),
+          ctaText: "Acompanhar no painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#protecao"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Ocorrência registrada — tipo: " + (p.case_type_label || p.case_type || "—") + ".\n" +
+          "A equipe Proteção vai analisar.\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#protecao"
+      };
+    },
+
+    /* Variante "team": usada via notifyEmail() pra suporte@ ou
+       super-admin, NÃO depende de profiles.email. */
+    case_opened_team: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "[Proteção] Nova ocorrência: " + (p.case_type_label || p.case_type || "—"),
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#7a1f4b 0%,#a02865 55%,#c83c87 100%)",
+          ctaBg: "#7a1f4b",
+          badge: "Ação interna",
+          title: "Nova ocorrência registrada",
+          preheader: "Caso aberto pelo cliente — triagem pendente.",
+          body: [
+            "Um cliente abriu uma ocorrência na plataforma.",
+            (p.description ? "<strong>Descrição:</strong> " + escapeHtml(p.description) : "")
+          ].filter(Boolean),
+          sections: [
+            ["Tipo", escapeHtml(p.case_type_label || p.case_type || "—")],
+            ["Cliente", escapeHtml(p.client_name || p.client_id || "—")],
+            (p.veiculo ? ["Veículo", escapeHtml(p.veiculo)] : null),
+            ["Aberta em", escapeHtml(p.created_at_fmt || new Date().toLocaleString("pt-BR"))]
+          ].filter(Boolean),
+          ctaText: "Abrir fila de triagem",
+          ctaUrl: SITE + "/dashboard-protecao.html#triagem"
+        }),
+        text: "Nova ocorrência — tipo: " + (p.case_type_label || p.case_type || "—") + ".\n" +
+          "Cliente: " + (p.client_name || "—") + "\n" +
+          (p.description ? "Descrição: " + p.description + "\n" : "") +
+          "\nTriagem: " + SITE + "/dashboard-protecao.html#triagem"
+      };
+    },
+
+    case_resolved_client: function (p) {
+      var statusLbl = p.status_label || p.status || "atualizada";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Triagem concluída — " + statusLbl,
+        html: baseTemplate({
+          badge: "Triagem concluída",
+          title: "Sua ocorrência foi analisada",
+          preheader: "A equipe Proteção finalizou a análise.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "A equipe de Proteção concluiu a análise da sua ocorrência do tipo <strong>" + escapeHtml(p.case_type_label || p.case_type || "—") + "</strong>.",
+            (p.resolution_notes ? "<strong>Parecer da equipe:</strong> " + escapeHtml(p.resolution_notes) : "")
+          ].filter(Boolean),
+          sections: [
+            ["Status final", escapeHtml(statusLbl)],
+            (p.veiculo ? ["Veículo", escapeHtml(p.veiculo)] : null)
+          ].filter(Boolean),
+          ctaText: "Ver no meu painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#protecao",
+          footerNote: "Se tiver dúvida sobre o parecer, responda este e-mail."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Triagem da sua ocorrência concluída.\n" +
+          "Status final: " + statusLbl + "\n" +
+          (p.resolution_notes ? "Parecer: " + p.resolution_notes + "\n" : "") +
+          "\nPainel: " + SITE + "/dashboard-cliente.html#protecao"
+      };
     }
   };
 
@@ -333,9 +514,42 @@
       });
   }
 
+  /* ============================================================
+   * notifyEmail(client, toEmail, templateKey, payload)
+   * Envia pra um e-mail literal (sem lookup em profiles).
+   * Útil para notificações da equipe (suporte@, super-admin) ou
+   * casos onde já temos o e-mail em mãos.
+   * ============================================================ */
+  function notifyEmail(client, toEmail, templateKey, payload) {
+    if (!client || !toEmail || !templateKey) {
+      return Promise.resolve({ ok: false, error: "invalid_args" });
+    }
+    var make = templates[templateKey];
+    if (!make) return Promise.resolve({ ok: false, error: "unknown_template" });
+    var tpl = make(payload || {});
+    return client.functions.invoke("send-email", {
+      body: {
+        to: toEmail,
+        subject: tpl.subject,
+        html: tpl.html,
+        text: tpl.text,
+        reply_to: tpl.replyTo
+      }
+    }).then(function (rr) {
+      var d = rr && rr.data;
+      if (d && d.ok) return { ok: true, id: d.id, to: toEmail };
+      return { ok: false, error: (rr && rr.error && rr.error.message) ||
+        (d && d.error) || "send_failed", to: toEmail };
+    }).catch(function (e) {
+      return { ok: false, error: (e && e.message) || String(e), to: toEmail };
+    });
+  }
+
   window.ndEmails = {
     notify: notify,
+    notifyEmail: notifyEmail,
     templates: templates,   // exposto pra debug / preview
-    _base: baseTemplate     // exposto pra testes
+    _base: baseTemplate,    // exposto pra testes
+    TEAM_PROTECTION: "suporte@nomadedrive.com.br"
   };
 })();

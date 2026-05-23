@@ -146,6 +146,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="statuses.js"></script>
+<script src="emails-runtime.js"></script>
 <script src="script.js"></script>
 <script>
 (function () {
@@ -554,9 +555,12 @@
       var c = a.client();
       if (!c) { showNotice("Conecte o Supabase para salvar a triagem.", "warn"); return; }
       btn.disabled = true; btn.textContent = "Salvando...";
+      var oldStatus = cs.status;
+      var newStatus = sel.value;
+      var newNotes = (notes.value || "").trim() || null;
       c.from("protection_cases").update({
-        status: sel.value,
-        resolution_notes: (notes.value || "").trim() || null
+        status: newStatus,
+        resolution_notes: newNotes
       }).eq("id", cs.id).then(function (r) {
         btn.disabled = false; btn.textContent = "Salvar triagem";
         if (r && r.error) {
@@ -565,6 +569,24 @@
         }
         showNotice("Triagem atualizada.", "ok");
         loadProtectionCases();
+
+        // #6 parte 2: notifica o cliente quando triagem encerra
+        // (status muda PRA um dos finais e o reported_by é conhecido)
+        var finals = ["aprovado", "aprovado_com_ressalvas", "recusado"];
+        if (window.ndEmails && cs.reported_by &&
+            finals.indexOf(newStatus) !== -1 && newStatus !== oldStatus) {
+          var v = cs.vehicles || {};
+          var veiculo = [v.make, v.model].filter(Boolean).join(" ");
+          if (v.year_model) veiculo += " (" + v.year_model + ")";
+          window.ndEmails.notify(c, cs.reported_by, "case_resolved_client", {
+            case_type: cs.case_type,
+            case_type_label: CASE_LABEL[cs.case_type] || cs.case_type,
+            veiculo: veiculo,
+            status: newStatus,
+            status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
+            resolution_notes: newNotes
+          }).catch(function (e) { console.warn("case_resolved_client:", e); });
+        }
       }).catch(function () {
         btn.disabled = false; btn.textContent = "Salvar triagem";
         showNotice("Não foi possível salvar agora. Tente novamente.", "error");

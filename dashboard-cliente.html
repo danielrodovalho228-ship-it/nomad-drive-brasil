@@ -257,6 +257,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="statuses.js"></script>
+<script src="emails-runtime.js"></script>
 <script src="script.js"></script>
 <script>
 (function () {
@@ -622,6 +623,33 @@
         form.hidden = true;
         showNotice("Solicitação enviada. O proprietário vai validar o seu pedido.", "ok");
         loadCheckInOut();
+
+        // #6 parte 2: notifica o proprietário do check-in/out solicitado
+        if (window.ndEmails) {
+          var bookingId = form.getAttribute("data-booking");
+          var kind = form.getAttribute("data-kind");
+          c.from("bookings")
+            .select("owner_id, vehicles(make,model,year_model), profiles!client_id(full_name)")
+            .eq("id", bookingId).maybeSingle()
+            .then(function (br) {
+              var b = br && br.data;
+              if (!b || !b.owner_id) return;
+              var v = b.vehicles || {};
+              var veiculo = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+              if (v.year_model) veiculo += " (" + v.year_model + ")";
+              var clientName = b.profiles && b.profiles.full_name || "";
+              window.ndEmails.notify(c, b.owner_id, "inspection_requested_owner", {
+                kind: kind,
+                veiculo: veiculo,
+                client_name: clientName,
+                scheduled_at: when ? new Date(when).toLocaleString("pt-BR") : "a confirmar",
+                location: loc,
+                mileage: form.elements["mileage"].value || null,
+                fuel_level: form.elements["fuel_level"].value || null,
+                notes: (form.elements["notes"].value || "").trim() || null
+              }).catch(function (e) { console.warn("inspection_requested_owner:", e); });
+            }).catch(function () { /* embed pode falhar; e-mail só vai com dados que temos */ });
+        }
       }).catch(function () {
         btn.disabled = false; btn.textContent = "Enviar solicitação";
         showNotice("Não foi possível enviar agora. Tente novamente.", "error");
@@ -977,6 +1005,38 @@
           form.reset();
           showNotice("Ocorrência registrada. A equipe de proteção vai analisar.", "ok");
           loadCases();
+
+          // #6 parte 2: notifica o cliente (confirmação) + equipe Proteção
+          if (window.ndEmails) {
+            // monta veiculo e label legível do tipo de caso
+            var v = booking && booking.vehicles || {};
+            var veiculo = [v.make, v.model].filter(Boolean).join(" ");
+            if (v.year_model) veiculo += " (" + v.year_model + ")";
+            var caseLabel = {
+              sinistro: "Sinistro / colisão", dano_externo: "Dano externo",
+              dano_interno: "Dano interno", pane: "Pane mecânica",
+              multa: "Multa de trânsito", roubo_furto: "Roubo ou furto",
+              limpeza_especial: "Limpeza especial", mau_uso: "Mau uso"
+            }[caseType] || caseType;
+            var payload = {
+              case_type: caseType, case_type_label: caseLabel,
+              veiculo: veiculo, description: desc,
+              client_id: s.user.id, client_name: "", // preenchido abaixo
+              created_at_fmt: new Date().toLocaleString("pt-BR")
+            };
+            // Confirmação ao cliente (lê own profile)
+            window.ndEmails.notify(c, s.user.id, "case_opened_client", payload)
+              .catch(function (e) { console.warn("case_opened_client:", e); });
+            // Pega nome do cliente pra incluir no e-mail da equipe
+            c.from("profiles").select("full_name").eq("id", s.user.id).maybeSingle()
+              .then(function (pr) {
+                payload.client_name = (pr && pr.data && pr.data.full_name) || s.user.email || "—";
+                window.ndEmails.notifyEmail(c,
+                  window.ndEmails.TEAM_PROTECTION,
+                  "case_opened_team", payload
+                ).catch(function (e) { console.warn("case_opened_team:", e); });
+              }).catch(function () {});
+          }
         }).catch(function () {
           btn.disabled = false; btn.textContent = "Registrar ocorrência";
           showNotice("Não foi possível registrar agora. Tente novamente.", "error");
