@@ -368,6 +368,37 @@ Deno.serve(async (req) => {
       console.error("close-rental: e-mail do cliente não obtido");
     }
 
+    // Fase 30 / C6: consulta multas Infosimples automaticamente
+    // (não bloqueia o fluxo se Infosimples falhar)
+    try {
+      const { data: vehInfo } = await admin.from("bookings")
+        .select("vehicle_id, vehicles(license_plate, renavam)")
+        .eq("id", bookingId).maybeSingle();
+      const v: any = vehInfo?.vehicles;
+      if (v?.license_plate && v?.renavam) {
+        // Invoca via fetch interno (não dá pra invoke direto sem helper)
+        const supaUrl = Deno.env.get("SUPABASE_URL")!;
+        const authHeader = req.headers.get("Authorization") ?? "";
+        const consultaResp = await fetch(`${supaUrl}/functions/v1/consulta-multas`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": authHeader,
+          },
+          body: JSON.stringify({ vehicle_id: vehInfo.vehicle_id, booking_id: bookingId }),
+        });
+        if (consultaResp.ok) {
+          const cd = await consultaResp.json();
+          (actions as any).multas_consultadas = cd.inserted || 0;
+          console.log(`close-rental: ${cd.inserted || 0} multas registradas via Infosimples.`);
+        } else {
+          console.warn("close-rental: consulta-multas falhou:", consultaResp.status);
+        }
+      }
+    } catch (e) {
+      console.warn("close-rental: consulta-multas erro (não bloqueia):", (e as Error)?.message);
+    }
+
     return json({ ok: true, actions, email_to: cliEmail || null });
   } catch (e) {
     actions.errors.push("geral: " + ((e as Error)?.message ?? String(e)));
