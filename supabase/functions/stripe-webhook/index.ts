@@ -134,6 +134,55 @@ function emailCaucao(d: { valor: string; veiculo: string }) {
       + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
   };
 }
+function emailMensalidadeRecorrente(d: { valor: string; veiculo: string; numero: number }) {
+  return {
+    subject: "Mensalidade #" + d.numero + " cobrada — Nomade Drive Brasil",
+    html: baseTemplate({
+      preheader: "Mensalidade #" + d.numero + " (R$ " + d.valor + ") cobrada no seu cartão cadastrado.",
+      badge: "Cobrança recorrente",
+      title: "Mensalidade #" + d.numero + " cobrada",
+      intro: "Sua mensalidade foi cobrada automaticamente no cartão cadastrado. Tudo certo — a locação segue ativa.",
+      rows: [
+        ["Valor", "R$ " + d.valor],
+        ["Mensalidade", "#" + d.numero],
+        ["Reserva", d.veiculo],
+      ],
+      ctaLabel: "Acessar meu painel",
+      ctaUrl: SITE + "/dashboard-cliente.html",
+    }),
+    text: "Mensalidade #" + d.numero + " cobrada — Nomade Drive Brasil\n\n"
+      + "Sua mensalidade foi cobrada automaticamente no cartão cadastrado.\n\n"
+      + "Valor:       R$ " + d.valor + "\n"
+      + "Mensalidade: #" + d.numero + "\n"
+      + "Reserva:     " + d.veiculo + "\n\n"
+      + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+  };
+}
+function emailPagamentoFalhou(d: { valor: string; veiculo: string; numero?: number }) {
+  const ref = d.numero ? "Mensalidade #" + d.numero : "Mensalidade";
+  return {
+    subject: "Falha no pagamento da mensalidade — Nomade Drive Brasil",
+    html: baseTemplate({
+      preheader: "A cobrança da " + ref.toLowerCase() + " falhou — atualize o cartão no painel para evitar suspensão.",
+      badge: "Pagamento recusado",
+      title: "Falha no pagamento da " + ref.toLowerCase(),
+      intro: "A operadora do seu cartão recusou a cobrança automática. Sem o pagamento em dia, a locação pode ser suspensa. Atualize o cartão no seu painel ou entre em contato com a equipe.",
+      rows: [
+        ["Valor tentado", "R$ " + d.valor],
+        ["Reserva", d.veiculo],
+        ["Próxima ação", "Atualizar cartão"],
+      ],
+      ctaLabel: "Atualizar cartão",
+      ctaUrl: SITE + "/dashboard-cliente.html",
+      gradient: "linear-gradient(135deg,#7a1f1f 0%,#a83838 55%,#d36161 100%)",
+    }),
+    text: "Falha no pagamento da " + ref.toLowerCase() + " — Nomade Drive Brasil\n\n"
+      + "A operadora do seu cartão recusou a cobrança automática.\n"
+      + "Atualize o cartão no painel para evitar suspensão da locação.\n\n"
+      + "Valor:    R$ " + d.valor + "\nReserva:  " + d.veiculo + "\n\n"
+      + "Acesse seu painel: " + SITE + "/dashboard-cliente.html",
+  };
+}
 
 // ====================================================================
 // Handler do webhook
@@ -250,6 +299,113 @@ Deno.serve(async (req) => {
         const ch = event.data.object as Stripe.Charge;
         const pi = typeof ch.payment_intent === "string" ? ch.payment_intent : null;
         if (pi) await patchByIntent(pi, { status: "estornado" });
+        break;
+      }
+      // ============================================================
+      // FASE 21 — assinatura mensal (subscription) recorrente
+      // ============================================================
+      case "customer.subscription.created":
+      case "customer.subscription.updated": {
+        const sub = event.data.object as Stripe.Subscription;
+        const bookingId = sub.metadata?.booking_id;
+        if (bookingId) {
+          const patch: Record<string, unknown> = {
+            stripe_subscription_id: sub.id,
+          };
+          if (sub.status === "canceled" || sub.status === "incomplete_expired") {
+            patch.stripe_subscription_id = null;
+          }
+          await admin.from("bookings").update(patch).eq("id", bookingId);
+        }
+        break;
+      }
+      case "customer.subscription.deleted": {
+        const sub = event.data.object as Stripe.Subscription;
+        const bookingId = sub.metadata?.booking_id;
+        if (bookingId) {
+          await admin.from("bookings")
+            .update({ stripe_subscription_id: null })
+            .eq("id", bookingId);
+        }
+        break;
+      }
+      case "invoice.paid": {
+        const inv = event.data.object as Stripe.Invoice;
+        const subId = typeof (inv as any).subscription === "string"
+          ? (inv as any).subscription : null;
+        if (!subId) break;
+        // descobre a booking via subscription_id
+        const { data: bk } = await admin.from("bookings")
+          .select("id, client_id, monthly_price, vehicles(make,model,year_model)")
+          .eq("stripe_subscription_id", subId)
+          .maybeSingle();
+        if (!bk) break;
+        // descobre o número da mensalidade (próxima sequência)
+        const { count: prev } = await admin.from("payments")
+          .select("id", { count: "exact", head: true })
+          .eq("booking_id", bk.id)
+          .eq("kind", "mensalidade")
+          .not("installment_number", "is", null);
+        const numero = (prev || 0) + 1;
+        // grava a linha de pagamento (idempotência via stripe_invoice_id unique)
+        const valorCents = inv.amount_paid ?? inv.total ?? 0;
+        await admin.from("payments").insert({
+          booking_id: bk.id,
+          client_id: bk.client_id,
+          kind: "mensalidade",
+          amount: valorCents / 100,
+          currency: (inv.currency || "brl").toLowerCase(),
+          status: "pago",
+          stripe_invoice_id: inv.id,
+          installment_number: numero,
+        });
+        // notifica o cliente
+        const to = inv.customer_email || (inv as any).customer_address?.email;
+        if (to) {
+          const v: any = bk.vehicles;
+          let veh = "Reserva Nomade Drive";
+          if (v) {
+            veh = [v.make, v.model].filter(Boolean).join(" ") || veh;
+            if (v.year_model) veh += " (" + v.year_model + ")";
+          }
+          const tpl = emailMensalidadeRecorrente({
+            valor: fmtBRL(valorCents, true),
+            veiculo: veh,
+            numero,
+          });
+          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+          if (!r.ok) console.error("E-mail recorrente:", r.error);
+          else console.log("E-mail recorrente enviado:", r.id, "mensalidade #", numero);
+        }
+        break;
+      }
+      case "invoice.payment_failed": {
+        const inv = event.data.object as Stripe.Invoice;
+        const subId = typeof (inv as any).subscription === "string"
+          ? (inv as any).subscription : null;
+        if (!subId) break;
+        const { data: bk } = await admin.from("bookings")
+          .select("id, client_id, vehicles(make,model,year_model)")
+          .eq("stripe_subscription_id", subId)
+          .maybeSingle();
+        if (!bk) break;
+        const valorCents = inv.amount_due ?? inv.total ?? 0;
+        const to = inv.customer_email || (inv as any).customer_address?.email;
+        if (to) {
+          const v: any = bk.vehicles;
+          let veh = "Reserva Nomade Drive";
+          if (v) {
+            veh = [v.make, v.model].filter(Boolean).join(" ") || veh;
+            if (v.year_model) veh += " (" + v.year_model + ")";
+          }
+          const tpl = emailPagamentoFalhou({
+            valor: fmtBRL(valorCents, true),
+            veiculo: veh,
+          });
+          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+          if (!r.ok) console.error("E-mail falhou:", r.error);
+          else console.log("E-mail falhou enviado:", r.id);
+        }
         break;
       }
       case "account.updated": {

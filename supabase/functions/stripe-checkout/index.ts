@@ -316,12 +316,20 @@ Deno.serve(async (req) => {
     // a reserva — o RLS garante que o usuário só enxerga as próprias
     const { data: booking } = await userClient
       .from("bookings")
-      .select("id, client_id, owner_id, monthly_price, deposit_amount, platform_fee")
+      .select("id, client_id, owner_id, monthly_price, deposit_amount, platform_fee, billing_mode, stripe_subscription_id")
       .eq("id", bookingId)
       .maybeSingle();
     if (!booking) return json({ error: "Reserva não encontrada." }, 404);
     if (booking.client_id !== user.id) {
       return json({ error: "Esta reserva não é da sua conta." }, 403);
+    }
+
+    // ---- já tem assinatura ativa para mensalidade? ----
+    if (kind === "mensalidade" && booking.billing_mode === "monthly" && booking.stripe_subscription_id) {
+      return json({
+        error: "Assinatura mensal já está ativa para esta reserva.",
+        subscription_id: booking.stripe_subscription_id,
+      }, 409);
     }
 
     // ---- já está pago/autorizado? não cria nova sessão ----
@@ -376,22 +384,88 @@ Deno.serve(async (req) => {
       // cobrança ocorre sem split — o repasse é acertado depois.
     }
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [{
-        quantity: 1,
-        price_data: {
-          currency: "brl",
-          unit_amount: amountCents,
-          product_data: { name: label },
-        },
-      }],
-      payment_intent_data: Object.keys(piData).length ? piData : undefined,
-      success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
-      client_reference_id: bookingId,
-      metadata: { booking_id: bookingId, kind, client_id: user.id },
-    });
+    // ---- decide modo de cobrança ---------------------------------
+    // mensalidade + booking.billing_mode='monthly' → subscription
+    // (cobrança mensal automática via Stripe Subscriptions)
+    // Caução continua sempre one-off (capture manual).
+    const useSubscription = !isDeposit && booking.billing_mode === "monthly";
+
+    let session: Stripe.Checkout.Session;
+
+    if (useSubscription) {
+      // garante Stripe customer pro usuário
+      const { data: prof } = await admin
+        .from("profiles")
+        .select("stripe_customer_id, full_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      let customerId = prof?.stripe_customer_id || null;
+      if (!customerId) {
+        const c = await stripe.customers.create({
+          email: user.email ?? undefined,
+          name: prof?.full_name ?? undefined,
+          metadata: { user_id: user.id },
+        });
+        customerId = c.id;
+        await admin.from("profiles")
+          .update({ stripe_customer_id: customerId })
+          .eq("id", user.id);
+      }
+
+      // dados de subscription: split via application_fee_percent
+      const subData: Record<string, unknown> = {
+        metadata: { booking_id: bookingId, kind, client_id: user.id },
+      };
+      // só inclui transfer/split se o proprietário já tem conta conectada
+      const { data: ownerAcct2 } = await admin
+        .from("payout_accounts")
+        .select("stripe_account_id, status, payouts_enabled")
+        .eq("user_id", booking.owner_id)
+        .maybeSingle();
+      const ownerReady2 = !!(ownerAcct2 && ownerAcct2.stripe_account_id &&
+        (ownerAcct2.status === "ativo" || ownerAcct2.payouts_enabled === true));
+      if (ownerReady2) {
+        subData.application_fee_percent = 10;
+        subData.transfer_data = { destination: ownerAcct2.stripe_account_id };
+      }
+
+      session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        customer: customerId!,
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: "brl",
+            unit_amount: amountCents,
+            recurring: { interval: "month" },
+            product_data: { name: label },
+          },
+        }],
+        subscription_data: subData,
+        success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
+        client_reference_id: bookingId,
+        metadata: { booking_id: bookingId, kind, client_id: user.id, billing_mode: "monthly" },
+      });
+    } else {
+      // ---- modo one-off (padrão atual: payment com app_fee_amount) ----
+      session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [{
+          quantity: 1,
+          price_data: {
+            currency: "brl",
+            unit_amount: amountCents,
+            product_data: { name: label },
+          },
+        }],
+        payment_intent_data: Object.keys(piData).length ? piData : undefined,
+        success_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=ok&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
+        client_reference_id: bookingId,
+        metadata: { booking_id: bookingId, kind, client_id: user.id },
+      });
+    }
 
     // ---- registra o pagamento SEM DUPLICAR ----
     // Reaproveita a linha "pendente" existente (1 por booking_id+kind):

@@ -153,6 +153,10 @@
             <label class="field"><span>Data de início</span><input type="date" id="nbStart" /></label>
             <label class="field"><span>Data de fim</span><input type="date" id="nbEnd" /></label>
             <label class="field"><span>Valor mensal (R$)</span><input type="number" id="nbPrice" min="0" inputmode="numeric" /></label>
+            <label class="field"><span>Cobrança</span><select id="nbBillingMode">
+              <option value="monthly" selected>Mensal recorrente (recomendado)</option>
+              <option value="one_off">Cobrança única</option>
+            </select></label>
           </div>
           <p class="form__err" id="nbErr" hidden>Selecione cliente, veículo e as datas.</p>
           <button type="submit" class="btn btn--solid btn--sm dash-cta">Criar reserva</button>
@@ -922,6 +926,8 @@
       var ownerAmount = price != null ? Math.round(price * 0.90 * 100) / 100 : null;
       var btn = form.querySelector('button[type="submit"]');
       btn.disabled = true; btn.textContent = "Criando...";
+      var billingModeEl = document.getElementById("nbBillingMode");
+      var billingMode = (billingModeEl && billingModeEl.value) || "monthly";
       c.from("bookings").insert({
         client_id: clientId,
         owner_id: vehicleOwner[vehicleId] || null,
@@ -931,6 +937,7 @@
         monthly_price: price,
         platform_fee: platformFee,
         owner_estimated_amount: ownerAmount,
+        billing_mode: billingMode,
         status: "aprovado"
       }).then(function (rr) {
         btn.disabled = false; btn.textContent = "Criar reserva";
