@@ -67,6 +67,23 @@
         <h2>Pagamentos</h2>
         <p>Pague a mensalidade ou autorize a caução pela Stripe. A tela de cartão é hospedada pela Stripe — os dados do seu cartão não passam pela Nomade Drive.</p>
         <div class="auth-msg" id="payNotice" hidden></div>
+
+        <!-- Bloco da assinatura mensal (só aparece se billing_mode='monthly' + subscription ativa) -->
+        <div class="sub-card" id="subCard" hidden>
+          <div class="sub-card__head">
+            <strong>Assinatura mensal ativa</strong>
+            <span class="dash-pill dash-pill--ok" id="subStatus">Ativa</span>
+          </div>
+          <div class="sub-card__rows">
+            <div><span>Valor</span><strong id="subAmount">R$ —</strong></div>
+            <div><span>Próxima cobrança</span><strong id="subNext">—</strong></div>
+            <div><span>Cobrança automática até</span><strong id="subEnd">—</strong></div>
+          </div>
+          <div class="sub-card__actions">
+            <button type="button" class="btn btn--ghost btn--sm" id="subCancel">Cancelar assinatura</button>
+          </div>
+        </div>
+
         <div class="insp-actions">
           <button type="button" class="btn btn--solid btn--sm" id="payMensal">Pagar mensalidade</button>
           <button type="button" class="btn btn--outline btn--sm" id="payCaucao">Autorizar caução</button>
@@ -174,6 +191,7 @@
           (b.monthly_price != null) ? "R$ " + Number(b.monthly_price).toLocaleString("pt-BR") : "—";
         document.getElementById("resvVehicle").textContent = vehText(b.vehicles);
 
+        loadSubscription(c, b);
         loadPayments(c, id);
         wirePayButtons(c, id);
         handlePayReturn(c, id);
@@ -253,10 +271,17 @@
     return c.from("payments").select("*").eq("booking_id", bookingId)
       .order("created_at", { ascending: false }).then(function (r) {
         var rows = (r && r.data) || [];
-        // 1 linha por tipo (kind): a de "melhor" status; empate -> mais recente.
-        // Evita exibir duplicatas de uma mesma reserva.
+        // Separa mensalidades RECORRENTES (com installment_number) das demais
+        var installments = rows.filter(function (p) {
+          return p.kind === "mensalidade" && p.installment_number != null;
+        }).sort(function (a, b) {
+          return (a.installment_number || 0) - (b.installment_number || 0);
+        });
+        var others = rows.filter(function (p) { return p.installment_number == null; });
+
+        // 1 linha por tipo (kind): a de "melhor" status; empate -> mais recente
         var best = {};
-        rows.forEach(function (p) {
+        others.forEach(function (p) {
           var cur = best[p.kind];
           if (!cur || payRank(p.status) > payRank(cur.status)) best[p.kind] = p;
         });
@@ -265,7 +290,7 @@
           if (best[k]) shown.push(best[k]);
         });
         list.innerHTML = "";
-        if (!shown.length) {
+        if (!shown.length && !installments.length) {
           if (empty) empty.hidden = false;
         } else {
           if (empty) empty.hidden = true;
@@ -277,6 +302,22 @@
               info[0], info[1]));
           });
         }
+
+        // Histórico de mensalidades recorrentes (com installment_number)
+        if (installments.length) {
+          var sep = document.createElement("p");
+          sep.className = "pay-history-title";
+          sep.textContent = "Histórico de mensalidades cobradas";
+          list.appendChild(sep);
+          installments.forEach(function (p) {
+            var info = payStatusInfo(p.status);
+            list.appendChild(row(
+              "Mensalidade #" + p.installment_number + " · " + brlv(p.amount),
+              "Cobrada em " + fmtDate(p.created_at),
+              info[0], info[1]));
+          });
+        }
+
         // desabilita o botão do que já foi pago/autorizado
         var m = document.getElementById("payMensal");
         var d = document.getElementById("payCaucao");
@@ -287,6 +328,91 @@
           d.disabled = true; d.textContent = "Caução autorizada";
         }
       }).catch(function () {});
+  }
+
+  /* ---- Fase 21b: subscription mensal (status + cancelar) ---- */
+  function loadSubscription(c, b) {
+    var card = document.getElementById("subCard");
+    if (!card) return;
+    // só mostra o card se for billing recorrente com subscription ativa
+    if (!b || b.billing_mode !== "monthly" || !b.stripe_subscription_id) {
+      card.hidden = true;
+      return;
+    }
+    var statusEl = document.getElementById("subStatus");
+    var amountEl = document.getElementById("subAmount");
+    var nextEl   = document.getElementById("subNext");
+    var endEl    = document.getElementById("subEnd");
+    var cancelBtn= document.getElementById("subCancel");
+
+    if (amountEl) amountEl.textContent = brlv(b.monthly_price) + " / mês";
+    if (endEl)    endEl.textContent = fmtDate(b.end_date);
+    card.hidden = false;
+
+    // busca status atualizado da Stripe via Edge Function
+    if (c && c.functions) {
+      c.functions.invoke("stripe-subscription", {
+        body: { booking_id: b.id, action: "status" }
+      }).then(function (r) {
+        var d = r && r.data;
+        if (!d) return;
+        if (statusEl) {
+          if (d.status === "active") {
+            statusEl.textContent = d.cancel_at_period_end ? "Ativa (cancelamento agendado)" : "Ativa";
+            statusEl.className = "dash-pill dash-pill--ok";
+          } else if (d.status === "canceled") {
+            statusEl.textContent = "Cancelada";
+            statusEl.className = "dash-pill dash-pill--neutral";
+            if (cancelBtn) cancelBtn.disabled = true;
+          } else if (d.status === "past_due") {
+            statusEl.textContent = "Atrasada — pagamento falhou";
+            statusEl.className = "dash-pill dash-pill--bad";
+          } else {
+            statusEl.textContent = d.status || "—";
+          }
+        }
+        if (d.current_period_end && nextEl) {
+          var dt = new Date(d.current_period_end * 1000);
+          nextEl.textContent =
+            ("0" + dt.getDate()).slice(-2) + "/" +
+            ("0" + (dt.getMonth() + 1)).slice(-2) + "/" +
+            dt.getFullYear();
+        }
+      }).catch(function () {});
+    }
+
+    if (cancelBtn && !cancelBtn.getAttribute("data-wired")) {
+      cancelBtn.setAttribute("data-wired", "1");
+      cancelBtn.addEventListener("click", function () {
+        var ok = window.confirm(
+          "Cancelar a assinatura mensal?\n\n" +
+          "A Stripe não vai mais cobrar automaticamente. " +
+          "Você pode continuar usando o veículo até o fim do período já pago."
+        );
+        if (!ok) return;
+        var orig = cancelBtn.textContent;
+        cancelBtn.disabled = true; cancelBtn.textContent = "Cancelando...";
+        c.functions.invoke("stripe-subscription", {
+          body: { booking_id: b.id, action: "cancel" }
+        }).then(function (r) {
+          var d = r && r.data;
+          if (d && d.ok) {
+            payNotice("Assinatura cancelada. Não haverá novas cobranças automáticas.", "ok");
+            if (statusEl) {
+              statusEl.textContent = "Cancelada";
+              statusEl.className = "dash-pill dash-pill--neutral";
+            }
+            cancelBtn.textContent = "Assinatura cancelada";
+          } else {
+            cancelBtn.disabled = false; cancelBtn.textContent = orig;
+            payNotice("Não foi possível cancelar agora. Tente novamente em instantes.", "error");
+          }
+        }).catch(function () {
+          cancelBtn.disabled = false; cancelBtn.textContent = orig;
+          payNotice("Erro ao cancelar a assinatura.", "error");
+        });
+      });
+    }
   }
   function startCheckout(c, bookingId, kind, btn) {
     if (!c || !c.functions) { payNotice("Pagamento indisponível nesta pré-visualização.", "warn"); return; }

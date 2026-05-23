@@ -1926,6 +1926,51 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
   pointer-events: auto; /* permite clique pra disparar a mensagem */
 }
 
+/* ====================================================================
+   ASSINATURA MENSAL — card de subscription ativa (Fase 21b)
+   ==================================================================== */
+.sub-card {
+  background: linear-gradient(135deg, #e8f3ed 0%, #f4f7f5 100%);
+  border: 1px solid #c2e0d0;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin: 14px 0 18px;
+}
+.sub-card[hidden] { display: none; }
+.sub-card__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; margin-bottom: 14px;
+}
+.sub-card__head strong {
+  font-family: var(--font-d); font-size: 15px; color: var(--green-d);
+}
+.sub-card__rows {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  margin-bottom: 14px;
+}
+.sub-card__rows > div {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.sub-card__rows span {
+  font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px;
+}
+.sub-card__rows strong {
+  font-family: var(--font-d); font-size: 16px; color: var(--ink); font-weight: 700;
+}
+.sub-card__actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 560px) {
+  .sub-card__rows { grid-template-columns: 1fr; }
+}
+
+.pay-history-title {
+  margin: 18px 0 6px;
+  font-family: var(--font-d); font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  color: var(--muted);
+}
+
 /* Lista de contatos por e-mail (suporte, pagamentos, contato) */
 .dash-contact-list {
   margin-top: 14px;

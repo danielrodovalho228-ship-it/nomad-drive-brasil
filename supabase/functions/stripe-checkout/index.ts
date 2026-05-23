@@ -321,7 +321,7 @@ Deno.serve(async (req) => {
     // a reserva — o RLS garante que o usuário só enxerga as próprias
     const { data: booking } = await userClient
       .from("bookings")
-      .select("id, client_id, owner_id, monthly_price, deposit_amount, platform_fee, billing_mode, stripe_subscription_id")
+      .select("id, client_id, owner_id, monthly_price, deposit_amount, platform_fee, billing_mode, stripe_subscription_id, end_date")
       .eq("id", bookingId)
       .maybeSingle();
     if (!booking) return json({ error: "Reserva não encontrada." }, 404);
@@ -421,6 +421,15 @@ Deno.serve(async (req) => {
       const subData: Record<string, unknown> = {
         metadata: { booking_id: bookingId, kind, client_id: user.id },
       };
+      // auto-cancela no fim da locação: Stripe para de cobrar sozinho no end_date.
+      // Converte YYYY-MM-DD para unix timestamp (fim do dia em horário BR, UTC-3).
+      if (booking.end_date) {
+        const dt = new Date(booking.end_date + "T23:59:59-03:00");
+        const ts = Math.floor(dt.getTime() / 1000);
+        if (!isNaN(ts) && ts > Math.floor(Date.now() / 1000)) {
+          subData.cancel_at = ts;
+        }
+      }
       // só inclui transfer/split se o proprietário já tem conta conectada
       const { data: ownerAcct2 } = await admin
         .from("payout_accounts")

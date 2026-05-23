@@ -246,6 +246,31 @@ Deno.serve(async (req) => {
     } catch { return "Reserva Nomade Drive"; }
   }
 
+  // Procura a booking pelo subscription_id; se ainda não estiver gravado
+  // (race: invoice.paid pode chegar antes de customer.subscription.created),
+  // busca a subscription na Stripe, lê metadata.booking_id e grava o id
+  // na booking. Resolve o problema do installment_number ficar NULL.
+  async function findBookingForSubscription(subId: string): Promise<any | null> {
+    const cols = "id, client_id, monthly_price, vehicles(make,model,year_model)";
+    let { data: bk } = await admin.from("bookings")
+      .select(cols).eq("stripe_subscription_id", subId).maybeSingle();
+    if (bk) return bk;
+    try {
+      const sub = await stripe.subscriptions.retrieve(subId);
+      const bookingId = sub.metadata?.booking_id;
+      if (!bookingId) return null;
+      const { data: bk2 } = await admin.from("bookings")
+        .select(cols).eq("id", bookingId).maybeSingle();
+      if (bk2) {
+        // grava o subscription_id que estava faltando (race recovery)
+        await admin.from("bookings")
+          .update({ stripe_subscription_id: subId })
+          .eq("id", bookingId);
+      }
+      return bk2 ?? null;
+    } catch { return null; }
+  }
+
   async function notifyCheckoutCompleted(s: Stripe.Checkout.Session) {
     const to = s.customer_details?.email || s.customer_email;
     if (!to) return;
@@ -343,11 +368,8 @@ Deno.serve(async (req) => {
         const subId = typeof (inv as any).subscription === "string"
           ? (inv as any).subscription : null;
         if (!subId) break;
-        // descobre a booking via subscription_id
-        const { data: bk } = await admin.from("bookings")
-          .select("id, client_id, monthly_price, vehicles(make,model,year_model)")
-          .eq("stripe_subscription_id", subId)
-          .maybeSingle();
+        // descobre a booking (com fallback via metadata da subscription)
+        const bk = await findBookingForSubscription(subId);
         if (!bk) break;
         // descobre o número da mensalidade (próxima sequência)
         const { count: prev } = await admin.from("payments")
@@ -393,10 +415,7 @@ Deno.serve(async (req) => {
         const subId = typeof (inv as any).subscription === "string"
           ? (inv as any).subscription : null;
         if (!subId) break;
-        const { data: bk } = await admin.from("bookings")
-          .select("id, client_id, vehicles(make,model,year_model)")
-          .eq("stripe_subscription_id", subId)
-          .maybeSingle();
+        const bk = await findBookingForSubscription(subId);
         if (!bk) break;
         const valorCents = inv.amount_due ?? inv.total ?? 0;
         const to = inv.customer_email || (inv as any).customer_address?.email;
