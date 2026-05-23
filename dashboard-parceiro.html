@@ -68,6 +68,7 @@
           <div class="dash-kpi"><span>Indicações registradas</span><strong id="kpiTotal">0</strong></div>
           <div class="dash-kpi"><span>Em análise</span><strong id="kpiAnalise">0</strong></div>
           <div class="dash-kpi"><span>Aprovadas</span><strong id="kpiAprov">0</strong></div>
+          <div class="dash-kpi"><span>Comissão estimada</span><strong id="kpiCommEst">R$ 0</strong></div>
         </div>
 
         <section class="dash-panel" id="indicacoes">
@@ -87,6 +88,13 @@
         <section class="dash-panel" id="comissoes">
           <h2>Comissões</h2>
           <p>As comissões aparecem sempre como <strong>estimadas</strong> ou <strong>elegíveis</strong> — nunca como garantidas. O valor só se confirma após a aprovação e a conversão real da indicação, conforme as regras vigentes da plataforma.</p>
+
+          <div class="why-box" style="margin:8px 0 16px;">
+            <h3>💰 Quanto você ganha por indicação</h3>
+            <p><strong>R$ 200 fixos por conversão.</strong> Cada indicação que vira locação ativa rende R$ 200 — sem cálculo complexo, sem percentual sobre mensalidade. O valor é liberado depois que a locação é confirmada e a primeira mensalidade é paga.</p>
+            <p class="note">Esta é a regra atual. A Nomade Drive pode revisar o modelo no futuro (ex.: bônus por volume de indicações), e comunicará com antecedência.</p>
+          </div>
+
           <div class="dash-list" id="commList"></div>
           <div class="dash-empty" id="commEmpty">Você ainda não tem indicações com comissão registrada. As etapas aparecem aqui conforme suas indicações avançam.</div>
         </section>
@@ -138,6 +146,12 @@
     if (status === "recusado" || status === "suspenso" || status === "bloqueado_para_revisao") return "bad";
     if (status === "em_analise" || status === "documentos_pendentes") return "warn";
     return "neutral";
+  }
+  function brl(v) {
+    var n = Number(v) || 0;
+    return "R$ " + n.toLocaleString("pt-BR", {
+      minimumFractionDigits: 0, maximumFractionDigits: 2
+    });
   }
   function rowEl(title, sub, pillText, kind) {
     var row = document.createElement("div"); row.className = "dash-row";
@@ -202,6 +216,16 @@
           rows.filter(function (x) { return x.status === "em_analise"; }).length;
         document.getElementById("kpiAprov").textContent =
           rows.filter(function (x) { return x.status === "aprovado"; }).length;
+
+        // Comissão estimada: soma das indicações ainda não canceladas
+        // (cada uma vale o valor de commission_amount — R$ 200 por padrão)
+        var estimada = rows
+          .filter(function (x) { return x.commission_status !== "cancelada"; })
+          .reduce(function (sum, x) {
+            return sum + (Number(x.commission_amount) || 200);
+          }, 0);
+        document.getElementById("kpiCommEst").textContent = brl(estimada);
+
         todosState.indicacoesEmAnalise =
           rows.filter(function (x) { return x.status === "em_analise"; }).length;
         refreshTodos();
@@ -211,7 +235,9 @@
         document.getElementById("refEmpty").hidden = true;
         var list = document.getElementById("refList");
         rows.forEach(function (ref) {
-          var sub = [ref.referral_type, "comissão " + (ref.commission_status || "estimada")]
+          var val = brl(Number(ref.commission_amount) || 200);
+          var sub = [ref.referral_type,
+            "comissão " + (ref.commission_status || "estimada") + " · " + val]
             .filter(Boolean).join(" · ");
           list.appendChild(rowEl(ref.referred_name || "Indicação", sub,
             a.statusLabel(ref.status), pillKind(ref.status)));

@@ -142,6 +142,37 @@
           </div>
           <div class="dash-list" id="finList"></div>
           <div class="dash-empty" id="finEmpty">Nenhuma reserva com valor registrado ainda. Os valores aparecem aqui quando uma locação é confirmada.</div>
+
+          <!-- ============ COMO FUNCIONA A CAUÇÃO ============ -->
+          <div class="why-box why-box--warn" style="margin-top:24px;">
+            <h3>🛡️ Como funciona a caução</h3>
+            <p>A caução protege o proprietário contra avarias e pendências. Na Nomade Drive ela é tratada como <strong>pré-autorização no cartão</strong> — não vira cobrança real, só reserva o limite enquanto a locação está ativa.</p>
+
+            <div class="block-title" style="margin-top:14px;">Valor por perfil</div>
+            <table class="admin-table" style="margin:8px 0 12px;">
+              <thead>
+                <tr><th>Perfil</th><th>Caução</th><th>Quem se encaixa</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Verificado</strong></td><td>R$ 500</td><td>KYC aprovado + CNH 5+ anos + sem multas recentes</td></tr>
+                <tr><td><strong>Padrão</strong></td><td>R$ 1.000</td><td>Cliente regular da plataforma</td></tr>
+                <tr><td><strong>Novo</strong></td><td>R$ 1.700</td><td>Primeira locação, sem histórico ainda</td></tr>
+                <tr><td><strong>Estendido</strong></td><td>R$ 2.000</td><td>Perfil estrangeiro ou maior risco operacional</td></tr>
+              </tbody>
+            </table>
+
+            <div class="block-title" style="margin-top:14px;">Como funciona na prática</div>
+            <ol style="margin:8px 0 0 18px;padding:0;line-height:1.7;color:#3a4945;">
+              <li><strong>Reserva confirmada</strong> — você paga a mensalidade e o cartão reserva o valor da caução (não cobra).</li>
+              <li><strong>Durante a locação</strong> — o valor fica reservado no seu limite, mas <strong>não é cobrado de fato</strong>. Se a locação dura mais de 30 dias, a Stripe pode renovar a pré-autorização automaticamente.</li>
+              <li><strong>Check-out aprovado</strong> — a caução é <strong>liberada</strong> e o limite volta ao cartão em até <strong>5 dias úteis</strong>.</li>
+              <li><strong>Se houver avaria</strong> — apenas o valor da avaria é cobrado, o restante é liberado normalmente. Você recebe e-mail com a decisão + foto + prazo de contestação de 5 dias úteis.</li>
+            </ol>
+
+            <p class="note" style="margin-top:14px;"><strong>Por que isso é melhor?</strong> Você não fica sem o valor da caução no banco, e o proprietário fica protegido — todo mundo ganha. A caução só vira cobrança real se houver algo a debitar.</p>
+            <p class="note"><strong>Forma de pagamento.</strong> A caução é sempre pré-autorização em cartão de crédito (PIX e débito não permitem reservar limite). A mensalidade pode usar outras formas, conforme combinado no orçamento.</p>
+          </div>
+          <!-- ============ /COMO FUNCIONA A CAUÇÃO ============ -->
         </section>
 
         <section class="dash-panel" id="recibos">

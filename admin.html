@@ -158,8 +158,10 @@
               <option value="monthly" selected>Mensal recorrente (recomendado)</option>
               <option value="one_off">Cobrança única</option>
             </select></label>
+            <label class="field"><span>Caução sugerida (R$) <span class="opt" id="nbDepositHint" style="font-weight:normal;color:#5b6b63;">— escolha um cliente</span></span><input type="number" id="nbDeposit" min="0" inputmode="numeric" placeholder="ex: 1000" /></label>
           </div>
           <p class="form__err" id="nbErr" hidden>Selecione cliente, veículo e as datas.</p>
+          <p class="note" style="margin:6px 0 12px;color:#5b6b63;">A caução é pré-autorizada no cartão do cliente (não cobrada) e liberada no check-out aprovado. O valor sugerido é baseado no tier do cliente — você pode sobrescrever.</p>
           <button type="submit" class="btn btn--solid btn--sm dash-cta">Criar reserva</button>
         </form>
       </div>
@@ -213,7 +215,7 @@
       <p class="note">Indicações enviadas pelos parceiros. Altere o status conforme a análise.</p>
       <div class="admin-card">
         <table class="admin-table">
-          <thead><tr><th>Indicado</th><th>Tipo</th><th>Comissão</th><th>Status</th></tr></thead>
+          <thead><tr><th>Indicado</th><th>Tipo</th><th>Comissão (R$ 200 fixo)</th><th>Status</th></tr></thead>
           <tbody id="parceirosList"><tr><td colspan="4">Carregando indicações...</td></tr></tbody>
         </table>
       </div>
@@ -932,7 +934,12 @@
       columns: [
         function (r) { return r.referred_name || "—"; },
         function (r) { return r.referral_type || "—"; },
-        function (r) { return r.commission_status || "—"; }
+        function (r) {
+          // Comissão fixa R$ 200 — Fase 23 / decisão produto 2026-05-23
+          var val = Number(r.commission_amount) || 200;
+          var statusTxt = r.commission_status || "estimada";
+          return "R$ " + val.toLocaleString("pt-BR") + " (" + statusTxt + ")";
+        }
       ]
     });
     loadSection({
@@ -1146,6 +1153,20 @@
   }
 
   /* ---- Criar reserva (admin) — conecta um cliente a um veículo ---- */
+  // Tabela de caução por tier (Fase 23 — decisão de produto 2026-05-23)
+  var CAUCAO_BY_TIER = {
+    basico: 500,
+    padrao: 1000,
+    novo: 1700,
+    risco: 2000
+  };
+  var CAUCAO_TIER_LABEL = {
+    basico: "Verificado",
+    padrao: "Padrão",
+    novo: "Novo",
+    risco: "Estendido"
+  };
+
   function loadNewBookingForm() {
     var c = a.client();
     var clientSel = document.getElementById("nbClient");
@@ -1153,11 +1174,13 @@
     var form = document.getElementById("newBookingForm");
     if (!c || !clientSel || !vehSel || !form) return;
     var vehicleOwner = {};
+    var clientTier = {};   // { clientId: 'padrao' | 'basico' | ... }
 
-    c.from("profiles").select("id,full_name").eq("main_role", "client").then(function (r) {
+    c.from("profiles").select("id,full_name,caucao_tier").eq("main_role", "client").then(function (r) {
       var rows = (r && r.data) || [];
       clientSel.innerHTML = '<option value="">Selecione o cliente</option>';
       rows.forEach(function (p) {
+        clientTier[p.id] = p.caucao_tier || "padrao";
         var o = document.createElement("option");
         o.value = p.id;
         o.textContent = p.full_name || "Cliente sem nome";
@@ -1179,6 +1202,16 @@
       });
     }).catch(function () {});
 
+    // Autopreenche caução quando troca o cliente
+    clientSel.addEventListener("change", function () {
+      var tier = clientTier[clientSel.value] || "padrao";
+      var suggested = CAUCAO_BY_TIER[tier] || 1000;
+      var hint = document.getElementById("nbDepositHint");
+      var inp = document.getElementById("nbDeposit");
+      if (hint) hint.textContent = "tier: " + CAUCAO_TIER_LABEL[tier] + " → R$ " + suggested;
+      if (inp && !inp.value) inp.value = suggested;
+    });
+
     if (form.getAttribute("data-wired")) return;
     form.setAttribute("data-wired", "1");
     form.addEventListener("submit", function (e) {
@@ -1198,6 +1231,8 @@
       /* taxa da plataforma: 10% de todo aluguel */
       var platformFee = price != null ? Math.round(price * 0.10 * 100) / 100 : null;
       var ownerAmount = price != null ? Math.round(price * 0.90 * 100) / 100 : null;
+      var depRaw = document.getElementById("nbDeposit").value;
+      var deposit = depRaw ? Number(depRaw) : (CAUCAO_BY_TIER[clientTier[clientId] || "padrao"] || 1000);
       var btn = form.querySelector('button[type="submit"]');
       btn.disabled = true; btn.textContent = "Criando...";
       var billingModeEl = document.getElementById("nbBillingMode");
@@ -1211,6 +1246,7 @@
         monthly_price: price,
         platform_fee: platformFee,
         owner_estimated_amount: ownerAmount,
+        deposit_amount: deposit,
         billing_mode: billingMode,
         status: "aprovado"
       }).then(function (rr) {
