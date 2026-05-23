@@ -108,7 +108,7 @@
           <form class="form insp-form" id="inspForm" hidden>
             <h3 id="inspFormTitle">Solicitar retirada (check-in)</h3>
             <div class="form__grid">
-              <label class="field"><span>Data e hora *</span><input type="datetime-local" name="scheduled_at" required /></label>
+              <label class="field"><span>Data e hora *</span><input type="datetime-local" name="scheduled_at" required min="2026-01-01T00:00" max="2099-12-31T23:59" /></label>
               <label class="field"><span>Local *</span><input type="text" name="location" required placeholder="Uberlândia-MG" /></label>
               <label class="field"><span>Quilometragem (km)</span><input type="number" name="mileage" min="0" inputmode="numeric" /></label>
               <label class="field"><span>Combustível</span>

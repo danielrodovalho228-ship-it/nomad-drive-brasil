@@ -363,6 +363,17 @@
         showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
           ". Este é o painel do proprietário.", "warn");
       }
+      // Fase 29: aviso claro quando proprietário está bloqueado.
+      // Triggers SQL bloqueiam operações; aqui é só UX informativo.
+      if (["recusado","suspenso","bloqueado_para_revisao"].indexOf(p.verification_status) !== -1) {
+        showNotice(
+          "⚠️ Seu perfil está \"" + a.statusLabel(p.verification_status) + "\". " +
+          "Aprovações de check-in/check-out, novas reservas e edição de veículos estão " +
+          "BLOQUEADAS até a regularização. Entre em contato com o suporte " +
+          "(suporte@nomadedrive.com.br).",
+          "error"
+        );
+      }
     });
     a.client().from("vehicles").select("*").order("created_at", { ascending: false })
       .then(function (r) {
@@ -555,7 +566,16 @@
         validated_at: new Date().toISOString()
       }).eq("id", i.id).then(function (r) {
         btn.disabled = false;
-        if (r && r.error) { showNotice("Não foi possível salvar agora. Tente novamente.", "error"); return; }
+        if (r && r.error) {
+          // Fase 29: gate de proprietário recusado
+          var msg = r.error.message || "";
+          if (msg.indexOf("OWNER_BLOQUEADO") !== -1) {
+            showNotice("⚠️ Seu perfil está bloqueado. Não é possível aprovar/recusar check-in ou check-out. Regularize com o suporte (suporte@nomadedrive.com.br).", "error");
+          } else {
+            showNotice("Não foi possível salvar agora. Tente novamente.", "error");
+          }
+          return;
+        }
         if (newStatus === "aprovado" && i.kind === "checkout" && i.mileage != null &&
             i.bookings && i.bookings.vehicle_id) {
           c.from("vehicles").update({ mileage: i.mileage }).eq("id", i.bookings.vehicle_id)
