@@ -49,6 +49,7 @@
         <p class="dash-side__title">Painel de proteção</p>
         <nav class="dash-side__nav">
           <a href="#visao"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Visão geral</a>
+          <a href="#avarias"><svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Avarias para revisar</a>
           <a href="#triagem"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6"/></svg>Casos abertos</a>
           <a href="#coberturas"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Coberturas</a>
           <a href="#sinistro"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Processo de sinistro</a>
@@ -65,8 +66,8 @@
 
         <div class="dash-cards" id="visao">
           <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
-          <div class="dash-kpi"><span>Tipos de caso atendidos</span><strong>8</strong></div>
-          <div class="dash-kpi"><span>Painel de casos</span><strong>Após aprovação</strong></div>
+          <div class="dash-kpi"><span>Avarias pendentes</span><strong id="kpiAvarias">0</strong></div>
+          <div class="dash-kpi"><span>Casos abertos</span><strong id="kpiCasos">0</strong></div>
         </div>
 
         <section class="dash-panel" id="aprovacao">
@@ -76,6 +77,20 @@
             <h3>Proteção não é autorização para mau uso</h3>
             <p>Sujeira excessiva, drogas, cigarro, negligência, danos internos, manchas, odores fortes, multas ou uso fora do contrato podem gerar cobrança adicional e análise separada. Veja a <a href="seguranca-sinistros.html#limpeza">política de limpeza e devolução</a>.</p>
           </div>
+        </section>
+
+        <!-- ============ FASE 22c.3: AVARIAS REPORTADAS NO CHECK-OUT ============ -->
+        <section class="dash-panel" id="avarias">
+          <h2>Avarias para revisar</h2>
+          <p>Cada avaria reportada por um proprietário no check-out aparece aqui. Avalie as fotos e a descrição, defina o valor final e escolha entre <strong>capturar parcial da caução</strong> ou <strong>liberar sem cobrança</strong>. O cliente recebe e-mail com a decisão e tem 5 dias úteis para contestar.</p>
+
+          <div class="why-box why-box--warn" style="margin-bottom:14px;">
+            <h3>Importante</h3>
+            <p>Ao aprovar a captura, o valor será debitado da caução autorizada na Stripe (pré-autorização → cobrança real). O excedente é liberado automaticamente. Ao liberar sem cobrança, a caução inteira é estornada ao cliente em até 5 dias úteis.</p>
+          </div>
+
+          <div class="dash-list" id="damageList"></div>
+          <div class="dash-empty" id="damageEmpty">Nenhuma avaria pendente de revisão.</div>
         </section>
 
         <section class="dash-panel" id="triagem">
@@ -154,18 +169,29 @@
     showNotice("Pré-visualização: configure o supabase-config.js para carregar os seus dados reais.", "warn");
   }
 
-  var todosState = { perfilEmAnalise: false, casosAbertos: 0 };
+  var todosState = { perfilEmAnalise: false, casosAbertos: 0, avariasPendentes: 0 };
   function refreshTodos() {
     if (!window.ndStatus) return;
     window.ndStatus.renderTodos("dashTodos", [
       { count: todosState.perfilEmAnalise ? 1 : 0,
         label: "seu perfil de proteção ainda está em análise — triagem só persiste após aprovação.",
         tip: "Enquanto o perfil não for aprovado, a triagem de casos não é gravada de forma definitiva." },
+      { count: todosState.avariasPendentes,
+        label: "avaria(s) aguardando sua revisão — captura parcial ou liberação da caução.",
+        link: "#avarias", linkLabel: "abrir revisão",
+        tip: "Cada avaria reportada no check-out precisa de uma decisão da Proteção." },
       { count: todosState.casosAbertos,
         label: "caso(s) aberto(s) para triagem — analise e atualize o status.",
         link: "#triagem", linkLabel: "abrir triagem",
         tip: "Cada caso pode ser aprovado, aprovado com ressalvas, recusado ou marcado como documentos pendentes." }
     ]);
+  }
+
+  function brl(v) {
+    var n = Number(v) || 0;
+    return "R$ " + n.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
   }
 
   a.requireAuth().then(function (s) {
@@ -188,6 +214,7 @@
       }
     });
     loadProtectionCases();
+    loadDamages();
   });
 
   /* ---- Fase 10: triagem dos casos de proteção ---- */
@@ -222,11 +249,267 @@
         todosState.casosAbertos = rows.filter(function (cs) {
           return cs.status === "em_analise" || cs.status === "documentos_pendentes";
         }).length;
+        var ka = document.getElementById("kpiCasos");
+        if (ka) ka.textContent = todosState.casosAbertos;
         refreshTodos();
         if (!rows.length) { if (empty) empty.hidden = false; return; }
         if (empty) empty.hidden = true;
         rows.forEach(function (cs) { list.appendChild(caseCard(cs)); });
       }).catch(function () {});
+  }
+
+  /* ============================================================
+   * FASE 22c.3 — Revisão de avarias (Proteção)
+   * ============================================================ */
+  var damageRulesByCode = {};
+
+  function loadDamageRules() {
+    var c = a.client();
+    if (!c) return Promise.resolve({});
+    return c.from("damage_rules").select("*").then(function (r) {
+      var rows = (r && r.data) || [];
+      rows.forEach(function (rule) { damageRulesByCode[rule.code] = rule; });
+      return damageRulesByCode;
+    }).catch(function () { return {}; });
+  }
+
+  function loadDamages() {
+    var c = a.client();
+    var list = document.getElementById("damageList");
+    var empty = document.getElementById("damageEmpty");
+    if (!c || !list) return;
+    loadDamageRules().then(function () {
+      // Lê avarias que precisam de ação + as recém-resolvidas pra contexto
+      c.from("damages")
+        .select("*, bookings(id, client_id, owner_id, vehicles(make,model,year_model))")
+        .in("status", ["pendente_revisao", "em_contestacao", "aprovado_captura", "aprovado_sem_captura"])
+        .order("created_at", { ascending: false })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          list.innerHTML = "";
+          var pendentes = rows.filter(function (d) {
+            return d.status === "pendente_revisao" || d.status === "em_contestacao";
+          });
+          todosState.avariasPendentes = pendentes.length;
+          var kp = document.getElementById("kpiAvarias");
+          if (kp) kp.textContent = pendentes.length;
+          refreshTodos();
+          if (!rows.length) { if (empty) empty.hidden = false; return; }
+          if (empty) empty.hidden = true;
+          rows.forEach(function (d) { list.appendChild(damageCard(d)); });
+        }).catch(function () {});
+    });
+  }
+
+  function damageStatusKind(s) {
+    if (s === "pendente_revisao") return "warn";
+    if (s === "em_contestacao") return "bad";
+    if (s === "aprovado_captura" || s === "resolvido") return "ok";
+    if (s === "aprovado_sem_captura") return "neutral";
+    return "neutral";
+  }
+  function damageStatusLabel(s) {
+    if (s === "pendente_revisao") return "Pendente de revisão";
+    if (s === "em_contestacao") return "Em contestação";
+    if (s === "aprovado_captura") return "Aprovado — captura";
+    if (s === "aprovado_sem_captura") return "Liberado (sem cobrança)";
+    if (s === "resolvido") return "Resolvido";
+    return s;
+  }
+
+  function damageCard(d) {
+    var rule = damageRulesByCode[d.rule_code] || { label: d.rule_code, amount_min: 0, amount_max: 0 };
+    var v = (d.bookings && d.bookings.vehicles) || {};
+    var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) vt += " (" + v.year_model + ")";
+
+    var card = document.createElement("div");
+    card.className = "insp-card";
+
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    t.textContent = rule.label + " — " + vt;
+    var sub = document.createElement("span");
+    sub.textContent = "Reportada em " + new Date(d.created_at).toLocaleString("pt-BR") +
+      " · sugerido " + brl(d.suggested_amount || 0) +
+      " · faixa " + brl(rule.amount_min) + " a " + brl(rule.amount_max);
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+
+    if (d.description) {
+      var desc = document.createElement("p");
+      desc.className = "insp-card__msg";
+      desc.textContent = d.description;
+      card.appendChild(desc);
+    }
+
+    if (d.client_dispute) {
+      var disp = document.createElement("div");
+      disp.className = "why-box why-box--warn";
+      disp.style.cssText = "margin:8px 0;padding:10px 14px;";
+      disp.innerHTML = '<strong>Contestação do cliente:</strong><br>' +
+        '<span style="font-size:13.5px;line-height:1.5;">' + escapeHtml(d.client_dispute) + '</span>';
+      card.appendChild(disp);
+    }
+
+    // Fotos (gera signed URLs pra cada path em evidence_urls)
+    var photosWrap = document.createElement("div");
+    photosWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;";
+    var paths = Array.isArray(d.evidence_urls) ? d.evidence_urls : [];
+    if (paths.length) {
+      var c = a.client();
+      paths.forEach(function (p) {
+        c.storage.from("damages").createSignedUrl(p, 600).then(function (r) {
+          if (!r || !r.data || !r.data.signedUrl) return;
+          var url = r.data.signedUrl;
+          var lower = p.toLowerCase();
+          var isPdf = lower.endsWith(".pdf");
+          if (isPdf) {
+            var a = document.createElement("a");
+            a.href = url; a.target = "_blank";
+            a.style.cssText = "display:inline-block;padding:8px 12px;background:#f4f7f5;border-radius:8px;color:#145f3e;text-decoration:none;font-size:13px;";
+            a.textContent = "📄 PDF";
+            photosWrap.appendChild(a);
+          } else {
+            var img = document.createElement("img");
+            img.src = url; img.loading = "lazy";
+            img.style.cssText = "width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #e3e9e5;cursor:zoom-in;";
+            img.addEventListener("click", function () { window.open(url, "_blank"); });
+            photosWrap.appendChild(img);
+          }
+        });
+      });
+      card.appendChild(photosWrap);
+    } else {
+      var noPhotos = document.createElement("p");
+      noPhotos.className = "note";
+      noPhotos.style.margin = "8px 0";
+      noPhotos.textContent = "Sem fotos anexadas.";
+      card.appendChild(noPhotos);
+    }
+
+    // Status atual (pill)
+    var statusRow = document.createElement("div");
+    statusRow.style.cssText = "margin:8px 0;";
+    var pill = document.createElement("span");
+    pill.className = "dash-pill dash-pill--" + damageStatusKind(d.status);
+    pill.textContent = damageStatusLabel(d.status);
+    statusRow.appendChild(pill);
+    if (d.final_amount != null) {
+      var amt = document.createElement("span");
+      amt.style.cssText = "margin-left:8px;font-weight:600;";
+      amt.textContent = "Valor final: " + brl(d.final_amount);
+      statusRow.appendChild(amt);
+    }
+    card.appendChild(statusRow);
+
+    // Form de decisão — só se ainda for acionável
+    var canReview = d.status === "pendente_revisao" || d.status === "em_contestacao";
+    if (!canReview) return card;
+
+    var reviewBox = document.createElement("div");
+    reviewBox.style.cssText = "background:#f9fafb;border:1px solid #e3e9e5;border-radius:10px;padding:12px;margin-top:8px;";
+    reviewBox.innerHTML =
+      '<div class="form__grid">' +
+        '<label class="field"><span>Valor final (R$) *</span>' +
+          '<input type="number" class="dmg-final" min="0" step="0.01" value="' + (d.suggested_amount || 0) + '" />' +
+        '</label>' +
+        '<label class="field field--full"><span>Parecer / observação</span>' +
+          '<textarea class="dmg-notes" rows="2" placeholder="Justificativa da decisão (visível ao cliente)."></textarea>' +
+        '</label>' +
+      '</div>' +
+      '<p class="form__err" style="color:#b00020;margin-top:6px;" hidden></p>' +
+      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="capture">Aprovar captura</button>' +
+        '<button type="button" class="btn btn--outline btn--sm" data-act="release">Liberar sem cobrança</button>' +
+      '</div>';
+    card.appendChild(reviewBox);
+
+    var finalInp = reviewBox.querySelector(".dmg-final");
+    var notesInp = reviewBox.querySelector(".dmg-notes");
+    var errEl = reviewBox.querySelector(".form__err");
+    var captureBtn = reviewBox.querySelector('[data-act="capture"]');
+    var releaseBtn = reviewBox.querySelector('[data-act="release"]');
+
+    if (d.review_notes) notesInp.value = d.review_notes;
+
+    captureBtn.addEventListener("click", function () {
+      var amt = Number(finalInp.value);
+      if (!amt || amt <= 0) {
+        errEl.textContent = "Defina um valor > 0 para capturar.";
+        errEl.hidden = false; return;
+      }
+      submitDamageDecision(d, "aprovado_captura", amt, notesInp.value, captureBtn, releaseBtn, errEl);
+    });
+    releaseBtn.addEventListener("click", function () {
+      submitDamageDecision(d, "aprovado_sem_captura", 0, notesInp.value, captureBtn, releaseBtn, errEl);
+    });
+
+    return card;
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  function submitDamageDecision(d, newStatus, finalAmount, notes, capBtn, relBtn, errEl) {
+    var c = a.client();
+    if (!c) { errEl.textContent = "Sessão indisponível."; errEl.hidden = false; return; }
+    capBtn.disabled = true; relBtn.disabled = true;
+    errEl.hidden = true;
+    var label = newStatus === "aprovado_captura" ? "Capturando..." : "Liberando...";
+    if (newStatus === "aprovado_captura") capBtn.textContent = label; else relBtn.textContent = label;
+
+    c.from("damages").update({
+      status: newStatus,
+      final_amount: finalAmount,
+      review_notes: (notes || "").trim() || null,
+      reviewed_at: new Date().toISOString()
+    }).eq("id", d.id).then(function (r) {
+      if (r && r.error) {
+        errEl.textContent = "Não foi possível salvar — confira seu acesso de proteção.";
+        errEl.hidden = false;
+        capBtn.disabled = false; relBtn.disabled = false;
+        capBtn.textContent = "Aprovar captura";
+        relBtn.textContent = "Liberar sem cobrança";
+        return;
+      }
+
+      // Fase 22c.4: se for captura, invoca damage-capture (Edge Function
+      // que faz stripe.paymentIntents.capture). Se for liberação só sem
+      // captura, basta marcar pra resolvido — o caução continua autorizado
+      // e será liberado quando todas as avarias estiverem resolvidas
+      // (ou via fluxo manual depois).
+      if (newStatus === "aprovado_captura") {
+        c.functions.invoke("damage-capture", { body: { damage_id: d.id } })
+          .then(function (rr) {
+            var data = rr && rr.data;
+            if (data && data.ok) {
+              showNotice("Captura realizada: " + brl(finalAmount) + ". E-mail enviado ao cliente.", "ok");
+            } else {
+              var msg = (rr && rr.error && rr.error.message) ||
+                (data && data.error) || "Captura no Stripe pendente — verifique o log.";
+              showNotice("Decisão salva, mas houve problema na captura: " + msg, "warn");
+            }
+            loadDamages();
+          }).catch(function (e) {
+            console.error("damage-capture ex:", e);
+            showNotice("Decisão salva, mas não consegui invocar a captura. Tente de novo.", "warn");
+            loadDamages();
+          });
+      } else {
+        showNotice("Decisão registrada: liberar sem cobrança.", "ok");
+        loadDamages();
+      }
+    }).catch(function () {
+      errEl.textContent = "Erro de rede ao salvar.";
+      errEl.hidden = false;
+      capBtn.disabled = false; relBtn.disabled = false;
+      capBtn.textContent = "Aprovar captura";
+      relBtn.textContent = "Liberar sem cobrança";
+    });
   }
   function caseCard(cs) {
     var card = document.createElement("div");
