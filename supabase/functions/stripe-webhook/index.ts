@@ -16,6 +16,7 @@
 // ====================================================================
 import Stripe from "https://esm.sh/stripe@17.5.0?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendEmail, emailMensalidade, emailCaucao, fmtBRL } from "../_shared/email.ts";
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Método não permitido.", { status: 405 });
@@ -53,114 +54,33 @@ Deno.serve(async (req) => {
     return admin.from("payments").update(patch).eq("stripe_payment_intent_id", intentId);
   }
 
-  // -------- e-mail via Resend (silencioso em erro / sem chave) ---------
-  async function sendEmail(to: string, subject: string, html: string, text: string) {
-    const apiKey = Deno.env.get("RESEND_API_KEY");
-    if (!apiKey || !to) return;
-    const from = Deno.env.get("EMAIL_FROM") ||
-      "Nomade Drive Brasil <onboarding@resend.dev>";
+  // descobre o veículo da reserva (best-effort) para enriquecer o e-mail
+  async function fetchVehLabel(bookingId: string | undefined): Promise<string> {
+    if (!bookingId) return "Reserva Nomade Drive";
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + apiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ from, to, subject, html, text }),
-      });
-    } catch {
-      /* não falha o webhook por causa de e-mail */
-    }
-  }
-  function fmtBRL(cents: number | null | undefined): string {
-    const v = (cents ?? 0) / 100;
-    return v.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2, maximumFractionDigits: 2,
-    });
-  }
-  function emailMensalidade(valor: string, veiculo: string): { html: string; text: string } {
-    const html =
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>' +
-      '<body style="margin:0;padding:0;background:#f4f7f5;font-family:Arial,sans-serif;color:#14201b;">' +
-      '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 0;"><tr><td align="center">' +
-      '<table cellpadding="0" cellspacing="0" width="560" style="background:#fff;border-radius:12px;overflow:hidden;max-width:560px;">' +
-      '<tr><td style="background:linear-gradient(135deg,#145f3e,#2da473);padding:24px;color:#fff;">' +
-      '<h1 style="margin:0;font-size:22px;">Mensalidade confirmada</h1>' +
-      '<p style="margin:6px 0 0;opacity:0.92;font-size:14px;">Nomade Drive Brasil</p>' +
-      '</td></tr>' +
-      '<tr><td style="padding:24px;font-size:14.5px;line-height:1.6;">' +
-      '<p>Olá!</p><p>Recebemos o pagamento da sua mensalidade. Tudo confirmado.</p>' +
-      '<table cellpadding="8" cellspacing="0" style="background:#f4f7f5;border-radius:8px;margin:14px 0;width:100%;">' +
-      '<tr><td style="font-weight:600;width:90px;">Valor</td><td>R$ ' + valor + '</td></tr>' +
-      '<tr><td style="font-weight:600;">Reserva</td><td>' + veiculo + '</td></tr>' +
-      '</table>' +
-      '<p><a href="https://nomadedrive.com.br/dashboard-cliente.html" style="display:inline-block;background:#1a7a4f;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;">Acessar meu painel</a></p>' +
-      '<p style="color:#5b6b63;font-size:12.5px;margin-top:20px;">Mensagem automática — em caso de dúvida, fale com nossa equipe pelo site.</p>' +
-      '</td></tr></table></td></tr></table></body></html>';
-    const text =
-      "Mensalidade confirmada — Nomade Drive Brasil\n\n" +
-      "Recebemos o pagamento da sua mensalidade.\n\n" +
-      "Valor:   R$ " + valor + "\n" +
-      "Reserva: " + veiculo + "\n\n" +
-      "Acesse seu painel: https://nomadedrive.com.br/dashboard-cliente.html\n\n" +
-      "Mensagem automática.";
-    return { html, text };
-  }
-  function emailCaucao(valor: string, veiculo: string): { html: string; text: string } {
-    const html =
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>' +
-      '<body style="margin:0;padding:0;background:#f4f7f5;font-family:Arial,sans-serif;color:#14201b;">' +
-      '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 0;"><tr><td align="center">' +
-      '<table cellpadding="0" cellspacing="0" width="560" style="background:#fff;border-radius:12px;overflow:hidden;max-width:560px;">' +
-      '<tr><td style="background:linear-gradient(135deg,#0d4a2f,#4ba37e);padding:24px;color:#fff;">' +
-      '<h1 style="margin:0;font-size:22px;">Caução autorizada</h1>' +
-      '<p style="margin:6px 0 0;opacity:0.92;font-size:14px;">Nomade Drive Brasil</p>' +
-      '</td></tr>' +
-      '<tr><td style="padding:24px;font-size:14.5px;line-height:1.6;">' +
-      '<p>Olá!</p>' +
-      '<p>A caução da sua locação foi <strong>autorizada</strong> no seu cartão — o valor fica reservado, sem cobrança imediata. Só é capturado em caso de dano, multa ou outro custo previsto em contrato.</p>' +
-      '<table cellpadding="8" cellspacing="0" style="background:#f4f7f5;border-radius:8px;margin:14px 0;width:100%;">' +
-      '<tr><td style="font-weight:600;width:90px;">Caução</td><td>R$ ' + valor + '</td></tr>' +
-      '<tr><td style="font-weight:600;">Reserva</td><td>' + veiculo + '</td></tr>' +
-      '</table>' +
-      '<p><a href="https://nomadedrive.com.br/dashboard-cliente.html" style="display:inline-block;background:#1a7a4f;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;">Acessar meu painel</a></p>' +
-      '<p style="color:#5b6b63;font-size:12.5px;margin-top:20px;">Mensagem automática.</p>' +
-      '</td></tr></table></td></tr></table></body></html>';
-    const text =
-      "Caução autorizada — Nomade Drive Brasil\n\n" +
-      "A caução da sua locação foi autorizada no cartão. Valor reservado, sem cobrança imediata.\n\n" +
-      "Valor:   R$ " + valor + "\n" +
-      "Reserva: " + veiculo + "\n\n" +
-      "Acesse seu painel: https://nomadedrive.com.br/dashboard-cliente.html";
-    return { html, text };
+      const { data } = await admin.from("bookings")
+        .select("vehicles(make,model,year_model)")
+        .eq("id", bookingId).maybeSingle();
+      const v: any = data?.vehicles;
+      if (!v) return "Reserva Nomade Drive";
+      let label = [v.make, v.model].filter(Boolean).join(" ") || "Veículo da reserva";
+      if (v.year_model) label += " (" + v.year_model + ")";
+      return label;
+    } catch { return "Reserva Nomade Drive"; }
   }
 
   async function notifyCheckoutCompleted(s: Stripe.Checkout.Session) {
-    const email = s.customer_details?.email || s.customer_email;
-    if (!email) return;
-    // descobre veículo da reserva (best-effort)
-    let veh = "Reserva Nomade Drive";
-    try {
-      const bookingId = s.metadata?.booking_id;
-      if (bookingId) {
-        const { data } = await admin.from("bookings")
-          .select("vehicles(make,model,year_model)")
-          .eq("id", bookingId)
-          .maybeSingle();
-        const v: any = data?.vehicles;
-        if (v) {
-          veh = [v.make, v.model].filter(Boolean).join(" ") || veh;
-          if (v.year_model) veh += " (" + v.year_model + ")";
-        }
-      }
-    } catch { /* mantém veh padrão */ }
-    const valor = fmtBRL(s.amount_total ?? null);
+    const to = s.customer_details?.email || s.customer_email;
+    if (!to) return;
+    const veh = await fetchVehLabel(s.metadata?.booking_id ?? undefined);
+    const valor = fmtBRL(s.amount_total ?? null, true);
     const isDeposit = s.metadata?.kind === "caucao";
-    const t = isDeposit ? emailCaucao(valor, veh) : emailMensalidade(valor, veh);
-    const subject = isDeposit
-      ? "Caução autorizada — Nomade Drive Brasil"
-      : "Mensalidade confirmada — Nomade Drive Brasil";
-    await sendEmail(email, subject, t.html, t.text);
+    const tpl = isDeposit
+      ? emailCaucao({ valor, veiculo: veh })
+      : emailMensalidade({ valor, veiculo: veh });
+    const result = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+    if (!result.ok) console.error("Falha ao enviar e-mail (webhook):", result.error);
+    else console.log("E-mail enviado (webhook):", result.id);
   }
 
   try {
@@ -170,14 +90,19 @@ Deno.serve(async (req) => {
         const pi = typeof s.payment_intent === "string"
           ? s.payment_intent
           : s.payment_intent?.id ?? null;
-        // caução usa captura manual -> "autorizado"; mensalidade -> "pago"
         const isDeposit = s.metadata?.kind === "caucao";
-        await patchBySession(s.id, {
-          status: isDeposit ? "autorizado" : "pago",
-          stripe_payment_intent_id: pi,
-        });
-        // notifica o cliente por e-mail (best-effort, não bloqueia o webhook)
-        await notifyCheckoutCompleted(s);
+        const newStatus = isDeposit ? "autorizado" : "pago";
+        // Update SÓ se ainda estiver 'pendente' — assim apenas o primeiro
+        // (webhook ou confirm) que processar dispara o e-mail. Sem
+        // duplicidade quando ambos rodam.
+        const { data: changed } = await admin.from("payments")
+          .update({ status: newStatus, stripe_payment_intent_id: pi })
+          .eq("stripe_checkout_session_id", s.id)
+          .eq("status", "pendente")
+          .select("id");
+        if (changed && changed.length > 0) {
+          await notifyCheckoutCompleted(s);
+        }
         break;
       }
       case "checkout.session.expired": {

@@ -26,6 +26,7 @@
 // ====================================================================
 import Stripe from "https://esm.sh/stripe@17.5.0?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendEmail, emailMensalidade, emailCaucao, fmtBRL } from "../_shared/email.ts";
 
 const SITE = "https://nomadedrive.com.br";
 
@@ -109,6 +110,15 @@ Deno.serve(async (req) => {
         : session.payment_intent?.id;
       if (pi) patch.stripe_payment_intent_id = pi;
 
+      // Lê o status ATUAL antes de atualizar — assim sabemos se a
+      // transição "pendente → pago/autorizado" foi feita aqui ou
+      // se o webhook já tinha resolvido antes. Só envia e-mail uma vez.
+      const { data: before } = await admin.from("payments")
+        .select("id, status")
+        .eq("stripe_checkout_session_id", sessionId)
+        .maybeSingle();
+      const wasPendente = !!(before && before.status === "pendente");
+
       // 1ª tentativa: casa a linha exatamente pela sessão da Stripe
       let { data: updated } = await admin
         .from("payments")
@@ -119,6 +129,7 @@ Deno.serve(async (req) => {
       // fallback: a linha pendente pode ter sido reaproveitada por uma
       // sessão mais nova (clique duplo). Casa pela reserva + tipo ainda
       // pendente — assim o pagamento concluído nunca fica preso pendente.
+      let wasPendenteFallback = false;
       if ((!updated || !updated.length) && session.metadata?.booking_id) {
         patch.stripe_checkout_session_id = sessionId;
         const r2 = await admin
@@ -129,6 +140,7 @@ Deno.serve(async (req) => {
           .eq("status", "pendente")
           .select("id, kind, status");
         updated = r2.data;
+        wasPendenteFallback = !!(updated && updated.length);
       }
 
       const row = updated && updated[0];
@@ -141,6 +153,36 @@ Deno.serve(async (req) => {
             booking_id: session.metadata?.booking_id,
             kind,
           }));
+      }
+
+      // E-mail: dispara só quando ESTA chamada foi a que transicionou
+      // o status (pendente → pago/autorizado). Dedup com o webhook.
+      const transicionou = (wasPendente && row) || wasPendenteFallback;
+      if (transicionou) {
+        const to = session.customer_details?.email || session.customer_email;
+        if (to) {
+          let veh = "Reserva Nomade Drive";
+          try {
+            const bId = session.metadata?.booking_id;
+            if (bId) {
+              const { data: bk } = await admin.from("bookings")
+                .select("vehicles(make,model,year_model)")
+                .eq("id", bId).maybeSingle();
+              const v: any = bk?.vehicles;
+              if (v) {
+                veh = [v.make, v.model].filter(Boolean).join(" ") || veh;
+                if (v.year_model) veh += " (" + v.year_model + ")";
+              }
+            }
+          } catch { /* keep default */ }
+          const valor = fmtBRL(session.amount_total ?? null, true);
+          const tpl = isDeposit
+            ? emailCaucao({ valor, veiculo: veh })
+            : emailMensalidade({ valor, veiculo: veh });
+          const r = await sendEmail(to, tpl.subject, tpl.html, tpl.text);
+          if (!r.ok) console.error("E-mail confirm:", r.error);
+          else console.log("E-mail confirm enviado:", r.id);
+        }
       }
 
       return json({
