@@ -545,6 +545,26 @@
           c.from("vehicles").update({ mileage: i.mileage }).eq("id", i.bookings.vehicle_id)
             .then(function () { loadMaintenance(); }).catch(function () {});
         }
+        // Fase 22a: check-out aprovado → fecha a locação (cancela
+        // subscription + libera caução + e-mail "Locação encerrada").
+        if (newStatus === "aprovado" && i.kind === "checkout" && i.booking_id) {
+          c.functions.invoke("close-rental", {
+            body: { booking_id: i.booking_id }
+          }).then(function (rr) {
+            var d = rr && rr.data;
+            if (d && d.ok) {
+              var parts = [];
+              if (d.actions && d.actions.subscription_canceled) parts.push("assinatura cancelada");
+              if (d.actions && d.actions.caucao_released) parts.push("caução liberada");
+              if (d.actions && d.actions.email_sent) parts.push("e-mail enviado ao cliente");
+              if (parts.length) {
+                showNotice("Locação encerrada: " + parts.join(", ") + ".", "ok");
+              }
+            } else if (rr && rr.error) {
+              console.error("close-rental:", rr.error);
+            }
+          }).catch(function (e) { console.error("close-rental ex:", e); });
+        }
         loadOwnerInspections();
       }).catch(function () { btn.disabled = false; });
     });
