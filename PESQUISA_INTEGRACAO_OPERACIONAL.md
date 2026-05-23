@@ -1,8 +1,11 @@
-# Pesquisa de Integração — Multas + Pedágio (C6 + C7)
+# Pesquisa de Integração — Multas + Pedágio + Rastreamento (C6 + C7 + C8)
 
-**Data:** 2026-05-23
+**Data:** 2026-05-23 (atualizado com C8)
 **Para:** Nomade Drive Brasil — Uberlândia/MG
-**Objetivo:** levantar APIs disponíveis em 2026 para consulta automatizada de (1) multas de trânsito e (2) pedágios pagos durante locações.
+**Objetivo:** levantar APIs disponíveis em 2026 para 3 integrações operacionais:
+1. Consulta automatizada de multas
+2. Controle/extrato de pedágios
+3. Rastreamento GPS da frota
 
 ---
 
@@ -14,10 +17,16 @@ Para uma locadora pequena/média em Uberlândia operando ~10-50 veículos:
 |---|---|---|---|
 | **C6 — Multas** | **Infosimples (API SENATRAN/Infrações)** + sandbox da Celcoin como backup | R$ 100/mês mínimo + R$ 0,06–0,20/consulta | API pública, R$ 100 de crédito de teste, contrato direto, sem certificado digital, abrange Brasil todo via SENATRAN |
 | **C7 — Pedágio** | **Veloe Go (Edenred)** ou **ConectCar Frotas** | R$ 5–10/tag/mês + uso real | APIs disponíveis pra parceiros via portal de developer. Tag física no veículo, consumo em tempo real, relatórios por placa |
+| **C8 — Rastreamento** | **SmartGPS** (preço baixo + API REST aberta) — alternativa: **Cobli** (mais completo, preço sob consulta) | R$ 2,20–3,20/dispositivo/mês + hardware (~R$ 200–400/un.) | SmartGPS tem preço público e API REST documentada. Cobli tem 80+ endpoints mas preço opaco. |
 
 **Estratégia recomendada para arrancada:**
 1. **Multas:** abrir conta Infosimples hoje (gratuita, R$ 100 crédito), integrar consulta na rota `/admin#frota`. Volume baixo = sem custo nos primeiros meses.
 2. **Pedágio:** contatar comercial Veloe Go ou ConectCar pra entender condições de parceiro pequena. Como exige tag física, é decisão de operação (toda frota Nomade Drive vai equipar tag?), não só técnica.
+3. **Rastreamento:** começar com SmartGPS por preço baixo e API documentada. Se precisar gestão completa (vídeo, telemetria, manutenção), avaliar Cobli depois.
+
+**Economia combinada se contratar TUDO num único provedor:**
+- Cobli/Veloe Go fazem TUDO (rastreamento + pedágio + parte de fleet management): pode dar desconto vs. contratar 3 fornecedores diferentes
+- Pra Nomade Drive pequena, separar é mais barato no MVP. Conforme cresce (20+ veículos), pacote único pode compensar.
 
 ---
 
@@ -182,9 +191,121 @@ Antes de qualquer integração, definir:
 
 ---
 
-## 🎯 Recomendação consolidada
+## C8 — APIs de Rastreamento GPS
 
-### Prioridade 1 — Multas (C6)
+### Por que rastreamento importa pra Nomade Drive
+
+1. **Recuperação em caso de roubo/furto** — proteção patrimonial do proprietário
+2. **Auditoria de quilometragem** — confirma se km declarado no check-out bate com realidade
+3. **Cerca eletrônica (geofencing)** — alerta se cliente cruza fronteira do contrato (ex: levou veículo pra outro estado quando contrato é só MG)
+4. **Suporte em emergência** — localizar veículo para socorro
+5. **Privacidade do locatário** — NUNCA exibir localização em tempo real ao proprietário, só em casos de emergência/segurança previstos em contrato
+
+### Comparativo
+
+| Provedor | Hardware | API REST | Cobertura | Preço/un./mês | Recomendação |
+|---|---|---|---|---|---|
+| **SmartGPS** | OBD-II ou hardwired | ✅ Documentada + webhooks + WebSocket | Nacional | R$ 2,20–3,20 + tag física (~R$ 200–400 única) | ⭐⭐⭐⭐⭐ Melhor pra começar |
+| **Cobli** | Próprio (vários modelos) | ✅ 80+ endpoints REST | Nacional + LATAM | Sob consulta (estimado R$ 30–60/un./mês) | ⭐⭐⭐⭐ Mais completo, opaco em preço |
+| **Sascar (Michelin)** | Próprio | ⚠️ API pra clientes Enterprise | Nacional | Sob consulta (alto — voltado a grandes frotas) | ⭐⭐⭐ Overkill p/ Nomade Drive |
+| **Maxtrack** | Próprio | ⚠️ Comercial | Nacional | Sob consulta | ⭐⭐⭐ 3M veículos atendidos, mas voltado a transporte de carga |
+| **OnixSat** | Próprio | ⚠️ Comercial | Nacional (forte em transporte) | Sob consulta | ⭐⭐⭐ Foco em logística cargo |
+| **Autotrac** | Satelital | ⚠️ Limitada | Nacional | Sob consulta | ⭐⭐ Tradicional, satelital cara |
+| **Seu Rastreio** | Vários | ✅ Docs pública | Nacional | Sob consulta | ⭐⭐⭐ Alternativa low-cost |
+| **RotaExata** | Vários | ✅ Documentação aberta | Nacional | Sob consulta | ⭐⭐⭐ Foco em pequenas/médias |
+
+### Detalhamento das opções
+
+#### 1. SmartGPS ⭐ RECOMENDADO PRA COMEÇAR
+- **URL:** [smartgps.com.br](https://www.smartgps.com.br/)
+- **Hardware:** dispositivo "Smart Tag" pequeno, instalação simples (OBD-II) ou hardwired (precisa eletricista)
+- **Preço:**
+  - 1-100 dispositivos: **R$ 3,20/un./mês**
+  - 101-2.000: R$ 2,40/un./mês
+  - 2.001+: R$ 2,20/un./mês
+  - **Hardware:** ~R$ 200–400 por unidade (compra única)
+- **API:** REST documentada + webhooks + WebSocket + SSE em tempo real
+- **Funcionalidades:** posição em tempo real, ignição on/off, velocidade, telemetria, alertas, vídeo opcional (câmeras), ADAS/DMS (alerta sonolência)
+- **White-label:** disponível (customiza logo, domínio, e-mail, app mobile)
+- **Sem fidelidade:** mensal, pode cancelar
+- **Casos de uso:** dezenas de locadoras pequenas e médias no Brasil
+- **Prós:** preço público (~R$ 32/mês pra 10 veículos), API REST documentada, white-label, sem contrato longo
+- **Contras:** depende da qualidade do hardware (vale validar com 1 dispositivo teste); ADAS/vídeo são extras pagos
+- **Ação:** falar com contato@smartgps.com.br pra demo + cotação com 5-10 dispositivos teste
+
+#### 2. Cobli ⭐ ALTERNATIVA MAIS COMPLETA
+- **URL:** [cobli.co](https://www.cobli.co/) | docs em [docs.cobli.co](https://docs.cobli.co/)
+- **Hardware:** dispositivo próprio + opção de câmera DVR
+- **Preço:** **opaco** — precisa preencher formulário no site. Estimativa de mercado: R$ 30–60/dispositivo/mês (inclui plataforma completa de gestão)
+- **API:** **80+ endpoints REST** documentados (`docs.cobli.co`)
+  - Posição em tempo real
+  - Históricos de trajeto
+  - Eventos de segurança (cerca eletrônica, excesso velocidade)
+  - Transações de combustível
+  - Manutenção, checklists, motoristas, veículos, grupos
+  - Integração com cartões combustível
+- **Auth:** API key gerada no painel
+- **Funcionalidades além de tracking:** combustível, manutenção, motoristas, gestão completa de frota
+- **Prós:** plataforma mais robusta do mercado, API rica, suporte 24/7, integrações com TMS/ERP
+- **Contras:** preço alto e opaco, complexidade pode ser overkill pra Nomade Drive (5-20 veículos no início)
+- **Quando faz sentido:** quando frota chegar a 30+ veículos OU quando quiser CONSOLIDAR fornecedores (rastreamento + pedágio + combustível em um só)
+
+#### 3. Sascar (Michelin) / Maxtrack / OnixSat
+- **Volta a transporte de carga** — grandes frotas, contratos enterprise
+- **Preço alto, contrato longo**
+- **Não recomendado** pra MVP Nomade Drive
+
+#### 4. Alternativas low-cost (Seu Rastreio, RotaExata)
+- **Preços não públicos** mas competitivos com SmartGPS
+- **Documentação aberta**
+- **Foco em pequenas locadoras**
+- **Quando faz sentido:** se SmartGPS não atender, são plano B
+
+### Considerações regulatórias e privacidade (LGPD)
+
+⚠️ **Rastreamento GPS em locação envolve dados pessoais sensíveis (localização):**
+
+1. **Contrato deve ser explícito** sobre uso do rastreador, finalidade (segurança/recuperação), prazo de retenção dos dados
+2. **Cliente locatário precisa CONSENTIR** — não pode ser oculto. Modelo da Movida/Localiza: cliente assina aceite na retirada
+3. **Localização exata em tempo real NÃO exibida ao proprietário** por padrão — só em casos de roubo/furto ou inadimplência prolongada (ver `dashboard-proprietario.html#rastreamento` que já tem essa policy escrita)
+4. **Dados devem ser apagados/anonimizados** após X meses (definir no contrato + política de privacidade)
+5. **Termos.html já cobre isso** parcialmente — vale revisar quando integrar pra confirmar bate
+
+### Decisão estratégica antes de codar
+Antes de qualquer integração, definir:
+
+1. **Toda frota Nomade Drive vai ter rastreador?**
+   - Sim → vai pra SmartGPS ou Cobli, integração API faz sentido
+   - Não (opcional/por contrato) → cliente assina aceite caso a caso
+
+2. **Modelo de instalação**
+   - OBD-II (plug & play): fácil, cliente pode até remover
+   - Hardwired (oculto): preciso eletricista, mais seguro mas custa mais
+   - **Recomendado pra locação:** hardwired + oculto (cliente não vê, segurança real)
+
+3. **Volume e ROI**
+   - 1-10 carros: SmartGPS no plano de menor volume = ~R$ 32/mês pra 10 unidades. ROI claro se recuperar 1 carro roubado.
+   - 10-30 carros: ~R$ 96/mês na SmartGPS. Cobli ainda overkill.
+   - 30+ carros: avaliar Cobli (consolidação com pedágio/combustível pode compensar)
+
+### Recomendação para C8 — Plano de ação
+
+1. **Decidir antes:** modelo operacional (todos os veículos? hardware oculto?)
+2. **Se for SmartGPS:**
+   - Contatar **contato@smartgps.com.br** ou WhatsApp via site
+   - Solicitar demo + cotação com 5 dispositivos teste
+   - Validar latência da API REST + qualidade do hardware com 1 veículo da frota Nomade Drive antes de escalar
+3. **Integração técnica:**
+   - Criar Edge Function `consulta-rastreamento` que recebe `vehicle_id` + período
+   - Chamar API SmartGPS pra buscar posições / eventos do período
+   - Salvar trajeto resumido (sem todos os pontos — só inicio/fim + km total) em tabela nova `vehicle_tracking_logs`
+   - **NÃO expor posição em tempo real ao proprietário** (só admin + proteção em caso de ocorrência)
+   - Cerca eletrônica via webhook (alerta quando veículo sai de geofence definido)
+4. **Termos contratuais:**
+   - Atualizar termos.html §3 (Regras de Locação) com cláusula de aceite de rastreamento
+   - Adicionar ao onboarding-cliente.html um checkbox "Aceito que o veículo terá rastreador GPS conforme política de privacidade"
+
+
 **AÇÃO:** abrir conta Infosimples hoje, integrar Edge Function em ~1 dia.
 **INVESTIMENTO:** R$ 100/mês fixo. Ponto de entrada barato e reversível.
 
@@ -196,6 +317,7 @@ Antes de qualquer integração, definir:
 ### Prazo realista de integração
 - **Multas (Infosimples):** ~1 dia (criar Edge Function + UI no admin)
 - **Pedágio (Veloe/ConectCar):** ~3-5 dias APÓS contrato comercial + documentação completa da API
+- **Rastreamento (SmartGPS):** ~2 dias APÓS cotação fechada + 1 dispositivo de teste validado
 
 ---
 
@@ -223,11 +345,15 @@ Vale enquanto frota for <10 veículos. Acima, automatizar paga rápido.
 ---
 
 ## 📚 Fontes consultadas
+
+### C6 — Multas
 - [Infosimples — API Senatran Infrações](https://infosimples.com/consultas/senatran-infracoes/)
 - [Infosimples — Preços](https://infosimples.com/consultas/precos/)
 - [Celcoin Developers — API Auto](https://developers.celcoin.com.br/docs/sobre-a-api-de-auto)
 - [SERPRO — Consulta Online Senatran](https://loja.serpro.gov.br/consulta-online-senatran/product/consultasenatran)
 - [WSDenatran — Catálogo gov.br](https://www.gov.br/conecta/catalogo/apis/wsdenatran)
+
+### C7 — Pedágio
 - [Veloe — Portal Developer](https://portaldeveloper.veloe.com.br/)
 - [Veloe Go — Gestão de Frota](https://veloe.com.br/veloego/gestao-de-frota)
 - [ConectCar Frotas](https://lp.conectcar.com/frotas)
@@ -236,14 +362,41 @@ Vale enquanto frota for <10 veículos. Acima, automatizar paga rápido.
 - [AILOG — API de Pedágio](https://ailog.com.br/solucoes/api-de-pedagio/)
 - [Exame — Veloe fatura R$ 5,4 bi](https://exame.com/negocios/a-veloe-ja-fatura-mais-de-r-5-bilhoes-por-ano-e-a-boa-parte-nao-e-com-pedagio-nem-estacionamento/)
 
+### C8 — Rastreamento
+- [SmartGPS — Plataforma white-label](https://www.smartgps.com.br/)
+- [Cobli — Plataforma de gestão de frotas](https://www.cobli.co/)
+- [Cobli — API primeiros passos](https://suporte.cobli.co/api-cobli-primeiros-passos)
+- [Cobli — Preços (formulário)](https://suporte.cobli.co/precos)
+- [Cobli — API & Integrações](https://www.cobli.co/integracoes/api-webhooks/)
+- [Sascar (Michelin) — Connected Fleet](https://connectedfleet.michelin.com/solutions/vehicle-tracking/)
+- [Maxtrack](https://www.maxtrack.com.br/)
+- [OnixSat](https://www.onixsat.com.br/)
+- [Autotrac](https://www.autotrac.com.br/)
+- [Seu Rastreio — API docs](https://seurastreio.com.br/api-docs)
+- [RotaExata — Integrações por API](https://www.rotaexata.com.br/blog/integracao-de-sistemas-por-api/)
+- [Paranátrack — Sascar vs Omnilink 2026](https://paranatrack.com.br/blog/sascar-vs-omnilink-controle-frotistas-2026)
+
 ---
 
 ## 🛡️ Decisões pendentes (suas)
 
+### C6 — Multas
 1. ☐ **Abre conta Infosimples hoje?** (R$ 100 crédito grátis, sem cartão)
-2. ☐ **Toda frota Nomade Drive vai ter tag de pedágio?** (Sim → Veloe/ConectCar; Não → modelo manual)
-3. ☐ **Cobertura MG é prioridade?** (Se sim, validar antes de fechar com Celcoin)
-4. ☐ **Volume estimado de check-outs/mês?** (define modelo de cobrança da API de multas)
+2. ☐ **Cobertura MG é prioridade?** (Se sim, validar antes de fechar com Celcoin)
+3. ☐ **Volume estimado de check-outs/mês?** (define modelo de cobrança da API de multas)
+
+### C7 — Pedágio
+4. ☐ **Toda frota Nomade Drive vai ter tag de pedágio?** (Sim → Veloe/ConectCar; Não → modelo manual via cláusula contratual)
+5. ☐ **Preferência: Veloe Go (pacote completo) ou ConectCar (sem mensalidade da tag, só uso)?**
+
+### C8 — Rastreamento
+6. ☐ **Toda frota Nomade Drive vai ter rastreador?** (Sim → SmartGPS recomendado; Não → opcional por contrato)
+7. ☐ **Hardware: OBD-II (plug & play, cliente vê) ou hardwired oculto (eletricista, mais seguro)?**
+8. ☐ **Aceita atualizar contrato/termos pra LGPD do rastreamento?** (cláusula de aceite explícito do cliente)
+9. ☐ **Quem vai instalar o hardware?** (rede própria, oficina parceira, ou fornecedor inclui?)
+
+### Consolidação
+10. ☐ **Prefere consolidar fornecedores?** (1 plataforma fazendo rastreamento + pedágio + manutenção, ex: Cobli ou Veloe Go) ou **manter separado** (mais barato no MVP)?
 
 Quando você decidir esses 4 pontos, posso começar a integração técnica em ~1-2 dias. Sem decisão, não vale a pena escrever código que depende de API que pode não ser usada.
 
