@@ -63,6 +63,7 @@
       </aside>
 
       <div class="dash-main">
+        <div class="dash-todos" id="dashTodos" hidden></div>
         <div class="dash-topline">
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
@@ -268,6 +269,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="statuses.js"></script>
 <script src="script.js"></script>
 <script src="payouts.js"></script>
 <script>
@@ -319,16 +321,43 @@
     showNotice("Pré-visualização: configure o supabase-config.js para carregar os seus dados reais.", "warn");
   }
 
+  var todosState = {
+    perfilEmAnalise: false,
+    veiculosEmAnalise: 0,
+    inspecoesAguardando: 0,
+    reservasNovas: 0
+  };
+  function refreshTodos() {
+    if (!window.ndStatus) return;
+    window.ndStatus.renderTodos("dashTodos", [
+      { count: todosState.perfilEmAnalise ? 1 : 0,
+        label: "seu perfil de proprietário ainda está em análise pela equipe Nomade Drive.",
+        tip: "Análise leva 1 a 3 dias úteis. Veículos podem ser cadastrados, mas a locação só libera após perfil aprovado." },
+      { count: todosState.veiculosEmAnalise,
+        label: "veículo(s) cadastrado(s) ainda em análise — aguardando aprovação para entrar na frota.",
+        link: "#veiculos", linkLabel: "ver veículos",
+        tip: "A análise inclui checklist técnico de oficina credenciada e verificação documental." },
+      { count: todosState.inspecoesAguardando,
+        label: "check-in/check-out aguardando a sua aprovação.",
+        link: "#checklist", linkLabel: "aprovar",
+        tip: "Aprovar o check-in libera o uso do veículo pelo cliente; aprovar o check-out encerra a etapa." }
+    ]);
+  }
+
   a.requireAuth().then(function (s) {
     if (!s) return;
     a.getProfile().then(function (p) {
-      if (!p) return;
+      if (!p) { refreshTodos(); return; }
       var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
       document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
       var st = document.getElementById("dashStatus");
       st.textContent = "Perfil: " + a.statusLabel(p.verification_status);
       st.className = "dash-pill dash-pill--" + pillKind(p.verification_status);
+      if (window.ndStatus) window.ndStatus.applyTo(st, p.verification_status);
       document.getElementById("kpiStatus").textContent = a.statusLabel(p.verification_status);
+      todosState.perfilEmAnalise = (p.verification_status === "em_analise" ||
+        p.verification_status === "documentos_pendentes");
+      refreshTodos();
       if (p.main_role && p.main_role !== PAGE_ROLE) {
         showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
           ". Este é o painel do proprietário.", "warn");
@@ -342,6 +371,10 @@
           return v.status === "aprovado" || v.status === "aprovado_com_ressalvas";
         }).length;
         document.getElementById("kpiAprov").textContent = aprov;
+        todosState.veiculosEmAnalise = rows.filter(function (v) {
+          return v.status === "em_analise" || v.status === "documentos_pendentes";
+        }).length;
+        refreshTodos();
         if (!rows.length) return;
         document.getElementById("veicEmpty").hidden = true;
         var list = document.getElementById("veicList");
@@ -444,6 +477,12 @@
       .order("created_at", { ascending: false }).then(function (r) {
         var rows = (r && r.data) || [];
         list.innerHTML = "";
+        if (typeof todosState !== "undefined") {
+          todosState.inspecoesAguardando = rows.filter(function (i) {
+            return i.status !== "aprovado" && i.status !== "recusado";
+          }).length;
+          refreshTodos();
+        }
         if (!rows.length) { if (empty) empty.hidden = false; return; }
         if (empty) empty.hidden = true;
         rows.forEach(function (i) { list.appendChild(ownerInspCard(i)); });

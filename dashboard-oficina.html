@@ -57,6 +57,7 @@
       </aside>
 
       <div class="dash-main">
+        <div class="dash-todos" id="dashTodos" hidden></div>
         <div class="dash-topline">
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
@@ -114,6 +115,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="statuses.js"></script>
 <script src="script.js"></script>
 <script src="payouts.js"></script>
 <script>
@@ -198,24 +200,45 @@
       }
     });
 
+    var todosState = { cadastroPendente: false, vistoriasPendentes: 0 };
+    function refreshTodos() {
+      if (!window.ndStatus) return;
+      window.ndStatus.renderTodos("dashTodos", [
+        { count: todosState.cadastroPendente ? 1 : 0,
+          label: "cadastro da oficina ainda não enviado — sem cadastro completo você não recebe vistorias.",
+          link: "onboarding-oficina.html", linkLabel: "concluir cadastro",
+          tip: "Você precisa concluir o cadastro da oficina antes de aparecer na fila de vistorias." },
+        { count: todosState.vistoriasPendentes,
+          label: "vistoria(s) na sua fila — checklist técnico precisa ser emitido.",
+          link: "#fila", linkLabel: "abrir fila",
+          tip: "Cada vistoria recebe um laudo técnico (aprovado, aprovado com ressalvas, reprovado ou pendente)." }
+      ]);
+    }
+
     c.from("workshops").select("*").eq("user_id", s.user.id).maybeSingle().then(function (r) {
       var w = r && r.data;
       var st = document.getElementById("dashStatus");
       if (!w) {
         st.textContent = "Oficina não cadastrada";
         st.className = "dash-pill dash-pill--warn";
+        if (window.ndStatus) window.ndStatus.applyTo(st, null,
+          "Você ainda não enviou o cadastro da oficina. Sem o cadastro, vistorias não chegam até você.");
         document.getElementById("kpiCred").textContent = "Pendente";
         document.getElementById("oficinaInfo").textContent =
           "Você ainda não enviou o cadastro da oficina. Conclua o credenciamento para receber vistorias.";
+        todosState.cadastroPendente = true;
+        refreshTodos();
         return;
       }
       st.textContent = a.statusLabel(w.status);
       st.className = "dash-pill dash-pill--" + pillKind(w.status);
+      if (window.ndStatus) window.ndStatus.applyTo(st, w.status);
       document.getElementById("kpiCred").textContent = a.statusLabel(w.status);
       document.getElementById("oficinaInfo").textContent =
         (w.business_name || "Sua oficina") + " — " + (w.city || "") +
         ". Credenciamento: " + a.statusLabel(w.status) + ".";
-    }).catch(function () {});
+      refreshTodos();
+    }).catch(function () { refreshTodos(); });
 
     c.from("vehicle_inspections").select("*, vehicles(make,model,year_model)")
       .order("created_at", { ascending: false }).then(function (r) {
@@ -229,6 +252,8 @@
         }).length;
         document.getElementById("kpiPend").textContent = pend;
         document.getElementById("kpiAprov").textContent = aprov;
+        todosState.vistoriasPendentes = pend;
+        refreshTodos();
         if (!rows.length) return;
         document.getElementById("inspEmpty").hidden = true;
         var list = document.getElementById("inspList");

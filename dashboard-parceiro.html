@@ -58,6 +58,7 @@
       </aside>
 
       <div class="dash-main">
+        <div class="dash-todos" id="dashTodos" hidden></div>
         <div class="dash-topline">
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
@@ -120,6 +121,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="statuses.js"></script>
 <script src="script.js"></script>
 <script src="payouts.js"></script>
 <script>
@@ -162,13 +164,31 @@
     if (!s) return;
     document.getElementById("refCode").textContent =
       "ND-" + String(s.user.id).replace(/-/g, "").slice(0, 6).toUpperCase();
+    var todosState = { perfilEmAnalise: false, indicacoesEmAnalise: 0 };
+    function refreshTodos() {
+      if (!window.ndStatus) return;
+      window.ndStatus.renderTodos("dashTodos", [
+        { count: todosState.perfilEmAnalise ? 1 : 0,
+          label: "seu perfil ainda está em análise pela equipe Nomade Drive.",
+          tip: "Normalmente leva 1 a 3 dias úteis. Você pode acompanhar pelo seu protocolo." },
+        { count: todosState.indicacoesEmAnalise,
+          label: "indicação(ões) em análise — aguardando validação e conversão.",
+          link: "#indicacoes", linkLabel: "ver indicações",
+          tip: "A comissão só se confirma após aprovação e conversão real do lead em locação." }
+      ]);
+    }
+
     a.getProfile().then(function (p) {
-      if (!p) return;
+      if (!p) { refreshTodos(); return; }
       var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
       document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
       var st = document.getElementById("dashStatus");
       st.textContent = "Perfil: " + a.statusLabel(p.verification_status);
       st.className = "dash-pill dash-pill--" + pillKind(p.verification_status);
+      if (window.ndStatus) window.ndStatus.applyTo(st, p.verification_status);
+      todosState.perfilEmAnalise = (p.verification_status === "em_analise" ||
+        p.verification_status === "documentos_pendentes");
+      refreshTodos();
       if (p.main_role && p.main_role !== PAGE_ROLE) {
         showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
           ". Este é o painel do parceiro de indicação.", "warn");
@@ -182,6 +202,9 @@
           rows.filter(function (x) { return x.status === "em_analise"; }).length;
         document.getElementById("kpiAprov").textContent =
           rows.filter(function (x) { return x.status === "aprovado"; }).length;
+        todosState.indicacoesEmAnalise =
+          rows.filter(function (x) { return x.status === "em_analise"; }).length;
+        refreshTodos();
         renderCommissions(rows);
         renderHistory(rows);
         if (!rows.length) return;

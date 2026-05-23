@@ -1791,3 +1791,110 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
   transition: color .14s, border-color .14s;
 }
 .dash-link-inline:hover { color: var(--green); border-bottom-color: var(--green); }
+
+/* ====================================================================
+   TOOLTIPS — [data-tip] mostra explicação ao passar o mouse / focar
+   --------------------------------------------------------------------
+   Universal: qualquer elemento com data-tip="texto" exibe o tooltip
+   acima dele ao hover (ou ao focar via teclado). Não precisa de JS.
+   ==================================================================== */
+[data-tip] { position: relative; }
+[data-tip]::before {
+  content: "";
+  position: absolute;
+  bottom: 100%; left: 50%;
+  transform: translateX(-50%); margin-bottom: -2px;
+  border: 6px solid transparent;
+  border-top-color: #1a2733;
+  opacity: 0; pointer-events: none;
+  transition: opacity .15s ease;
+  z-index: 100;
+}
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 100%; left: 50%;
+  transform: translateX(-50%); margin-bottom: 8px;
+  width: max-content; max-width: 280px;
+  padding: 9px 12px;
+  background: #1a2733; color: #fff;
+  font-family: var(--font-b);
+  font-size: 12px; font-weight: 500; line-height: 1.5;
+  text-transform: none; letter-spacing: normal;
+  text-align: left; white-space: normal;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px -10px rgba(0,0,0,.45);
+  opacity: 0; pointer-events: none;
+  transition: opacity .15s ease;
+  z-index: 100;
+}
+[data-tip]:hover::after,
+[data-tip]:hover::before,
+[data-tip]:focus-visible::after,
+[data-tip]:focus-visible::before { opacity: 1; }
+
+/* Variant: posiciona o tooltip abaixo do elemento */
+[data-tip][data-tip-pos="bottom"]::after {
+  bottom: auto; top: 100%; margin-top: 8px; margin-bottom: 0;
+}
+[data-tip][data-tip-pos="bottom"]::before {
+  bottom: auto; top: 100%; margin-top: -2px; margin-bottom: 0;
+  border-top-color: transparent; border-bottom-color: #1a2733;
+}
+
+/* Pills com tip ganham cursor pra avisar que tem explicação */
+.dash-pill[data-tip] { cursor: help; }
+
+@media (max-width: 720px) {
+  [data-tip]::after { max-width: 220px; font-size: 11.5px; }
+}
+
+/* ====================================================================
+   AÇÕES PENDENTES — banner no topo de cada dashboard
+   ==================================================================== */
+.dash-todos {
+  background: #fffbeb;
+  border: 1px solid #f5e1b0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.dash-todos[hidden] { display: none; }
+.dash-todos__icon {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: #fff4e0;
+  color: #8a6116;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.dash-todos__icon svg { width: 20px; height: 20px; }
+.dash-todos__body { flex: 1; min-width: 0; }
+.dash-todos__title {
+  font-family: var(--font-d); font-size: 12px; font-weight: 700;
+  color: #8a6116; text-transform: uppercase; letter-spacing: .8px;
+  margin-bottom: 6px;
+}
+.dash-todos__list {
+  display: flex; flex-direction: column; gap: 4px;
+  list-style: none; padding: 0; margin: 0;
+}
+.dash-todos__list li {
+  font-size: 13.5px; color: #14201b; line-height: 1.5;
+}
+.dash-todos__list li strong {
+  font-weight: 700; color: #8a6116; min-width: 18px;
+  display: inline-block;
+}
+.dash-todos__list a {
+  color: var(--green-d); font-weight: 600;
+  border-bottom: 1px dashed var(--green-d);
+}
+.dash-todos__list a:hover { color: var(--green); }
+
+.dash-todos--ok {
+  background: var(--green-l); border-color: #bfe6cf;
+}
+.dash-todos--ok .dash-todos__icon { background: rgba(20,122,79,0.12); color: var(--green-d); }
+.dash-todos--ok .dash-todos__title { color: var(--green-d); }

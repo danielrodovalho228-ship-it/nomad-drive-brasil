@@ -66,6 +66,8 @@
       </div>
     </div>
 
+    <div class="dash-todos" id="dashTodos" hidden></div>
+
     <header class="admin-topbar">
       <div>
         <h1>Painel Administrativo</h1>
@@ -263,6 +265,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="statuses.js"></script>
 <script src="script.js"></script>
 <script>
 (function () {
@@ -330,18 +333,62 @@
     return q.then(function (r) { return (r && typeof r.count === "number") ? r.count : null; })
       .catch(function () { return null; });
   }
+  /* Estado dos "TODOs" do admin — itens que pedem ação ou revisão */
+  var adminTodos = {
+    cadastros: 0, veiculosAnalise: 0, kycAnalise: 0,
+    ocorrencias: 0, oficinasAnalise: 0
+  };
+  function refreshAdminTodos() {
+    if (!window.ndStatus) return;
+    window.ndStatus.renderTodos("dashTodos", [
+      { count: adminTodos.cadastros,
+        label: "cadastro(s) aguardando aprovação — clientes, proprietários, parceiros, oficinas.",
+        link: "#cadastros", linkLabel: "ver cadastros",
+        tip: "Cada cadastro é uma application em análise — revise dados e aprove ou recuse." },
+      { count: adminTodos.veiculosAnalise,
+        label: "veículo(s) em análise — pendente de aprovação para entrar na frota.",
+        link: "#frota", linkLabel: "ver frota",
+        tip: "Veículos novos precisam de checklist técnico + documentos antes de entrar em locação." },
+      { count: adminTodos.kycAnalise,
+        label: "documento(s) KYC em análise para revisar.",
+        link: "#documentos", linkLabel: "abrir KYC",
+        tip: "Documentos enviados pelos clientes (CNH, RG, comprovantes) aguardando revisão." },
+      { count: adminTodos.ocorrencias,
+        label: "ocorrência(s) de proteção sem triagem.",
+        link: "#sinistros", linkLabel: "abrir triagem",
+        tip: "Sinistros, danos, multas e outros eventos abertos pelos clientes — pedem parecer." },
+      { count: adminTodos.oficinasAnalise,
+        label: "oficina(s) aguardando credenciamento.",
+        link: "#oficinas", linkLabel: "ver oficinas",
+        tip: "Oficinas novas precisam de aprovação para receber vistorias da plataforma." }
+    ]);
+  }
+
   function loadAdminData() {
     var c = a.client();
     if (!c) return;
-    countOf("applications", [["status", "em_analise"]]).then(function (n) { setK("kCadastros", n); });
+    countOf("applications", [["status", "em_analise"]]).then(function (n) {
+      setK("kCadastros", n); adminTodos.cadastros = n || 0; refreshAdminTodos();
+    });
     countOf("applications", [["profile_type", "client"], ["status", "em_analise"]]).then(function (n) { setK("kClientes", n); });
     countOf("applications", [["profile_type", "owner"], ["status", "em_analise"]]).then(function (n) { setK("kProprietarios", n); });
     countOf("vehicles", []).then(function (n) { setK("kVeiculos", n); });
     countOf("vehicles", [["status", "aprovado"]]).then(function (n) { setK("kVeicAprov", n); });
+    countOf("vehicles", [["status", "em_analise"]]).then(function (n) {
+      adminTodos.veiculosAnalise = n || 0; refreshAdminTodos();
+    });
+    countOf("user_documents", [["status", "em_analise"]]).then(function (n) {
+      adminTodos.kycAnalise = n || 0; refreshAdminTodos();
+    });
     countOf("bookings", []).then(function (n) { setK("kLocacoes", n); });
-    countOf("protection_cases", [["status", "em_analise"]]).then(function (n) { setK("kOcorrencias", n); });
+    countOf("protection_cases", [["status", "em_analise"]]).then(function (n) {
+      setK("kOcorrencias", n); adminTodos.ocorrencias = n || 0; refreshAdminTodos();
+    });
     countOf("partners_referrals", []).then(function (n) { setK("kParceiros", n); });
     countOf("workshops", []).then(function (n) { setK("kOficinas", n); });
+    countOf("workshops", [["status", "em_analise"]]).then(function (n) {
+      adminTodos.oficinasAnalise = n || 0; refreshAdminTodos();
+    });
     countOf("notifications", [["status", "unread"]]).then(function (n) { setK("kNotif", n); });
     c.from("bookings").select("monthly_price,platform_fee").then(function (r) {
       var rows = (r && r.data) || [], bruta = 0, taxa = 0;

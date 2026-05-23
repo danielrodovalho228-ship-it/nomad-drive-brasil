@@ -59,6 +59,7 @@
       </aside>
 
       <div class="dash-main">
+        <div class="dash-todos" id="dashTodos" hidden></div>
         <div class="dash-topline">
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
@@ -197,6 +198,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="statuses.js"></script>
 <script src="script.js"></script>
 <script>
 (function () {
@@ -239,17 +241,48 @@
     showNotice("Pré-visualização: configure o supabase-config.js para carregar os seus dados reais.", "warn");
   }
 
+  var todosState = {
+    perfilEmAnalise: false,
+    solicitacoesEmAnalise: 0,
+    documentosFaltando: 0,
+    ocorrenciasEmAnalise: 0
+  };
+  function refreshTodos() {
+    if (!window.ndStatus) return;
+    window.ndStatus.renderTodos("dashTodos", [
+      { count: todosState.perfilEmAnalise ? 1 : 0,
+        label: "seu perfil ainda está em análise pela equipe Nomade Drive.",
+        tip: "Análise normalmente leva 1 a 3 dias úteis após o envio do cadastro completo." },
+      { count: todosState.solicitacoesEmAnalise,
+        label: "solicitação(ões) de locação em análise — aguardando avaliação da equipe.",
+        link: "#solicitacoes", linkLabel: "ver solicitações",
+        tip: "Cada solicitação vira reserva ativa apenas após aprovação da equipe + criação no admin." },
+      { count: todosState.documentosFaltando,
+        label: "documento(s) ainda não enviado(s) — sem documentos a aprovação não é liberada.",
+        link: "#documentos", linkLabel: "enviar documentos",
+        tip: "CNH, RG, comprovante de residência e comprovação de renda são analisados pela equipe." },
+      { count: todosState.ocorrenciasEmAnalise,
+        label: "ocorrência(s) em análise pela equipe de proteção.",
+        link: "#protecao", linkLabel: "ver ocorrências",
+        tip: "A equipe de proteção avalia cada ocorrência (sinistro, dano, multa, pane etc.)." }
+    ]);
+  }
+
   a.requireAuth().then(function (s) {
     if (!s) return;
     a.getProfile().then(function (p) {
-      if (!p) return;
+      if (!p) { refreshTodos(); return; }
       var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
       document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
       var st = document.getElementById("dashStatus");
       st.textContent = "Perfil: " + a.statusLabel(p.verification_status);
       st.className = "dash-pill dash-pill--" + pillKind(p.verification_status);
+      if (window.ndStatus) window.ndStatus.applyTo(st, p.verification_status);
       document.getElementById("kpiStatus").textContent = a.statusLabel(p.verification_status);
       document.getElementById("kpiCidade").textContent = p.city || "—";
+      todosState.perfilEmAnalise = (p.verification_status === "em_analise" ||
+        p.verification_status === "documentos_pendentes");
+      refreshTodos();
       if (p.main_role && p.main_role !== PAGE_ROLE) {
         showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
           ". Este é o painel do cliente — você pode usá-lo se também aluga veículos.", "warn");
@@ -259,6 +292,9 @@
       .then(function (r) {
         var rows = (r && r.data) || [];
         document.getElementById("kpiReqs").textContent = rows.length;
+        todosState.solicitacoesEmAnalise =
+          rows.filter(function (req) { return req.status === "em_analise" || req.status === "solicitado"; }).length;
+        refreshTodos();
         if (!rows.length) return;
         document.getElementById("reqEmpty").hidden = true;
         var list = document.getElementById("reqList");
@@ -528,7 +564,17 @@
       if (!latest[d.document_type]) latest[d.document_type] = d;
     });
     list.innerHTML = "";
-    KYC_TYPES.forEach(function (t) { list.appendChild(docCard(t, latest[t.key])); });
+    var faltando = 0;
+    KYC_TYPES.forEach(function (t) {
+      var doc = latest[t.key];
+      // "faltando" inclui não enviado e recusado
+      if (!doc || doc.status === "recusado") faltando++;
+      list.appendChild(docCard(t, doc));
+    });
+    if (typeof todosState !== "undefined") {
+      todosState.documentosFaltando = faltando;
+      refreshTodos();
+    }
   }
   function docCard(t, doc) {
     var card = document.createElement("div");
@@ -686,6 +732,12 @@
       .then(function (r) {
         var rows = (r && r.data) || [];
         list.innerHTML = "";
+        if (typeof todosState !== "undefined") {
+          todosState.ocorrenciasEmAnalise = rows.filter(function (cs) {
+            return cs.status === "em_analise" || cs.status === "documentos_pendentes";
+          }).length;
+          refreshTodos();
+        }
         if (!rows.length) { if (empty) empty.hidden = false; return; }
         if (empty) empty.hidden = true;
         rows.forEach(function (cs) {
