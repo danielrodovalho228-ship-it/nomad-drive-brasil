@@ -137,8 +137,8 @@
             </div>
           </div>
 
-          <div class="block-title">Check-in e check-out</div>
-          <p class="note">Quando o cliente solicita a retirada (check-in) ou a devolução (check-out) do veículo, o pedido aparece aqui para você aprovar ou recusar.</p>
+          <div class="block-title">Retirada e devolução do veículo</div>
+          <p class="note">Quando o cliente solicita a <strong>retirada (check-in)</strong> ou a <strong>devolução (check-out)</strong> do veículo, o pedido aparece aqui para você aprovar ou recusar.</p>
           <div class="dash-list" id="ownerInspList"></div>
           <div class="dash-empty" id="ownerInspEmpty">Nenhuma solicitação de check-in ou check-out no momento.</div>
 
@@ -467,7 +467,7 @@
   }
 
   /* ---- Fase 5: validação de check-in / check-out ---- */
-  function inspKindLabel(k) { return k === "checkout" ? "Check-out" : "Check-in"; }
+  function inspKindLabel(k) { return k === "checkout" ? "Devolução" : "Retirada"; }
 
   function loadOwnerInspections() {
     var c = a.client();
@@ -519,7 +519,7 @@
         var openBtn = document.createElement("button");
         openBtn.type = "button";
         openBtn.className = "btn btn--solid btn--sm";
-        openBtn.textContent = "Aprovar check-out";
+        openBtn.textContent = "Aprovar devolução";
         openBtn.addEventListener("click", function () {
           openCheckoutApproval(card, i);
           openBtn.disabled = true;
@@ -693,8 +693,8 @@
       var hasDamage = sel && sel.value === "yes";
       damageList.style.display = hasDamage ? "block" : "none";
       submitBtn.textContent = hasDamage
-        ? "Aprovar check-out e reportar avaria(s)"
-        : "Aprovar check-out (sem avaria)";
+        ? "Aprovar devolução e reportar avaria(s)"
+        : "Aprovar devolução (sem avaria)";
       if (hasDamage && !damageList.children.length) {
         addDamageEntry(damageList, inspection);
       }

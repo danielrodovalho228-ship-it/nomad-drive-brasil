@@ -67,8 +67,10 @@
 
     <nav class="legal-toc" aria-label="Índice">
       <a href="#termos">Termos e Condições</a>
+      <a href="#verificacao">Verificação de Identidade</a>
       <a href="#privacidade">Política de Privacidade</a>
       <a href="#locacao">Regras de Locação</a>
+      <a href="#pagamento">Fluxo de Pagamento</a>
       <a href="#cancelamento">Política de Cancelamento</a>
       <a href="#sinistros">Segurança e Sinistros</a>
     </nav>
@@ -84,50 +86,91 @@
       <p>O locatário é responsável pelo uso adequado do veículo, por pedágios, multas e por danos decorrentes de uso indevido. O proprietário é responsável por entregar o veículo em condições adequadas, com documentação em dia. A plataforma organiza contrato, vistoria e suporte.</p>
     </section>
 
+    <section class="legal-section" id="verificacao">
+      <h2>2. Verificação de Identidade</h2>
+      <p>Para alugar pela Nomade Drive, o condutor passa por uma <strong>verificação de identidade</strong> realizada pela equipe da plataforma. Essa verificação protege o veículo do proprietário, a operação e os demais clientes.</p>
+      <h3>2.1. Documentos exigidos</h3>
+      <p>O cliente envia, pela área "Documentos" do painel: (a) CNH válida há pelo menos 2 anos, (b) documento com foto (RG, CPF ou passaporte), (c) comprovante de residência recente (até 90 dias), (d) comprovação de renda compatível com o valor da locação.</p>
+      <h3>2.2. Prazo de análise</h3>
+      <p>A análise leva, em regra, 1 a 3 dias úteis. O resultado (aprovado, aprovado com ressalvas, documentos pendentes ou recusado) é comunicado por e-mail e refletido no painel do cliente.</p>
+      <h3>2.3. Tier de caução baseado no perfil</h3>
+      <p>Após a verificação inicial, o cliente recebe um <strong>tier de caução</strong> que define o valor da pré-autorização em cartão de crédito em cada nova locação:</p>
+      <ul>
+        <li><strong>Verificado</strong> (R$ 500): CNH 5+ anos, sem multas recentes, histórico positivo na plataforma.</li>
+        <li><strong>Padrão</strong> (R$ 1.000): cliente regular, sem ressalvas relevantes.</li>
+        <li><strong>Novo</strong> (R$ 1.700): primeira locação, sem histórico anterior.</li>
+        <li><strong>Estendido</strong> (R$ 2.000): perfis com maior risco operacional (avaliados caso a caso).</li>
+      </ul>
+      <p>O tier pode ser ajustado ao longo do tempo conforme o comportamento do cliente — pagamentos em dia, devoluções sem problema e ausência de avarias aumentam a confiança.</p>
+      <h3>2.4. Privacidade dos documentos</h3>
+      <p>Os arquivos enviados ficam em área privada (Supabase Storage), com acesso restrito à equipe de análise. São usados <strong>exclusivamente</strong> para validar a identidade do condutor e definir o tier de caução. Não são compartilhados com proprietários, parceiros ou terceiros, salvo determinação legal.</p>
+    </section>
+
     <section class="legal-section" id="privacidade">
-      <h2>2. Política de Privacidade (LGPD)</h2>
+      <h2>3. Política de Privacidade (LGPD)</h2>
       <p>Levamos a sério a proteção dos seus dados, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).</p>
-      <h3>2.1. Dados coletados</h3>
+      <h3>3.1. Dados coletados</h3>
       <p>Coletamos apenas os dados que você fornece voluntariamente nos formulários (nome, contato, cidade, informações do veículo ou da locação) e os necessários para viabilizar a locação e o atendimento.</p>
-      <h3>2.2. Uso dos dados</h3>
+      <h3>3.2. Uso dos dados</h3>
       <p>Os dados são usados para responder ao seu contato, elaborar orçamentos, formalizar contratos e prestar suporte. Não vendemos seus dados. O compartilhamento ocorre apenas com partes essenciais à operação (ex.: seguradora parceira, proprietário do veículo), e somente quando necessário.</p>
-      <h3>2.3. Seus direitos</h3>
+      <h3>3.3. Seus direitos</h3>
       <p>Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo nosso canal de contato. O envio de formulários neste site ocorre via WhatsApp — nenhum dado é armazenado em servidores do site.</p>
     </section>
 
     <section class="legal-section" id="locacao">
-      <h2>3. Regras de Locação</h2>
-      <h3>3.1. Período e quilometragem</h3>
+      <h2>4. Regras de Locação</h2>
+      <h3>4.1. Período e quilometragem</h3>
       <p>As locações são mensais (a partir de 30 dias). Cada contrato inclui uma franquia de quilometragem; quilômetros excedentes são cobrados por km, com valor informado no orçamento.</p>
-      <h3>3.2. Caução</h3>
-      <p>É exigida uma caução reembolsável, definida por categoria de veículo, paga por Pix ou pré-autorização em cartão de crédito. A devolução ocorre após a vistoria de devolução, descontadas eventuais pendências (multas, pedágios, danos não cobertos).</p>
-      <h3>3.3. Pagamento</h3>
-      <p>O pagamento da mensalidade pode ser feito por Pix, transferência ou cartão de crédito. Condições de parcelamento são avaliadas conforme a duração e confirmadas no contrato.</p>
-      <h3>3.4. Vistoria</h3>
+      <h3>4.2. Caução</h3>
+      <p>É exigida uma caução reembolsável, definida pelo <em>tier</em> do cliente (ver seção 2.3) e paga por pré-autorização em cartão de crédito. A liberação ocorre após o check-out aprovado, descontadas eventuais pendências (multas, pedágios, danos não cobertos). Detalhes operacionais na seção 5.</p>
+      <h3>4.3. Pagamento</h3>
+      <p>O pagamento da mensalidade é feito por cartão de crédito (cobrança recorrente automática). PIX em estudo — detalhes na seção 5.</p>
+      <h3>4.4. Vistoria</h3>
       <p>Na retirada e na devolução é feita vistoria com foto e vídeo, assinada por ambas as partes. Danos novos são comparados com o registro de retirada.</p>
-      <h3>3.5. Uso proibido</h3>
+      <h3>4.5. Uso proibido</h3>
       <p>É vedado o uso do veículo sob efeito de álcool ou substâncias, em competições, fora de estrada não autorizada, para transporte remunerado de passageiros não acordado, ou para subaluguel. O descumprimento pode gerar responsabilização integral do condutor.</p>
     </section>
 
+    <section class="legal-section" id="pagamento">
+      <h2>5. Fluxo de Pagamento</h2>
+      <p>Esta seção descreve, em detalhe, como funcionam as cobranças, o split de receita, os ciclos de mensalidade e a pré-autorização da caução. Os valores específicos são confirmados individualmente no contrato.</p>
+      <h3>5.1. Mensalidade recorrente</h3>
+      <p>Locações por 30 dias ou mais usam o modelo de <strong>assinatura mensal</strong>: a 1ª mensalidade é paga via Stripe Checkout, e as próximas são cobradas automaticamente no mesmo cartão, na data correspondente ao início da locação. A cobrança recorrente é encerrada automaticamente na data fim do contrato (parâmetro <em>cancel_at</em> do Stripe).</p>
+      <h3>5.2. Split de receita (10% / 90%)</h3>
+      <p>A cada mensalidade paga, o valor é dividido automaticamente via <strong>Stripe Connect</strong>: <strong>10%</strong> ficam com a Nomade Drive (cobrindo operação, suporte, intermediação e proteção contratada) e <strong>90%</strong> são transferidos diretamente para a conta bancária do proprietário do veículo, cadastrada via Stripe Express.</p>
+      <p>Não há outras cobranças regulares — não cobramos taxa de cadastro, taxa de cancelamento, taxa de boletos ou mensalidade adicional. Os 10% incluem tudo.</p>
+      <h3>5.3. Caução pré-autorizada</h3>
+      <p>Junto com a 1ª mensalidade, o cartão de crédito do cliente recebe uma <strong>pré-autorização</strong> (capture manual da Stripe) no valor do tier de caução. Essa pré-autorização <strong>reserva o limite mas não cobra de fato</strong>. Se nada acontecer, o valor é liberado integralmente ao final da locação.</p>
+      <p>Se houver avaria reportada pelo proprietário no check-out, a equipe de Proteção analisa as evidências e pode autorizar uma <strong>captura parcial</strong>: apenas o valor da avaria é debitado, o restante é liberado automaticamente pela Stripe (5 dias úteis para retornar ao limite do cartão).</p>
+      <h3>5.4. Formas de pagamento aceitas</h3>
+      <p>Atualmente: <strong>cartão de crédito</strong> (Visa, Mastercard, Elo, Amex via Stripe). PIX está em estudo para a mensalidade — caução continuará sendo apenas cartão (PIX não permite pré-autorização).</p>
+      <h3>5.5. Falha de pagamento</h3>
+      <p>Se a cobrança recorrente falhar, o cliente recebe e-mail imediato e tem prazo para regularizar (atualizar o cartão pela Stripe Billing Portal). A locação pode ser suspensa em caso de inadimplência prolongada, conforme o contrato.</p>
+      <h3>5.6. Atualização do cartão</h3>
+      <p>O cliente pode trocar o cartão da assinatura a qualquer momento pelo botão <strong>"Atualizar cartão / ver histórico"</strong> no painel — abre a tela hospedada da Stripe (Billing Portal). Os dados do novo cartão não passam pela Nomade Drive.</p>
+      <h3>5.7. Recibo e nota fiscal</h3>
+      <p>A cada pagamento confirmado, o cliente recebe e-mail com link para o <strong>recibo</strong> gerado automaticamente, e também pode acessá-lo pelo painel. A <strong>nota fiscal</strong> é emitida pela equipe Nomade Drive e disponibilizada na mesma área.</p>
+    </section>
+
     <section class="legal-section" id="cancelamento">
-      <h2>4. Política de Cancelamento</h2>
-      <h3>4.1. Antes da retirada</h3>
+      <h2>6. Política de Cancelamento</h2>
+      <h3>6.1. Antes da retirada</h3>
       <p>Cancelamentos com boa antecedência (em regra, mais de 7 dias) têm reembolso integral de valores adiantados. Prazos mais curtos podem ter retenção parcial, para cobrir custos de reserva e logística. Os percentuais exatos constam no contrato.</p>
-      <h3>4.2. Força maior</h3>
+      <h3>6.2. Força maior</h3>
       <p>Situações de força maior (problemas de saúde, recusa documental, eventos imprevisíveis) são avaliadas individualmente, com transparência e boa-fé.</p>
-      <h3>4.3. Durante a locação</h3>
+      <h3>6.3. Durante a locação</h3>
       <p>O encerramento antecipado de uma locação em andamento segue as condições previstas no contrato, podendo haver ajuste de valores conforme o período efetivamente utilizado.</p>
     </section>
 
     <section class="legal-section" id="sinistros">
-      <h2>5. Segurança e Sinistros</h2>
-      <h3>5.1. Seguro</h3>
+      <h2>7. Segurança e Sinistros</h2>
+      <h3>7.1. Seguro</h3>
       <p>Os veículos da rede contam com seguro para uso em locação, cobrindo colisão, danos a terceiros, roubo, incêndio e eventos da natureza, além de assistência 24h. Há franquia (valor de participação do condutor), que varia por categoria. As coberturas e valores exatos constam no contrato e seguem a apólice da seguradora parceira.</p>
-      <h3>5.2. Em caso de acidente</h3>
+      <h3>7.2. Em caso de acidente</h3>
       <p>Acione imediatamente a linha de emergência 24/7 informada no contrato. Registre boletim de ocorrência quando aplicável, faça fotos da situação e comunique a plataforma. A abertura do sinistro com a seguradora é orientada pela equipe.</p>
-      <h3>5.3. Rastreador e carro reserva</h3>
+      <h3>7.3. Rastreador e carro reserva</h3>
       <p>Os veículos contam com rastreador GPS, utilizado para segurança e recuperação — nunca para monitoramento rotineiro do condutor. Em caso de problema mecânico ou sinistro, buscamos um carro reserva da mesma categoria, conforme disponibilidade da rede.</p>
-      <h3>5.4. Multas e pedágios</h3>
+      <h3>7.4. Multas e pedágios</h3>
       <p>Multas e pedágios gerados durante a locação são de responsabilidade do condutor. Multas recebidas após a devolução têm pontuação e cobrança transferidas ao condutor, com cópia do auto de infração.</p>
     </section>
 
@@ -147,8 +190,10 @@
     <div class="footer__col">
       <h4>Documentos</h4>
       <a href="#termos">Termos e Condições</a>
+      <a href="#verificacao">Verificação de Identidade</a>
       <a href="#privacidade">Política de Privacidade</a>
       <a href="#locacao">Regras de Locação</a>
+      <a href="#pagamento">Fluxo de Pagamento</a>
       <a href="#cancelamento">Política de Cancelamento</a>
       <a href="#sinistros">Segurança e Sinistros</a>
     </div>

@@ -51,7 +51,7 @@
           <a href="#visao"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Visão geral</a>
           <a href="#solicitacoes"><svg viewBox="0 0 24 24"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>Solicitações</a>
           <a href="#documentos"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Documentos</a>
-          <a href="#checklist"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Check-in / check-out</a>
+          <a href="#checklist"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Retirada e devolução</a>
           <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro</a>
           <a href="#recibos"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Recibos e NF</a>
           <a href="#avarias"><svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Avarias</a>
@@ -75,13 +75,13 @@
 
         <section class="dash-panel" id="solicitacoes">
           <h2>Solicitações de locação</h2>
-          <p>Aqui ficam os seus <strong>pedidos enviados</strong>. Solicitação <em>não é o mesmo</em> que reserva: cada pedido passa por análise da equipe Nomade Drive e, se aprovado, vira uma <strong>reserva ativa</strong> que aparece na seção <a href="#checklist" class="dash-link-inline">Check-in / check-out</a> deste painel.</p>
+          <p>Aqui ficam os seus <strong>pedidos enviados</strong>. Solicitação <em>não é o mesmo</em> que reserva: cada pedido passa por análise da equipe Nomade Drive e, se aprovado, vira uma <strong>reserva ativa</strong> que aparece na seção <a href="#checklist" class="dash-link-inline">Retirada e devolução</a> deste painel.</p>
           <ol class="dash-steps">
             <li><strong>1. Solicitação</strong> — você envia o pedido (status “em análise”).</li>
             <li><strong>2. Análise</strong> — a equipe valida documentos, disponibilidade e proposta.</li>
-            <li><strong>3. Reserva ativa</strong> — quando aprovada, a locação aparece em Check-in/check-out, com valores e datas.</li>
+            <li><strong>3. Reserva ativa</strong> — quando aprovada, a locação aparece em Retirada e devolução, com valores e datas.</li>
             <li><strong>4. Pagamento</strong> — você paga a mensalidade e autoriza a caução pela Stripe.</li>
-            <li><strong>5. Check-in → uso → Check-out</strong> — fluxo operacional da locação.</li>
+            <li><strong>5. Retirada → uso → Devolução</strong> — fluxo operacional da locação (também chamado <em>check-in</em> e <em>check-out</em>).</li>
           </ol>
           <div class="dash-list" id="reqList"></div>
           <div class="dash-empty" id="reqEmpty">Você ainda não enviou solicitações. Comece pelo seu perfil de cliente.</div>
@@ -100,13 +100,13 @@
         </section>
 
         <section class="dash-panel" id="checklist">
-          <h2>Check-in e check-out</h2>
-          <p>Quando estiver perto de retirar ou devolver o veículo, solicite o check-in ou o check-out aqui. Cada solicitação é validada pelo proprietário.</p>
+          <h2>Retirada e devolução do veículo</h2>
+          <p>Quando estiver perto de retirar ou devolver o veículo, solicite a <strong>retirada (check-in)</strong> ou a <strong>devolução (check-out)</strong> aqui. Cada solicitação é validada pelo proprietário.</p>
           <div class="dash-list" id="bookingsList"></div>
           <div class="dash-empty" id="bookingsEmpty">Você ainda não tem uma reserva confirmada. O check-in fica disponível quando uma locação é confirmada.</div>
 
           <form class="form insp-form" id="inspForm" hidden>
-            <h3 id="inspFormTitle">Solicitar check-in</h3>
+            <h3 id="inspFormTitle">Solicitar retirada (check-in)</h3>
             <div class="form__grid">
               <label class="field"><span>Data e hora *</span><input type="datetime-local" name="scheduled_at" required /></label>
               <label class="field"><span>Local *</span><input type="text" name="location" required placeholder="Uberlândia-MG" /></label>
@@ -166,7 +166,7 @@
             <ol style="margin:8px 0 0 18px;padding:0;line-height:1.7;color:#3a4945;">
               <li><strong>Reserva confirmada</strong> — você paga a mensalidade e o cartão reserva o valor da caução (não cobra).</li>
               <li><strong>Durante a locação</strong> — o valor fica reservado no seu limite, mas <strong>não é cobrado de fato</strong>. Se a locação dura mais de 30 dias, a Stripe pode renovar a pré-autorização automaticamente.</li>
-              <li><strong>Check-out aprovado</strong> — a caução é <strong>liberada</strong> e o limite volta ao cartão em até <strong>5 dias úteis</strong>.</li>
+              <li><strong>Devolução (check-out) aprovada</strong> — a caução é <strong>liberada</strong> e o limite volta ao cartão em até <strong>5 dias úteis</strong>.</li>
               <li><strong>Se houver avaria</strong> — apenas o valor da avaria é cobrado, o restante é liberado normalmente. Você recebe e-mail com a decisão + foto + prazo de contestação de 5 dias úteis.</li>
             </ol>
 
@@ -430,7 +430,7 @@
       "/" + dt.getFullYear() + " " + ("0" + dt.getHours()).slice(-2) +
       ":" + ("0" + dt.getMinutes()).slice(-2);
   }
-  function inspKindLabel(k) { return k === "checkout" ? "Check-out" : "Check-in"; }
+  function inspKindLabel(k) { return k === "checkout" ? "Devolução" : "Retirada"; }
   function inspPillKind(s) {
     return s === "aprovado" ? "ok" : (s === "recusado" ? "bad" : "warn");
   }
@@ -524,15 +524,15 @@
     var actions = document.createElement("div");
     actions.className = "insp-card__actions";
     if (!approvedIn && !pendingIn) {
-      actions.appendChild(actionBtn(b, "checkin", "Solicitar check-in"));
+      actions.appendChild(actionBtn(b, "checkin", "Solicitar retirada"));
     } else if (approvedIn && !approvedOut && !pendingOut) {
-      actions.appendChild(actionBtn(b, "checkout", "Solicitar check-out"));
+      actions.appendChild(actionBtn(b, "checkout", "Solicitar devolução"));
     } else {
       var msg = document.createElement("span");
       msg.className = "insp-card__msg";
-      if (pendingIn) msg.textContent = "Check-in enviado — aguardando o proprietário.";
-      else if (pendingOut) msg.textContent = "Check-out enviado — aguardando o proprietário.";
-      else if (approvedOut) msg.textContent = "Locação encerrada — check-out aprovado.";
+      if (pendingIn) msg.textContent = "Pedido de retirada enviado — aguardando o proprietário.";
+      else if (pendingOut) msg.textContent = "Pedido de devolução enviado — aguardando o proprietário.";
+      else if (approvedOut) msg.textContent = "Locação encerrada — devolução aprovada.";
       else msg.textContent = "Locação ativa.";
       actions.appendChild(msg);
     }
@@ -561,7 +561,7 @@
     form.setAttribute("data-booking", b.id);
     form.setAttribute("data-kind", kind);
     document.getElementById("inspFormTitle").textContent =
-      (kind === "checkout" ? "Solicitar check-out — " : "Solicitar check-in — ") + vehText(b.vehicles);
+      (kind === "checkout" ? "Solicitar devolução — " : "Solicitar retirada — ") + vehText(b.vehicles);
     var err = document.getElementById("inspErr");
     if (err) err.hidden = true;
     form.hidden = false;

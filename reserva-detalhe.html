@@ -58,7 +58,7 @@
       </section>
 
       <section class="dash-panel">
-        <h2>Check-in e check-out</h2>
+        <h2>Retirada e devolução</h2>
         <div class="dash-list" id="resvInsp"></div>
         <div class="dash-empty" id="resvInspEmpty">Nenhum check-in ou check-out registrado nesta reserva ainda.</div>
       </section>
@@ -219,9 +219,9 @@
     var steps = [
       ["Reserva criada", fmtDate(b.created_at), true],
       ["Reserva confirmada", confirmada ? "confirmada" : "aguardando confirmação", confirmada],
-      ["Check-in solicitado", ckinReq ? fmtDate(ckinReq.scheduled_at || ckinReq.created_at) : "pendente", !!ckinReq],
-      ["Check-in aprovado — em uso", ckinOk ? fmtDate(ckinOk.validated_at || ckinOk.created_at) : "pendente", !!ckinOk],
-      ["Check-out solicitado", ckoutReq ? fmtDate(ckoutReq.scheduled_at || ckoutReq.created_at) : "pendente", !!ckoutReq],
+      ["Retirada solicitada", ckinReq ? fmtDate(ckinReq.scheduled_at || ckinReq.created_at) : "pendente", !!ckinReq],
+      ["Retirada aprovada — em uso", ckinOk ? fmtDate(ckinOk.validated_at || ckinOk.created_at) : "pendente", !!ckinOk],
+      ["Devolução solicitada", ckoutReq ? fmtDate(ckoutReq.scheduled_at || ckoutReq.created_at) : "pendente", !!ckoutReq],
       ["Locação encerrada", ckoutOk ? fmtDate(ckoutOk.validated_at || ckoutOk.created_at) : "pendente", !!ckoutOk]
     ];
     tl.innerHTML = "";
@@ -541,7 +541,7 @@
     if (empty) empty.hidden = true;
     box.innerHTML = "";
     insps.slice().reverse().forEach(function (i) {
-      var label = (i.kind === "checkout" ? "Check-out" : "Check-in");
+      var label = (i.kind === "checkout" ? "Devolução" : "Retirada");
       var bits = [fmtDate(i.scheduled_at)];
       if (i.mileage != null && i.mileage !== "") bits.push(i.mileage + " km");
       if (i.fuel_level) bits.push("combustível: " + i.fuel_level);
