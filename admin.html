@@ -232,14 +232,36 @@
 
     <!-- FINANCEIRO -->
     <section class="admin-block" id="financeiro">
-      <h2>Financeiro estimado</h2>
+      <h2>Financeiro</h2>
+      <p class="note">Dados reais do banco — toda mensalidade paga, taxa da plataforma (10%) e repasse ao proprietário (90%). Valores em BRL.</p>
       <div class="kpi-grid">
-        <div class="kpi"><small>Receita estimada / mês</small><b>R$ 21,4 mil</b><span>locações ativas</span></div>
-        <div class="kpi"><small>Repasses a proprietários</small><b>R$ 15,1 mil</b><span>estimado</span></div>
-        <div class="kpi"><small>Créditos de parceiros</small><b>R$ 1,2 mil</b><span>a liberar</span></div>
-        <div class="kpi"><small>Ticket médio</small><b>R$ 3,5 mil</b><span>por locação</span></div>
+        <div class="kpi"><small>Receita bruta total</small><b id="finReceita">R$ —</b><span>mensalidades pagas</span></div>
+        <div class="kpi"><small>Taxa da plataforma (10%)</small><b id="finTaxa">R$ —</b><span>fee recebido</span></div>
+        <div class="kpi"><small>Repasses aos proprietários</small><b id="finRepasse">R$ —</b><span>transferido (90%)</span></div>
+        <div class="kpi"><small>Caução autorizada ativa</small><b id="finCaucao">R$ —</b><span>retida (sem cobrança)</span></div>
+        <div class="kpi"><small>Mensalidades cobradas</small><b id="finCount">—</b><span>total de cobranças pagas</span></div>
+        <div class="kpi"><small>Ticket médio mensal</small><b id="finTicket">R$ —</b><span>por cobrança</span></div>
       </div>
-      <p class="note">Valores estimados e demonstrativos. Não refletem dados reais da operação.</p>
+
+      <div class="admin-card" style="margin-top:18px;">
+        <h3 class="block-title">Por mês</h3>
+        <table class="admin-table">
+          <thead><tr>
+            <th>Mês</th>
+            <th>Cobranças</th>
+            <th>Receita bruta</th>
+            <th>Taxa (10%)</th>
+            <th>Repasse (90%)</th>
+          </tr></thead>
+          <tbody id="finPorMes"><tr><td colspan="5">Carregando…</td></tr></tbody>
+        </table>
+      </div>
+
+      <p class="note" style="margin-top:14px;">
+        <strong>Conferência cruzada:</strong> os fees reais cobrados pela Stripe ficam em
+        <a href="https://dashboard.stripe.com/test/connect/application_fees" target="_blank" rel="noopener">Stripe → Connect → Application fees</a>.
+        Devem bater com os valores acima.
+      </p>
     </section>
 
     <!-- LOG DE ATIVIDADES -->
@@ -419,6 +441,79 @@
     // Cliente da tabela Reservas já mostra o nome quando renderiza.
     loadProfileNames().then(loadSections);
     loadNewBookingForm();
+    loadFinanceiroDetalhado();
+  }
+
+  /* ====== FINANCEIRO DETALHADO (dados reais do banco) ====== */
+  function brlMoney(n) {
+    var v = Number(n) || 0;
+    return "R$ " + v.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2, maximumFractionDigits: 2,
+    });
+  }
+  function loadFinanceiroDetalhado() {
+    var c = a.client();
+    if (!c) return;
+    c.from("payments")
+      .select("kind, status, amount, installment_number, created_at")
+      .order("created_at", { ascending: false })
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        // Mensalidades pagas (one-off OU recorrentes com installment)
+        var paid = rows.filter(function (p) {
+          return p.kind === "mensalidade" && p.status === "pago";
+        });
+        var bruta = paid.reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0);
+        var taxa = bruta * 0.10;
+        var repasse = bruta - taxa;
+        var caucao = rows
+          .filter(function (p) { return p.kind === "caucao" && p.status === "autorizado"; })
+          .reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0);
+        var ticket = paid.length ? bruta / paid.length : 0;
+
+        setK("finReceita", brlMoney(bruta));
+        setK("finTaxa", brlMoney(taxa));
+        setK("finRepasse", brlMoney(repasse));
+        setK("finCaucao", brlMoney(caucao));
+        setK("finCount", paid.length);
+        setK("finTicket", brlMoney(ticket));
+
+        // Quebra por mês (YYYY-MM)
+        var byMonth = {};
+        paid.forEach(function (p) {
+          var d = new Date(p.created_at);
+          if (isNaN(d.getTime())) return;
+          var ym = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
+          if (!byMonth[ym]) byMonth[ym] = { count: 0, bruta: 0 };
+          byMonth[ym].count++;
+          byMonth[ym].bruta += Number(p.amount) || 0;
+        });
+        var tb = document.getElementById("finPorMes");
+        if (tb) {
+          var keys = Object.keys(byMonth).sort().reverse();
+          if (!keys.length) {
+            tb.innerHTML = '<tr><td colspan="5">Nenhuma mensalidade paga ainda.</td></tr>';
+          } else {
+            tb.innerHTML = "";
+            keys.forEach(function (ym) {
+              var m = byMonth[ym];
+              var fee = m.bruta * 0.10;
+              var rep = m.bruta - fee;
+              var tr = document.createElement("tr");
+              tr.innerHTML =
+                "<td>" + ym + "</td>" +
+                "<td>" + m.count + "</td>" +
+                "<td>" + brlMoney(m.bruta) + "</td>" +
+                "<td>" + brlMoney(fee) + "</td>" +
+                "<td>" + brlMoney(rep) + "</td>";
+              tb.appendChild(tr);
+            });
+          }
+        }
+      }).catch(function () {
+        var tb = document.getElementById("finPorMes");
+        if (tb) tb.innerHTML = '<tr><td colspan="5">Não foi possível carregar.</td></tr>';
+      });
   }
   function loadCadastros() {
     var c = a.client();
