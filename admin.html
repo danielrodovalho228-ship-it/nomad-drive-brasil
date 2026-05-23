@@ -614,47 +614,37 @@
           sel.addEventListener("change", function () {
             var oldStatus = app.status;
             var newStatus = sel.value;
-            // DEBUG paranoico — confirma que o handler FOI chamado.
-            // Se este console.log NÃO aparecer, é cache de browser servindo
-            // a versão antiga. Faça Ctrl+Shift+Del → limpar cache + cookies.
-            console.log("[ND-EMAIL DEBUG] sel.change disparou",
-              { protocol: app.protocol, oldStatus: oldStatus, newStatus: newStatus,
-                hasEmail: !!app.email, hasUserId: !!app.user_id, appKeys: Object.keys(app) });
-            if (window.ndEmails && window.ndEmails.showToast) {
-              window.ndEmails.showToast("Handler change disparou: " + oldStatus + " → " + newStatus, "loading");
+            // Debug opcional — ative com window.ND_EMAIL_DEBUG = true no console
+            // pra ver o caminho completo do handler. Default off em produção.
+            function debug(msg, data) {
+              if (window.ND_EMAIL_DEBUG) console.log("[ND-EMAIL]", msg, data);
             }
+            debug("sel.change disparou",
+              { protocol: app.protocol, oldStatus: oldStatus, newStatus: newStatus,
+                hasEmail: !!app.email, hasUserId: !!app.user_id });
             sel.disabled = true;
             c.from("applications").update({ status: newStatus }).eq("id", app.id)
               .then(function (rr) {
-                console.log("[ND-EMAIL DEBUG] PATCH applications resolveu", rr);
+                debug("PATCH applications resolveu", rr);
                 sel.disabled = false;
                 sel.style.borderColor = (rr && rr.error) ? "#c0392b" : "";
                 if (rr && rr.error) {
                   if (window.ndEmails) window.ndEmails.showToast(
-                    "PATCH falhou: " + (rr.error.message || JSON.stringify(rr.error)), "error");
+                    "PATCH falhou: " + (rr.error.message || "erro desconhecido"), "error");
                   return;
                 }
                 app.status = newStatus;
 
-                // Fix #6 + fix QA d803285+b50dbd0: dispara e-mail de cadastro
-                // aprovado/recusado. Estratégia de resolução do destinatário:
+                // Dispara e-mail de cadastro aprovado/recusado.
+                // Estratégia de resolução do destinatário:
                 //   1) usa applications.email se preenchido (caminho rápido)
                 //   2) fallback: notify() via app.user_id → profiles.email
                 //   3) último: mostra toast warn explicando o que faltou
-                if (!window.ndEmails) {
-                  console.warn("[ND-EMAIL DEBUG] window.ndEmails NÃO existe");
-                  return;
-                }
+                if (!window.ndEmails) return;
                 var emailTransitionFinal =
                   (newStatus === "aprovado" && oldStatus !== "aprovado") ? "approved" :
                   (newStatus === "reprovado" && oldStatus !== "reprovado") ? "rejected" : null;
-                console.log("[ND-EMAIL DEBUG] emailTransitionFinal=", emailTransitionFinal);
-                if (!emailTransitionFinal) {
-                  window.ndEmails.showToast(
-                    "Transição " + oldStatus + "→" + newStatus + " não dispara e-mail (só aprovado/reprovado disparam).",
-                    "warn");
-                  return;
-                }
+                if (!emailTransitionFinal) return;  // outras transições não notificam
 
                 var dashPath = a.dashboardFor
                   ? a.dashboardFor(app.profile_type) : "dashboard-cliente.html";
@@ -674,26 +664,24 @@
                   ) || "Cadastro reprovado pela equipe Nomade Drive.";
                 }
 
-                console.log("[ND-EMAIL DEBUG] indo enviar email", { tplKey: tplKey, email: app.email, user_id: app.user_id });
                 if (app.email) {
                   window.ndEmails.notifyEmailVerbose(c, app.email, tplKey, payload);
                 } else if (app.user_id) {
-                  // Fallback: tenta via profiles.email do user_id
                   window.ndEmails.notifyVerbose(c, app.user_id, tplKey, payload);
                 } else {
                   window.ndEmails.showToast(
                     "Cadastro " + (app.protocol || "—") +
-                    " SEM email NEM user_id — nada foi enviado. " +
+                    " sem e-mail registrado — nada foi enviado. " +
                     "Edite o cadastro pra adicionar e-mail antes de aprovar.",
                     "warn"
                   );
                 }
               }).catch(function (e) {
-                console.error("[ND-EMAIL DEBUG] PATCH applications REJECTED:", e);
+                console.error("PATCH applications rejected:", e);
                 sel.disabled = false;
                 if (window.ndEmails && window.ndEmails.showToast) {
                   window.ndEmails.showToast(
-                    "PATCH applications REJECTED: " + (e && e.message ? e.message : String(e)),
+                    "Erro de rede: " + (e && e.message ? e.message : String(e)),
                     "error");
                 }
               });
