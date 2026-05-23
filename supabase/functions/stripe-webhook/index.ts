@@ -350,6 +350,26 @@ Deno.serve(async (req) => {
             patch.stripe_subscription_id = null;
           }
           await admin.from("bookings").update(patch).eq("id", bookingId);
+
+          // FASE 22a — set cancel_at na subscription com base no end_date
+          // (Stripe rejeita cancel_at em subscription_data do Checkout, mas
+          // aceita na API de Subscriptions diretamente.)
+          if (event.type === "customer.subscription.created" && !sub.cancel_at) {
+            const endDate = sub.metadata?.end_date;
+            if (endDate) {
+              try {
+                const dt = new Date(endDate + "T23:59:59-03:00");
+                const ts = Math.floor(dt.getTime() / 1000);
+                const nowTs = Math.floor(Date.now() / 1000);
+                if (!isNaN(ts) && ts > nowTs) {
+                  await stripe.subscriptions.update(sub.id, { cancel_at: ts });
+                  console.log("cancel_at setado em " + sub.id + " = " + endDate);
+                }
+              } catch (e) {
+                console.error("falha ao setar cancel_at:", (e as Error)?.message);
+              }
+            }
+          }
         }
         break;
       }

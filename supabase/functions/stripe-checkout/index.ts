@@ -417,19 +417,19 @@ Deno.serve(async (req) => {
           .eq("id", user.id);
       }
 
-      // dados de subscription: split via application_fee_percent
+      // dados de subscription: split via application_fee_percent.
+      // NÃO setamos cancel_at aqui — não é parâmetro válido em
+      // subscription_data do Checkout Session. Em vez disso, passamos
+      // end_date via metadata; o webhook customer.subscription.created
+      // chama subscriptions.update({ cancel_at: ... }) depois (onde é válido).
       const subData: Record<string, unknown> = {
-        metadata: { booking_id: bookingId, kind, client_id: user.id },
+        metadata: {
+          booking_id: bookingId,
+          kind,
+          client_id: user.id,
+          end_date: booking.end_date || "",
+        },
       };
-      // auto-cancela no fim da locação: Stripe para de cobrar sozinho no end_date.
-      // Converte YYYY-MM-DD para unix timestamp (fim do dia em horário BR, UTC-3).
-      if (booking.end_date) {
-        const dt = new Date(booking.end_date + "T23:59:59-03:00");
-        const ts = Math.floor(dt.getTime() / 1000);
-        if (!isNaN(ts) && ts > Math.floor(Date.now() / 1000)) {
-          subData.cancel_at = ts;
-        }
-      }
       // só inclui transfer/split se o proprietário já tem conta conectada
       const { data: ownerAcct2 } = await admin
         .from("payout_accounts")
