@@ -54,6 +54,7 @@
           <a href="#checklist"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Check-in / check-out</a>
           <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro</a>
           <a href="#recibos"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Recibos e NF</a>
+          <a href="#avarias"><svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Avarias</a>
           <a href="#protecao"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Ocorrências</a>
           <a href="#suporte"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5"/></svg>Suporte</a>
         </nav>
@@ -180,6 +181,14 @@
           <p>Cada pagamento confirmado gera um <strong>recibo</strong> automaticamente — você pode visualizar, imprimir ou salvar em PDF. A <strong>nota fiscal</strong> (NF) é emitida pela equipe Nomade Drive e aparece aqui quando disponível.</p>
           <div class="dash-list" id="recibosList"></div>
           <div class="dash-empty" id="recibosEmpty">Você ainda não tem pagamentos confirmados — recibos aparecem aqui após cada cobrança.</div>
+        </section>
+
+        <!-- ============ FASE 22c.5: AVARIAS REPORTADAS / CONTESTAÇÃO ============ -->
+        <section class="dash-panel" id="avarias">
+          <h2>Avarias na minha locação</h2>
+          <p>Quando o proprietário reporta uma avaria no check-out, ela aparece aqui. Você acompanha a análise da equipe Proteção e pode <strong>contestar a decisão em até 5 dias úteis</strong>.</p>
+          <div class="dash-list" id="myDamageList"></div>
+          <div class="dash-empty" id="myDamageEmpty">Nenhuma avaria reportada em suas locações.</div>
         </section>
 
         <section class="dash-panel" id="protecao">
@@ -400,6 +409,7 @@
     loadDocuments();
     loadCases();
     loadRecibos();
+    loadMyDamages();
   });
 
   /* ---- Fase 5: check-in / check-out ---- */
@@ -974,6 +984,180 @@
       });
     });
   })();
+
+  /* ============================================================
+   * FASE 22c.5 — Cliente vê e contesta avarias
+   * ============================================================ */
+  var dmgRulesMap = {};
+  function loadDmgRules() {
+    var c = a.client();
+    if (!c) return Promise.resolve({});
+    return c.from("damage_rules").select("code,label,description").then(function (r) {
+      ((r && r.data) || []).forEach(function (x) { dmgRulesMap[x.code] = x; });
+      return dmgRulesMap;
+    }).catch(function () { return {}; });
+  }
+
+  function loadMyDamages() {
+    var c = a.client();
+    var list = document.getElementById("myDamageList");
+    var empty = document.getElementById("myDamageEmpty");
+    if (!c || !list) return;
+    loadDmgRules().then(function () {
+      c.from("damages").select("*, bookings(vehicles(make,model,year_model))")
+        .order("created_at", { ascending: false })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          list.innerHTML = "";
+          if (!rows.length) { if (empty) empty.hidden = false; return; }
+          if (empty) empty.hidden = true;
+          rows.forEach(function (d) { list.appendChild(myDamageCard(d)); });
+        }).catch(function () {});
+    });
+  }
+
+  function dmgBrl(v) {
+    var n = Number(v) || 0;
+    return "R$ " + n.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
+  }
+  function dmgFmtDate(d) {
+    if (!d) return "—";
+    try { return new Date(d).toLocaleString("pt-BR"); } catch (e) { return String(d); }
+  }
+  function dmgStatusLabel(s) {
+    if (s === "pendente_revisao") return "Aguardando revisão da Proteção";
+    if (s === "em_contestacao") return "Em contestação — 2ª análise";
+    if (s === "aprovado_captura") return "Aprovado para captura";
+    if (s === "aprovado_sem_captura") return "Liberado (sem cobrança)";
+    if (s === "resolvido") return "Resolvido";
+    return s;
+  }
+  function dmgStatusKind(s) {
+    if (s === "pendente_revisao") return "warn";
+    if (s === "em_contestacao") return "warn";
+    if (s === "aprovado_captura" || s === "resolvido") return "ok";
+    if (s === "aprovado_sem_captura") return "neutral";
+    return "neutral";
+  }
+
+  // Pode contestar se está resolvido ou aprovado_captura E o prazo de
+  // 5 dias úteis (~5 dias corridos pra simplificar) ainda não passou
+  function canDispute(d) {
+    if (d.status !== "resolvido" && d.status !== "aprovado_captura") return false;
+    if (d.client_dispute) return false; // já contestou
+    var ref = d.captured_at || d.reviewed_at;
+    if (!ref) return true;
+    var daysSince = (Date.now() - new Date(ref).getTime()) / (1000 * 60 * 60 * 24);
+    return daysSince <= 5;
+  }
+
+  function myDamageCard(d) {
+    var rule = dmgRulesMap[d.rule_code] || { label: d.rule_code };
+    var v = (d.bookings && d.bookings.vehicles) || {};
+    var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) vt += " (" + v.year_model + ")";
+
+    var card = document.createElement("div");
+    card.className = "insp-card";
+
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    t.textContent = rule.label + " — " + vt;
+    var sub = document.createElement("span");
+    sub.textContent = "Reportada em " + dmgFmtDate(d.created_at) +
+      (d.final_amount != null ? " · valor final " + dmgBrl(d.final_amount) : "");
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+
+    if (d.description) {
+      var desc = document.createElement("p");
+      desc.className = "insp-card__msg";
+      desc.textContent = "Descrição do proprietário: " + d.description;
+      card.appendChild(desc);
+    }
+
+    if (d.review_notes) {
+      var pn = document.createElement("p");
+      pn.className = "insp-card__msg";
+      pn.style.background = "#e8f5e9";
+      pn.style.borderLeft = "3px solid #145f3e";
+      pn.textContent = "Parecer da Proteção: " + d.review_notes;
+      card.appendChild(pn);
+    }
+
+    var status = document.createElement("div");
+    status.style.cssText = "margin:8px 0;";
+    var pill = document.createElement("span");
+    pill.className = "dash-pill dash-pill--" + dmgStatusKind(d.status);
+    pill.textContent = dmgStatusLabel(d.status);
+    status.appendChild(pill);
+    card.appendChild(status);
+
+    if (d.client_dispute) {
+      var disp = document.createElement("p");
+      disp.className = "insp-card__msg";
+      disp.style.background = "#fff5e8";
+      disp.style.borderLeft = "3px solid #cf7a1c";
+      disp.textContent = "Sua contestação: " + d.client_dispute;
+      card.appendChild(disp);
+    }
+
+    if (canDispute(d)) {
+      var box = document.createElement("div");
+      box.style.cssText = "background:#f9fafb;border:1px solid #e3e9e5;border-radius:10px;padding:12px;margin-top:8px;";
+      box.innerHTML =
+        '<h4 style="margin:0 0 8px;font-size:14px;">Contestar a decisão</h4>' +
+        '<p class="note" style="margin:0 0 8px;">Você tem até 5 dias úteis após a decisão para contestar. A Proteção fará uma 2ª análise.</p>' +
+        '<textarea class="dispute-input" rows="3" style="width:100%;padding:8px;border:1px solid #ccd5cf;border-radius:8px;font-family:inherit;font-size:14px;" placeholder="Explique por que você não concorda com a avaliação."></textarea>' +
+        '<p class="form__err" style="color:#b00020;margin-top:6px;" hidden></p>' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="dispute" style="margin-top:8px;">Enviar contestação</button>';
+      card.appendChild(box);
+
+      var btn = box.querySelector('[data-act="dispute"]');
+      var inp = box.querySelector(".dispute-input");
+      var err = box.querySelector(".form__err");
+      btn.addEventListener("click", function () {
+        var txt = (inp.value || "").trim();
+        if (txt.length < 20) {
+          err.textContent = "A contestação precisa ter pelo menos 20 caracteres.";
+          err.hidden = false; return;
+        }
+        err.hidden = true;
+        btn.disabled = true; btn.textContent = "Enviando...";
+        var c = a.client();
+        c.from("damages").update({
+          status: "em_contestacao",
+          client_dispute: txt,
+          client_disputed_at: new Date().toISOString()
+        }).eq("id", d.id).then(function (r) {
+          btn.disabled = false; btn.textContent = "Enviar contestação";
+          if (r && r.error) {
+            err.textContent = "Não foi possível enviar. Tente novamente.";
+            err.hidden = false; return;
+          }
+          showNotice("Contestação enviada. A equipe Proteção fará uma 2ª análise.", "ok");
+          loadMyDamages();
+        }).catch(function () {
+          btn.disabled = false; btn.textContent = "Enviar contestação";
+          err.textContent = "Erro de rede. Tente novamente.";
+          err.hidden = false;
+        });
+      });
+    } else if (d.status === "resolvido" || d.status === "aprovado_captura") {
+      if (!d.client_dispute) {
+        var msg = document.createElement("p");
+        msg.className = "note";
+        msg.style.cssText = "margin:8px 0 0;";
+        msg.textContent = "Prazo de contestação encerrado (5 dias úteis após a decisão).";
+        card.appendChild(msg);
+      }
+    }
+
+    return card;
+  }
 })();
 </script>
 </body>
