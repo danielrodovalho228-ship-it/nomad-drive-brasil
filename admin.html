@@ -41,6 +41,7 @@
       <a href="#reservas"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Reservas</a>
       <a href="#frota"><svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="11" rx="1"/><polygon points="16 10 20 10 23 13 23 17 16 17 16 10"/><circle cx="5.5" cy="18.5" r="1.5"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>Frota</a>
       <a href="#vistorias"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Vistorias</a>
+      <a href="#instalacoes"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Instalações de rastreador</a>
       <a href="#proprietarios"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Proprietários</a>
       <a href="#oficinas"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Oficinas</a>
       <a href="#parceiros"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Parceiros</a>
@@ -209,6 +210,27 @@
         <table class="admin-table">
           <thead><tr><th>Veículo</th><th>Oficina</th><th>Status</th><th>Concluída?</th><th>Atribuída em</th></tr></thead>
           <tbody id="vistList"><tr><td colspan="5">Carregando vistorias...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- INSTALAÇÕES DE RASTREADOR (Fase 28.6) -->
+    <section class="admin-block" id="instalacoes">
+      <h2>Instalações de rastreador GPS</h2>
+      <p class="note">Ordens de instalação compradas por proprietários. Valide as evidências (fotos + NF) enviadas pela oficina antes de liberar o veículo pra entrar na frota.</p>
+      <div class="auth-msg" id="instAdminMsg" hidden></div>
+
+      <div class="admin-card">
+        <h3 class="block-title">Pendentes de validação</h3>
+        <div id="instAdminList"></div>
+        <div class="dash-empty" id="instAdminEmpty">Nenhuma instalação aguardando validação.</div>
+      </div>
+
+      <div class="admin-card" style="margin-top:18px;">
+        <h3 class="block-title">Todas as ordens (últimas 30)</h3>
+        <table class="admin-table">
+          <thead><tr><th>Data</th><th>Veículo</th><th>Oficina</th><th>Valor</th><th>Status</th></tr></thead>
+          <tbody id="instAdminAll"><tr><td colspan="5">Carregando...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -509,6 +531,7 @@
     loadFinanceiroDetalhado();
     loadNotasFiscais();
     loadVistorias();   // #4: gerenciar vistorias técnicas
+    loadInstallationOrders();  // Fase 28.6: instalações de rastreador
   }
 
   /* ====== FINANCEIRO DETALHADO (dados reais do banco) ====== */
@@ -1709,6 +1732,156 @@
       }).catch(function () {
         tb.innerHTML = '<tr><td colspan="5">Não foi possível carregar.</td></tr>';
       });
+  }
+
+  /* ============================================================
+   * FASE 28.6 — Admin: validar instalações de rastreador
+   * ============================================================ */
+  function instAdminMsg(text, kind) {
+    var el = document.getElementById("instAdminMsg");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "auth-msg auth-msg--" + (kind || "ok");
+    el.hidden = false;
+  }
+
+  function loadInstallationOrders() {
+    var c = a.client();
+    if (!c) return;
+    var pending = document.getElementById("instAdminList");
+    var pendingEmpty = document.getElementById("instAdminEmpty");
+    var allTb = document.getElementById("instAdminAll");
+    if (!pending || !allTb) return;
+
+    c.from("installation_orders")
+      .select("*, vehicles(make,model,year_model,owner_id), workshops(business_name,city)")
+      .order("created_at",{ascending:false}).limit(30)
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        // Pending list (aguardando_validacao apenas)
+        var pendingRows = rows.filter(function (o) { return o.status === "aguardando_validacao"; });
+        pending.innerHTML = "";
+        if (!pendingRows.length) {
+          if (pendingEmpty) pendingEmpty.hidden = false;
+        } else {
+          if (pendingEmpty) pendingEmpty.hidden = true;
+          pendingRows.forEach(function (o) { pending.appendChild(installAdminCard(o, c)); });
+        }
+        // Tabela completa
+        if (!rows.length) {
+          allTb.innerHTML = '<tr><td colspan="5">Nenhuma ordem ainda.</td></tr>';
+        } else {
+          allTb.innerHTML = "";
+          rows.forEach(function (o) {
+            var tr = document.createElement("tr");
+            function td(t) { var d=document.createElement("td"); d.textContent = t; return d; }
+            var v = o.vehicles || {};
+            var vt = [v.make, v.model].filter(Boolean).join(" ");
+            if (v.year_model) vt += " ("+v.year_model+")";
+            tr.appendChild(td(new Date(o.created_at).toLocaleDateString("pt-BR")));
+            tr.appendChild(td(vt || "—"));
+            tr.appendChild(td((o.workshops && o.workshops.business_name) || "—"));
+            tr.appendChild(td(o.amount ? "R$ "+Number(o.amount).toLocaleString("pt-BR",{minimumFractionDigits:2}) : "—"));
+            tr.appendChild(td(o.status));
+            allTb.appendChild(tr);
+          });
+        }
+      }).catch(function (e) {
+        console.error("loadInstallationOrders:", e);
+        pending.innerHTML = '<p class="note">Erro ao carregar.</p>';
+      });
+  }
+
+  function installAdminCard(o, c) {
+    var v = o.vehicles || {};
+    var vt = [v.make, v.model].filter(Boolean).join(" ");
+    if (v.year_model) vt += " ("+v.year_model+")";
+
+    var card = document.createElement("div");
+    card.style.cssText = "border:1px solid #e3e9e5;border-radius:10px;padding:14px;margin-bottom:12px;background:#f9fafb;";
+    card.innerHTML =
+      '<h4 style="margin:0 0 4px;">Veículo: ' + (vt || "—") + '</h4>' +
+      '<p class="note" style="margin:0 0 8px;">Oficina: ' + ((o.workshops && o.workshops.business_name) || "—") +
+      ' · Valor: R$ ' + Number(o.amount||0).toLocaleString("pt-BR",{minimumFractionDigits:2}) +
+      ' · Concluída em: ' + (o.completed_at ? new Date(o.completed_at).toLocaleString("pt-BR") : "—") +
+      '</p>' +
+      (o.installer_notes ? '<p class="note" style="margin:6px 0;background:#fff5e8;padding:8px;border-radius:6px;">📝 ' + o.installer_notes + '</p>' : '') +
+      '<div class="inst-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;"></div>' +
+      '<div class="inst-nf" style="margin:8px 0;"></div>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;">' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="approve">Validar instalação ✓</button>' +
+        '<button type="button" class="btn btn--ghost btn--sm" data-act="reject">Rejeitar</button>' +
+      '</div>';
+
+    // Carrega fotos via signed URLs
+    var photosDiv = card.querySelector(".inst-photos");
+    var paths = Array.isArray(o.evidence_photos) ? o.evidence_photos : [];
+    paths.forEach(function (p) {
+      c.storage.from("installations").createSignedUrl(p, 600).then(function (r) {
+        if (!r || !r.data || !r.data.signedUrl) return;
+        var img = document.createElement("img");
+        img.src = r.data.signedUrl;
+        img.style.cssText = "width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ccd5cf;cursor:zoom-in;";
+        img.addEventListener("click", function () { window.open(r.data.signedUrl, "_blank"); });
+        photosDiv.appendChild(img);
+      });
+    });
+    // NF
+    var nfDiv = card.querySelector(".inst-nf");
+    if (o.evidence_invoice_path) {
+      c.storage.from("installations").createSignedUrl(o.evidence_invoice_path, 600).then(function (r) {
+        if (!r || !r.data || !r.data.signedUrl) return;
+        var link = document.createElement("a");
+        link.href = r.data.signedUrl;
+        link.target = "_blank";
+        link.style.cssText = "display:inline-block;padding:8px 14px;background:#145f3e;color:#fff;border-radius:6px;text-decoration:none;font-size:13px;";
+        link.textContent = "📄 Ver nota fiscal (PDF)";
+        nfDiv.appendChild(link);
+      });
+    }
+
+    // Aprovar
+    card.querySelector('[data-act="approve"]').addEventListener("click", function () {
+      a.getSession().then(function (s) {
+        c.from("installation_orders").update({
+          status: "concluida",
+          validated_by: s ? s.user.id : null,
+          validated_at: new Date().toISOString()
+        }).eq("id", o.id).then(function (r) {
+          if (r && r.error) { instAdminMsg("Erro: " + r.error.message, "error"); return; }
+          // Marca veículo como tracker_installed
+          c.from("vehicles").update({
+            tracker_installed: true,
+            tracker_installed_at: new Date().toISOString(),
+            tracker_installation_id: o.id
+          }).eq("id", o.vehicle_id).then(function () {
+            instAdminMsg("Instalação validada! Veículo liberado pra entrar na frota. Pagamento à oficina via Stripe Connect já está em curso.", "ok");
+            loadInstallationOrders();
+          });
+        });
+      });
+    });
+
+    // Rejeitar
+    card.querySelector('[data-act="reject"]').addEventListener("click", function () {
+      var motivo = window.prompt(
+        "Motivo da rejeição (vai aparecer pra oficina pra ela refazer):", "");
+      if (!motivo || !motivo.trim()) return;
+      a.getSession().then(function (s) {
+        c.from("installation_orders").update({
+          status: "rejeitada",
+          rejection_reason: motivo.trim(),
+          validated_by: s ? s.user.id : null,
+          validated_at: new Date().toISOString()
+        }).eq("id", o.id).then(function (r) {
+          if (r && r.error) { instAdminMsg("Erro: " + r.error.message, "error"); return; }
+          instAdminMsg("Ordem rejeitada. Oficina vai precisar refazer com novas evidências.", "warn");
+          loadInstallationOrders();
+        });
+      });
+    });
+
+    return card;
   }
 })();
 </script>

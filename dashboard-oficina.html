@@ -50,6 +50,7 @@
         <nav class="dash-side__nav">
           <a href="#visao"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Visão geral</a>
           <a href="#fila"><svg viewBox="0 0 24 24"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>Fila de vistorias</a>
+          <a href="#rastreador"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Instalações de rastreador</a>
           <a href="#checklist"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Checklist técnico</a>
           <a href="#recebimentos"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Recebimentos</a>
           <a href="#historico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Histórico</a>
@@ -80,6 +81,27 @@
           <p>Veículos atribuídos para checklist técnico. O resultado pode ser aprovado, aprovado com ressalvas, reprovado ou pendente de revisão.</p>
           <div class="dash-list" id="inspList"></div>
           <div class="dash-empty" id="inspEmpty">Nenhuma vistoria atribuída no momento.</div>
+        </section>
+
+        <!-- FASE 28.4: Instalações de rastreador -->
+        <section class="dash-panel" id="rastreador">
+          <h2>Instalações de rastreador GPS</h2>
+          <p>Ordens de instalação que proprietários compraram pra sua oficina. Aceite a ordem, instale o rastreador e envie evidências (fotos + NF) pra liberar a aprovação do veículo + recebimento via Stripe.</p>
+          <div class="auth-msg" id="instMsg" hidden></div>
+
+          <div class="why-box why-box--warn" style="margin-bottom:14px;">
+            <h3>💡 Pra aparecer aqui</h3>
+            <p>Sua oficina precisa:</p>
+            <ul style="margin:8px 0 0 18px;">
+              <li>Estar com cadastro <strong>aprovado</strong></li>
+              <li>Ter <strong>"oferece instalação de rastreador"</strong> marcado no cadastro</li>
+              <li>Ter <strong>preço sugerido cadastrado</strong> (o valor que o proprietário paga)</li>
+              <li>Ter <strong>Stripe Connect ativo</strong> em "Recebimentos" pra receber automaticamente</li>
+            </ul>
+          </div>
+
+          <div class="dash-list" id="instList"></div>
+          <div class="dash-empty" id="instEmpty">Nenhuma instalação atribuída ainda.</div>
         </section>
 
         <section class="dash-panel" id="checklist">
@@ -286,7 +308,205 @@
           list.appendChild(inspRow(i, title));
         });
       }).catch(function () {});
+
+    // Fase 28.4: ordens de instalação de rastreador
+    loadInstallations();
   });
+
+  /* ============================================================
+   * FASE 28.4 — Ordens de instalação de rastreador (oficina)
+   * ============================================================ */
+  function instMsg(text, kind) {
+    var el = document.getElementById("instMsg");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "auth-msg auth-msg--" + (kind || "ok");
+    el.hidden = false;
+  }
+  function brl(v) {
+    var n = Number(v) || 0;
+    return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function loadInstallations() {
+    var c = a.client();
+    var list = document.getElementById("instList");
+    var empty = document.getElementById("instEmpty");
+    if (!c || !list) return;
+    c.from("installation_orders")
+      .select("*, vehicles(make,model,year_model)")
+      .in("status", ["aguardando_instalacao","em_instalacao","aguardando_validacao","concluida","rejeitada"])
+      .order("created_at", { ascending: false }).limit(50)
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        list.innerHTML = "";
+        if (!rows.length) { if (empty) empty.hidden = false; return; }
+        if (empty) empty.hidden = true;
+        rows.forEach(function (o) { list.appendChild(installRow(o)); });
+      }).catch(function () {});
+  }
+
+  function installStatusLabel(s) {
+    if (s === "aguardando_instalacao") return "Aguardando você instalar";
+    if (s === "em_instalacao") return "Em instalação";
+    if (s === "aguardando_validacao") return "Aguardando validação do admin";
+    if (s === "concluida") return "Concluída — pagamento liberado";
+    if (s === "rejeitada") return "Rejeitada pelo admin";
+    return s;
+  }
+  function installStatusKind(s) {
+    if (s === "aguardando_instalacao") return "warn";
+    if (s === "em_instalacao") return "warn";
+    if (s === "aguardando_validacao") return "neutral";
+    if (s === "concluida") return "ok";
+    if (s === "rejeitada") return "bad";
+    return "neutral";
+  }
+
+  function installRow(o) {
+    var v = o.vehicles || {};
+    var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) vt += " (" + v.year_model + ")";
+
+    var card = document.createElement("div");
+    card.className = "insp-card";
+
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    t.textContent = "Instalação rastreador — " + vt;
+    var sub = document.createElement("span");
+    sub.textContent = "Valor: " + brl(o.amount) +
+      " · Criada em " + new Date(o.created_at).toLocaleString("pt-BR") +
+      (o.accepted_at ? " · Aceita em " + new Date(o.accepted_at).toLocaleString("pt-BR") : "");
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+
+    var pill = document.createElement("div");
+    pill.style.cssText = "margin:8px 0;";
+    var p = document.createElement("span");
+    p.className = "dash-pill dash-pill--" + installStatusKind(o.status);
+    p.textContent = installStatusLabel(o.status);
+    pill.appendChild(p);
+    card.appendChild(pill);
+
+    if (o.rejection_reason) {
+      var rj = document.createElement("p");
+      rj.className = "insp-card__msg";
+      rj.style.background = "#fff5e8";
+      rj.style.borderLeft = "3px solid #cf7a1c";
+      rj.textContent = "Motivo da rejeição: " + o.rejection_reason;
+      card.appendChild(rj);
+    }
+
+    // Ação: aceitar
+    if (o.status === "aguardando_instalacao") {
+      var aceitar = document.createElement("button");
+      aceitar.type = "button";
+      aceitar.className = "btn btn--solid btn--sm";
+      aceitar.textContent = "Aceitar ordem";
+      aceitar.addEventListener("click", function () {
+        aceitar.disabled = true;
+        a.client().from("installation_orders").update({
+          status: "em_instalacao",
+          accepted_at: new Date().toISOString()
+        }).eq("id", o.id).then(function (r) {
+          if (r && r.error) {
+            aceitar.disabled = false;
+            instMsg("Não foi possível aceitar: " + (r.error.message || ""), "error");
+            return;
+          }
+          instMsg("Ordem aceita. Faça a instalação e envie evidências.", "ok");
+          loadInstallations();
+        });
+      });
+      card.appendChild(aceitar);
+    }
+
+    // Ação: concluir + upload evidências
+    if (o.status === "em_instalacao" || o.status === "rejeitada") {
+      var box = document.createElement("div");
+      box.style.cssText = "background:#f9fafb;border:1px solid #e3e9e5;border-radius:10px;padding:12px;margin-top:8px;";
+      box.innerHTML =
+        '<h4 style="margin:0 0 8px;font-size:14px;">Enviar evidências da instalação</h4>' +
+        '<label class="field"><span>Fotos do rastreador instalado (múltiplas)</span>' +
+        '<input type="file" class="inst-photos" multiple accept="image/jpeg,image/png,image/webp" /></label>' +
+        '<label class="field" style="margin-top:8px;"><span>Nota fiscal (PDF)</span>' +
+        '<input type="file" class="inst-nf" accept="application/pdf" /></label>' +
+        '<label class="field" style="margin-top:8px;"><span>Notas do instalador (opcional)</span>' +
+        '<textarea class="inst-notes" rows="2" placeholder="Local da instalação, modelo do dispositivo, número de série..."></textarea></label>' +
+        '<p class="form__err" style="color:#b00020;margin-top:6px;" hidden></p>' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="enviar" style="margin-top:8px;">Concluir e enviar para validação</button>';
+      card.appendChild(box);
+
+      var btnEnviar = box.querySelector('[data-act="enviar"]');
+      var errEl = box.querySelector(".form__err");
+      btnEnviar.addEventListener("click", function () {
+        var photos = box.querySelector(".inst-photos").files;
+        var nfFile = box.querySelector(".inst-nf").files[0];
+        var notes  = box.querySelector(".inst-notes").value.trim();
+        if (!photos.length) {
+          errEl.textContent = "Adicione ao menos 1 foto."; errEl.hidden = false; return;
+        }
+        if (!nfFile) {
+          errEl.textContent = "Anexe a nota fiscal (PDF)."; errEl.hidden = false; return;
+        }
+        errEl.hidden = true;
+        btnEnviar.disabled = true; btnEnviar.textContent = "Enviando...";
+        submitInstallationEvidence(o.id, photos, nfFile, notes, btnEnviar, errEl);
+      });
+    }
+
+    return card;
+  }
+
+  function submitInstallationEvidence(orderId, photos, nfFile, notes, btn, errEl) {
+    var c = a.client();
+    // Upload de cada foto
+    var uploads = [].slice.call(photos).map(function (f) {
+      var ext = (f.name.split(".").pop() || "jpg").toLowerCase();
+      var path = orderId + "/photos/" + Date.now() + "_" + Math.random().toString(36).slice(2,8) + "." + ext;
+      return c.storage.from("installations").upload(path, f, {
+        cacheControl: "3600", upsert: false, contentType: f.type
+      }).then(function (r) {
+        if (r && r.error) { console.error("upload foto:", r.error); return null; }
+        return path;
+      });
+    });
+    // Upload da NF
+    var nfPath = orderId + "/invoice/" + Date.now() + "_" + nfFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    var nfUpload = c.storage.from("installations").upload(nfPath, nfFile, {
+      cacheControl: "3600", upsert: false, contentType: "application/pdf"
+    });
+
+    Promise.all([Promise.all(uploads), nfUpload]).then(function (results) {
+      var photoPaths = (results[0] || []).filter(Boolean);
+      var nfRes = results[1];
+      if (nfRes && nfRes.error) {
+        errEl.textContent = "Erro ao subir NF: " + nfRes.error.message;
+        errEl.hidden = false;
+        btn.disabled = false; btn.textContent = "Concluir e enviar para validação";
+        return;
+      }
+      // Atualiza ordem
+      c.from("installation_orders").update({
+        status: "aguardando_validacao",
+        completed_at: new Date().toISOString(),
+        evidence_photos: photoPaths,
+        evidence_invoice_path: nfPath,
+        installer_notes: notes || null,
+        rejection_reason: null   // limpa se for re-envio após rejeição
+      }).eq("id", orderId).then(function (r) {
+        btn.disabled = false; btn.textContent = "Concluir e enviar para validação";
+        if (r && r.error) {
+          errEl.textContent = "Não foi possível salvar: " + r.error.message;
+          errEl.hidden = false; return;
+        }
+        instMsg("Evidências enviadas! Aguarde validação do admin.", "ok");
+        loadInstallations();
+      });
+    });
+  }
 })();
 </script>
 </body>

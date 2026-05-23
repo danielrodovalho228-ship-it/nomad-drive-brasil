@@ -50,6 +50,7 @@
         <nav class="dash-side__nav">
           <a href="#visao"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Visão geral</a>
           <a href="#veiculos"><svg viewBox="0 0 24 24"><path d="M19 17H5l-1.5-5a2 2 0 0 1 .14-1.42l1.79-3.58A2 2 0 0 1 7.24 6h9.52a2 2 0 0 1 1.81 1.16l1.78 3.57A2 2 0 0 1 20.5 12L19 17z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>Meus veículos</a>
+          <a href="#rastreador"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Instalar rastreador</a>
           <a href="#locacao"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Em locação</a>
           <a href="#rastreamento"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Segurança e rastreamento</a>
           <a href="#alertas"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Alertas</a>
@@ -81,6 +82,17 @@
           <div class="dash-list" id="veicList"></div>
           <div class="dash-empty" id="veicEmpty">Você ainda não cadastrou veículos.</div>
           <a href="onboarding-proprietario.html" class="btn btn--solid btn--sm dash-cta">Cadastrar um veículo</a>
+        </section>
+
+        <!-- FASE 28.5: Instalação de rastreador -->
+        <section class="dash-panel" id="rastreador">
+          <h2>Instalação obrigatória de rastreador GPS</h2>
+          <p>Todo veículo da Nomade Drive precisa ter <strong>rastreador GPS instalado</strong> antes de entrar na frota. A instalação é feita por <strong>oficina parceira credenciada</strong> de Uberlândia-MG. Custo do proprietário. Pagamento pela plataforma com split automático.</p>
+
+          <div class="auth-msg" id="trackerMsg" hidden></div>
+
+          <div class="dash-list" id="trackerList"></div>
+          <div class="dash-empty" id="trackerEmpty">Cadastre um veículo primeiro pra ver o status da instalação.</div>
         </section>
 
         <section class="dash-panel" id="locacao">
@@ -440,6 +452,7 @@
 
     loadOwnerInspections();
     loadMaintenance();
+    loadTrackerInstallations();
   });
 
   /* ---- Financeiro: receita e repasse consolidados ---- */
@@ -1043,6 +1056,225 @@
     });
     return form;
   }
+
+  /* ============================================================
+   * FASE 28.5 — Instalação de rastreador (proprietário)
+   * ============================================================
+   * Pra cada veículo do owner, mostra status:
+   *  - sem ordem: lista oficinas parceiras + botão "Contratar"
+   *  - com ordem: mostra status atual + ações conforme
+   * ============================================================ */
+  function trackerMsg(text, kind) {
+    var el = document.getElementById("trackerMsg");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "auth-msg auth-msg--" + (kind || "ok");
+    el.hidden = false;
+  }
+  function brlT(v) {
+    var n = Number(v) || 0;
+    return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function loadTrackerInstallations() {
+    var c = a.client();
+    var list = document.getElementById("trackerList");
+    var empty = document.getElementById("trackerEmpty");
+    if (!c || !list) return;
+
+    // Lê em paralelo: meus veículos + oficinas parceiras que oferecem instalação
+    Promise.all([
+      c.from("vehicles").select("id,make,model,year_model,tracker_installed,status").order("created_at",{ascending:false}),
+      c.from("workshops").select("id,business_name,city,tracker_install_price,tracker_install_notes")
+        .eq("status","aprovado").eq("offers_tracker_install", true)
+        .not("tracker_install_price","is",null),
+      c.from("installation_orders").select("id, vehicle_id, workshop_id, status, amount, created_at, rejection_reason")
+        .order("created_at",{ascending:false})
+    ]).then(function (results) {
+      var vehicles = (results[0] && results[0].data) || [];
+      var workshops = (results[1] && results[1].data) || [];
+      var orders = (results[2] && results[2].data) || [];
+
+      list.innerHTML = "";
+      if (!vehicles.length) { if (empty) empty.hidden = false; return; }
+      if (empty) empty.hidden = true;
+
+      vehicles.forEach(function (v) {
+        list.appendChild(vehicleTrackerCard(v, workshops, orders));
+      });
+    }).catch(function (e) {
+      console.error("loadTrackerInstallations:", e);
+      list.innerHTML = '<p class="note">Não foi possível carregar agora. Tente novamente.</p>';
+    });
+  }
+
+  function vehicleTrackerCard(v, workshops, orders) {
+    var card = document.createElement("div");
+    card.className = "insp-card";
+
+    var head = document.createElement("div");
+    head.className = "insp-card__head";
+    var t = document.createElement("strong");
+    var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) vt += " (" + v.year_model + ")";
+    t.textContent = vt;
+    var sub = document.createElement("span");
+    sub.textContent = "Status do veículo: " + (v.status || "em análise");
+    head.appendChild(t); head.appendChild(sub);
+    card.appendChild(head);
+
+    // Veículo já tem rastreador?
+    if (v.tracker_installed) {
+      var ok = document.createElement("div");
+      ok.style.cssText = "margin:8px 0;";
+      var pill = document.createElement("span");
+      pill.className = "dash-pill dash-pill--ok";
+      pill.textContent = "✓ Rastreador instalado e validado";
+      ok.appendChild(pill);
+      card.appendChild(ok);
+      return card;
+    }
+
+    // Tem ordem aberta pra esse veículo?
+    var openOrder = orders.find(function (o) {
+      return o.vehicle_id === v.id &&
+        ["pending_payment","aguardando_instalacao","em_instalacao","aguardando_validacao","rejeitada"]
+          .indexOf(o.status) !== -1;
+    });
+
+    if (openOrder) {
+      var statusRow = document.createElement("div");
+      statusRow.style.cssText = "margin:8px 0;";
+      var kindMap = {
+        pending_payment: "warn", aguardando_instalacao: "warn", em_instalacao: "warn",
+        aguardando_validacao: "neutral", rejeitada: "bad"
+      };
+      var lblMap = {
+        pending_payment: "Aguardando pagamento",
+        aguardando_instalacao: "Aguardando oficina aceitar",
+        em_instalacao: "Em instalação pela oficina",
+        aguardando_validacao: "Instalada — aguardando validação do admin",
+        rejeitada: "Rejeitada pelo admin (oficina vai refazer)"
+      };
+      var p = document.createElement("span");
+      p.className = "dash-pill dash-pill--" + (kindMap[openOrder.status] || "neutral");
+      p.textContent = lblMap[openOrder.status] || openOrder.status;
+      statusRow.appendChild(p);
+      var amt = document.createElement("span");
+      amt.style.cssText = "margin-left:8px;font-weight:600;";
+      amt.textContent = brlT(openOrder.amount);
+      statusRow.appendChild(amt);
+      card.appendChild(statusRow);
+
+      if (openOrder.status === "pending_payment") {
+        var payBtn = document.createElement("button");
+        payBtn.type = "button";
+        payBtn.className = "btn btn--solid btn--sm";
+        payBtn.textContent = "Pagar instalação agora";
+        payBtn.addEventListener("click", function () {
+          startInstallationCheckout(openOrder.id, openOrder.vehicle_id, openOrder.workshop_id, payBtn);
+        });
+        card.appendChild(payBtn);
+      }
+      if (openOrder.rejection_reason) {
+        var rj = document.createElement("p");
+        rj.className = "note";
+        rj.style.cssText = "margin:8px 0;color:#cf7a1c;";
+        rj.textContent = "Motivo: " + openOrder.rejection_reason;
+        card.appendChild(rj);
+      }
+      return card;
+    }
+
+    // Sem ordem aberta: mostra lista de oficinas pra escolher
+    if (!workshops.length) {
+      var noWs = document.createElement("p");
+      noWs.className = "note";
+      noWs.style.margin = "8px 0";
+      noWs.textContent = "Nenhuma oficina parceira credenciada com preço cadastrado no momento. Aguarde — a equipe Nomade Drive está expandindo a rede.";
+      card.appendChild(noWs);
+      return card;
+    }
+
+    var pick = document.createElement("div");
+    pick.style.cssText = "margin-top:8px;";
+    pick.innerHTML = '<p class="note" style="margin:0 0 8px;">Escolha uma oficina parceira pra instalar o rastreador:</p>';
+    var select = document.createElement("select");
+    select.style.cssText = "width:100%;padding:8px;border:1px solid #ccd5cf;border-radius:8px;margin-bottom:8px;";
+    select.innerHTML = '<option value="">Selecione...</option>';
+    workshops.forEach(function (w) {
+      var o = document.createElement("option");
+      o.value = w.id;
+      o.textContent = w.business_name + " — " + (w.city || "") + " · " + brlT(w.tracker_install_price);
+      o.setAttribute("data-price", w.tracker_install_price);
+      select.appendChild(o);
+    });
+    pick.appendChild(select);
+
+    var contrato = document.createElement("button");
+    contrato.type = "button";
+    contrato.className = "btn btn--solid btn--sm";
+    contrato.textContent = "Contratar e pagar";
+    contrato.disabled = true;
+    select.addEventListener("change", function () { contrato.disabled = !select.value; });
+    contrato.addEventListener("click", function () {
+      var wid = select.value;
+      if (!wid) return;
+      startInstallationCheckout(null, v.id, wid, contrato);
+    });
+    pick.appendChild(contrato);
+    card.appendChild(pick);
+
+    return card;
+  }
+
+  function startInstallationCheckout(orderId, vehicleId, workshopId, btn) {
+    var c = a.client();
+    if (!c || !c.functions) {
+      trackerMsg("Pagamento indisponível nesta pré-visualização.", "warn"); return;
+    }
+    btn.disabled = true;
+    var orig = btn.textContent;
+    btn.textContent = "Abrindo pagamento...";
+    c.functions.invoke("installation-checkout", {
+      body: { action: "create", vehicle_id: vehicleId, workshop_id: workshopId }
+    }).then(function (r) {
+      var d = r && r.data;
+      if (d && d.ok && d.url) {
+        window.location.href = d.url;   // vai pra Stripe
+        return;
+      }
+      btn.disabled = false; btn.textContent = orig;
+      trackerMsg("Não foi possível abrir o pagamento: " +
+        ((r && r.error && r.error.message) || (d && d.error) || "tente novamente."), "error");
+    }).catch(function (e) {
+      btn.disabled = false; btn.textContent = orig;
+      trackerMsg("Erro de rede: " + (e && e.message || e), "error");
+    });
+  }
+
+  // Quando volta da Stripe (success_url tem ?instalacao=ok&session_id=...),
+  // chama confirm pra atualizar status da ordem
+  (function handleStripeReturn() {
+    try {
+      var q = new URLSearchParams(window.location.search);
+      if (q.get("instalacao") === "ok" && q.get("session_id")) {
+        var c = a.client();
+        if (!c || !c.functions) return;
+        c.functions.invoke("installation-checkout", {
+          body: { action: "confirm", session_id: q.get("session_id") }
+        }).then(function () {
+          trackerMsg("Pagamento confirmado! Aguardando oficina aceitar a ordem.", "ok");
+          loadTrackerInstallations();
+          // Limpa query string
+          history.replaceState({}, "", window.location.pathname + "#rastreador");
+        });
+      } else if (q.get("instalacao") === "cancelado") {
+        trackerMsg("Pagamento cancelado. Tente novamente quando quiser.", "warn");
+        history.replaceState({}, "", window.location.pathname + "#rastreador");
+      }
+    } catch (e) {}
+  })();
 })();
 </script>
 </body>
