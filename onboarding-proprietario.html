@@ -113,6 +113,8 @@
 
         <label class="onb-check"><input type="checkbox" id="cienteAnalise" /> <span>Entendo que o veículo passa por <strong>análise documental, fotos, checklist técnico em oficina parceira</strong> e que a aprovação não é garantida — a renda é estimada e não garantida.</span></label>
 
+        <label class="onb-check"><input type="checkbox" id="cienteRastreador" /> <span>Aceito que o veículo precisa ter <strong>rastreador GPS instalado de forma fixa e oculta</strong> por oficina parceira credenciada (custo do proprietário) <strong>antes</strong> de entrar na frota Nomade Drive Brasil. Conforme <a href="termos.html#locacao" target="_blank">cláusula 4.6 dos Termos de Uso</a>.</span></label>
+
         <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Cadastrar veículo para análise</button>
       </form>
 
@@ -219,6 +221,9 @@
     }
     if (!document.getElementById("cienteAnalise").checked) {
       showNotice("Confirme a declaração de análise para cadastrar o veículo.", "warn"); return;
+    }
+    if (!document.getElementById("cienteRastreador").checked) {
+      showNotice("Confirme a declaração de instalação do rastreador GPS (obrigatório).", "warn"); return;
     }
     if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
     if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
