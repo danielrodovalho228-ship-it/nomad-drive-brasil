@@ -513,8 +513,23 @@
     var actions = document.createElement("div");
     actions.className = "insp-card__actions";
     if (i.status === "solicitado") {
-      actions.appendChild(validateBtn(i, "aprovado", "Aprovar", "btn--solid"));
-      actions.appendChild(validateBtn(i, "recusado", "Recusar", "btn--ghost"));
+      if (i.kind === "checkout") {
+        // Fase 22c.2: check-out tem fluxo de avaria
+        var openBtn = document.createElement("button");
+        openBtn.type = "button";
+        openBtn.className = "btn btn--solid btn--sm";
+        openBtn.textContent = "Aprovar check-out";
+        openBtn.addEventListener("click", function () {
+          openCheckoutApproval(card, i);
+          openBtn.disabled = true;
+        });
+        actions.appendChild(openBtn);
+        actions.appendChild(validateBtn(i, "recusado", "Recusar", "btn--ghost"));
+      } else {
+        // check-in continua simples
+        actions.appendChild(validateBtn(i, "aprovado", "Aprovar", "btn--solid"));
+        actions.appendChild(validateBtn(i, "recusado", "Recusar", "btn--ghost"));
+      }
     } else {
       var pill = document.createElement("span");
       pill.className = "dash-pill dash-pill--" + (i.status === "aprovado" ? "ok" : "bad");
@@ -569,6 +584,291 @@
       }).catch(function () { btn.disabled = false; });
     });
     return btn;
+  }
+
+  /* ============================================================
+   * FASE 22c.2 — Fluxo de avaria no check-out (proprietário)
+   * ============================================================
+   * Quando o owner aprova um check-out, abre um form inline com:
+   *   1. Toggle "Devolveu sem problemas?" / "Reportar avaria"
+   *   2. Lista dinâmica de avarias (add/remove)
+   *   3. Para cada avaria: tipo, descrição, valor, fotos
+   *   4. Submit: aprova inspection + insere damages + sobe fotos +
+   *      chama close-rental (que sabe se deve liberar caução ou não)
+   * ============================================================ */
+
+  var damageRulesCache = null;
+
+  function loadDamageRules() {
+    if (damageRulesCache) return Promise.resolve(damageRulesCache);
+    var c = a.client();
+    if (!c) return Promise.resolve([]);
+    return c.from("damage_rules").select("*")
+      .eq("active", true).order("sort_order")
+      .then(function (r) {
+        damageRulesCache = (r && r.data) || [];
+        return damageRulesCache;
+      }).catch(function () { return []; });
+  }
+
+  function openCheckoutApproval(card, inspection) {
+    // Evita abrir duas vezes
+    if (card.querySelector(".checkout-approval")) return;
+
+    var box = document.createElement("div");
+    box.className = "checkout-approval why-box why-box--warn";
+    box.style.marginTop = "12px";
+    box.innerHTML =
+      '<h3 style="margin:0 0 10px;">Como o veículo voltou?</h3>' +
+      '<div class="checkout-approval__opts">' +
+        '<label style="display:block;margin:6px 0;cursor:pointer;">' +
+          '<input type="radio" name="hasDamage_' + inspection.id + '" value="no" checked> ' +
+          '<strong>Sem problemas</strong> — caução será liberada automaticamente.' +
+        '</label>' +
+        '<label style="display:block;margin:6px 0;cursor:pointer;">' +
+          '<input type="radio" name="hasDamage_' + inspection.id + '" value="yes"> ' +
+          '<strong>Encontrei avaria(s)</strong> — vou reportar para a equipe Proteção avaliar.' +
+        '</label>' +
+      '</div>' +
+      '<div class="damage-list" style="display:none;margin-top:14px;"></div>' +
+      '<p class="form__err" style="color:#b00020;margin-top:8px;" hidden></p>' +
+      '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="submit">Confirmar aprovação</button>' +
+        '<button type="button" class="btn btn--ghost btn--sm" data-act="cancel">Cancelar</button>' +
+      '</div>';
+    card.appendChild(box);
+
+    var damageList = box.querySelector(".damage-list");
+    var submitBtn = box.querySelector('[data-act="submit"]');
+    var cancelBtn = box.querySelector('[data-act="cancel"]');
+    var errEl = box.querySelector(".form__err");
+
+    function updateUI() {
+      var sel = box.querySelector('input[name="hasDamage_' + inspection.id + '"]:checked');
+      var hasDamage = sel && sel.value === "yes";
+      damageList.style.display = hasDamage ? "block" : "none";
+      submitBtn.textContent = hasDamage
+        ? "Aprovar check-out e reportar avaria(s)"
+        : "Aprovar check-out (sem avaria)";
+      if (hasDamage && !damageList.children.length) {
+        addDamageEntry(damageList, inspection);
+      }
+    }
+    box.querySelectorAll('input[name="hasDamage_' + inspection.id + '"]').forEach(function (r) {
+      r.addEventListener("change", updateUI);
+    });
+    updateUI();
+
+    cancelBtn.addEventListener("click", function () {
+      box.remove();
+      var openBtn = card.querySelector(".insp-card__actions .btn--solid");
+      if (openBtn) openBtn.disabled = false;
+    });
+
+    submitBtn.addEventListener("click", function () {
+      var sel = box.querySelector('input[name="hasDamage_' + inspection.id + '"]:checked');
+      var hasDamage = sel && sel.value === "yes";
+      var damages = hasDamage ? collectDamages(damageList) : [];
+      if (hasDamage && !damages.length) {
+        errEl.textContent = "Adicione pelo menos uma avaria ou marque 'Sem problemas'.";
+        errEl.hidden = false; return;
+      }
+      if (hasDamage) {
+        for (var k = 0; k < damages.length; k++) {
+          var d = damages[k];
+          if (!d.rule_code) { errEl.textContent = "Avaria #" + (k+1) + ": selecione o tipo."; errEl.hidden = false; return; }
+        }
+      }
+      errEl.hidden = true;
+      submitCheckoutApproval(submitBtn, cancelBtn, errEl, inspection, damages);
+    });
+
+    // Pré-carrega regras pra evitar atraso no 1º "Sim"
+    loadDamageRules();
+  }
+
+  function addDamageEntry(damageList, inspection) {
+    var idx = damageList.children.length + 1;
+    var entry = document.createElement("div");
+    entry.className = "damage-entry";
+    entry.style.cssText = "background:#fff;border:1px solid #e3e9e5;border-radius:10px;padding:12px;margin:8px 0;";
+    entry.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+        '<strong>Avaria #' + idx + '</strong>' +
+        '<button type="button" class="btn btn--ghost btn--sm" data-act="remove">Remover</button>' +
+      '</div>' +
+      '<div class="form__grid">' +
+        '<label class="field"><span>Tipo *</span>' +
+          '<select class="damage-type"><option value="">Carregando...</option></select>' +
+        '</label>' +
+        '<label class="field"><span>Valor sugerido (R$)</span>' +
+          '<input type="number" class="damage-amount" min="0" step="0.01" />' +
+        '</label>' +
+        '<label class="field field--full"><span>Descrição *</span>' +
+          '<textarea class="damage-desc" rows="2" placeholder="Conte onde, como e o tamanho do dano."></textarea>' +
+        '</label>' +
+        '<label class="field field--full"><span>Fotos (jpg, png, webp ou pdf — até 10 MB cada)</span>' +
+          '<input type="file" class="damage-files" multiple accept="image/jpeg,image/png,image/webp,application/pdf" />' +
+        '</label>' +
+      '</div>' +
+      '<p class="damage-rule-desc note" style="margin:8px 0 0;"></p>';
+    damageList.appendChild(entry);
+
+    var typeSel = entry.querySelector(".damage-type");
+    var amountInp = entry.querySelector(".damage-amount");
+    var ruleDesc = entry.querySelector(".damage-rule-desc");
+
+    loadDamageRules().then(function (rules) {
+      typeSel.innerHTML = '<option value="">Selecione</option>';
+      rules.forEach(function (rule) {
+        var o = document.createElement("option");
+        o.value = rule.code;
+        o.textContent = rule.label;
+        typeSel.appendChild(o);
+      });
+      typeSel.addEventListener("change", function () {
+        var rule = rules.find(function (r) { return r.code === typeSel.value; });
+        if (rule) {
+          if (!amountInp.value) amountInp.value = rule.amount_default;
+          ruleDesc.textContent = rule.description +
+            " · faixa de referência R$ " + rule.amount_min + " a R$ " + rule.amount_max + ".";
+        } else {
+          ruleDesc.textContent = "";
+        }
+      });
+    });
+
+    entry.querySelector('[data-act="remove"]').addEventListener("click", function () {
+      entry.remove();
+      // Renumera as restantes
+      [].slice.call(damageList.children).forEach(function (el, n) {
+        var s = el.querySelector("strong");
+        if (s) s.textContent = "Avaria #" + (n + 1);
+      });
+      if (!damageList.children.length) {
+        addDamageEntry(damageList, inspection);
+      }
+    });
+
+    // Adiciona botão "+" só uma vez (no final da lista)
+    if (!damageList.parentNode.querySelector('[data-act="add"]')) {
+      var addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn--outline btn--sm";
+      addBtn.style.marginTop = "8px";
+      addBtn.setAttribute("data-act", "add");
+      addBtn.textContent = "+ Adicionar outra avaria";
+      addBtn.addEventListener("click", function () { addDamageEntry(damageList, inspection); });
+      damageList.parentNode.insertBefore(addBtn, damageList.nextSibling);
+    }
+  }
+
+  function collectDamages(damageList) {
+    var out = [];
+    [].slice.call(damageList.querySelectorAll(".damage-entry")).forEach(function (entry) {
+      var code = entry.querySelector(".damage-type").value;
+      if (!code) return; // entrada vazia, ignora
+      out.push({
+        rule_code: code,
+        description: entry.querySelector(".damage-desc").value.trim(),
+        suggested_amount: Number(entry.querySelector(".damage-amount").value) || 0,
+        files: [].slice.call(entry.querySelector(".damage-files").files)
+      });
+    });
+    return out;
+  }
+
+  /* Upload das fotos pra storage damages/<booking>/<inspection>/<arquivo> */
+  function uploadDamageFiles(c, bookingId, inspectionId, files) {
+    if (!files || !files.length) return Promise.resolve([]);
+    var uploads = files.map(function (file) {
+      var ext = (file.name.split(".").pop() || "bin").toLowerCase();
+      var safeName = Date.now() + "_" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      var path = bookingId + "/" + inspectionId + "/" + safeName;
+      return c.storage.from("damages").upload(path, file, {
+        cacheControl: "3600", upsert: false, contentType: file.type
+      }).then(function (r) {
+        if (r && r.error) {
+          console.error("upload damage falhou:", r.error);
+          return null;
+        }
+        return path; // salva path, signed URL é gerada na hora de exibir
+      });
+    });
+    return Promise.all(uploads).then(function (paths) {
+      return paths.filter(Boolean);
+    });
+  }
+
+  function submitCheckoutApproval(submitBtn, cancelBtn, errEl, i, damages) {
+    var c = a.client();
+    if (!c) { errEl.textContent = "Sessão indisponível."; errEl.hidden = false; return; }
+    submitBtn.disabled = true; cancelBtn.disabled = true;
+    submitBtn.textContent = "Salvando...";
+
+    // 1) Aprova a inspection
+    c.from("rental_inspections").update({
+      status: "aprovado", validated_at: new Date().toISOString()
+    }).eq("id", i.id).then(function (r) {
+      if (r && r.error) {
+        errEl.textContent = "Não foi possível aprovar a vistoria."; errEl.hidden = false;
+        submitBtn.disabled = false; cancelBtn.disabled = false;
+        submitBtn.textContent = "Confirmar aprovação"; return;
+      }
+
+      // 2) Atualiza km do veículo (regra anterior)
+      var kmPromise = Promise.resolve();
+      if (i.mileage != null && i.bookings && i.bookings.vehicle_id) {
+        kmPromise = c.from("vehicles").update({ mileage: i.mileage })
+          .eq("id", i.bookings.vehicle_id);
+      }
+
+      // 3) Para cada avaria: sobe fotos → insere em damages
+      var dmgPromise = !damages.length
+        ? Promise.resolve(0)
+        : Promise.all(damages.map(function (d) {
+            return uploadDamageFiles(c, i.booking_id, i.id, d.files).then(function (paths) {
+              return c.from("damages").insert({
+                inspection_id: i.id,
+                booking_id: i.booking_id,
+                rule_code: d.rule_code,
+                description: d.description,
+                evidence_urls: paths,
+                suggested_amount: d.suggested_amount,
+                status: "pendente_revisao"
+              });
+            });
+          })).then(function (results) {
+            var failed = results.filter(function (r) { return r && r.error; }).length;
+            if (failed) console.error("Algumas avarias não foram salvas:", failed);
+            return damages.length - failed;
+          });
+
+      // 4) Quando tudo gravado, chama close-rental
+      Promise.all([kmPromise, dmgPromise]).then(function (res) {
+        var savedDamages = res[1] || 0;
+        c.functions.invoke("close-rental", {
+          body: { booking_id: i.booking_id, has_damages: savedDamages > 0 }
+        }).then(function (rr) {
+          var d = rr && rr.data;
+          if (d && d.ok) {
+            var parts = [];
+            if (d.actions && d.actions.subscription_canceled) parts.push("assinatura cancelada");
+            if (d.actions && d.actions.caucao_released) parts.push("caução liberada");
+            if (d.actions && d.actions.caucao_held) parts.push("caução retida (avaria em análise)");
+            if (d.actions && d.actions.email_sent) parts.push("e-mail enviado ao cliente");
+            if (parts.length) showNotice("Locação encerrada: " + parts.join(", ") + ".", "ok");
+          } else if (rr && rr.error) {
+            console.error("close-rental:", rr.error);
+          }
+        }).catch(function (e) { console.error("close-rental ex:", e); })
+          .then(function () { loadMaintenance(); loadOwnerInspections(); });
+      });
+    }).catch(function () {
+      errEl.textContent = "Erro de rede ao aprovar."; errEl.hidden = false;
+      submitBtn.disabled = false; cancelBtn.disabled = false;
+      submitBtn.textContent = "Confirmar aprovação";
+    });
   }
 
   /* ---- Fase 6: manutenção por km ---- */
