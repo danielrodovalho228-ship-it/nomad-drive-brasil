@@ -103,6 +103,16 @@
     showMsg(a ? a.notConfiguredMessage() : "Autenticação indisponível nesta página.", "warn");
   }
 
+  // D1 (Fase 23.5): se chegou aqui depois de uma sessão expirada
+  // num painel, mostra a mensagem que o redirectToLogin gravou.
+  try {
+    var savedMsg = sessionStorage.getItem("ndb-auth-msg");
+    if (savedMsg) {
+      sessionStorage.removeItem("ndb-auth-msg");
+      showMsg(savedMsg, "warn");
+    }
+  } catch (e) {}
+
   /* já conectado: oferece redirecionamento */
   if (a && a.ready) {
     a.getSession().then(function (s) {

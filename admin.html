@@ -853,13 +853,29 @@
     var tb = document.getElementById(opts.tbodyId);
     if (!c || !tb) return;
     var span = opts.columns.length + (opts.statusField ? 1 : 0);
-    function fail() {
-      tb.innerHTML = '<tr><td colspan="' + span + '">Não foi possível carregar agora.</td></tr>';
+    function fail(err) {
+      // D1: tratamento mais rico — detecta sessão expirada e oferece retry
+      if (a.isAuthError(err)) {
+        a.redirectToLogin("Sua sessão expirou. Faça login novamente para continuar.");
+        return;
+      }
+      tb.innerHTML = '<tr><td colspan="' + span + '">' +
+        '<span style="color:#b00020;">Não foi possível carregar.</span> ' +
+        '<button type="button" class="btn btn--ghost btn--sm" data-retry-section="' + opts.tbodyId + '">Tentar novamente</button>' +
+        '</td></tr>';
+      var btn = tb.querySelector('[data-retry-section]');
+      if (btn) btn.addEventListener("click", function () {
+        tb.innerHTML = '<tr><td colspan="' + span + '">Recarregando…</td></tr>';
+        loadSection(opts);
+      });
     }
     var q = c.from(opts.table).select(opts.select || "*");
     if (opts.filter) q = q.eq(opts.filter[0], opts.filter[1]);
-    q.order("created_at", { ascending: false }).limit(100).then(function (r) {
-      if (!r || r.error) { fail(); return; }
+    a.withTimeout(
+      q.order("created_at", { ascending: false }).limit(100),
+      10000
+    ).then(function (r) {
+      if (!r || r.error) { fail(r && r.error); return; }
       var rows = r.data || [];
       if (!rows.length) {
         tb.innerHTML = '<tr><td colspan="' + span + '">Nada por aqui ainda.</td></tr>';
@@ -876,7 +892,7 @@
         if (opts.statusField) tr.appendChild(statusCell(opts.table, opts.statusField, row));
         tb.appendChild(tr);
       });
-    }).catch(fail);
+    }).catch(function (e) { fail(e); });
   }
 
   function loadSections() {
@@ -1176,31 +1192,77 @@
     var vehicleOwner = {};
     var clientTier = {};   // { clientId: 'padrao' | 'basico' | ... }
 
-    c.from("profiles").select("id,full_name,caucao_tier").eq("main_role", "client").then(function (r) {
-      var rows = (r && r.data) || [];
-      clientSel.innerHTML = '<option value="">Selecione o cliente</option>';
-      rows.forEach(function (p) {
-        clientTier[p.id] = p.caucao_tier || "padrao";
-        var o = document.createElement("option");
-        o.value = p.id;
-        o.textContent = p.full_name || "Cliente sem nome";
-        clientSel.appendChild(o);
-      });
-    }).catch(function () {});
+    // D1: helper que escapa do "Carregando..." infinito.
+    // - Faz timeout de 10s
+    // - Em erro 401/403: redireciona pro login (sessão expirou)
+    // - Em qualquer outro erro: mostra "Erro — tentar novamente"
+    //   como única opção do select, e o admin clica pra refazer.
+    function fillSelectSafe(select, queryFn, opts) {
+      opts = opts || {};
+      var emptyLabel = opts.emptyLabel || "Selecione";
+      var loadingLabel = opts.loadingLabel || "Carregando...";
+      var retryLabel = "Erro — clique para tentar de novo";
 
-    c.from("vehicles").select("id,make,model,year_model,owner_id").then(function (r) {
-      var rows = (r && r.data) || [];
-      vehSel.innerHTML = '<option value="">Selecione o veículo</option>';
-      rows.forEach(function (v) {
-        vehicleOwner[v.id] = v.owner_id;
-        var o = document.createElement("option");
-        o.value = v.id;
-        var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
-        if (v.year_model) t += " (" + v.year_model + ")";
-        o.textContent = t;
-        vehSel.appendChild(o);
-      });
-    }).catch(function () {});
+      select.innerHTML = '<option value="">' + loadingLabel + '</option>';
+      select.disabled = true;
+
+      var attempt = function () {
+        a.withTimeout(queryFn(), 10000).then(function (r) {
+          if (r && r.error) throw r.error;
+          select.disabled = false;
+          select.innerHTML = '<option value="">' + emptyLabel + '</option>';
+          opts.render(r && r.data ? r.data : []);
+        }).catch(function (err) {
+          console.error("admin: query falhou", err);
+          if (a.isAuthError(err)) {
+            a.redirectToLogin("Sua sessão expirou. Faça login novamente para continuar.");
+            return;
+          }
+          select.disabled = false;
+          select.innerHTML = '<option value="">' + retryLabel + '</option>';
+          // único click no select faz o retry
+          select.onchange = function () {
+            select.onchange = null;
+            attempt();
+          };
+        });
+      };
+      attempt();
+    }
+
+    fillSelectSafe(clientSel, function () {
+      return c.from("profiles")
+        .select("id,full_name,caucao_tier")
+        .eq("main_role", "client");
+    }, {
+      emptyLabel: "Selecione o cliente",
+      render: function (rows) {
+        rows.forEach(function (p) {
+          clientTier[p.id] = p.caucao_tier || "padrao";
+          var o = document.createElement("option");
+          o.value = p.id;
+          o.textContent = p.full_name || "Cliente sem nome";
+          clientSel.appendChild(o);
+        });
+      }
+    });
+
+    fillSelectSafe(vehSel, function () {
+      return c.from("vehicles").select("id,make,model,year_model,owner_id");
+    }, {
+      emptyLabel: "Selecione o veículo",
+      render: function (rows) {
+        rows.forEach(function (v) {
+          vehicleOwner[v.id] = v.owner_id;
+          var o = document.createElement("option");
+          o.value = v.id;
+          var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+          if (v.year_model) t += " (" + v.year_model + ")";
+          o.textContent = t;
+          vehSel.appendChild(o);
+        });
+      }
+    });
 
     // Autopreenche caução quando troca o cliente
     clientSel.addEventListener("change", function () {

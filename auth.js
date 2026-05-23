@@ -17,7 +17,20 @@
   var configured = !hasPlaceholder;
 
   var sdk = (window.supabase && window.supabase.createClient) ? window.supabase : null;
-  var client = (configured && sdk) ? sdk.createClient(cfg.url, cfg.anonKey) : null;
+  // D1 (Fase 23.5): força explicitamente auto-refresh e persistência da
+  // sessão. Os defaults do supabase-js 2.x JÁ são esses, mas o painel
+  // admin reportou sessão caindo sozinha — explicitar evita confusão
+  // futura e garante que a sessão só expire por inatividade real.
+  var client = (configured && sdk)
+    ? sdk.createClient(cfg.url, cfg.anonKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          storageKey: "ndb-auth-token"
+        }
+      })
+    : null;
 
   var ROLE_LABELS = {
     client: "Cliente locatário",
@@ -98,6 +111,55 @@
     roleLabels: ROLE_LABELS,
     validRoles: VALID_ROLES,
     client: function () { return client; },
+
+    /* D1 (Fase 23.5): wrappers de resiliência de sessão.
+     * - withTimeout(promise, ms): rejeita se demorar demais
+     * - runQuery(thenable, opts): executa uma query Supabase com
+     *   timeout configurável e, em caso de erro 401/403 ou sessão
+     *   ausente, redireciona pro login. Evita os "Carregando..." infinitos. */
+    withTimeout: function (promise, ms) {
+      ms = ms || 10000;
+      var t;
+      var timeout = new Promise(function (_, reject) {
+        t = setTimeout(function () {
+          reject(new Error("Tempo esgotado (" + ms + "ms). Verifique sua conexão."));
+        }, ms);
+      });
+      return Promise.race([
+        Promise.resolve(promise).then(function (v) { clearTimeout(t); return v; }),
+        timeout
+      ]);
+    },
+
+    /* Verifica se a resposta indica sessão expirada/inválida. */
+    isAuthError: function (err) {
+      if (!err) return false;
+      var code = err.code || err.status || (err.message || "").toLowerCase();
+      return code === 401 || code === 403 || code === "PGRST301" ||
+        (typeof code === "string" && (
+          code.indexOf("jwt") !== -1 ||
+          code.indexOf("not authenticated") !== -1 ||
+          code.indexOf("session") !== -1 && code.indexOf("expired") !== -1
+        ));
+    },
+
+    /* Redireciona pra login mantendo onde estava. Idempotente. */
+    redirectToLogin: function (reason) {
+      try {
+        var here = window.location.pathname.split("/").pop() || "";
+        var url = "login.html";
+        if (here) url += "?redirect=" + encodeURIComponent(here);
+        if (reason) {
+          try { sessionStorage.setItem("ndb-auth-msg", reason); } catch (e) {}
+        }
+        if (window.location.pathname.indexOf("login.html") === -1) {
+          window.location.href = url;
+        }
+      } catch (e) {
+        window.location.href = "login.html";
+      }
+    },
+
     dashboardFor: function (role) { return ROLE_DASHBOARD[role] || "index.html"; },
     onboardingFor: function (role) { return ROLE_ONBOARDING[role] || "index.html"; },
     roleLabel: function (role) { return ROLE_LABELS[role] || role || "—"; },
