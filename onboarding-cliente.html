@@ -95,6 +95,7 @@
         <div class="onb-declare">
           <label class="onb-check"><input type="checkbox" id="cnh" name="cnh" /> <span>Declaro que possuo <strong>CNH válida e em dia</strong>.</span></label>
           <label class="onb-check"><input type="checkbox" id="cienteDocs" name="cienteDocs" /> <span>Entendo que a Nomade Drive pode solicitar <strong>documento oficial, comprovante de residência, comprovação de renda ou vínculo, referências e verificação</strong> — e que <strong>nem toda solicitação é aprovada</strong>.</span></label>
+          <label class="onb-check"><input type="checkbox" id="cienteRastreador" name="cienteRastreador" /> <span>Aceito que <strong>todo veículo da Nomade Drive Brasil possui rastreador GPS instalado de forma fixa e oculta</strong>, e <strong>consinto</strong> com a coleta de dados de localização <strong>exclusivamente</strong> para fins operacionais e de segurança (recuperação em caso de roubo/furto, auditoria de km, cerca eletrônica e suporte em emergência), conforme <a href="termos.html#locacao" target="_blank">cláusula 4.6 dos Termos de Uso</a>.</span></label>
         </div>
 
         <button type="submit" class="btn btn--solid btn--lg auth-submit" id="onbBtn">Enviar perfil para análise</button>
@@ -181,14 +182,15 @@
     if (!nome || !cidade || !motivo) { showNotice("Preencha nome, cidade e motivo da locação.", "warn"); return; }
     var cnhOk = document.getElementById("cnh").checked === true;
     var docsOk = document.getElementById("cienteDocs").checked === true;
-    if (!cnhOk && !docsOk) {
-      showNotice("Marque as duas declarações (CNH e documentos) para enviar o perfil.", "warn"); return;
-    }
+    var trackerOk = document.getElementById("cienteRastreador").checked === true;
     if (!cnhOk) {
-      showNotice("Marque a primeira declaração: que você possui CNH válida e em dia.", "warn"); return;
+      showNotice("Marque a declaração: você possui CNH válida e em dia.", "warn"); return;
     }
     if (!docsOk) {
-      showNotice("Marque a segunda declaração: ciência sobre documentos e análise.", "warn"); return;
+      showNotice("Marque a declaração: ciência sobre documentos e análise.", "warn"); return;
+    }
+    if (!trackerOk) {
+      showNotice("Marque a declaração: consentimento ao rastreador GPS (LGPD).", "warn"); return;
     }
     if (!a.ready) { showNotice(a.notConfiguredMessage(), "warn"); return; }
     if (!session) { showNotice("Sessão expirada. Faça login novamente.", "warn"); return; }
