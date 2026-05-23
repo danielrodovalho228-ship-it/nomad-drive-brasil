@@ -83,7 +83,11 @@
           </ol>
           <div class="dash-list" id="reqList"></div>
           <div class="dash-empty" id="reqEmpty">Você ainda não enviou solicitações. Comece pelo seu perfil de cliente.</div>
-          <a href="onboarding-cliente.html" class="btn btn--solid btn--sm dash-cta">Nova solicitação de locação</a>
+          <div class="kyc-gate" id="reqGate" hidden>
+            <strong>Solicitação bloqueada — KYC ainda não aprovado.</strong>
+            <span>Você só pode criar uma nova solicitação de locação <em>depois</em> que a equipe Nomade Drive aprovar seus documentos. Verifique a seção <a href="#documentos" class="dash-link-inline">Documentos</a> e aguarde a aprovação (1 a 3 dias úteis).</span>
+          </div>
+          <a href="onboarding-cliente.html" class="btn btn--solid btn--sm dash-cta" id="newReqBtn">Nova solicitação de locação</a>
         </section>
 
         <section class="dash-panel" id="documentos">
@@ -271,7 +275,7 @@
   a.requireAuth().then(function (s) {
     if (!s) return;
     a.getProfile().then(function (p) {
-      if (!p) { refreshTodos(); return; }
+      if (!p) { refreshTodos(); applyKycGate("profile"); return; }
       var first = p.full_name ? String(p.full_name).split(" ")[0] : "";
       document.getElementById("dashGreet").textContent = "Olá" + (first ? ", " + first : "") + "!";
       var st = document.getElementById("dashStatus");
@@ -283,11 +287,50 @@
       todosState.perfilEmAnalise = (p.verification_status === "em_analise" ||
         p.verification_status === "documentos_pendentes");
       refreshTodos();
+      kycState.status = p.verification_status;
+      applyKycGate("profile");
       if (p.main_role && p.main_role !== PAGE_ROLE) {
         showNotice("Seu perfil principal é " + a.roleLabel(p.main_role) +
           ". Este é o painel do cliente — você pode usá-lo se também aluga veículos.", "warn");
       }
     });
+    /* Fase 20: gate de KYC — só libera "Nova solicitação" se KYC aprovado.
+       Exceção: 1ª solicitação (cliente ainda não tem nenhuma) é liberada,
+       porque é parte do onboarding. O banco também valida via trigger
+       guard_rental_request_kyc — esta UI é só para evitar cliques inúteis. */
+    var kycState = { status: null, hasReqs: false, ready: { profile: false, reqs: false } };
+    function applyKycGate(kind) {
+      if (kind) kycState.ready[kind] = true;
+      var btn = document.getElementById("newReqBtn");
+      var gate = document.getElementById("reqGate");
+      if (!btn || !gate) return;
+      // aguarda profile + reqs antes de decidir (evita "flash" no carregamento)
+      if (!kycState.ready.profile || !kycState.ready.reqs) return;
+      var aprovado = (kycState.status === "aprovado" || kycState.status === "aprovado_com_ressalvas");
+      var locked = !aprovado && kycState.hasReqs;
+      if (!locked) {
+        btn.removeAttribute("data-kyc-locked");
+        btn.removeAttribute("tabindex");
+        btn.removeAttribute("aria-disabled");
+        btn.removeAttribute("data-tip");
+        gate.hidden = true;
+      } else {
+        btn.setAttribute("data-kyc-locked", "1");
+        btn.setAttribute("tabindex", "-1");
+        btn.setAttribute("aria-disabled", "true");
+        btn.setAttribute("data-tip", "Disponível depois que seus documentos forem aprovados pela equipe.");
+        gate.hidden = false;
+        if (!btn.getAttribute("data-kyc-wired")) {
+          btn.setAttribute("data-kyc-wired", "1");
+          btn.addEventListener("click", function (e) {
+            if (btn.getAttribute("data-kyc-locked")) {
+              e.preventDefault();
+              showNotice("Para criar uma nova solicitação, seus documentos precisam estar aprovados. Verifique a seção Documentos.", "warn");
+            }
+          });
+        }
+      }
+    }
     a.client().from("rental_requests").select("*").order("created_at", { ascending: false })
       .then(function (r) {
         var rows = (r && r.data) || [];
@@ -295,6 +338,8 @@
         todosState.solicitacoesEmAnalise =
           rows.filter(function (req) { return req.status === "em_analise" || req.status === "solicitado"; }).length;
         refreshTodos();
+        kycState.hasReqs = rows.length > 0;
+        applyKycGate("reqs");
         if (!rows.length) return;
         document.getElementById("reqEmpty").hidden = true;
         var list = document.getElementById("reqList");
@@ -304,7 +349,7 @@
           list.appendChild(rowEl(req.reason || "Solicitação de locação", sub,
             a.statusLabel(req.status), pillKind(req.status)));
         });
-      }).catch(function () {});
+      }).catch(function () { applyKycGate("reqs"); });
 
     loadCheckInOut();
     loadDocuments();

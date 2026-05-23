@@ -1898,3 +1898,30 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 }
 .dash-todos--ok .dash-todos__icon { background: rgba(20,122,79,0.12); color: var(--green-d); }
 .dash-todos--ok .dash-todos__title { color: var(--green-d); }
+
+/* ====================================================================
+   KYC GATE — bloqueio de ação até documentos aprovados (Fase 20)
+   ==================================================================== */
+.kyc-gate {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: #fff4e0;
+  border: 1px dashed #d8b06a;
+  color: #6e4a10;
+  font-size: 13.5px;
+  line-height: 1.5;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.kyc-gate[hidden] { display: none; }
+.kyc-gate strong { color: #6e4a10; font-weight: 700; }
+.kyc-gate a { color: var(--green-d); font-weight: 600; }
+
+/* Botão visualmente desabilitado via data-kyc-locked (sem disabled real
+   pra não perder eventos — o handler de click previne navegação). */
+[data-kyc-locked] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+  pointer-events: auto; /* permite clique pra disparar a mensagem */
+}
