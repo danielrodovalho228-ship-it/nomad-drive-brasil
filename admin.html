@@ -40,6 +40,7 @@
       <a href="#leads"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/></svg>Leads</a>
       <a href="#reservas"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Reservas</a>
       <a href="#frota"><svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="11" rx="1"/><polygon points="16 10 20 10 23 13 23 17 16 17 16 10"/><circle cx="5.5" cy="18.5" r="1.5"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>Frota</a>
+      <a href="#vistorias"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Vistorias</a>
       <a href="#proprietarios"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Proprietários</a>
       <a href="#oficinas"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Oficinas</a>
       <a href="#parceiros"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Parceiros</a>
@@ -181,6 +182,33 @@
         <table class="admin-table">
           <thead><tr><th>Veículo</th><th>Categoria</th><th>Km</th><th>Cidade</th><th>Status</th></tr></thead>
           <tbody id="frotaList"><tr><td colspan="5">Carregando frota...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTORIAS (Fase 27 / #4 do roadmap) -->
+    <section class="admin-block" id="vistorias">
+      <h2>Vistorias</h2>
+      <p class="note">Atribua a vistoria técnica de qualquer veículo aprovado a uma oficina credenciada. A oficina vê na própria fila e envia o laudo pelo painel dela.</p>
+      <div class="auth-msg" id="vistMsg" hidden></div>
+
+      <div class="admin-card">
+        <h3 class="block-title">Atribuir vistoria</h3>
+        <form id="newVistForm">
+          <div class="form__grid">
+            <label class="field"><span>Veículo</span><select id="vistVehicle"><option value="">Carregando...</option></select></label>
+            <label class="field"><span>Oficina credenciada</span><select id="vistWorkshop"><option value="">Carregando...</option></select></label>
+          </div>
+          <p class="note" style="margin:6px 0 12px;">Só veículos com status "Aprovado" e oficinas com status "Aprovado" aparecem. A oficina recebe e-mail automaticamente.</p>
+          <button type="submit" class="btn btn--solid btn--sm dash-cta">Atribuir vistoria</button>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3 class="block-title">Vistorias em andamento</h3>
+        <table class="admin-table">
+          <thead><tr><th>Veículo</th><th>Oficina</th><th>Status</th><th>Concluída?</th><th>Atribuída em</th></tr></thead>
+          <tbody id="vistList"><tr><td colspan="5">Carregando vistorias...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -480,6 +508,7 @@
     loadNewBookingForm();
     loadFinanceiroDetalhado();
     loadNotasFiscais();
+    loadVistorias();   // #4: gerenciar vistorias técnicas
   }
 
   /* ====== FINANCEIRO DETALHADO (dados reais do banco) ====== */
@@ -1504,6 +1533,145 @@
         btn.disabled = false; btn.textContent = "Criar reserva";
       });
     });
+  }
+
+  /* ============================================================
+   * #4 / FASE 27 — Gestão de vistorias técnicas
+   * ============================================================
+   * Admin atribui vehicle_inspections para qualquer veículo aprovado.
+   * A oficina aprovada selecionada vê na própria fila e envia o
+   * laudo pelo painel dela.
+   * ============================================================ */
+  function vistMsg(text, kind) {
+    var el = document.getElementById("vistMsg");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "auth-msg auth-msg--" + (kind || "ok");
+    el.hidden = false;
+  }
+
+  function loadVistorias() {
+    var c = a.client();
+    if (!c) return;
+
+    // Popula selects de Veículo (só aprovados) e Oficina (só aprovadas)
+    var vehSel = document.getElementById("vistVehicle");
+    var wsSel  = document.getElementById("vistWorkshop");
+    var form   = document.getElementById("newVistForm");
+    if (!vehSel || !wsSel || !form) return;
+
+    var workshopUserId = {};   // { workshopId: user_id }   pra notify() por user_id
+    var workshopNames  = {};
+    var vehicleLabel   = {};
+
+    // Veículos aprovados
+    c.from("vehicles").select("id,make,model,year_model,status")
+      .eq("status", "aprovado").then(function (r) {
+        var rows = (r && r.data) || [];
+        vehSel.innerHTML = '<option value="">Selecione o veículo</option>';
+        rows.forEach(function (v) {
+          var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+          if (v.year_model) t += " (" + v.year_model + ")";
+          vehicleLabel[v.id] = t;
+          var o = document.createElement("option");
+          o.value = v.id; o.textContent = t;
+          vehSel.appendChild(o);
+        });
+      }).catch(function () {
+        vehSel.innerHTML = '<option value="">Erro ao carregar veículos</option>';
+      });
+
+    // Oficinas aprovadas — usa user_id pra mandar e-mail via profiles.email (Fase 24)
+    c.from("workshops").select("id,business_name,user_id,status")
+      .eq("status", "aprovado").then(function (r) {
+        var rows = (r && r.data) || [];
+        wsSel.innerHTML = '<option value="">Selecione a oficina</option>';
+        rows.forEach(function (w) {
+          workshopUserId[w.id] = w.user_id || null;
+          workshopNames[w.id]  = w.business_name || "Oficina";
+          var o = document.createElement("option");
+          o.value = w.id; o.textContent = w.business_name || "Oficina";
+          wsSel.appendChild(o);
+        });
+      }).catch(function () {
+        wsSel.innerHTML = '<option value="">Erro ao carregar oficinas</option>';
+      });
+
+    // Submit
+    if (!form.getAttribute("data-wired")) {
+      form.setAttribute("data-wired", "1");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var vehicleId  = vehSel.value;
+        var workshopId = wsSel.value;
+        if (!vehicleId || !workshopId) {
+          vistMsg("Selecione o veículo E a oficina.", "warn"); return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = "Atribuindo...";
+        c.from("vehicle_inspections").insert({
+          vehicle_id: vehicleId,
+          workshop_id: workshopId,
+          inspection_status: "em_analise",
+          approved: false
+        }).then(function (rr) {
+          btn.disabled = false; btn.textContent = "Atribuir vistoria";
+          if (rr && rr.error) {
+            vistMsg("Não foi possível atribuir: " + (rr.error.message || "verifique permissões."), "error");
+            return;
+          }
+          vistMsg("Vistoria atribuída. A oficina já consegue ver na fila dela.", "ok");
+          form.reset();
+          renderVistorias();
+
+          // E-mail pra oficina via profiles.email (Fase 24)
+          if (window.ndEmails && workshopUserId[workshopId]) {
+            window.ndEmails.notify(c, workshopUserId[workshopId],
+              "inspection_assigned_workshop", {
+                workshop_name: workshopNames[workshopId] || "sua oficina",
+                veiculo: vehicleLabel[vehicleId] || "Veículo"
+              }).catch(function (e) { console.warn("inspection_assigned_workshop:", e); });
+          }
+        }).catch(function () {
+          btn.disabled = false; btn.textContent = "Atribuir vistoria";
+          vistMsg("Erro de rede. Tente novamente.", "error");
+        });
+      });
+    }
+
+    renderVistorias();
+  }
+
+  function renderVistorias() {
+    var c = a.client();
+    var tb = document.getElementById("vistList");
+    if (!c || !tb) return;
+    c.from("vehicle_inspections")
+      .select("*, vehicles(make,model,year_model), workshops(business_name)")
+      .order("created_at", { ascending: false }).limit(100)
+      .then(function (r) {
+        var rows = (r && r.data) || [];
+        if (!rows.length) {
+          tb.innerHTML = '<tr><td colspan="5">Nenhuma vistoria atribuída ainda.</td></tr>';
+          return;
+        }
+        tb.innerHTML = "";
+        rows.forEach(function (vi) {
+          var tr = document.createElement("tr");
+          function td(c) { var d = document.createElement("td"); d.textContent = c; return d; }
+          var v = vi.vehicles || {};
+          var vt = [v.make, v.model].filter(Boolean).join(" ") || "—";
+          if (v.year_model) vt += " (" + v.year_model + ")";
+          tr.appendChild(td(vt));
+          tr.appendChild(td((vi.workshops && vi.workshops.business_name) || "—"));
+          tr.appendChild(td(a.statusLabel ? a.statusLabel(vi.inspection_status) : vi.inspection_status));
+          tr.appendChild(td(vi.approved ? "Sim" : "Não"));
+          tr.appendChild(td(new Date(vi.created_at).toLocaleString("pt-BR")));
+          tb.appendChild(tr);
+        });
+      }).catch(function () {
+        tb.innerHTML = '<tr><td colspan="5">Não foi possível carregar.</td></tr>';
+      });
   }
 })();
 </script>

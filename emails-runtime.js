@@ -483,6 +483,68 @@
       };
     },
 
+    inspection_assigned_workshop: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Nova vistoria atribuída — " + (p.veiculo || "Nomade Drive Brasil"),
+        html: baseTemplate({
+          badge: "Vistoria atribuída",
+          title: "Você tem uma nova vistoria",
+          preheader: "Veículo na fila da sua oficina.",
+          body: [
+            "Olá " + escapeHtml(p.workshop_name || p.full_name || "") + ",",
+            "A Nomade Drive atribuiu uma nova vistoria técnica para a sua oficina. Acesse seu painel para ver os detalhes do veículo, fazer o checklist, registrar fotos e enviar o laudo."
+          ],
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            ["Status atual", "Em análise"]
+          ],
+          ctaText: "Abrir minha fila",
+          ctaUrl: SITE + "/dashboard-oficina.html#vistorias"
+        }),
+        text: "Olá " + (p.workshop_name || p.full_name || "") + ",\n\n" +
+          "Nova vistoria atribuída para sua oficina.\n" +
+          "Veículo: " + (p.veiculo || "—") + "\n\n" +
+          "Painel: " + SITE + "/dashboard-oficina.html#vistorias"
+      };
+    },
+
+    inspection_completed_owner: function (p) {
+      var approved = p.approved === true || p.approved === "true";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: approved
+          ? "Vistoria do seu veículo APROVADA"
+          : "Vistoria do seu veículo concluída — com ressalvas",
+        html: baseTemplate({
+          gradient: approved
+            ? "linear-gradient(135deg,#145f3e 0%,#1a7a4f 55%,#2da473 100%)"
+            : "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: approved ? "#1a7a4f" : "#a8580e",
+          badge: approved ? "Vistoria aprovada" : "Vistoria concluída",
+          title: approved
+            ? "Vistoria do seu veículo aprovada"
+            : "Vistoria concluída com ressalvas",
+          preheader: "Laudo técnico disponível no painel.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "A oficina <strong>" + escapeHtml(p.workshop_name || "credenciada") + "</strong> concluiu a vistoria técnica do seu veículo " + escapeHtml(p.veiculo || "") + ".",
+            (approved
+              ? "<strong>Resultado:</strong> aprovado para entrar na frota Nomade Drive."
+              : "<strong>Resultado:</strong> concluído com observações. Veja o parecer no painel."),
+            (p.mechanic_notes ? "<strong>Notas do mecânico:</strong> " + escapeHtml(p.mechanic_notes) : "")
+          ].filter(Boolean),
+          ctaText: "Ver no painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#veiculos"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Vistoria concluída por " + (p.workshop_name || "oficina credenciada") + ".\n" +
+          "Resultado: " + (approved ? "APROVADO" : "CONCLUÍDO COM RESSALVAS") + "\n" +
+          (p.mechanic_notes ? "Notas: " + p.mechanic_notes + "\n" : "") +
+          "\nPainel: " + SITE + "/dashboard-proprietario.html#veiculos"
+      };
+    },
+
     case_resolved_client: function (p) {
       var statusLbl = p.status_label || p.status || "atualizada";
       return {

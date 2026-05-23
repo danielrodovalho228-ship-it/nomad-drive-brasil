@@ -116,6 +116,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="statuses.js"></script>
+<script src="emails-runtime.js"></script>
 <script src="script.js"></script>
 <script src="payouts.js"></script>
 <script>
@@ -168,13 +169,34 @@
     sel.addEventListener("change", function () {
       var c = a.client();
       if (!c) return;
+      var oldStatus = i.inspection_status;
+      var newStatus = sel.value;
+      var approved = (newStatus === "aprovado" || newStatus === "aprovado_com_ressalvas");
       sel.disabled = true;
       c.from("vehicle_inspections").update({
-        inspection_status: sel.value,
-        approved: (sel.value === "aprovado" || sel.value === "aprovado_com_ressalvas")
+        inspection_status: newStatus,
+        approved: approved
       }).eq("id", i.id).then(function (rr) {
         sel.disabled = false;
         sel.style.borderColor = (rr && rr.error) ? "#c0392b" : "";
+        if (rr && rr.error) return;
+        i.inspection_status = newStatus;
+        i.approved = approved;
+
+        // #4 / Fase 27: vistoria concluída → notifica proprietário
+        var finals = ["aprovado", "aprovado_com_ressalvas", "recusado"];
+        if (window.ndEmails && finals.indexOf(newStatus) !== -1 && newStatus !== oldStatus &&
+            i.vehicles && i.vehicles.owner_id) {
+          var v = i.vehicles;
+          var veiculo = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+          if (v.year_model) veiculo += " (" + v.year_model + ")";
+          window.ndEmails.notify(c, v.owner_id, "inspection_completed_owner", {
+            veiculo: veiculo,
+            approved: approved,
+            workshop_name: i._workshop_name || "",
+            mechanic_notes: i.mechanic_notes || ""
+          }).catch(function (e) { console.warn("inspection_completed_owner:", e); });
+        }
       }).catch(function () { sel.disabled = false; });
     });
     row.appendChild(sel);
@@ -240,7 +262,7 @@
       refreshTodos();
     }).catch(function () { refreshTodos(); });
 
-    c.from("vehicle_inspections").select("*, vehicles(make,model,year_model)")
+    c.from("vehicle_inspections").select("*, vehicles(make,model,year_model,owner_id)")
       .order("created_at", { ascending: false }).then(function (r) {
         var rows = (r && r.data) || [];
         var pend = rows.filter(function (i) {
