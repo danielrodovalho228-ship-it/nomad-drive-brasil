@@ -328,6 +328,7 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="statuses.js"></script>
+<script src="emails-runtime.js"></script>
 <script src="script.js"></script>
 <script>
 (function () {
@@ -702,6 +703,23 @@
         }
         doc.status = newStatus;
         kycMsg("Status do documento atualizado com sucesso.", "ok");
+
+        // #6: notifica o cliente quando aprovamos/recusamos o documento
+        if (window.ndEmails && doc.user_id) {
+          if (newStatus === "aprovado" || newStatus === "aprovado_com_ressalvas") {
+            window.ndEmails.notify(c, doc.user_id, "kyc_approved", {}).then(function (r) {
+              if (r && r.ok) kycMsg("Documento aprovado e e-mail enviado ao cliente.", "ok");
+              else console.warn("kyc_approved email falhou:", r && r.error);
+            });
+          } else if (newStatus === "recusado" || newStatus === "documentos_pendentes") {
+            window.ndEmails.notify(c, doc.user_id, "kyc_rejected",
+              { reason: notes || "Sem motivo registrado." }
+            ).then(function (r) {
+              if (r && r.ok) kycMsg("Documento recusado e e-mail enviado ao cliente.", "ok");
+              else console.warn("kyc_rejected email falhou:", r && r.error);
+            });
+          }
+        }
       }).catch(function () {
         sel.disabled = false;
         kycMsg("Falha ao atualizar o status. Tente novamente.", "error");
@@ -820,11 +838,48 @@
       var c = a.client();
       if (!c) return;
       sel.disabled = true;
+      var oldVal = row[field];
+      var newVal = sel.value;
       var patch = {};
-      patch[field] = sel.value;
+      patch[field] = newVal;
       c.from(table).update(patch).eq("id", row.id).then(function (rr) {
         sel.disabled = false;
         sel.style.borderColor = (rr && rr.error) ? "#c0392b" : "";
+        if (rr && rr.error) return;
+        row[field] = newVal;
+
+        // #6: e-mails de profile aprovado/recusado quando admin muda
+        // verification_status de profiles. Outras tabelas/campos ignora.
+        if (window.ndEmails && table === "profiles" && field === "verification_status" && row.id) {
+          if ((newVal === "aprovado" || newVal === "aprovado_com_ressalvas") &&
+              oldVal !== "aprovado" && oldVal !== "aprovado_com_ressalvas") {
+            var roleLbl = a.roleLabel ? a.roleLabel(row.main_role) : (row.main_role || "perfil");
+            var dashPath = a.dashboardFor ? a.dashboardFor(row.main_role) : "dashboard-cliente.html";
+            window.ndEmails.notify(c, row.id, "profile_approved", {
+              role_label: roleLbl,
+              dashboard_path: dashPath
+            }).catch(function (e) { console.warn("profile_approved email:", e); });
+          } else if (newVal === "recusado") {
+            var motivo = window.prompt(
+              "(Opcional) Motivo da recusa do cadastro — vai no e-mail ao usuário:",
+              ""
+            ) || "Cadastro recusado pela equipe Nomade Drive.";
+            window.ndEmails.notify(c, row.id, "profile_rejected", {
+              reason: motivo
+            }).catch(function (e) { console.warn("profile_rejected email:", e); });
+          }
+        }
+
+        // #6: comissão paga ao parceiro — quando admin marca
+        // partners_referrals.commission_status = "paga"
+        if (window.ndEmails && table === "partners_referrals" &&
+            field === "commission_status" && newVal === "paga" && oldVal !== "paga" &&
+            row.partner_id) {
+          window.ndEmails.notify(c, row.partner_id, "referral_commission_paid", {
+            referred_name: row.referred_name,
+            commission_amount: row.commission_amount || 200
+          }).catch(function (e) { console.warn("referral_commission_paid email:", e); });
+        }
       }).catch(function () { sel.disabled = false; });
     });
     td.appendChild(sel);
@@ -1311,7 +1366,7 @@
         deposit_amount: deposit,
         billing_mode: billingMode,
         status: "aprovado"
-      }).then(function (rr) {
+      }).select("id, vehicle_id, owner_id").then(function (rr) {
         btn.disabled = false; btn.textContent = "Criar reserva";
         if (rr && rr.error) {
           if (err) { err.textContent = "Não foi possível criar a reserva. Verifique os dados."; err.hidden = false; }
@@ -1319,6 +1374,31 @@
         }
         form.reset();
         loadSections();
+
+        // #6: notifica cliente e proprietário sobre reserva confirmada
+        var booking = rr && rr.data && rr.data[0];
+        if (window.ndEmails && booking && booking.id) {
+          // monta string do veículo
+          c.from("vehicles").select("make,model,year_model")
+            .eq("id", booking.vehicle_id).maybeSingle()
+            .then(function (vr) {
+              var v = (vr && vr.data) || {};
+              var veiculo = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+              if (v.year_model) veiculo += " (" + v.year_model + ")";
+              var commonPayload = {
+                veiculo: veiculo, start_date: start, end_date: end,
+                monthly_price: price, deposit_amount: deposit,
+                booking_id: booking.id,
+                owner_amount: ownerAmount
+              };
+              window.ndEmails.notify(c, clientId,
+                "booking_confirmed_client", commonPayload);
+              if (booking.owner_id) {
+                window.ndEmails.notify(c, booking.owner_id,
+                  "booking_confirmed_owner", commonPayload);
+              }
+            }).catch(function () {});
+        }
       }).catch(function () {
         btn.disabled = false; btn.textContent = "Criar reserva";
       });
