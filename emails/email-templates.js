@@ -648,10 +648,10 @@
       key: "admin_document_review_required", profile: "admin", priority: "alta",
       trigger: "Upload/documento pendente",
       subject: "[Admin] Documento aguardando análise",
-      preheader: "Há um documento KYC aguardando revisão.",
+      preheader: "Há um documento de identidade aguardando revisão.",
       title: "Documento aguardando análise",
       body: [
-        "Um documento foi enviado e aguarda revisão da equipe na área de Documentos (KYC).",
+        "Um documento foi enviado e aguarda revisão da equipe na área de Verificação de identidade.",
         "Confira o arquivo e aprove ou recuse pelo painel administrativo."
       ],
       data_blocks: [["Tipo", "{{document_name}}"], ["Usuário", "{{user_email}}"], ["Severidade", "Alta"]],
