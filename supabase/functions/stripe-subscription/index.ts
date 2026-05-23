@@ -149,14 +149,26 @@ Deno.serve(async (req) => {
       });
     }
 
-    // helper: pega o email + label do veículo do cliente
-    async function notifyCancel(atEnd: boolean): Promise<boolean> {
-      let cliEmail = "";
+    // helper: tira o e-mail do Customer da Stripe (mais confiável que
+    // admin.auth.admin.getUserById, que falhava silenciosamente no Deno)
+    async function getClientEmail(sub: Stripe.Subscription): Promise<string> {
       try {
-        const { data: u } = await admin.auth.admin.getUserById(booking.client_id);
-        cliEmail = u?.user?.email ?? "";
-      } catch { /* ignora */ }
-      if (!cliEmail) return false;
+        const custId = typeof sub.customer === "string"
+          ? sub.customer : sub.customer?.id;
+        if (!custId) return "";
+        const cust = await stripe.customers.retrieve(custId);
+        if ((cust as any).deleted) return "";
+        return (cust as Stripe.Customer).email ?? "";
+      } catch (e) {
+        console.error("getClientEmail erro:", (e as Error)?.message);
+        return "";
+      }
+    }
+    async function notifyCancel(atEnd: boolean, cliEmail: string): Promise<boolean> {
+      if (!cliEmail) {
+        console.error("notifyCancel: e-mail do cliente não obtido (Customer Stripe vazio).");
+        return false;
+      }
       const v: any = (booking as any).vehicles;
       let veh = "Reserva Nomade Drive";
       if (v) {
@@ -169,6 +181,8 @@ Deno.serve(async (req) => {
         endDate: booking.end_date ?? undefined,
       });
       const r = await sendEmail(cliEmail, tpl.subject, tpl.html, tpl.text, tpl.replyTo);
+      if (r.ok) console.log("E-mail 'Assinatura cancelada' enviado:", r.id, "para", cliEmail);
+      else console.error("Falha ao enviar 'Assinatura cancelada':", r.error);
       return r.ok;
     }
 
@@ -179,21 +193,30 @@ Deno.serve(async (req) => {
       await admin.from("bookings")
         .update({ stripe_subscription_id: null })
         .eq("id", bookingId);
-      const emailed = await notifyCancel(false);
-      return json({ ok: true, status: sub.status, canceled_at: sub.canceled_at, email_sent: emailed });
+      const cliEmail = await getClientEmail(sub);
+      const emailed = await notifyCancel(false, cliEmail);
+      return json({
+        ok: true,
+        status: sub.status,
+        canceled_at: sub.canceled_at,
+        email_sent: emailed,
+        email_to: cliEmail || null,
+      });
     }
 
     if (action === "cancel_at_end") {
       const sub = await stripe.subscriptions.update(booking.stripe_subscription_id, {
         cancel_at_period_end: true,
       });
-      const emailed = await notifyCancel(true);
+      const cliEmail = await getClientEmail(sub);
+      const emailed = await notifyCancel(true, cliEmail);
       return json({
         ok: true,
         status: sub.status,
         cancel_at_period_end: sub.cancel_at_period_end,
         current_period_end: (sub as any).current_period_end ?? null,
         email_sent: emailed,
+        email_to: cliEmail || null,
       });
     }
 

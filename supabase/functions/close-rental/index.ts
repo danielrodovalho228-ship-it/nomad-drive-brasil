@@ -160,10 +160,17 @@ Deno.serve(async (req) => {
       return json({ error: "Apenas o proprietário ou admin pode encerrar." }, 403);
     }
 
+    // Capturamos o customer.id da Stripe ao longo do caminho — é o jeito
+    // mais confiável de descobrir o e-mail do cliente (admin.auth.admin
+    // .getUserById falha silenciosamente no runtime Deno).
+    let stripeCustomerId: string | null = null;
+
     // 1) Cancelar subscription
     if (booking.stripe_subscription_id) {
       try {
-        await stripe.subscriptions.cancel(booking.stripe_subscription_id);
+        const canceled = await stripe.subscriptions.cancel(booking.stripe_subscription_id);
+        const cust = canceled.customer;
+        stripeCustomerId = typeof cust === "string" ? cust : (cust?.id ?? null);
         await admin.from("bookings")
           .update({ stripe_subscription_id: null })
           .eq("id", bookingId);
@@ -183,7 +190,11 @@ Deno.serve(async (req) => {
     let caucaoAmount = 0;
     if (caucao && caucao.stripe_payment_intent_id) {
       try {
-        await stripe.paymentIntents.cancel(caucao.stripe_payment_intent_id);
+        const pi = await stripe.paymentIntents.cancel(caucao.stripe_payment_intent_id);
+        if (!stripeCustomerId) {
+          const pcust = pi.customer;
+          stripeCustomerId = typeof pcust === "string" ? pcust : (pcust?.id ?? null);
+        }
         await admin.from("payments")
           .update({ status: "liberado" })
           .eq("id", caucao.id);
@@ -194,12 +205,44 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Se ainda não temos customer.id, tenta achar em qualquer pagamento
+    // já registrado da reserva (mensalidade, caução liberada, etc.)
+    if (!stripeCustomerId) {
+      try {
+        const { data: anyPay } = await admin.from("payments")
+          .select("stripe_payment_intent_id")
+          .eq("booking_id", bookingId)
+          .not("stripe_payment_intent_id", "is", null)
+          .limit(1).maybeSingle();
+        if (anyPay?.stripe_payment_intent_id) {
+          const pi = await stripe.paymentIntents.retrieve(anyPay.stripe_payment_intent_id);
+          const pcust = pi.customer;
+          stripeCustomerId = typeof pcust === "string" ? pcust : (pcust?.id ?? null);
+        }
+      } catch (e) {
+        console.error("close-rental: fallback customer lookup falhou:", (e as Error)?.message);
+      }
+    }
+
     // 3) Enviar e-mail "Locação encerrada"
     let cliEmail = "";
-    try {
-      const { data: u } = await admin.auth.admin.getUserById(booking.client_id);
-      cliEmail = u?.user?.email ?? "";
-    } catch { /* ignora */ }
+    if (stripeCustomerId) {
+      try {
+        const cust = await stripe.customers.retrieve(stripeCustomerId);
+        if (!(cust as any).deleted) {
+          cliEmail = (cust as Stripe.Customer).email ?? "";
+        }
+      } catch (e) {
+        console.error("close-rental: stripe.customers.retrieve falhou:", (e as Error)?.message);
+      }
+    }
+    // Fallback: tenta auth.admin (pode falhar — mas deixamos como último recurso)
+    if (!cliEmail) {
+      try {
+        const { data: u } = await admin.auth.admin.getUserById(booking.client_id);
+        cliEmail = u?.user?.email ?? "";
+      } catch { /* ignora */ }
+    }
     if (cliEmail) {
       const v: any = (booking as any).vehicles;
       let veh = "Reserva Nomade Drive";
@@ -212,14 +255,21 @@ Deno.serve(async (req) => {
         veiculo: veh,
         caucaoLiberada: actions.caucao_released,
       });
+      console.log("close-rental: enviando e-mail 'Locação encerrada' para", cliEmail);
       const r = await sendEmail(cliEmail, tpl.subject, tpl.html, tpl.text, tpl.replyTo);
-      if (r.ok) actions.email_sent = true;
-      else actions.errors.push("email: " + (r.error ?? ""));
+      if (r.ok) {
+        actions.email_sent = true;
+        console.log("close-rental: Resend OK id=", r.id);
+      } else {
+        actions.errors.push("email: " + (r.error ?? ""));
+        console.error("close-rental: Resend falhou:", r.error);
+      }
     } else {
-      actions.errors.push("email: cliente sem e-mail conhecido");
+      actions.errors.push("email: cliente sem e-mail conhecido (customer Stripe vazio e auth.admin falhou)");
+      console.error("close-rental: e-mail do cliente não obtido");
     }
 
-    return json({ ok: true, actions });
+    return json({ ok: true, actions, email_to: cliEmail || null });
   } catch (e) {
     actions.errors.push("geral: " + ((e as Error)?.message ?? String(e)));
     return json({ ok: false, actions, error: (e as Error)?.message }, 500);
