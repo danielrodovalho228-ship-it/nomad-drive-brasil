@@ -411,7 +411,9 @@
       }).catch(function () {});
     loadCadastros();
     loadUserDocuments();
-    loadSections();
+    // carrega o mapa de nomes ANTES das sections — assim a coluna
+    // Cliente da tabela Reservas já mostra o nome quando renderiza.
+    loadProfileNames().then(loadSections);
     loadNewBookingForm();
   }
   function loadCadastros() {
@@ -694,6 +696,22 @@
   }
 
   /* carrega uma seção no mesmo padrão de "Cadastros e aprovações" */
+  /* Mapa global id→nome dos profiles — preenchido por loadProfileNames()
+     antes de loadSections() rodar. Permite exibir o nome do cliente em
+     tabelas como Reservas sem precisar de embed PostgREST (que falha
+     porque bookings.client_id referencia auth.users, não profiles). */
+  var profileNamesMap = {};
+  function loadProfileNames() {
+    var c = a.client();
+    if (!c) return Promise.resolve();
+    return c.from("profiles").select("id,full_name").then(function (r) {
+      var rows = (r && r.data) || [];
+      rows.forEach(function (p) {
+        if (p && p.id) profileNamesMap[p.id] = p.full_name || null;
+      });
+    }).catch(function () { /* sem nomes, tabela mostra UUID curto */ });
+  }
+
   function loadSection(opts) {
     var c = a.client();
     var tb = document.getElementById(opts.tbodyId);
@@ -737,11 +755,11 @@
     });
     loadSection({
       table: "bookings", tbodyId: "reservasList", statusField: "status",
-      select: "*, vehicles(make,model,year_model), client:profiles!client_id(full_name)",
+      select: "*, vehicles(make,model,year_model)",
       columns: [
         function (r) { return vehLabel(r.vehicles); },
         function (r) {
-          var nm = r.client && r.client.full_name;
+          var nm = profileNamesMap[r.client_id];
           if (nm) return nm;
           return r.client_id ? (r.client_id.slice(0, 8) + "…") : "—";
         },
