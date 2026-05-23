@@ -583,11 +583,41 @@
             sel.appendChild(o);
           });
           sel.addEventListener("change", function () {
+            var oldStatus = app.status;
+            var newStatus = sel.value;
             sel.disabled = true;
-            c.from("applications").update({ status: sel.value }).eq("id", app.id)
+            c.from("applications").update({ status: newStatus }).eq("id", app.id)
               .then(function (rr) {
                 sel.disabled = false;
                 sel.style.borderColor = rr.error ? "#c0392b" : "";
+                if (rr && rr.error) return;
+                app.status = newStatus;
+
+                // Fix #6: dispara e-mail de cadastro aprovado/recusado
+                // Applications tem 'email' direto na própria tabela, então
+                // usamos notifyEmail() sem precisar lookup em profiles.
+                if (window.ndEmails && app.email) {
+                  var dashPath = a.dashboardFor
+                    ? a.dashboardFor(app.profile_type) : "dashboard-cliente.html";
+                  var roleLbl = a.roleLabel
+                    ? a.roleLabel(app.profile_type) : (app.profile_type || "perfil");
+                  if (newStatus === "aprovado" && oldStatus !== "aprovado") {
+                    window.ndEmails.notifyEmail(c, app.email, "profile_approved", {
+                      full_name: app.full_name || "",
+                      role_label: roleLbl,
+                      dashboard_path: dashPath
+                    }).catch(function (e) { console.warn("profile_approved (app):", e); });
+                  } else if (newStatus === "reprovado" && oldStatus !== "reprovado") {
+                    var motivo = window.prompt(
+                      "(Opcional) Motivo da recusa — vai no e-mail ao candidato:",
+                      ""
+                    ) || "Cadastro reprovado pela equipe Nomade Drive.";
+                    window.ndEmails.notifyEmail(c, app.email, "profile_rejected", {
+                      full_name: app.full_name || "",
+                      reason: motivo
+                    }).catch(function (e) { console.warn("profile_rejected (app):", e); });
+                  }
+                }
               }).catch(function () { sel.disabled = false; });
           });
           stTd.appendChild(sel); tr.appendChild(stTd);
@@ -879,6 +909,21 @@
             referred_name: row.referred_name,
             commission_amount: row.commission_amount || 200
           }).catch(function (e) { console.warn("referral_commission_paid email:", e); });
+        }
+
+        // Fix #6: lead de aluguel (rental_requests) — quando admin
+        // muda status, notifica o cliente que solicitou. Cliente_id
+        // está na linha; emails-runtime busca o email via profiles.
+        if (window.ndEmails && table === "rental_requests" &&
+            field === "status" && row.client_id && newVal !== oldVal &&
+            ["aprovado", "aprovado_com_ressalvas", "recusado", "suspenso"].indexOf(newVal) !== -1) {
+          window.ndEmails.notify(c, row.client_id, "lead_status_updated", {
+            status: newVal,
+            status_label: a.statusLabel ? a.statusLabel(newVal) : newVal,
+            cidade: row.city,
+            duracao: row.desired_months,
+            inicio: row.desired_start_date
+          }).catch(function (e) { console.warn("lead_status_updated:", e); });
         }
       }).catch(function () { sel.disabled = false; });
     });

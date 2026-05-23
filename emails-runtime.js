@@ -444,6 +444,45 @@
       };
     },
 
+    lead_status_updated: function (p) {
+      var statusLbl = p.status_label || p.status || "atualizada";
+      var orangeStatus = p.status === "recusado" || p.status === "suspenso";
+      return {
+        replyTo: "contato@nomadedrive.com.br",
+        subject: "Sua solicitação de aluguel — " + statusLbl,
+        html: baseTemplate({
+          gradient: orangeStatus
+            ? "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)"
+            : "linear-gradient(135deg,#145f3e 0%,#1a7a4f 55%,#2da473 100%)",
+          ctaBg: orangeStatus ? "#a8580e" : "#1a7a4f",
+          badge: "Status atualizado",
+          title: "Atualização na sua solicitação",
+          preheader: "Status agora: " + statusLbl,
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "A equipe Nomade Drive analisou sua solicitação de aluguel e o status agora é <strong>" + escapeHtml(statusLbl) + "</strong>.",
+            (p.status === "aprovado"
+              ? "Em breve um consultor vai entrar em contato pelo WhatsApp com as opções disponíveis."
+              : p.status === "aprovado_com_ressalvas"
+                ? "Há condições especiais para sua solicitação. O consultor vai detalhar no contato."
+                : p.status === "recusado"
+                  ? "Infelizmente não foi possível atender no momento. Você pode responder este e-mail pra entender o motivo."
+                  : "Acompanhe pelo painel ou aguarde nosso contato.")
+          ],
+          sections: [
+            (p.cidade ? ["Cidade", escapeHtml(p.cidade)] : null),
+            (p.duracao ? ["Duração", escapeHtml(p.duracao + " mês(es)")] : null),
+            (p.inicio ? ["Início desejado", escapeHtml(p.inicio)] : null)
+          ].filter(Boolean),
+          ctaText: "Acompanhar no painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#solicitacoes"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Sua solicitação foi atualizada: " + statusLbl + ".\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#solicitacoes"
+      };
+    },
+
     case_resolved_client: function (p) {
       var statusLbl = p.status_label || p.status || "atualizada";
       return {
