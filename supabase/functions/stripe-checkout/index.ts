@@ -463,8 +463,18 @@ Deno.serve(async (req) => {
       });
     } else {
       // ---- modo one-off (padrão atual: payment com app_fee_amount) ----
+      //
+      // B2 (Fase 28): PIX como método alternativo
+      // - Caução: SÓ cartão (precisa de pré-autorização — PIX não suporta)
+      // - Mensalidade one-off: cartão OU PIX (cliente escolhe na Stripe)
+      // - PIX expira em 30 min por padrão; o webhook trata o paid quando vier.
+      const paymentMethods = isDeposit
+        ? ["card"]
+        : ["card", "pix"];
+
       session = await stripe.checkout.sessions.create({
         mode: "payment",
+        payment_method_types: paymentMethods as Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
         line_items: [{
           quantity: 1,
           price_data: {
