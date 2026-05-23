@@ -1771,3 +1771,23 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 
 /* HERO dentro do admin (espaçamento e margem específicos) */
 .admin-main .dash-hero { margin-top: 0; margin-bottom: 24px; }
+
+/* Como funciona — passo a passo do fluxo do cliente ------------------ */
+.dash-steps {
+  list-style: none; padding: 0; margin: 14px 0 6px;
+  display: flex; flex-direction: column; gap: 8px;
+  border-left: 3px solid var(--green-l);
+  padding-left: 14px;
+}
+.dash-steps li {
+  font-size: 13.5px; color: var(--muted); line-height: 1.55;
+}
+.dash-steps li strong { color: var(--ink); font-weight: 700; }
+
+/* Link inline dentro de texto explicativo */
+.dash-link-inline {
+  color: var(--green-d); font-weight: 600;
+  border-bottom: 1px dashed var(--green-d);
+  transition: color .14s, border-color .14s;
+}
+.dash-link-inline:hover { color: var(--green); border-bottom-color: var(--green); }

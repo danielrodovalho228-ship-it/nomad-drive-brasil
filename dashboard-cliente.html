@@ -72,7 +72,14 @@
 
         <section class="dash-panel" id="solicitacoes">
           <h2>Solicitações de locação</h2>
-          <p>Acompanhe aqui o andamento de cada pedido. Toda solicitação passa por análise — a aprovação não é automática.</p>
+          <p>Aqui ficam os seus <strong>pedidos enviados</strong>. Solicitação <em>não é o mesmo</em> que reserva: cada pedido passa por análise da equipe Nomade Drive e, se aprovado, vira uma <strong>reserva ativa</strong> que aparece na seção <a href="#checklist" class="dash-link-inline">Check-in / check-out</a> deste painel.</p>
+          <ol class="dash-steps">
+            <li><strong>1. Solicitação</strong> — você envia o pedido (status “em análise”).</li>
+            <li><strong>2. Análise</strong> — a equipe valida documentos, disponibilidade e proposta.</li>
+            <li><strong>3. Reserva ativa</strong> — quando aprovada, a locação aparece em Check-in/check-out, com valores e datas.</li>
+            <li><strong>4. Pagamento</strong> — você paga a mensalidade e autoriza a caução pela Stripe.</li>
+            <li><strong>5. Check-in → uso → Check-out</strong> — fluxo operacional da locação.</li>
+          </ol>
           <div class="dash-list" id="reqList"></div>
           <div class="dash-empty" id="reqEmpty">Você ainda não enviou solicitações. Comece pelo seu perfil de cliente.</div>
           <a href="onboarding-cliente.html" class="btn btn--solid btn--sm dash-cta">Nova solicitação de locação</a>
