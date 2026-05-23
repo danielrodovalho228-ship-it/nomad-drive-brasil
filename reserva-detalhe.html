@@ -65,7 +65,7 @@
 
       <section class="dash-panel" id="resvPayPanel">
         <h2>Pagamentos</h2>
-        <p>Pague a mensalidade ou autorize a caução pela Stripe. A tela de cartão é hospedada pela Stripe — os dados do seu cartão não passam pela Nomade Drive.</p>
+        <p>Pague a mensalidade ou autorize a caução pela Stripe. A tela de cartão é hospedada pela Stripe — os dados do seu cartão não passam pela Nomade Drive. Quando tiver uma assinatura ativa, use <strong>"Atualizar cartão / ver histórico"</strong> para trocar o cartão salvo ou ver todas as cobranças.</p>
         <div class="auth-msg" id="payNotice" hidden></div>
 
         <!-- Bloco da assinatura mensal (só aparece se billing_mode='monthly' + subscription ativa) -->
@@ -80,6 +80,7 @@
             <div><span>Cobrança automática até</span><strong id="subEnd">—</strong></div>
           </div>
           <div class="sub-card__actions">
+            <button type="button" class="btn btn--outline btn--sm" id="subPortal">Atualizar cartão / ver histórico</button>
             <button type="button" class="btn btn--ghost btn--sm" id="subCancel">Cancelar assinatura</button>
           </div>
         </div>
@@ -344,6 +345,7 @@
     var nextEl   = document.getElementById("subNext");
     var endEl    = document.getElementById("subEnd");
     var cancelBtn= document.getElementById("subCancel");
+    var portalBtn= document.getElementById("subPortal");
 
     if (amountEl) amountEl.textContent = brlv(b.monthly_price) + " / mês";
     if (endEl)    endEl.textContent = fmtDate(b.end_date);
@@ -379,6 +381,38 @@
             dt.getFullYear();
         }
       }).catch(function () {});
+    }
+
+    // B1: botão "Atualizar cartão / ver histórico" → Stripe Billing Portal
+    if (portalBtn && !portalBtn.getAttribute("data-wired")) {
+      portalBtn.setAttribute("data-wired", "1");
+      portalBtn.addEventListener("click", function () {
+        if (!c || !c.functions) {
+          payNotice("Pagamento indisponível nesta pré-visualização.", "warn"); return;
+        }
+        var orig = portalBtn.textContent;
+        portalBtn.disabled = true; portalBtn.textContent = "Abrindo...";
+        c.functions.invoke("stripe-billing-portal", { body: {} }).then(function (r) {
+          var d = r && r.data;
+          if (d && d.ok && d.url) {
+            // Redireciona na mesma aba (Stripe espera isso pro return_url
+            // voltar pra cá quando o cliente clicar em "Voltar").
+            window.location.href = d.url;
+            return;
+          }
+          portalBtn.disabled = false; portalBtn.textContent = orig;
+          if (d && d.error === "customer_not_found") {
+            payNotice(d.message || "Faça pelo menos uma cobrança antes de gerenciar pagamentos.", "warn");
+          } else if (d && d.error === "billing_portal_not_configured") {
+            payNotice("O portal de pagamentos está sendo configurado — tente novamente em instantes.", "warn");
+          } else {
+            payNotice("Não foi possível abrir o portal de pagamentos agora.", "error");
+          }
+        }).catch(function () {
+          portalBtn.disabled = false; portalBtn.textContent = orig;
+          payNotice("Erro de rede ao abrir o portal de pagamentos.", "error");
+        });
+      });
     }
 
     if (cancelBtn && !cancelBtn.getAttribute("data-wired")) {
