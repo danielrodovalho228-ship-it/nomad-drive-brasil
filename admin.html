@@ -158,8 +158,8 @@
       </div>
       <div class="admin-card">
         <table class="admin-table">
-          <thead><tr><th>Veículo</th><th>Período</th><th>Valor mensal</th><th>Status</th></tr></thead>
-          <tbody id="reservasList"><tr><td colspan="4">Carregando reservas...</td></tr></tbody>
+          <thead><tr><th>Veículo</th><th>Cliente</th><th>Período</th><th>Valor mensal</th><th>Status</th></tr></thead>
+          <tbody id="reservasList"><tr><td colspan="5">Carregando reservas...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -690,9 +690,14 @@
     });
     loadSection({
       table: "bookings", tbodyId: "reservasList", statusField: "status",
-      select: "*, vehicles(make,model,year_model)",
+      select: "*, vehicles(make,model,year_model), client:profiles!client_id(full_name)",
       columns: [
         function (r) { return vehLabel(r.vehicles); },
+        function (r) {
+          var nm = r.client && r.client.full_name;
+          if (nm) return nm;
+          return r.client_id ? (r.client_id.slice(0, 8) + "…") : "—";
+        },
         function (r) { return fmtDate(r.start_date) + " – " + fmtDate(r.end_date); },
         function (r) { return fmtMoney(r.monthly_price); }
       ]
