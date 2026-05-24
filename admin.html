@@ -989,6 +989,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
+<script src="nd-modal.js?v=20260524g"></script>
 <script src="auth.js?v=20260524e"></script>
 <script src="statuses.js?v=20260524e"></script>
 <script src="emails-runtime.js?v=20260524f"></script>
@@ -1084,8 +1085,14 @@
       callSetup({ email: email }, btnOne);
     });
 
-    if (btnAll) btnAll.addEventListener('click', function () {
-      if (!window.confirm('Processar TODAS as Connected Accounts (Express) cadastradas?\n\nIsto vai configurá-las como MANUAL payouts.')) return;
+    if (btnAll) btnAll.addEventListener('click', async function () {
+      var ok = await ndModal.confirm({
+        title: 'Processar TODAS as Connected Accounts?',
+        body: 'Isto vai configurar todas como MANUAL payouts no Stripe Connect.',
+        okText: 'Sim, processar todas', cancelText: 'Cancelar',
+        icon: '⚙️', danger: false
+      });
+      if (!ok) return;
       callSetup({ all: true }, btnAll);
     });
   });
@@ -1785,16 +1792,21 @@
     btn.className = "btn btn--ghost btn--sm";
     btn.textContent = "Cancelar assinatura";
     btn.title = "Cancela a subscription Stripe e dispara e-mail ao cliente.";
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", async function () {
       var c = a.client();
       if (!c || !c.functions) return;
-      var ok = window.confirm(
-        "Cancelar a assinatura mensal desta reserva?\n\n" +
-        "• Stripe para de cobrar automaticamente.\n" +
-        "• O cliente recebe e-mail \"Assinatura cancelada\".\n" +
-        "• A reserva fica ativa até o fim do período atual.\n\n" +
-        "Esta ação é registrada no log de auditoria."
-      );
+      var ok = await ndModal.confirm({
+        title: "Cancelar a assinatura mensal desta reserva?",
+        html:
+          '<ul style="margin:0 0 0 18px;padding:0;line-height:1.7;">' +
+            '<li>Stripe para de cobrar automaticamente</li>' +
+            '<li>O cliente recebe e-mail <strong>"Assinatura cancelada"</strong></li>' +
+            '<li>A reserva fica ativa até o fim do período atual</li>' +
+          '</ul>',
+        meta: '🔒 Esta ação é registrada no log de auditoria.',
+        okText: "Sim, cancelar", cancelText: "Voltar",
+        danger: true, icon: '⚠️'
+      });
       if (!ok) return;
       btn.disabled = true; var orig = btn.textContent;
       btn.textContent = "Cancelando...";

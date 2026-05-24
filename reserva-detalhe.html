@@ -256,6 +256,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="nd-modal.js?v=20260524g"></script>
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="script.js?v=20260523c"></script>
@@ -569,12 +570,15 @@
 
     if (cancelBtn && !cancelBtn.getAttribute("data-wired")) {
       cancelBtn.setAttribute("data-wired", "1");
-      cancelBtn.addEventListener("click", function () {
-        var ok = window.confirm(
-          "Cancelar a assinatura mensal?\n\n" +
-          "A Stripe não vai mais cobrar automaticamente. " +
-          "Você pode continuar usando o veículo até o fim do período já pago."
-        );
+      cancelBtn.addEventListener("click", async function () {
+        var ok = await ndModal.confirm({
+          title: "Cancelar a assinatura mensal?",
+          body: "A Stripe não vai mais cobrar automaticamente. Você pode continuar usando o veículo até o fim do período já pago.",
+          okText: "Sim, cancelar",
+          cancelText: "Voltar",
+          danger: true,
+          icon: '⚠️'
+        });
         if (!ok) return;
         var orig = cancelBtn.textContent;
         cancelBtn.disabled = true; cancelBtn.textContent = "Cancelando...";
@@ -806,14 +810,19 @@
         // ============================================================
         // Fase 32 Sprint 2 — Saque real via Edge Function
         // ============================================================
-        saqueBtn.addEventListener('click', function () {
-          var ok = window.confirm(
-            'Confirmar saque de ' + fmtBRL(available.amount_net) + '?\n\n' +
-            '• O valor será depositado na sua conta Stripe Express em 1-2 dias úteis.\n' +
-            '• Comissão Nomade Drive (10%) já descontada.\n' +
-            '• Você recebe e-mail de confirmação assim que liberado.\n\n' +
-            'Pode prosseguir?'
-          );
+        saqueBtn.addEventListener('click', async function () {
+          var ok = await ndModal.confirm({
+            title: 'Confirmar saque de ' + fmtBRL(available.amount_net) + '?',
+            html:
+              '<ul style="margin:0 0 0 18px;padding:0;line-height:1.7;">' +
+                '<li>Valor depositado na sua conta Stripe Express em <strong>1-2 dias úteis</strong></li>' +
+                '<li>Comissão Nomade Drive (10%) já descontada</li>' +
+                '<li>Você recebe e-mail de confirmação assim que liberado</li>' +
+              '</ul>',
+            okText: '💸 Sim, sacar agora',
+            cancelText: 'Voltar',
+            icon: '💰'
+          });
           if (!ok) return;
           saqueBtn.disabled = true;
           var origText = saqueBtn.textContent;
