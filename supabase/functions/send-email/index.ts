@@ -58,9 +58,64 @@ Deno.serve(async (req) => {
     const { data: userData } = await userClient.auth.getUser();
     if (!userData?.user) return json({ error: "Não autenticado." }, 401);
 
-    const { to, subject, html, text, reply_to } = await req.json();
-    if (!to || !subject || (!html && !text)) {
-      return json({ error: "Parâmetros: to, subject, html ou text." }, 400);
+    const { to, to_user_id, subject, html, text, reply_to } = await req.json();
+    if (!subject || (!html && !text)) {
+      return json({ error: "Parâmetros obrigatórios: subject + (html ou text)." }, 400);
+    }
+    if (!to && !to_user_id) {
+      return json({ error: "Parâmetro 'to' (email) ou 'to_user_id' (uuid) é obrigatório." }, 400);
+    }
+
+    // ============================================================
+    // Fase 32 (Caminho A) — Resolução server-side via to_user_id
+    // ============================================================
+    // Quando o caller (browser) não tem permissão RLS pra ler o
+    // profiles do destinatário (caso "equipe → usuário": Proteção,
+    // suporte, admin notificando alguém que não é parte da reserva),
+    // ele passa to_user_id em vez de email. Aqui usamos a SERVICE
+    // ROLE pra resolver o e-mail sem RLS.
+    // ============================================================
+    let resolvedTo: string | string[] = to;
+    let resolvedName: string | null = null;
+    if (!to && to_user_id) {
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!serviceKey) {
+        return json({
+          error: "SUPABASE_SERVICE_ROLE_KEY não configurado.",
+          hint: "Necessário pra resolver to_user_id sem RLS."
+        }, 500);
+      }
+      const admin = createClient(url, serviceKey);
+      const { data: profile, error: pErr } = await admin
+        .from("profiles")
+        .select("id, email, full_name")
+        .eq("id", to_user_id)
+        .maybeSingle();
+      if (pErr) {
+        return json({ error: "Falha ao resolver to_user_id.", detail: pErr.message }, 500);
+      }
+      if (!profile || !profile.email) {
+        // Fallback: tenta auth.admin (caso profile não tenha email cacheado)
+        try {
+          const { data: u } = await admin.auth.admin.getUserById(to_user_id);
+          const authEmail = u?.user?.email;
+          if (authEmail) {
+            resolvedTo = authEmail;
+            resolvedName = u?.user?.user_metadata?.full_name ?? null;
+          } else {
+            return json({ error: "email_not_found", to_user_id }, 404);
+          }
+        } catch (e) {
+          return json({
+            error: "email_not_found",
+            to_user_id,
+            detail: (e as Error)?.message ?? String(e)
+          }, 404);
+        }
+      } else {
+        resolvedTo = profile.email;
+        resolvedName = profile.full_name;
+      }
     }
 
     const resp = await fetch("https://api.resend.com/emails", {
@@ -71,7 +126,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         from,
-        to: Array.isArray(to) ? to : [to],
+        to: Array.isArray(resolvedTo) ? resolvedTo : [resolvedTo],
         subject,
         html,
         text,
@@ -85,7 +140,12 @@ Deno.serve(async (req) => {
     }
 
     const body = await resp.json();
-    return json({ ok: true, id: body?.id ?? null });
+    return json({
+      ok: true,
+      id: body?.id ?? null,
+      resolved_to: to_user_id ? resolvedTo : undefined,
+      resolved_name: resolvedName ?? undefined
+    });
   } catch (e) {
     return json({ error: (e as Error)?.message ?? String(e) }, 500);
   }

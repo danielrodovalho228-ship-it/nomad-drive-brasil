@@ -146,7 +146,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260523c"></script>
+<script src="emails-runtime.js?v=20260524a"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
@@ -572,13 +572,17 @@
 
         // #6 parte 2: notifica o cliente quando triagem encerra
         // (status muda PRA um dos finais e o reported_by é conhecido)
+        // Fase 32 (Caminho A): usa notifyByUserId pra resolver email
+        // server-side via service role (Proteção não tem RLS no profile
+        // do reporter, então notify() do browser falharia).
         var finals = ["aprovado", "aprovado_com_ressalvas", "recusado"];
         if (window.ndEmails && cs.reported_by &&
             finals.indexOf(newStatus) !== -1 && newStatus !== oldStatus) {
           var v = cs.vehicles || {};
           var veiculo = [v.make, v.model].filter(Boolean).join(" ");
           if (v.year_model) veiculo += " (" + v.year_model + ")";
-          window.ndEmails.notify(c, cs.reported_by, "case_resolved_client", {
+          var notifyFn = window.ndEmails.notifyByUserId || window.ndEmails.notify;
+          notifyFn(c, cs.reported_by, "case_resolved_client", {
             case_type: cs.case_type,
             case_type_label: CASE_LABEL[cs.case_type] || cs.case_type,
             veiculo: veiculo,

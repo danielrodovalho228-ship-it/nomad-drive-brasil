@@ -1,7 +1,9 @@
 # Checklist Pessoal — Daniel / Nomade Drive Brasil
 
-> **Última atualização:** 2026-05-23 (commit `910a89e`)
+> **Última atualização:** 2026-05-24 madrugada (sessão Claude code-side enquanto Daniel dormia)
 > Marque cada item conforme for fazendo.
+>
+> 📬 **Leia primeiro:** `INBOX_COWORKER/STATUS_DANIEL_BOM_DIA.md` — resumo do que foi feito na madrugada
 
 ---
 
@@ -25,8 +27,10 @@
   - Pagamento confirmado
   - Status "Pago" registrado em 24/05/2026
   - 📧 E-mail "Mensalidade confirmada" recebido em `contato@nomadedrive.com.br` (via alias qa-cliente@)
+  - ✅ **Subscription ATIVA no Stripe Dashboard** com email `qa-cliente@nomadedrive.com.br`
+  - ✅ Próxima cobrança: 23/06/2026 | Cobrança automática até: 22/08/2026
 
-- [x] **5b. Autorizar caução R$ 2.500** ✅
+- [x] **5b. Autorizar caução R$ 1.000** ✅
   - Stripe pré-autorizou (não cobrou)
   - Status "Caução autorizada" registrado em 24/05/2026
   - 📧 E-mail "Caução autorizada" recebido com template branded perfeito
@@ -34,6 +38,7 @@
 **🎯 Pipeline end-to-end VALIDADO:**
 ```
 Stripe Checkout → Edge Function → Resend → Hostinger alias → Inbox ✅
+Stripe Subscription (Active) → Webhook → Profile.stripe_customer_id → Booking.stripe_subscription_id ✅
 ```
 
 ---
@@ -42,10 +47,7 @@ Stripe Checkout → Edge Function → Resend → Hostinger alias → Inbox ✅
 
 ### Testar fluxos end-to-end (1-2h)
 
-- [ ] **5. Fluxo A — Pagar mensalidade** (3 min)
-  - Login como `qa-cliente` → `/reserva-detalhe?id=<booking>` → "Pagar mensalidade"
-  - Stripe Checkout: cartão `4242 4242 4242 4242`, CVC `123`, data `12/30`, CEP `01310-100`
-  - Verificar: e-mail "Mensalidade confirmada" em `contato@nomadedrive.com.br` (webmail Hostinger)
+- [x] **5. Fluxo A — Pagar mensalidade** ✅ (validado 2x — última com email correto qa-cliente@)
 
 - [ ] **6. Fluxo B — Check-in / check-out** (5 min)
   - Cliente solicita retirada → Proprietário aprova → cliente vê "Em uso"
@@ -143,11 +145,23 @@ Stripe Checkout → Edge Function → Resend → Hostinger alias → Inbox ✅
 |---|---|---|---|
 | 🔴 Urgente | 6 | 6 | 0 ✅ |
 | 🟢 Fluxos validados | 2 | 2 | 0 ✅ |
-| 🟡 Esta semana (restantes) | 4 | 0 | 4 |
+| 🟡 Esta semana (restantes) | 3 | 0 | 3 |
 | 🟢 Quando quiser | 7 | 0 | 7 |
 | ✅ Já feito (total) | 23 | 23 | 0 |
 
-**🎯 Próxima ação:** Testar Fluxo B (check-in/check-out), C (avaria) ou D (cancelar) — ou pausar.
+**🎯 Próxima ação:** Ler `INBOX_COWORKER/STATUS_DANIEL_BOM_DIA.md` → rodar 2 SQLs novos + redeploy close-rental + git push → começar Sprint 2 ou retomar QA dos Fluxos B/C/D.
+
+## 🌅 Madrugada 23→24/05 — sessão autônoma Claude code-side
+
+- [x] Fase 32 - Sprint 1 SQL pronto: `supabase-fase32-timeline-saques.sql` (timeline + saques + earnings views)
+- [x] Fase 32b SQL pronto: `supabase-fase32b-bookings-status-terminal.sql` (adiciona 'em_uso', 'encerrada' ao enum)
+- [x] Spec UI Sprint 1 pronta: `SPRINT_1_PLANO_UI.md` (HTML/CSS/JS detalhados)
+- [x] Proposta atualizada com contador "Sua frota rendeu R$ ▴" (decisão Daniel 23/05)
+- [x] BUG cowork #2 (Contestação) resolvido: 2 templates + handler
+- [x] BUG cowork #7 (Veículo aprovado/recusado) resolvido: handler admin + 2 templates
+- [x] BUG cowork #4 (bookings.status terminal) resolvido: migração SQL + close-rental update
+- [ ] **PENDENTE Daniel:** rodar SQLs novos + redeploy close-rental + git push
+- [ ] **PENDENTE Daniel:** decidir caminho A/B/C pro BUG case_resolved server-side
 
 ---
 

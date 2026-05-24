@@ -257,7 +257,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260523c"></script>
+<script src="emails-runtime.js?v=20260524a"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
@@ -304,7 +304,10 @@
     perfilEmAnalise: false,
     solicitacoesEmAnalise: 0,
     documentosFaltando: 0,
-    ocorrenciasEmAnalise: 0
+    ocorrenciasEmAnalise: 0,
+    mensalidadePendente: 0,
+    caucaoPendente: 0,
+    pendingBookingLink: "#checklist"
   };
   function refreshTodos() {
     if (!window.ndStatus) return;
@@ -323,7 +326,15 @@
       { count: todosState.ocorrenciasEmAnalise,
         label: "ocorrência(s) em análise pela equipe de proteção.",
         link: "#protecao", linkLabel: "ver ocorrências",
-        tip: "A equipe de proteção avalia cada ocorrência (sinistro, dano, multa, pane etc.)." }
+        tip: "A equipe de proteção avalia cada ocorrência (sinistro, dano, multa, pane etc.)." },
+      { count: todosState.mensalidadePendente,
+        label: "reserva(s) com mensalidade a pagar — a locação só fica ativa após o pagamento.",
+        link: todosState.pendingBookingLink, linkLabel: "pagar mensalidade",
+        tip: "Pague a mensalidade pela Stripe na página da reserva (cartão ou PIX)." },
+      { count: todosState.caucaoPendente,
+        label: "reserva(s) com caução a autorizar — pré-autorização no cartão, sem cobrança.",
+        link: todosState.pendingBookingLink, linkLabel: "autorizar caução",
+        tip: "A caução é uma pré-autorização no cartão de crédito; não vira cobrança real." }
     ]);
   }
 
@@ -454,7 +465,57 @@
               (inspByBooking[i.booking_id] = inspByBooking[i.booking_id] || []).push(i);
             });
             renderBookings(bookings);
+            computePendingPayments(c, bookings);
           }).catch(function () { renderBookings(bookings); });
+      }).catch(function () {});
+  }
+
+  /* Banner "Ações pendentes": detecta reservas ativas com mensalidade a
+     pagar (sem assinatura ativa e sem pagamento concluído) ou caução a
+     autorizar. Usa os mesmos critérios da página de detalhe da reserva. */
+  var PAID_MENSAL_DASH = { pago: 1, capturado: 1, liberado: 1 };
+  var PAID_CAUCAO_DASH = { autorizado: 1, capturado: 1, liberado: 1 };
+  function computePendingPayments(c, bookings) {
+    var today = new Date().toISOString().slice(0, 10);
+    var active = (bookings || []).filter(function (b) {
+      if (b.status === "rascunho" || b.status === "recusado" || b.status === "suspenso") return false;
+      if (b.monthly_price == null) return false;
+      if (b.end_date && b.end_date < today) return false;
+      // reserva já encerrada (check-out aprovado) não pede ação
+      var insps = inspByBooking[b.id] || [];
+      var encerrada = insps.some(function (i) { return i.kind === "checkout" && i.status === "aprovado"; });
+      return !encerrada;
+    });
+    if (!active.length) {
+      todosState.mensalidadePendente = 0;
+      todosState.caucaoPendente = 0;
+      todosState.pendingBookingLink = "#checklist";
+      refreshTodos();
+      return;
+    }
+    var ids = active.map(function (b) { return b.id; });
+    c.from("payments").select("booking_id,kind,status").in("booking_id", ids)
+      .then(function (rp) {
+        var pays = (rp && rp.data) || [];
+        var byBooking = {};
+        pays.forEach(function (p) {
+          (byBooking[p.booking_id] = byBooking[p.booking_id] || []).push(p);
+        });
+        var needMensal = 0, needCaucao = 0, firstPendingId = null;
+        active.forEach(function (b) {
+          var ps = byBooking[b.id] || [];
+          var mensalOk = !!b.stripe_subscription_id ||
+            ps.some(function (p) { return p.kind === "mensalidade" && PAID_MENSAL_DASH[p.status]; });
+          var caucaoOk = ps.some(function (p) { return p.kind === "caucao" && PAID_CAUCAO_DASH[p.status]; });
+          if (!mensalOk) { needMensal++; if (!firstPendingId) firstPendingId = b.id; }
+          if (!caucaoOk) { needCaucao++; if (!firstPendingId) firstPendingId = b.id; }
+        });
+        todosState.mensalidadePendente = needMensal;
+        todosState.caucaoPendente = needCaucao;
+        todosState.pendingBookingLink = firstPendingId
+          ? ("reserva-detalhe.html?id=" + encodeURIComponent(firstPendingId) + "#resvPayPanel")
+          : "#checklist";
+        refreshTodos();
       }).catch(function () {});
   }
 
@@ -1199,6 +1260,53 @@
             err.hidden = false; return;
           }
           showNotice("Contestação enviada. A equipe Proteção fará uma 2ª análise.", "ok");
+
+          /* ============================================================
+           * Fase 32 — disparar e-mails de contestação
+           * ============================================================
+           * 1. Confirmação pro cliente (próprio usuário, sem RLS issue)
+           * 2. Aviso pra equipe Proteção via notifyEmail literal
+           *    (sem dependência de profile/RLS)
+           * ============================================================ */
+          if (window.ndEmails) {
+            try {
+              var ruleLabel = (dmgRulesMap[d.rule_code] && dmgRulesMap[d.rule_code].label) || d.rule_code || "—";
+              var veiculoStr = vt; // já calculado no card (make/model/year)
+              var valorStr = dmgBrl(d.estimated_amount || d.value || 0);
+              var userSession = (a.session && a.session()) || null;
+              var session = userSession && userSession.user ? userSession : null;
+
+              // Resolver user_id via sessão atual (cliente logado)
+              c.auth.getUser().then(function (u) {
+                var userId = (u && u.data && u.data.user && u.data.user.id) || null;
+                var userMeta = (u && u.data && u.data.user && u.data.user.user_metadata) || {};
+                var fullName = userMeta.full_name || (u && u.data && u.data.user && u.data.user.email) || "Cliente";
+
+                if (userId) {
+                  // 1) Confirmação pro cliente
+                  window.ndEmails.notify(c, userId, "dispute_registered_client", {
+                    full_name: fullName,
+                    veiculo: veiculoStr,
+                    valor: valorStr,
+                    dispute_text: txt
+                  }).catch(function () { /* silencioso */ });
+                }
+
+                // 2) Aviso pra equipe Proteção (e-mail literal)
+                var protectionEmail = window.ndEmails.TEAM_PROTECTION || "suporte@nomadedrive.com.br";
+                window.ndEmails.notifyEmail(c, protectionEmail, "dispute_for_protection", {
+                  client_name: fullName,
+                  client_id: userId || "—",
+                  veiculo: veiculoStr,
+                  valor: valorStr,
+                  rule_label: ruleLabel,
+                  dispute_text: txt,
+                  disputed_at_fmt: new Date().toLocaleString("pt-BR")
+                }).catch(function () { /* silencioso */ });
+              }).catch(function () { /* silencioso */ });
+            } catch (e) { /* nunca quebra o fluxo principal */ }
+          }
+
           loadMyDamages();
         }).catch(function () {
           btn.disabled = false; btn.textContent = "Enviar contestação";

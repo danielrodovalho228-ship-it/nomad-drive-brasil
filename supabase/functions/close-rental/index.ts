@@ -368,6 +368,27 @@ Deno.serve(async (req) => {
       console.error("close-rental: e-mail do cliente não obtido");
     }
 
+    // Fase 32b: marca bookings.status como 'encerrada' (terminal)
+    // Depende da migração supabase-fase32b-bookings-status-terminal.sql
+    // ter sido aplicada (adiciona 'encerrada' ao enum entity_status).
+    // Best-effort: se o enum não tiver o valor, registra erro e continua.
+    try {
+      const newStatus = hasPendingDamages ? "bloqueado_para_revisao" : "encerrada";
+      const { error: stErr } = await admin
+        .from("bookings")
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq("id", bookingId);
+      if (stErr) {
+        actions.errors.push("booking_status: " + stErr.message);
+        console.warn("close-rental: update bookings.status falhou:", stErr.message);
+      } else {
+        (actions as any).booking_status_set = newStatus;
+        console.log(`close-rental: bookings.status = ${newStatus}`);
+      }
+    } catch (e) {
+      actions.errors.push("booking_status: " + (e as Error)?.message);
+    }
+
     // Fase 30 / C6: consulta multas Infosimples automaticamente
     // (não bloqueia o fluxo se Infosimples falhar)
     try {

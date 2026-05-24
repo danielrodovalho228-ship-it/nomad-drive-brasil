@@ -378,7 +378,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260523c"></script>
+<script src="emails-runtime.js?v=20260524a"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
@@ -1013,6 +1013,34 @@
             duracao: row.desired_months,
             inicio: row.desired_start_date
           }).catch(function (e) { console.warn("lead_status_updated:", e); });
+        }
+
+        /* Fase 32 — Melhoria #7: veículo aprovado/recusado
+         * Quando admin muda vehicles.status, notifica o proprietário
+         * (admin lê profiles via role admin — sem RLS issue).
+         * Templates vehicle_approved / vehicle_rejected em emails-runtime.js. */
+        if (window.ndEmails && table === "vehicles" &&
+            field === "status" && row.owner_id && newVal !== oldVal) {
+          var vehStr = [row.make, row.model].filter(Boolean).join(" ") +
+            (row.year_model ? " (" + row.year_model + ")" : "");
+          if ((newVal === "aprovado" || newVal === "aprovado_com_ressalvas") &&
+              oldVal !== "aprovado" && oldVal !== "aprovado_com_ressalvas") {
+            window.ndEmails.notifyVerbose(c, row.owner_id, "vehicle_approved", {
+              veiculo: vehStr,
+              placa: row.license_plate || row.plate_last_digits || "—",
+              status_label: a.statusLabel ? a.statusLabel(newVal) : newVal
+            }).catch(function (e) { console.warn("vehicle_approved email:", e); });
+          } else if (newVal === "recusado" || newVal === "reprovado") {
+            var motivoVeh = window.prompt(
+              "(Opcional) Motivo da recusa do veículo — vai no e-mail ao proprietário:",
+              ""
+            ) || "Veículo não aprovado pela equipe Nomade Drive.";
+            window.ndEmails.notifyVerbose(c, row.owner_id, "vehicle_rejected", {
+              veiculo: vehStr,
+              placa: row.license_plate || row.plate_last_digits || "—",
+              reason: motivoVeh
+            }).catch(function (e) { console.warn("vehicle_rejected email:", e); });
+          }
         }
       }).catch(function () { sel.disabled = false; });
     });

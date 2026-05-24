@@ -444,6 +444,84 @@
       };
     },
 
+    /* ============================================================
+     * Fluxo C — Contestação de avaria pelo cliente
+     * ============================================================
+     * dispute_registered_client: confirmação pro próprio cliente
+     *   (sem problema de RLS — usuário lê próprio profile)
+     * dispute_for_protection: aviso pra equipe via notifyEmail
+     *   literal (sem lookup em profiles)
+     * ============================================================ */
+    dispute_registered_client: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Contestação registrada — Nomade Drive Brasil",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: "#a8580e",
+          badge: "Contestação registrada",
+          title: "Recebemos sua contestação",
+          preheader: "A equipe Proteção vai fazer uma 2ª análise.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "Recebemos a sua contestação sobre a avaria do veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong>.",
+            "A equipe Proteção vai reanalisar o caso com os argumentos que você enviou e te dá um retorno em até <strong>5 dias úteis</strong> com a decisão final."
+          ],
+          sections: [
+            (p.veiculo ? ["Veículo", escapeHtml(p.veiculo)] : null),
+            (p.valor ? ["Valor em análise", escapeHtml(p.valor)] : null),
+            (p.dispute_text ? ["Sua contestação", escapeHtml(p.dispute_text)] : null),
+            ["Status", "Em contestação — 2ª análise"]
+          ].filter(Boolean),
+          ctaText: "Acompanhar no meu painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#avarias",
+          footerNote: "Você pode complementar respondendo este e-mail."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Sua contestação da avaria foi registrada.\n" +
+          "Veículo: " + (p.veiculo || "—") + "\n" +
+          (p.valor ? "Valor em análise: " + p.valor + "\n" : "") +
+          "A equipe Proteção vai fazer uma 2ª análise em até 5 dias úteis.\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#avarias"
+      };
+    },
+
+    /* Variante "team": vai via notifyEmail() pra equipe Proteção,
+       NÃO depende de profiles.email (sem RLS). */
+    dispute_for_protection: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "[Proteção] Nova contestação de avaria — 2ª análise",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#7a1f4b 0%,#a02865 55%,#c83c87 100%)",
+          ctaBg: "#7a1f4b",
+          badge: "Ação interna",
+          title: "Nova contestação de avaria",
+          preheader: "Cliente contestou a decisão — 2ª análise pendente.",
+          body: [
+            "Um cliente contestou a decisão de uma avaria registrada.",
+            (p.dispute_text ? "<strong>Contestação:</strong> " + escapeHtml(p.dispute_text) : ""),
+            "Acesse a fila de triagem para revisar o caso."
+          ].filter(Boolean),
+          sections: [
+            ["Cliente", escapeHtml(p.client_name || p.client_id || "—")],
+            (p.veiculo ? ["Veículo", escapeHtml(p.veiculo)] : null),
+            (p.valor ? ["Valor em análise", escapeHtml(p.valor)] : null),
+            (p.rule_label ? ["Regra original", escapeHtml(p.rule_label)] : null),
+            ["Contestada em", escapeHtml(p.disputed_at_fmt || new Date().toLocaleString("pt-BR"))]
+          ].filter(Boolean),
+          ctaText: "Abrir fila de triagem",
+          ctaUrl: SITE + "/dashboard-protecao.html#triagem"
+        }),
+        text: "Nova contestação de avaria — 2ª análise pendente.\n" +
+          "Cliente: " + (p.client_name || "—") + "\n" +
+          (p.veiculo ? "Veículo: " + p.veiculo + "\n" : "") +
+          (p.valor ? "Valor: " + p.valor + "\n" : "") +
+          (p.dispute_text ? "Contestação: " + p.dispute_text + "\n" : "") +
+          "\nTriagem: " + SITE + "/dashboard-protecao.html#triagem"
+      };
+    },
+
     lead_status_updated: function (p) {
       var statusLbl = p.status_label || p.status || "atualizada";
       var orangeStatus = p.status === "recusado" || p.status === "suspenso";
@@ -480,6 +558,78 @@
         text: "Olá " + (p.full_name || "") + ",\n\n" +
           "Sua solicitação foi atualizada: " + statusLbl + ".\n\n" +
           "Painel: " + SITE + "/dashboard-cliente.html#solicitacoes"
+      };
+    },
+
+    /* ============================================================
+     * Fase 32 — Aprovação/recusa de veículo pelo admin (Melhoria #7)
+     * ============================================================
+     * vehicle_approved / vehicle_rejected: notifica o proprietário
+     * quando o admin altera vehicles.status. Admin tem permissão
+     * pra ler profiles (sem RLS issue).
+     * ============================================================ */
+    vehicle_approved: function (p) {
+      var withRessalvas = (p.status_label || "").toLowerCase().indexOf("ressalvas") !== -1;
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Seu veículo foi aprovado — Nomade Drive Brasil",
+        html: baseTemplate({
+          badge: withRessalvas ? "Aprovado com ressalvas" : "Veículo aprovado",
+          title: withRessalvas
+            ? "Veículo aprovado com ressalvas"
+            : "Seu veículo está aprovado!",
+          preheader: "Seu veículo já pode ser locado na plataforma.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "O veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong> foi <strong>" +
+              (withRessalvas ? "aprovado com ressalvas" : "aprovado") + "</strong> pela equipe Nomade Drive.",
+            (withRessalvas
+              ? "Há observações específicas para sua frota — entre no painel pra ver os detalhes e ajustar o que for necessário."
+              : "Seu carro já aparece como disponível na plataforma e pode receber solicitações de locação. Acompanhe os pedidos pelo seu painel.")
+          ],
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.placa && p.placa !== "—" ? ["Placa", escapeHtml(p.placa)] : null),
+            ["Status", escapeHtml(p.status_label || "Aprovado")]
+          ].filter(Boolean),
+          ctaText: "Abrir meu painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#frota"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Seu veículo " + (p.veiculo || "—") + " foi " +
+          (withRessalvas ? "APROVADO COM RESSALVAS" : "APROVADO") + ".\n\n" +
+          "Painel: " + SITE + "/dashboard-proprietario.html#frota"
+      };
+    },
+
+    vehicle_rejected: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Seu veículo não foi aprovado — Nomade Drive Brasil",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: "#a8580e",
+          badge: "Veículo recusado",
+          title: "Veículo não aprovado",
+          preheader: "Entre em contato para entender os motivos.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "Infelizmente o veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong> <strong>não foi aprovado</strong> para entrar na frota Nomade Drive neste momento.",
+            (p.reason ? "<strong>Motivo:</strong> " + escapeHtml(p.reason) : ""),
+            "Você pode responder este e-mail pra falar com a equipe ou ajustar o cadastro pelo painel e reenviar."
+          ].filter(Boolean),
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.placa && p.placa !== "—" ? ["Placa", escapeHtml(p.placa)] : null)
+          ].filter(Boolean),
+          ctaText: "Falar com a equipe",
+          ctaUrl: SITE + "/dashboard-proprietario.html#suporte",
+          footerNote: "Resposta direta neste e-mail vai pro nosso time."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Seu veículo " + (p.veiculo || "—") + " NÃO foi aprovado.\n" +
+          (p.reason ? "Motivo: " + p.reason + "\n" : "") +
+          "\nPainel: " + SITE + "/dashboard-proprietario.html#suporte"
       };
     },
 
@@ -616,6 +766,48 @@
   }
 
   /* ============================================================
+   * Fase 32 (Caminho A) — notifyByUserId
+   * ============================================================
+   * notifyByUserId(client, userId, templateKey, payload)
+   *
+   * Igual a notify(), MAS resolve o e-mail server-side via
+   * to_user_id (service role no send-email). Usado quando o caller
+   * NÃO tem permissão RLS pra ler o profile do destinatário —
+   * ex.: Proteção notificando o cliente que abriu o caso (Proteção
+   * não é parte da reserva, RLS bloqueia leitura do profile).
+   *
+   * O navegador renderiza o template (continua mantendo o visual
+   * consistente do baseTemplate) e o servidor só resolve o email.
+   *
+   * Espera p.full_name no payload se quiser saudar pelo nome — se
+   * vazio, o template renderiza com "Olá ,".
+   * ============================================================ */
+  function notifyByUserId(client, userId, templateKey, payload) {
+    if (!client || !userId || !templateKey) {
+      return Promise.resolve({ ok: false, error: "invalid_args" });
+    }
+    var make = templates[templateKey];
+    if (!make) return Promise.resolve({ ok: false, error: "unknown_template" });
+    var tpl = make(payload || {});
+    return client.functions.invoke("send-email", {
+      body: {
+        to_user_id: userId,           // <- diferença: vai userId, servidor resolve email
+        subject: tpl.subject,
+        html: tpl.html,
+        text: tpl.text,
+        reply_to: tpl.replyTo
+      }
+    }).then(function (rr) {
+      var d = rr && rr.data;
+      if (d && d.ok) return { ok: true, id: d.id, to: d.resolved_to || null };
+      return { ok: false, error: (rr && rr.error && rr.error.message) ||
+        (d && d.error) || "send_failed" };
+    }).catch(function (e) {
+      return { ok: false, error: (e && e.message) || String(e) };
+    });
+  }
+
+  /* ============================================================
    * notifyEmail(client, toEmail, templateKey, payload)
    * Envia pra um e-mail literal (sem lookup em profiles).
    * Útil para notificações da equipe (suporte@, super-admin) ou
@@ -711,12 +903,25 @@
       return r;
     });
   }
+  function notifyByUserIdVerbose(client, userId, templateKey, payload) {
+    showToast("Enviando e-mail '" + templateKey + "' (server-side)...", "loading");
+    return notifyByUserId(client, userId, templateKey, payload).then(function (r) {
+      if (r && r.ok) {
+        showToast("E-mail '" + templateKey + "' enviado para " + (r.to || "destinatário"), "ok");
+      } else {
+        showToast("FALHA '" + templateKey + "': " + (r && r.error || "erro desconhecido"), "error");
+      }
+      return r;
+    });
+  }
 
   window.ndEmails = {
     notify: notify,
     notifyEmail: notifyEmail,
+    notifyByUserId: notifyByUserId,           // Fase 32 (Caminho A) — server-side
     notifyVerbose: notifyVerbose,             // versões com toast
     notifyEmailVerbose: notifyEmailVerbose,
+    notifyByUserIdVerbose: notifyByUserIdVerbose,
     showToast: showToast,                     // exposto pra reuso
     templates: templates,
     _base: baseTemplate,

@@ -277,7 +277,23 @@ Deno.serve(async (req) => {
     actions.payment_updated = true;
 
     // 7) E-mail pro cliente
-    const cliEmail = await getClientEmailFromStripe(stripe, stripeCustomerId);
+    let cliEmail = await getClientEmailFromStripe(stripe, stripeCustomerId);
+    // Fallback robusto: se o Stripe Customer não devolveu e-mail (ou não
+    // havia customer), busca direto em profiles via service role usando o
+    // client_id da reserva. Evita que a "Decisão da Proteção" (#12) deixe
+    // de sair só porque o PaymentIntent da caução não tinha customer/email.
+    if (!cliEmail) {
+      const cid = (dmg as any).bookings?.client_id;
+      if (cid) {
+        try {
+          const { data: prof } = await admin.from("profiles")
+            .select("email").eq("id", cid).maybeSingle();
+          if (prof?.email) cliEmail = prof.email as string;
+        } catch (e) {
+          console.error("damage-capture: fallback profiles email falhou:", (e as Error)?.message);
+        }
+      }
+    }
     if (cliEmail) {
       const v: any = (dmg as any).bookings?.vehicles;
       let veh = "Reserva Nomade Drive";
