@@ -70,7 +70,7 @@ async function sendEmail(to: string, subject: string, html: string, text: string
 
 /* Fase 22c.2 — template alternativo: locação encerrada, mas caução
    fica retida porque há avaria(s) em análise pela Proteção. */
-function emailLocacaoEncerradaAvaria(d: { valor: string; veiculo: string }) {
+function emailLocacaoEncerradaAvaria(d: { valor: string; veiculo: string; protocolo?: string }) {
   const html =
     '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
     + '<meta name="viewport" content="width=device-width,initial-scale=1.0">'
@@ -105,6 +105,7 @@ function emailLocacaoEncerradaAvaria(d: { valor: string; veiculo: string }) {
     + '<tr><td style="background:#fff5e8;padding:18px 28px;border-top:1px solid #f0d9b8;font-size:12px;color:#5b6b63;line-height:1.55;">'
     + '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>'
     + '<a href="' + SITE + '" style="color:#a8580e;text-decoration:none;">nomadedrive.com.br</a> · Para tirar dúvidas, responda a este e-mail.<br>'
+    + (d.protocolo ? '<span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml(d.protocolo) + '</strong></span><br>' : '')
     + '<span style="color:#8a9591;">Cobranças e contestações seguem o contrato vigente.</span>'
     + '</td></tr></table></td></tr></table></body></html>';
   const text =
@@ -123,7 +124,7 @@ function emailLocacaoEncerradaAvaria(d: { valor: string; veiculo: string }) {
   };
 }
 
-function emailLocacaoEncerrada(d: { valor: string; veiculo: string; caucaoLiberada: boolean }) {
+function emailLocacaoEncerrada(d: { valor: string; veiculo: string; caucaoLiberada: boolean; protocolo?: string }) {
   const caucaoText = d.caucaoLiberada
     ? "A caução de R$ " + d.valor + " foi <strong>liberada</strong> no seu cartão. O estorno aparece na sua fatura em até 5 dias úteis (alguns bancos podem demorar mais)."
     : "A locação foi encerrada sem cobrança adicional.";
@@ -154,6 +155,7 @@ function emailLocacaoEncerrada(d: { valor: string; veiculo: string; caucaoLibera
     + '<tr><td style="background:#f4f7f5;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;line-height:1.55;">'
     + '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>'
     + '<a href="' + SITE + '" style="color:#145f3e;text-decoration:none;">nomadedrive.com.br</a> · Mensagem automática — em caso de dúvida, responda a este e-mail.<br>'
+    + (d.protocolo ? '<span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml(d.protocolo) + '</strong></span><br>' : '')
     + '<span style="color:#8a9591;">Valores, disponibilidade e condições são confirmados individualmente por contrato.</span>'
     + '</td></tr></table></td></tr></table></body></html>';
   const text =
@@ -347,11 +349,13 @@ Deno.serve(async (req) => {
         ? emailLocacaoEncerradaAvaria({
             valor: fmtBRL(caucaoAmount),
             veiculo: veh,
+            protocolo: (booking as any).protocol_number || undefined,    // Fase 36e: RS-####
           })
         : emailLocacaoEncerrada({
             valor: fmtBRL(caucaoAmount),
             veiculo: veh,
             caucaoLiberada: actions.caucao_released,
+            protocolo: (booking as any).protocol_number || undefined,    // Fase 36e
           });
       console.log("close-rental: enviando e-mail (" +
         (hasPendingDamages ? "avaria em análise" : "locação encerrada") + ") para", cliEmail);
@@ -417,6 +421,9 @@ Deno.serve(async (req) => {
               '</td></tr>' +
               '<tr><td style="background:#f9fafb;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;">' +
               '<strong>Nomade Drive Brasil</strong> · Uberlândia/MG · <a href="' + SITE + '" style="color:#a8580e;text-decoration:none;">nomadedrive.com.br</a>' +
+              ((booking as any).protocol_number
+                ? '<br><span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml((booking as any).protocol_number) + '</strong></span>'
+                : '') +
               '</td></tr></table></td></tr></table></body></html>';
             const text = "Olá " + (ownerProf.full_name || "") + ",\n\nAvaria registrada no veículo " + vehStr + ".\nAguardando análise da Proteção.\n\nPainel: " + SITE + "/dashboard-proprietario.html#avarias";
             const r3 = await sendEmail(ownerProf.email, subject, html, text);

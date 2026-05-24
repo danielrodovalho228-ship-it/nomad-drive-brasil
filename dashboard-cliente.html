@@ -257,7 +257,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260524f"></script>
+<script src="emails-runtime.js?v=20260524g"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
@@ -1060,12 +1060,17 @@
           description: desc,
           reported_by: s.user.id,
           status: "em_analise"
-        }).then(function (r) {
+        }).select("id, protocol_number").then(function (r) {
+          // Fase 36e: .select() retorna o registro inserido com protocol_number
+          // (gerado pelo trigger BEFORE INSERT — PR-AAAA-####)
           btn.disabled = false; btn.textContent = "Registrar ocorrência";
           if (r && r.error) { showNotice("Não foi possível registrar agora. Tente novamente.", "error"); return; }
           form.reset();
           showNotice("Ocorrência registrada. A equipe de proteção vai analisar.", "ok");
           loadCases();
+
+          // Captura o protocolo do caso recém-criado
+          var caseProtocol = (r && r.data && r.data[0] && r.data[0].protocol_number) || null;
 
           // #6 parte 2: notifica o cliente (confirmação) + equipe Proteção
           if (window.ndEmails) {
@@ -1083,7 +1088,8 @@
               case_type: caseType, case_type_label: caseLabel,
               veiculo: veiculo, description: desc,
               client_id: s.user.id, client_name: "", // preenchido abaixo
-              created_at_fmt: new Date().toLocaleString("pt-BR")
+              created_at_fmt: new Date().toLocaleString("pt-BR"),
+              protocolo: caseProtocol    // Fase 36e: PR-AAAA-#### no rodapé
             };
             // Confirmação ao cliente (lê own profile)
             window.ndEmails.notify(c, s.user.id, "case_opened_client", payload)
@@ -1112,7 +1118,8 @@
                       case_type: payload.case_type,
                       case_type_label: payload.case_type_label,
                       veiculo: payload.veiculo,
-                      description: payload.description
+                      description: payload.description,
+                      protocolo: caseProtocol    // Fase 36e
                     }).catch(function () {});
                   }).catch(function () {});
               }
