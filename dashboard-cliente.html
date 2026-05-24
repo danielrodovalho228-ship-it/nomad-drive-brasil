@@ -99,6 +99,9 @@
           <p class="form__err" id="docErr" hidden></p>
         </section>
 
+        <!-- Fase 41 — Renovação 1-clique (D-7) -->
+        <div id="renewalContainer"></div>
+
         <section class="dash-panel" id="checklist">
           <h2>Retirada e devolução do veículo</h2>
           <p>Quando estiver perto de retirar ou devolver o veículo, solicite a <strong>retirada (check-in)</strong> ou a <strong>devolução (check-out)</strong> aqui. Cada solicitação é validada pelo proprietário.</p>
@@ -1374,6 +1377,216 @@
 
     return card;
   }
+})();
+</script>
+
+<style>
+/* Fase 41 — Card de Renovação 1-clique */
+.renewal-card {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border: 2px solid #ffc107;
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+.renewal-card::before {
+  content: '⏰';
+  position: absolute; top: 16px; right: 22px;
+  font-size: 56px; opacity: 0.12;
+}
+.renewal-card__urgency {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #b00020; color: #fff;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.renewal-card__title {
+  font-size: 20px; font-weight: 700;
+  color: #14201b; margin: 0 0 4px;
+  font-family: 'Sora', sans-serif;
+}
+.renewal-card__vehicle {
+  font-size: 14px; color: #5b6b63; margin: 0 0 14px;
+}
+.renewal-card__offer {
+  background: rgba(255,255,255,0.6);
+  border-radius: 10px; padding: 12px 16px;
+  margin: 14px 0;
+}
+.renewal-card__discount {
+  display: inline-block;
+  background: #198754; color: #fff;
+  padding: 3px 10px; border-radius: 4px;
+  font-size: 12px; font-weight: 700;
+  margin-right: 8px;
+}
+.renewal-card__price-old {
+  color: #6b7670; text-decoration: line-through; font-size: 13px;
+}
+.renewal-card__price-new {
+  color: #0f5132; font-weight: 800; font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Sora', sans-serif;
+}
+.renewal-card__actions {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;
+}
+.renewal-card__actions button {
+  flex: 1; min-width: 140px;
+  padding: 12px 18px; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; border: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.renewal-card__btn-primary {
+  background: #0f5132; color: #fff;
+}
+.renewal-card__btn-primary:hover {
+  background: #198754; transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15,81,50,0.3);
+}
+.renewal-card__btn-secondary {
+  background: #fff; color: #5b6b63; border: 1px solid #ccd5cf;
+}
+.renewal-card__btn-secondary:hover { background: #f4f7f5; }
+.renewal-card__decline {
+  background: transparent; color: #8a948e; border: 0;
+  font-size: 12.5px; text-decoration: underline;
+  padding: 8px 12px; cursor: pointer; margin-top: 4px;
+}
+</style>
+
+<script>
+/* ============================================================
+ * Fase 41 — Renovação 1-clique de locação
+ * ============================================================
+ * Detecta reservas em renewal_opportunities e mostra card destacado
+ * no topo do dashboard. Botão renova com 5% off em 1 clique.
+ * ============================================================ */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function fmtBRL(n) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(n) || 0);
+  }
+  function getSb() {
+    return (window.ndAuth && window.ndAuth.client && window.ndAuth.client()) || null;
+  }
+
+  function loadRenewals() {
+    var sb = getSb(); if (!sb) return;
+    var container = $('renewalContainer'); if (!container) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      sb.from('renewal_opportunities').select('*').eq('client_id', user.id)
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          // Filtra: dentro do prazo + sem avaria pendente + não já renovada
+          var elegible = rows.filter(function (op) {
+            return op.days_remaining >= 0 && op.days_remaining <= 7
+              && !op.has_pending_damage
+              && !op.already_renewed;
+          });
+          if (!elegible.length) {
+            container.innerHTML = '';
+            return;
+          }
+          container.innerHTML = elegible.map(renderRenewalCard).join('');
+          // Bind handlers
+          container.querySelectorAll('[data-renew]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              handleRenew(btn.getAttribute('data-renew'), parseInt(btn.getAttribute('data-months')));
+            });
+          });
+          container.querySelectorAll('[data-decline]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              btn.closest('.renewal-card').style.display = 'none';
+            });
+          });
+        }).catch(function (e) {
+          console.warn('renewal_opportunities:', e && e.message);
+        });
+    });
+  }
+  window.loadRenewals = loadRenewals;
+
+  function renderRenewalCard(op) {
+    var urgency = op.days_remaining <= 3 ? '🚨 ÚLTIMOS DIAS' : '⏰ TERMINA EM BREVE';
+    var vehName = [op.make, op.model, op.year_model].filter(Boolean).join(' ');
+    return '<div class="renewal-card">' +
+      '<span class="renewal-card__urgency">' + urgency + '</span>' +
+      '<h3 class="renewal-card__title">Sua locação termina em ' + op.days_remaining + ' dia' + (op.days_remaining === 1 ? '' : 's') + '</h3>' +
+      '<p class="renewal-card__vehicle">🚗 ' + vehName + (op.license_plate ? ' · ' + op.license_plate : '') + ' · até ' + new Date(op.end_date).toLocaleDateString('pt-BR') + '</p>' +
+      '<div class="renewal-card__offer">' +
+        '<span class="renewal-card__discount">5% OFF na renovação</span>' +
+        '<br>' +
+        '<span class="renewal-card__price-old">' + fmtBRL(op.monthly_price) + '/mês</span>' +
+        ' <span class="renewal-card__price-new">' + fmtBRL(op.discounted_price) + '/mês</span>' +
+        '<small style="display:block;color:#5b6b63;margin-top:4px;">Economize ' + fmtBRL(op.discount_amount) + ' no 1º mês</small>' +
+      '</div>' +
+      '<div class="renewal-card__actions">' +
+        '<button class="renewal-card__btn-primary" data-renew="' + op.booking_id + '" data-months="1">Renovar 1 mês</button>' +
+        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="2">2 meses</button>' +
+        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="3">3 meses</button>' +
+      '</div>' +
+      '<button class="renewal-card__decline" data-decline="' + op.booking_id + '">Não, obrigado — vou devolver</button>' +
+      '</div>';
+  }
+
+  async function handleRenew(bookingId, months) {
+    if (!window.ndModal) {
+      if (!confirm('Renovar por ' + months + ' meses com 5% off?')) return;
+    } else {
+      var ok = await window.ndModal.confirm({
+        title: 'Renovar por ' + months + ' ' + (months === 1 ? 'mês' : 'meses') + ' com 5% off?',
+        body: 'Uma nova reserva será criada começando assim que sua atual terminar. Você paga a 1ª mensalidade nova com desconto.',
+        okText: '✅ Sim, renovar',
+        cancelText: 'Voltar',
+        icon: '🔄'
+      });
+      if (!ok) return;
+    }
+    var sb = getSb(); if (!sb) return;
+    sb.rpc('clone_booking_for_renewal', {
+      source_booking_id: bookingId, duration_months: months
+    }).then(function (r) {
+      if (r && r.error) {
+        if (window.ndModal) {
+          ndModal.alert({ title: 'Não consegui renovar', body: r.error.message, icon: '❌' });
+        } else alert('Erro: ' + r.error.message);
+        return;
+      }
+      var newBookingId = r.data;
+      if (window.ndModal) {
+        ndModal.alert({
+          title: '🎉 Reserva renovada!',
+          html: '<p>Sua nova reserva foi criada com sucesso. Agora <strong>pague a primeira mensalidade</strong> pra confirmar.</p>',
+          icon: '✅',
+          okText: 'Ir pra reserva nova'
+        }).then(function () {
+          window.location.href = '/reserva-detalhe.html?id=' + newBookingId;
+        });
+      } else {
+        alert('🎉 Reserva renovada!');
+        window.location.href = '/reserva-detalhe.html?id=' + newBookingId;
+      }
+    }).catch(function (e) {
+      if (window.ndModal) {
+        ndModal.alert({ title: 'Erro de rede', body: e.message, icon: '🌐' });
+      } else alert('Erro: ' + e.message);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(loadRenewals, 1200);
+    setInterval(loadRenewals, 300000); // refresh a cada 5min
+  });
 })();
 </script>
 </body>

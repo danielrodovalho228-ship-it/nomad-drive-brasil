@@ -843,31 +843,46 @@
                 ? new Date(d.payout.arrival_date * 1000).toLocaleDateString('pt-BR')
                 : '1-2 dias úteis';
               setTimeout(function () {
-                window.alert(
-                  '💰 Saque liberado!\n\n' +
-                  'Valor: ' + fmtBRL(available.amount_net) + '\n' +
-                  'Previsão depósito: ' + arrival + '\n' +
-                  'Stripe ID: ' + (d.payout && d.payout.id) + '\n\n' +
-                  'Você recebe e-mail de confirmação em alguns segundos.'
-                );
-                loadTimeline(); // refresh
+                ndModal.alert({
+                  title: '💰 Saque liberado!',
+                  icon: '✅',
+                  html:
+                    '<div style="font-size:32px;font-weight:800;color:#0f5132;margin:8px 0;text-align:center;font-family:Sora,sans-serif;">' +
+                      fmtBRL(available.amount_net) +
+                    '</div>' +
+                    '<p style="margin:0 0 6px;color:#5b6b63;"><strong>Previsão depósito:</strong> ' + arrival + '</p>' +
+                    '<p style="margin:0 0 6px;color:#5b6b63;font-size:12px;"><strong>Stripe ID:</strong> <code>' + (d.payout && d.payout.id) + '</code></p>' +
+                    '<p style="margin:12px 0 0;color:#5b6b63;font-size:13px;">📧 Você recebe e-mail de confirmação em alguns segundos.</p>'
+                }).then(function () { loadTimeline(); });
               }, 200);
             } else {
               saqueBtn.textContent = origText;
               var err = (r && r.error && r.error.message) || (d && d.error) || 'Tente novamente.';
-              var hint = (d && d.hint) ? '\n\nDica: ' + d.hint : '';
-              window.alert('❌ Não foi possível liberar o saque:\n\n' + err + hint);
+              ndModal.alert({
+                title: '❌ Não foi possível liberar o saque',
+                body: err,
+                meta: (d && d.hint) ? '💡 Dica: ' + d.hint : null,
+                icon: '⚠️'
+              });
             }
           }).catch(function (e) {
             saqueBtn.disabled = false;
             skipBtn.disabled = false;
             saqueBtn.textContent = origText;
-            window.alert('❌ Erro de rede: ' + (e && e.message || e));
+            ndModal.alert({
+              title: 'Erro de rede',
+              body: (e && e.message) || String(e),
+              icon: '🌐'
+            });
           });
         });
 
         skipBtn.addEventListener('click', function () {
-          window.alert('⏸ OK, vamos acumular esse saque com o próximo marco. Você pode liberar a qualquer momento clicando em "Sacar agora" depois.');
+          ndModal.alert({
+            title: 'OK, vamos acumular',
+            body: 'Esse saque fica somando com o próximo marco. Você pode liberar a qualquer momento clicando em "Sacar agora" depois.',
+            icon: '⏸️'
+          });
         });
       });
     }).catch(function (e) {

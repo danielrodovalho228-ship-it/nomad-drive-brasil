@@ -1821,12 +1821,19 @@
           btn.classList.add("btn--outline");
         } else {
           btn.disabled = false; btn.textContent = orig;
-          window.alert("Não foi possível cancelar agora: " +
-            ((r && r.error && r.error.message) || (d && d.error) || "tente novamente."));
+          ndModal.alert({
+            title: "Não foi possível cancelar",
+            body: (r && r.error && r.error.message) || (d && d.error) || "Tente novamente.",
+            icon: '❌'
+          });
         }
       }).catch(function (e) {
         btn.disabled = false; btn.textContent = orig;
-        window.alert("Erro de rede: " + (e && e.message || e));
+        ndModal.alert({
+          title: "Erro de rede",
+          body: (e && e.message) || String(e),
+          icon: '🌐'
+        });
       });
     });
     return btn;
