@@ -598,7 +598,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260524b"></script>
 <script src="statuses.js?v=20260524b"></script>
-<script src="emails-runtime.js?v=20260524c"></script>
+<script src="emails-runtime.js?v=20260524d"></script>
 <script src="script.js?v=20260524b"></script>
 <script>
 (function () {
@@ -1404,28 +1404,26 @@
           }).catch(function (e) { console.warn('case_resolved_client:', e); });
 
           // 2) E-mail pra CONTRAPARTE (Fase 35 — transparência)
-          // Se cliente abriu, notifica o owner; se owner abriu, notifica o cliente
-          if (cs.booking_id) {
-            c.from('bookings').select('client_id, owner_id').eq('id', cs.booking_id).maybeSingle()
-              .then(function (br) {
-                var bk = br && br.data;
-                if (!bk) return;
-                var counterpartyId = null;
-                if (cs.reported_by === bk.client_id && bk.owner_id) counterpartyId = bk.owner_id;
-                else if (cs.reported_by === bk.owner_id && bk.client_id) counterpartyId = bk.client_id;
-                if (!counterpartyId || counterpartyId === cs.reported_by) return;
-
-                var notifyFnCounter = window.ndEmails.notifyByUserId || window.ndEmails.notify;
-                notifyFnCounter(c, counterpartyId, 'case_resolved_client', {
-                  case_type: cs.case_type,
-                  case_type_label: caseType,
-                  veiculo: veiculo,
-                  status: newStatus,
-                  status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
-                  resolution_notes: newNotes
-                }).catch(function () {});
-              }).catch(function () {});
-          }
+          // BUG cowork (Fluxo 6 QA): Proteção não tem RLS em bookings, então
+          // o select retornava vazio e o counterpartyId era null.
+          // FIX (Fase 35a): RPC SECURITY DEFINER `get_case_counterparty`
+          // resolve sem expor a tabela bookings inteira.
+          c.rpc('get_case_counterparty', { case_id_in: cs.id }).then(function (rpcR) {
+            var counterpartyId = rpcR && rpcR.data;
+            if (!counterpartyId || counterpartyId === cs.reported_by) return;
+            var notifyFnCounter = window.ndEmails.notifyByUserIdVerbose ||
+              window.ndEmails.notifyByUserId || window.ndEmails.notify;
+            notifyFnCounter(c, counterpartyId, 'case_resolved_client', {
+              case_type: cs.case_type,
+              case_type_label: caseType,
+              veiculo: veiculo,
+              status: newStatus,
+              status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
+              resolution_notes: newNotes
+            }).catch(function () {});
+          }).catch(function (e) {
+            console.warn('get_case_counterparty RPC falhou:', e && e.message);
+          });
         }
       }).catch(function () {
         btn.disabled = false; btn.textContent = '💾 Salvar triagem';
