@@ -5,27 +5,16 @@
 
 ---
 
-## 🔴 URGENTE — Re-deploys novos (5 min)
-
-### Apareceram depois do Pix Automático
-
-- [ ] **A. Re-deploy `stripe-checkout`** (mudei pra suportar Pix Automático)
-  - Supabase Dashboard → Edge Functions → `stripe-checkout`
-  - Apaga TUDO no editor
-  - Cola conteúdo de [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/stripe-checkout/index.ts)
-  - Deploy
-
-- [ ] **B. Re-deploy `stripe-webhook`** (novo handler `mandate.updated`)
-  - Mesmo processo — [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/stripe-webhook/index.ts)
-
----
-
-## ✅ URGENTE — JÁ FEITO
+## ✅ URGENTE — TODOS FEITOS 🎉
 
 - [x] **1. Verificar Edge Function `consulta-multas`**
 - [x] **2. Verificar Edge Function `installation-checkout`**
-- [x] **3. PIX no Stripe** — descoberto que precisa ativação via Stripe Support. Integração técnica feita (Pix Automático). Pedir ativação à Stripe quando puder.
+- [x] **3. PIX no Stripe** — integração técnica feita (Pix Automático). Ativação na conta = solicitar à Stripe Support quando puder
 - [x] **4. Validar login** `qa-cliente@nomadedrive.com.br` / `Teste123`
+- [x] **A. Re-deploy `stripe-checkout`** (com suporte a Pix Automático)
+- [x] **B. Re-deploy `stripe-webhook`** (com handler `mandate.updated`)
+
+**SETUP 100% COMPLETO** — pronto pra rodar fluxos reais de teste.
 
 ---
 
@@ -115,6 +104,8 @@
 - [x] `close-rental` re-deployada com código novo
 - [x] `consulta-multas` deployada com código real (Fase 30 / Infosimples)
 - [x] `installation-checkout` deployada com código real (Fase 28.3)
+- [x] `stripe-checkout` re-deployada com Pix Automático (Fase 31)
+- [x] `stripe-webhook` re-deployada com handler mandate.updated
 
 ### Validações QA já feitas
 - [x] Smoke test: handler de cadastros dispara e-mail
@@ -130,12 +121,12 @@
 
 | Categoria | Total | Feito | Falta |
 |---|---|---|---|
-| 🔴 Urgente — Re-deploys novos | 2 | 0 | 2 |
+| 🔴 Urgente | 6 | 6 | 0 ✅ |
 | 🟡 Esta semana | 6 | 0 | 6 |
 | 🟢 Quando quiser | 7 | 0 | 7 |
-| ✅ Já feito | 19 | 19 | 0 |
+| ✅ Já feito (total) | 21 | 21 | 0 |
 
-**Próxima ação:** Item A acima (re-deploy `stripe-checkout` por causa do Pix Automático).
+**🎯 Próxima ação:** Item 5 — Testar Fluxo A (pagar mensalidade) com cartão de teste Stripe.
 
 ---
 
