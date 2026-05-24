@@ -261,6 +261,48 @@ Deno.serve(async (req) => {
       return json({ error: "Você não é o proprietário deste veículo." }, 403);
     }
 
+    // Fase 45: VALIDA que o owner tem Stripe Connect ATIVA antes de aprovar.
+    // Sem isso, cliente paga mas dinheiro fica preso na plataforma — owner
+    // não consegue receber por transfer automático.
+    // Super_admin pode aprovar mesmo sem Connect (caso de teste/manual).
+    const { data: superAdminRole } = await admin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", ownerId)
+      .eq("role", "super_admin")
+      .eq("status", "aprovado")
+      .limit(1);
+    const isSuperAdmin = Array.isArray(superAdminRole) && superAdminRole.length > 0;
+
+    if (!isSuperAdmin) {
+      // Pega o vehicle_owner_id pra checar a conta de pagamento DELE
+      // (caso o admin esteja aprovando em nome do owner)
+      let realOwnerId = ownerId;
+      if (rr.vehicle_id) {
+        const { data: vehOwner } = await admin
+          .from("vehicles")
+          .select("owner_id")
+          .eq("id", rr.vehicle_id)
+          .maybeSingle();
+        if (vehOwner?.owner_id) realOwnerId = vehOwner.owner_id;
+      }
+
+      const { data: payoutAcc } = await admin
+        .from("payout_accounts")
+        .select("status, payouts_enabled")
+        .eq("user_id", realOwnerId)
+        .maybeSingle();
+
+      const connectAtiva = payoutAcc?.status === "ativo" && payoutAcc?.payouts_enabled === true;
+      if (!connectAtiva) {
+        return json({
+          error: "Configure sua conta bancária antes de aprovar reservas. Vá em 'Recebimentos' no seu dashboard pra conectar via Stripe (leva 5min).",
+          code: "connect_not_ready",
+          payout_status: payoutAcc?.status || "pendente"
+        }, 409);
+      }
+    }
+
     // Pega dados do veículo (se vehicle_id existe)
     let vehicleName = "Veículo";
     let vehicleOwnerId = ownerId;

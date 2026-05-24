@@ -393,6 +393,9 @@
           <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
         </div>
 
+        <!-- Fase 45: Banner urgente "Configure sua conta bancária" -->
+        <div id="connectBanner" style="display:none;"></div>
+
         <!-- Fase 44: Solicitações de aluguel pendentes do owner -->
         <section class="dash-panel" id="solicitacoes" style="display:none;">
           <h2>📩 Solicitações de aluguel pendentes</h2>
@@ -1817,6 +1820,70 @@
   }
 
   /* ============================================================
+   * Fase 45 — Banner urgente "Configure conta bancária"
+   * Aparece quando owner tem veículo aprovado mas Connect não está ativa.
+   * ============================================================ */
+  function loadConnectBanner() {
+    var sb = getSb(); if (!sb) return;
+    var banner = $('connectBanner'); if (!banner) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      // 1. Owner tem algum veículo aprovado?
+      sb.from('vehicles').select('id, make, model', { count: 'exact', head: false })
+        .eq('owner_id', user.id).eq('status', 'aprovado')
+        .then(function (vr) {
+          var approvedCount = (vr && vr.data && vr.data.length) || 0;
+          if (approvedCount === 0) { banner.style.display = 'none'; return; }
+
+          // 2. Já tem payout_accounts ativa?
+          sb.from('payout_accounts').select('status, payouts_enabled').eq('user_id', user.id).maybeSingle()
+            .then(function (pr) {
+              var pa = (pr && pr.data) || {};
+              var ativa = pa.status === 'ativo' && pa.payouts_enabled;
+              if (ativa) { banner.style.display = 'none'; return; }
+
+              // Mostra banner urgente
+              var stateLabel = !pa.status || pa.status === 'pendente' ? 'Não configurada'
+                : pa.status === 'em_analise' ? 'Em análise pela Stripe'
+                : pa.status === 'restrito' ? 'Com pendências' : 'Inativa';
+
+              var stateColor = !pa.status || pa.status === 'pendente' ? '#b91c1c'
+                : pa.status === 'em_analise' ? '#a16207' : '#b91c1c';
+
+              banner.style.display = '';
+              banner.innerHTML =
+                '<div style="background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border:2px solid #f59e0b;border-radius:12px;padding:18px 22px;margin:14px 0;box-shadow:0 4px 12px -4px rgba(245,158,11,.3);">'
+                + '<div style="display:flex;align-items:start;gap:14px;flex-wrap:wrap;">'
+                +   '<div style="font-size:32px;line-height:1;flex-shrink:0;">🏦</div>'
+                +   '<div style="flex:1;min-width:240px;">'
+                +     '<div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#92400e;margin-bottom:4px;">⚠️ Ação obrigatória</div>'
+                +     '<h3 style="margin:0 0 8px;font-size:18px;font-weight:800;color:#7c2d12;">Conecte sua conta bancária pra receber</h3>'
+                +     '<p style="margin:0 0 6px;font-size:13.5px;line-height:1.55;color:#3a4945;">'
+                +       'Você tem <strong>' + approvedCount + ' veículo' + (approvedCount > 1 ? 's' : '') + ' aprovado' + (approvedCount > 1 ? 's' : '') + '</strong> '
+                +       'mas <strong>não vai conseguir receber</strong> quando clientes alugarem.'
+                +     '</p>'
+                +     '<p style="margin:0;font-size:12.5px;color:#5b6b63;">'
+                +       'Status atual: <strong style="color:' + stateColor + ';">' + stateLabel + '</strong> · '
+                +       'Leva 5min pelo Stripe (verificação de identidade + dados bancários).'
+                +     '</p>'
+                +   '</div>'
+                +   '<div style="flex-shrink:0;">'
+                +     '<a href="#recebimentos" class="btn btn--solid btn--sm" style="background:#92400e;border-color:#92400e;">'
+                +       (!pa.status || pa.status === 'pendente' ? '🏦 Configurar agora' : '✓ Continuar cadastro') +
+                '     </a>'
+                +   '</div>'
+                + '</div>'
+                + '</div>';
+            });
+        });
+    });
+  }
+  window.loadConnectBanner = loadConnectBanner;
+
+  /* ============================================================
    * Fase 44 — Solicitações de aluguel pendentes (owner)
    * ============================================================ */
   function loadOwnerRequests() {
@@ -1938,6 +2005,21 @@
       btn.textContent = '✅ Aprovar';
       if (resp.error || (resp.data && resp.data.error)) {
         var msg = (resp.data && resp.data.error) || resp.error.message || 'Erro desconhecido';
+        var code = (resp.data && resp.data.code) || null;
+        // Fase 45: tratamento especial pra Connect não configurado
+        if (code === 'connect_not_ready') {
+          if (modal) {
+            modal.alert({
+              title: '🏦 Configure sua conta bancária primeiro',
+              body: msg + '<br><br><a href="#recebimentos" style="display:inline-block;margin-top:8px;background:#0f5132;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;">Ir pra Recebimentos →</a>',
+              icon: '🏦'
+            });
+          } else {
+            alert(msg);
+            window.location.hash = '#recebimentos';
+          }
+          return;
+        }
         if (modal) modal.alert({ title: 'Erro', body: msg, icon: '⚠️' });
         else alert('Erro: ' + msg);
         return;
@@ -2361,10 +2443,12 @@
     // Aguarda auth iniciar
     setTimeout(loadGreenPanel, 1000);
     setTimeout(loadOwnerRequests, 800);  // Fase 44 — solicitações pendentes
+    setTimeout(loadConnectBanner, 600);  // Fase 45 — banner urgente connect
 
     // Refresh a cada 60s
     setInterval(loadGreenPanel, 60000);
     setInterval(loadOwnerRequests, 30000);  // Refresh mais rápido pra solicitações novas
+    setInterval(loadConnectBanner, 90000);  // Fase 45 — recheca status conexão
 
     // Bind modal handlers
     var closeBtn = $('notifModalClose');
