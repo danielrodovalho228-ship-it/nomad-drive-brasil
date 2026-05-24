@@ -363,31 +363,29 @@ Deno.serve(async (req) => {
       ? "Caução da locação — Nomade Drive Brasil"
       : "Mensalidade da locação — Nomade Drive Brasil";
 
-    // ---- Fase B — split do pagamento ----
-    // A MENSALIDADE é dividida: parte vai ao proprietário (conta conectada)
-    // e a taxa fica com a plataforma. A CAUÇÃO não é dividida (fica retida).
+    // ---- Fase 32 Sprint 2.6 (BR) — Separate Charges & Transfers ----
+    // ATENÇÃO: removemos transfer_data.destination e application_fee_amount.
+    //
+    // Por quê: Stripe BR NÃO permite Connected Accounts em modo manual
+    // payouts. Pra a plataforma controlar QUANDO o proprietário recebe
+    // (saques parciais a cada 15 dias da Fase 32), usamos o fluxo de
+    // "Separate Charges and Transfers":
+    //
+    //   1. Cliente paga R$ X → 100% vai pro saldo da PLATAFORMA
+    //   2. Plataforma rastreia em withdrawals (a cada 15d cria marco)
+    //   3. Quando proprietário "Sacar agora" → liberar-saque-parcial
+    //      chama stripe.transfers.create() pra mandar 90% pra Connected
+    //      Account dele
+    //   4. Stripe BR processa automatic payout (1-2 dias úteis) da
+    //      Connected Account pro banco do proprietário
+    //
+    // A CAUÇÃO continua com capture_method=manual (autoriza sem capturar).
     const piData: Record<string, unknown> = {};
     if (isDeposit) {
       piData.capture_method = "manual"; // autoriza sem capturar
-    } else {
-      const { data: ownerAcct } = await admin
-        .from("payout_accounts")
-        .select("stripe_account_id, status, payouts_enabled")
-        .eq("user_id", booking.owner_id)
-        .maybeSingle();
-      const ownerReady = !!(ownerAcct && ownerAcct.stripe_account_id &&
-        (ownerAcct.status === "ativo" || ownerAcct.payouts_enabled === true));
-      if (ownerReady) {
-        // taxa da plataforma: 10% de todo aluguel
-        const PLATFORM_FEE_PCT = 0.10;
-        const feeCents = Math.round(amountCents * PLATFORM_FEE_PCT);
-        // a taxa nunca é negativa nem maior/igual ao total
-        piData.application_fee_amount = Math.min(Math.max(feeCents, 0), amountCents - 1);
-        piData.transfer_data = { destination: ownerAcct.stripe_account_id };
-      }
-      // se o proprietário ainda não tiver conta de recebimento ativa, a
-      // cobrança ocorre sem split — o repasse é acertado depois.
     }
+    // Mensalidade: SEM transfer_data — dinheiro fica na plataforma.
+    // O split (10% fee + 90% owner) é feito depois via Transfer API.
 
     // ---- decide modo de cobrança ---------------------------------
     // mensalidade + booking.billing_mode='monthly' → subscription
@@ -430,18 +428,9 @@ Deno.serve(async (req) => {
           end_date: booking.end_date || "",
         },
       };
-      // só inclui transfer/split se o proprietário já tem conta conectada
-      const { data: ownerAcct2 } = await admin
-        .from("payout_accounts")
-        .select("stripe_account_id, status, payouts_enabled")
-        .eq("user_id", booking.owner_id)
-        .maybeSingle();
-      const ownerReady2 = !!(ownerAcct2 && ownerAcct2.stripe_account_id &&
-        (ownerAcct2.status === "ativo" || ownerAcct2.payouts_enabled === true));
-      if (ownerReady2) {
-        subData.application_fee_percent = 10;
-        subData.transfer_data = { destination: ownerAcct2.stripe_account_id };
-      }
+      // Fase 32 Sprint 2.6 (BR): SEM application_fee_percent + transfer_data.
+      // Dinheiro fica 100% na plataforma. Split (10/90) é feito depois via
+      // Transfer API em liberar-saque-parcial. Vide explicação acima.
 
       // B2-v2 (Fase 31): Pix Automático em subscription mensal.
       // PIX é opt-in via env var ENABLE_PIX=true. Default off porque

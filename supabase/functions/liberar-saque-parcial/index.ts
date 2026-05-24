@@ -1,23 +1,21 @@
 // ====================================================================
 // Nomade Drive Brasil — Edge Function: liberar-saque-parcial
+// Sprint 2 (Fase 32) — REFATORADA Sprint 2.6 (BR fix)
 // --------------------------------------------------------------------
-// Sprint 2 da Fase 32: ativa de verdade o saque parcial (a cada 15d).
-//
-// FLUXO:
+// FLUXO (BR — Separate Charges + Transfers):
 //   1. Recebe withdrawal_id no body
 //   2. Autoriza: dono do withdrawal (owner_id) OU super-admin
-//   3. Valida:
-//      - withdrawal.status === 'available' (marco já vencido + não pago)
-//      - profile.payouts_enabled === true via payout_accounts
-//      - Não tem avaria pendente que segura a caução
-//   4. Chama stripe.payouts.create() na Connected Account do proprietário
-//   5. Atualiza withdrawals: status='paid', stripe_payout_id, paid_at
+//   3. Valida: withdrawal.status='available' + Connected Account ativa
+//   4. Chama stripe.transfers.create() do saldo da plataforma PRA
+//      Connected Account do proprietário (R$ 1.125, valor já líquido
+//      = 90% da metade da mensalidade)
+//   5. Atualiza withdrawals: status='paid', stripe_payout_id=transfer.id, paid_at
 //   6. Dispara e-mail "Saque liberado" pro proprietário
+//   7. Stripe BR processa automatic payout (1-2 dias úteis) da Connected
+//      Account pro banco do proprietário (a gente não controla esse passo)
 //
-// COMO CHAMAR (do JS do site):
-//   await supabase.functions.invoke('liberar-saque-parcial', {
-//     body: { withdrawal_id: 'uuid-aqui' }
-//   });
+// MUDANÇA vs versão anterior: trocou stripe.payouts.create() (que exigia
+// manual schedule — proibido em BR) por stripe.transfers.create().
 //
 // SECRETS: STRIPE_SECRET_KEY, RESEND_API_KEY (opcional), EMAIL_FROM (opcional)
 // Verify JWT: LIGADO
@@ -190,9 +188,12 @@ Deno.serve(async (req) => {
     }
 
     // 4) Pega a Connected Account do proprietário
+    //    Sprint 2.6 (BR): payouts_enabled não é mais bloqueante (transfer
+    //    sempre rola pra account válida); só precisa ter conta criada e
+    //    charges/details OK. Stripe BR libera payout automático depois.
     const { data: payoutAcct } = await admin
       .from("payout_accounts")
-      .select("stripe_account_id, payouts_enabled, status")
+      .select("stripe_account_id, payouts_enabled, charges_enabled, details_submitted, status")
       .eq("user_id", w.owner_id)
       .maybeSingle();
 
@@ -202,10 +203,10 @@ Deno.serve(async (req) => {
         hint: "O proprietário precisa completar o onboarding em /dashboard-proprietario.html#recebimentos"
       }, 400);
     }
-    if (!payoutAcct.payouts_enabled) {
+    if (!payoutAcct.details_submitted) {
       return json({
-        error: "Conta Stripe do proprietário não está habilitada para payouts",
-        hint: "Status: " + payoutAcct.status + ". Acessar Stripe Express Dashboard pra completar verificação."
+        error: "Conta Stripe do proprietário com onboarding incompleto",
+        hint: "Status: " + payoutAcct.status + ". O proprietário precisa terminar o cadastro na Stripe Express."
       }, 400);
     }
 
@@ -220,40 +221,46 @@ Deno.serve(async (req) => {
       .select("id", { count: "exact", head: true })
       .eq("booking_id", w.booking_id);
 
-    // 7) Cria payout via Stripe Connect
+    // 7) Sprint 2.6 (BR) — Cria TRANSFER do saldo da plataforma pra
+    //    Connected Account do proprietário. NÃO usa stripe.payouts.create
+    //    (proibido em BR — Connected Accounts brasileiras devem estar em
+    //    modo automatic schedule). Stripe BR vai processar o payout
+    //    automático da Connected Account pro banco em 1-2 dias úteis.
     const amountCents = Math.round(Number(w.amount_net) * 100);
-    let payout: Stripe.Payout;
+    let transfer: Stripe.Transfer;
     try {
-      payout = await stripe.payouts.create(
-        {
-          amount: amountCents,
-          currency: "brl",
-          description: "Nomade Drive — Saque parcial marco " + w.milestone_number,
-          metadata: {
-            withdrawal_id: withdrawalId,
-            booking_id: String(w.booking_id),
-            milestone_number: String(w.milestone_number),
-          },
+      transfer = await stripe.transfers.create({
+        amount: amountCents,
+        currency: "brl",
+        destination: payoutAcct.stripe_account_id,
+        description: "Nomade Drive — Saque parcial marco " + w.milestone_number,
+        metadata: {
+          withdrawal_id: withdrawalId,
+          booking_id: String(w.booking_id),
+          milestone_number: String(w.milestone_number),
+          owner_id: String(w.owner_id),
         },
-        { stripeAccount: payoutAcct.stripe_account_id }
-      );
+      });
       actions.payout_created = true;
-      actions.payout_id = payout.id;
+      actions.payout_id = transfer.id; // sufixo "po_" antes, agora "tr_"
       actions.amount = amountCents / 100;
     } catch (e) {
       const msg = (e as Error)?.message ?? String(e);
-      actions.errors.push("stripe_payouts_create: " + msg);
+      actions.errors.push("stripe_transfers_create: " + msg);
       return json({
         ok: false, actions,
-        error: "Falha ao criar payout no Stripe: " + msg
+        error: "Falha ao criar transfer no Stripe: " + msg,
+        hint: msg.indexOf("insufficient") !== -1
+          ? "Plataforma sem saldo. Cliente precisa ter pago a mensalidade antes (R$ entra no saldo)."
+          : undefined
       }, 500);
     }
 
-    // 8) Atualiza DB
+    // 8) Atualiza DB (stripe_payout_id agora guarda o transfer.id "tr_xxx")
     try {
       await admin.from("withdrawals").update({
         status: "paid",
-        stripe_payout_id: payout.id,
+        stripe_payout_id: transfer.id,
         paid_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }).eq("id", withdrawalId);
@@ -270,15 +277,15 @@ Deno.serve(async (req) => {
         vehStr = [v.make, v.model].filter(Boolean).join(" ") || vehStr;
         if (v.year_model) vehStr += " (" + v.year_model + ")";
       }
-      const arrivalDate = payout.arrival_date
-        ? new Date(payout.arrival_date * 1000).toLocaleDateString("pt-BR")
-        : "1-2 dias úteis";
+      // Transfer é síncrono — não tem arrival_date. Stripe BR vai criar
+      // payout automático na Connected Account em 1-2 dias úteis.
+      const arrivalDate = "1-2 dias úteis (depósito automático Stripe BR)";
 
       const tpl = emailSaqueLiberado({
         full_name: ownerProf.full_name || "",
         veiculo: vehStr,
         valor: fmtBRL(Number(w.amount_net)),
-        payout_id: payout.id,
+        payout_id: transfer.id,
         estimated_arrival: arrivalDate,
         milestone_num: w.milestone_number,
         total_milestones: totalMilestones || 1,
@@ -297,10 +304,11 @@ Deno.serve(async (req) => {
       ok: true,
       actions,
       payout: {
-        id: payout.id,
+        id: transfer.id,            // mantém nome "payout" no JSON pra compat
         amount: amountCents / 100,
-        arrival_date: payout.arrival_date,
-        status: payout.status,
+        arrival_date: null,         // transfer não tem arrival_date
+        status: "transfer_created", // Stripe BR processa payout automático depois
+        type: "transfer",           // marca que foi via Transfer API
       },
     });
   } catch (e) {
