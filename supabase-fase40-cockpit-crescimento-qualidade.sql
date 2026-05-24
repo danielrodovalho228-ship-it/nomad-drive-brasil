@@ -241,22 +241,22 @@ create policy nps_own_insert on public.nps_responses
 
 do $$
 declare
-  client_id uuid;
-  booking_id uuid;
+  v_client_id uuid;    -- prefixo v_ evita colisão com bookings.client_id
+  v_booking_id uuid;
 begin
   -- Pega 1 cliente + 1 booking pra mockar
-  select id into client_id from public.profiles
+  select id into v_client_id from public.profiles
     where email = 'qa-cliente@nomadedrive.com.br' limit 1;
-  select id into booking_id from public.bookings
-    where client_id = (select id from public.profiles where email = 'qa-cliente@nomadedrive.com.br')
+  select b.id into v_booking_id from public.bookings b
+    where b.client_id = v_client_id
     limit 1;
 
-  if client_id is not null then
+  if v_client_id is not null then
     insert into public.nps_responses (user_id, booking_id, user_role, score, comment, category, responded_at)
     select * from (values
-      (client_id, booking_id, 'client', 9, 'Adorei! Plataforma fácil de usar.', 'app_ux', now() - interval '15 days'),
-      (client_id, booking_id, 'client', 10, 'Recomendaria com certeza, tudo muito transparente.', 'comunicacao', now() - interval '10 days'),
-      (client_id, booking_id, 'client', 8, 'Bom! Poderia ter mais opções de carro.', 'veiculo', now() - interval '5 days')
+      (v_client_id, v_booking_id, 'client', 9, 'Adorei! Plataforma fácil de usar.', 'app_ux', now() - interval '15 days'),
+      (v_client_id, v_booking_id, 'client', 10, 'Recomendaria com certeza, tudo muito transparente.', 'comunicacao', now() - interval '10 days'),
+      (v_client_id, v_booking_id, 'client', 8, 'Bom! Poderia ter mais opções de carro.', 'veiculo', now() - interval '5 days')
     ) as t(user_id, booking_id, user_role, score, comment, category, responded_at)
     on conflict do nothing;
   end if;
