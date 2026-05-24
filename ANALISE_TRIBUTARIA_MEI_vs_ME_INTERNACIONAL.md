@@ -28,7 +28,15 @@
 - ❌ NÃO pode ter mais que 1 funcionário CLT
 - ❌ NÃO pode ter participação em outra empresa
 - ❌ Atividades restritas (CNAE específico permitido)
-- ✅ Locação de automóveis (CNAE 7711-0/00) **É** permitida em MEI
+- ❌ **CORREÇÃO 2026-05-24:** Locação de automóveis (CNAE 7711-0/00) **NÃO** é permitida em MEI (atividade regulada — exige ME/EPP)
+
+**CNAEs MEI permitidos pra Nomade Drive (modelo plataforma):**
+- ⭐ **6319-4/00** — Portais, provedores de conteúdo e outros serviços de informação na internet (RECOMENDADO)
+- **6311-9/00** — Tratamento de dados, provedores de serviços de aplicação e hospedagem
+- **6209-1/00** — Suporte técnico, manutenção e outros serviços em TI
+
+**Modelo legal correto:**
+Nomade Drive é **plataforma de intermediação** (não locadora). MEI recebe APENAS a comissão de 10%. O proprietário do veículo é o locador formal — recebe 90% via Stripe Connect direto. Mesmo modelo de Airbnb/Uber/iFood.
 
 **Tributos inclusos no DAS:**
 - INSS do titular (~R$ 70 = 5% salário mínimo)
