@@ -736,7 +736,7 @@
     Promise.all([
       sb.from('bookings').select('id, start_date, end_date, owner_id, client_id, status, monthly_price')
         .eq('id', bookingId).maybeSingle(),
-      sb.from('withdrawals').select('milestone_number, milestone_date, amount_net, status')
+      sb.from('withdrawals').select('id, milestone_number, milestone_date, amount_net, status')
         .eq('booking_id', bookingId)
         .order('milestone_number', { ascending: true })
     ]).then(function (results) {
