@@ -1,9 +1,17 @@
-# 🧪 Roteiro QA — Fase 41 + 41b + 42 + Backlog Mobile (3 itens)
+# 🧪 Roteiro QA — Fase 41 + 41b + 42 + 43 + 43b + Backlog Mobile
 
-> **Data:** 2026-05-24
-> **Builds:** main `f7c6159` (Fase 42), `2504c5c` (Fase 41b FIX), `13d5aa4` (Backlog mobile), `0590cb8` (Fase 41)
-> **Tempo estimado:** ~3h pra rodar tudo
+> **Data:** 2026-05-24 (v2)
+> **Builds:**
+>   - `21f40fd` — Fase 43 COMPLETO (Nomade Gold)
+>   - `b105676` — Fase 43 inicial
+>   - `8677823` — Roteiro QA v1
+>   - `f7c6159` — Fase 42 (Painel Leads)
+>   - `2504c5c` — Fase 41b FIX
+>   - `13d5aa4` — Backlog mobile (3 itens)
+>   - `0590cb8` — Fase 41 (Renovação)
+> **Tempo estimado:** ~4.5h pra rodar tudo (8 blocos × ~30min)
 > **Ambiente:** produção (https://nomadedrive.com.br)
+> **Cobertura:** 56 cenários distribuídos em 8 blocos
 
 ---
 
@@ -22,13 +30,34 @@
 
 ### Reserva pra testar renovação
 - Booking ativa pra Cliente A: `status='em_uso'` ou `'aprovado'`, `end_date` entre **hoje + 1d** e **hoje + 7d**
-- Se não tiver, criar via admin OU rodar:
+- Se não tiver, criar via admin OU rodar o SQL abaixo:
+
+> ⚠️ **IMPORTANTE:** os placeholders `<COLE_*_AQUI>` devem ser SUBSTITUÍDOS por UUIDs reais antes de rodar. Pega os UUIDs primeiro:
+>
+> ```sql
+> -- 1. Pega UUID do Cliente A
+> select id, full_name from public.profiles where main_role = 'client' limit 5;
+>
+> -- 2. Pega UUID de um veículo aprovado e seu owner
+> select id, owner_id, make, model from public.vehicles where status = 'aprovado' limit 5;
+> ```
+>
+> **Depois** cola os UUIDs nos lugares corretos:
+
   ```sql
-  insert into public.bookings (client_id, owner_id, vehicle_id, start_date, end_date, monthly_price, status, billing_mode)
-  values (
-    '<uuid_cliente_A>', '<uuid_owner_D>', '<uuid_veiculo>',
-    current_date - interval '23 days', current_date + interval '5 days',
-    1800, 'em_uso', 'monthly'
+  insert into public.bookings (
+    client_id, owner_id, vehicle_id,
+    start_date, end_date,
+    monthly_price, status, billing_mode
+  ) values (
+    '<COLE_UUID_CLIENTE_A_AQUI>',   -- ex: '11111111-1111-...'
+    '<COLE_UUID_OWNER_D_AQUI>',      -- pega de vehicles.owner_id
+    '<COLE_UUID_VEICULO_AQUI>',
+    current_date - interval '23 days',
+    current_date + interval '5 days',
+    1800,
+    'em_uso',
+    'monthly'
   );
   ```
 
@@ -376,6 +405,185 @@ await window.ndAuth.client().from('leads_enriched').select('*');
 
 ---
 
+## 🏆 BLOCO 7 — Fase 43: Nomade Gold (tiers de fidelidade)
+
+### Cenário 7.1 — Cliente novo é Bronze
+**Pré:** Cliente A logado, sem bookings encerradas ainda.
+1. Acessa `dashboard-cliente.html`
+2. **Esperado:** card no topo "🥉 Você é **Bronze** · 0 meses concluídos"
+   - Background marrom/laranja
+   - Benefício: "💸 5% off em renovações"
+   - Progresso: "Falta 3 meses pra virar 🥈 Silver"
+   - Barra de progresso em 0%
+
+### Cenário 7.2 — Promover Cliente A pra Silver
+1. Pega UUID do Cliente A:
+   ```sql
+   select id from public.profiles where main_role = 'client' limit 5;
+   ```
+2. Pega 1 booking dele e marca como encerrada com 3 meses (substitui os 2 UUIDs):
+   ```sql
+   -- Pega ID de uma booking ativa do Cliente A
+   select id, status, start_date, end_date from public.bookings
+   where client_id = '<COLE_UUID_CLIENTE_A_AQUI>';
+
+   -- Marca como encerrada com duração de 3 meses
+   update public.bookings
+   set status = 'encerrada',
+       start_date = current_date - interval '95 days',  -- ~3 meses
+       end_date = current_date - interval '5 days'
+   where id = '<COLE_UUID_BOOKING_AQUI>';
+   ```
+3. Confere via SQL:
+   ```sql
+   select tier, months_completed, renewal_discount_pct
+   from public.client_loyalty
+   where client_id = '<COLE_UUID_CLIENTE_A_AQUI>';
+   ```
+4. **Esperado:** `tier='silver'`, `renewal_discount_pct=7`
+
+### Cenário 7.3 — Cliente Silver vê card atualizado
+1. Loga novamente como Cliente A
+2. Recarrega dashboard (Ctrl+Shift+R)
+3. **Esperado:**
+   - Card mudou pra "🥈 Você é **Silver**"
+   - Background prata/cinza
+   - "7% off em renovações"
+   - "Falta 3 meses pra 🥇 Gold"
+   - Progresso ~50%
+
+### Cenário 7.4 — Promover pra Gold (6 meses)
+1. Cria/atualiza outra booking com 3 meses adicionais:
+   ```sql
+   update public.bookings
+   set status = 'encerrada',
+       start_date = current_date - interval '200 days',
+       end_date = current_date - interval '110 days'
+   where id = '<COLE_UUID_OUTRA_BOOKING_AQUI>';
+   ```
+2. Confere:
+   ```sql
+   select tier, months_completed, renewal_discount_pct, deposit_reduction_pct
+   from public.client_loyalty
+   where client_id = '<COLE_UUID_CLIENTE_A_AQUI>';
+   ```
+3. **Esperado:** `tier='gold'`, `renewal_discount_pct=10`, `deposit_reduction_pct=20`
+
+### Cenário 7.5 — Renovação com desconto tier-aware
+**Pré:** Cliente A é Silver (7% off), tem booking ativa terminando em ≤7 dias.
+1. Acessa dashboard
+2. **Esperado:** card de renovação mostra "**7% OFF**" (não mais 5%) + badge "🥈 Silver"
+3. Clica "Renovar 1 mês"
+4. **Esperado:** modal "Renovar por 1 mês com **7%** off?"
+5. Confirma
+6. Validar:
+   ```sql
+   select monthly_price, deposit_amount from public.bookings
+   where client_id = '<COLE_UUID_CLIENTE_A_AQUI>'
+   order by created_at desc limit 1;
+   ```
+7. **Esperado:** `monthly_price` = valor original × 0.93 (7% off, não 5%)
+
+### Cenário 7.6 — Cliente Gold tem caução reduzida na renovação
+**Pré:** Cliente Gold com booking ativa.
+1. Renova
+2. **Esperado:**
+   - Preço com 10% off
+   - **Caução** = caução original × 0.80 (20% menos)
+   - Linha extra no card: "🛡️ + caução reduzida em 20% (benefício gold)"
+
+### Cenário 7.7 — Admin vê overview de loyalty
+1. Loga como Admin → `admin.html` → 📈 Crescimento → role pra baixo
+2. **Esperado:** seção "🥇 Clientes Nomade Gold"
+   - 4 KPIs com contagem por tier
+   - Tabela top 20 ordenada por tier + LTV
+   - Cliente A promovido aparece com badge correto
+
+### Cenário 7.8 — Bronze NÃO recebe benefício diferenciado
+1. Cliente com 0 meses
+2. **Esperado:** renewal_discount_pct=5, deposit_reduction_pct=0 (sem benefício extra)
+
+---
+
+## 📧 BLOCO 8 — Fase 43b: E-mail de promoção automático
+
+### Cenário 8.1 — Edge Function deployada
+1. Verifica:
+   ```bash
+   supabase functions list
+   ```
+2. **Esperado:** `send-tier-promotion` aparece na lista
+
+### Cenário 8.2 — Promoção dispara e-mail automaticamente
+**Pré:** Cliente A é Bronze, tem 1 booking ativa.
+1. Marca booking como encerrada com duração ≥3 meses (vide Cenário 7.2)
+2. Aguarda 5–10 segundos
+3. Confere no caixa de e-mail do Cliente A
+4. **Esperado:** e-mail com assunto "🥈 Parabéns! Você é Cliente Silver — Nomade Drive Brasil"
+   - HTML rico com gradient prata
+   - Lista de 3 benefícios Silver
+   - CTA "Ver meus benefícios Silver" → leva pro dashboard
+
+### Cenário 8.3 — E-mail Gold visual diferente
+1. Promove cliente pra Gold (6+ meses)
+2. **Esperado:** e-mail com gradient dourado + 4 benefícios Gold + CTA "Aproveitar benefícios Gold"
+
+### Cenário 8.4 — E-mail Platinum (top)
+1. Promove cliente pra Platinum (12+ meses)
+2. **Esperado:** e-mail com gradient roxo/índigo + 5 benefícios Platinum + tom celebratório "Status máximo"
+
+### Cenário 8.5 — Idempotência (não envia 2x pro mesmo evento)
+1. Roda o `update bookings ...` que causou promoção (igual ao 8.2) — não muda nada efetivamente
+2. **Esperado:** trigger NÃO insere novo loyalty_event (porque tier não mudou), e-mail NÃO dispara
+3. Validar via SQL:
+   ```sql
+   select count(*) from public.admin_audit_logs
+   where action = 'tier_promotion_email_sent'
+     and metadata_json->>'client_id' = '<COLE_UUID_CLIENTE_A_AQUI>';
+   ```
+   Cada promoção real = 1 linha. Não deve ter duplicatas.
+
+### Cenário 8.6 — Bronze NÃO recebe e-mail
+1. Cliente sem bookings encerradas (fica Bronze)
+2. **Esperado:** nenhum e-mail enviado (Edge Function retorna `skipped: true` se chamada)
+
+### Cenário 8.7 — Re-disparo manual via RPC
+**Pré:** existe um loyalty_event antigo cujo e-mail falhou (ou QA quer re-testar).
+1. Pega event_id:
+   ```sql
+   select id, to_tier, client_id, created_at from public.loyalty_events
+   where event = 'tier_promoted' order by created_at desc limit 5;
+   ```
+2. Como admin, chama RPC:
+   ```sql
+   select public.resend_tier_promotion_email('<COLE_EVENT_ID_AQUI>');
+   ```
+3. **Esperado:** retorna `{"ok": true, "request_id": N, "event_id": "..."}`
+4. E-mail chega de novo na caixa do cliente
+
+### Cenário 8.8 — RLS bloqueia não-admin de re-disparar
+1. Logado como Cliente A
+2. Tenta:
+   ```sql
+   select public.resend_tier_promotion_email('<algum_event_id>');
+   ```
+3. **Esperado:** erro "Apenas admin pode reenviar e-mail de promoção"
+
+### Cenário 8.9 — Histórico de e-mails enviados
+```sql
+select metadata_json->>'client_email' as cliente,
+       metadata_json->>'to_tier' as tier,
+       metadata_json->>'email_sent' as enviado,
+       created_at
+from public.admin_audit_logs
+where action = 'tier_promotion_email_sent'
+order by created_at desc
+limit 10;
+```
+**Esperado:** lista todos os e-mails de promoção disparados, com flag de sucesso.
+
+---
+
 ## 🐛 Template de Bug Report
 
 Pra cada bug encontrado, abre arquivo em `INBOX_COWORKER/BUG_<feature>_<descricao>.md`:
@@ -463,6 +671,27 @@ Marca conforme valida:
 - [ ] 6.11 SLA crítico após 48h
 - [ ] 6.12 Audit log gravado
 - [ ] 6.13 RLS bloqueia não-admin
+
+### Nomade Gold (tiers)
+- [ ] 7.1 Cliente novo é Bronze
+- [ ] 7.2 Promover pra Silver via SQL
+- [ ] 7.3 Card visual atualiza pra Silver
+- [ ] 7.4 Promover pra Gold
+- [ ] 7.5 Renovação Silver = 7% off
+- [ ] 7.6 Renovação Gold = caução reduzida
+- [ ] 7.7 Admin vê overview de loyalty
+- [ ] 7.8 Bronze NÃO tem benefício extra
+
+### E-mail promoção tier
+- [ ] 8.1 Edge Function deployada
+- [ ] 8.2 Promoção dispara e-mail Silver
+- [ ] 8.3 E-mail Gold visual correto
+- [ ] 8.4 E-mail Platinum (top)
+- [ ] 8.5 Idempotência (sem duplicatas)
+- [ ] 8.6 Bronze NÃO recebe e-mail
+- [ ] 8.7 Re-disparo manual via RPC funciona
+- [ ] 8.8 RLS bloqueia não-admin
+- [ ] 8.9 Histórico de e-mails populado
 
 ---
 
