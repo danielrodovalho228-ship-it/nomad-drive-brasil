@@ -81,6 +81,7 @@ function emailAvariaDecisao(d: {
   descricao: string;
   valor: string;
   parecer: string;
+  protocolo?: string;       // Fase 36: AV-AAAA-#### (rodapé)
 }) {
   const html =
     '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
@@ -120,6 +121,7 @@ function emailAvariaDecisao(d: {
     + '<tr><td style="background:#fff5e8;padding:18px 28px;border-top:1px solid #f0d9b8;font-size:12px;color:#5b6b63;line-height:1.55;">'
     + '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>'
     + '<a href="' + SITE + '" style="color:#a8580e;text-decoration:none;">nomadedrive.com.br</a> · Para tirar dúvidas, responda a este e-mail.<br>'
+    + (d.protocolo ? '<span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml(d.protocolo) + '</strong></span><br>' : '')
     + '<span style="color:#8a9591;">Cobranças seguem o contrato vigente e a política de avarias.</span>'
     + '</td></tr></table></td></tr></table></body></html>';
   const text =
@@ -150,6 +152,7 @@ function ownerDecisionTpl(d: {
   valor: string;
   parecer: string;
   outcome: "captured" | "released";
+  protocolo?: string;       // Fase 36: AV-AAAA-#### (rodapé)
 }) {
   const captured = d.outcome === "captured";
   const gradient = captured
@@ -199,6 +202,7 @@ function ownerDecisionTpl(d: {
     + '<tr><td style="background:#f9fafb;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;line-height:1.55;">'
     + '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>'
     + '<a href="' + SITE + '" style="color:' + ctaBg + ';text-decoration:none;">nomadedrive.com.br</a> · Dúvidas? Responda este e-mail.'
+    + (d.protocolo ? '<br><span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml(d.protocolo) + '</strong></span>' : '')
     + '</td></tr></table></td></tr></table></body></html>';
 
   const text =
@@ -276,9 +280,11 @@ Deno.serve(async (req) => {
     const damageId: string | undefined = payload.damage_id;
     if (!damageId) return json({ error: "damage_id ausente." }, 400);
 
-    // 1) Lê o damage + booking + dados pro e-mail (Fase 35: + owner_id)
+    // 1) Lê o damage + booking + dados pro e-mail
+    // Fase 35: + owner_id pra notificar proprietário
+    // Fase 36: + protocol_number da avaria + bookings.protocol_number
     const { data: dmg } = await admin.from("damages")
-      .select("*, bookings(id, client_id, owner_id, vehicles(make,model,year_model))")
+      .select("*, bookings(id, client_id, owner_id, protocol_number, vehicles(make,model,year_model))")
       .eq("id", damageId).maybeSingle();
     if (!dmg) return json({ error: "Avaria não encontrada." }, 404);
 
@@ -382,7 +388,8 @@ Deno.serve(async (req) => {
         tipoAvaria,
         descricao: dmg.description || "",
         valor: fmtBRL(finalAmount),
-        parecer: dmg.review_notes || ""
+        parecer: dmg.review_notes || "",
+        protocolo: (dmg as any).protocol_number || undefined,    // Fase 36: AV-####
       });
       console.log("damage-capture: enviando e-mail pro cliente:", cliEmail);
       const r = await sendEmail(cliEmail, tpl.subject, tpl.html, tpl.text, tpl.replyTo);
@@ -426,7 +433,8 @@ Deno.serve(async (req) => {
             cliente: cliName,
             valor: fmtBRL(finalAmount),
             parecer: dmg.review_notes || "",
-            outcome: "captured"  // sempre "captured" neste handler (damage-capture)
+            outcome: "captured",  // sempre "captured" neste handler (damage-capture)
+            protocolo: (dmg as any).protocol_number || undefined,    // Fase 36: AV-####
           });
           console.log("damage-capture: enviando e-mail pro proprietário:", ownerProf.email);
           const r2 = await sendEmail(

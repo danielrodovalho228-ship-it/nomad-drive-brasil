@@ -71,6 +71,7 @@ async function sendEmail(to: string, subject: string, html: string, text: string
 }
 
 function emailSaqueLiberado(d: {
+  protocolo?: string;       // Fase 36: RS-AAAA-####
   full_name: string;
   veiculo: string;
   valor: string;
@@ -108,6 +109,7 @@ function emailSaqueLiberado(d: {
     + '<tr><td style="background:#f9fafb;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;">'
     + '<strong>Nomade Drive Brasil</strong> · Uberlândia/MG · <a href="' + SITE + '" style="color:#0f5132;text-decoration:none;">nomadedrive.com.br</a><br>'
     + 'Dúvidas sobre saques? Responda este e-mail.'
+    + (d.protocolo ? '<br><span style="color:#5b6b63;font-family:monospace;font-size:11.5px;">📋 Protocolo: <strong>' + escapeHtml(d.protocolo) + '</strong></span>' : '')
     + '</td></tr></table></td></tr></table></body></html>';
 
   const text = "Olá " + (d.full_name || "") + ",\n\n"
@@ -161,9 +163,10 @@ Deno.serve(async (req) => {
     if (!withdrawalId) return json({ error: "withdrawal_id ausente." }, 400);
 
     // 1) Lê o withdrawal completo
+    // Fase 36: + booking.protocol_number pra incluir RS-#### no e-mail
     const { data: w, error: wErr } = await admin
       .from("withdrawals")
-      .select("*, bookings(id, vehicle_id, vehicles(make, model, year_model))")
+      .select("*, bookings(id, vehicle_id, protocol_number, vehicles(make, model, year_model))")
       .eq("id", withdrawalId)
       .maybeSingle();
     if (wErr || !w) return json({ error: "Saque não encontrado." }, 404);
@@ -289,6 +292,7 @@ Deno.serve(async (req) => {
         estimated_arrival: arrivalDate,
         milestone_num: w.milestone_number,
         total_milestones: totalMilestones || 1,
+        protocolo: (w as any).bookings?.protocol_number || undefined,    // Fase 36: RS-####
       });
       const r = await sendEmail(ownerProf.email, tpl.subject, tpl.html, tpl.text, tpl.replyTo);
       if (r.ok) {

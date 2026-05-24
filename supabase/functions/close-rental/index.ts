@@ -210,7 +210,7 @@ Deno.serve(async (req) => {
     const flaggedDamages = payload.has_damages === true;
 
     const { data: booking } = await admin.from("bookings")
-      .select("id, client_id, owner_id, monthly_price, stripe_subscription_id, vehicles(make,model,year_model)")
+      .select("id, client_id, owner_id, monthly_price, stripe_subscription_id, protocol_number, vehicles(make,model,year_model)")
       .eq("id", bookingId).maybeSingle();
     if (!booking) return json({ error: "Reserva não encontrada." }, 404);
 
