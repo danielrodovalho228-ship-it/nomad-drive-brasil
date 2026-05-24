@@ -122,6 +122,170 @@
   .earnings-amount__arrow { font-size: 24px; }
   .earnings-meta { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+ * Fase 33 — Painel Verde de Monitoramento do Veículo
+ * ============================================================ */
+.green-panel {
+  background: #fff;
+  border: 1px solid #e3e9e5;
+  border-radius: 16px;
+  padding: 0;
+  margin: 18px 0;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(20,40,30,0.04);
+}
+.green-panel--ok { border-left: 4px solid #198754; }
+.green-panel--warn { border-left: 4px solid #cf7a1c; }
+.green-panel--alert { border-left: 4px solid #b00020; }
+
+.green-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f4f7f5 0%, #ffffff 100%);
+  border-bottom: 1px solid #f0f3f1;
+  flex-wrap: wrap;
+}
+.green-panel--ok .green-panel__head {
+  background: linear-gradient(135deg, #e6f4ec 0%, #ffffff 100%);
+}
+.green-panel--warn .green-panel__head {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+}
+.green-panel--alert .green-panel__head {
+  background: linear-gradient(135deg, #fde8eb 0%, #ffffff 100%);
+}
+
+.green-panel__vehicle {
+  display: flex; flex-direction: column; gap: 4px; min-width: 0;
+}
+.green-panel__vehicle-name {
+  font-size: 18px; font-weight: 700; color: #14201b;
+  font-family: 'Sora', sans-serif;
+}
+.green-panel__vehicle-meta { font-size: 12.5px; color: #6b7670; }
+
+.green-panel__status-big {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 999px;
+  font-weight: 700; font-size: 15px;
+}
+.green-panel--ok .green-panel__status-big { background: #198754; color: #fff; }
+.green-panel--warn .green-panel__status-big { background: #cf7a1c; color: #fff; }
+.green-panel--alert .green-panel__status-big { background: #b00020; color: #fff; }
+
+.green-panel__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 18px 24px;
+}
+.green-card {
+  background: #f9fafb;
+  border: 1px solid #e3e9e5;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.green-card--ok { background: #e6f4ec; border-color: #bce5d0; }
+.green-card--warn { background: #fff3e0; border-color: #f8d4a8; }
+.green-card--alert { background: #fde8eb; border-color: #f0b3bc; }
+
+.green-card__icon { font-size: 24px; line-height: 1; }
+.green-card__data { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.green-card__label {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: #5b6b63;
+}
+.green-card__value {
+  font-size: 14.5px; font-weight: 700; color: #14201b;
+}
+.green-card__sub { font-size: 11.5px; color: #6b7670; }
+
+.green-panel__footer {
+  padding: 14px 24px;
+  background: #f9fafb;
+  border-top: 1px solid #f0f3f1;
+  font-size: 12.5px; color: #5b6b63;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 10px;
+}
+.green-panel__client-info {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.green-panel__alerts {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.green-panel__alerts li {
+  background: rgba(176,0,32,0.08);
+  padding: 6px 10px; border-radius: 4px;
+  font-size: 12.5px; color: #b00020;
+  border-left: 2px solid #b00020;
+}
+
+.green-panel__configure {
+  margin-top: 12px; padding: 10px 24px;
+  background: #f0f9ff;
+  border-top: 1px solid #d4e6f8;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 10px;
+  font-size: 12.5px;
+}
+.green-panel__configure a {
+  color: #1a4d8c; font-weight: 600; text-decoration: none;
+}
+.green-panel__configure a:hover { text-decoration: underline; }
+
+/* Modal de configuração de notificações */
+.notif-modal {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.55);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.notif-modal[data-open="true"] { display: flex; }
+.notif-modal__box {
+  background: #fff; border-radius: 14px;
+  width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.notif-modal__head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 24px; border-bottom: 1px solid #e3e9e5;
+}
+.notif-modal__head h3 { margin: 0; font-size: 17px; }
+.notif-modal__close {
+  background: none; border: 0; font-size: 22px;
+  cursor: pointer; color: #6b7670;
+}
+.notif-modal__body { padding: 18px 24px; }
+.notif-modal__section { margin-bottom: 18px; }
+.notif-modal__section h4 {
+  margin: 0 0 10px; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: #5b6b63; font-weight: 700;
+}
+.notif-radio-group, .notif-check-group {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.notif-radio-group label, .notif-check-group label {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 6px;
+  cursor: pointer; transition: background 0.2s;
+}
+.notif-radio-group label:hover, .notif-check-group label:hover { background: #f4f7f5; }
+.notif-modal__footer {
+  padding: 14px 24px; border-top: 1px solid #e3e9e5;
+  display: flex; justify-content: flex-end; gap: 8px;
+}
 </style>
 </head>
 <body>
@@ -341,6 +505,16 @@
         <section class="dash-panel" id="rastreamento">
           <h2>Segurança e rastreamento</h2>
           <p>A Nomade Drive recomenda fortemente rastreador nos veículos cadastrados e pode exigir rastreador para veículos de maior valor, locações longas ou perfis de maior risco.</p>
+
+          <!-- ============================================================
+               Fase 33 — PAINEL VERDE de monitoramento
+               ============================================================ -->
+          <div id="greenPanelContainer" style="margin:18px 0;">
+            <p style="text-align:center;color:#8a948e;padding:20px;" id="greenPanelLoading">
+              Carregando estado dos veículos...
+            </p>
+            <!-- Painéis verdes gerados dinamicamente aqui -->
+          </div>
           <div class="dash-list">
             <div class="dash-row"><div class="dash-row__main"><strong>Rastreador informado</strong><span>Declarado pelo proprietário</span></div><span class="dash-pill dash-pill--warn" id="trkInformado">Não informado</span></div>
             <div class="dash-row"><div class="dash-row__main"><strong>Rastreador validado</strong><span>Verificado pela operação</span></div><span class="dash-pill dash-pill--warn" id="trkValidado">Não validado</span></div>
@@ -1540,6 +1714,335 @@
       }
     } catch (e) {}
   })();
+})();
+</script>
+
+<!-- ============================================================
+     Fase 33 — Modal de configuração de notificações
+     ============================================================ -->
+<div class="notif-modal" id="notifModal" data-open="false" role="dialog" aria-modal="true">
+  <div class="notif-modal__box">
+    <div class="notif-modal__head">
+      <h3>🔔 Configurar notificações</h3>
+      <button type="button" class="notif-modal__close" id="notifModalClose" aria-label="Fechar">✕</button>
+    </div>
+    <div class="notif-modal__body">
+      <div class="notif-modal__section">
+        <h4>📊 Status periódico do veículo</h4>
+        <p style="font-size:12.5px;color:#5b6b63;margin:0 0 10px;">Receba um resumo "Tudo OK" sobre seus carros:</p>
+        <div class="notif-radio-group">
+          <label><input type="radio" name="notifFreq" value="off" /> Desativado (só alertas críticos)</label>
+          <label><input type="radio" name="notifFreq" value="daily" /> Diariamente</label>
+          <label><input type="radio" name="notifFreq" value="weekly" checked /> Semanalmente (segunda 9h)</label>
+          <label><input type="radio" name="notifFreq" value="biweekly" /> Quinzenalmente</label>
+          <label><input type="radio" name="notifFreq" value="monthly" /> Mensalmente</label>
+        </div>
+      </div>
+
+      <div class="notif-modal__section">
+        <h4>📱 Canais de entrega</h4>
+        <div class="notif-check-group">
+          <label><input type="checkbox" name="notifChan" value="email" checked /> ✉️ E-mail (sempre)</label>
+          <label><input type="checkbox" name="notifChan" value="push" /> 📲 Push no navegador (PWA)</label>
+          <label><input type="checkbox" name="notifChan" value="whatsapp" disabled /> 💬 WhatsApp (em breve)</label>
+          <label><input type="checkbox" name="notifChan" value="sms" disabled /> 📲 SMS (plano premium)</label>
+        </div>
+      </div>
+
+      <div class="notif-modal__section">
+        <h4>🚨 Tipos de alertas críticos (sempre on)</h4>
+        <div class="notif-check-group" style="opacity:0.7;">
+          <label><input type="checkbox" checked disabled /> Saída de região autorizada</label>
+          <label><input type="checkbox" checked disabled /> Bateria do GPS abaixo de 20%</label>
+          <label><input type="checkbox" checked disabled /> Avaria reportada na devolução</label>
+          <label><input type="checkbox" checked disabled /> Multa nova detectada</label>
+          <label><input type="checkbox" checked disabled /> Sinistro / emergência</label>
+        </div>
+      </div>
+
+      <div class="notif-modal__section">
+        <h4>💰 Notificações financeiras</h4>
+        <div class="notif-check-group">
+          <label><input type="checkbox" name="notifFin" value="financial" checked /> Saque disponível</label>
+          <label><input type="checkbox" name="notifFin" value="maintenance" checked /> Próxima manutenção (D-7)</label>
+        </div>
+      </div>
+    </div>
+    <div class="notif-modal__footer">
+      <button type="button" class="btn btn--ghost btn--sm" id="notifModalCancel">Cancelar</button>
+      <button type="button" class="btn btn--solid btn--sm" id="notifModalSave">💾 Salvar preferências</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+ * Fase 33 — Painel Verde de monitoramento + modal notificações
+ * ============================================================ */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function getSb() {
+    return (window.ndAuth && window.ndAuth.client && window.ndAuth.client()) || null;
+  }
+  function fmtBRL(n) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(n) || 0);
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function fmtDateBR(d) {
+    if (!d) return '—';
+    try { return new Date(d).toLocaleDateString('pt-BR'); } catch (e) { return String(d); }
+  }
+  function relativeTime(d) {
+    if (!d) return '—';
+    var diff = (Date.now() - new Date(d).getTime()) / 1000;
+    if (diff < 60) return 'agora há pouco';
+    if (diff < 3600) return 'há ' + Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return 'há ' + Math.floor(diff / 3600) + 'h';
+    return 'há ' + Math.floor(diff / 86400) + ' dias';
+  }
+
+  /* ============================================================
+   * Render do painel verde
+   * ============================================================ */
+  function loadGreenPanel() {
+    var sb = getSb(); if (!sb) return;
+    var container = $('greenPanelContainer'); if (!container) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      sb.from('vehicle_health_latest').select('*').eq('owner_id', user.id)
+        .then(function (r) {
+          if (!r || r.error) {
+            $('greenPanelLoading').textContent = 'View vehicle_health_latest não disponível. Rode o SQL fase33 antes.';
+            return;
+          }
+          var rows = r.data || [];
+          if (!rows.length) {
+            $('greenPanelLoading').textContent = 'Nenhum veículo aprovado pra monitorar ainda.';
+            return;
+          }
+          $('greenPanelLoading').style.display = 'none';
+          container.innerHTML = '';
+          rows.forEach(function (vh) {
+            container.appendChild(renderGreenPanel(vh));
+          });
+        }).catch(function (e) {
+          $('greenPanelLoading').textContent = 'Erro ao carregar: ' + (e && e.message || e);
+        });
+    });
+  }
+  window.loadGreenPanel = loadGreenPanel;
+
+  function renderGreenPanel(vh) {
+    var statusClass = vh.overall_status === 'green' ? 'ok'
+                    : vh.overall_status === 'yellow' ? 'warn' : 'alert';
+    var statusLabel = vh.overall_status === 'green' ? '🟢 TUDO OK'
+                    : vh.overall_status === 'yellow' ? '🟡 ATENÇÃO' : '🔴 ALERTA';
+    var statusSub = vh.overall_status === 'green' ? 'Veículo operando normalmente'
+                  : vh.overall_status === 'yellow' ? 'Há itens a observar'
+                  : 'Ação imediata necessária';
+
+    var vehName = [vh.make, vh.model].filter(Boolean).join(' ') +
+      (vh.year_model ? ' ' + vh.year_model : '');
+    var plate = vh.license_plate || vh.plate_last_digits || '';
+
+    var div = document.createElement('div');
+    div.className = 'green-panel green-panel--' + statusClass;
+
+    var alertsHtml = '';
+    if (vh.alert_messages && Array.isArray(vh.alert_messages) && vh.alert_messages.length) {
+      alertsHtml = '<ul class="green-panel__alerts">' +
+        vh.alert_messages.map(function (a) { return '<li>⚠ ' + escapeHtml(a) + '</li>'; }).join('') +
+        '</ul>';
+    }
+
+    var clientInfoHtml = '';
+    if (vh.active_client_name) {
+      clientInfoHtml = '<span class="green-panel__client-info">👤 Em uso por <strong>' +
+        escapeHtml(vh.active_client_name) + '</strong> até ' + fmtDateBR(vh.active_booking_end) + '</span>';
+    } else {
+      clientInfoHtml = '<span class="green-panel__client-info" style="color:#8a948e;">⚪ Sem locação ativa</span>';
+    }
+
+    div.innerHTML =
+      '<div class="green-panel__head">' +
+        '<div class="green-panel__vehicle">' +
+          '<span class="green-panel__vehicle-name">🚗 ' + escapeHtml(vehName) + '</span>' +
+          (plate ? '<span class="green-panel__vehicle-meta">Placa ' + escapeHtml(plate) + '</span>' : '') +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<div class="green-panel__status-big">' + statusLabel + '</div>' +
+          '<div style="font-size:11.5px;color:#6b7670;margin-top:4px;">' + escapeHtml(statusSub) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="green-panel__cards">' +
+        renderCard('📡', 'Rastreador',
+          vh.tracker_connected === false ? 'Desconectado' :
+          vh.tracker_connected === true ? 'Conectado' : 'Sem dados',
+          vh.tracker_connected === false ? 'alert' : vh.tracker_connected === true ? 'ok' : 'warn',
+          vh.tracker_last_ping_at ? 'Último ping: ' + relativeTime(vh.tracker_last_ping_at) : ''
+        ) +
+        renderCard('🔋', 'Bateria GPS',
+          vh.tracker_battery_pct != null ? vh.tracker_battery_pct + '%' : '—',
+          vh.tracker_battery_pct == null ? 'warn' :
+            vh.tracker_battery_pct < 20 ? 'alert' :
+            vh.tracker_battery_pct < 50 ? 'warn' : 'ok',
+          vh.tracker_battery_pct != null && vh.tracker_battery_pct < 50 ? 'Considerar trocar/recarregar' : 'OK'
+        ) +
+        renderCard('📍', 'Região',
+          vh.in_authorized_region === false ? 'FORA da autorizada' :
+          vh.current_region || (vh.current_state ? vh.current_state : '—'),
+          vh.in_authorized_region === false ? 'alert' : 'ok',
+          vh.in_authorized_region === true ? 'Dentro da área permitida' : 'Verificar contrato'
+        ) +
+        renderCard('🔧', 'Manutenção',
+          vh.maintenance_status === 'atrasada' ? 'Atrasada' :
+          vh.maintenance_status === 'proxima' ? 'Próxima' :
+          vh.maintenance_status === 'em_dia' ? 'Em dia' : '—',
+          vh.maintenance_status === 'atrasada' ? 'alert' :
+          vh.maintenance_status === 'proxima' ? 'warn' :
+          vh.maintenance_status === 'em_dia' ? 'ok' : 'warn',
+          vh.km_to_next_revision != null ? 'Próxima em ' + vh.km_to_next_revision + ' km' : ''
+        ) +
+        renderCard('🚦', 'Multas',
+          vh.pending_fines_count > 0 ? vh.pending_fines_count + ' pendente(s)' : 'Nenhuma',
+          vh.pending_fines_count > 0 ? 'warn' : 'ok',
+          vh.pending_fines_amount > 0 ? fmtBRL(vh.pending_fines_amount) + ' a cobrar' : ''
+        ) +
+        renderCard('🔒', 'Privacidade LGPD',
+          'Garantida',
+          'ok',
+          'Localização exata só em emergência'
+        ) +
+      '</div>' +
+      (alertsHtml ? '<div style="padding:12px 24px;">' + alertsHtml + '</div>' : '') +
+      '<div class="green-panel__footer">' +
+        clientInfoHtml +
+        '<span>📊 Última atualização: ' + (vh.snapshot_at ? relativeTime(vh.snapshot_at) : 'sem dados') + '</span>' +
+      '</div>' +
+      '<div class="green-panel__configure">' +
+        '<span>🔔 Quer ser avisado periodicamente? Configure as notificações.</span>' +
+        '<a href="#" data-open-notif>⚙ Configurar notificações</a>' +
+      '</div>';
+
+    // Bind "Configurar notificações"
+    var notifLink = div.querySelector('[data-open-notif]');
+    if (notifLink) notifLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      openNotifModal();
+    });
+
+    return div;
+  }
+
+  function renderCard(icon, label, value, kind, sub) {
+    return '<div class="green-card green-card--' + kind + '">' +
+      '<span class="green-card__icon">' + icon + '</span>' +
+      '<div class="green-card__data">' +
+        '<span class="green-card__label">' + escapeHtml(label) + '</span>' +
+        '<span class="green-card__value">' + escapeHtml(value) + '</span>' +
+        (sub ? '<span class="green-card__sub">' + escapeHtml(sub) + '</span>' : '') +
+      '</div>' +
+    '</div>';
+  }
+
+  /* ============================================================
+   * Modal de notificações
+   * ============================================================ */
+  function openNotifModal() {
+    var sb = getSb(); if (!sb) return;
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+      // Carrega preferences existentes (se houver)
+      sb.from('notification_preferences').select('*').eq('user_id', user.id).maybeSingle()
+        .then(function (r) {
+          var p = (r && r.data) || {};
+          // Set radio frequency
+          var freq = p.status_frequency || 'weekly';
+          var rad = document.querySelector('input[name="notifFreq"][value="' + freq + '"]');
+          if (rad) rad.checked = true;
+          // Canais
+          var channels = Array.isArray(p.channels) ? p.channels : ['email'];
+          document.querySelectorAll('input[name="notifChan"]').forEach(function (cb) {
+            cb.checked = channels.indexOf(cb.value) !== -1;
+          });
+          // Mostra modal
+          $('notifModal').setAttribute('data-open', 'true');
+        }).catch(function () {
+          $('notifModal').setAttribute('data-open', 'true');
+        });
+    });
+  }
+  function closeNotifModal() {
+    $('notifModal').setAttribute('data-open', 'false');
+  }
+  function saveNotifPrefs() {
+    var sb = getSb(); if (!sb) return;
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+      var freq = (document.querySelector('input[name="notifFreq"]:checked') || {}).value || 'weekly';
+      var channels = Array.from(document.querySelectorAll('input[name="notifChan"]:checked'))
+        .map(function (cb) { return cb.value; });
+      if (channels.indexOf('email') === -1) channels.push('email'); // garante email sempre
+
+      var financial = !!document.querySelector('input[name="notifFin"][value="financial"]:checked');
+      var maintenance = !!document.querySelector('input[name="notifFin"][value="maintenance"]:checked');
+
+      var body = {
+        user_id: user.id,
+        status_frequency: freq,
+        channels: channels,
+        financial_alerts: financial,
+        maintenance_alerts: maintenance,
+        critical_alerts: true,  // sempre on
+        updated_at: new Date().toISOString()
+      };
+
+      sb.from('notification_preferences').upsert(body, { onConflict: 'user_id' }).then(function (r) {
+        if (r && r.error) {
+          alert('Erro: ' + r.error.message);
+          return;
+        }
+        closeNotifModal();
+        // Toast de sucesso simples
+        if (window.ndEmails && window.ndEmails.showToast) {
+          window.ndEmails.showToast('✅ Preferências salvas', 'ok');
+        } else {
+          alert('✅ Preferências salvas com sucesso!');
+        }
+      });
+    });
+  }
+
+  /* ============================================================
+   * Inicialização
+   * ============================================================ */
+  window.addEventListener('DOMContentLoaded', function () {
+    // Aguarda auth iniciar
+    setTimeout(loadGreenPanel, 1000);
+
+    // Refresh a cada 60s
+    setInterval(loadGreenPanel, 60000);
+
+    // Bind modal handlers
+    var closeBtn = $('notifModalClose');
+    var cancelBtn = $('notifModalCancel');
+    var saveBtn = $('notifModalSave');
+    var modal = $('notifModal');
+    if (closeBtn) closeBtn.addEventListener('click', closeNotifModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeNotifModal);
+    if (saveBtn) saveBtn.addEventListener('click', saveNotifPrefs);
+    if (modal) modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeNotifModal();
+    });
+  });
 })();
 </script>
 </body>
