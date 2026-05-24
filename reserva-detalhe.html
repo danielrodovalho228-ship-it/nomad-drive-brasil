@@ -789,16 +789,74 @@
       sb.auth.getUser().then(function (uRes) {
         var user = uRes && uRes.data && uRes.data.user;
         if (!user || user.id !== bk.owner_id) return; // só pro owner
-        var available = wRows.find(function (w) { return w.status === 'available'; });
+        var available = null;
+        for (var i = 0; i < wRows.length; i++) {
+          if (wRows[i].status === 'available') { available = wRows[i]; break; }
+        }
         if (!available) return;
         var cta = document.getElementById('timelineCta');
         cta.removeAttribute('hidden');
         document.getElementById('timelineCtaAmount').textContent = fmtBRL(available.amount_net);
-        document.getElementById('timelineCtaBtn').addEventListener('click', function () {
-          alert('💸 Saque parcial: feature ativada na Sprint 2 (Stripe Manual Payouts). Em breve!');
+
+        var saqueBtn = document.getElementById('timelineCtaBtn');
+        var skipBtn = document.getElementById('timelineCtaSkip');
+
+        // ============================================================
+        // Fase 32 Sprint 2 — Saque real via Edge Function
+        // ============================================================
+        saqueBtn.addEventListener('click', function () {
+          var ok = window.confirm(
+            'Confirmar saque de ' + fmtBRL(available.amount_net) + '?\n\n' +
+            '• O valor será depositado na sua conta Stripe Express em 1-2 dias úteis.\n' +
+            '• Comissão Nomade Drive (10%) já descontada.\n' +
+            '• Você recebe e-mail de confirmação assim que liberado.\n\n' +
+            'Pode prosseguir?'
+          );
+          if (!ok) return;
+          saqueBtn.disabled = true;
+          var origText = saqueBtn.textContent;
+          saqueBtn.textContent = '⏳ Liberando saque...';
+          skipBtn.disabled = true;
+
+          sb.functions.invoke('liberar-saque-parcial', {
+            body: { withdrawal_id: available.id }
+          }).then(function (r) {
+            saqueBtn.disabled = false;
+            skipBtn.disabled = false;
+            var d = r && r.data;
+            if (d && d.ok) {
+              saqueBtn.textContent = '✅ Saque liberado';
+              saqueBtn.classList.remove('btn--solid');
+              saqueBtn.classList.add('btn--outline');
+              var arrival = d.payout && d.payout.arrival_date
+                ? new Date(d.payout.arrival_date * 1000).toLocaleDateString('pt-BR')
+                : '1-2 dias úteis';
+              setTimeout(function () {
+                window.alert(
+                  '💰 Saque liberado!\n\n' +
+                  'Valor: ' + fmtBRL(available.amount_net) + '\n' +
+                  'Previsão depósito: ' + arrival + '\n' +
+                  'Stripe ID: ' + (d.payout && d.payout.id) + '\n\n' +
+                  'Você recebe e-mail de confirmação em alguns segundos.'
+                );
+                loadTimeline(); // refresh
+              }, 200);
+            } else {
+              saqueBtn.textContent = origText;
+              var err = (r && r.error && r.error.message) || (d && d.error) || 'Tente novamente.';
+              var hint = (d && d.hint) ? '\n\nDica: ' + d.hint : '';
+              window.alert('❌ Não foi possível liberar o saque:\n\n' + err + hint);
+            }
+          }).catch(function (e) {
+            saqueBtn.disabled = false;
+            skipBtn.disabled = false;
+            saqueBtn.textContent = origText;
+            window.alert('❌ Erro de rede: ' + (e && e.message || e));
+          });
         });
-        document.getElementById('timelineCtaSkip').addEventListener('click', function () {
-          alert('⏸ OK, vou acumular com o próximo marco.');
+
+        skipBtn.addEventListener('click', function () {
+          window.alert('⏸ OK, vamos acumular esse saque com o próximo marco. Você pode liberar a qualquer momento clicando em "Sacar agora" depois.');
         });
       });
     }).catch(function (e) {

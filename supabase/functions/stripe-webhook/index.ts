@@ -474,6 +474,61 @@ Deno.serve(async (req) => {
         }).eq("stripe_account_id", acct.id);
         break;
       }
+      /* ============================================================
+       * Fase 32 Sprint 2 — Webhooks de Payout (Connect)
+       * ============================================================
+       * Quando criamos um payout via stripe.payouts.create() na conta
+       * do proprietário, o Stripe pode demorar 1-5 dias úteis pra
+       * realmente depositar no banco. Esses eventos confirmam ou
+       * reportam falha — mantém o DB sincronizado com a realidade.
+       *
+       * Esses eventos vêm da Connected Account (account.payouts.*),
+       * então event.account contém o stripe_account_id.
+       * ============================================================ */
+      case "payout.paid": {
+        const payout: any = event.data.object;
+        const withdrawalId = payout?.metadata?.withdrawal_id;
+        if (withdrawalId) {
+          await admin.from("withdrawals").update({
+            status: "paid",
+            paid_at: payout.arrival_date
+              ? new Date(payout.arrival_date * 1000).toISOString()
+              : new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }).eq("id", withdrawalId);
+          console.log("payout.paid: withdrawal", withdrawalId, "confirmado em conta");
+        }
+        break;
+      }
+      case "payout.failed": {
+        const payout: any = event.data.object;
+        const withdrawalId = payout?.metadata?.withdrawal_id;
+        if (withdrawalId) {
+          // Reverte status pra available pra proprietário tentar de novo
+          await admin.from("withdrawals").update({
+            status: "available",
+            withheld_reason: "payout_failed: " + (payout.failure_message || payout.failure_code || "desconhecido"),
+            updated_at: new Date().toISOString(),
+          }).eq("id", withdrawalId);
+          console.error("payout.failed: withdrawal", withdrawalId,
+            "revertido pra available. Motivo:", payout.failure_message);
+        }
+        break;
+      }
+      case "payout.canceled": {
+        const payout: any = event.data.object;
+        const withdrawalId = payout?.metadata?.withdrawal_id;
+        if (withdrawalId) {
+          await admin.from("withdrawals").update({
+            status: "available",
+            withheld_reason: "payout_canceled",
+            updated_at: new Date().toISOString(),
+          }).eq("id", withdrawalId);
+          console.log("payout.canceled: withdrawal", withdrawalId, "revertido");
+        }
+        break;
+      }
+
       case "mandate.updated": {
         // Fase 31 / B2-v2: cliente revogou (ou alterou) mandato Pix
         // Automático no app do banco. Loga o evento — se for revogação,
