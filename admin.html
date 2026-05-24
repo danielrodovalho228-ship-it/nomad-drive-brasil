@@ -156,6 +156,8 @@
     </div>
     <nav class="admin-side__nav">
       <a href="#cockpit" style="background:#e6f4ec;font-weight:700;color:#0f5132;border-left:3px solid #0f5132;"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 14 21 8"/></svg>🎯 Cockpit CEO</a>
+      <a href="#crescimento"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>📈 Crescimento</a>
+      <a href="#qualidade"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>⭐ Qualidade</a>
       <a href="#visao" class="is-current"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Visão geral</a>
       <a href="#notificacoes"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Notificações</a>
       <a href="#cadastros"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Cadastros e aprovações</a>
@@ -746,6 +748,99 @@
           </tr></thead>
           <tbody id="empList"><tr><td colspan="6">Carregando...</td></tr></tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Fase 40 — CRESCIMENTO
+         ============================================================ -->
+    <section class="admin-block" id="crescimento">
+      <h2>📈 Crescimento</h2>
+      <p class="note">Funil de aquisição + métricas por período + top proprietários. Atualiza em tempo real.</p>
+
+      <!-- Funil -->
+      <div class="admin-card" style="margin-bottom:14px;">
+        <h3 class="block-title">🎯 Funil de aquisição</h3>
+        <div id="funnelContainer" style="display:flex;flex-direction:column;gap:6px;margin-top:14px;">
+          <p style="color:#8a948e;">Carregando funil...</p>
+        </div>
+      </div>
+
+      <!-- Métricas por período -->
+      <div class="admin-card" style="margin-bottom:14px;">
+        <h3 class="block-title">📅 Crescimento por período</h3>
+        <table class="admin-table">
+          <thead><tr>
+            <th>Período</th>
+            <th>👥 Cadastros</th>
+            <th>📅 Reservas</th>
+            <th>🚗 Veículos</th>
+            <th>💰 Receita</th>
+          </tr></thead>
+          <tbody id="growthPeriodList"><tr><td colspan="5">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- Top owners -->
+      <div class="admin-card">
+        <h3 class="block-title">🏆 Top proprietários por receita gerada</h3>
+        <table class="admin-table">
+          <thead><tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Veículos</th>
+            <th>Reservas ativas</th>
+            <th>Receita gerada</th>
+          </tr></thead>
+          <tbody id="topOwnersList"><tr><td colspan="5">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Fase 40 — QUALIDADE
+         ============================================================ -->
+    <section class="admin-block" id="qualidade">
+      <h2>⭐ Qualidade</h2>
+      <p class="note">NPS (últimos 90 dias), SLA da Proteção, churn rate dos clientes. Métricas críticas pro CEO.</p>
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <small>NPS Score</small>
+          <b id="qualNPS">—</b>
+          <span id="qualNPSSub">— respostas</span>
+        </div>
+        <div class="kpi">
+          <small>SLA Proteção</small>
+          <b id="qualSLA">—%</b>
+          <span id="qualSLASub">cumprimento</span>
+        </div>
+        <div class="kpi">
+          <small>Tempo médio triagem</small>
+          <b id="qualTime">—h</b>
+          <span>por ocorrência</span>
+        </div>
+        <div class="kpi">
+          <small>Churn 30d</small>
+          <b id="qualChurn">—%</b>
+          <span id="qualChurnSub">— canceladas</span>
+        </div>
+      </div>
+
+      <div class="admin-card" style="margin-top:18px;">
+        <h3 class="block-title">📊 Distribuição NPS (últimos 90 dias)</h3>
+        <div id="npsDistribution" style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+          <p style="color:#8a948e;">Carregando...</p>
+        </div>
+        <p class="note" style="margin-top:14px;">
+          <strong>NPS:</strong> % Promoters (9-10) menos % Detractors (0-6). Acima de 50 é excelente,
+          acima de 70 é world-class. Abaixo de 0 é crítico — atender feedback dos detractors.
+        </p>
+      </div>
+
+      <div class="why-box" style="margin-top:14px;background:#f0f9ff;border-left:3px solid #1a4d8c;">
+        <h3>📋 Como coletar NPS</h3>
+        <p>Pós-locação, enviar e-mail automático: <em>"De 0 a 10, quanto recomendaria a Nomade Drive a um amigo?"</em>. Resposta vira linha em <code>nps_responses</code>. <strong>Fase 41 (futuro):</strong> Edge Function que dispara o e-mail D+1 do check-out.</p>
       </div>
     </section>
 
@@ -2736,6 +2831,145 @@
   }
 
   /* ============================================================
+   * Fase 40 — CRESCIMENTO + QUALIDADE
+   * ============================================================ */
+  function loadGrowth() {
+    var sb = getClient(); if (!sb) return;
+
+    // Funil
+    sb.from('growth_funnel').select('*').maybeSingle().then(function (r) {
+      var f = r && r.data;
+      var box = $('funnelContainer'); if (!box) return;
+      if (!f) { box.innerHTML = '<p style="color:#b00020;">View growth_funnel não disponível.</p>'; return; }
+      var stages = [
+        { label: '👤 Cadastros', value: f.total_cadastros, color: '#1a4d8c' },
+        { label: '📝 Iniciaram verificação', value: f.iniciaram_verificacao, color: '#1a7a4f' },
+        { label: '📄 Enviaram documentos', value: f.enviaram_documentos, color: '#0f5132' },
+        { label: '✅ Aprovados', value: f.aprovados, color: '#198754' },
+        { label: '📅 Solicitaram reserva', value: f.solicitaram_reserva, color: '#16a34a' },
+        { label: '🚗 Reservaram', value: f.reservaram, color: '#22c55e' },
+        { label: '💳 Pagaram', value: f.pagaram, color: '#0f5132' }
+      ];
+      var maxVal = Math.max.apply(null, stages.map(function (s) { return s.value || 0; })) || 1;
+      box.innerHTML = stages.map(function (s, i) {
+        var pct = ((s.value || 0) / maxVal) * 100;
+        var prev = i > 0 ? stages[i - 1].value : null;
+        var conv = (prev && prev > 0) ? ((s.value / prev) * 100).toFixed(0) + '%' : '';
+        return '<div style="display:flex;align-items:center;gap:10px;font-size:13px;">' +
+          '<span style="min-width:200px;color:#5b6b63;font-weight:500;">' + s.label + '</span>' +
+          '<div style="flex:1;background:#f0f3f1;border-radius:4px;height:24px;position:relative;overflow:hidden;">' +
+            '<div style="width:' + pct + '%;height:100%;background:' + s.color + ';border-radius:4px;transition:width 1s;"></div>' +
+            '<span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#fff;font-weight:700;font-size:12px;">' + s.value + '</span>' +
+          '</div>' +
+          '<span style="min-width:60px;text-align:right;color:#6b7670;font-size:12px;">' + conv + '</span>' +
+        '</div>';
+      }).join('');
+    }).catch(function () {});
+
+    // Período
+    sb.from('growth_by_period').select('*').maybeSingle().then(function (r) {
+      var d = r && r.data;
+      var tb = $('growthPeriodList'); if (!tb) return;
+      if (!d) { tb.innerHTML = '<tr><td colspan="5">View indisponível.</td></tr>'; return; }
+      var rows = [
+        ['Hoje', d.cadastros_hoje, d.reservas_hoje, d.veiculos_hoje, d.receita_hoje],
+        ['Últimos 7 dias', d.cadastros_7d, d.reservas_7d, d.veiculos_7d, d.receita_7d],
+        ['Este mês', d.cadastros_mes, d.reservas_mes, d.veiculos_mes, d.receita_mes],
+        ['Este ano', d.cadastros_ano, d.reservas_ano, '—', d.receita_ano]
+      ];
+      tb.innerHTML = rows.map(function (r) {
+        return '<tr><td><strong>' + r[0] + '</strong></td>' +
+          '<td>' + fmtInt(r[1]) + '</td>' +
+          '<td>' + fmtInt(r[2]) + '</td>' +
+          '<td>' + (r[3] === '—' ? '—' : fmtInt(r[3])) + '</td>' +
+          '<td style="font-weight:600;font-variant-numeric:tabular-nums;">' + fmtBRL(r[4]) + '</td></tr>';
+      }).join('');
+    }).catch(function () {});
+
+    // Top owners
+    sb.from('top_owners').select('*').limit(10).then(function (r) {
+      var rows = (r && r.data) || [];
+      var tb = $('topOwnersList'); if (!tb) return;
+      if (!rows.length) {
+        tb.innerHTML = '<tr><td colspan="5" style="color:#8a948e;text-align:center;padding:20px;">Sem dados ainda.</td></tr>';
+        return;
+      }
+      tb.innerHTML = rows.map(function (o, i) {
+        var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+        return '<tr><td style="font-weight:700;">' + medal + '</td>' +
+          '<td>' + escapeHtml(o.full_name || '—') + '<br><small style="color:#8a948e;">' + escapeHtml(o.email || '') + '</small></td>' +
+          '<td>' + fmtInt(o.veiculos_ativos) + '</td>' +
+          '<td>' + fmtInt(o.reservas_ativas) + '/' + fmtInt(o.reservas_total) + '</td>' +
+          '<td style="font-weight:700;color:#0f5132;font-variant-numeric:tabular-nums;">' + fmtBRL(o.receita_gerada) + '</td>' +
+          '</tr>';
+      }).join('');
+    }).catch(function () {});
+  }
+  window.loadGrowth = loadGrowth;
+
+  function loadQuality() {
+    var sb = getClient(); if (!sb) return;
+    sb.from('quality_summary').select('*').maybeSingle().then(function (r) {
+      var q = r && r.data; if (!q) return;
+
+      // NPS Score
+      var npsEl = $('qualNPS');
+      if (npsEl) {
+        if (q.nps_score == null) {
+          npsEl.textContent = '—';
+          npsEl.style.color = '#8a948e';
+        } else {
+          npsEl.textContent = q.nps_score;
+          npsEl.style.color = q.nps_score >= 50 ? '#198754' :
+            q.nps_score >= 0 ? '#cf7a1c' : '#b00020';
+        }
+      }
+      $('qualNPSSub').textContent = (q.nps_total_respostas || 0) + ' respostas';
+
+      // SLA
+      $('qualSLA').textContent = q.sla_cumprimento_pct != null ? q.sla_cumprimento_pct + '%' : '—';
+      $('qualSLASub').textContent = (q.casos_resolvidos || 0) + ' casos avaliados';
+
+      // Tempo médio triagem
+      $('qualTime').textContent = q.tempo_medio_triagem_horas != null
+        ? Math.round(q.tempo_medio_triagem_horas) + 'h' : '—';
+
+      // Churn
+      var churnEl = $('qualChurn');
+      churnEl.textContent = (q.churn_rate_30d_pct || 0) + '%';
+      churnEl.style.color = q.churn_rate_30d_pct >= 10 ? '#b00020' :
+        q.churn_rate_30d_pct >= 5 ? '#cf7a1c' : '#198754';
+      $('qualChurnSub').textContent = (q.canceladas_30d || 0) + ' canceladas / ' + (q.ativas_atual || 0) + ' ativas';
+
+      // Distribuição NPS visual
+      if (q.nps_total_respostas > 0) {
+        var promPct = (q.nps_promoters / q.nps_total_respostas * 100).toFixed(0);
+        var detrPct = (q.nps_detractors / q.nps_total_respostas * 100).toFixed(0);
+        var passPct = (100 - promPct - detrPct).toFixed(0);
+        var npsHtml =
+          '<div style="display:flex;border-radius:8px;overflow:hidden;height:36px;">' +
+            '<div style="width:' + promPct + '%;background:#198754;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">' +
+              '🟢 ' + promPct + '% Promoters</div>' +
+            '<div style="width:' + passPct + '%;background:#cf7a1c;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">' +
+              '🟡 ' + passPct + '% Passives</div>' +
+            '<div style="width:' + detrPct + '%;background:#b00020;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">' +
+              '🔴 ' + detrPct + '% Detractors</div>' +
+          '</div>' +
+          '<div style="font-size:12.5px;color:#5b6b63;margin-top:8px;">' +
+            'Promoters (9-10): ' + q.nps_promoters + ' · Passives (7-8): ' + (q.nps_total_respostas - q.nps_promoters - q.nps_detractors) +
+            ' · Detractors (0-6): ' + q.nps_detractors +
+          '</div>';
+        $('npsDistribution').innerHTML = npsHtml;
+      } else {
+        $('npsDistribution').innerHTML = '<p style="color:#8a948e;text-align:center;padding:20px;">Sem respostas NPS ainda. Configurar e-mail pós-locação na Fase 41.</p>';
+      }
+    }).catch(function (e) {
+      console.warn('quality_summary indisponível:', e && e.message);
+    });
+  }
+  window.loadQuality = loadQuality;
+
+  /* ============================================================
    * COCKPIT HERO
    * ============================================================ */
   function loadCockpit() {
@@ -3154,6 +3388,12 @@
     if (fCat) fCat.addEventListener('change', function () {
       expensesState.filter.category = fCat.value; renderExpenses();
     });
+
+    // ----- Fase 40 — Crescimento + Qualidade -----
+    loadGrowth();
+    loadQuality();
+    setInterval(loadGrowth, 60000);
+    setInterval(loadQuality, 60000);
 
     // ----- Employee form -----
     var addEmp = $('btnAddEmployee'),
