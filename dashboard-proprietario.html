@@ -856,7 +856,42 @@
           if (v.year_model) title += " (" + v.year_model + ")";
           var sub = [CAT[v.category] || v.category, (v.mileage ? v.mileage + " km" : "")]
             .filter(Boolean).join(" · ") || "Dados do veículo";
-          list.appendChild(rowEl(title, sub, a.statusLabel(v.status), pillKind(v.status)));
+          var row = rowEl(title, sub, a.statusLabel(v.status), pillKind(v.status));
+          list.appendChild(row);
+
+          // Fase 46: checkbox de auto-aprovação Gold/Platinum (só pra veículos aprovados)
+          if (v.status === "aprovado") {
+            var autoRow = document.createElement("div");
+            autoRow.style.cssText = "display:flex;align-items:center;gap:10px;padding:8px 14px 12px;margin-top:-6px;font-size:13px;color:#5b6b63;";
+            var label = document.createElement("label");
+            label.style.cssText = "display:flex;align-items:center;gap:8px;cursor:pointer;";
+            var cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = !!v.auto_approve_high_tier;
+            cb.style.cssText = "width:16px;height:16px;cursor:pointer;";
+            cb.addEventListener("change", function () {
+              cb.disabled = true;
+              a.client().from("vehicles")
+                .update({ auto_approve_high_tier: cb.checked })
+                .eq("id", v.id)
+                .then(function (r) {
+                  cb.disabled = false;
+                  if (r && r.error) {
+                    cb.checked = !cb.checked;
+                    if (window.ndModal) {
+                      ndModal.alert({ title: "Erro", body: "Não foi possível salvar: " + r.error.message, icon: "⚠️" });
+                    }
+                  }
+                });
+            });
+            var span = document.createElement("span");
+            span.innerHTML = '⚡ Aprovar automaticamente clientes <strong>🥇 Gold</strong> e <strong>💎 Platinum</strong> ' +
+                             '<small style="color:#8a948e;">(reservas viram aprovadas na hora, sem clique)</small>';
+            label.appendChild(cb);
+            label.appendChild(span);
+            autoRow.appendChild(label);
+            list.appendChild(autoRow);
+          }
         });
       }).catch(function () {});
 
