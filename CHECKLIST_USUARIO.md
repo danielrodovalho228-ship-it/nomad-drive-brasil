@@ -158,6 +158,15 @@ Stripe Subscription (Active) → Webhook → Profile.stripe_customer_id → Book
 - ✅ Edge Function `damage-capture` (fallback email via profiles)
 - ✅ SQLs Fase 31, 32, 32b aplicados no Supabase
 
+**Estado deploys 24/05 tarde:**
+- ✅ Fase 34 — Painel Proteção profissional (protocolo PR-/AV- + filtros + SLA)
+- ✅ Fase 35 — Transparência total e-mails (proprietário + contraparte)
+- ✅ Fase 35a — Hotfix triagem contraparte (RPC SECURITY DEFINER)
+- ✅ Fase 36 — Protocolo universal (RS-/VS-/PG-) + rodapé "Protocolo" nos e-mails
+- ✅ Fase 36b — Log de atividades com filtros + colapsar
+- ✅ **Sprint 2 FECHADA** — Saques parciais BR (Separate Charges + Transfers)
+- ⚠️ Sprint 2 validação real: pendente reserva nova pra testar transfer
+
 ## 🌅 Madrugada 23→24/05 — sessão autônoma Claude code-side
 
 - [x] Fase 32 - Sprint 1 SQL pronto: `supabase-fase32-timeline-saques.sql` (timeline + saques + earnings views)
