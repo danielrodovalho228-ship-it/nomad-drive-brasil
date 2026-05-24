@@ -361,32 +361,61 @@
       </h2>
       <p class="note">Auditoria automática: cada criação e cada mudança de status em reservas, veículos, vistorias, documentos, ocorrências, papéis, perfis e cadastros é registrada pelo banco de dados — não pode ser burlada pelo front-end.</p>
       <div class="admin-card" id="logCardBody">
-        <!-- Toolbar Fase 36b: bulk delete -->
-        <div id="logToolbar" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 14px;background:#f9fafb;border-radius:8px;margin-bottom:10px;font-size:13px;">
-          <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:500;color:#5b6b63;">
-            <input type="checkbox" id="logSelectAll" />
-            Selecionar todos
-          </label>
-          <span style="color:#8a948e;">|</span>
-          <button type="button" id="logDeleteSelected" disabled
-            style="font-size:12.5px;padding:6px 12px;border:1px solid #d4a3a8;border-radius:6px;background:#fde8eb;color:#b00020;cursor:pointer;font-weight:600;opacity:0.5;">
-            🗑 Apagar selecionados (<span id="logSelectedCount">0</span>)
+        <!-- Toolbar Fase 36b (v2): filtros (auditoria não pode ser apagada) -->
+        <div id="logToolbar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#f9fafb;border-radius:8px;margin-bottom:10px;font-size:13px;">
+          <span style="font-size:11.5px;color:#5b6b63;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Filtros:</span>
+
+          <select id="logFilterTarget" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;cursor:pointer;">
+            <option value="">Todos os alvos</option>
+            <option value="bookings">📅 Reservas</option>
+            <option value="vehicles">🚗 Veículos</option>
+            <option value="rental_inspections">📋 Vistorias</option>
+            <option value="documents">📄 Documentos</option>
+            <option value="protection_cases">🛡 Ocorrências</option>
+            <option value="damages">⚠️ Avarias</option>
+            <option value="profiles">👤 Perfis</option>
+            <option value="user_roles">🔑 Papéis</option>
+            <option value="applications">📝 Cadastros</option>
+            <option value="payments">💰 Pagamentos</option>
+            <option value="withdrawals">💸 Saques</option>
+          </select>
+
+          <select id="logFilterAction" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;cursor:pointer;">
+            <option value="">Todas as ações</option>
+            <option value="criado">➕ Criação</option>
+            <option value="status_alterado">🔄 Mudança de status</option>
+            <option value="bloqueada">🛑 Bloqueios</option>
+            <option value="outros">⋯ Outros</option>
+          </select>
+
+          <select id="logFilterPeriod" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;cursor:pointer;">
+            <option value="all">Tudo</option>
+            <option value="today">Hoje</option>
+            <option value="7d">Últimos 7 dias</option>
+            <option value="30d">Últimos 30 dias</option>
+          </select>
+
+          <input type="search" id="logFilterSearch" placeholder="🔍 buscar por detalhe..."
+            style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;min-width:180px;flex:1;max-width:280px;" />
+
+          <button type="button" id="logFilterClear"
+            style="font-size:12px;padding:5px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;cursor:pointer;color:#5b6b63;">
+            ↺ Limpar
           </button>
-          <span style="margin-left:auto;color:#8a948e;font-size:12px;" id="logTotalInfo">—</span>
+
+          <span style="margin-left:auto;color:#5b6b63;font-size:12px;font-weight:500;" id="logTotalInfo">—</span>
         </div>
 
         <table class="admin-table">
           <thead>
             <tr>
-              <th style="width:30px;"></th>
               <th>Data</th>
               <th>Ação</th>
               <th>Alvo</th>
               <th>Detalhe</th>
-              <th style="width:50px;">Ações</th>
             </tr>
           </thead>
-          <tbody id="logList"><tr><td colspan="6">Carregando registros...</td></tr></tbody>
+          <tbody id="logList"><tr><td colspan="4">Carregando registros...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -1402,68 +1431,109 @@
   }
 
   /* ============================================================
-   * Fase 36b — Log de atividades: colapsar + apagar (individual + bulk)
+   * Fase 36b (v2) — Log de atividades: colapsar + filtros
+   * ============================================================
+   * Auditoria NÃO pode ser apagada (compliance + rastreabilidade).
+   * Filtros disponíveis:
+   *   - target_type (Reserva, Veículo, Vistoria, ...)
+   *   - action keyword (criado, status_alterado, bloqueada, outros)
+   *   - período (hoje / 7d / 30d / tudo)
+   *   - busca por detalhe (metadata_json texto)
    * ============================================================ */
-  var auditState = { rows: [], selected: new Set(), collapsed: false };
+  var auditState = { rows: [], collapsed: false, filters: {} };
 
   function loadAuditLogs() {
     var c = a.client();
     var tb = document.getElementById("logList");
     var info = document.getElementById("logTotalInfo");
     if (!c || !tb) return;
-    tb.innerHTML = '<tr><td colspan="6">Carregando registros...</td></tr>';
+    tb.innerHTML = '<tr><td colspan="4">Carregando registros...</td></tr>';
 
     a.withTimeout(
-      c.from("admin_audit_logs").select("*").order("created_at", { ascending: false }).limit(200),
+      c.from("admin_audit_logs").select("*").order("created_at", { ascending: false }).limit(500),
       10000
     ).then(function (r) {
       if (!r || r.error) {
         if (a.isAuthError && a.isAuthError(r && r.error)) {
           a.redirectToLogin("Sessão expirou."); return;
         }
-        tb.innerHTML = '<tr><td colspan="6"><span style="color:#b00020;">Erro ao carregar.</span> ' +
+        tb.innerHTML = '<tr><td colspan="4"><span style="color:#b00020;">Erro ao carregar.</span> ' +
           '<button type="button" class="btn btn--ghost btn--sm" onclick="loadAuditLogs()">Tentar de novo</button></td></tr>';
         return;
       }
       auditState.rows = (r.data || []);
-      auditState.selected.clear();
       renderAuditLogs();
-      if (info) info.textContent = auditState.rows.length + ' registro(s)';
     }).catch(function () {
-      tb.innerHTML = '<tr><td colspan="6"><span style="color:#b00020;">Falha ao carregar.</span></td></tr>';
+      tb.innerHTML = '<tr><td colspan="4"><span style="color:#b00020;">Falha ao carregar.</span></td></tr>';
     });
   }
   // expor pra retry inline
   window.loadAuditLogs = loadAuditLogs;
 
+  function rowMatchesFilters(row) {
+    var f = auditState.filters;
+    // target_type
+    if (f.target && row.target_type !== f.target) return false;
+    // action keyword
+    if (f.action) {
+      var act = String(row.action || "");
+      if (f.action === "outros") {
+        // "outros" = nem criado, nem status_alterado, nem bloqueada
+        if (act.indexOf("_criado") !== -1 || act.indexOf("_status_alterado") !== -1 || act.indexOf("bloqueada") !== -1) return false;
+      } else {
+        if (act.indexOf(f.action) === -1) return false;
+      }
+    }
+    // período
+    if (f.period && f.period !== "all") {
+      var created = new Date(row.created_at).getTime();
+      var now = Date.now();
+      var days = f.period === "today" ? 1 : f.period === "7d" ? 7 : 30;
+      var cutoff = now - days * 86400000;
+      if (f.period === "today") {
+        // hoje = mesma data calendário
+        var todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+        if (created < todayStart.getTime()) return false;
+      } else {
+        if (created < cutoff) return false;
+      }
+    }
+    // busca livre por texto do detalhe + metadata
+    if (f.search) {
+      var hay = [
+        row.action || "",
+        row.target_type || "",
+        JSON.stringify(row.metadata_json || {})
+      ].join(" ").toLowerCase();
+      if (hay.indexOf(f.search.toLowerCase()) === -1) return false;
+    }
+    return true;
+  }
+
   function renderAuditLogs() {
     var tb = document.getElementById("logList");
+    var info = document.getElementById("logTotalInfo");
     if (!tb) return;
-    if (!auditState.rows.length) {
-      tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8a948e;padding:20px;">Nenhum registro de atividade.</td></tr>';
-      updateSelectedUI();
+    var filtered = auditState.rows.filter(rowMatchesFilters);
+
+    if (info) {
+      info.textContent = filtered.length === auditState.rows.length
+        ? auditState.rows.length + ' registro(s)'
+        : filtered.length + ' de ' + auditState.rows.length + ' registro(s)';
+    }
+
+    if (!filtered.length) {
+      tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#8a948e;padding:24px;">' +
+        (auditState.rows.length === 0
+          ? 'Nenhum registro de atividade ainda.'
+          : '🔍 Nenhum registro corresponde aos filtros.') +
+        '</td></tr>';
       return;
     }
+
     tb.innerHTML = "";
-    auditState.rows.forEach(function (row) {
+    filtered.forEach(function (row) {
       var tr = document.createElement("tr");
-      tr.setAttribute("data-log-id", row.id);
-
-      // Checkbox
-      var tdCheck = document.createElement("td");
-      var cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.className = "log-row-check";
-      cb.setAttribute("data-id", row.id);
-      cb.addEventListener("change", function () {
-        if (cb.checked) auditState.selected.add(row.id);
-        else auditState.selected.delete(row.id);
-        updateSelectedUI();
-      });
-      tdCheck.appendChild(cb);
-      tr.appendChild(tdCheck);
-
-      // Data, Ação, Alvo, Detalhe
       [
         fmtDate(row.created_at),
         auditActionLabel(row.action),
@@ -1475,69 +1545,11 @@
         else td.textContent = String(val == null ? "" : val);
         tr.appendChild(td);
       });
-
-      // Ação individual: apagar
-      var tdAct = document.createElement("td");
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.title = "Apagar este registro";
-      btn.textContent = "🗑";
-      btn.style.cssText = "font-size:14px;padding:4px 8px;border:1px solid #e3e9e5;border-radius:4px;background:#fff;cursor:pointer;color:#b00020;";
-      btn.addEventListener("click", function () {
-        deleteAuditLog([row.id], 1);
-      });
-      tdAct.appendChild(btn);
-      tr.appendChild(tdAct);
-
       tb.appendChild(tr);
     });
-    updateSelectedUI();
   }
 
-  function updateSelectedUI() {
-    var count = auditState.selected.size;
-    var countEl = document.getElementById("logSelectedCount");
-    var delBtn = document.getElementById("logDeleteSelected");
-    var selAll = document.getElementById("logSelectAll");
-    if (countEl) countEl.textContent = count;
-    if (delBtn) {
-      delBtn.disabled = count === 0;
-      delBtn.style.opacity = count === 0 ? "0.5" : "1";
-      delBtn.style.cursor = count === 0 ? "not-allowed" : "pointer";
-    }
-    // Atualiza "selecionar todos" pra refletir estado
-    if (selAll && auditState.rows.length) {
-      selAll.checked = count === auditState.rows.length;
-      selAll.indeterminate = count > 0 && count < auditState.rows.length;
-    }
-  }
-
-  function deleteAuditLog(ids, count) {
-    if (!ids || !ids.length) return;
-    var msg = count > 1
-      ? "Apagar " + count + " registro(s) de auditoria?\n\n⚠️ Esta ação é IRREVERSÍVEL e quebra a continuidade da auditoria. Tem certeza?"
-      : "Apagar este registro de auditoria?\n\n⚠️ Esta ação é IRREVERSÍVEL.";
-    if (!window.confirm(msg)) return;
-    var c = a.client();
-    if (!c) return;
-    c.from("admin_audit_logs").delete().in("id", ids).then(function (r) {
-      if (r && r.error) {
-        window.alert("Não foi possível apagar: " + (r.error.message || "verifique permissões."));
-        return;
-      }
-      // Atualiza estado local sem precisar reload
-      var idSet = new Set(ids);
-      auditState.rows = auditState.rows.filter(function (it) { return !idSet.has(it.id); });
-      auditState.selected.clear();
-      renderAuditLogs();
-      var info = document.getElementById("logTotalInfo");
-      if (info) info.textContent = auditState.rows.length + ' registro(s)';
-    }).catch(function (e) {
-      window.alert("Erro de rede ao apagar: " + (e && e.message || e));
-    });
-  }
-
-  /* Ligar handlers da toolbar + colapsar */
+  /* Handlers: colapsar + filtros */
   window.addEventListener("DOMContentLoaded", function () {
     var toggleBtn = document.getElementById("logToggleBtn");
     var body = document.getElementById("logCardBody");
@@ -1549,28 +1561,33 @@
       });
     }
 
-    var selAll = document.getElementById("logSelectAll");
-    if (selAll) {
-      selAll.addEventListener("change", function () {
-        var checked = selAll.checked;
-        var boxes = document.querySelectorAll(".log-row-check");
-        auditState.selected.clear();
-        boxes.forEach(function (cb) {
-          cb.checked = checked;
-          if (checked) auditState.selected.add(cb.getAttribute("data-id"));
-        });
-        updateSelectedUI();
+    function bindFilter(id, key) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", function () {
+        auditState.filters[key] = el.value;
+        renderAuditLogs();
+      });
+      el.addEventListener("change", function () {
+        auditState.filters[key] = el.value;
+        renderAuditLogs();
       });
     }
+    bindFilter("logFilterTarget", "target");
+    bindFilter("logFilterAction", "action");
+    bindFilter("logFilterPeriod", "period");
+    bindFilter("logFilterSearch", "search");
 
-    var delBtn = document.getElementById("logDeleteSelected");
-    if (delBtn) {
-      delBtn.addEventListener("click", function () {
-        var ids = Array.from(auditState.selected);
-        if (!ids.length) return;
-        deleteAuditLog(ids, ids.length);
+    var clearBtn = document.getElementById("logFilterClear");
+    if (clearBtn) clearBtn.addEventListener("click", function () {
+      auditState.filters = {};
+      var ids = ["logFilterTarget", "logFilterAction", "logFilterPeriod", "logFilterSearch"];
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = (id === "logFilterPeriod") ? "all" : "";
       });
-    }
+      renderAuditLogs();
+    });
   });
 
   /* ---- Fase 11: leitura amigável da auditoria ---- */
