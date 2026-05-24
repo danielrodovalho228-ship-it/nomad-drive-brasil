@@ -459,19 +459,153 @@ Deno.serve(async (req) => {
       case "account.updated": {
         // Stripe Connect — status da conta conectada (recebimento)
         const acct = event.data.object as Stripe.Account;
-        const status = acct.payouts_enabled && acct.details_submitted
+        const newStatus = acct.payouts_enabled && acct.details_submitted
           ? "ativo"
           : acct.requirements?.disabled_reason
             ? "restrito"
             : acct.details_submitted
               ? "em_analise"
               : "pendente";
+
+        // Fase 45b: pega status ANTERIOR pra detectar transição
+        const { data: prev } = await admin
+          .from("payout_accounts")
+          .select("user_id, status, payouts_enabled")
+          .eq("stripe_account_id", acct.id)
+          .maybeSingle();
+
+        const prevStatus = prev?.status || "pendente";
+        const userId = prev?.user_id;
+
         await admin.from("payout_accounts").update({
-          status,
+          status: newStatus,
           charges_enabled: !!acct.charges_enabled,
           payouts_enabled: !!acct.payouts_enabled,
           details_submitted: !!acct.details_submitted,
         }).eq("stripe_account_id", acct.id);
+
+        // Detecta transição pra "ativo" — dispara e-mail de boas-vindas
+        if (newStatus === "ativo" && prevStatus !== "ativo" && userId) {
+          try {
+            const { data: profile } = await admin
+              .from("profiles").select("full_name").eq("id", userId).maybeSingle();
+            const { data: userAuth } = await admin.auth.admin.getUserById(userId);
+            const userEmail = userAuth?.user?.email;
+
+            if (userEmail) {
+              const firstName = (profile?.full_name || "").split(" ")[0] || "olá";
+              const html =
+                '<!DOCTYPE html><html lang="pt-BR"><body style="margin:0;padding:0;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;">'
+                + '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 12px;background:#f4f5f7;"><tr><td align="center">'
+                + '<table cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(20,40,30,.15);">'
+                + '<tr><td style="background:linear-gradient(135deg,#065f46 0%,#10b981 100%);padding:30px 28px;text-align:center;">'
+                + '<div style="font-size:48px;line-height:1;margin-bottom:8px;">🏦</div>'
+                + '<div style="color:#fff;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.95;">Conta verificada</div>'
+                + '<div style="color:#fff;font-size:26px;font-weight:800;line-height:1.2;margin-top:6px;">Pronto pra receber, ' + escapeHtml(firstName) + '!</div>'
+                + '</td></tr>'
+                + '<tr><td style="padding:30px 28px 24px;">'
+                + '<p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#3a4945;">A Stripe acaba de <strong>verificar sua conta de recebimento</strong>. Sua identidade e dados bancários foram aprovados.</p>'
+                + '<div style="background:#d1fae5;border-left:4px solid #065f46;border-radius:8px;padding:16px 20px;margin:18px 0;">'
+                + '<strong style="color:#065f46;font-size:14.5px;">✅ Agora você pode:</strong>'
+                + '<ul style="margin:8px 0 0;padding-left:20px;color:#14201b;font-size:14px;line-height:1.7;">'
+                + '<li>Aprovar solicitações de locação dos seus veículos</li>'
+                + '<li>Receber repasses automáticos quando clientes pagarem</li>'
+                + '<li>Sacar saldo pelo painel "Recebimentos"</li>'
+                + '</ul></div>'
+                + '<p style="margin:24px 0 0;text-align:center;">'
+                + '<a href="https://nomadedrive.com.br/dashboard-proprietario.html" '
+                + 'style="display:inline-block;background:linear-gradient(135deg,#065f46 0%,#10b981 100%);color:#fff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">'
+                + '🚗 Abrir dashboard</a></p>'
+                + '</td></tr>'
+                + '<tr><td style="background:#f0f7f3;padding:18px 28px;border-top:1px solid #cde0d4;font-size:12px;color:#5b6b63;line-height:1.55;">'
+                + '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>'
+                + '<a href="https://nomadedrive.com.br" style="color:#145f3e;text-decoration:none;">nomadedrive.com.br</a>'
+                + '</td></tr></table></td></tr></table></body></html>';
+              const text =
+                "🏦 Sua conta de recebimento foi verificada!\n\n" +
+                "Olá " + firstName + ",\n\n" +
+                "A Stripe verificou sua conta. Agora você pode:\n" +
+                "  • Aprovar solicitações de locação\n" +
+                "  • Receber repasses automáticos\n" +
+                "  • Sacar saldo pelo painel\n\n" +
+                "Abrir dashboard: https://nomadedrive.com.br/dashboard-proprietario.html\n\n" +
+                "Nomade Drive Brasil";
+              await sendEmail(userEmail,
+                "🏦 Sua conta foi verificada — pronto pra receber",
+                html, text, "pagamentos@nomadedrive.com.br");
+            }
+
+            await admin.from("admin_audit_logs").insert({
+              admin_id: null,
+              action: "connect_account_activated",
+              target_type: "payout_accounts",
+              target_id: null,
+              metadata_json: {
+                user_id: userId,
+                stripe_account_id: acct.id,
+                prev_status: prevStatus,
+                new_status: newStatus,
+              },
+            });
+          } catch (e) {
+            console.error("Erro no e-mail de ativação Connect:", (e as Error)?.message);
+          }
+        }
+
+        // Detecta transição pra "restrito" — dispara e-mail de alerta
+        if (newStatus === "restrito" && prevStatus === "ativo" && userId) {
+          try {
+            const { data: userAuth } = await admin.auth.admin.getUserById(userId);
+            const userEmail = userAuth?.user?.email;
+            const disabledReason = acct.requirements?.disabled_reason || "pendência não especificada";
+
+            if (userEmail) {
+              const html =
+                '<!DOCTYPE html><html lang="pt-BR"><body style="margin:0;padding:0;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;">'
+                + '<table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;background:#f4f5f7;"><tr><td align="center">'
+                + '<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;">'
+                + '<tr><td style="background:#b91c1c;padding:24px 28px;color:#fff;">'
+                + '<div style="font-size:36px;line-height:1;margin-bottom:6px;">⚠️</div>'
+                + '<div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.95;">Atenção</div>'
+                + '<div style="font-size:22px;font-weight:800;line-height:1.2;margin-top:6px;">Sua conta de recebimento tem pendências</div>'
+                + '</td></tr>'
+                + '<tr><td style="padding:28px;">'
+                + '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">A Stripe identificou pendências na sua conta. Enquanto não resolver, você <strong>não vai conseguir receber</strong> novos repasses.</p>'
+                + '<div style="background:#fee2e2;border-left:4px solid #b91c1c;border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13.5px;color:#7c2d12;">'
+                + '<strong>Motivo:</strong> ' + escapeHtml(disabledReason) + '</div>'
+                + '<p style="margin:24px 0 0;text-align:center;">'
+                + '<a href="https://nomadedrive.com.br/dashboard-proprietario.html#recebimentos" '
+                + 'style="display:inline-block;background:#b91c1c;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-weight:700;">'
+                + '🔧 Resolver pendências</a></p>'
+                + '</td></tr></table></td></tr></table></body></html>';
+              const text =
+                "⚠️ Sua conta de recebimento tem pendências.\n\n" +
+                "Motivo: " + disabledReason + "\n\n" +
+                "Resolva em: https://nomadedrive.com.br/dashboard-proprietario.html#recebimentos\n\n" +
+                "Nomade Drive Brasil";
+              await sendEmail(userEmail,
+                "⚠️ Sua conta de recebimento tem pendências",
+                html, text, "pagamentos@nomadedrive.com.br");
+            }
+
+            await admin.from("admin_audit_logs").insert({
+              admin_id: null,
+              action: "connect_account_restricted",
+              target_type: "payout_accounts",
+              target_id: null,
+              metadata_json: {
+                user_id: userId,
+                stripe_account_id: acct.id,
+                prev_status: prevStatus,
+                new_status: newStatus,
+                disabled_reason: disabledReason,
+              },
+            });
+          } catch (e) {
+            console.error("Erro no e-mail de restrição Connect:", (e as Error)?.message);
+          }
+        }
+
         break;
       }
       /* ============================================================
