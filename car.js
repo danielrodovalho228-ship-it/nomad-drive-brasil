@@ -145,6 +145,136 @@
   monthsSel.addEventListener("change", updateBooking);
   updateBooking();
 
+  /* ====================================================================
+     "Quero alugar este carro" — Backlog #3 (mobile feedback Daniel)
+     Fluxo:
+       - Não logado          → cadastro.html?retorno=<url atual>
+       - Logado em rascunho  → onboarding-cliente.html
+       - Logado pendente     → status-cadastro.html
+       - Logado + aprovado   → cria rental_request + notifica owner/staff
+     ==================================================================== */
+  var rentBtn = el("rentNowCta");
+  var rentMsg = el("rentFlowMsg");
+
+  function showFlowMsg(html, kind) {
+    if (!rentMsg) return;
+    var bg = kind === "success" ? "#e8f6ee" : (kind === "error" ? "#fdecec" : "#fff8e0");
+    var bd = kind === "success" ? "#1a7a4f" : (kind === "error" ? "#d33" : "#d4af37");
+    var fg = kind === "success" ? "#14201b" : (kind === "error" ? "#7a1d1d" : "#14201b");
+    rentMsg.style.display = "block";
+    rentMsg.style.background = bg;
+    rentMsg.style.borderLeft = "3px solid " + bd;
+    rentMsg.style.color = fg;
+    rentMsg.innerHTML = html;
+  }
+
+  function setBtnLoading(loading) {
+    if (!rentBtn) return;
+    rentBtn.disabled = !!loading;
+    rentBtn.textContent = loading ? "Enviando solicitação..." : "Quero alugar este carro";
+  }
+
+  if (rentBtn) {
+    rentBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      // Captura estado atual
+      var months = parseInt(monthsSel.value, 10) || 1;
+      var startDate = startInput.value || null;
+
+      // Auth check
+      if (!window.ndAuth || typeof window.ndAuth.getSession !== "function") {
+        showFlowMsg(
+          "Sistema de cadastro indisponível no momento. Use o WhatsApp para falar com a gente.",
+          "error",
+        );
+        return;
+      }
+
+      setBtnLoading(true);
+      window.ndAuth.getSession().then(function (session) {
+        if (!session) {
+          // Redireciona pra cadastro com retorno pra esta página
+          var here = "car.html?id=" + car.id;
+          var url = "cadastro.html?redirect=" + encodeURIComponent(here);
+          showFlowMsg(
+            "Você precisa criar uma conta primeiro. Redirecionando para o cadastro...",
+            "info",
+          );
+          setTimeout(function () { window.location.href = url; }, 1200);
+          return null;
+        }
+        // Tem sessão — checa profile
+        return window.ndAuth.getProfile().then(function (profile) {
+          if (!profile) {
+            showFlowMsg("Perfil não encontrado. Faça login novamente.", "error");
+            setBtnLoading(false);
+            return;
+          }
+          var st = profile.verification_status;
+          if (st === "rascunho" || st === "email_verificado") {
+            showFlowMsg(
+              "Você precisa completar seu cadastro de cliente primeiro. Redirecionando...",
+              "info",
+            );
+            setTimeout(function () { window.location.href = "onboarding-cliente.html"; }, 1500);
+            return;
+          }
+          if (st !== "aprovado" && st !== "aprovado_com_ressalvas") {
+            showFlowMsg(
+              "Seu cadastro ainda está em análise (<strong>" + (st || "—") + "</strong>). "
+              + "Você receberá um e-mail quando for aprovado. "
+              + "<a href='status-cadastro.html' style='color:#145f3e;text-decoration:underline;'>Ver status</a>",
+              "info",
+            );
+            setBtnLoading(false);
+            return;
+          }
+          // Aprovado — dispara Edge Function
+          var client = window.ndAuth.client();
+          if (!client || !client.functions || typeof client.functions.invoke !== "function") {
+            showFlowMsg("Erro técnico. Tente novamente em alguns minutos.", "error");
+            setBtnLoading(false);
+            return;
+          }
+          return client.functions.invoke("create-rental-request", {
+            body: {
+              catalog_id: car.id,
+              catalog_name: car.name,
+              desired_start_date: startDate,
+              desired_months: months,
+              city: profile.city || null,
+              reason: null,
+            },
+          }).then(function (resp) {
+            setBtnLoading(false);
+            if (resp.error || (resp.data && resp.data.error)) {
+              var errMsg = (resp.data && resp.data.error) || resp.error.message || "Erro desconhecido";
+              showFlowMsg("Não foi possível enviar a solicitação: " + errMsg, "error");
+              return;
+            }
+            var d = resp.data || {};
+            showFlowMsg(
+              "✅ <strong>Solicitação enviada!</strong> "
+              + "Você receberá um e-mail de confirmação em instantes. "
+              + "O proprietário (ou nossa equipe) responde em até 24h. "
+              + "<br><br><a href='dashboard-cliente.html' style='color:#145f3e;text-decoration:underline;font-weight:600;'>Ver no meu painel →</a>"
+              + (d.rental_request_id ? "<br><small style='color:#5b6b63;'>Referência: " + d.rental_request_id.slice(0, 8) + "</small>" : ""),
+              "success",
+            );
+            rentBtn.disabled = true;
+            rentBtn.textContent = "Solicitação enviada ✓";
+          }).catch(function (err) {
+            setBtnLoading(false);
+            showFlowMsg("Erro ao enviar: " + (err && err.message || String(err)), "error");
+          });
+        });
+      }).catch(function (err) {
+        setBtnLoading(false);
+        showFlowMsg("Erro: " + (err && err.message || String(err)), "error");
+      });
+    });
+  }
+
   /* ---- compartilhar ---- */
   var shareText = "Olha este " + car.name + " na Nomade Drive Brasil — aluguel mensal de carro em Uberlândia.";
   var shareUrl = window.location.href;

@@ -178,8 +178,11 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
   order.forEach(function (id) {
     var c = window.CAR_CATALOG[id];
     if (!c || id === "cybertruck") return;
-    var slide = document.createElement("div");
+    // Slide vira <a> clicável → leva direto pra página do carro (UX #2 backlog mobile)
+    var slide = document.createElement("a");
     slide.className = "hero-slide";
+    slide.href = "car.html?id=" + c.id;
+    slide.setAttribute("aria-label", "Ver detalhes do " + c.name);
     var img = document.createElement("img");
     img.src = "images/car-" + c.id + "-1.jpg";
     img.alt = c.name;
@@ -187,7 +190,7 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     img.onerror = function () { slide.style.display = "none"; };
     var cap = document.createElement("span");
     cap.className = "hero-slide__cap";
-    cap.textContent = c.name;
+    cap.textContent = c.name + " — ver detalhes →";
     slide.appendChild(img);
     slide.appendChild(cap);
     rail.appendChild(slide);
@@ -359,6 +362,11 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 /* ====================================================================
    FORMULÁRIOS — qualquer <form class="wa-form" data-intent="...">
    monta a mensagem e abre WhatsApp (ou e-mail, se não configurado)
+   --------------------------------------------------------------------
+   Backlog #1 (mobile Daniel 2026-05-24):
+   Também POSTa pra Edge Function submit-lead-quote pra captar o lead
+   via e-mail (contato@nomadedrive.com.br) — mesmo que o cliente
+   feche o WhatsApp sem enviar.
    ==================================================================== */
 (function () {
   function labelFor(input) {
@@ -369,6 +377,39 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     }
     return input.getAttribute("name") || "Campo";
   }
+
+  // POST silencioso pra Edge Function (não bloqueia abertura do WhatsApp)
+  function postLeadToBackend(form, payload) {
+    try {
+      var cfg = window.NOMADDRIVE_SUPABASE;
+      if (!cfg || !cfg.url || !cfg.anonKey) return;
+      var url = cfg.url.replace(/\/$/, "") + "/functions/v1/submit-lead-quote";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": cfg.anonKey,
+          "Authorization": "Bearer " + cfg.anonKey,
+        },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (data) {
+          // Marca form como "lead capturado" pra exibir feedback discreto
+          if (data && data.ok && data.captured) {
+            var note = form.querySelector(".form__lead-ok");
+            if (!note) {
+              note = document.createElement("p");
+              note.className = "form__lead-ok";
+              note.style.cssText = "margin:10px 0 0;padding:10px;background:#e8f6ee;border-left:3px solid #1a7a4f;color:#14201b;font-size:13.5px;border-radius:6px;";
+              form.appendChild(note);
+            }
+            note.textContent = "✅ Lead capturado por e-mail também — nossa equipe responde em até 24h, mesmo que você não envie o WhatsApp.";
+          }
+        }).catch(function () { /* silencia */ });
+    } catch (e) { /* silencia */ }
+  }
+
   document.querySelectorAll("form.wa-form").forEach(function (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -383,10 +424,17 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 
       var intent = form.getAttribute("data-intent") || "Contato";
       var lines = [intent, ""];
+      var payload = { intent: intent, source_url: window.location.href };
       inputs.forEach(function (inp) {
         var v = inp.value.trim();
         lines.push("• " + labelFor(inp) + ": " + (v || "—"));
+        if (inp.name) payload[inp.name] = v;
       });
+
+      // POST pro backend (não bloqueia)
+      postLeadToBackend(form, payload);
+
+      // Abre WhatsApp (comportamento original preservado)
       window.open(waHref(lines.join("\n")), "_blank");
     });
   });

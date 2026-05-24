@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="style.css?v=20260524-hero-click" />
 </head>
 <body>
 
@@ -439,12 +439,16 @@
     <div class="section__head">
       <span class="eyebrow">Pedir orçamento</span>
       <h2>Conte suas datas — respondemos rápido</h2>
-      <p>Preencha e o WhatsApp abre com tudo pronto para enviar. Sem cadastro, sem compromisso. Se o WhatsApp ainda não estiver ativo, o envio segue por e-mail.</p>
+      <p>Preencha e o WhatsApp abre com tudo pronto para enviar. Sem cadastro, sem compromisso. <strong>Seus dados também chegam à nossa equipe por e-mail automaticamente</strong> — então mesmo se você não enviar o WhatsApp, a gente responde.</p>
     </div>
     <div class="hero-media">
       <img src="images/hero-orcamento.jpg" alt="Cliente recebendo as chaves de um carro para locação mensal em Uberlândia" loading="lazy" decoding="async" />
     </div>
     <form class="form wa-form" id="form-orcamento" data-intent="Quero alugar um carro (pedido de orçamento)" novalidate>
+      <!-- honeypot: bots costumam preencher; deve ficar escondido pro humano -->
+      <label style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+        <span>Empresa (não preencha)</span><input type="text" name="company" tabindex="-1" autocomplete="off" />
+      </label>
       <div class="form__grid">
         <label class="field"><span>Seu nome *</span><input type="text" name="nome" required /></label>
         <label class="field"><span>WhatsApp ou e-mail *</span><input type="text" name="contato" required /></label>
@@ -604,6 +608,6 @@
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script src="car-data.js"></script>
-<script src="script.js"></script>
+<script src="script.js?v=20260524-hero-click"></script>
 </body>
 </html>

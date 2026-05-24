@@ -92,3 +92,45 @@ Depois de fechar a Fase 41b (e-mail D-7 automático de renovação, ~1h) que est
 - **Fase 42 — Banner clicável + Fluxo alugar com check de cadastro** (3 ações combinadas)
 
 Daniel: se quiser priorizar diferente, manda a letra. Senão, vou na ordem acima.
+
+---
+
+## ✅ STATUS DE EXECUÇÃO (2026-05-24)
+
+### Item #1 — Form orçamento fallback e-mail ✅
+- Edge Function `submit-lead-quote` criada (anônima, com honeypot anti-bot)
+- `script.js` wa-form handler POSTa pro backend antes de abrir WhatsApp
+- E-mail HTML rico vai pra `contato@nomadedrive.com.br` com todos os campos do form
+- `index.html` honeypot field oculto adicionado + texto explicativo atualizado
+- Feedback discreto pro usuário quando lead é capturado
+- Log em `admin_audit_logs` (action=lead_quote_submitted)
+
+### Item #2 — Banner carrossel clicável ✅
+- `script.js` — slides do hero viraram `<a href="car.html?id=...">`
+- Vai direto pra página do carro específico (melhor que só pra lista)
+- `style.css` — hover effect (zoom 1.02 + cap dourada)
+- Cache-bust `?v=20260524-hero-click` no `index.html`
+
+### Item #3 — Fluxo "Quero alugar este carro" com check cadastro ✅
+- Botão verde "Quero alugar este carro" adicionado em `car.html` (acima do WhatsApp CTA)
+- `car.js` checa fluxo completo:
+  - Não logado → `cadastro.html?redirect=car.html?id=X`
+  - Rascunho/email_verificado → `onboarding-cliente.html`
+  - Em análise/pendente → `status-cadastro.html` com mensagem
+  - Aprovado → chama Edge Function `create-rental-request`
+- Edge Function `create-rental-request` criada:
+  - Valida verification_status='aprovado'
+  - Cria row em `rental_requests`
+  - E-mail #1 pro owner (se vehicle_id mapeado) OU pro staff
+  - E-mail #2 pro cliente (confirmação "Recebemos sua solicitação")
+- Log em `admin_audit_logs` (action=rental_request_created)
+
+## 🚀 DEPLOY
+
+Edge Functions novas:
+```bash
+supabase functions deploy submit-lead-quote --no-verify-jwt
+supabase functions deploy create-rental-request
+```
+
+> ⚠️ `submit-lead-quote` deploy com `--no-verify-jwt` (é form público da landing).

@@ -161,8 +161,10 @@
               <div class="car-book__sumrow"><span>Devolução estimada</span><strong id="bookEnd">—</strong></div>
               <div class="car-book__sumrow"><span>Total estimado</span><strong id="bookTotal">—</strong></div>
             </div>
-            <a href="#" class="btn btn--solid btn--block" id="bookCta" target="_blank" rel="noopener">Pedir orçamento no WhatsApp</a>
+            <button type="button" class="btn btn--solid btn--block" id="rentNowCta" style="background:#145f3e;border-color:#145f3e;margin-bottom:8px;">Quero alugar este carro</button>
+            <a href="#" class="btn btn--outline btn--block" id="bookCta" target="_blank" rel="noopener">Pedir orçamento no WhatsApp</a>
             <p class="car-book__note">Tudo incluso, sob confirmação. Disponibilidade, caução, seguro e preço final são confirmados por escrito.</p>
+            <div id="rentFlowMsg" style="display:none;margin-top:10px;padding:12px;border-radius:8px;font-size:13.5px;line-height:1.5;"></div>
 
             <div class="car-share">
               <strong>Compartilhar este carro</strong>
@@ -229,7 +231,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
+<script src="nd-modal.js"></script>
 <script src="script.js"></script>
-<script src="car.js"></script>
+<script src="car.js?v=20260524-rent-flow"></script>
 </body>
 </html>
