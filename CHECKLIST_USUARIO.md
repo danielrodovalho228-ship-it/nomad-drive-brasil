@@ -1,32 +1,31 @@
 # Checklist Pessoal — Daniel / Nomade Drive Brasil
 
-> **Última atualização:** 2026-05-23 (commit `3ae3b40`)
+> **Última atualização:** 2026-05-23 (commit `ef02707`)
 > Marque cada item conforme for fazendo.
 
 ---
 
-## 🔴 URGENTE — Próximos 10 minutos
+## 🔴 URGENTE — Re-deploys novos (5 min)
 
-### Setup final do MVP
+### Apareceram depois do Pix Automático
 
-- [ ] **1. Verificar Edge Function `consulta-multas`**
-  - Supabase Dashboard → Edge Functions → `consulta-multas`
-  - Buscar no código (Ctrl+F): `const INFOSIMPLES_URL`
-  - Se NÃO encontrar: colar conteúdo de [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/consulta-multas/index.ts) → Deploy
+- [ ] **A. Re-deploy `stripe-checkout`** (mudei pra suportar Pix Automático)
+  - Supabase Dashboard → Edge Functions → `stripe-checkout`
+  - Apaga TUDO no editor
+  - Cola conteúdo de [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/stripe-checkout/index.ts)
+  - Deploy
 
-- [ ] **2. Verificar Edge Function `installation-checkout`**
-  - Supabase Dashboard → Edge Functions → `installation-checkout`
-  - Buscar: `const SUPER_ADMIN_EMAIL`
-  - Se NÃO encontrar: colar [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/installation-checkout/index.ts) → Deploy
+- [ ] **B. Re-deploy `stripe-webhook`** (novo handler `mandate.updated`)
+  - Mesmo processo — [github raw](https://raw.githubusercontent.com/danielrodovalho228-ship-it/nomad-drive-brasil/main/supabase/functions/stripe-webhook/index.ts)
 
-- [ ] **3. Ativar PIX no Stripe**
-  - Stripe Dashboard → Settings → Payment methods → Brazil → PIX → **Enable**
+---
 
-- [ ] **4. Validar login**
-  - Aba anônima (Ctrl+Shift+N)
-  - `nomadedrive.com.br/login.html`
-  - `qa-cliente@nomadedrive.com.br` / `Teste123`
-  - Esperado: cair no painel cliente "Olá Carlos!"
+## ✅ URGENTE — JÁ FEITO
+
+- [x] **1. Verificar Edge Function `consulta-multas`**
+- [x] **2. Verificar Edge Function `installation-checkout`**
+- [x] **3. PIX no Stripe** — descoberto que precisa ativação via Stripe Support. Integração técnica feita (Pix Automático). Pedir ativação à Stripe quando puder.
+- [x] **4. Validar login** `qa-cliente@nomadedrive.com.br` / `Teste123`
 
 ---
 
@@ -114,11 +113,16 @@
 
 ### Edge Functions deployadas
 - [x] `close-rental` re-deployada com código novo
+- [x] `consulta-multas` deployada com código real (Fase 30 / Infosimples)
+- [x] `installation-checkout` deployada com código real (Fase 28.3)
 
 ### Validações QA já feitas
 - [x] Smoke test: handler de cadastros dispara e-mail
 - [x] Bug crítico de cancelamento de assinatura corrigido (Fase 22)
 - [x] Reset de senhas pra Teste123 (via SQL)
+- [x] Login validado `qa-cliente@nomadedrive.com.br` / `Teste123`
+- [x] PIX no Stripe: integração técnica + Pix Automático implementados.
+      Ativação na conta depende de pedido à Stripe Support (não bloqueia operação com cartão)
 
 ---
 
@@ -126,12 +130,12 @@
 
 | Categoria | Total | Feito | Falta |
 |---|---|---|---|
-| 🔴 Urgente | 4 | 0 | 4 |
+| 🔴 Urgente — Re-deploys novos | 2 | 0 | 2 |
 | 🟡 Esta semana | 6 | 0 | 6 |
 | 🟢 Quando quiser | 7 | 0 | 7 |
-| ✅ Já feito | 15 | 15 | 0 |
+| ✅ Já feito | 19 | 19 | 0 |
 
-**Próxima ação:** Item 1 acima (verificar `consulta-multas` no Supabase).
+**Próxima ação:** Item A acima (re-deploy `stripe-checkout` por causa do Pix Automático).
 
 ---
 
