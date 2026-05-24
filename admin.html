@@ -340,12 +340,66 @@
 
     <!-- LEADS -->
     <section class="admin-block" id="leads">
-      <h2>Leads de locação</h2>
-      <p class="note">Solicitações de orçamento enviadas pelos clientes. Altere o status para conduzir o atendimento.</p>
+      <h2>📩 Leads de locação</h2>
+      <p class="note">Pipeline de leads do form da landing + pedidos de clientes logados (rental_requests). Mova pelo funil pra acompanhar conversão.</p>
+
+      <!-- KPIs do funil -->
+      <div class="leads-kpis" id="leadsKpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0 18px;">
+        <div class="lead-kpi" data-status="novo" style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 14px;border-radius:8px;cursor:pointer;transition:transform .15s;">
+          <div style="font-size:12px;color:#5b6b63;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">🆕 Novos</div>
+          <div style="font-size:24px;font-weight:800;color:#92400e;" id="kpiNovo">—</div>
+          <div style="font-size:11px;color:#5b6b63;" id="kpiNovoSla">—</div>
+        </div>
+        <div class="lead-kpi" data-status="contatado" style="background:#dbeafe;border-left:4px solid #3b82f6;padding:12px 14px;border-radius:8px;cursor:pointer;transition:transform .15s;">
+          <div style="font-size:12px;color:#5b6b63;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">📞 Contatados</div>
+          <div style="font-size:24px;font-weight:800;color:#1e40af;" id="kpiContatado">—</div>
+        </div>
+        <div class="lead-kpi" data-status="qualificado" style="background:#e0e7ff;border-left:4px solid #6366f1;padding:12px 14px;border-radius:8px;cursor:pointer;transition:transform .15s;">
+          <div style="font-size:12px;color:#5b6b63;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">✓ Qualificados</div>
+          <div style="font-size:24px;font-weight:800;color:#3730a3;" id="kpiQualificado">—</div>
+        </div>
+        <div class="lead-kpi" data-status="convertido" style="background:#d1fae5;border-left:4px solid #10b981;padding:12px 14px;border-radius:8px;cursor:pointer;transition:transform .15s;">
+          <div style="font-size:12px;color:#5b6b63;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">💰 Convertidos</div>
+          <div style="font-size:24px;font-weight:800;color:#065f46;" id="kpiConvertido">—</div>
+          <div style="font-size:11px;color:#5b6b63;" id="kpiConvRate">—</div>
+        </div>
+        <div class="lead-kpi" data-status="perdido" style="background:#fee2e2;border-left:4px solid #ef4444;padding:12px 14px;border-radius:8px;cursor:pointer;transition:transform .15s;">
+          <div style="font-size:12px;color:#5b6b63;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">✗ Perdidos</div>
+          <div style="font-size:24px;font-weight:800;color:#991b1b;" id="kpiPerdido">—</div>
+        </div>
+      </div>
+
+      <!-- Filtros + busca -->
+      <div class="admin-card" style="margin-bottom:12px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <strong style="margin-right:6px;">Filtrar:</strong>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter is-active" data-filter="all">Todos</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="novo">🆕 Novos</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="contatado">📞 Contatados</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="qualificado">✓ Qualificados</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="convertido">💰 Convertidos</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="perdido">✗ Perdidos</button>
+          <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="sla_critico" style="border-color:#dc2626;color:#dc2626;">⏰ SLA crítico</button>
+          <input type="search" id="leadsSearch" placeholder="Buscar nome ou contato..." style="flex:1;min-width:200px;padding:8px 12px;border:1px solid #cde0d4;border-radius:6px;font-size:14px;" />
+          <button type="button" class="btn btn--outline btn--sm" id="leadsReload">🔄 Atualizar</button>
+        </div>
+      </div>
+
+      <!-- Lista de leads (landing form) -->
       <div class="admin-card">
+        <h3 class="block-title">📥 Leads do form da landing</h3>
+        <div id="leadsList" style="display:flex;flex-direction:column;gap:10px;">
+          <p class="note">Carregando leads...</p>
+        </div>
+      </div>
+
+      <!-- Lista antiga (rental_requests = clientes logados pedindo carro específico) -->
+      <div class="admin-card" style="margin-top:14px;">
+        <h3 class="block-title">👤 Pedidos de clientes logados (rental_requests)</h3>
+        <p class="note">Solicitações criadas via car.html → "Quero alugar este carro" (Backlog #3).</p>
         <table class="admin-table">
           <thead><tr><th>Data</th><th>Cidade</th><th>Duração</th><th>Início desejado</th><th>Status</th></tr></thead>
-          <tbody id="leadsList"><tr><td colspan="5">Carregando leads...</td></tr></tbody>
+          <tbody id="leadsListRR"><tr><td colspan="5">Carregando...</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -1892,9 +1946,300 @@
     }).catch(function (e) { fail(e); });
   }
 
+  /* ====================================================================
+     Fase 42 — Painel de Leads (form da landing → tabela leads)
+     ==================================================================== */
+  var _leadsCache = [];
+  var _leadsFilter = "all";
+  var _leadsSearch = "";
+
+  function leadStatusBadge(st) {
+    var map = {
+      novo: { c: "#92400e", bg: "#fef3c7", l: "🆕 Novo" },
+      contatado: { c: "#1e40af", bg: "#dbeafe", l: "📞 Contatado" },
+      qualificado: { c: "#3730a3", bg: "#e0e7ff", l: "✓ Qualificado" },
+      convertido: { c: "#065f46", bg: "#d1fae5", l: "💰 Convertido" },
+      perdido: { c: "#991b1b", bg: "#fee2e2", l: "✗ Perdido" }
+    };
+    var m = map[st] || { c: "#333", bg: "#eee", l: st };
+    return '<span style="display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;background:' + m.bg + ';color:' + m.c + ';">' + m.l + '</span>';
+  }
+
+  function leadSlaBadge(sla, hours) {
+    if (!sla) return "";
+    var map = {
+      ok: { c: "#065f46", bg: "#d1fae5", t: "⏱ SLA ok" },
+      atrasado: { c: "#92400e", bg: "#fef3c7", t: "⏰ Atrasado" },
+      "crítico": { c: "#991b1b", bg: "#fee2e2", t: "🚨 SLA crítico" }
+    };
+    var m = map[sla] || { c: "#333", bg: "#eee", t: sla };
+    return '<span style="display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;background:' + m.bg + ';color:' + m.c + ';margin-left:6px;">' + m.t + ' (' + hours + 'h)</span>';
+  }
+
+  function renderLeadsKpis(rows) {
+    var counts = { novo: 0, contatado: 0, qualificado: 0, convertido: 0, perdido: 0 };
+    var slaCriticoCount = 0;
+    rows.forEach(function (r) {
+      if (counts.hasOwnProperty(r.status)) counts[r.status]++;
+      if (r.status === "novo" && r.sla_status === "crítico") slaCriticoCount++;
+    });
+    var ids = ["kpiNovo", "kpiContatado", "kpiQualificado", "kpiConvertido", "kpiPerdido"];
+    var keys = ["novo", "contatado", "qualificado", "convertido", "perdido"];
+    ids.forEach(function (id, i) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = counts[keys[i]];
+    });
+    var slaEl = document.getElementById("kpiNovoSla");
+    if (slaEl) slaEl.textContent = slaCriticoCount > 0 ? (slaCriticoCount + " crítico(s)") : "todos no SLA";
+    var convRateEl = document.getElementById("kpiConvRate");
+    var total = counts.novo + counts.contatado + counts.qualificado + counts.convertido + counts.perdido;
+    if (convRateEl && total > 0) {
+      var rate = ((counts.convertido / total) * 100).toFixed(1);
+      convRateEl.textContent = rate + "% do total";
+    } else if (convRateEl) {
+      convRateEl.textContent = "—";
+    }
+  }
+
+  function filterLeads(rows) {
+    var q = (_leadsSearch || "").toLowerCase().trim();
+    return rows.filter(function (r) {
+      if (_leadsFilter !== "all") {
+        if (_leadsFilter === "sla_critico") {
+          if (!(r.status === "novo" && r.sla_status === "crítico")) return false;
+        } else if (r.status !== _leadsFilter) {
+          return false;
+        }
+      }
+      if (q) {
+        var hay = ((r.name || "") + " " + (r.contact || "") + " " + (r.city || "") + " " + (r.obs || "")).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderLeadCard(r) {
+    var card = document.createElement("div");
+    card.className = "lead-card";
+    card.style.cssText = "background:#fff;border:1px solid #e5e7eb;border-left:3px solid " +
+      (r.status === "novo" ? "#f59e0b" :
+       r.status === "contatado" ? "#3b82f6" :
+       r.status === "qualificado" ? "#6366f1" :
+       r.status === "convertido" ? "#10b981" :
+       r.status === "perdido" ? "#ef4444" : "#999") +
+      ";border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;";
+
+    var details = [];
+    if (r.city) details.push("📍 " + r.city);
+    if (r.desired_months) details.push("📆 " + r.desired_months + "m");
+    if (r.desired_start_date) details.push("🚗 a partir de " + fmtDate(r.desired_start_date));
+    if (r.category) details.push("⭐ " + r.category);
+    if (r.indication) details.push("👋 " + r.indication);
+
+    var body = '<div>'
+      + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">'
+      +   '<strong style="font-size:15.5px;color:#111;">' + (r.name || "—") + '</strong>'
+      +   leadStatusBadge(r.status)
+      +   (r.status === "novo" ? leadSlaBadge(r.sla_status, r.age_hours) : "")
+      + '</div>'
+      + '<div style="font-size:13.5px;color:#3a4945;margin-bottom:4px;">'
+      +   '<a href="' + (r.contact_type === "email" ? ("mailto:" + r.contact) : "#") + '" style="color:#0f5132;text-decoration:none;font-weight:600;">' + r.contact + '</a>'
+      +   ' <span style="color:#8a9591;font-size:12px;">(' + (r.contact_type || "—") + ')</span>'
+      + '</div>'
+      + (details.length ? '<div style="font-size:12.5px;color:#5b6b63;margin-bottom:6px;">' + details.join(" · ") + '</div>' : "")
+      + (r.obs ? '<div style="font-size:12.5px;color:#3a4945;padding:6px 10px;background:#fffbe6;border-left:2px solid #d4af37;border-radius:4px;margin:6px 0;">"' + r.obs + '"</div>' : "")
+      + (r.notes ? '<details style="margin-top:6px;"><summary style="cursor:pointer;font-size:12px;color:#5b6b63;">📋 Anotações da equipe</summary><pre style="font-size:11.5px;color:#3a4945;white-space:pre-wrap;background:#f4f5f7;padding:8px;border-radius:4px;margin-top:6px;">' + r.notes + '</pre></details>' : "")
+      + (r.converted_protocol ? '<div style="margin-top:6px;font-size:12px;color:#065f46;font-weight:600;">→ Convertido em reserva ' + r.converted_protocol + (r.converted_monthly_price ? ' (' + fmtMoney(r.converted_monthly_price) + '/mês)' : '') + '</div>' : "")
+      + '<div style="font-size:11px;color:#8a9591;margin-top:6px;">Recebido ' + fmtDate(r.created_at) + (r.assigned_to_name ? ' · Atribuído a ' + r.assigned_to_name : '') + '</div>'
+      + '</div>';
+
+    // Botões de ação (transições)
+    var actions = '<div style="display:flex;flex-direction:column;gap:6px;min-width:130px;">';
+    if (r.status === "novo") {
+      actions += '<button class="btn btn--solid btn--sm leadAct" data-id="' + r.id + '" data-to="contatado">📞 Marcar contatado</button>';
+      actions += '<button class="btn btn--outline btn--sm leadAct" data-id="' + r.id + '" data-to="perdido">✗ Perdido</button>';
+    } else if (r.status === "contatado") {
+      actions += '<button class="btn btn--solid btn--sm leadAct" data-id="' + r.id + '" data-to="qualificado">✓ Qualificar</button>';
+      actions += '<button class="btn btn--outline btn--sm leadAct" data-id="' + r.id + '" data-to="perdido">✗ Perdido</button>';
+    } else if (r.status === "qualificado") {
+      actions += '<button class="btn btn--solid btn--sm leadAct" data-id="' + r.id + '" data-to="convertido" style="background:#065f46;border-color:#065f46;">💰 Converter</button>';
+      actions += '<button class="btn btn--outline btn--sm leadAct" data-id="' + r.id + '" data-to="perdido">✗ Perdido</button>';
+    } else if (r.status === "convertido") {
+      actions += '<span style="font-size:12px;color:#065f46;font-weight:700;text-align:center;padding:8px;">✅ Convertido</span>';
+    } else if (r.status === "perdido") {
+      actions += '<button class="btn btn--outline btn--sm leadAct" data-id="' + r.id + '" data-to="novo" style="font-size:11px;">↩ Reabrir</button>';
+    }
+    actions += '<button class="btn btn--outline btn--sm leadNote" data-id="' + r.id + '" style="font-size:11px;">📝 Anotar</button>';
+    actions += '</div>';
+
+    card.innerHTML = body + actions;
+    return card;
+  }
+
+  function bindLeadActions() {
+    document.querySelectorAll(".leadAct").forEach(function (btn) {
+      btn.onclick = function () {
+        var id = btn.getAttribute("data-id");
+        var to = btn.getAttribute("data-to");
+        handleLeadStatusChange(id, to);
+      };
+    });
+    document.querySelectorAll(".leadNote").forEach(function (btn) {
+      btn.onclick = function () {
+        var id = btn.getAttribute("data-id");
+        handleLeadAddNote(id);
+      };
+    });
+  }
+
+  function handleLeadStatusChange(leadId, newStatus) {
+    var modal = window.ndModal || { prompt: function (msg) { return Promise.resolve(prompt(msg)); }, confirm: function (msg) { return Promise.resolve(confirm(msg)); }, alert: function (m) { alert(m); return Promise.resolve(); } };
+    var c = a.client();
+    if (!c) return;
+
+    function callRpc(notes, lostReason, bookingId) {
+      return c.rpc("update_lead_status", {
+        p_lead_id: leadId,
+        p_new_status: newStatus,
+        p_notes: notes || null,
+        p_lost_reason: lostReason || null,
+        p_converted_booking_id: bookingId || null
+      }).then(function (resp) {
+        if (resp.error) {
+          modal.alert({ title: "Erro ao atualizar lead", body: resp.error.message, icon: "⚠️" });
+          return;
+        }
+        loadLeadsRich();
+      });
+    }
+
+    if (newStatus === "perdido") {
+      modal.prompt({ title: "Marcar como perdido", body: "Motivo da perda (obrigatório, mín 3 chars):", placeholder: "Ex: não retornou contato, escolheu concorrente, fora do perfil...", icon: "✗" }).then(function (motivo) {
+        if (!motivo || motivo.trim().length < 3) return;
+        modal.prompt({ title: "Anotação", body: "Quer adicionar alguma observação? (opcional)", placeholder: "Deixe em branco pra pular" }).then(function (notes) {
+          callRpc(notes, motivo, null);
+        });
+      });
+    } else if (newStatus === "convertido") {
+      modal.prompt({ title: "Converter em reserva", body: "Cole o ID (UUID) da booking criada pra este lead. Crie a reserva primeiro na aba 'Reservas'.", placeholder: "uuid completo da booking", icon: "💰" }).then(function (bId) {
+        if (!bId || bId.trim().length < 8) {
+          modal.alert({ title: "ID inválido", body: "Crie a reserva primeiro em 'Reservas' e cole o UUID aqui." });
+          return;
+        }
+        modal.prompt({ title: "Anotação", body: "Observação sobre a conversão (opcional):" }).then(function (notes) {
+          callRpc(notes, null, bId.trim());
+        });
+      });
+    } else {
+      modal.prompt({ title: "Anotação", body: "Adicionar alguma observação sobre essa transição? (opcional)" }).then(function (notes) {
+        callRpc(notes, null, null);
+      });
+    }
+  }
+
+  function handleLeadAddNote(leadId) {
+    var modal = window.ndModal || { prompt: function (msg) { return Promise.resolve(prompt(msg)); }, alert: function (m) { alert(m); return Promise.resolve(); } };
+    var c = a.client();
+    if (!c) return;
+    modal.prompt({ title: "Adicionar anotação", body: "O que você quer registrar sobre este lead?", placeholder: "Ex: cliente pediu pra ligar amanhã às 14h", icon: "📝" }).then(function (note) {
+      if (!note || note.trim().length < 1) return;
+      // Pega lead atual pra acrescentar nota mantendo status
+      var cur = _leadsCache.find(function (l) { return l.id === leadId; });
+      if (!cur) return;
+      c.rpc("update_lead_status", {
+        p_lead_id: leadId,
+        p_new_status: cur.status,
+        p_notes: note,
+        p_lost_reason: null,
+        p_converted_booking_id: null
+      }).then(function (resp) {
+        if (resp.error) { modal.alert("Erro: " + resp.error.message); return; }
+        loadLeadsRich();
+      });
+    });
+  }
+
+  function renderLeadsList() {
+    var box = document.getElementById("leadsList");
+    if (!box) return;
+    var filtered = filterLeads(_leadsCache);
+    if (!filtered.length) {
+      box.innerHTML = '<p class="note" style="padding:14px;text-align:center;color:#8a9591;">Nenhum lead nessa visão.</p>';
+      return;
+    }
+    box.innerHTML = "";
+    filtered.forEach(function (r) { box.appendChild(renderLeadCard(r)); });
+    bindLeadActions();
+  }
+
+  function loadLeadsRich() {
+    var c = a.client();
+    var box = document.getElementById("leadsList");
+    if (!c || !box) return;
+    box.innerHTML = '<p class="note">Carregando...</p>';
+    c.from("leads_enriched")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(200)
+      .then(function (resp) {
+        if (resp.error) {
+          if (a.isAuthError && a.isAuthError(resp.error)) {
+            a.redirectToLogin("Sessão expirada");
+            return;
+          }
+          box.innerHTML = '<p class="note" style="color:#b00020;">Erro ao carregar leads: ' + (resp.error.message || "—") + '</p>';
+          return;
+        }
+        _leadsCache = resp.data || [];
+        renderLeadsKpis(_leadsCache);
+        renderLeadsList();
+      });
+  }
+
+  // Bind dos filtros + KPIs + busca + reload (uma vez)
+  (function bindLeadsControls() {
+    document.querySelectorAll(".leadsFilter").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".leadsFilter").forEach(function (b) { b.classList.remove("is-active"); });
+        btn.classList.add("is-active");
+        _leadsFilter = btn.getAttribute("data-filter");
+        renderLeadsList();
+      });
+    });
+    document.querySelectorAll(".lead-kpi").forEach(function (kpi) {
+      kpi.addEventListener("click", function () {
+        var st = kpi.getAttribute("data-status");
+        if (!st) return;
+        _leadsFilter = st;
+        document.querySelectorAll(".leadsFilter").forEach(function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-filter") === st);
+        });
+        renderLeadsList();
+        // Scroll suave pra lista
+        var listEl = document.getElementById("leadsList");
+        if (listEl) listEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    var search = document.getElementById("leadsSearch");
+    if (search) {
+      var t;
+      search.addEventListener("input", function () {
+        clearTimeout(t);
+        t = setTimeout(function () {
+          _leadsSearch = search.value;
+          renderLeadsList();
+        }, 200);
+      });
+    }
+    var reload = document.getElementById("leadsReload");
+    if (reload) reload.addEventListener("click", loadLeadsRich);
+  })();
+
   function loadSections() {
+    // Fase 42 — rental_requests vai no quadro de baixo (leadsListRR)
     loadSection({
-      table: "rental_requests", tbodyId: "leadsList", statusField: "status",
+      table: "rental_requests", tbodyId: "leadsListRR", statusField: "status",
       columns: [
         function (r) { return fmtDate(r.created_at); },
         function (r) { return r.city || "—"; },
@@ -1902,6 +2247,8 @@
         function (r) { return fmtDate(r.desired_start_date); }
       ]
     });
+    // Fase 42 — leads novos (form landing) vão no quadro rico
+    loadLeadsRich();
     loadSection({
       table: "bookings", tbodyId: "reservasList", statusField: "status",
       select: "*, vehicles(make,model,year_model)",

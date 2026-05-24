@@ -201,16 +201,66 @@ Deno.serve(async (req) => {
       STAFF_EMAIL, tpl.subject, tpl.html, tpl.text, tpl.replyTo,
     );
 
-    // Log no audit pra rastreabilidade (best-effort)
+    // ============================================================
+    // Fase 42 — INSERIR também em public.leads (pipeline no admin)
+    // ============================================================
+    let leadId: string | null = null;
     try {
       const url = Deno.env.get("SUPABASE_URL")!;
       const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
       const admin = createClient(url, serviceKey);
+
+      // Normaliza duração (form manda string "1", "2", "" pra "+6")
+      let monthsNum: number | null = null;
+      if (duracao != null && String(duracao).trim() !== "") {
+        const n = parseInt(String(duracao).trim(), 10);
+        if (!isNaN(n) && n > 0) monthsNum = n;
+      }
+
+      // Anti-duplicata "burra": mesmo contato + mesma origem nas últimas 24h?
+      // Não bloqueia inserir — só marca duplicata em notes pra equipe ver.
+      const { data: dups } = await admin
+        .from("leads")
+        .select("id, created_at")
+        .ilike("contact", String(contato).trim())
+        .gte("created_at", new Date(Date.now() - 24 * 3600 * 1000).toISOString())
+        .limit(1);
+      const isDup = Array.isArray(dups) && dups.length > 0;
+
+      const { data: leadIns, error: leadErr } = await admin
+        .from("leads")
+        .insert({
+          name: String(nome).trim().slice(0, 200),
+          contact: String(contato).trim().slice(0, 200),
+          city: cidade ? String(cidade).trim().slice(0, 100) : null,
+          desired_start_date: data && String(data).trim().match(/^\d{4}-\d{2}-\d{2}$/) ? String(data).trim() : null,
+          desired_months: monthsNum,
+          desired_devolucao: devolucao && String(devolucao).trim().match(/^\d{4}-\d{2}-\d{2}$/) ? String(devolucao).trim() : null,
+          category: categoria ? String(categoria).trim().slice(0, 50) : null,
+          indication: indicacao ? String(indicacao).trim().slice(0, 200) : null,
+          obs: obs ? String(obs).trim().slice(0, 2000) : null,
+          source: "landing_form",
+          source_url: source_url ? String(source_url).trim().slice(0, 500) : null,
+          intent: intent ? String(intent).trim().slice(0, 200) : null,
+          status: "novo",
+          notes: isDup ? "⚠️ Possível duplicata (mesmo contato nas últimas 24h)" : null,
+        })
+        .select("id")
+        .single();
+
+      if (leadErr) {
+        // Não derruba — só loga
+        console.error("Lead insert failed:", leadErr.message);
+      } else {
+        leadId = leadIns?.id ?? null;
+      }
+
+      // Log audit
       await admin.from("admin_audit_logs").insert({
         admin_id: null,
         action: "lead_quote_submitted",
         target_type: "leads",
-        target_id: null,
+        target_id: leadId,
         metadata_json: {
           source: "landing_form",
           nome: String(nome).slice(0, 100),
@@ -221,22 +271,26 @@ Deno.serve(async (req) => {
           source_url,
           email_sent: sent.ok,
           email_error: sent.error,
+          lead_inserted: leadId !== null,
+          is_duplicate: isDup,
         },
       });
     } catch (e) {
-      // ignora — log é best-effort
+      // ignora — log/insert é best-effort
+      console.error("Lead persist error:", (e as Error)?.message);
     }
 
     if (!sent.ok) {
       // Retorna 200 com error pra UI mostrar fallback (não derrubar o lead)
       return json({
         ok: false,
-        captured: false,
+        captured: leadId !== null,
+        lead_id: leadId,
         error: "Não foi possível enviar e-mail: " + sent.error,
       });
     }
 
-    return json({ ok: true, captured: true });
+    return json({ ok: true, captured: true, lead_id: leadId });
 
   } catch (e) {
     return json({ error: (e as Error)?.message ?? "Erro desconhecido." }, 500);
