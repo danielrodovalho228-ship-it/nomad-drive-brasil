@@ -99,6 +99,9 @@
           <p class="form__err" id="docErr" hidden></p>
         </section>
 
+        <!-- Fase 43 — Card Nomade Gold (loyalty tier) -->
+        <div id="loyaltyContainer"></div>
+
         <!-- Fase 41 — Renovação 1-clique (D-7) -->
         <div id="renewalContainer"></div>
 
@@ -1519,32 +1522,48 @@
   function renderRenewalCard(op) {
     var urgency = op.days_remaining <= 3 ? '🚨 ÚLTIMOS DIAS' : '⏰ TERMINA EM BREVE';
     var vehName = [op.make, op.model, op.year_model].filter(Boolean).join(' ');
+    // Fase 43: desconto tier-aware vem do view
+    var discPct = op.renewal_discount_pct || 5;
+    var tier = op.client_tier || 'bronze';
+    var tierBadge = '';
+    if (tier !== 'bronze') {
+      var tierLabel = { silver: '🥈 Silver', gold: '🥇 Gold', platinum: '💎 Platinum' }[tier] || tier;
+      tierBadge = ' <span style="display:inline-block;background:#fff;color:#111;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;margin-left:4px;">' + tierLabel + '</span>';
+    }
+    var depositLine = '';
+    if (op.deposit_reduction_pct > 0) {
+      depositLine = '<small style="display:block;color:#0f5132;margin-top:2px;font-weight:600;">🛡️ + caução reduzida em ' + op.deposit_reduction_pct + '% (benefício ' + tier + ')</small>';
+    }
     return '<div class="renewal-card">' +
       '<span class="renewal-card__urgency">' + urgency + '</span>' +
       '<h3 class="renewal-card__title">Sua locação termina em ' + op.days_remaining + ' dia' + (op.days_remaining === 1 ? '' : 's') + '</h3>' +
       '<p class="renewal-card__vehicle">🚗 ' + vehName + (op.license_plate ? ' · ' + op.license_plate : '') + ' · até ' + new Date(op.end_date).toLocaleDateString('pt-BR') + '</p>' +
       '<div class="renewal-card__offer">' +
-        '<span class="renewal-card__discount">5% OFF na renovação</span>' +
+        '<span class="renewal-card__discount">' + discPct + '% OFF na renovação' + tierBadge + '</span>' +
         '<br>' +
         '<span class="renewal-card__price-old">' + fmtBRL(op.monthly_price) + '/mês</span>' +
         ' <span class="renewal-card__price-new">' + fmtBRL(op.discounted_price) + '/mês</span>' +
         '<small style="display:block;color:#5b6b63;margin-top:4px;">Economize ' + fmtBRL(op.discount_amount) + ' no 1º mês</small>' +
+        depositLine +
       '</div>' +
       '<div class="renewal-card__actions">' +
-        '<button class="renewal-card__btn-primary" data-renew="' + op.booking_id + '" data-months="1">Renovar 1 mês</button>' +
-        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="2">2 meses</button>' +
-        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="3">3 meses</button>' +
+        '<button class="renewal-card__btn-primary" data-renew="' + op.booking_id + '" data-months="1" data-disc="' + discPct + '">Renovar 1 mês</button>' +
+        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="2" data-disc="' + discPct + '">2 meses</button>' +
+        '<button class="renewal-card__btn-secondary" data-renew="' + op.booking_id + '" data-months="3" data-disc="' + discPct + '">3 meses</button>' +
       '</div>' +
       '<button class="renewal-card__decline" data-decline="' + op.booking_id + '">Não, obrigado — vou devolver</button>' +
       '</div>';
   }
 
   async function handleRenew(bookingId, months) {
+    // Pega o desconto atual do botão clicado (data-disc ou fallback 5)
+    var discBtn = document.querySelector('[data-renew="' + bookingId + '"]');
+    var disc = discBtn && discBtn.getAttribute('data-disc') ? discBtn.getAttribute('data-disc') : '5';
     if (!window.ndModal) {
-      if (!confirm('Renovar por ' + months + ' meses com 5% off?')) return;
+      if (!confirm('Renovar por ' + months + ' meses com ' + disc + '% off?')) return;
     } else {
       var ok = await window.ndModal.confirm({
-        title: 'Renovar por ' + months + ' ' + (months === 1 ? 'mês' : 'meses') + ' com 5% off?',
+        title: 'Renovar por ' + months + ' ' + (months === 1 ? 'mês' : 'meses') + ' com ' + disc + '% off?',
         body: 'Uma nova reserva será criada começando assim que sua atual terminar. Você paga a 1ª mensalidade nova com desconto.',
         okText: '✅ Sim, renovar',
         cancelText: 'Voltar',
@@ -1583,9 +1602,87 @@
     });
   }
 
+  /* ====================================================================
+     Fase 43 — Card Nomade Gold (loyalty tier)
+     ==================================================================== */
+  function loadLoyalty() {
+    var sb = getSb(); if (!sb) return;
+    var container = $('loyaltyContainer'); if (!container) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+      sb.rpc('get_client_loyalty_tier', { p_client_id: user.id })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          if (!rows.length) { container.innerHTML = ''; return; }
+          var loyalty = rows[0];
+          container.innerHTML = renderLoyaltyCard(loyalty);
+        }).catch(function (e) {
+          console.warn('loyalty load:', e && e.message);
+        });
+    });
+  }
+  window.loadLoyalty = loadLoyalty;
+
+  function renderLoyaltyCard(l) {
+    var tierMap = {
+      bronze:   { icon: '🥉', name: 'Bronze',   gradient: 'linear-gradient(135deg,#92400e 0%,#b45309 55%,#d97706 100%)', bg: '#fef3c7', fg: '#92400e' },
+      silver:   { icon: '🥈', name: 'Silver',   gradient: 'linear-gradient(135deg,#475569 0%,#64748b 55%,#94a3b8 100%)', bg: '#e2e8f0', fg: '#334155' },
+      gold:     { icon: '🥇', name: 'Gold',     gradient: 'linear-gradient(135deg,#a16207 0%,#d4af37 55%,#fbbf24 100%)', bg: '#fef9c3', fg: '#854d0e' },
+      platinum: { icon: '💎', name: 'Platinum', gradient: 'linear-gradient(135deg,#312e81 0%,#6366f1 55%,#818cf8 100%)', bg: '#e0e7ff', fg: '#312e81' }
+    };
+    var t = tierMap[l.tier] || tierMap.bronze;
+    var next = l.next_tier ? tierMap[l.next_tier] : null;
+
+    // Progresso visual pra próximo tier
+    var threshold = l.tier === 'bronze' ? 3 : l.tier === 'silver' ? 6 : l.tier === 'gold' ? 12 : 12;
+    var prevThreshold = l.tier === 'silver' ? 3 : l.tier === 'gold' ? 6 : l.tier === 'platinum' ? 12 : 0;
+    var range = threshold - prevThreshold;
+    var done = Math.max(0, (l.months_completed || 0) - prevThreshold);
+    var pct = next ? Math.min(100, Math.round((done / range) * 100)) : 100;
+
+    var benefits = [];
+    benefits.push('💸 <strong>' + l.renewal_discount_pct + '% off</strong> em renovações');
+    if (l.deposit_reduction_pct > 0) {
+      benefits.push('🛡️ Caução reduzida em <strong>' + l.deposit_reduction_pct + '%</strong>');
+    }
+    if (l.tier === 'platinum') {
+      benefits.push('⭐ Atendimento prioritário');
+    }
+
+    return '<div class="loyalty-card" style="background:' + t.gradient + ';color:#fff;padding:18px 20px;border-radius:14px;margin:14px 0;box-shadow:0 8px 24px -12px rgba(0,0,0,.3);">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">'
+      +   '<div style="flex:1;min-width:200px;">'
+      +     '<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.9;margin-bottom:4px;">🏆 NOMADE</div>'
+      +     '<div style="font-size:26px;font-weight:800;line-height:1.1;margin-bottom:4px;">' + t.icon + ' Você é <em style="font-style:normal;text-decoration:underline;">' + t.name + '</em></div>'
+      +     '<div style="font-size:13.5px;opacity:.92;">' + (l.months_completed || 0) + ' ' + (l.months_completed === 1 ? 'mês' : 'meses') + ' concluído' + (l.months_completed === 1 ? '' : 's') + ' como cliente</div>'
+      +   '</div>'
+      +   '<div style="background:rgba(255,255,255,.18);padding:10px 14px;border-radius:10px;text-align:right;min-width:140px;">'
+      +     '<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.88;">Seus benefícios</div>'
+      +     '<div style="font-size:13px;margin-top:4px;line-height:1.6;">' + benefits.join('<br>') + '</div>'
+      +   '</div>'
+      + '</div>'
+      + (next
+          ? '<div style="margin-top:14px;background:rgba(255,255,255,.16);padding:10px 14px;border-radius:8px;">'
+            + '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin-bottom:6px;">'
+            +   '<span><strong>Próximo:</strong> ' + tierMap[l.next_tier].icon + ' ' + tierMap[l.next_tier].name + '</span>'
+            +   '<span>Falta <strong>' + l.months_to_next_tier + ' ' + (l.months_to_next_tier === 1 ? 'mês' : 'meses') + '</strong></span>'
+            + '</div>'
+            + '<div style="height:8px;background:rgba(0,0,0,.25);border-radius:99px;overflow:hidden;">'
+            +   '<div style="height:100%;width:' + pct + '%;background:#fff;border-radius:99px;transition:width .5s ease;"></div>'
+            + '</div>'
+          + '</div>'
+          : '<div style="margin-top:14px;background:rgba(255,255,255,.16);padding:10px 14px;border-radius:8px;font-size:13px;text-align:center;">✨ <strong>Você está no nível máximo!</strong> Continue aproveitando os benefícios Platinum.</div>'
+        )
+      + '</div>';
+  }
+
   window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(loadLoyalty, 800);
     setTimeout(loadRenewals, 1200);
     setInterval(loadRenewals, 300000); // refresh a cada 5min
+    setInterval(loadLoyalty, 600000); // loyalty refresh a cada 10min
   });
 })();
 </script>

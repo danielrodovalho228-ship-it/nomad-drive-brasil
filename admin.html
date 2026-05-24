@@ -849,6 +849,30 @@
           <tbody id="topOwnersList"><tr><td colspan="5">Carregando...</td></tr></tbody>
         </table>
       </div>
+
+      <!-- Fase 43 — Top clientes por tier de fidelidade -->
+      <div class="admin-card" style="margin-top:14px;">
+        <h3 class="block-title">🥇 Clientes Nomade Gold (top fidelidade)</h3>
+        <p class="note">Tier calculado de meses de locação concluídos. Ranking por LTV estimado.</p>
+        <div id="loyaltyTierSummary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0 14px;">
+          <div style="background:#fef3c7;padding:8px 10px;border-radius:6px;border-left:3px solid #d97706;"><div style="font-size:11px;color:#92400e;font-weight:700;">🥉 BRONZE</div><div style="font-size:18px;font-weight:800;color:#92400e;" id="ltyBronze">—</div></div>
+          <div style="background:#e2e8f0;padding:8px 10px;border-radius:6px;border-left:3px solid #64748b;"><div style="font-size:11px;color:#334155;font-weight:700;">🥈 SILVER</div><div style="font-size:18px;font-weight:800;color:#334155;" id="ltySilver">—</div></div>
+          <div style="background:#fef9c3;padding:8px 10px;border-radius:6px;border-left:3px solid #d4af37;"><div style="font-size:11px;color:#854d0e;font-weight:700;">🥇 GOLD</div><div style="font-size:18px;font-weight:800;color:#854d0e;" id="ltyGold">—</div></div>
+          <div style="background:#e0e7ff;padding:8px 10px;border-radius:6px;border-left:3px solid #6366f1;"><div style="font-size:11px;color:#312e81;font-weight:700;">💎 PLATINUM</div><div style="font-size:18px;font-weight:800;color:#312e81;" id="ltyPlatinum">—</div></div>
+        </div>
+        <table class="admin-table">
+          <thead><tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Tier</th>
+            <th>Meses</th>
+            <th>Reservas</th>
+            <th>LTV estimado</th>
+            <th>Última atividade</th>
+          </tr></thead>
+          <tbody id="topLoyaltyList"><tr><td colspan="7">Carregando...</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- ============================================================
@@ -3273,6 +3297,61 @@
   }
   window.loadGrowth = loadGrowth;
 
+  /* Fase 43 — Top clientes por loyalty tier */
+  function loadLoyaltyOverview() {
+    var sb = getClient(); if (!sb) return;
+    sb.from('client_loyalty_overview').select('*').limit(50).then(function (r) {
+      var rows = (r && r.data) || [];
+
+      // KPIs por tier
+      var counts = { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+      rows.forEach(function (c) { if (counts[c.tier] !== undefined) counts[c.tier]++; });
+      var ltyBronze = $('ltyBronze'); if (ltyBronze) ltyBronze.textContent = counts.bronze;
+      var ltySilver = $('ltySilver'); if (ltySilver) ltySilver.textContent = counts.silver;
+      var ltyGold = $('ltyGold'); if (ltyGold) ltyGold.textContent = counts.gold;
+      var ltyPlatinum = $('ltyPlatinum'); if (ltyPlatinum) ltyPlatinum.textContent = counts.platinum;
+
+      // Tabela top
+      var tb = $('topLoyaltyList'); if (!tb) return;
+      // Ordena: tier desc (platinum > gold > silver > bronze), depois ltv desc
+      var rank = { platinum: 4, gold: 3, silver: 2, bronze: 1 };
+      var sorted = rows.slice().sort(function (a, b) {
+        var dt = (rank[b.tier] || 0) - (rank[a.tier] || 0);
+        if (dt !== 0) return dt;
+        return Number(b.estimated_ltv || 0) - Number(a.estimated_ltv || 0);
+      }).slice(0, 20);
+
+      if (!sorted.length) {
+        tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8a948e;padding:14px;">Nenhum cliente com bookings ainda.</td></tr>';
+        return;
+      }
+
+      var tierBadge = {
+        bronze: '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">🥉 Bronze</span>',
+        silver: '<span style="background:#e2e8f0;color:#334155;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">🥈 Silver</span>',
+        gold: '<span style="background:#fef9c3;color:#854d0e;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">🥇 Gold</span>',
+        platinum: '<span style="background:#e0e7ff;color:#312e81;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">💎 Platinum</span>'
+      };
+
+      tb.innerHTML = sorted.map(function (c, i) {
+        var lastAt = c.last_booking_at ? new Date(c.last_booking_at).toLocaleDateString('pt-BR') : '—';
+        return '<tr>' +
+          '<td style="color:#8a948e;">#' + (i + 1) + '</td>' +
+          '<td>' + escapeHtml(c.full_name || '—') + '</td>' +
+          '<td>' + (tierBadge[c.tier] || c.tier) + '</td>' +
+          '<td><strong>' + fmtInt(c.months_completed) + '</strong>' + (c.months_active > 0 ? ' <small style="color:#5b6b63;">(+' + c.months_active + ' ativo)</small>' : '') + '</td>' +
+          '<td>' + fmtInt(c.total_bookings) + '</td>' +
+          '<td style="font-weight:700;color:#0f5132;font-variant-numeric:tabular-nums;">' + fmtBRL(c.estimated_ltv) + '</td>' +
+          '<td style="color:#5b6b63;">' + lastAt + '</td>' +
+          '</tr>';
+      }).join('');
+    }).catch(function (e) {
+      var tb = $('topLoyaltyList');
+      if (tb) tb.innerHTML = '<tr><td colspan="7" style="color:#b00020;">Erro: ' + (e && e.message || '—') + '</td></tr>';
+    });
+  }
+  window.loadLoyaltyOverview = loadLoyaltyOverview;
+
   function loadQuality() {
     var sb = getClient(); if (!sb) return;
     sb.from('quality_summary').select('*').maybeSingle().then(function (r) {
@@ -3758,6 +3837,10 @@
     // ----- Fase 40 — Crescimento + Qualidade -----
     loadGrowth();
     loadQuality();
+
+    // ----- Fase 43 — Top clientes Nomade Gold -----
+    loadLoyaltyOverview();
+    setInterval(loadLoyaltyOverview, 300000); // refresh a cada 5min
     setInterval(loadGrowth, 60000);
     setInterval(loadQuality, 60000);
 
