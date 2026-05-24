@@ -1,6 +1,6 @@
 # Checklist Pessoal — Daniel / Nomade Drive Brasil
 
-> **Última atualização:** 2026-05-23 (commit `ef02707`)
+> **Última atualização:** 2026-05-23 (commit `910a89e`)
 > Marque cada item conforme for fazendo.
 
 ---
@@ -9,12 +9,32 @@
 
 - [x] **1. Verificar Edge Function `consulta-multas`**
 - [x] **2. Verificar Edge Function `installation-checkout`**
-- [x] **3. PIX no Stripe** — integração técnica feita (Pix Automático). Ativação na conta = solicitar à Stripe Support quando puder
+- [x] **3. PIX no Stripe** — integração técnica feita (Pix Automático opt-in via ENABLE_PIX). Default off (cartão apenas). Quando Stripe Support liberar PIX, basta criar secret ENABLE_PIX=true.
 - [x] **4. Validar login** `qa-cliente@nomadedrive.com.br` / `Teste123`
-- [x] **A. Re-deploy `stripe-checkout`** (com suporte a Pix Automático)
+- [x] **A. Re-deploy `stripe-checkout`** (com Pix Automático + opt-in env var)
 - [x] **B. Re-deploy `stripe-webhook`** (com handler `mandate.updated`)
 
-**SETUP 100% COMPLETO** — pronto pra rodar fluxos reais de teste.
+**SETUP 100% COMPLETO** ✅
+
+---
+
+## 🟢 PRIMEIRO FLUXO REAL — VALIDADO
+
+- [x] **5a. Fluxo A — Pagar mensalidade R$ 2.500** ✅
+  - Stripe Checkout abriu com cartão `4242 4242 4242 4242`
+  - Pagamento confirmado
+  - Status "Pago" registrado em 24/05/2026
+  - 📧 E-mail "Mensalidade confirmada" recebido em `contato@nomadedrive.com.br` (via alias qa-cliente@)
+
+- [x] **5b. Autorizar caução R$ 2.500** ✅
+  - Stripe pré-autorizou (não cobrou)
+  - Status "Caução autorizada" registrado em 24/05/2026
+  - 📧 E-mail "Caução autorizada" recebido com template branded perfeito
+
+**🎯 Pipeline end-to-end VALIDADO:**
+```
+Stripe Checkout → Edge Function → Resend → Hostinger alias → Inbox ✅
+```
 
 ---
 
@@ -122,11 +142,12 @@
 | Categoria | Total | Feito | Falta |
 |---|---|---|---|
 | 🔴 Urgente | 6 | 6 | 0 ✅ |
-| 🟡 Esta semana | 6 | 0 | 6 |
+| 🟢 Fluxos validados | 2 | 2 | 0 ✅ |
+| 🟡 Esta semana (restantes) | 4 | 0 | 4 |
 | 🟢 Quando quiser | 7 | 0 | 7 |
-| ✅ Já feito (total) | 21 | 21 | 0 |
+| ✅ Já feito (total) | 23 | 23 | 0 |
 
-**🎯 Próxima ação:** Item 5 — Testar Fluxo A (pagar mensalidade) com cartão de teste Stripe.
+**🎯 Próxima ação:** Testar Fluxo B (check-in/check-out), C (avaria) ou D (cancelar) — ou pausar.
 
 ---
 
