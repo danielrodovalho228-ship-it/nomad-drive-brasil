@@ -11,6 +11,118 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
+<style>
+/* ============================================================
+ * Fase 32 Sprint 1 — Earnings Counter "Sua frota já rendeu R$ ▴"
+ * Dopamine loop: usuário abre o app só pra ver o número subir.
+ * ============================================================ */
+.earnings-section {
+  background: linear-gradient(135deg, #0f5132 0%, #198754 100%);
+  color: white;
+  padding: 32px 28px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px -8px rgba(15,81,50,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.earnings-section::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.earnings-card { text-align: center; margin-bottom: 24px; position: relative; }
+.earnings-label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+.earnings-amount {
+  font-size: 52px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1.5px;
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-family: 'Sora', sans-serif;
+}
+.earnings-amount__arrow {
+  font-size: 32px;
+  margin-left: 6px;
+  opacity: 0.85;
+  display: inline-block;
+  animation: bob 2s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
+
+.earnings-deltas {
+  font-size: 15px;
+  opacity: 0.92;
+  margin-top: 12px;
+  font-weight: 500;
+}
+.delta-sep { margin: 0 10px; opacity: 0.5; }
+
+.earnings-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  background: rgba(255,255,255,0.1);
+  padding: 16px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+.meta-item { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.meta-label { font-size: 11.5px; opacity: 0.82; font-weight: 500; }
+.meta-value {
+  font-size: 18px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.earnings-motivation {
+  text-align: center;
+  margin-top: 16px;
+  font-style: italic;
+  opacity: 0.88;
+  min-height: 20px;
+  font-size: 13.5px;
+}
+
+.earnings-by-vehicle { margin-top: 20px; }
+.earnings-by-vehicle h3 {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.earnings-by-vehicle ul { list-style: none; padding: 0; margin: 0; }
+.earnings-by-vehicle li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.earnings-by-vehicle li:last-child { margin-bottom: 0; }
+.earnings-by-vehicle li strong { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 640px) {
+  .earnings-amount { font-size: 38px; }
+  .earnings-amount__arrow { font-size: 24px; }
+  .earnings-meta { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
@@ -69,6 +181,47 @@
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
         </div>
+
+        <!-- ============================================================
+             Fase 32 Sprint 1 — Earnings Counter
+             "Sua frota já rendeu R$ ▴" — dopamine loop pro proprietário.
+             Atualiza a cada 30s. Lê de owner_dashboard_summary (view SQL).
+             ============================================================ -->
+        <section id="earnings-counter" class="earnings-section" hidden>
+          <div class="earnings-card">
+            <h2 class="earnings-label">💰 Sua frota já rendeu</h2>
+            <div class="earnings-amount">
+              <span id="earnings-total">R$ 0,00</span><span class="earnings-amount__arrow">▴</span>
+            </div>
+            <div class="earnings-deltas">
+              <span>+<span id="delta-today">R$ 0</span> hoje</span>
+              <span class="delta-sep">·</span>
+              <span>+<span id="delta-week">R$ 0</span> esta semana</span>
+            </div>
+          </div>
+
+          <div class="earnings-meta">
+            <div class="meta-item">
+              <span class="meta-label">📊 Disponível pra saque</span>
+              <span class="meta-value" id="meta-available">R$ 0,00</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">📅 Próximo saque</span>
+              <span class="meta-value" id="meta-next">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">📈 Projeção do contrato</span>
+              <span class="meta-value" id="meta-projected">R$ 0,00</span>
+            </div>
+          </div>
+
+          <div class="earnings-by-vehicle" id="earnings-vehicles" hidden>
+            <h3>Por veículo</h3>
+            <ul id="earnings-vehicles-list"></ul>
+          </div>
+
+          <p class="earnings-motivation" id="earnings-motivation"></p>
+        </section>
 
         <div class="dash-cards" id="visao">
           <div class="dash-kpi"><span>Veículos cadastrados</span><strong id="kpiVeic">0</strong></div>
@@ -285,6 +438,118 @@
 <script src="emails-runtime.js?v=20260524c"></script>
 <script src="script.js?v=20260523c"></script>
 <script src="payouts.js?v=20260523c"></script>
+<script>
+/* ============================================================
+ * Fase 32 Sprint 1 — Earnings Counter (Sua frota já rendeu R$)
+ * ============================================================
+ * Lê de owner_dashboard_summary (view criada em supabase-fase32-
+ * timeline-saques.sql). Anima count-up de 0 até total a cada
+ * refresh. Mostra também breakdown por veículo se >1.
+ *
+ * Roda em paralelo ao IIFE principal — não interfere.
+ * ============================================================ */
+(function () {
+  var MOTIVACIONAIS = [
+    '🚗 Seu carro trabalhou enquanto você descansava',
+    '📈 Subindo como sempre',
+    '💡 Cada dia gera renda passiva pra você',
+    '🏆 Você está entre os proprietários ativos',
+    '✨ Caça-níquel, mas o seu',
+    '🎯 Faltam poucos dias pro próximo saque',
+    '⏱ Atualizado em tempo real'
+  ];
+
+  function fmtBRL(n) {
+    n = Number(n) || 0;
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+  }
+  function fmtBRLnum(n) {
+    return fmtBRL(n).replace('R$', '').trim();
+  }
+  function pickMotivacional() {
+    return MOTIVACIONAIS[Math.floor(Math.random() * MOTIVACIONAIS.length)];
+  }
+  function animateCountUp(el, target, duration) {
+    duration = duration || 1400;
+    var start = parseFloat(el.dataset.current || 0);
+    var t0 = performance.now();
+    function tick(now) {
+      var p = Math.min(1, (now - t0) / duration);
+      var eased = 1 - Math.pow(1 - p, 4); // easeOutQuart
+      var current = start + (target - start) * eased;
+      el.textContent = fmtBRL(current);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.dataset.current = target;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function loadEarningsCounter() {
+    var sb = (window.ndAuth && window.ndAuth.client && window.ndAuth.client()) || null;
+    if (!sb) return;
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      sb.from('owner_dashboard_summary').select('*').eq('owner_id', user.id).maybeSingle()
+        .then(function (r) {
+          var s = r && r.data;
+          if (!s || (s.active_bookings_count || 0) === 0) {
+            // Sem reservas ativas → não mostra a seção
+            var sec = document.getElementById('earnings-counter');
+            if (sec) sec.setAttribute('hidden', '');
+            return;
+          }
+          var section = document.getElementById('earnings-counter');
+          if (!section) return;
+          section.removeAttribute('hidden');
+
+          animateCountUp(document.getElementById('earnings-total'), Number(s.total_accrued || 0));
+          document.getElementById('delta-today').textContent = fmtBRLnum(s.today_increment);
+          document.getElementById('delta-week').textContent = fmtBRLnum(s.week_increment);
+          document.getElementById('meta-available').textContent = fmtBRL(s.total_available);
+          document.getElementById('meta-projected').textContent = fmtBRL(s.total_projected);
+          document.getElementById('meta-next').textContent = s.next_milestone_date
+            ? new Date(s.next_milestone_date).toLocaleDateString('pt-BR')
+            : '—';
+          document.getElementById('earnings-motivation').textContent = pickMotivacional();
+
+          // Breakdown por veículo (se >1)
+          if ((s.active_vehicles_count || 0) > 1) {
+            sb.from('owner_earnings').select('vehicle_id, make, model, year_model, accrued_amount, client_name')
+              .eq('owner_id', user.id).eq('booking_status', 'em_uso')
+              .order('accrued_amount', { ascending: false })
+              .then(function (vr) {
+                var rows = (vr && vr.data) || [];
+                if (!rows.length) return;
+                var ul = document.getElementById('earnings-vehicles-list');
+                ul.innerHTML = rows.map(function (v) {
+                  return '<li>' +
+                    '<span>🚗 ' + (v.make || '') + ' ' + (v.model || '') +
+                      (v.year_model ? ' ' + v.year_model : '') + '</span>' +
+                    '<span><strong>' + fmtBRL(v.accrued_amount) + '</strong>' +
+                      (v.client_name ? ' · ' + v.client_name : '') + '</span>' +
+                    '</li>';
+                }).join('');
+                document.getElementById('earnings-vehicles').removeAttribute('hidden');
+              }).catch(function () {});
+          }
+        }).catch(function (e) {
+          // View pode não existir ainda (SQL não rodado) — silencioso
+          console.warn('owner_dashboard_summary não disponível:', e && e.message);
+        });
+    }).catch(function () {});
+  }
+
+  // Carrega quando DOM e auth.js prontos
+  window.addEventListener('DOMContentLoaded', function () {
+    // Espera 800ms pra auth.js inicializar
+    setTimeout(loadEarningsCounter, 800);
+    // Refresh a cada 30s pra simular "tempo real"
+    setInterval(loadEarningsCounter, 30000);
+  });
+})();
+</script>
 <script>
 (function () {
   var PAGE_ROLE = "owner";

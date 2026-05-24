@@ -11,6 +11,118 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
+<style>
+/* ============================================================
+ * Fase 32 Sprint 1 — Timeline visual de marcos da locação
+ * ============================================================ */
+.timeline-section {
+  background: #fff;
+  padding: 24px 28px;
+  border-radius: 14px;
+  margin: 16px 0;
+  box-shadow: 0 2px 6px rgba(20,40,30,0.06);
+  border: 1px solid #e3e9e5;
+}
+.timeline-section__head { margin-bottom: 20px; }
+.timeline-section h2 { margin: 0 0 4px; font-size: 19px; }
+.timeline-subtitle { color: #6b7670; font-size: 13.5px; margin: 0; }
+
+.timeline-track {
+  position: relative;
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  margin: 50px 12px 60px;
+}
+.timeline-fill {
+  position: absolute;
+  height: 100%;
+  background: linear-gradient(90deg, #0f5132, #198754);
+  border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.timeline-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #adb5bd;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s;
+}
+.timeline-marker:hover { transform: translate(-50%, -50%) scale(1.15); }
+.timeline-marker--paid {
+  background: #198754; color: #fff; border-color: #198754;
+}
+.timeline-marker--available {
+  background: #fff3cd; border-color: #ffc107;
+  animation: timeline-pulse 2s infinite;
+}
+@keyframes timeline-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,0.6); }
+  50% { box-shadow: 0 0 0 10px rgba(255,193,7,0); }
+}
+.timeline-marker--pending { background: #fff; border-color: #adb5bd; color: #6b7670; }
+.timeline-marker--withheld { background: #fde8eb; border-color: #b00020; color: #b00020; }
+
+.timeline-marker-label {
+  position: absolute;
+  top: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  text-align: center;
+  font-size: 11.5px;
+  color: #495057;
+}
+.timeline-marker-label__date { font-weight: 600; display: block; color: #14201b; }
+.timeline-marker-label__amount { color: #198754; font-weight: 600; display: block; margin-top: 2px; }
+
+.timeline-legend {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  justify-content: center; align-items: center;
+  margin-top: 32px;
+  font-size: 12.5px; color: #6b7670;
+}
+.timeline-legend__item { display: inline-flex; align-items: center; gap: 6px; }
+.timeline-legend__dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block;
+}
+
+.timeline-cta {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-left: 4px solid #ffc107;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.timeline-cta__content h3 { margin: 0 0 2px; font-size: 15px; }
+.timeline-cta__amount {
+  font-size: 26px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #0f5132; margin: 4px 0 0;
+  font-family: 'Sora', sans-serif;
+}
+.timeline-cta__meta { font-size: 12px; color: #6b7670; margin: 2px 0 0; }
+.timeline-cta__actions { display: flex; gap: 8px; }
+
+@media (max-width: 640px) {
+  .timeline-track { margin: 50px 8px 70px; }
+  .timeline-marker-label { font-size: 10px; }
+  .timeline-cta { flex-direction: column; align-items: stretch; }
+}
+</style>
 </head>
 <body>
 
@@ -93,6 +205,43 @@
         <div class="dash-list" id="payList"></div>
         <div class="dash-empty" id="payEmpty">Nenhum pagamento registrado nesta reserva ainda.</div>
       </section>
+
+      <!-- ============================================================
+           Fase 32 Sprint 1 — Timeline visual de marcos (saques 15/15d)
+           Pro proprietário: bolinhas representam marcos disponíveis.
+           Pro cliente: visualização do progresso da locação.
+           ============================================================ -->
+      <section class="timeline-section" id="timelineSection" hidden>
+        <div class="timeline-section__head">
+          <h2>📅 Linha do tempo da locação</h2>
+          <p class="timeline-subtitle" id="timelineSubtitle">Carregando...</p>
+        </div>
+
+        <div class="timeline-track">
+          <div class="timeline-fill" id="timelineFill" style="width: 0%"></div>
+          <div id="timelineMarkers"></div>
+        </div>
+
+        <div class="timeline-legend">
+          <span class="timeline-legend__item"><span class="timeline-legend__dot" style="background:#198754"></span>Pago</span>
+          <span class="timeline-legend__item"><span class="timeline-legend__dot" style="background:#ffc107"></span>Disponível agora</span>
+          <span class="timeline-legend__item"><span class="timeline-legend__dot" style="background:#adb5bd"></span>Futuro</span>
+        </div>
+
+        <!-- CTA "Sacar agora" só aparece se tem available (pro proprietário) -->
+        <div class="timeline-cta" id="timelineCta" hidden>
+          <div class="timeline-cta__content">
+            <h3>💰 Saque disponível agora</h3>
+            <p class="timeline-cta__amount" id="timelineCtaAmount">R$ 0,00</p>
+            <p class="timeline-cta__meta">já descontada comissão Nomade Drive (10%)</p>
+          </div>
+          <div class="timeline-cta__actions">
+            <button type="button" class="btn btn--solid btn--sm" id="timelineCtaBtn">💸 Sacar agora</button>
+            <button type="button" class="btn btn--ghost btn--sm" id="timelineCtaSkip">⏸ Acumular pro próximo</button>
+          </div>
+        </div>
+      </section>
+
     </div>
 
   </div>
@@ -553,6 +702,114 @@
       box.appendChild(row(label, bits.join(" · "), inspLabel(i.status), pillKind(i.status)));
     });
   }
+})();
+</script>
+
+<script>
+/* ============================================================
+ * Fase 32 Sprint 1 — Timeline visual de marcos de saque
+ * ============================================================
+ * Lê de withdrawals (tabela criada em supabase-fase32-timeline-saques.sql)
+ * Renderiza bolinhas posicionadas proporcionalmente no track.
+ * Mostra CTA "Sacar agora" se tem marco available pro proprietário logado.
+ * ============================================================ */
+(function () {
+  function fmtBRL(n) {
+    n = Number(n) || 0;
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+  }
+  function fmtDateShort(d) {
+    if (!d) return '—';
+    var dt = new Date(d);
+    return dt.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  }
+
+  function loadTimeline() {
+    var params = new URLSearchParams(window.location.search);
+    var bookingId = params.get('id');
+    if (!bookingId) return;
+    var sb = (window.ndAuth && window.ndAuth.client && window.ndAuth.client()) || null;
+    if (!sb) return;
+
+    Promise.all([
+      sb.from('bookings').select('id, start_date, end_date, owner_id, client_id, status, monthly_price')
+        .eq('id', bookingId).maybeSingle(),
+      sb.from('withdrawals').select('milestone_number, milestone_date, amount_net, status')
+        .eq('booking_id', bookingId)
+        .order('milestone_number', { ascending: true })
+    ]).then(function (results) {
+      var bk = results[0] && results[0].data;
+      var wRows = (results[1] && results[1].data) || [];
+      if (!bk || !wRows.length) return;
+
+      var section = document.getElementById('timelineSection');
+      if (!section) return;
+      section.removeAttribute('hidden');
+
+      // Subtitle
+      var startDate = new Date(bk.start_date);
+      var endDate = new Date(bk.end_date);
+      var totalDays = Math.max(1, Math.ceil((endDate - startDate) / 86400000));
+      document.getElementById('timelineSubtitle').textContent =
+        totalDays + ' dias · de ' + startDate.toLocaleDateString('pt-BR') + ' até ' + endDate.toLocaleDateString('pt-BR');
+
+      // Fill bar baseado em dias decorridos
+      var today = new Date();
+      var elapsed = Math.max(0, Math.min(totalDays, Math.ceil((today - startDate) / 86400000)));
+      var fillPct = Math.min(100, (elapsed / totalDays) * 100);
+      document.getElementById('timelineFill').style.width = fillPct + '%';
+
+      // Markers (posicionados proporcionalmente)
+      var markersContainer = document.getElementById('timelineMarkers');
+      markersContainer.innerHTML = '';
+      wRows.forEach(function (w) {
+        var wDate = new Date(w.milestone_date);
+        var dayOffset = Math.max(0, Math.ceil((wDate - startDate) / 86400000));
+        var leftPct = Math.min(100, (dayOffset / totalDays) * 100);
+        var statusLabel = {
+          paid: '✓ Pago',
+          available: '💰 Disponível',
+          pending: '⏳ Futuro',
+          withheld: '⚠ Segurada',
+          cancelled: '✗ Cancelado'
+        }[w.status] || w.status;
+        var marker = document.createElement('div');
+        marker.className = 'timeline-marker timeline-marker--' + w.status;
+        marker.style.left = leftPct + '%';
+        marker.title = '#' + w.milestone_number + ' · ' + fmtBRL(w.amount_net) + ' · ' + statusLabel;
+        marker.innerHTML = (w.status === 'paid' ? '✓' : w.milestone_number) +
+          '<div class="timeline-marker-label">' +
+            '<span class="timeline-marker-label__date">' + fmtDateShort(w.milestone_date) + '</span>' +
+            '<span class="timeline-marker-label__amount">' + fmtBRL(w.amount_net) + '</span>' +
+          '</div>';
+        markersContainer.appendChild(marker);
+      });
+
+      // CTA "Sacar agora" — só pro proprietário logado, se tem available
+      sb.auth.getUser().then(function (uRes) {
+        var user = uRes && uRes.data && uRes.data.user;
+        if (!user || user.id !== bk.owner_id) return; // só pro owner
+        var available = wRows.find(function (w) { return w.status === 'available'; });
+        if (!available) return;
+        var cta = document.getElementById('timelineCta');
+        cta.removeAttribute('hidden');
+        document.getElementById('timelineCtaAmount').textContent = fmtBRL(available.amount_net);
+        document.getElementById('timelineCtaBtn').addEventListener('click', function () {
+          alert('💸 Saque parcial: feature ativada na Sprint 2 (Stripe Manual Payouts). Em breve!');
+        });
+        document.getElementById('timelineCtaSkip').addEventListener('click', function () {
+          alert('⏸ OK, vou acumular com o próximo marco.');
+        });
+      });
+    }).catch(function (e) {
+      console.warn('timeline load:', e && e.message);
+      // Se a tabela withdrawals não existir ainda, fica silencioso
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(loadTimeline, 800); // espera auth.js iniciar
+  });
 })();
 </script>
 </body>
