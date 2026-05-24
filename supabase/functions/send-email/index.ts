@@ -86,35 +86,48 @@ Deno.serve(async (req) => {
         }, 500);
       }
       const admin = createClient(url, serviceKey);
-      const { data: profile, error: pErr } = await admin
+
+      // BUG FIX (2026-05-24): A tabela public.profiles NÃO TEM coluna 'email'
+      // (schema só tem: id, full_name, phone, city, state, main_role,
+      //  verification_status, avatar_url, created_at, updated_at).
+      // O email REAL está em auth.users — temos que ir direto via admin.auth.admin.
+      // Antes: select("id, email, full_name") quebrava com "column does not exist"
+      //        e cancelava a função inteira ANTES do fallback ser alcançado.
+      // Agora: pega full_name de profiles + email de auth.users.
+
+      // 1. Nome do usuário (opcional — só pra personalização)
+      const { data: profile } = await admin
         .from("profiles")
-        .select("id, email, full_name")
+        .select("id, full_name")
         .eq("id", to_user_id)
         .maybeSingle();
-      if (pErr) {
-        return json({ error: "Falha ao resolver to_user_id.", detail: pErr.message }, 500);
-      }
-      if (!profile || !profile.email) {
-        // Fallback: tenta auth.admin (caso profile não tenha email cacheado)
-        try {
-          const { data: u } = await admin.auth.admin.getUserById(to_user_id);
-          const authEmail = u?.user?.email;
-          if (authEmail) {
-            resolvedTo = authEmail;
-            resolvedName = u?.user?.user_metadata?.full_name ?? null;
-          } else {
-            return json({ error: "email_not_found", to_user_id }, 404);
-          }
-        } catch (e) {
+      resolvedName = profile?.full_name ?? null;
+
+      // 2. E-mail real via auth.admin (a fonte da verdade)
+      try {
+        const { data: u, error: authErr } = await admin.auth.admin.getUserById(to_user_id);
+        if (authErr) {
           return json({
-            error: "email_not_found",
-            to_user_id,
-            detail: (e as Error)?.message ?? String(e)
-          }, 404);
+            error: "Falha ao buscar usuário no auth.",
+            detail: authErr.message,
+            to_user_id
+          }, 500);
         }
-      } else {
-        resolvedTo = profile.email;
-        resolvedName = profile.full_name;
+        const authEmail = u?.user?.email;
+        if (!authEmail) {
+          return json({ error: "email_not_found", to_user_id }, 404);
+        }
+        resolvedTo = authEmail;
+        // Se profile não tinha full_name, tenta puxar do user_metadata
+        if (!resolvedName) {
+          resolvedName = u?.user?.user_metadata?.full_name ?? null;
+        }
+      } catch (e) {
+        return json({
+          error: "email_not_found",
+          to_user_id,
+          detail: (e as Error)?.message ?? String(e)
+        }, 404);
       }
     }
 
