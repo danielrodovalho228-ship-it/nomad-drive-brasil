@@ -404,10 +404,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
-<script src="auth.js?v=20260524d"></script>
-<script src="statuses.js?v=20260524d"></script>
-<script src="emails-runtime.js?v=20260524d"></script>
-<script src="script.js?v=20260524d"></script>
+<script src="auth.js?v=20260524e"></script>
+<script src="statuses.js?v=20260524e"></script>
+<script src="emails-runtime.js?v=20260524e"></script>
+<script src="script.js?v=20260524e"></script>
 <script>
 /* ============================================================
  * Fase 32 Sprint 2.5 — Botão "Configurar manual payouts"
@@ -437,10 +437,25 @@
     if (btn) { btn.disabled = true; var orig = btn.textContent; btn.textContent = '⏳ Processando...'; }
     showOut('⏳ Chamando setup-manual-payouts...', 'loading');
 
-    sb.functions.invoke('setup-manual-payouts', { body: body }).then(function (r) {
+    sb.functions.invoke('setup-manual-payouts', { body: body }).then(async function (r) {
       if (btn) { btn.disabled = false; btn.textContent = orig; }
       console.log('setup-manual-payouts response:', r);
       var d = r && r.data;
+
+      // Fase 32 Sprint 2.5 fix: extrai mensagem real do erro quando Edge
+      // Function retorna 4xx/5xx (Supabase client esconde no error.context)
+      if (r && r.error && r.error.context) {
+        try {
+          var ctx = r.error.context;
+          if (typeof ctx.json === 'function') {
+            d = await ctx.json();
+            console.log('Error body parsed:', d);
+          } else if (ctx.body) {
+            try { d = JSON.parse(ctx.body); } catch(e) {}
+          }
+        } catch(e) { console.warn('Não consegui parsear error body:', e); }
+      }
+
       if (d && d.ok) {
         if (d.results) {
           // Modo "all"
@@ -461,11 +476,14 @@
         }
       } else {
         var err = (d && d.error) || (r && r.error && r.error.message) || 'Erro desconhecido';
-        var hint = (d && d.hint) ? '\n\nDica: ' + d.hint : '';
-        showOut('❌ ' + err + hint, 'error');
+        var hint = (d && d.hint) ? '\n\n💡 Dica: ' + d.hint : '';
+        var status = (r && r.error && r.error.context && r.error.context.status)
+          ? '\n\nHTTP Status: ' + r.error.context.status : '';
+        showOut('❌ ' + err + hint + status, 'error');
       }
     }).catch(function (e) {
       if (btn) { btn.disabled = false; btn.textContent = orig; }
+      console.error('setup-manual-payouts exception:', e);
       showOut('❌ Erro de rede: ' + (e && e.message || e), 'error');
     });
   }
