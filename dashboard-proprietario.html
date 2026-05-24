@@ -393,6 +393,13 @@
           <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
         </div>
 
+        <!-- Fase 44: Solicitações de aluguel pendentes do owner -->
+        <section class="dash-panel" id="solicitacoes" style="display:none;">
+          <h2>📩 Solicitações de aluguel pendentes</h2>
+          <p class="note">Clientes interessados nos seus veículos. Aprove pra criar a reserva (cliente paga em seguida) ou recuse com motivo.</p>
+          <div id="ownerRequestsList" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </section>
+
         <section class="dash-panel" id="veiculos">
           <h2>Meus veículos</h2>
           <p>Cada veículo passa por análise documental, fotos e checklist técnico em oficina parceira. A aprovação não é garantida.</p>
@@ -1810,6 +1817,184 @@
   }
 
   /* ============================================================
+   * Fase 44 — Solicitações de aluguel pendentes (owner)
+   * ============================================================ */
+  function loadOwnerRequests() {
+    var sb = getSb(); if (!sb) return;
+    var section = $('solicitacoes');
+    var box = $('ownerRequestsList');
+    if (!box || !section) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      // Pega rental_requests pendentes pros veículos do owner logado
+      sb.from('rental_requests')
+        .select('id, client_id, vehicle_id, desired_start_date, desired_months, reason, city, status, created_at, vehicles!inner(id, owner_id, make, model, year_model)')
+        .eq('vehicles.owner_id', user.id)
+        .eq('status', 'em_analise')
+        .order('created_at', { ascending: false })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          if (!rows.length) {
+            section.style.display = 'none';
+            return;
+          }
+          section.style.display = '';
+
+          // Pega nomes dos clientes em batch
+          var clientIds = [];
+          rows.forEach(function (rr) { if (rr.client_id && clientIds.indexOf(rr.client_id) === -1) clientIds.push(rr.client_id); });
+          sb.from('profiles').select('id, full_name, city').in('id', clientIds)
+            .then(function (pr) {
+              var profilesMap = {};
+              ((pr && pr.data) || []).forEach(function (p) { profilesMap[p.id] = p; });
+              renderOwnerRequests(rows, profilesMap);
+            });
+        }).catch(function (e) {
+          console.warn('loadOwnerRequests error:', e && e.message);
+        });
+    });
+  }
+  window.loadOwnerRequests = loadOwnerRequests;
+
+  function renderOwnerRequests(rows, profilesMap) {
+    var box = $('ownerRequestsList');
+    box.innerHTML = '';
+
+    rows.forEach(function (rr) {
+      var profile = profilesMap[rr.client_id] || {};
+      var v = rr.vehicles || {};
+      var vehName = [v.make, v.model, v.year_model].filter(Boolean).join(' ');
+
+      var card = document.createElement('div');
+      card.style.cssText = 'background:#fff;border:1px solid #cde0d4;border-left:4px solid #d4af37;border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;box-shadow:0 4px 12px -8px rgba(0,0,0,.1);';
+
+      var details = '';
+      if (rr.desired_start_date) details += '📅 Retirada: <strong>' + fmtDateBR(rr.desired_start_date) + '</strong> · ';
+      if (rr.desired_months) details += '📆 ' + rr.desired_months + (rr.desired_months === 1 ? ' mês' : ' meses') + ' · ';
+      if (rr.city || profile.city) details += '📍 ' + escapeHtml(rr.city || profile.city);
+
+      card.innerHTML =
+        '<div>'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">'
+        +   '<strong style="font-size:16px;color:#111;">' + escapeHtml(profile.full_name || 'Cliente') + '</strong>'
+        +   '<span style="background:#fef3c7;color:#92400e;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;">🆕 Pendente</span>'
+        +   '<span style="font-size:11px;color:#8a948e;">' + timeAgo(rr.created_at) + '</span>'
+        + '</div>'
+        + '<div style="font-size:14px;color:#3a4945;margin-bottom:6px;">Quer alugar seu <strong>' + escapeHtml(vehName) + '</strong></div>'
+        + (details ? '<div style="font-size:12.5px;color:#5b6b63;margin-bottom:6px;">' + details + '</div>' : '')
+        + (rr.reason ? '<div style="font-size:12.5px;color:#3a4945;padding:8px 12px;background:#fffbe6;border-left:2px solid #d4af37;border-radius:4px;margin:6px 0;font-style:italic;">"' + escapeHtml(rr.reason) + '"</div>' : '')
+        + '</div>'
+        + '<div style="display:flex;flex-direction:column;gap:6px;min-width:140px;">'
+        +   '<button class="btn btn--solid btn--sm rrApprove" data-id="' + escapeHtml(rr.id) + '" data-vehicle="' + escapeHtml(vehName) + '" data-months="' + (rr.desired_months || 1) + '" style="background:#145f3e;border-color:#145f3e;">✅ Aprovar</button>'
+        +   '<button class="btn btn--outline btn--sm rrReject" data-id="' + escapeHtml(rr.id) + '" data-vehicle="' + escapeHtml(vehName) + '" style="color:#b00020;border-color:#b00020;">❌ Recusar</button>'
+        + '</div>';
+
+      box.appendChild(card);
+    });
+
+    bindOwnerRequestActions();
+  }
+
+  function bindOwnerRequestActions() {
+    document.querySelectorAll('.rrApprove').forEach(function (btn) {
+      btn.onclick = function () { handleApproveRequest(btn); };
+    });
+    document.querySelectorAll('.rrReject').forEach(function (btn) {
+      btn.onclick = function () { handleRejectRequest(btn); };
+    });
+  }
+
+  async function handleApproveRequest(btn) {
+    var id = btn.getAttribute('data-id');
+    var vehName = btn.getAttribute('data-vehicle');
+    var months = parseInt(btn.getAttribute('data-months'), 10) || 1;
+
+    var modal = window.ndModal;
+    if (!modal) { if (!confirm('Aprovar essa solicitação?')) return; }
+    else {
+      var ok = await modal.confirm({
+        title: '✅ Aprovar solicitação',
+        body: 'Vamos criar uma reserva do <strong>' + vehName + '</strong> por <strong>' + months + (months === 1 ? ' mês' : ' meses') + '</strong>. ' +
+              'O cliente vai receber um e-mail pra pagar a 1ª mensalidade (com desconto do tier dele, se for Silver/Gold/Platinum). ' +
+              'A reserva expira em 48h se não for paga.',
+        okText: '✅ Sim, aprovar',
+        cancelText: 'Voltar',
+        icon: '🎯'
+      });
+      if (!ok) return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Aprovando...';
+
+    var sb = getSb(); if (!sb) return;
+    sb.functions.invoke('approve-rental-request', {
+      body: { rental_request_id: id, duration_months: months }
+    }).then(function (resp) {
+      btn.disabled = false;
+      btn.textContent = '✅ Aprovar';
+      if (resp.error || (resp.data && resp.data.error)) {
+        var msg = (resp.data && resp.data.error) || resp.error.message || 'Erro desconhecido';
+        if (modal) modal.alert({ title: 'Erro', body: msg, icon: '⚠️' });
+        else alert('Erro: ' + msg);
+        return;
+      }
+      var d = resp.data || {};
+      var msg = 'Reserva criada! Cliente vai pagar R$ ' + fmtBRL(d.monthly_price) + '/mês' +
+                (d.discount_pct > 5 ? ' (desconto ' + d.tier + ')' : '') +
+                '. E-mail enviado ✉️';
+      if (modal) modal.alert({ title: '🎉 Solicitação aprovada', body: msg, icon: '✅' });
+      else alert(msg);
+      loadOwnerRequests();
+    });
+  }
+
+  async function handleRejectRequest(btn) {
+    var id = btn.getAttribute('data-id');
+    var vehName = btn.getAttribute('data-vehicle');
+
+    var modal = window.ndModal;
+    var reason = null;
+    if (modal) {
+      reason = await modal.prompt({
+        title: '❌ Recusar solicitação',
+        body: 'O cliente vai receber um e-mail explicando que o <strong>' + vehName + '</strong> não está disponível. ' +
+              'Pode escrever uma mensagem opcional (ex: "Veículo em manutenção até dia X"):',
+        placeholder: 'Mensagem opcional pro cliente (deixe vazio se preferir)',
+        okText: '❌ Recusar',
+        cancelText: 'Voltar',
+        icon: '🚫'
+      });
+      if (reason === null) return; // cancelou
+    } else {
+      reason = prompt('Motivo da recusa (opcional):') || '';
+      if (!confirm('Recusar solicitação do ' + vehName + '?')) return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Recusando...';
+
+    var sb = getSb(); if (!sb) return;
+    sb.functions.invoke('reject-rental-request', {
+      body: { rental_request_id: id, reason: reason || null }
+    }).then(function (resp) {
+      btn.disabled = false;
+      btn.textContent = '❌ Recusar';
+      if (resp.error || (resp.data && resp.data.error)) {
+        var msg = (resp.data && resp.data.error) || resp.error.message || 'Erro desconhecido';
+        if (modal) modal.alert({ title: 'Erro', body: msg, icon: '⚠️' });
+        else alert('Erro: ' + msg);
+        return;
+      }
+      if (modal) modal.alert({ title: 'Solicitação recusada', body: 'Cliente notificado por e-mail.', icon: '✓' });
+      loadOwnerRequests();
+    });
+  }
+
+  /* ============================================================
    * Render do painel verde
    * ============================================================ */
   function loadGreenPanel() {
@@ -2175,9 +2360,11 @@
   window.addEventListener('DOMContentLoaded', function () {
     // Aguarda auth iniciar
     setTimeout(loadGreenPanel, 1000);
+    setTimeout(loadOwnerRequests, 800);  // Fase 44 — solicitações pendentes
 
     // Refresh a cada 60s
     setInterval(loadGreenPanel, 60000);
+    setInterval(loadOwnerRequests, 30000);  // Refresh mais rápido pra solicitações novas
 
     // Bind modal handlers
     var closeBtn = $('notifModalClose');

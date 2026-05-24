@@ -99,6 +99,9 @@
           <p class="form__err" id="docErr" hidden></p>
         </section>
 
+        <!-- Fase 44 — Reservas aprovadas aguardando pagamento (prioridade máxima!) -->
+        <div id="approvedPendingPaymentContainer"></div>
+
         <!-- Fase 43 — Card Nomade Gold (loyalty tier) -->
         <div id="loyaltyContainer"></div>
 
@@ -1603,6 +1606,68 @@
   }
 
   /* ====================================================================
+     Fase 44 — Reservas aprovadas AGUARDANDO PAGAMENTO
+     ==================================================================== */
+  function loadApprovedPending() {
+    var sb = getSb(); if (!sb) return;
+    var container = $('approvedPendingPaymentContainer'); if (!container) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      // Bookings aprovadas SEM Stripe subscription ainda (= cliente ainda não pagou)
+      sb.from('bookings')
+        .select('id, vehicle_id, monthly_price, deposit_amount, start_date, end_date, status, stripe_subscription_id, created_at, vehicles(make, model, year_model, license_plate)')
+        .eq('client_id', user.id)
+        .eq('status', 'aprovado')
+        .is('stripe_subscription_id', null)
+        .order('created_at', { ascending: false })
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          if (!rows.length) { container.innerHTML = ''; return; }
+          container.innerHTML = rows.map(renderApprovedPendingCard).join('');
+        }).catch(function (e) {
+          console.warn('approved pending:', e && e.message);
+        });
+    });
+  }
+  window.loadApprovedPending = loadApprovedPending;
+
+  function renderApprovedPendingCard(b) {
+    var v = b.vehicles || {};
+    var vehName = [v.make, v.model, v.year_model].filter(Boolean).join(' ') || 'Veículo';
+    var hoursOld = Math.floor((Date.now() - new Date(b.created_at).getTime()) / 3600000);
+    var hoursLeft = Math.max(0, 48 - hoursOld);
+    var urgent = hoursLeft <= 12;
+
+    return '<div style="background:linear-gradient(135deg,#145f3e 0%,#1a7a4f 100%);color:#fff;padding:20px 22px;border-radius:14px;margin:14px 0;box-shadow:0 8px 24px -10px rgba(20,80,50,.4);">'
+      + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">'
+      +   '<span style="background:rgba(255,255,255,.22);color:#fff;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">🎉 APROVADA</span>'
+      +   (urgent
+            ? '<span style="background:#fbbf24;color:#7c2d12;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:800;">⏰ ' + hoursLeft + 'h restantes</span>'
+            : '<span style="background:rgba(255,255,255,.22);color:#fff;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;">⏰ ' + hoursLeft + 'h pra confirmar</span>')
+      + '</div>'
+      + '<h3 style="margin:0 0 6px;font-size:21px;font-weight:800;line-height:1.2;">Sua reserva do ' + escapeHtmlSafe(vehName) + ' foi aprovada!</h3>'
+      + '<p style="margin:0 0 14px;font-size:14px;line-height:1.6;opacity:.92;">Falta só confirmar pagando a 1ª mensalidade. A caução fica pré-autorizada no cartão (não é cobrada) e liberada no check-out aprovado.</p>'
+      + '<div style="background:rgba(255,255,255,.16);border-radius:10px;padding:14px 18px;margin-bottom:14px;">'
+      +   '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13.5px;"><span style="opacity:.88;">Mensalidade</span><strong>' + fmtBRL(b.monthly_price) + '/mês</strong></div>'
+      +   '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13.5px;"><span style="opacity:.88;">Caução (pré-auth)</span><strong>' + fmtBRL(b.deposit_amount) + '</strong></div>'
+      +   '<div style="display:flex;justify-content:space-between;font-size:13.5px;"><span style="opacity:.88;">Período</span><strong>' + fmtDate(b.start_date) + ' → ' + fmtDate(b.end_date) + '</strong></div>'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+      +   '<a href="/reserva-detalhe.html?id=' + b.id + '" style="display:inline-block;background:#fff;color:#145f3e;padding:13px 28px;border-radius:8px;text-decoration:none;font-weight:800;font-size:15px;">💳 Pagar e confirmar</a>'
+      +   '<a href="/reserva-detalhe.html?id=' + b.id + '" style="display:inline-block;background:transparent;color:#fff;padding:13px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid rgba(255,255,255,.4);">Ver detalhes</a>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function escapeHtmlSafe(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  /* ====================================================================
      Fase 43 — Card Nomade Gold (loyalty tier)
      ==================================================================== */
   function loadLoyalty() {
@@ -1679,8 +1744,10 @@
   }
 
   window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(loadApprovedPending, 600);   // Fase 44 — prioridade máxima (reservas aprovadas)
     setTimeout(loadLoyalty, 800);
     setTimeout(loadRenewals, 1200);
+    setInterval(loadApprovedPending, 30000); // refresh rápido pra ver aprovação chegar
     setInterval(loadRenewals, 300000); // refresh a cada 5min
     setInterval(loadLoyalty, 600000); // loyalty refresh a cada 10min
   });
