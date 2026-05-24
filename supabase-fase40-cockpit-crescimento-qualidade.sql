@@ -62,13 +62,13 @@ select
   (select count(*) from public.profiles
     where verification_status != 'rascunho')::int as iniciaram_verificacao,
 
-  -- Documentos enviados (qualquer documento com status != rascunho)
-  -- (precisa de tabela documents — se não existir, retorna 0)
-  coalesce((
-    select count(distinct user_id)
-    from public.documents
-    where status != 'rascunho'
-  ), 0)::int as enviaram_documentos,
+  -- Em análise+ (proxy pra "enviou docs" — substitui referência a
+  -- public.documents que pode não existir no schema base)
+  (select count(*) from public.profiles
+    where verification_status in (
+      'em_analise', 'documentos_pendentes', 'aprovado',
+      'aprovado_com_ressalvas', 'recusado'
+    ))::int as enviaram_documentos,
 
   -- Aprovados (verification_status = aprovado)
   (select count(*) from public.profiles
