@@ -2055,7 +2055,7 @@
       ";border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;";
 
     // Fase 42 fix CRÍTICO: escapeHtml em TODOS os campos vindos do form público.
-    // Sem isso, atacante submete <script>...</script> no nome → executa na sessão admin.
+    // Sem isso, atacante submete tag <script> no nome -> executa na sessao admin.
     var details = [];
     if (r.city) details.push("📍 " + escapeHtml(r.city));
     if (r.desired_months) details.push("📆 " + parseInt(r.desired_months, 10) + "m");

@@ -99,10 +99,16 @@ select
   end as resultado,
   left(content::text, 150) as resposta
 from net._http_response
+-- net._http_response NÃO tem coluna url. Filtra por janela de tempo
+-- e por conteúdo da resposta (tier-promotion retorna mensagens específicas)
 where created >= now() - interval '2 minutes'
-  and url like '%send-tier-promotion%'
+  and (
+    content::text ilike '%event_id%'
+    or content::text ilike '%tier%'
+    or content::text ilike '%client_id%'
+  )
 order by created desc
-limit 3;
+limit 5;
 
 -- ============================================================
 -- TESTE C: HONEYPOT do submit-lead-quote

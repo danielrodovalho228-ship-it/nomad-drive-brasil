@@ -98,10 +98,10 @@ select net.http_post(
 ### Validar envio
 ```sql
 -- Logs Resend (status, ID do envio)
+-- ⚠️ net._http_response NÃO tem coluna url. Filtra por janela de tempo.
 select id, status_code, content::text
 from net._http_response
 where created >= now() - interval '5 minutes'
-  and url like '%send-email%'
 order by created desc limit 5;
 ```
 
