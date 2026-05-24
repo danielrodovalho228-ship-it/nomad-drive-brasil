@@ -161,6 +161,7 @@
         <div class="dash-kpi"><span>Período</span><strong id="resvPeriod">—</strong></div>
         <div class="dash-kpi"><span>Valor mensal</span><strong id="resvPrice">—</strong></div>
         <div class="dash-kpi"><span>Veículo</span><strong id="resvVehicle">—</strong></div>
+        <div class="dash-kpi"><span>Protocolo</span><strong id="resvProtocol">—</strong></div>
       </div>
 
       <section class="dash-panel">
@@ -341,6 +342,7 @@
         document.getElementById("resvPrice").textContent =
           (b.monthly_price != null) ? "R$ " + Number(b.monthly_price).toLocaleString("pt-BR") : "—";
         document.getElementById("resvVehicle").textContent = vehText(b.vehicles);
+        document.getElementById("resvProtocol").textContent = b.protocol_number || "—";
 
         loadSubscription(c, b);
         loadPayments(c, id);

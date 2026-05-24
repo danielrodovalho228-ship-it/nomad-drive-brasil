@@ -598,7 +598,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260524b"></script>
 <script src="statuses.js?v=20260524b"></script>
-<script src="emails-runtime.js?v=20260524d"></script>
+<script src="emails-runtime.js?v=20260524f"></script>
 <script src="script.js?v=20260524b"></script>
 <script>
 (function () {
@@ -1400,7 +1400,8 @@
             veiculo: veiculo,
             status: newStatus,
             status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
-            resolution_notes: newNotes
+            resolution_notes: newNotes,
+            protocolo: cs.protocol_number    // Fase 36: footer mostra PR-AAAA-####
           }).catch(function (e) { console.warn('case_resolved_client:', e); });
 
           // 2) E-mail pra CONTRAPARTE (Fase 35 — transparência)
@@ -1419,7 +1420,8 @@
               veiculo: veiculo,
               status: newStatus,
               status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
-              resolution_notes: newNotes
+              resolution_notes: newNotes,
+              protocolo: cs.protocol_number    // Fase 36
             }).catch(function () {});
           }).catch(function (e) {
             console.warn('get_case_counterparty RPC falhou:', e && e.message);

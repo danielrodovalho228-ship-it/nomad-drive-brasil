@@ -96,6 +96,9 @@
       '<tr><td style="background:#f4f7f5;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;line-height:1.55;">' +
       '<strong style="color:#14201b;">Nomade Drive Brasil</strong> · Uberlândia/MG<br>' +
       '<a href="' + SITE + '" style="color:#145f3e;text-decoration:none;">nomadedrive.com.br</a> · ' + escapeHtml(footerNote) + '<br>' +
+      (opts.protocolo
+        ? '<span style="color:#5b6b63;font-family:monospace;font-size:11.5px;letter-spacing:0.3px;">📋 Protocolo: <strong>' + escapeHtml(opts.protocolo) + '</strong></span><br>'
+        : '') +
       '<span style="color:#8a9591;">Disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</span>' +
       '</td></tr></table></td></tr></table></body></html>'
     );
