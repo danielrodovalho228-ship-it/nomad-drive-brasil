@@ -11,6 +11,122 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
+<style>
+/* ============================================================
+ * Fase 37/38/39 — Cockpit CEO
+ * ============================================================ */
+.cockpit-hero {
+  background: linear-gradient(135deg, #0f5132 0%, #1a7a4f 100%);
+  color: #fff;
+  padding: 28px 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px -8px rgba(15,81,50,0.35);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.cockpit-hero::before {
+  content: '';
+  position: absolute; top: -30%; right: -10%;
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cockpit-hero__head {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 22px; gap: 14px;
+  flex-wrap: wrap; position: relative;
+}
+.cockpit-hero__eyebrow {
+  font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  opacity: 0.85; margin: 0;
+}
+.cockpit-hero__title {
+  font-size: 26px; font-weight: 800;
+  margin: 4px 0 2px; font-family: 'Sora', sans-serif;
+}
+.cockpit-hero__sub { font-size: 13.5px; opacity: 0.88; margin: 0; }
+.cockpit-hero__period {
+  font-size: 13px; padding: 6px 14px;
+  background: rgba(255,255,255,0.15); border-radius: 6px;
+}
+.cockpit-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; margin-bottom: 18px; position: relative;
+}
+.cockpit-kpi {
+  background: rgba(255,255,255,0.1);
+  padding: 16px 18px; border-radius: 12px;
+  display: flex; align-items: center; gap: 14px;
+  backdrop-filter: blur(4px);
+  border-left: 3px solid rgba(255,255,255,0.3);
+}
+.cockpit-kpi--green { border-left-color: #4ade80; }
+.cockpit-kpi--orange { border-left-color: #fbbf24; }
+.cockpit-kpi--blue { border-left-color: #60a5fa; }
+.cockpit-kpi--purple { border-left-color: #c084fc; }
+.cockpit-kpi__icon { font-size: 28px; line-height: 1; }
+.cockpit-kpi__data { display: flex; flex-direction: column; min-width: 0; }
+.cockpit-kpi__label {
+  font-size: 11.5px; opacity: 0.82;
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.cockpit-kpi__value {
+  font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums;
+  margin: 2px 0; font-family: 'Sora', sans-serif; line-height: 1.1;
+}
+.cockpit-kpi__sub { font-size: 11.5px; opacity: 0.78; }
+
+.cockpit-alerts {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 14px; position: relative;
+}
+.cockpit-alert {
+  background: rgba(220, 38, 38, 0.25);
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 12.5px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.cockpit-alert--info { background: rgba(96, 165, 250, 0.25); }
+
+.cockpit-mei-bar {
+  margin-top: 18px; padding: 14px 18px;
+  background: rgba(255,255,255,0.1); border-radius: 12px;
+  position: relative;
+}
+.cockpit-mei-bar__head {
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 10px; font-size: 13px;
+}
+.cockpit-mei-bar__label { font-weight: 600; opacity: 0.95; }
+.cockpit-mei-bar__value strong {
+  font-size: 16px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.cockpit-mei-bar__track {
+  height: 8px; background: rgba(0,0,0,0.2);
+  border-radius: 4px; overflow: hidden;
+}
+.cockpit-mei-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, #fbbf24 70%, #f87171);
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cockpit-mei-bar__warning {
+  margin-top: 8px; font-size: 12.5px;
+  font-weight: 600; color: #fef3c7;
+}
+
+@media (max-width: 640px) {
+  .cockpit-hero { padding: 20px 18px; }
+  .cockpit-hero__title { font-size: 20px; }
+  .cockpit-kpi__value { font-size: 18px; }
+}
+</style>
 </head>
 <body class="admin-body">
 
@@ -33,6 +149,7 @@
       <span>Admin <strong>Nomade Drive</strong></span>
     </div>
     <nav class="admin-side__nav">
+      <a href="#cockpit" style="background:#e6f4ec;font-weight:700;color:#0f5132;border-left:3px solid #0f5132;"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 14 21 8"/></svg>🎯 Cockpit CEO</a>
       <a href="#visao" class="is-current"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Visão geral</a>
       <a href="#notificacoes"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Notificações</a>
       <a href="#cadastros"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Cadastros e aprovações</a>
@@ -47,6 +164,9 @@
       <a href="#parceiros"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Parceiros</a>
       <a href="#sinistros"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6"/></svg>Proteção / Sinistros</a>
       <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financeiro</a>
+      <a href="#contas-pagar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Contas a pagar</a>
+      <a href="#fiscal"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 14 2 2 4-4"/></svg>Fiscal (MEI)</a>
+      <a href="#equipe"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipe</a>
       <a href="#nfs"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Notas fiscais</a>
       <a href="#log"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Log de atividades</a>
       <a href="#config"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07 4.25 4.25M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07 4.25-4.25"/></svg>Configurações</a>
@@ -78,6 +198,83 @@
       </div>
       <span class="admin-demo" id="adminDemoBadge">Modo demonstração</span>
     </header>
+
+    <!-- ============================================================
+         Fase 37 — COCKPIT DO CEO (sempre no topo)
+         ============================================================ -->
+    <section class="admin-block" id="cockpit">
+      <div class="cockpit-hero">
+        <div class="cockpit-hero__head">
+          <div>
+            <p class="cockpit-hero__eyebrow">🎯 Cockpit Executivo</p>
+            <h2 class="cockpit-hero__title" id="cockpitGreeting">Olá, Daniel</h2>
+            <p class="cockpit-hero__sub">Nomade Drive Brasil em números — tempo real</p>
+          </div>
+          <div class="cockpit-hero__period" id="cockpitPeriod">📅 <span id="cockpitDate">—</span></div>
+        </div>
+
+        <div class="cockpit-kpis">
+          <div class="cockpit-kpi cockpit-kpi--green">
+            <span class="cockpit-kpi__icon">💰</span>
+            <div class="cockpit-kpi__data">
+              <span class="cockpit-kpi__label">Receita do mês</span>
+              <span class="cockpit-kpi__value" id="kpiReceitaMes">R$ —</span>
+              <span class="cockpit-kpi__sub" id="kpiReceitaSub">— ano</span>
+            </div>
+          </div>
+          <div class="cockpit-kpi cockpit-kpi--orange">
+            <span class="cockpit-kpi__icon">⏳</span>
+            <div class="cockpit-kpi__data">
+              <span class="cockpit-kpi__label">Contas a pagar (7d)</span>
+              <span class="cockpit-kpi__value" id="kpiContasPagar">R$ —</span>
+              <span class="cockpit-kpi__sub" id="kpiContasPagarSub">— em 30d</span>
+            </div>
+          </div>
+          <div class="cockpit-kpi cockpit-kpi--blue">
+            <span class="cockpit-kpi__icon">🚗</span>
+            <div class="cockpit-kpi__data">
+              <span class="cockpit-kpi__label">Frota</span>
+              <span class="cockpit-kpi__value" id="kpiFrota">—</span>
+              <span class="cockpit-kpi__sub" id="kpiFrotaSub">— em uso</span>
+            </div>
+          </div>
+          <div class="cockpit-kpi cockpit-kpi--purple">
+            <span class="cockpit-kpi__icon">👥</span>
+            <div class="cockpit-kpi__data">
+              <span class="cockpit-kpi__label">Base de clientes</span>
+              <span class="cockpit-kpi__value" id="kpiBase">—</span>
+              <span class="cockpit-kpi__sub" id="kpiBaseSub">— novos no mês</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linha 2: alertas + status -->
+        <div class="cockpit-alerts" id="cockpitAlerts">
+          <span class="cockpit-alert" id="alertSLA" hidden>🚨 <span id="alertSLACount">0</span> SLA vencendo</span>
+          <span class="cockpit-alert" id="alertAvarias" hidden>⚠️ <span id="alertAvariasCount">0</span> avarias pendentes</span>
+          <span class="cockpit-alert" id="alertMultas" hidden>🚦 <span id="alertMultasCount">0</span> multas a cobrar</span>
+          <span class="cockpit-alert cockpit-alert--info" id="alertDAS" hidden>🧾 DAS MEI vence em <span id="alertDASDays">—</span> dias</span>
+          <span class="cockpit-alert cockpit-alert--info" id="alertSaques" hidden>💸 R$ <span id="alertSaquesValor">0</span> em saques disponíveis</span>
+        </div>
+
+        <!-- Linha 3: Limite MEI -->
+        <div class="cockpit-mei-bar" id="cockpitMeiBar">
+          <div class="cockpit-mei-bar__head">
+            <span class="cockpit-mei-bar__label">🧾 Faturamento MEI <span id="meiYear">2026</span></span>
+            <span class="cockpit-mei-bar__value">
+              <strong id="meiCurrent">R$ —</strong> de <span id="meiLimit">R$ 81.000</span>
+              (<span id="meiPct">—</span>%)
+            </span>
+          </div>
+          <div class="cockpit-mei-bar__track">
+            <div class="cockpit-mei-bar__fill" id="meiFill" style="width:0%"></div>
+          </div>
+          <p class="cockpit-mei-bar__warning" id="meiWarning" hidden>
+            ⚠️ Próximo do limite — considere migrar pra ME/EPP (Simples Nacional)
+          </p>
+        </div>
+      </div>
+    </section>
 
     <!-- VISÃO GERAL -->
     <section class="admin-block" id="visao">
@@ -315,6 +512,232 @@
         <a href="https://dashboard.stripe.com/test/connect/application_fees" target="_blank" rel="noopener">Stripe → Connect → Application fees</a>.
         Devem bater com os valores acima.
       </p>
+    </section>
+
+    <!-- ============================================================
+         Fase 38 — CONTAS A PAGAR
+         ============================================================ -->
+    <section class="admin-block" id="contas-pagar">
+      <h2 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <span>⏳ Contas a pagar</span>
+        <button type="button" id="btnAddExpense"
+          style="font-size:13px;font-weight:600;padding:8px 16px;border:0;border-radius:6px;background:#0f5132;color:#fff;cursor:pointer;">
+          ➕ Nova despesa
+        </button>
+      </h2>
+      <p class="note">Hospedagem, ferramentas, marketing, salários — tudo o que sai do caixa. Marque como pago quando quitar.</p>
+
+      <!-- Form add despesa (collapsed default) -->
+      <div class="admin-card" id="expenseFormCard" hidden style="margin-bottom:14px;border-left:3px solid #0f5132;">
+        <h3 class="block-title">Nova despesa</h3>
+        <form id="expenseForm">
+          <div class="form__grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
+            <label class="field"><span>Categoria *</span>
+              <select id="expCategory" required>
+                <option value="hosting">🌐 Hospedagem</option>
+                <option value="stripe_fees">💳 Taxas Stripe</option>
+                <option value="resend">📧 Resend (e-mails)</option>
+                <option value="infosimples">🚦 Infosimples (multas)</option>
+                <option value="cobli">📡 Cobli (rastreador)</option>
+                <option value="notazz">🧾 NotaZZ (NF)</option>
+                <option value="marketing">📢 Marketing</option>
+                <option value="salario">👔 Salário</option>
+                <option value="pro_labore">💼 Pró-labore</option>
+                <option value="distribuicao_lucros">💰 Distribuição de lucros</option>
+                <option value="contabilidade">🧮 Contabilidade</option>
+                <option value="dominio">🌍 Domínio</option>
+                <option value="escritorio">🏢 Escritório</option>
+                <option value="equipamentos">💻 Equipamentos</option>
+                <option value="outros">⋯ Outros</option>
+              </select>
+            </label>
+            <label class="field"><span>Fornecedor</span>
+              <input type="text" id="expVendor" placeholder="ex: Hostinger" />
+            </label>
+            <label class="field"><span>Valor (R$) *</span>
+              <input type="number" id="expAmount" min="0.01" step="0.01" required />
+            </label>
+            <label class="field"><span>Vencimento</span>
+              <input type="date" id="expDueDate" />
+            </label>
+            <label class="field"><span>Recorrência *</span>
+              <select id="expRecurrence" required>
+                <option value="one_off">Única (one-off)</option>
+                <option value="monthly">Mensal</option>
+                <option value="yearly">Anual</option>
+              </select>
+            </label>
+          </div>
+          <label class="field" style="margin-top:10px;"><span>Descrição *</span>
+            <input type="text" id="expDescription" required placeholder="ex: Hospedagem Cloud Startup - renovação anual" />
+          </label>
+          <label class="field" style="margin-top:8px;"><span>Notas (opcional)</span>
+            <textarea id="expNotes" rows="2"></textarea>
+          </label>
+          <p id="expFormErr" style="color:#b00020;margin-top:6px;font-size:13px;" hidden></p>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button type="submit" class="btn btn--solid btn--sm">💾 Salvar</button>
+            <button type="button" class="btn btn--ghost btn--sm" id="btnCancelExpense">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <select id="expFilterStatus" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;">
+            <option value="all">Todas</option>
+            <option value="pending" selected>A pagar</option>
+            <option value="paid">Pagas</option>
+            <option value="overdue">Vencidas</option>
+          </select>
+          <select id="expFilterCategory" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;">
+            <option value="">Todas as categorias</option>
+          </select>
+          <span style="margin-left:auto;color:#5b6b63;font-size:12px;font-weight:500;" id="expTotalInfo">—</span>
+        </div>
+        <table class="admin-table">
+          <thead><tr>
+            <th>Vencimento</th>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr></thead>
+          <tbody id="expList"><tr><td colspan="6">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Fase 39 — FISCAL (MEI)
+         ============================================================ -->
+    <section class="admin-block" id="fiscal">
+      <h2>🧾 Fiscal — MEI</h2>
+      <p class="note">Obrigações fiscais do MEI. Limite anual <strong>R$ 81.000</strong>. DAS mensal fixo (~R$ 75) vence dia 20. DASN anual em janeiro.</p>
+
+      <div class="kpi-grid">
+        <div class="kpi"><small>Faturamento ano corrente</small><b id="fisFaturamento">R$ —</b><span id="fisFaturamentoPct">— do limite</span></div>
+        <div class="kpi"><small>Próximo DAS</small><b id="fisProxDas">R$ —</b><span id="fisProxDasData">— em — dias</span></div>
+        <div class="kpi"><small>DAS pagos (ano)</small><b id="fisDasPagos">—</b><span>de 12 meses</span></div>
+        <div class="kpi"><small>Margem até virar ME</small><b id="fisMargem">R$ —</b><span>antes do limite</span></div>
+      </div>
+
+      <div class="admin-card" style="margin-top:18px;">
+        <h3 class="block-title">📅 DAS MEI — próximos 12 meses</h3>
+        <table class="admin-table">
+          <thead><tr>
+            <th>Mês ref.</th>
+            <th>Vencimento</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr></thead>
+          <tbody id="fisDasList"><tr><td colspan="5">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="why-box why-box--warn" id="meiMigrateAlert" style="margin-top:16px;" hidden>
+        <h3>⚠️ Próximo do limite MEI</h3>
+        <p>Seu faturamento anual está se aproximando dos R$ 81.000 do limite MEI. Considere migrar pra <strong>ME (Microempresa)</strong> no Simples Nacional — DAS variável (4-15%) mas permite faturamento até R$ 360k/ano e equipe maior.</p>
+        <p style="margin-top:8px;"><strong>Próximos passos sugeridos:</strong> contratar um contador, abrir CNPJ ME, transferir contratos, comunicar Stripe sobre mudança de tipo.</p>
+      </div>
+
+      <div class="why-box" style="margin-top:14px;background:#f0f9ff;border-left:3px solid #1a4d8c;">
+        <h3>📚 Lembretes anuais</h3>
+        <ul style="margin:6px 0 0 18px;line-height:1.7;">
+          <li><strong>DASN-SIMEI:</strong> declaração anual do MEI — janeiro/maio (varia)</li>
+          <li><strong>IRPF (PF):</strong> declaração até final de abril — retiradas isentas até R$ 28.560/ano</li>
+          <li><strong>Renovação dados MEI:</strong> revisar atividades CNAE anualmente</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Fase 39b — EQUIPE
+         ============================================================ -->
+    <section class="admin-block" id="equipe">
+      <h2 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <span>👥 Equipe</span>
+        <button type="button" id="btnAddEmployee"
+          style="font-size:13px;font-weight:600;padding:8px 16px;border:0;border-radius:6px;background:#0f5132;color:#fff;cursor:pointer;">
+          ➕ Adicionar pessoa
+        </button>
+      </h2>
+      <p class="note">Sócios, funcionários CLT, PJ, estagiários. Custo total da folha aparece nos KPIs.</p>
+
+      <div class="why-box why-box--warn" id="meiTeamAlert" style="margin-bottom:14px;" hidden>
+        <h3>⚠️ MEI tem limite de funcionários</h3>
+        <p>MEI permite apenas <strong>1 funcionário CLT</strong> (titular + 1). Sócios NÃO são permitidos no MEI — Empresário Individual é unipessoal. Pra ter sócio ou mais de 1 funcionário, precisa migrar pra <strong>ME (Microempresa)</strong>.</p>
+      </div>
+
+      <!-- Form add funcionário -->
+      <div class="admin-card" id="employeeFormCard" hidden style="margin-bottom:14px;border-left:3px solid #0f5132;">
+        <h3 class="block-title">Adicionar pessoa</h3>
+        <form id="employeeForm">
+          <div class="form__grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
+            <label class="field"><span>Nome completo *</span>
+              <input type="text" id="empName" required />
+            </label>
+            <label class="field"><span>E-mail</span>
+              <input type="email" id="empEmail" />
+            </label>
+            <label class="field"><span>Telefone</span>
+              <input type="text" id="empPhone" />
+            </label>
+            <label class="field"><span>Cargo</span>
+              <input type="text" id="empRole" placeholder="ex: CTO, Desenvolvedor, Suporte" />
+            </label>
+            <label class="field"><span>Tipo de contrato *</span>
+              <select id="empContract" required>
+                <option value="socio">🤝 Sócio</option>
+                <option value="clt">📋 CLT</option>
+                <option value="pj">💼 PJ</option>
+                <option value="estagio">🎓 Estágio</option>
+                <option value="aprendiz">👶 Aprendiz</option>
+                <option value="informal">🤷 Informal</option>
+              </select>
+            </label>
+            <label class="field"><span>Salário/Pró-labore mensal (R$)</span>
+              <input type="number" id="empSalary" min="0" step="0.01" />
+            </label>
+            <label class="field"><span>Benefícios (R$/mês)</span>
+              <input type="number" id="empBenefits" min="0" step="0.01" value="0" />
+            </label>
+            <label class="field"><span>Data admissão</span>
+              <input type="date" id="empHireDate" />
+            </label>
+          </div>
+          <label class="field" style="margin-top:8px;"><span>Notas</span>
+            <textarea id="empNotes" rows="2"></textarea>
+          </label>
+          <p id="empFormErr" style="color:#b00020;margin-top:6px;font-size:13px;" hidden></p>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button type="submit" class="btn btn--solid btn--sm">💾 Adicionar</button>
+            <button type="button" class="btn btn--ghost btn--sm" id="btnCancelEmployee">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><small>Pessoas ativas</small><b id="empCount">—</b><span>na equipe</span></div>
+        <div class="kpi"><small>Folha mensal (bruto)</small><b id="empFolha">R$ —</b><span>salários + benefícios</span></div>
+        <div class="kpi"><small>Custo anual</small><b id="empAnual">R$ —</b><span>folha × 12 (sem encargos)</span></div>
+      </div>
+
+      <div class="admin-card" style="margin-top:18px;">
+        <table class="admin-table">
+          <thead><tr>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Contrato</th>
+            <th>Salário</th>
+            <th>Admissão</th>
+            <th>Ações</th>
+          </tr></thead>
+          <tbody id="empList"><tr><td colspan="6">Carregando...</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- NOTAS FISCAIS -->
@@ -2250,6 +2673,505 @@
 
     return card;
   }
+})();
+</script>
+
+<script>
+/* ============================================================
+ * Fase 37/38/39 — Cockpit CEO: loaders + CRUD
+ * ============================================================
+ * Carrega ceo_cockpit_summary, lista expenses, tax_obligations,
+ * employees. CRUD de despesas + funcionários. Filtros básicos.
+ * ============================================================ */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function fmtBRL(n) {
+    n = Number(n) || 0;
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
+  }
+  function fmtInt(n) {
+    return new Intl.NumberFormat('pt-BR').format(Number(n) || 0);
+  }
+  function fmtDateBR(d) {
+    if (!d) return '—';
+    try {
+      var dt = new Date(d);
+      return dt.toLocaleDateString('pt-BR');
+    } catch (e) { return String(d); }
+  }
+  function daysUntil(date) {
+    if (!date) return null;
+    var diff = (new Date(date) - new Date()) / 86400000;
+    return Math.ceil(diff);
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  var CATEGORY_LABEL = {
+    hosting: '🌐 Hospedagem', stripe_fees: '💳 Taxas Stripe', resend: '📧 Resend',
+    infosimples: '🚦 Infosimples', cobli: '📡 Cobli', notazz: '🧾 NotaZZ',
+    marketing: '📢 Marketing', salario: '👔 Salário', pro_labore: '💼 Pró-labore',
+    distribuicao_lucros: '💰 Distribuição', contabilidade: '🧮 Contabilidade',
+    dominio: '🌍 Domínio', escritorio: '🏢 Escritório',
+    equipamentos: '💻 Equipamentos', outros: '⋯ Outros'
+  };
+  var CONTRACT_LABEL = {
+    socio: '🤝 Sócio', clt: '📋 CLT', pj: '💼 PJ',
+    estagio: '🎓 Estágio', aprendiz: '👶 Aprendiz', informal: '🤷 Informal'
+  };
+
+  function getClient() {
+    return (window.ndAuth && window.ndAuth.client && window.ndAuth.client()) || null;
+  }
+
+  /* ============================================================
+   * COCKPIT HERO
+   * ============================================================ */
+  function loadCockpit() {
+    var sb = getClient(); if (!sb) return;
+
+    // Data atual
+    var dateEl = $('cockpitDate');
+    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR',
+      { weekday: 'long', day: 'numeric', month: 'long' });
+
+    // Greeting com nome
+    sb.auth.getUser().then(function (u) {
+      var name = u && u.data && u.data.user && (
+        u.data.user.user_metadata && u.data.user.user_metadata.full_name
+      );
+      if (name) {
+        var first = String(name).split(' ')[0];
+        var g = $('cockpitGreeting');
+        if (g) g.textContent = 'Olá, ' + first;
+      }
+    }).catch(function () {});
+
+    // Summary view
+    sb.from('ceo_cockpit_summary').select('*').maybeSingle().then(function (r) {
+      var s = r && r.data;
+      if (!s) return;
+
+      // KPI 1: Receita
+      $('kpiReceitaMes').textContent = fmtBRL(s.receita_mes);
+      $('kpiReceitaSub').textContent = fmtBRL(s.receita_ano) + ' no ano';
+
+      // KPI 2: Contas a pagar
+      $('kpiContasPagar').textContent = fmtBRL(s.contas_pagar_7d);
+      $('kpiContasPagarSub').textContent = fmtBRL(s.contas_pagar_30d) + ' em 30 dias';
+
+      // KPI 3: Frota
+      $('kpiFrota').textContent = fmtInt(s.veiculos_aprovados) + '/' + fmtInt(s.veiculos_total);
+      $('kpiFrotaSub').textContent = fmtInt(s.bookings_ativos) + ' em uso';
+
+      // KPI 4: Base
+      var totalBase = (s.clientes_aprovados || 0) + (s.proprietarios_aprovados || 0);
+      $('kpiBase').textContent = fmtInt(totalBase);
+      $('kpiBaseSub').textContent = '+' + fmtInt(s.novos_usuarios_mes) + ' no mês';
+
+      // Alertas
+      var showAlert = function (id, count) {
+        var el = $(id);
+        if (!el) return;
+        var n = Number(count) || 0;
+        if (n > 0) {
+          el.removeAttribute('hidden');
+          var countEl = el.querySelector('span');
+          if (countEl) countEl.textContent = n;
+        } else el.setAttribute('hidden', '');
+      };
+      showAlert('alertSLA', s.cases_vencendo_sla);
+      showAlert('alertAvarias', s.avarias_pendentes);
+      showAlert('alertMultas', s.multas_pendentes);
+
+      // DAS countdown
+      var dasDays = daysUntil(s.proximo_das_data);
+      if (dasDays != null && dasDays >= 0) {
+        $('alertDAS').removeAttribute('hidden');
+        $('alertDASDays').textContent = dasDays;
+      }
+
+      // Saques disponíveis
+      if (s.saques_disponiveis > 0) {
+        $('alertSaques').removeAttribute('hidden');
+        $('alertSaquesValor').textContent = fmtBRL(s.saques_disponiveis).replace('R$', '').trim();
+      }
+
+      // MEI bar
+      var fat = Number(s.faturamento_ano_corrente) || 0;
+      var lim = Number(s.mei_limit) || 81000;
+      var pct = Math.min(100, (fat / lim) * 100);
+      $('meiCurrent').textContent = fmtBRL(fat);
+      $('meiLimit').textContent = fmtBRL(lim);
+      $('meiPct').textContent = pct.toFixed(1);
+      $('meiYear').textContent = new Date().getFullYear();
+      $('meiFill').style.width = pct + '%';
+      if (pct >= 75) {
+        $('meiWarning').removeAttribute('hidden');
+      }
+    }).catch(function (e) {
+      console.warn('ceo_cockpit_summary não disponível:', e && e.message);
+    });
+  }
+
+  /* ============================================================
+   * CONTAS A PAGAR (CRUD)
+   * ============================================================ */
+  var expensesState = { rows: [], filter: { status: 'pending', category: '' } };
+
+  function loadExpenses() {
+    var sb = getClient(); if (!sb) return;
+    var tb = $('expList'); if (!tb) return;
+    tb.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+    sb.from('expenses').select('*').order('due_date', { ascending: true, nullsFirst: false }).limit(200)
+      .then(function (r) {
+        if (!r || r.error) {
+          tb.innerHTML = '<tr><td colspan="6" style="color:#b00020;">Erro ao carregar.</td></tr>';
+          return;
+        }
+        expensesState.rows = r.data || [];
+        // Popula filtro de categorias dinamicamente
+        var cats = Array.from(new Set(expensesState.rows.map(function (e) { return e.category; })));
+        var sel = $('expFilterCategory');
+        if (sel) {
+          var current = sel.value;
+          sel.innerHTML = '<option value="">Todas as categorias</option>' +
+            cats.sort().map(function (c) {
+              return '<option value="' + c + '">' + (CATEGORY_LABEL[c] || c) + '</option>';
+            }).join('');
+          sel.value = current;
+        }
+        renderExpenses();
+      }).catch(function () {
+        tb.innerHTML = '<tr><td colspan="6" style="color:#b00020;">Erro.</td></tr>';
+      });
+  }
+  window.loadExpenses = loadExpenses;
+
+  function renderExpenses() {
+    var tb = $('expList'); if (!tb) return;
+    var f = expensesState.filter;
+    var now = Date.now();
+    var filtered = expensesState.rows.filter(function (e) {
+      if (f.category && e.category !== f.category) return false;
+      if (f.status === 'pending' && e.paid_at) return false;
+      if (f.status === 'paid' && !e.paid_at) return false;
+      if (f.status === 'overdue') {
+        if (e.paid_at) return false;
+        if (!e.due_date || new Date(e.due_date).getTime() >= now) return false;
+      }
+      return true;
+    });
+
+    var total = filtered.reduce(function (sum, e) { return sum + Number(e.amount); }, 0);
+    var info = $('expTotalInfo');
+    if (info) info.textContent = filtered.length + ' despesa(s) — Total: ' + fmtBRL(total);
+
+    if (!filtered.length) {
+      tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8a948e;padding:20px;">Nenhuma despesa.</td></tr>';
+      return;
+    }
+
+    tb.innerHTML = '';
+    filtered.forEach(function (e) {
+      var tr = document.createElement('tr');
+      var overdue = !e.paid_at && e.due_date && new Date(e.due_date).getTime() < now;
+      var statusHtml = e.paid_at
+        ? '<span style="color:#0f5132;font-weight:600;">✅ Pago em ' + fmtDateBR(e.paid_at) + '</span>'
+        : overdue
+          ? '<span style="color:#b00020;font-weight:600;">⚠️ Vencida</span>'
+          : '<span style="color:#cf7a1c;font-weight:600;">⏳ Pendente</span>';
+      tr.innerHTML =
+        '<td>' + fmtDateBR(e.due_date) + '</td>' +
+        '<td>' + (CATEGORY_LABEL[e.category] || e.category) + '</td>' +
+        '<td>' + escapeHtml(e.description) + (e.vendor ? ' <small style="color:#8a948e;">· ' + escapeHtml(e.vendor) + '</small>' : '') + '</td>' +
+        '<td style="font-weight:600;font-variant-numeric:tabular-nums;">' + fmtBRL(e.amount) + '</td>' +
+        '<td>' + statusHtml + '</td>' +
+        '<td>' + (e.paid_at
+          ? '<button type="button" data-undo="' + e.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #ccd5cf;background:#fff;border-radius:4px;cursor:pointer;">↶ Reabrir</button>'
+          : '<button type="button" data-pay="' + e.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #0f5132;background:#0f5132;color:#fff;border-radius:4px;cursor:pointer;">✓ Pagar</button>'
+        ) +
+        ' <button type="button" data-del="' + e.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #d4a3a8;background:#fff;color:#b00020;border-radius:4px;cursor:pointer;">🗑</button>' +
+        '</td>';
+      tb.appendChild(tr);
+    });
+
+    // Bind ações
+    tb.querySelectorAll('[data-pay]').forEach(function (b) {
+      b.addEventListener('click', function () { markExpensePaid(b.getAttribute('data-pay'), true); });
+    });
+    tb.querySelectorAll('[data-undo]').forEach(function (b) {
+      b.addEventListener('click', function () { markExpensePaid(b.getAttribute('data-undo'), false); });
+    });
+    tb.querySelectorAll('[data-del]').forEach(function (b) {
+      b.addEventListener('click', function () { deleteExpense(b.getAttribute('data-del')); });
+    });
+  }
+
+  function markExpensePaid(id, paid) {
+    var sb = getClient(); if (!sb) return;
+    sb.from('expenses').update({
+      paid_at: paid ? new Date().toISOString() : null
+    }).eq('id', id).then(function (r) {
+      if (r && r.error) { alert('Erro: ' + r.error.message); return; }
+      loadExpenses(); loadCockpit();
+    });
+  }
+  function deleteExpense(id) {
+    if (!confirm('Apagar esta despesa? Esta ação não pode ser desfeita.')) return;
+    var sb = getClient(); if (!sb) return;
+    sb.from('expenses').delete().eq('id', id).then(function (r) {
+      if (r && r.error) { alert('Erro: ' + r.error.message); return; }
+      loadExpenses(); loadCockpit();
+    });
+  }
+
+  /* ============================================================
+   * FISCAL MEI
+   * ============================================================ */
+  function loadFiscal() {
+    var sb = getClient(); if (!sb) return;
+    // DAS list
+    sb.from('tax_obligations').select('*').eq('kind', 'das_mei')
+      .order('due_date', { ascending: true }).limit(24)
+      .then(function (r) {
+        var tb = $('fisDasList');
+        if (!tb) return;
+        var rows = (r && r.data) || [];
+        if (!rows.length) {
+          tb.innerHTML = '<tr><td colspan="5">Nenhum DAS cadastrado.</td></tr>';
+          return;
+        }
+        tb.innerHTML = '';
+        var pagosThisYear = 0;
+        var thisYear = new Date().getFullYear();
+        rows.forEach(function (t) {
+          var pago = !!t.paid_at;
+          if (pago && t.reference_period && t.reference_period.indexOf(String(thisYear)) === 0) pagosThisYear++;
+          var status = pago
+            ? '<span style="color:#0f5132;font-weight:600;">✅ Pago</span>'
+            : daysUntil(t.due_date) < 0
+              ? '<span style="color:#b00020;font-weight:600;">⚠️ Vencido</span>'
+              : '<span style="color:#cf7a1c;font-weight:600;">⏳ Em aberto</span>';
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + escapeHtml(t.reference_period) + '</td>' +
+            '<td>' + fmtDateBR(t.due_date) + '</td>' +
+            '<td style="font-weight:600;">' + fmtBRL(t.amount) + '</td>' +
+            '<td>' + status + '</td>' +
+            '<td>' + (pago
+              ? '<button type="button" data-tax-undo="' + t.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #ccd5cf;background:#fff;border-radius:4px;cursor:pointer;">↶ Reabrir</button>'
+              : '<button type="button" data-tax-pay="' + t.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #0f5132;background:#0f5132;color:#fff;border-radius:4px;cursor:pointer;">✓ Marcar pago</button>'
+            ) + '</td>';
+          tb.appendChild(tr);
+        });
+        $('fisDasPagos').textContent = pagosThisYear;
+        // Bind
+        tb.querySelectorAll('[data-tax-pay]').forEach(function (b) {
+          b.addEventListener('click', function () { markTaxPaid(b.getAttribute('data-tax-pay'), true); });
+        });
+        tb.querySelectorAll('[data-tax-undo]').forEach(function (b) {
+          b.addEventListener('click', function () { markTaxPaid(b.getAttribute('data-tax-undo'), false); });
+        });
+      });
+
+    // KPIs faturamento (lê do cockpit summary)
+    sb.from('ceo_cockpit_summary').select('*').maybeSingle().then(function (r) {
+      var s = r && r.data; if (!s) return;
+      var fat = Number(s.faturamento_ano_corrente) || 0;
+      var lim = Number(s.mei_limit) || 81000;
+      var pct = (fat / lim) * 100;
+      $('fisFaturamento').textContent = fmtBRL(fat);
+      $('fisFaturamentoPct').textContent = pct.toFixed(1) + '% do limite';
+      $('fisProxDas').textContent = fmtBRL(s.proximo_das_valor);
+      var dasDays = daysUntil(s.proximo_das_data);
+      $('fisProxDasData').textContent = s.proximo_das_data
+        ? fmtDateBR(s.proximo_das_data) + (dasDays != null ? ' (em ' + dasDays + 'd)' : '')
+        : '—';
+      $('fisMargem').textContent = fmtBRL(Math.max(0, lim - fat));
+      if (pct >= 75) $('meiMigrateAlert').removeAttribute('hidden');
+    });
+  }
+  window.loadFiscal = loadFiscal;
+
+  function markTaxPaid(id, paid) {
+    var sb = getClient(); if (!sb) return;
+    sb.from('tax_obligations').update({
+      paid_at: paid ? new Date().toISOString() : null
+    }).eq('id', id).then(function (r) {
+      if (r && r.error) { alert('Erro: ' + r.error.message); return; }
+      loadFiscal(); loadCockpit();
+    });
+  }
+
+  /* ============================================================
+   * EQUIPE
+   * ============================================================ */
+  function loadEmployees() {
+    var sb = getClient(); if (!sb) return;
+    var tb = $('empList'); if (!tb) return;
+    tb.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+    sb.from('employees').select('*').eq('active', true).order('hire_date', { ascending: true })
+      .then(function (r) {
+        if (!r || r.error) {
+          tb.innerHTML = '<tr><td colspan="6" style="color:#b00020;">Erro.</td></tr>';
+          return;
+        }
+        var rows = r.data || [];
+        // KPIs
+        $('empCount').textContent = rows.length;
+        var folha = rows.reduce(function (sum, e) {
+          return sum + Number(e.monthly_salary || 0) + Number(e.benefits_monthly || 0);
+        }, 0);
+        $('empFolha').textContent = fmtBRL(folha);
+        $('empAnual').textContent = fmtBRL(folha * 12);
+
+        // Alerta MEI se tem sócio ou mais de 1 funcionário CLT
+        var socios = rows.filter(function (e) { return e.contract_type === 'socio'; }).length;
+        var clts = rows.filter(function (e) { return e.contract_type === 'clt'; }).length;
+        if (socios > 0 || clts > 1) {
+          $('meiTeamAlert').removeAttribute('hidden');
+        }
+
+        if (!rows.length) {
+          tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8a948e;padding:20px;">Nenhuma pessoa cadastrada ainda.</td></tr>';
+          return;
+        }
+        tb.innerHTML = '';
+        rows.forEach(function (e) {
+          var tr = document.createElement('tr');
+          var totalCost = Number(e.monthly_salary || 0) + Number(e.benefits_monthly || 0);
+          tr.innerHTML =
+            '<td><strong>' + escapeHtml(e.full_name) + '</strong>' +
+              (e.email ? '<br><small style="color:#8a948e;">' + escapeHtml(e.email) + '</small>' : '') + '</td>' +
+            '<td>' + escapeHtml(e.role_title || '—') + '</td>' +
+            '<td>' + (CONTRACT_LABEL[e.contract_type] || e.contract_type) + '</td>' +
+            '<td style="font-weight:600;font-variant-numeric:tabular-nums;">' + fmtBRL(totalCost) +
+              (e.benefits_monthly > 0 ? '<br><small style="color:#8a948e;">' + fmtBRL(e.monthly_salary) + ' + benef.</small>' : '') + '</td>' +
+            '<td>' + (e.hire_date ? fmtDateBR(e.hire_date) : '—') + '</td>' +
+            '<td><button type="button" data-emp-del="' + e.id + '" style="font-size:12px;padding:4px 8px;border:1px solid #d4a3a8;background:#fff;color:#b00020;border-radius:4px;cursor:pointer;">🗑 Desativar</button></td>';
+          tb.appendChild(tr);
+        });
+        tb.querySelectorAll('[data-emp-del]').forEach(function (b) {
+          b.addEventListener('click', function () { deactivateEmployee(b.getAttribute('data-emp-del')); });
+        });
+      });
+  }
+  window.loadEmployees = loadEmployees;
+
+  function deactivateEmployee(id) {
+    if (!confirm('Desativar esta pessoa? (não apaga histórico)')) return;
+    var sb = getClient(); if (!sb) return;
+    sb.from('employees').update({
+      active: false,
+      termination_date: new Date().toISOString().slice(0, 10)
+    }).eq('id', id).then(function (r) {
+      if (r && r.error) { alert('Erro: ' + r.error.message); return; }
+      loadEmployees(); loadCockpit();
+    });
+  }
+
+  /* ============================================================
+   * Handlers DOMContentLoaded
+   * ============================================================ */
+  window.addEventListener('DOMContentLoaded', function () {
+    // Espera 1s pra auth/sb estarem prontos
+    setTimeout(function () {
+      loadCockpit();
+      loadExpenses();
+      loadFiscal();
+      loadEmployees();
+    }, 1000);
+
+    // Refresh cockpit a cada 60s
+    setInterval(loadCockpit, 60000);
+
+    // ----- Expense form -----
+    var addBtn = $('btnAddExpense'),
+        cancelBtn = $('btnCancelExpense'),
+        formCard = $('expenseFormCard'),
+        form = $('expenseForm');
+    if (addBtn) addBtn.addEventListener('click', function () { formCard.removeAttribute('hidden'); });
+    if (cancelBtn) cancelBtn.addEventListener('click', function () { formCard.setAttribute('hidden', ''); form.reset(); });
+    if (form) form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var sb = getClient(); if (!sb) return;
+      var err = $('expFormErr');
+      err.hidden = true;
+      var body = {
+        category: $('expCategory').value,
+        vendor: $('expVendor').value.trim() || null,
+        description: $('expDescription').value.trim(),
+        amount: parseFloat($('expAmount').value),
+        due_date: $('expDueDate').value || null,
+        recurrence: $('expRecurrence').value,
+        notes: $('expNotes').value.trim() || null
+      };
+      if (!body.description || !body.amount) {
+        err.textContent = 'Preencha descrição e valor.';
+        err.hidden = false; return;
+      }
+      sb.from('expenses').insert(body).then(function (r) {
+        if (r && r.error) {
+          err.textContent = 'Erro: ' + r.error.message;
+          err.hidden = false; return;
+        }
+        form.reset();
+        formCard.setAttribute('hidden', '');
+        loadExpenses(); loadCockpit();
+      });
+    });
+
+    // ----- Expense filters -----
+    var fStatus = $('expFilterStatus'), fCat = $('expFilterCategory');
+    if (fStatus) fStatus.addEventListener('change', function () {
+      expensesState.filter.status = fStatus.value; renderExpenses();
+    });
+    if (fCat) fCat.addEventListener('change', function () {
+      expensesState.filter.category = fCat.value; renderExpenses();
+    });
+
+    // ----- Employee form -----
+    var addEmp = $('btnAddEmployee'),
+        cancelEmp = $('btnCancelEmployee'),
+        empFormCard = $('employeeFormCard'),
+        empForm = $('employeeForm');
+    if (addEmp) addEmp.addEventListener('click', function () { empFormCard.removeAttribute('hidden'); });
+    if (cancelEmp) cancelEmp.addEventListener('click', function () { empFormCard.setAttribute('hidden', ''); empForm.reset(); });
+    if (empForm) empForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var sb = getClient(); if (!sb) return;
+      var err = $('empFormErr');
+      err.hidden = true;
+      var body = {
+        full_name: $('empName').value.trim(),
+        email: $('empEmail').value.trim() || null,
+        phone: $('empPhone').value.trim() || null,
+        role_title: $('empRole').value.trim() || null,
+        contract_type: $('empContract').value,
+        monthly_salary: parseFloat($('empSalary').value) || 0,
+        benefits_monthly: parseFloat($('empBenefits').value) || 0,
+        hire_date: $('empHireDate').value || null,
+        notes: $('empNotes').value.trim() || null,
+        active: true
+      };
+      if (!body.full_name) {
+        err.textContent = 'Nome é obrigatório.';
+        err.hidden = false; return;
+      }
+      sb.from('employees').insert(body).then(function (r) {
+        if (r && r.error) {
+          err.textContent = 'Erro: ' + r.error.message;
+          err.hidden = false; return;
+        }
+        empForm.reset();
+        empFormCard.setAttribute('hidden', '');
+        loadEmployees(); loadCockpit();
+      });
+    });
+  });
 })();
 </script>
 </body>
