@@ -47,6 +47,12 @@
   margin: 4px 0 2px; font-family: 'Sora', sans-serif;
 }
 .cockpit-hero__sub { font-size: 13.5px; opacity: 0.88; margin: 0; }
+.cockpit-hero__legal {
+  font-size: 12px; opacity: 0.85;
+  margin: 8px 0 0; padding: 4px 10px;
+  background: rgba(0,0,0,0.15); border-radius: 5px;
+  display: inline-block;
+}
 .cockpit-hero__period {
   font-size: 13px; padding: 6px 14px;
   background: rgba(255,255,255,0.15); border-radius: 6px;
@@ -209,6 +215,9 @@
             <p class="cockpit-hero__eyebrow">🎯 Cockpit Executivo</p>
             <h2 class="cockpit-hero__title" id="cockpitGreeting">Olá, Daniel</h2>
             <p class="cockpit-hero__sub">Nomade Drive Brasil em números — tempo real</p>
+            <p class="cockpit-hero__legal" id="cockpitLegal" hidden>
+              🧾 MEI · Titular: <strong id="cockpitTitular">—</strong>
+            </p>
           </div>
           <div class="cockpit-hero__period" id="cockpitPeriod">📅 <span id="cockpitDate">—</span></div>
         </div>
@@ -2748,6 +2757,19 @@
         if (g) g.textContent = 'Olá, ' + first;
       }
     }).catch(function () {});
+
+    // Titular MEI (de business_settings)
+    sb.from('business_settings').select('legal_name, tax_regime').maybeSingle()
+      .then(function (br) {
+        var s = br && br.data;
+        if (!s || !s.legal_name) return;
+        // Remove CPF/CNPJ do final pra mostrar só o nome
+        var titularName = String(s.legal_name).replace(/\s+\d+$/, '').trim();
+        var titularEl = $('cockpitTitular');
+        if (titularEl) titularEl.textContent = titularName +
+          ' (' + String(s.tax_regime || 'mei').toUpperCase() + ')';
+        $('cockpitLegal').removeAttribute('hidden');
+      }).catch(function () {});
 
     // Summary view
     sb.from('ceo_cockpit_summary').select('*').maybeSingle().then(function (r) {
