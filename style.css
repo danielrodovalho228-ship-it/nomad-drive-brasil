@@ -1004,7 +1004,18 @@ ul, ol { list-style: none; }
 .admin-side {
   background: var(--dark); color: #fff; padding: 22px 18px;
   display: flex; flex-direction: column; gap: 18px; position: sticky; top: 0; height: 100vh;
+  /* Scroll interno quando menu passa da altura da viewport (cresceu muito com Cockpit/Leads/etc.) */
+  overflow-y: auto;
+  /* Custom scrollbar discreta no fundo escuro */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.18) transparent;
 }
+.admin-side::-webkit-scrollbar { width: 6px; }
+.admin-side::-webkit-scrollbar-track { background: transparent; }
+.admin-side::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.18); border-radius: 999px;
+}
+.admin-side::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.32); }
 .admin-side__brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-d); font-size: 15px; }
 .admin-side__brand .brand__mark { width: 32px; height: 32px; }
 .admin-side__nav { display: flex; flex-direction: column; gap: 3px; }
