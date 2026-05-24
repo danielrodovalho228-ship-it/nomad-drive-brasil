@@ -1,6 +1,8 @@
 # 🌅 Bom dia, Daniel! — Resumo da madrugada (23→24/05)
 
 > **Pra você ler primeiro coisa de manhã, em 3 min.**
+>
+> 🟢 **UPDATE 2026-05-24 manhã:** TODOS os deploys feitos. Sistema 100% no ar com todas as 7 melhorias do cowork + Sprint 1 schema pronto. Só falta retestar. Detalhe em `DEPLOY_FECHADO.md`.
 
 ---
 

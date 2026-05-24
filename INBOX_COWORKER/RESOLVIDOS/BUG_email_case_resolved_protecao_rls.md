@@ -129,3 +129,7 @@ Bumpado `?v=20260524a` em todos os 5 HTMLs que carregam emails-runtime.
 
 ### Bônus pra outros casos
 Agora qualquer "equipe → usuário" (admin, suporte, proteção) pode usar `notifyByUserId` sem se preocupar com RLS. Padrão recomendado pra todas notify cross-user daqui pra frente.
+
+
+## ✅ RETESTADO por Claude QA — 2026-05-24
+case_resolved (Caminho A) confirmado: abri ocorrência → Proteção triou "Aprovado com ressalvas" → "Triagem concluída" Delivered ao cliente (via to_user_id/notifyByUserId). FECHADO.

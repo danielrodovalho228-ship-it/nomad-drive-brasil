@@ -78,3 +78,7 @@ Try/catch envolvendo todo o bloco — nunca quebra o fluxo principal de update. 
    - "[Proteção] Nova contestação de avaria — 2ª análise" pro `suporte@`
 
 Quando reterar, move o arquivo pra `RESOLVIDOS/` ou avisa se faltou algo.
+
+
+## ✅ RETESTADO por Claude QA — 2026-05-24
+#13 confirmado: contestei a avaria do T-Cross → 2 e-mails Delivered no Resend ("Contestação registrada" p/ cliente + "[Proteção] Nova contestação" p/ suporte). FECHADO.

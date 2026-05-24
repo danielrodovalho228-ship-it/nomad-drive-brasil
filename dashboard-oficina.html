@@ -212,7 +212,10 @@
           var v = i.vehicles;
           var veiculo = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
           if (v.year_model) veiculo += " (" + v.year_model + ")";
-          window.ndEmails.notify(c, v.owner_id, "inspection_completed_owner", {
+          // Fase 31/Caminho A: a oficina NÃO é parte da reserva → notify por RLS
+          // não lê o profile do proprietário. Usa notifyByUserId (resolve e-mail
+          // server-side via service role), com fallback pro notify antigo.
+          (window.ndEmails.notifyByUserId || window.ndEmails.notify)(c, v.owner_id, "inspection_completed_owner", {
             veiculo: veiculo,
             approved: approved,
             workshop_name: i._workshop_name || "",

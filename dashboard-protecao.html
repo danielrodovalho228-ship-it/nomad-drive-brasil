@@ -11,6 +11,357 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
+<style>
+/* ============================================================
+ * Fase 34 — Painel Proteção profissional
+ * Cards de caso/avaria com protocolo, prioridade, SLA, cliente
+ * ============================================================ */
+
+/* Top stats bar */
+.prot-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.prot-stat {
+  background: #fff;
+  border: 1px solid #e3e9e5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.prot-stat__icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.prot-stat__data { display: flex; flex-direction: column; }
+.prot-stat__value {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: #14201b;
+  font-variant-numeric: tabular-nums;
+}
+.prot-stat__label {
+  font-size: 11.5px;
+  color: #6b7670;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+.prot-stat--alert .prot-stat__value { color: #b00020; }
+.prot-stat--warn .prot-stat__value { color: #cf7a1c; }
+.prot-stat--ok .prot-stat__value { color: #1a7a4f; }
+
+/* Filter bar */
+.prot-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 18px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 10px;
+  align-items: center;
+}
+.prot-filters__label {
+  font-size: 12px;
+  color: #5b6b63;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+.prot-filters select, .prot-filters input {
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid #ccd5cf;
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+}
+.prot-filters input { min-width: 200px; }
+
+/* Card geral */
+.prot-card {
+  background: #fff;
+  border: 1px solid #e3e9e5;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(20,40,30,0.04);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.prot-card:hover { box-shadow: 0 4px 12px rgba(20,40,30,0.08); }
+
+/* Borda lateral por prioridade */
+.prot-card--prio-alta  { border-left: 4px solid #b00020; }
+.prot-card--prio-media { border-left: 4px solid #cf7a1c; }
+.prot-card--prio-baixa { border-left: 4px solid #1a7a4f; }
+
+/* Header com protocolo + prioridade + SLA */
+.prot-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid #f0f3f1;
+  flex-wrap: wrap;
+}
+.prot-card__id { display: flex; flex-direction: column; gap: 2px; }
+.prot-card__protocol {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7670;
+  letter-spacing: 0.5px;
+}
+.prot-card__type {
+  font-size: 16px;
+  font-weight: 700;
+  color: #14201b;
+}
+.prot-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.prot-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.prot-badge--prio-alta  { background: #fde8eb; color: #b00020; }
+.prot-badge--prio-media { background: #fff3e0; color: #a8580e; }
+.prot-badge--prio-baixa { background: #e6f4ec; color: #1a7a4f; }
+.prot-card__age { color: #6b7670; font-size: 12px; }
+.prot-sla {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.prot-sla--ok { background: #e6f4ec; color: #145f3e; }
+.prot-sla--warn { background: #fff3e0; color: #a8580e; }
+.prot-sla--late { background: #fde8eb; color: #b00020; animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Body do card */
+.prot-card__body { padding: 14px 18px 18px; }
+
+.prot-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+@media (max-width: 640px) { .prot-info-grid { grid-template-columns: 1fr; } }
+
+.prot-info-block { display: flex; flex-direction: column; gap: 2px; }
+.prot-info-block__label {
+  font-size: 11px;
+  color: #6b7670;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.prot-info-block__main {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #14201b;
+  line-height: 1.3;
+}
+.prot-info-block__sub {
+  font-size: 12.5px;
+  color: #5b6b63;
+  line-height: 1.4;
+}
+
+.prot-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f3f1;
+}
+.prot-section__label {
+  font-size: 11px;
+  color: #6b7670;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  display: block;
+}
+.prot-section__content {
+  font-size: 14px;
+  color: #14201b;
+  line-height: 1.55;
+}
+
+/* Status pill */
+.prot-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.prot-status-pill::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.prot-status-pill--em_analise { background: #e0eaf6; color: #1a4d8c; }
+.prot-status-pill--documentos_pendentes { background: #fff3e0; color: #a8580e; }
+.prot-status-pill--aprovado { background: #e6f4ec; color: #145f3e; }
+.prot-status-pill--aprovado_com_ressalvas { background: #fff3e0; color: #a8580e; }
+.prot-status-pill--recusado { background: #fde8eb; color: #b00020; }
+.prot-status-pill--pendente_revisao { background: #fff3e0; color: #a8580e; }
+.prot-status-pill--em_contestacao { background: #fde8eb; color: #b00020; }
+.prot-status-pill--aprovado_captura { background: #e6f4ec; color: #145f3e; }
+.prot-status-pill--aprovado_sem_captura { background: #e0eaf6; color: #1a4d8c; }
+.prot-status-pill--resolvido { background: #e6f4ec; color: #145f3e; }
+
+/* Decisão (form) */
+.prot-decision {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: #f4f7f5;
+  border-radius: 10px;
+  border-left: 3px solid #1a7a4f;
+}
+.prot-decision__title {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prot-decision__row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.prot-decision__row label { font-size: 12.5px; color: #5b6b63; font-weight: 600; }
+.prot-decision select, .prot-decision input[type="number"] {
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #ccd5cf;
+  border-radius: 6px;
+  background: #fff;
+}
+.prot-decision textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccd5cf;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13.5px;
+  resize: vertical;
+  margin-top: 4px;
+}
+.prot-decision__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* Contestação box (chamativa) */
+.prot-dispute {
+  margin: 12px 0;
+  padding: 12px 14px;
+  background: #fff3e0;
+  border-left: 3px solid #cf7a1c;
+  border-radius: 6px;
+}
+.prot-dispute__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a8580e;
+  letter-spacing: 0.5px;
+}
+.prot-dispute__text {
+  font-size: 13.5px;
+  margin: 4px 0 0;
+  line-height: 1.5;
+  color: #5e3508;
+}
+
+/* Photos */
+.prot-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.prot-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e3e9e5;
+  cursor: zoom-in;
+}
+.prot-photo--pdf {
+  padding: 18px 14px;
+  background: #f4f7f5;
+  color: #145f3e;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.prot-empty-photos {
+  font-size: 12.5px;
+  color: #8a948e;
+  font-style: italic;
+}
+
+/* Empty state melhorado */
+.prot-empty {
+  text-align: center;
+  padding: 32px 20px;
+  background: #fff;
+  border: 1px dashed #d4dad6;
+  border-radius: 12px;
+  color: #6b7670;
+}
+.prot-empty__icon { font-size: 36px; opacity: 0.5; margin-bottom: 8px; }
+.prot-empty__title { font-size: 15px; font-weight: 600; color: #5b6b63; margin: 0 0 4px; }
+.prot-empty__sub { font-size: 13px; color: #8a948e; margin: 0; }
+
+/* Card oculto por filtro */
+.prot-card[data-hidden="true"] { display: none; }
+</style>
 </head>
 <body>
 
@@ -79,7 +430,41 @@
           </div>
         </section>
 
-        <!-- ============ FASE 22c.3: AVARIAS REPORTADAS NO CHECK-OUT ============ -->
+        <!-- ============ FASE 34: TOP STATS BAR ============ -->
+        <section class="dash-panel" id="stats" style="background:transparent;border:0;padding:0;margin-bottom:8px;">
+          <div class="prot-stats" id="protStats">
+            <div class="prot-stat prot-stat--warn">
+              <span class="prot-stat__icon">⚠️</span>
+              <div class="prot-stat__data">
+                <span class="prot-stat__value" id="statAvariasPendentes">—</span>
+                <span class="prot-stat__label">Avarias pendentes</span>
+              </div>
+            </div>
+            <div class="prot-stat">
+              <span class="prot-stat__icon">📋</span>
+              <div class="prot-stat__data">
+                <span class="prot-stat__value" id="statCasosEmAnalise">—</span>
+                <span class="prot-stat__label">Casos em análise</span>
+              </div>
+            </div>
+            <div class="prot-stat prot-stat--alert">
+              <span class="prot-stat__icon">🚨</span>
+              <div class="prot-stat__data">
+                <span class="prot-stat__value" id="statVencendoSLA">—</span>
+                <span class="prot-stat__label">Vencendo SLA (&lt; 6h)</span>
+              </div>
+            </div>
+            <div class="prot-stat prot-stat--ok">
+              <span class="prot-stat__icon">✅</span>
+              <div class="prot-stat__data">
+                <span class="prot-stat__value" id="statResolvidosHoje">—</span>
+                <span class="prot-stat__label">Resolvidos hoje</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ FASE 22c.3 + 34: AVARIAS REPORTADAS NO CHECK-OUT ============ -->
         <section class="dash-panel" id="avarias">
           <h2>Avarias para revisar</h2>
           <p>Cada avaria reportada por um proprietário no check-out aparece aqui. Avalie as fotos e a descrição, defina o valor final e escolha entre <strong>capturar parcial da caução</strong> ou <strong>liberar sem cobrança</strong>. O cliente recebe e-mail com a decisão e tem 5 dias úteis para contestar.</p>
@@ -89,15 +474,55 @@
             <p>Ao aprovar a captura, o valor será debitado da caução autorizada na Stripe (pré-autorização → cobrança real). O excedente é liberado automaticamente. Ao liberar sem cobrança, a caução inteira é estornada ao cliente em até 5 dias úteis.</p>
           </div>
 
+          <div class="prot-filters">
+            <span class="prot-filters__label">Filtrar:</span>
+            <select id="dmgFilterStatus" data-filter="status">
+              <option value="">Todos os status</option>
+              <option value="pendente_revisao">Pendente de revisão</option>
+              <option value="em_contestacao">Em contestação</option>
+              <option value="aprovado_captura">Aprovado — captura</option>
+              <option value="aprovado_sem_captura">Liberado</option>
+            </select>
+            <input type="search" id="dmgFilterSearch" placeholder="Buscar por protocolo, cliente, placa..." />
+          </div>
+
           <div class="dash-list" id="damageList"></div>
-          <div class="dash-empty" id="damageEmpty">Nenhuma avaria pendente de revisão.</div>
+          <div class="prot-empty" id="damageEmpty" hidden>
+            <div class="prot-empty__icon">✓</div>
+            <p class="prot-empty__title">Nenhuma avaria pendente</p>
+            <p class="prot-empty__sub">Todas as avarias reportadas foram resolvidas.</p>
+          </div>
         </section>
 
         <section class="dash-panel" id="triagem">
           <h2>Casos abertos — triagem</h2>
           <p>Ocorrências registradas pelos clientes e proprietários. Confira a descrição, ajuste o status e registre a resolução. A triagem só é gravada após a aprovação do seu acesso de parceiro de proteção.</p>
+
+          <div class="prot-filters">
+            <span class="prot-filters__label">Filtrar:</span>
+            <select id="caseFilterStatus" data-filter="status">
+              <option value="">Todos os status</option>
+              <option value="em_analise">Em análise</option>
+              <option value="documentos_pendentes">Documentos pendentes</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="aprovado_com_ressalvas">Aprovado c/ ressalvas</option>
+              <option value="recusado">Recusado</option>
+            </select>
+            <select id="caseFilterPriority" data-filter="priority">
+              <option value="">Todas prioridades</option>
+              <option value="alta">🚨 Alta</option>
+              <option value="media">⚠️ Média</option>
+              <option value="baixa">🟢 Baixa</option>
+            </select>
+            <input type="search" id="caseFilterSearch" placeholder="Buscar por protocolo, cliente, veículo..." />
+          </div>
+
           <div class="dash-list" id="caseList"></div>
-          <div class="dash-empty" id="caseEmpty">Nenhum caso aberto para triagem no momento.</div>
+          <div class="prot-empty" id="caseEmpty" hidden>
+            <div class="prot-empty__icon">✓</div>
+            <p class="prot-empty__title">Nenhum caso aberto</p>
+            <p class="prot-empty__sub">Sem ocorrências pendentes de triagem.</p>
+          </div>
         </section>
 
         <section class="dash-panel" id="coberturas">
@@ -144,10 +569,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
-<script src="auth.js?v=20260523c"></script>
-<script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260524a"></script>
-<script src="script.js?v=20260523c"></script>
+<script src="auth.js?v=20260524b"></script>
+<script src="statuses.js?v=20260524b"></script>
+<script src="emails-runtime.js?v=20260524b"></script>
+<script src="script.js?v=20260524b"></script>
 <script>
 (function () {
   var PAGE_ROLE = "protection_partner";
@@ -214,11 +639,13 @@
           ". Este é o painel do parceiro de proteção.", "warn");
       }
     });
+    loadStats();
     loadProtectionCases();
     loadDamages();
+    bindFilters();
   });
 
-  /* ---- Fase 10: triagem dos casos de proteção ---- */
+  /* ---- Fase 10 + 34: triagem profissional dos casos de proteção ---- */
   var CASE_LABEL = {
     sinistro: "Sinistro / colisão", dano_externo: "Dano externo",
     dano_interno: "Dano interno", pane: "Pane mecânica", multa: "Multa de trânsito",
@@ -226,6 +653,7 @@
   };
   var CASE_STATI = ["em_analise", "documentos_pendentes", "aprovado",
     "aprovado_com_ressalvas", "recusado"];
+  var PRIORITY_LABEL = { alta: "🚨 Alta", media: "⚠️ Média", baixa: "🟢 Baixa" };
 
   function fmtDate(d) {
     if (!d) return "—";
@@ -238,12 +666,84 @@
     if (v.year_model) t += " (" + v.year_model + ")";
     return t;
   }
+  /* Fase 34: formata "aberto há X" a partir de hours_since_open */
+  function fmtAge(hours) {
+    if (hours == null) return "—";
+    if (hours < 1) return "aberto há " + Math.round(hours * 60) + " min";
+    if (hours < 24) return "aberto há " + Math.floor(hours) + "h " + Math.round((hours - Math.floor(hours)) * 60) + "min";
+    var d = Math.floor(hours / 24);
+    return "aberto há " + d + (d === 1 ? " dia" : " dias");
+  }
+  /* Fase 34: badge SLA (verde / amarelo / vermelho) */
+  function fmtSLA(remainingHours, status) {
+    if (status === "aprovado" || status === "aprovado_com_ressalvas" ||
+        status === "recusado" || status === "aprovado_captura" ||
+        status === "aprovado_sem_captura" || status === "resolvido") {
+      return ''; // sem SLA pra finalizados
+    }
+    if (remainingHours == null) return '';
+    var cls = remainingHours < 0 ? "late" : (remainingHours < 6 ? "warn" : "ok");
+    var label = remainingHours < 0
+      ? "⏱ SLA vencido há " + Math.abs(Math.floor(remainingHours)) + "h"
+      : "⏱ SLA " + Math.floor(remainingHours) + "h";
+    return '<span class="prot-sla prot-sla--' + cls + '">' + label + '</span>';
+  }
+  /* Fase 34: stats top-bar */
+  function loadStats() {
+    var c = a.client();
+    if (!c) return;
+    c.from("protection_dashboard_stats").select("*").maybeSingle().then(function (r) {
+      var s = (r && r.data) || {};
+      var fmt = function (v) { return v == null ? "0" : String(v); };
+      var el;
+      if ((el = document.getElementById("statAvariasPendentes"))) el.textContent = fmt(s.avarias_pendentes);
+      if ((el = document.getElementById("statCasosEmAnalise"))) el.textContent = fmt(s.casos_em_analise);
+      if ((el = document.getElementById("statVencendoSLA"))) el.textContent = fmt(s.casos_vencendo_sla);
+      if ((el = document.getElementById("statResolvidosHoje"))) {
+        var hoje = (Number(s.resolvidos_hoje || 0)) + (Number(s.avarias_resolvidas_hoje || 0));
+        el.textContent = String(hoje);
+      }
+    }).catch(function () {});
+  }
+  /* Fase 34: liga handlers dos filtros */
+  function bindFilters() {
+    var ids = ["dmgFilterStatus", "dmgFilterSearch", "caseFilterStatus", "caseFilterPriority", "caseFilterSearch"];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("input", applyFilters);
+    });
+  }
+  function applyFilters() {
+    // Avarias
+    var dmgStatus = (document.getElementById("dmgFilterStatus") || {}).value || "";
+    var dmgSearch = ((document.getElementById("dmgFilterSearch") || {}).value || "").toLowerCase().trim();
+    Array.from(document.querySelectorAll("#damageList .prot-card")).forEach(function (card) {
+      var st = card.getAttribute("data-status") || "";
+      var blob = (card.getAttribute("data-search") || "").toLowerCase();
+      var hide = (dmgStatus && st !== dmgStatus) || (dmgSearch && blob.indexOf(dmgSearch) === -1);
+      card.setAttribute("data-hidden", hide ? "true" : "false");
+    });
+    // Casos
+    var caseStatus = (document.getElementById("caseFilterStatus") || {}).value || "";
+    var casePrio = (document.getElementById("caseFilterPriority") || {}).value || "";
+    var caseSearch = ((document.getElementById("caseFilterSearch") || {}).value || "").toLowerCase().trim();
+    Array.from(document.querySelectorAll("#caseList .prot-card")).forEach(function (card) {
+      var st = card.getAttribute("data-status") || "";
+      var pr = card.getAttribute("data-priority") || "";
+      var blob = (card.getAttribute("data-search") || "").toLowerCase();
+      var hide = (caseStatus && st !== caseStatus) ||
+                 (casePrio && pr !== casePrio) ||
+                 (caseSearch && blob.indexOf(caseSearch) === -1);
+      card.setAttribute("data-hidden", hide ? "true" : "false");
+    });
+  }
   function loadProtectionCases() {
     var c = a.client();
     var list = document.getElementById("caseList");
     var empty = document.getElementById("caseEmpty");
     if (!c || !list) return;
-    c.from("protection_cases").select("*, vehicles(make,model,year_model)")
+    // Fase 34: usa view enriquecida com cliente + veículo + SLA computado
+    c.from("protection_cases_full").select("*")
       .order("created_at", { ascending: false }).then(function (r) {
         var rows = (r && r.data) || [];
         list.innerHTML = "";
@@ -256,7 +756,24 @@
         if (!rows.length) { if (empty) empty.hidden = false; return; }
         if (empty) empty.hidden = true;
         rows.forEach(function (cs) { list.appendChild(caseCard(cs)); });
-      }).catch(function () {});
+        applyFilters();
+      }).catch(function (e) {
+        console.warn("loadProtectionCases (view full falhou, tentando fallback):", e);
+        // Fallback pra schema antigo se a view não existir ainda
+        c.from("protection_cases").select("*, vehicles(make,model,year_model)")
+          .order("created_at", { ascending: false }).then(function (r2) {
+            var rows = (r2 && r2.data) || [];
+            list.innerHTML = "";
+            if (!rows.length) { if (empty) empty.hidden = false; return; }
+            rows.forEach(function (cs) {
+              // Achata o shape pra reusar caseCard
+              var v = cs.vehicles || {};
+              cs.vehicle_make = v.make; cs.vehicle_model = v.model;
+              cs.vehicle_year_model = v.year_model;
+              list.appendChild(caseCard(cs));
+            });
+          }).catch(function () {});
+      });
   }
 
   /* ============================================================
@@ -280,9 +797,8 @@
     var empty = document.getElementById("damageEmpty");
     if (!c || !list) return;
     loadDamageRules().then(function () {
-      // Lê avarias que precisam de ação + as recém-resolvidas pra contexto
-      c.from("damages")
-        .select("*, bookings(id, client_id, owner_id, vehicles(make,model,year_model))")
+      // Fase 34: usa view damages_full com cliente + veículo + SLA
+      c.from("damages_full").select("*")
         .in("status", ["pendente_revisao", "em_contestacao", "aprovado_captura", "aprovado_sem_captura"])
         .order("created_at", { ascending: false })
         .then(function (r) {
@@ -298,7 +814,28 @@
           if (!rows.length) { if (empty) empty.hidden = false; return; }
           if (empty) empty.hidden = true;
           rows.forEach(function (d) { list.appendChild(damageCard(d)); });
-        }).catch(function () {});
+          applyFilters();
+        }).catch(function (e) {
+          console.warn("loadDamages (view full falhou, tentando fallback):", e);
+          // Fallback pra schema antigo se view não existir
+          c.from("damages")
+            .select("*, bookings(id, client_id, owner_id, vehicles(make,model,year_model))")
+            .in("status", ["pendente_revisao", "em_contestacao", "aprovado_captura", "aprovado_sem_captura"])
+            .order("created_at", { ascending: false })
+            .then(function (r2) {
+              var rows = (r2 && r2.data) || [];
+              list.innerHTML = "";
+              if (!rows.length) { if (empty) empty.hidden = false; return; }
+              rows.forEach(function (d) {
+                var b = d.bookings || {};
+                var v = b.vehicles || {};
+                d.vehicle_make = v.make; d.vehicle_model = v.model;
+                d.vehicle_year_model = v.year_model;
+                d.client_id = b.client_id; d.owner_id = b.owner_id;
+                list.appendChild(damageCard(d));
+              });
+            }).catch(function () {});
+        });
     });
   }
 
@@ -318,133 +855,203 @@
     return s;
   }
 
+  /* ============================================================
+   * Fase 34: damageCard refeito — visual profissional
+   * Mostra protocolo, veículo completo, cliente, proprietário,
+   * SLA, contestação destacada, decisão clara.
+   * ============================================================ */
   function damageCard(d) {
     var rule = damageRulesByCode[d.rule_code] || { label: d.rule_code, amount_min: 0, amount_max: 0 };
-    var v = (d.bookings && d.bookings.vehicles) || {};
-    var vt = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
-    if (v.year_model) vt += " (" + v.year_model + ")";
 
-    var card = document.createElement("div");
-    card.className = "insp-card";
+    // Suporta tanto view damages_full quanto fallback
+    var vehMake = d.vehicle_make || (d.bookings && d.bookings.vehicles && d.bookings.vehicles.make) || '';
+    var vehModel = d.vehicle_model || (d.bookings && d.bookings.vehicles && d.bookings.vehicles.model) || '';
+    var vehYear = d.vehicle_year_model || (d.bookings && d.bookings.vehicles && d.bookings.vehicles.year_model) || '';
+    var vehPlate = d.vehicle_license_plate || d.vehicle_plate_digits || '';
+    var clientName = d.client_name || 'Cliente';
+    var clientPhone = d.client_phone || '';
+    var clientEmail = d.client_email || '';
+    var ownerName = d.owner_name || '';
 
-    var head = document.createElement("div");
-    head.className = "insp-card__head";
-    var t = document.createElement("strong");
-    t.textContent = rule.label + " — " + vt;
-    var sub = document.createElement("span");
-    sub.textContent = "Reportada em " + new Date(d.created_at).toLocaleString("pt-BR") +
-      " · sugerido " + brl(d.suggested_amount || 0) +
-      " · faixa " + brl(rule.amount_min) + " a " + brl(rule.amount_max);
-    head.appendChild(t); head.appendChild(sub);
+    var vehFull = [vehMake, vehModel].filter(Boolean).join(' ') || 'Veículo';
+    if (vehYear) vehFull += ' ' + vehYear;
+    var protocol = d.protocol_number || ('AV-' + String(d.id).slice(0, 8));
+
+    var card = document.createElement('article');
+    card.className = 'prot-card';
+    card.setAttribute('data-status', d.status || '');
+    card.setAttribute('data-protocol', protocol);
+    card.setAttribute('data-search',
+      (protocol + ' ' + vehFull + ' ' + vehPlate + ' ' + clientName + ' ' + (rule.label || '')).toLowerCase()
+    );
+
+    // --- HEADER ---
+    var head = document.createElement('header');
+    head.className = 'prot-card__head';
+    head.innerHTML =
+      '<div class="prot-card__id">' +
+        '<span class="prot-card__protocol">#' + escapeHtml(protocol) + '</span>' +
+        '<span class="prot-card__type">' + escapeHtml(rule.label || d.rule_code || 'Avaria') + '</span>' +
+      '</div>' +
+      '<div class="prot-card__meta">' +
+        '<span class="prot-card__age">' + escapeHtml(fmtAge(d.hours_since_open)) + '</span>' +
+        fmtSLA(d.sla_remaining_hours, d.status) +
+      '</div>';
     card.appendChild(head);
 
+    // --- BODY ---
+    var body = document.createElement('div');
+    body.className = 'prot-card__body';
+
+    // Info grid: Veículo + Cliente (e Proprietário)
+    var info = document.createElement('div');
+    info.className = 'prot-info-grid';
+    info.innerHTML =
+      '<div class="prot-info-block">' +
+        '<span class="prot-info-block__label">🚗 Veículo</span>' +
+        '<span class="prot-info-block__main">' + escapeHtml(vehFull) + '</span>' +
+        (vehPlate ? '<span class="prot-info-block__sub">Placa ' + escapeHtml(vehPlate) + '</span>' : '') +
+      '</div>' +
+      '<div class="prot-info-block">' +
+        '<span class="prot-info-block__label">👤 Cliente</span>' +
+        '<span class="prot-info-block__main">' + escapeHtml(clientName) + '</span>' +
+        '<span class="prot-info-block__sub">' +
+          (clientPhone ? '📞 ' + escapeHtml(clientPhone) : '') +
+          (clientPhone && clientEmail ? ' · ' : '') +
+          (clientEmail ? '✉ ' + escapeHtml(clientEmail) : '') +
+        '</span>' +
+        (ownerName ? '<span class="prot-info-block__sub">Proprietário: ' + escapeHtml(ownerName) + '</span>' : '') +
+      '</div>';
+    body.appendChild(info);
+
+    // Descrição (do proprietário, no check-out)
     if (d.description) {
-      var desc = document.createElement("p");
-      desc.className = "insp-card__msg";
-      desc.textContent = d.description;
-      card.appendChild(desc);
+      var desc = document.createElement('div');
+      desc.className = 'prot-section';
+      desc.innerHTML =
+        '<span class="prot-section__label">📝 Descrição do proprietário</span>' +
+        '<p class="prot-section__content">' + escapeHtml(d.description) + '</p>';
+      body.appendChild(desc);
     }
 
-    if (d.client_dispute) {
-      var disp = document.createElement("div");
-      disp.className = "why-box why-box--warn";
-      disp.style.cssText = "margin:8px 0;padding:10px 14px;";
-      disp.innerHTML = '<strong>Contestação do cliente:</strong><br>' +
-        '<span style="font-size:13.5px;line-height:1.5;">' + escapeHtml(d.client_dispute) + '</span>';
-      card.appendChild(disp);
-    }
+    // Valores
+    var vals = document.createElement('div');
+    vals.className = 'prot-section';
+    vals.innerHTML =
+      '<span class="prot-section__label">💰 Valores</span>' +
+      '<p class="prot-section__content">' +
+        'Sugerido: <strong>' + brl(d.suggested_amount || 0) + '</strong> · ' +
+        'faixa: ' + brl(rule.amount_min || 0) + ' a ' + brl(rule.amount_max || 0) +
+        (d.final_amount != null ? ' · final: <strong>' + brl(d.final_amount) + '</strong>' : '') +
+      '</p>';
+    body.appendChild(vals);
 
-    // Fotos (gera signed URLs pra cada path em evidence_urls)
-    var photosWrap = document.createElement("div");
-    photosWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;";
+    // Fotos
     var paths = Array.isArray(d.evidence_urls) ? d.evidence_urls : [];
+    var photosWrap = document.createElement('div');
+    photosWrap.className = 'prot-photos';
     if (paths.length) {
-      var c = a.client();
+      var sb = a.client();
       paths.forEach(function (p) {
-        c.storage.from("damages").createSignedUrl(p, 600).then(function (r) {
+        sb.storage.from('damages').createSignedUrl(p, 600).then(function (r) {
           if (!r || !r.data || !r.data.signedUrl) return;
           var url = r.data.signedUrl;
-          var lower = p.toLowerCase();
-          var isPdf = lower.endsWith(".pdf");
+          var isPdf = p.toLowerCase().endsWith('.pdf');
           if (isPdf) {
-            var a = document.createElement("a");
-            a.href = url; a.target = "_blank";
-            a.style.cssText = "display:inline-block;padding:8px 12px;background:#f4f7f5;border-radius:8px;color:#145f3e;text-decoration:none;font-size:13px;";
-            a.textContent = "📄 PDF";
-            photosWrap.appendChild(a);
+            var link = document.createElement('a');
+            link.href = url; link.target = '_blank';
+            link.className = 'prot-photo--pdf';
+            link.textContent = '📄 PDF';
+            photosWrap.appendChild(link);
           } else {
-            var img = document.createElement("img");
-            img.src = url; img.loading = "lazy";
-            img.style.cssText = "width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #e3e9e5;cursor:zoom-in;";
-            img.addEventListener("click", function () { window.open(url, "_blank"); });
+            var img = document.createElement('img');
+            img.src = url; img.loading = 'lazy';
+            img.className = 'prot-photo';
+            img.alt = 'Evidência avaria';
+            img.addEventListener('click', function () { window.open(url, '_blank'); });
             photosWrap.appendChild(img);
           }
         });
       });
-      card.appendChild(photosWrap);
+      var photoSection = document.createElement('div');
+      photoSection.className = 'prot-section';
+      photoSection.innerHTML = '<span class="prot-section__label">📷 Evidências</span>';
+      photoSection.appendChild(photosWrap);
+      body.appendChild(photoSection);
     } else {
-      var noPhotos = document.createElement("p");
-      noPhotos.className = "note";
-      noPhotos.style.margin = "8px 0";
-      noPhotos.textContent = "Sem fotos anexadas.";
-      card.appendChild(noPhotos);
+      var noPhotosSection = document.createElement('div');
+      noPhotosSection.className = 'prot-section';
+      noPhotosSection.innerHTML =
+        '<span class="prot-section__label">📷 Evidências</span>' +
+        '<p class="prot-empty-photos">Sem fotos anexadas.</p>';
+      body.appendChild(noPhotosSection);
+    }
+
+    // Contestação do cliente (se houver — destaque âmbar)
+    if (d.client_dispute) {
+      var dispDate = d.client_disputed_at ? new Date(d.client_disputed_at).toLocaleString('pt-BR') : '';
+      var disp = document.createElement('div');
+      disp.className = 'prot-dispute';
+      disp.innerHTML =
+        '<span class="prot-dispute__label">⚖️ Contestação do cliente' + (dispDate ? ' · ' + escapeHtml(dispDate) : '') + '</span>' +
+        '<p class="prot-dispute__text">' + escapeHtml(d.client_dispute) + '</p>';
+      body.appendChild(disp);
     }
 
     // Status atual (pill)
-    var statusRow = document.createElement("div");
-    statusRow.style.cssText = "margin:8px 0;";
-    var pill = document.createElement("span");
-    pill.className = "dash-pill dash-pill--" + damageStatusKind(d.status);
-    pill.textContent = damageStatusLabel(d.status);
-    statusRow.appendChild(pill);
-    if (d.final_amount != null) {
-      var amt = document.createElement("span");
-      amt.style.cssText = "margin-left:8px;font-weight:600;";
-      amt.textContent = "Valor final: " + brl(d.final_amount);
-      statusRow.appendChild(amt);
-    }
-    card.appendChild(statusRow);
+    var statusRow = document.createElement('div');
+    statusRow.className = 'prot-section';
+    statusRow.innerHTML =
+      '<span class="prot-section__label">Status atual</span>' +
+      '<span class="prot-status-pill prot-status-pill--' + d.status + '">' +
+        escapeHtml(damageStatusLabel(d.status)) +
+      '</span>';
+    body.appendChild(statusRow);
+
+    card.appendChild(body);
 
     // Form de decisão — só se ainda for acionável
-    var canReview = d.status === "pendente_revisao" || d.status === "em_contestacao";
+    var canReview = d.status === 'pendente_revisao' || d.status === 'em_contestacao';
     if (!canReview) return card;
 
-    var reviewBox = document.createElement("div");
-    reviewBox.style.cssText = "background:#f9fafb;border:1px solid #e3e9e5;border-radius:10px;padding:12px;margin-top:8px;";
-    reviewBox.innerHTML =
-      '<div class="form__grid">' +
-        '<label class="field"><span>Valor final (R$) *</span>' +
-          '<input type="number" class="dmg-final" min="0" step="0.01" value="' + (d.suggested_amount || 0) + '" />' +
-        '</label>' +
-        '<label class="field field--full"><span>Parecer / observação</span>' +
-          '<textarea class="dmg-notes" rows="2" placeholder="Justificativa da decisão (visível ao cliente)."></textarea>' +
-        '</label>' +
+    var decision = document.createElement('div');
+    decision.className = 'prot-decision';
+    decision.style.margin = '0 18px 16px';
+    decision.innerHTML =
+      '<h4 class="prot-decision__title">⚖️ Decisão da Proteção</h4>' +
+      '<div class="prot-decision__row">' +
+        '<label>Valor final (R$):</label>' +
+        '<input type="number" class="dmg-final" min="0" step="0.01" value="' + (d.suggested_amount || 0) + '" />' +
       '</div>' +
-      '<p class="form__err" style="color:#b00020;margin-top:6px;" hidden></p>' +
-      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">' +
-        '<button type="button" class="btn btn--solid btn--sm" data-act="capture">Aprovar captura</button>' +
-        '<button type="button" class="btn btn--outline btn--sm" data-act="release">Liberar sem cobrança</button>' +
+      '<label style="display:block;font-size:12.5px;color:#5b6b63;font-weight:600;margin-top:8px;">' +
+        'Parecer (visível ao cliente):' +
+        '<textarea class="dmg-notes" rows="2" placeholder="Justificativa da decisão."></textarea>' +
+      '</label>' +
+      '<p class="form__err" style="color:#b00020;margin-top:6px;font-size:12.5px;" hidden></p>' +
+      '<div class="prot-decision__actions">' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="capture">💰 Aprovar captura</button>' +
+        '<button type="button" class="btn btn--outline btn--sm" data-act="release">↩ Liberar sem cobrança</button>' +
       '</div>';
-    card.appendChild(reviewBox);
+    card.appendChild(decision);
 
-    var finalInp = reviewBox.querySelector(".dmg-final");
-    var notesInp = reviewBox.querySelector(".dmg-notes");
-    var errEl = reviewBox.querySelector(".form__err");
-    var captureBtn = reviewBox.querySelector('[data-act="capture"]');
-    var releaseBtn = reviewBox.querySelector('[data-act="release"]');
+    var finalInp = decision.querySelector('.dmg-final');
+    var notesInp = decision.querySelector('.dmg-notes');
+    var errEl = decision.querySelector('.form__err');
+    var captureBtn = decision.querySelector('[data-act="capture"]');
+    var releaseBtn = decision.querySelector('[data-act="release"]');
 
     if (d.review_notes) notesInp.value = d.review_notes;
 
-    captureBtn.addEventListener("click", function () {
+    captureBtn.addEventListener('click', function () {
       var amt = Number(finalInp.value);
       if (!amt || amt <= 0) {
-        errEl.textContent = "Defina um valor > 0 para capturar.";
+        errEl.textContent = 'Defina um valor > 0 para capturar.';
         errEl.hidden = false; return;
       }
-      submitDamageDecision(d, "aprovado_captura", amt, notesInp.value, captureBtn, releaseBtn, errEl);
+      submitDamageDecision(d, 'aprovado_captura', amt, notesInp.value, captureBtn, releaseBtn, errEl);
     });
-    releaseBtn.addEventListener("click", function () {
-      submitDamageDecision(d, "aprovado_sem_captura", 0, notesInp.value, captureBtn, releaseBtn, errEl);
+    releaseBtn.addEventListener('click', function () {
+      submitDamageDecision(d, 'aprovado_sem_captura', 0, notesInp.value, captureBtn, releaseBtn, errEl);
     });
 
     return card;
@@ -512,97 +1119,178 @@
       relBtn.textContent = "Liberar sem cobrança";
     });
   }
+  /* ============================================================
+   * Fase 34: caseCard refeito — visual profissional
+   * Mostra protocolo, prioridade, SLA, veículo completo, cliente,
+   * timeline implícita, decisão clara.
+   * ============================================================ */
   function caseCard(cs) {
-    var card = document.createElement("div");
-    card.className = "insp-card";
-    var head = document.createElement("div");
-    head.className = "insp-card__head";
-    var t = document.createElement("strong");
-    t.textContent = (CASE_LABEL[cs.case_type] || cs.case_type || "Ocorrência") +
-      " — " + vehText(cs.vehicles);
-    var sub = document.createElement("span");
-    sub.textContent = "Aberto em " + fmtDate(cs.created_at);
-    head.appendChild(t); head.appendChild(sub);
+    // Suporta tanto view full quanto fallback
+    var vehMake = cs.vehicle_make || (cs.vehicles && cs.vehicles.make) || '';
+    var vehModel = cs.vehicle_model || (cs.vehicles && cs.vehicles.model) || '';
+    var vehYear = cs.vehicle_year_model || (cs.vehicles && cs.vehicles.year_model) || '';
+    var vehPlate = cs.vehicle_license_plate || cs.vehicle_plate_digits || '';
+    var clientName = cs.client_name || 'Cliente';
+    var clientPhone = cs.client_phone || '';
+    var clientEmail = cs.client_email || '';
+    var caseType = CASE_LABEL[cs.case_type] || cs.case_type || 'Ocorrência';
+    var priority = cs.priority || 'media';
+    var protocol = cs.protocol_number || ('PR-' + String(cs.id).slice(0, 8));
+
+    var vehFull = [vehMake, vehModel].filter(Boolean).join(' ') || 'Veículo não vinculado';
+    if (vehYear) vehFull += ' ' + vehYear;
+
+    var card = document.createElement('article');
+    card.className = 'prot-card prot-card--prio-' + priority;
+    card.setAttribute('data-status', cs.status || '');
+    card.setAttribute('data-priority', priority);
+    card.setAttribute('data-protocol', protocol);
+    card.setAttribute('data-search',
+      (protocol + ' ' + vehFull + ' ' + vehPlate + ' ' + clientName + ' ' + caseType).toLowerCase()
+    );
+
+    // --- HEADER ---
+    var head = document.createElement('header');
+    head.className = 'prot-card__head';
+    head.innerHTML =
+      '<div class="prot-card__id">' +
+        '<span class="prot-card__protocol">#' + escapeHtml(protocol) + '</span>' +
+        '<span class="prot-card__type">' + escapeHtml(caseType) + '</span>' +
+      '</div>' +
+      '<div class="prot-card__meta">' +
+        '<span class="prot-badge prot-badge--prio-' + priority + '">' + (PRIORITY_LABEL[priority] || priority) + '</span>' +
+        '<span class="prot-card__age">' + escapeHtml(fmtAge(cs.hours_since_open)) + '</span>' +
+        fmtSLA(cs.sla_remaining_hours, cs.status) +
+      '</div>';
     card.appendChild(head);
 
+    // --- BODY ---
+    var body = document.createElement('div');
+    body.className = 'prot-card__body';
+
+    // Info grid: Veículo + Cliente
+    var info = document.createElement('div');
+    info.className = 'prot-info-grid';
+    info.innerHTML =
+      '<div class="prot-info-block">' +
+        '<span class="prot-info-block__label">🚗 Veículo</span>' +
+        '<span class="prot-info-block__main">' + escapeHtml(vehFull) + '</span>' +
+        (vehPlate ? '<span class="prot-info-block__sub">Placa ' + escapeHtml(vehPlate) + '</span>' : '') +
+      '</div>' +
+      '<div class="prot-info-block">' +
+        '<span class="prot-info-block__label">👤 Cliente</span>' +
+        '<span class="prot-info-block__main">' + escapeHtml(clientName) + '</span>' +
+        '<span class="prot-info-block__sub">' +
+          (clientPhone ? '📞 ' + escapeHtml(clientPhone) : '') +
+          (clientPhone && clientEmail ? ' · ' : '') +
+          (clientEmail ? '✉ ' + escapeHtml(clientEmail) : '') +
+        '</span>' +
+      '</div>';
+    body.appendChild(info);
+
+    // Descrição do cliente
     if (cs.description) {
-      var desc = document.createElement("p");
-      desc.className = "insp-card__msg";
-      desc.textContent = cs.description;
-      card.appendChild(desc);
+      var desc = document.createElement('div');
+      desc.className = 'prot-section';
+      desc.innerHTML =
+        '<span class="prot-section__label">📝 Descrição do cliente</span>' +
+        '<p class="prot-section__content">' + escapeHtml(cs.description) + '</p>';
+      body.appendChild(desc);
     }
 
-    var sel = document.createElement("select");
-    sel.className = "cad-status";
-    CASE_STATI.forEach(function (st) {
-      var o = document.createElement("option");
-      o.value = st; o.textContent = a.statusLabel(st);
-      if (st === cs.status) o.selected = true;
-      sel.appendChild(o);
-    });
+    // Valor estimado (se houver)
+    if (cs.estimated_amount) {
+      var amt = document.createElement('div');
+      amt.className = 'prot-section';
+      amt.innerHTML =
+        '<span class="prot-section__label">💰 Valor estimado</span>' +
+        '<p class="prot-section__content"><strong>' + brl(cs.estimated_amount) + '</strong></p>';
+      body.appendChild(amt);
+    }
 
-    var notes = document.createElement("textarea");
-    notes.rows = 2;
-    notes.className = "case-notes";
-    notes.placeholder = "Resolução / parecer da triagem";
-    if (cs.resolution_notes) notes.value = cs.resolution_notes;
+    // Status atual
+    var statusRow = document.createElement('div');
+    statusRow.className = 'prot-section';
+    statusRow.innerHTML =
+      '<span class="prot-section__label">Status atual</span>' +
+      '<span class="prot-status-pill prot-status-pill--' + cs.status + '">' +
+        escapeHtml(a.statusLabel ? a.statusLabel(cs.status) : cs.status) +
+      '</span>';
+    body.appendChild(statusRow);
 
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "btn btn--solid btn--sm";
-    btn.textContent = "Salvar triagem";
-    btn.addEventListener("click", function () {
+    card.appendChild(body);
+
+    // --- DECISÃO ---
+    var decision = document.createElement('div');
+    decision.className = 'prot-decision';
+    decision.style.margin = '0 18px 16px';
+
+    var stOptions = CASE_STATI.map(function (st) {
+      return '<option value="' + st + '"' + (st === cs.status ? ' selected' : '') + '>' +
+        escapeHtml(a.statusLabel(st)) + '</option>';
+    }).join('');
+
+    decision.innerHTML =
+      '<h4 class="prot-decision__title">⚖️ Decisão da Proteção</h4>' +
+      '<div class="prot-decision__row">' +
+        '<label>Novo status:</label>' +
+        '<select class="case-status">' + stOptions + '</select>' +
+      '</div>' +
+      '<label style="display:block;font-size:12.5px;color:#5b6b63;font-weight:600;margin-top:8px;">' +
+        'Parecer / resolução (visível ao cliente):' +
+        '<textarea class="case-notes" rows="2" placeholder="Justificativa da decisão.">' +
+          escapeHtml(cs.resolution_notes || '') +
+        '</textarea>' +
+      '</label>' +
+      '<div class="prot-decision__actions">' +
+        '<button type="button" class="btn btn--solid btn--sm" data-act="save-triage">💾 Salvar triagem</button>' +
+      '</div>';
+    card.appendChild(decision);
+
+    var sel = decision.querySelector('.case-status');
+    var notes = decision.querySelector('.case-notes');
+    var btn = decision.querySelector('[data-act="save-triage"]');
+
+    btn.addEventListener('click', function () {
       var c = a.client();
-      if (!c) { showNotice("Conecte o Supabase para salvar a triagem.", "warn"); return; }
-      btn.disabled = true; btn.textContent = "Salvando...";
+      if (!c) { showNotice('Conecte o Supabase para salvar a triagem.', 'warn'); return; }
+      btn.disabled = true; btn.textContent = 'Salvando...';
       var oldStatus = cs.status;
       var newStatus = sel.value;
-      var newNotes = (notes.value || "").trim() || null;
-      c.from("protection_cases").update({
+      var newNotes = (notes.value || '').trim() || null;
+      c.from('protection_cases').update({
         status: newStatus,
         resolution_notes: newNotes
-      }).eq("id", cs.id).then(function (r) {
-        btn.disabled = false; btn.textContent = "Salvar triagem";
+      }).eq('id', cs.id).then(function (r) {
+        btn.disabled = false; btn.textContent = '💾 Salvar triagem';
         if (r && r.error) {
-          showNotice("Não foi possível salvar. Verifique se o seu acesso de proteção já foi aprovado.", "error");
+          showNotice('Não foi possível salvar. Verifique se o seu acesso de proteção já foi aprovado.', 'error');
           return;
         }
-        showNotice("Triagem atualizada.", "ok");
-        loadProtectionCases();
+        showNotice('Triagem atualizada.', 'ok');
+        loadStats(); loadProtectionCases();
 
-        // #6 parte 2: notifica o cliente quando triagem encerra
-        // (status muda PRA um dos finais e o reported_by é conhecido)
-        // Fase 32 (Caminho A): usa notifyByUserId pra resolver email
-        // server-side via service role (Proteção não tem RLS no profile
-        // do reporter, então notify() do browser falharia).
-        var finals = ["aprovado", "aprovado_com_ressalvas", "recusado"];
+        // Fase 32 (Caminho A) — notifica cliente via server-side resolution
+        var finals = ['aprovado', 'aprovado_com_ressalvas', 'recusado'];
         if (window.ndEmails && cs.reported_by &&
             finals.indexOf(newStatus) !== -1 && newStatus !== oldStatus) {
-          var v = cs.vehicles || {};
-          var veiculo = [v.make, v.model].filter(Boolean).join(" ");
-          if (v.year_model) veiculo += " (" + v.year_model + ")";
-          var notifyFn = window.ndEmails.notifyByUserId || window.ndEmails.notify;
-          notifyFn(c, cs.reported_by, "case_resolved_client", {
+          var veiculo = vehFull;
+          var notifyFn = window.ndEmails.notifyByUserIdVerbose || window.ndEmails.notifyByUserId || window.ndEmails.notify;
+          notifyFn(c, cs.reported_by, 'case_resolved_client', {
             case_type: cs.case_type,
-            case_type_label: CASE_LABEL[cs.case_type] || cs.case_type,
+            case_type_label: caseType,
             veiculo: veiculo,
             status: newStatus,
             status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
             resolution_notes: newNotes
-          }).catch(function (e) { console.warn("case_resolved_client:", e); });
+          }).catch(function (e) { console.warn('case_resolved_client:', e); });
         }
       }).catch(function () {
-        btn.disabled = false; btn.textContent = "Salvar triagem";
-        showNotice("Não foi possível salvar agora. Tente novamente.", "error");
+        btn.disabled = false; btn.textContent = '💾 Salvar triagem';
+        showNotice('Não foi possível salvar agora. Tente novamente.', 'error');
       });
     });
 
-    var actions = document.createElement("div");
-    actions.className = "insp-card__actions";
-    actions.appendChild(sel);
-    actions.appendChild(btn);
-    card.appendChild(notes);
-    card.appendChild(actions);
     return card;
   }
 })();

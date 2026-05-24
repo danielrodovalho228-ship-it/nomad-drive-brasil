@@ -149,7 +149,14 @@ Stripe Subscription (Active) → Webhook → Profile.stripe_customer_id → Book
 | 🟢 Quando quiser | 7 | 0 | 7 |
 | ✅ Já feito (total) | 23 | 23 | 0 |
 
-**🎯 Próxima ação:** Ler `INBOX_COWORKER/STATUS_DANIEL_BOM_DIA.md` → rodar 2 SQLs novos + redeploy close-rental + git push → começar Sprint 2 ou retomar QA dos Fluxos B/C/D.
+**🎯 Próxima ação:** Sistema 100% deployado em 24/05 manhã. Próximo: retestar os 7 fixes (~10 min) ou começar **Sprint 2 (Stripe Manual Payouts)**.
+
+**Estado dos deploys (24/05 manhã):**
+- ✅ Git push commit `26bfa75` em main (GitHub Pages servindo)
+- ✅ Edge Function `send-email` (Caminho A — server-side resolution)
+- ✅ Edge Function `close-rental` (bookings.status terminal)
+- ✅ Edge Function `damage-capture` (fallback email via profiles)
+- ✅ SQLs Fase 31, 32, 32b aplicados no Supabase
 
 ## 🌅 Madrugada 23→24/05 — sessão autônoma Claude code-side
 

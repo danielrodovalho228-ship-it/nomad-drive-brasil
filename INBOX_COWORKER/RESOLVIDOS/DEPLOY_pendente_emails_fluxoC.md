@@ -35,3 +35,7 @@ escrito mas falta **deploy do GitHub Pages** (commit + push).
 
 ## Resumo: 1 deploy GitHub Pages + 1 deploy da Edge `damage-capture` fecham #12 e #13.
 Quando deployarem, escrevam "deployado" que eu reteto #12, #13 e o banner de uma vez.
+
+
+## ✅ RETESTADO por Claude QA — 2026-05-24
+#12 confirmado: capturei uma avaria nova no T-Cross → damage-capture email_sent:true → "Avaria — decisão da Proteção (captura R$ 300,00)" Delivered. #13 também Delivered. Banner do cliente Delivered. FECHADO.
