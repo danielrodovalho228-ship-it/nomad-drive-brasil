@@ -230,8 +230,11 @@ Deno.serve(async (req) => {
       return json({ error: "SUPABASE_URL ou SERVICE_ROLE_KEY não configurados." }, 500);
     }
 
-    // Verifica que veio com SERVICE_ROLE no Authorization (chamada server-side)
-    // Aceita também ANON pra testes manuais via dashboard
+    // Authorization header obrigatório (qualquer Bearer válido — anon ou service).
+    // A validação REAL anti-abuso vem depois: exigimos que event_id exista em
+    // public.loyalty_events com client_id + to_tier batendo. Como RLS bloqueia
+    // INSERT em loyalty_events pra non-admin, atacante não consegue forjar
+    // event_id válido → não consegue spam de e-mails.
     const authHeader = req.headers.get("Authorization") || "";
     if (!authHeader.includes("Bearer ")) {
       return json({ error: "Authorization header obrigatório." }, 401);
@@ -251,17 +254,39 @@ Deno.serve(async (req) => {
 
     const admin = createClient(url, serviceKey);
 
+    // ⚠️ ANTI-ABUSE: event_id é OBRIGATÓRIO e deve existir em loyalty_events com
+    //    client_id + to_tier batendo. Sem isso, qualquer um com a anon key
+    //    pública poderia disparar e-mails arbitrários em massa.
+    if (!event_id) {
+      return json({ error: "event_id obrigatório (anti-abuso)." }, 400);
+    }
+    const { data: evt, error: evtErr } = await admin
+      .from("loyalty_events")
+      .select("id, client_id, to_tier, event")
+      .eq("id", event_id)
+      .maybeSingle();
+    if (evtErr || !evt) {
+      return json({ error: "event_id inválido ou não encontrado." }, 403);
+    }
+    if (evt.client_id !== client_id) {
+      return json({ error: "event_id não bate com client_id." }, 403);
+    }
+    if (evt.to_tier !== to_tier) {
+      return json({ error: "event_id não bate com to_tier." }, 403);
+    }
+    if (evt.event !== "tier_promoted") {
+      return json({ error: "event_id não é de promoção." }, 403);
+    }
+
     // Idempotência: se já mandamos e-mail pra esse event_id, skip
-    if (event_id) {
-      const { data: prevLog } = await admin
-        .from("admin_audit_logs")
-        .select("id")
-        .eq("action", "tier_promotion_email_sent")
-        .eq("target_id", event_id)
-        .limit(1);
-      if (Array.isArray(prevLog) && prevLog.length > 0) {
-        return json({ ok: true, skipped: true, reason: "Já enviado pra event_id=" + event_id });
-      }
+    const { data: prevLog } = await admin
+      .from("admin_audit_logs")
+      .select("id")
+      .eq("action", "tier_promotion_email_sent")
+      .eq("target_id", event_id)
+      .limit(1);
+    if (Array.isArray(prevLog) && prevLog.length > 0) {
+      return json({ ok: true, skipped: true, reason: "Já enviado pra event_id=" + event_id });
     }
 
     // Busca profile + email

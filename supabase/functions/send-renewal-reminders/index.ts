@@ -74,13 +74,27 @@ function emailRenewalReminder(d: {
   discount: number;
   protocolo: string;
   booking_id: string;
+  discount_pct?: number;     // Fase 43: tier-aware (5/7/10/15)
+  client_tier?: string;      // Fase 43: bronze/silver/gold/platinum
 }): { subject: string; html: string; text: string } {
   const urgency = d.days_remaining <= 3
     ? '🚨 Últimos dias'
     : '⏰ Sua locação termina em breve';
   const urgencyColor = d.days_remaining <= 3 ? '#b00020' : '#cf7a1c';
 
-  const subject = '🔄 Renove sua locação com 5% off — ' + d.days_remaining + (d.days_remaining === 1 ? ' dia restante' : ' dias restantes');
+  // Fase 43 fix: usa desconto real do tier (não mais "5%" fixo)
+  const discPct = d.discount_pct || 5;
+  const tier = d.client_tier || 'bronze';
+  const tierLabel: Record<string, string> = {
+    silver: '🥈 Silver',
+    gold: '🥇 Gold',
+    platinum: '💎 Platinum'
+  };
+  const tierBadge = tier !== 'bronze' && tierLabel[tier]
+    ? ' · <strong>' + tierLabel[tier] + '</strong>'
+    : '';
+
+  const subject = '🔄 Renove sua locação com ' + discPct + '% off — ' + d.days_remaining + (d.days_remaining === 1 ? ' dia restante' : ' dias restantes');
 
   const html =
     '<!DOCTYPE html><html lang="pt-BR"><body style="margin:0;padding:0;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;color:#14201b;">' +
@@ -96,9 +110,9 @@ function emailRenewalReminder(d: {
     '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">Olá ' + escapeHtml(d.client_name) + ',</p>' +
     '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">Sua locação do <strong>' + escapeHtml(d.vehicle) + '</strong> está chegando ao fim. Quer continuar com o veículo?</p>' +
 
-    // Oferta destacada
+    // Oferta destacada (Fase 43: badge mostra desconto + tier real)
     '<div style="background:linear-gradient(135deg,#fff3cd 0%,#ffeaa7 100%);border:2px solid #ffc107;border-radius:12px;padding:20px;margin:20px 0;text-align:center;">' +
-    '<div style="background:#198754;color:#fff;display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:10px;">5% OFF NA RENOVAÇÃO</div>' +
+    '<div style="background:#198754;color:#fff;display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:10px;">' + discPct + '% OFF NA RENOVAÇÃO' + tierBadge + '</div>' +
     '<div style="font-size:13px;color:#5b6b63;margin-bottom:4px;">De <span style="text-decoration:line-through;">R$ ' + fmtBRL(d.price_old) + '</span> por</div>' +
     '<div style="font-size:34px;font-weight:800;color:#0f5132;font-family:Sora,sans-serif;line-height:1;">R$ ' + fmtBRL(d.price_new) + '<span style="font-size:14px;font-weight:500;">/mês</span></div>' +
     '<div style="font-size:12px;color:#5b6b63;margin-top:6px;">Economize <strong>R$ ' + fmtBRL(d.discount) + '</strong> no 1º mês da renovação</div>' +
@@ -108,11 +122,11 @@ function emailRenewalReminder(d: {
     '<ol style="margin:0 0 14px;padding-left:18px;color:#5b6b63;line-height:1.8;font-size:14px;">' +
     '<li>Você clica no botão abaixo</li>' +
     '<li>Escolhe duração: <strong>1, 2 ou 3 meses</strong></li>' +
-    '<li>Confirma pagamento da próxima mensalidade (com 5% off)</li>' +
+    '<li>Confirma pagamento da próxima mensalidade (com ' + discPct + '% off)</li>' +
     '<li>Continua usando o mesmo veículo, sem precisar passar por verificação de novo</li>' +
     '</ol>' +
 
-    '<p style="margin:24px 0 0;text-align:center;"><a href="' + SITE + '/reserva-detalhe.html?id=' + escapeHtml(d.booking_id) + '" style="display:inline-block;background:#0f5132;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">🔄 Renovar com 5% off</a></p>' +
+    '<p style="margin:24px 0 0;text-align:center;"><a href="' + SITE + '/reserva-detalhe.html?id=' + escapeHtml(d.booking_id) + '" style="display:inline-block;background:#0f5132;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">🔄 Renovar com ' + discPct + '% off</a></p>' +
 
     '<p style="margin:18px 0 0;text-align:center;font-size:12px;color:#8a948e;">Não quer renovar? Sem problema — devolva o veículo na data combinada e nada muda.</p>' +
     '</td></tr>' +
@@ -124,8 +138,9 @@ function emailRenewalReminder(d: {
 
   const text = 'Olá ' + d.client_name + ',\n\n' +
     'Sua locação do ' + d.vehicle + ' termina em ' + d.days_remaining + ' dia(s).\n\n' +
-    'Renove com 5% off! De R$ ' + fmtBRL(d.price_old) + ' por R$ ' + fmtBRL(d.price_new) + '/mês.\n' +
+    'Renove com ' + discPct + '% off! De R$ ' + fmtBRL(d.price_old) + ' por R$ ' + fmtBRL(d.price_new) + '/mês.\n' +
     'Economize R$ ' + fmtBRL(d.discount) + ' no 1º mês.\n\n' +
+    (tier !== 'bronze' ? 'Benefício ' + tier + ' aplicado.\n\n' : '') +
     'Renovar: ' + SITE + '/reserva-detalhe.html?id=' + d.booking_id + '\n\n' +
     'Não quer renovar? Devolva normalmente na data combinada.\n\n' +
     'Nomade Drive Brasil';
@@ -199,7 +214,10 @@ Deno.serve(async (req) => {
           price_new: Number(op.discounted_price),
           discount: Number(op.discount_amount),
           protocolo: op.protocol_number || "",
-          booking_id: op.booking_id
+          booking_id: op.booking_id,
+          // Fase 43: passa desconto + tier reais (não mais 5% fixo)
+          discount_pct: Number(op.renewal_discount_pct || 5),
+          client_tier: op.client_tier || "bronze"
         });
 
         const r = await sendEmail(op.client_email, tpl.subject, tpl.html, tpl.text);
