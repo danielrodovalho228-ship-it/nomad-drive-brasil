@@ -369,6 +369,34 @@
         <p>Este painel é uma demonstração visual da operação. O acesso real exigirá autenticação da equipe (login/super admin). Módulos como cadastro de usuários, integrações e permissões serão adicionados conforme a plataforma evolui.</p>
         <p class="note">Nenhum dado sensível é publicado nesta página.</p>
       </div>
+
+      <!-- ============================================================
+           Fase 32 Sprint 2.5 — Ferramentas Stripe Connect
+           ============================================================ -->
+      <div class="admin-card" style="margin-top:16px;">
+        <h3 style="margin:0 0 8px;font-size:16px;">🔧 Stripe Connect — Configurar payouts manuais</h3>
+        <p class="note" style="margin:0 0 12px;">
+          Proprietários (Connected Accounts Express) vêm com schedule "daily" por default.
+          Pra ativar saques parciais (Sprint 2 Fase 32) precisam estar em modo <strong>manual</strong>.
+          O Dashboard do Stripe não permite editar Express via UI — só via API.
+        </p>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px;">
+          <label class="field" style="flex:1;min-width:240px;">
+            <span style="font-size:12px;color:#5b6b63;font-weight:600;">E-mail do proprietário</span>
+            <input type="email" id="stripeManualEmail" value="qa-proprietario@nomadedrive.com.br"
+              style="width:100%;padding:8px;border:1px solid #ccd5cf;border-radius:6px;font-size:14px;" />
+          </label>
+          <button type="button" class="btn btn--solid btn--sm" id="btnStripeManualOne">
+            Configurar este
+          </button>
+          <button type="button" class="btn btn--outline btn--sm" id="btnStripeManualAll" title="Processa TODAS as Connected Accounts">
+            Configurar TODAS
+          </button>
+        </div>
+
+        <div id="stripeManualOut" style="margin-top:10px;padding:10px 12px;background:#f9fafb;border-radius:8px;font-family:monospace;font-size:12.5px;color:#5b6b63;line-height:1.5;white-space:pre-wrap;display:none;"></div>
+      </div>
     </section>
 
   </main>
@@ -376,10 +404,90 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
-<script src="auth.js?v=20260523c"></script>
-<script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260524c"></script>
-<script src="script.js?v=20260523c"></script>
+<script src="auth.js?v=20260524d"></script>
+<script src="statuses.js?v=20260524d"></script>
+<script src="emails-runtime.js?v=20260524d"></script>
+<script src="script.js?v=20260524d"></script>
+<script>
+/* ============================================================
+ * Fase 32 Sprint 2.5 — Botão "Configurar manual payouts"
+ * ============================================================
+ * Helper UI pro super-admin invocar setup-manual-payouts sem
+ * precisar do Console do navegador. Funciona depois do login.
+ * ============================================================ */
+(function () {
+  function showOut(msg, kind) {
+    var el = document.getElementById('stripeManualOut');
+    if (!el) return;
+    el.style.display = 'block';
+    el.style.background = kind === 'ok' ? '#e6f4ec' : kind === 'error' ? '#fde8eb' : '#f9fafb';
+    el.style.color = kind === 'ok' ? '#0f5132' : kind === 'error' ? '#b00020' : '#5b6b63';
+    el.textContent = msg;
+  }
+  function callSetup(body, btn) {
+    if (!window.ndAuth || !window.ndAuth.client) {
+      showOut('Auth não disponível. Recarregue a página.', 'error');
+      return;
+    }
+    var sb = window.ndAuth.client();
+    if (!sb) {
+      showOut('Você não está logado. Faça login como super-admin primeiro.', 'error');
+      return;
+    }
+    if (btn) { btn.disabled = true; var orig = btn.textContent; btn.textContent = '⏳ Processando...'; }
+    showOut('⏳ Chamando setup-manual-payouts...', 'loading');
+
+    sb.functions.invoke('setup-manual-payouts', { body: body }).then(function (r) {
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+      console.log('setup-manual-payouts response:', r);
+      var d = r && r.data;
+      if (d && d.ok) {
+        if (d.results) {
+          // Modo "all"
+          var lines = ['✅ Processadas ' + d.processed + ' conta(s):\n'];
+          d.results.forEach(function (it) {
+            lines.push((it.ok ? '✅' : '❌') + ' ' + it.account_id +
+              ' user=' + (it.user_id ? it.user_id.slice(0,8) : '?') +
+              (it.schedule ? ' schedule=' + it.schedule : '') +
+              (it.error ? ' err=' + it.error : ''));
+          });
+          showOut(lines.join('\n'), 'ok');
+        } else {
+          // Modo single
+          showOut('✅ ' + (d.message || 'Sucesso!') +
+            '\n\nAccount: ' + d.account_id +
+            '\nSchedule: ' + d.schedule +
+            '\nPayouts enabled: ' + d.payouts_enabled, 'ok');
+        }
+      } else {
+        var err = (d && d.error) || (r && r.error && r.error.message) || 'Erro desconhecido';
+        var hint = (d && d.hint) ? '\n\nDica: ' + d.hint : '';
+        showOut('❌ ' + err + hint, 'error');
+      }
+    }).catch(function (e) {
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+      showOut('❌ Erro de rede: ' + (e && e.message || e), 'error');
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    var btnOne = document.getElementById('btnStripeManualOne');
+    var btnAll = document.getElementById('btnStripeManualAll');
+    var inpEmail = document.getElementById('stripeManualEmail');
+
+    if (btnOne) btnOne.addEventListener('click', function () {
+      var email = (inpEmail && inpEmail.value || '').trim();
+      if (!email) { showOut('Preencha o e-mail.', 'error'); return; }
+      callSetup({ email: email }, btnOne);
+    });
+
+    if (btnAll) btnAll.addEventListener('click', function () {
+      if (!window.confirm('Processar TODAS as Connected Accounts (Express) cadastradas?\n\nIsto vai configurá-las como MANUAL payouts.')) return;
+      callSetup({ all: true }, btnAll);
+    });
+  });
+})();
+</script>
 <script>
 (function () {
   var gate = document.getElementById("adminGate");
