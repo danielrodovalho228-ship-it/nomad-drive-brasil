@@ -257,7 +257,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
-<script src="emails-runtime.js?v=20260524a"></script>
+<script src="emails-runtime.js?v=20260524c"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
@@ -1097,6 +1097,26 @@
                   "case_opened_team", payload
                 ).catch(function (e) { console.warn("case_opened_team:", e); });
               }).catch(function () {});
+
+            // Fase 35 — Transparência: notifica PROPRIETÁRIO do veículo
+            // (cliente abriu ocorrência sobre o carro dele — merece saber)
+            try {
+              if (bookingId) {
+                c.from("bookings").select("owner_id").eq("id", bookingId).maybeSingle()
+                  .then(function (br) {
+                    var ownerId = br && br.data && br.data.owner_id;
+                    if (!ownerId) return;
+                    var notifyFn = window.ndEmails.notifyByUserId || window.ndEmails.notify;
+                    notifyFn(c, ownerId, "case_opened_counterparty", {
+                      recipient_role: "owner",
+                      case_type: payload.case_type,
+                      case_type_label: payload.case_type_label,
+                      veiculo: payload.veiculo,
+                      description: payload.description
+                    }).catch(function () {});
+                  }).catch(function () {});
+              }
+            } catch (e4) { /* silencioso */ }
           }
         }).catch(function () {
           btn.disabled = false; btn.textContent = "Registrar ocorrência";
@@ -1303,6 +1323,26 @@
                   dispute_text: txt,
                   disputed_at_fmt: new Date().toLocaleString("pt-BR")
                 }).catch(function () { /* silencioso */ });
+
+                // 3) Fase 35 — Transparência: avisa o PROPRIETÁRIO da contestação
+                // (foi ele que reportou a avaria — merece saber que cliente contestou)
+                try {
+                  var bookingId = d.booking_id;
+                  if (bookingId) {
+                    c.from("bookings").select("owner_id").eq("id", bookingId).maybeSingle()
+                      .then(function (br) {
+                        var ownerId = br && br.data && br.data.owner_id;
+                        if (!ownerId) return;
+                        var ownerNotifyFn = window.ndEmails.notifyByUserId || window.ndEmails.notify;
+                        ownerNotifyFn(c, ownerId, "damage_disputed_owner", {
+                          veiculo: veiculoStr,
+                          cliente: fullName,
+                          valor: valorStr,
+                          dispute_text: txt
+                        }).catch(function () {});
+                      }).catch(function () {});
+                  }
+                } catch (e3) { /* silencioso */ }
               }).catch(function () { /* silencioso */ });
             } catch (e) { /* nunca quebra o fluxo principal */ }
           }

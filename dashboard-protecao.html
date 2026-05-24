@@ -361,6 +361,33 @@
 
 /* Card oculto por filtro */
 .prot-card[data-hidden="true"] { display: none; }
+
+/* Fase 35: Mini-log de notificações enviadas no card */
+.prot-notif-log {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #f4f7f5;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #5b6b63;
+}
+.prot-notif-log__label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #145f3e;
+  margin-right: 4px;
+}
+.prot-notif-log__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.prot-notif-log__item--on { color: #1a7a4f; font-weight: 600; }
+.prot-notif-log__item--off { color: #8a948e; }
 </style>
 </head>
 <body>
@@ -571,7 +598,7 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260524b"></script>
 <script src="statuses.js?v=20260524b"></script>
-<script src="emails-runtime.js?v=20260524b"></script>
+<script src="emails-runtime.js?v=20260524c"></script>
 <script src="script.js?v=20260524b"></script>
 <script>
 (function () {
@@ -688,6 +715,23 @@
       : "⏱ SLA " + Math.floor(remainingHours) + "h";
     return '<span class="prot-sla prot-sla--' + cls + '">' + label + '</span>';
   }
+  /* Fase 35: mini-log "Notificações" - mostra quais e-mails dispararam
+   * Baseado no evento (estado do caso/avaria) e nas partes envolvidas.
+   * É declarativo: lista o que o sistema sempre envia em cada estado.
+   */
+  function buildNotifLog(items) {
+    // items = [{ to: "cliente", sent: true/false }, ...]
+    var inner = items.map(function (it) {
+      var cls = it.sent ? "prot-notif-log__item--on" : "prot-notif-log__item--off";
+      var icon = it.sent ? "✓" : "—";
+      return '<span class="prot-notif-log__item ' + cls + '">' + icon + ' ' + escapeHtml(it.to) + '</span>';
+    }).join('');
+    return '<div class="prot-notif-log">' +
+      '<span class="prot-notif-log__label">✉ Notificações:</span>' +
+      inner +
+      '</div>';
+  }
+
   /* Fase 34: stats top-bar */
   function loadStats() {
     var c = a.client();
@@ -1008,6 +1052,27 @@
       '</span>';
     body.appendChild(statusRow);
 
+    // Fase 35: log de notificações enviadas
+    var notifItems = [];
+    // Avaria registrada → cliente + owner
+    notifItems.push({ to: 'cliente', sent: true });
+    notifItems.push({ to: 'proprietário', sent: true });
+    if (d.status === 'aprovado_captura' || d.status === 'aprovado_sem_captura' || d.status === 'resolvido') {
+      // Decisão tomada → todos recebem
+      notifItems = [
+        { to: 'cliente', sent: true },
+        { to: 'proprietário', sent: true }
+      ];
+    }
+    if (d.client_dispute) {
+      // Contestação → cliente + Proteção + owner
+      notifItems.push({ to: 'Proteção (equipe)', sent: true });
+    }
+    var notifHtml = buildNotifLog(notifItems);
+    var notifDiv = document.createElement('div');
+    notifDiv.innerHTML = notifHtml;
+    body.appendChild(notifDiv.firstChild);
+
     card.appendChild(body);
 
     // Form de decisão — só se ainda for acionável
@@ -1109,6 +1174,39 @@
           });
       } else {
         showNotice("Decisão registrada: liberar sem cobrança.", "ok");
+
+        // Fase 35 — Transparência: notifica CLIENTE + OWNER da liberação
+        // (até agora "Liberar sem cobrança" não disparava NENHUM e-mail)
+        try {
+          if (window.ndEmails && d.booking_id) {
+            c.from("bookings").select("client_id, owner_id, vehicles(make,model,year_model)")
+              .eq("id", d.booking_id).maybeSingle().then(function (br) {
+                var bk = br && br.data; if (!bk) return;
+                var v = bk.vehicles || {};
+                var vehStr = [v.make, v.model].filter(Boolean).join(" ");
+                if (v.year_model) vehStr += " (" + v.year_model + ")";
+                var notifyFn = window.ndEmails.notifyByUserId || window.ndEmails.notify;
+
+                // E-mail pro CLIENTE — avaria liberada (boa notícia)
+                if (bk.client_id) {
+                  notifyFn(c, bk.client_id, "damage_released_client", {
+                    veiculo: vehStr,
+                    parecer: (notes || "").trim() || null
+                  }).catch(function () {});
+                }
+                // E-mail pro OWNER — decisão (liberada)
+                if (bk.owner_id) {
+                  notifyFn(c, bk.owner_id, "damage_decision_owner", {
+                    veiculo: vehStr,
+                    valor: "0,00",
+                    parecer: (notes || "").trim() || null,
+                    outcome: "released"
+                  }).catch(function () {});
+                }
+              }).catch(function () {});
+          }
+        } catch (e) { /* silencioso */ }
+
         loadDamages();
       }
     }).catch(function () {
@@ -1218,6 +1316,23 @@
       '</span>';
     body.appendChild(statusRow);
 
+    // Fase 35: log de notificações enviadas
+    var caseNotifItems = [
+      { to: 'quem abriu', sent: true },
+      { to: 'Proteção (equipe)', sent: true },
+      { to: 'contraparte', sent: true }
+    ];
+    if (cs.status === 'aprovado' || cs.status === 'aprovado_com_ressalvas' || cs.status === 'recusado') {
+      caseNotifItems = [
+        { to: 'quem abriu', sent: true },
+        { to: 'contraparte', sent: true }
+      ];
+    }
+    var caseNotifHtml = buildNotifLog(caseNotifItems);
+    var caseNotifDiv = document.createElement('div');
+    caseNotifDiv.innerHTML = caseNotifHtml;
+    body.appendChild(caseNotifDiv.firstChild);
+
     card.appendChild(body);
 
     // --- DECISÃO ---
@@ -1270,12 +1385,15 @@
         showNotice('Triagem atualizada.', 'ok');
         loadStats(); loadProtectionCases();
 
-        // Fase 32 (Caminho A) — notifica cliente via server-side resolution
+        // Fase 32 (Caminho A) — notifica REPORTER via server-side resolution
+        // Fase 35 — também notifica CONTRAPARTE pra transparência total
         var finals = ['aprovado', 'aprovado_com_ressalvas', 'recusado'];
         if (window.ndEmails && cs.reported_by &&
             finals.indexOf(newStatus) !== -1 && newStatus !== oldStatus) {
           var veiculo = vehFull;
           var notifyFn = window.ndEmails.notifyByUserIdVerbose || window.ndEmails.notifyByUserId || window.ndEmails.notify;
+
+          // 1) E-mail pro reporter (cliente OU owner — quem abriu o caso)
           notifyFn(c, cs.reported_by, 'case_resolved_client', {
             case_type: cs.case_type,
             case_type_label: caseType,
@@ -1284,6 +1402,30 @@
             status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
             resolution_notes: newNotes
           }).catch(function (e) { console.warn('case_resolved_client:', e); });
+
+          // 2) E-mail pra CONTRAPARTE (Fase 35 — transparência)
+          // Se cliente abriu, notifica o owner; se owner abriu, notifica o cliente
+          if (cs.booking_id) {
+            c.from('bookings').select('client_id, owner_id').eq('id', cs.booking_id).maybeSingle()
+              .then(function (br) {
+                var bk = br && br.data;
+                if (!bk) return;
+                var counterpartyId = null;
+                if (cs.reported_by === bk.client_id && bk.owner_id) counterpartyId = bk.owner_id;
+                else if (cs.reported_by === bk.owner_id && bk.client_id) counterpartyId = bk.client_id;
+                if (!counterpartyId || counterpartyId === cs.reported_by) return;
+
+                var notifyFnCounter = window.ndEmails.notifyByUserId || window.ndEmails.notify;
+                notifyFnCounter(c, counterpartyId, 'case_resolved_client', {
+                  case_type: cs.case_type,
+                  case_type_label: caseType,
+                  veiculo: veiculo,
+                  status: newStatus,
+                  status_label: a.statusLabel ? a.statusLabel(newStatus) : newStatus,
+                  resolution_notes: newNotes
+                }).catch(function () {});
+              }).catch(function () {});
+          }
         }
       }).catch(function () {
         btn.disabled = false; btn.textContent = '💾 Salvar triagem';

@@ -368,6 +368,71 @@ Deno.serve(async (req) => {
       console.error("close-rental: e-mail do cliente não obtido");
     }
 
+    // ============================================================
+    // Fase 35 — Transparência: quando há avaria, notifica owner também
+    // ============================================================
+    if (hasPendingDamages) {
+      try {
+        const ownerId = (booking as any).owner_id;
+        if (ownerId) {
+          const { data: ownerProf } = await admin.from("profiles")
+            .select("full_name, email")
+            .eq("id", ownerId).maybeSingle();
+
+          // Nome do cliente pra contextualizar
+          let cliName = "";
+          const cliId = (booking as any).client_id;
+          if (cliId) {
+            const { data: cliProf } = await admin.from("profiles")
+              .select("full_name").eq("id", cliId).maybeSingle();
+            cliName = cliProf?.full_name || "";
+          }
+
+          if (ownerProf?.email) {
+            const veh: any = (booking as any).vehicles;
+            let vehStr = "Reserva Nomade Drive";
+            if (veh) {
+              vehStr = [veh.make, veh.model].filter(Boolean).join(" ") || vehStr;
+              if (veh.year_model) vehStr += " (" + veh.year_model + ")";
+            }
+            const subject = "Avaria registrada — aguardando análise da Proteção";
+            const html =
+              '<!DOCTYPE html><html lang="pt-BR"><body style="margin:0;padding:0;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;color:#14201b;">' +
+              '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 12px;background:#f4f5f7;"><tr><td align="center">' +
+              '<table cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(20,40,30,.15);">' +
+              '<tr><td style="background:linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%);padding:24px 28px;">' +
+              '<img src="' + LOGO_URL + '" alt="Nomade Drive Brasil" width="120" style="display:block;height:auto;border:0;background:#fff;border-radius:6px;padding:4px 8px;">' +
+              '</td></tr>' +
+              '<tr><td style="padding:30px 28px 24px;">' +
+              '<h1 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#14201b;">Sua avaria foi registrada</h1>' +
+              '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">Olá ' + escapeHtml(ownerProf.full_name || "") + ',</p>' +
+              '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">Registramos a avaria que você reportou no check-out do veículo <strong>' + escapeHtml(vehStr) + '</strong>.</p>' +
+              '<p style="margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#3a4945;">A equipe Proteção da Nomade Drive vai analisar as fotos e a descrição e decidir entre <strong>captura parcial da caução</strong> ou <strong>liberação sem cobrança</strong>. Você recebe um novo e-mail com a decisão final.</p>' +
+              '<table cellpadding="8" cellspacing="0" style="background:#fff5e8;border-radius:10px;margin:14px 0 18px;width:100%;">' +
+              '<tr><td style="font-weight:600;color:#5b6b63;width:140px;">Veículo</td><td>' + escapeHtml(vehStr) + '</td></tr>' +
+              (cliName ? '<tr><td style="font-weight:600;color:#5b6b63;">Cliente</td><td>' + escapeHtml(cliName) + '</td></tr>' : '') +
+              '<tr><td style="font-weight:600;color:#5b6b63;">Status</td><td>Em análise — Proteção</td></tr>' +
+              '</table>' +
+              '<p style="margin:24px 0 0;"><a href="' + SITE + '/dashboard-proprietario.html#avarias" style="display:inline-block;background:#a8580e;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14.5px;">Acompanhar pelo meu painel</a></p>' +
+              '</td></tr>' +
+              '<tr><td style="background:#f9fafb;padding:18px 28px;border-top:1px solid #e3e9e5;font-size:12px;color:#5b6b63;">' +
+              '<strong>Nomade Drive Brasil</strong> · Uberlândia/MG · <a href="' + SITE + '" style="color:#a8580e;text-decoration:none;">nomadedrive.com.br</a>' +
+              '</td></tr></table></td></tr></table></body></html>';
+            const text = "Olá " + (ownerProf.full_name || "") + ",\n\nAvaria registrada no veículo " + vehStr + ".\nAguardando análise da Proteção.\n\nPainel: " + SITE + "/dashboard-proprietario.html#avarias";
+            const r3 = await sendEmail(ownerProf.email, subject, html, text);
+            if (r3.ok) {
+              (actions as any).email_owner_avaria_sent = true;
+              console.log("close-rental: e-mail avaria pro owner enviado:", r3.id);
+            } else {
+              actions.errors.push("email_owner_avaria: " + (r3.error ?? ""));
+            }
+          }
+        }
+      } catch (e) {
+        actions.errors.push("email_owner_avaria_ex: " + ((e as Error)?.message ?? String(e)));
+      }
+    }
+
     // Fase 32b: marca bookings.status como 'encerrada' (terminal)
     // Depende da migração supabase-fase32b-bookings-status-terminal.sql
     // ter sido aplicada (adiciona 'encerrada' ao enum entity_status).

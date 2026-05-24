@@ -522,6 +522,216 @@
       };
     },
 
+    /* ============================================================
+     * Fase 35 — Transparência completa: e-mails pro proprietário e contraparte
+     * ============================================================
+     * Objetivo: ninguém fica no escuro. Cada evento de Proteção/Avaria
+     * notifica TODAS as partes envolvidas (cliente + proprietário +
+     * Proteção team quando aplicável).
+     *
+     * Templates novos:
+     *  - damage_reported_owner       (você reportou avaria, aguardando Proteção)
+     *  - damage_decision_owner       (Proteção decidiu sua avaria)
+     *  - damage_released_client      (avaria liberada — sem cobrança)
+     *  - damage_disputed_owner       (cliente contestou sua avaria)
+     *  - case_opened_counterparty    (foi aberta ocorrência sobre seu veículo/locação)
+     *
+     * (case_resolved_client é reutilizado pra contraparte — texto neutro)
+     * ============================================================ */
+
+    damage_reported_owner: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Avaria registrada — aguardando análise da Proteção",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: "#a8580e",
+          badge: "Avaria registrada",
+          title: "Sua avaria foi registrada",
+          preheader: "A equipe Proteção vai analisar.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "Registramos a avaria que você reportou no check-out do veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong>.",
+            "A equipe Proteção da Nomade Drive vai analisar as fotos e a descrição, e então decidir entre <strong>captura parcial da caução</strong> ou <strong>liberação sem cobrança</strong>. Você recebe um novo e-mail com a decisão final."
+          ],
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.cliente ? ["Cliente da locação", escapeHtml(p.cliente)] : null),
+            (p.valor_sugerido ? ["Valor sugerido", escapeHtml(p.valor_sugerido)] : null),
+            ["Status", "Em análise — Proteção"]
+          ].filter(Boolean),
+          ctaText: "Acompanhar pelo meu painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#avarias"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Avaria registrada — aguardando análise da Proteção.\n" +
+          "Veículo: " + (p.veiculo || "—") + "\n" +
+          (p.valor_sugerido ? "Valor sugerido: " + p.valor_sugerido + "\n" : "") +
+          "\nPainel: " + SITE + "/dashboard-proprietario.html#avarias"
+      };
+    },
+
+    damage_decision_owner: function (p) {
+      var captured = p.outcome === "captured";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: captured
+          ? "Decisão da Proteção — captura de R$ " + (p.valor || "—") + " aprovada"
+          : "Decisão da Proteção — avaria liberada sem cobrança",
+        html: baseTemplate({
+          gradient: captured
+            ? "linear-gradient(135deg,#145f3e 0%,#1a7a4f 55%,#2da473 100%)"
+            : "linear-gradient(135deg,#1a4d8c 0%,#2563a8 55%,#3b82c5 100%)",
+          ctaBg: captured ? "#1a7a4f" : "#1a4d8c",
+          badge: captured ? "Captura aprovada" : "Liberada sem cobrança",
+          title: captured
+            ? "A Proteção aprovou a captura"
+            : "A Proteção liberou a avaria sem cobrança",
+          preheader: captured
+            ? "Valor capturado da caução do cliente."
+            : "A caução do cliente será estornada.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            captured
+              ? "A equipe Proteção da Nomade Drive aprovou a <strong>captura parcial da caução</strong> referente à avaria do veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong>."
+              : "A equipe Proteção da Nomade Drive decidiu <strong>liberar a avaria sem cobrança</strong> ao cliente. A caução autorizada será estornada normalmente.",
+            (p.parecer ? "<strong>Parecer da equipe:</strong> " + escapeHtml(p.parecer) : "")
+          ].filter(Boolean),
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.cliente ? ["Cliente", escapeHtml(p.cliente)] : null),
+            (captured && p.valor ? ["Valor capturado", "R$ " + escapeHtml(p.valor)] : null),
+            ["Status", captured ? "Aprovado — captura" : "Liberada (sem cobrança)"]
+          ].filter(Boolean),
+          ctaText: "Acompanhar pelo meu painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#avarias",
+          footerNote: "O cliente pode contestar a decisão em até 5 dias úteis."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          (captured
+            ? "DECISÃO: Captura aprovada — R$ " + (p.valor || "—") + "\n"
+            : "DECISÃO: Liberada sem cobrança\n") +
+          "Veículo: " + (p.veiculo || "—") + "\n" +
+          (p.parecer ? "Parecer: " + p.parecer + "\n" : "") +
+          "\nPainel: " + SITE + "/dashboard-proprietario.html#avarias"
+      };
+    },
+
+    damage_released_client: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Sua avaria foi liberada sem cobrança — Nomade Drive Brasil",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#1a4d8c 0%,#2563a8 55%,#3b82c5 100%)",
+          ctaBg: "#1a4d8c",
+          badge: "Avaria liberada",
+          title: "Boa notícia: nenhuma cobrança",
+          preheader: "A Proteção decidiu liberar sem cobrança da caução.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "A equipe Proteção da Nomade Drive analisou a avaria reportada no veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong> e decidiu <strong>liberar sem cobrança</strong>.",
+            (p.parecer ? "<strong>Parecer da equipe:</strong> " + escapeHtml(p.parecer) : ""),
+            "<strong>Sua caução autorizada será estornada</strong> em até 5 dias úteis no cartão usado na pré-autorização."
+          ].filter(Boolean),
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            ["Valor cobrado", "R$ 0,00"],
+            ["Status", "Liberada — sem cobrança"]
+          ],
+          ctaText: "Ver no meu painel",
+          ctaUrl: SITE + "/dashboard-cliente.html#avarias"
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "A Proteção liberou a avaria SEM COBRANÇA.\n" +
+          "Veículo: " + (p.veiculo || "—") + "\n" +
+          (p.parecer ? "Parecer: " + p.parecer + "\n" : "") +
+          "Sua caução será estornada em até 5 dias úteis.\n\n" +
+          "Painel: " + SITE + "/dashboard-cliente.html#avarias"
+      };
+    },
+
+    damage_disputed_owner: function (p) {
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Cliente contestou a avaria — 2ª análise da Proteção",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#a8580e 0%,#cf7a1c 55%,#e89c3f 100%)",
+          ctaBg: "#a8580e",
+          badge: "Avaria contestada",
+          title: "Cliente contestou sua avaria",
+          preheader: "A Proteção vai fazer uma 2ª análise.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            "O cliente da locação contestou a avaria que você reportou no veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong>.",
+            (p.dispute_text ? "<strong>Argumento do cliente:</strong> " + escapeHtml(p.dispute_text) : ""),
+            "A equipe Proteção da Nomade Drive vai reavaliar o caso em até 5 dias úteis e te avisa do resultado por e-mail."
+          ].filter(Boolean),
+          sections: [
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.cliente ? ["Cliente", escapeHtml(p.cliente)] : null),
+            (p.valor ? ["Valor em análise", "R$ " + escapeHtml(p.valor)] : null),
+            ["Status", "Em contestação — 2ª análise"]
+          ].filter(Boolean),
+          ctaText: "Ver no meu painel",
+          ctaUrl: SITE + "/dashboard-proprietario.html#avarias",
+          footerNote: "Você pode responder este e-mail pra adicionar contexto à 2ª análise."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "O cliente contestou sua avaria.\n" +
+          "Veículo: " + (p.veiculo || "—") + "\n" +
+          (p.dispute_text ? "Contestação: " + p.dispute_text + "\n" : "") +
+          "Proteção vai reavaliar em até 5 dias úteis.\n\n" +
+          "Painel: " + SITE + "/dashboard-proprietario.html#avarias"
+      };
+    },
+
+    case_opened_counterparty: function (p) {
+      // Genérico: usado tanto pra notificar owner (quando cliente abriu)
+      // quanto cliente (quando owner abriu). recipient_role indica qual.
+      var isOwner = p.recipient_role === "owner";
+      return {
+        replyTo: "suporte@nomadedrive.com.br",
+        subject: "Ocorrência registrada sobre " +
+          (isOwner ? "seu veículo" : "sua locação") +
+          " — Nomade Drive Brasil",
+        html: baseTemplate({
+          gradient: "linear-gradient(135deg,#7a1f4b 0%,#a02865 55%,#c83c87 100%)",
+          ctaBg: "#7a1f4b",
+          badge: "Ocorrência aberta",
+          title: isOwner
+            ? "Nova ocorrência sobre seu veículo"
+            : "Nova ocorrência sobre sua locação",
+          preheader: "A equipe Proteção vai analisar.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + ",",
+            (isOwner
+              ? "O <strong>cliente</strong> da sua locação abriu uma ocorrência do tipo <strong>" +
+                escapeHtml(p.case_type_label || p.case_type || "—") +
+                "</strong> referente ao veículo <strong>" + escapeHtml(p.veiculo || "—") + "</strong>."
+              : "O <strong>proprietário</strong> do veículo da sua locação abriu uma ocorrência do tipo <strong>" +
+                escapeHtml(p.case_type_label || p.case_type || "—") +
+                "</strong> referente ao <strong>" + escapeHtml(p.veiculo || "—") + "</strong>."),
+            "A equipe Proteção da Nomade Drive já está com o caso na fila e vai atualizar você sobre a resolução."
+          ],
+          sections: [
+            ["Tipo", escapeHtml(p.case_type_label || p.case_type || "—")],
+            ["Veículo", escapeHtml(p.veiculo || "—")],
+            (p.description ? ["Descrição", escapeHtml(p.description)] : null),
+            ["Status", "Em análise — Proteção"]
+          ].filter(Boolean),
+          ctaText: "Acompanhar pelo meu painel",
+          ctaUrl: SITE + (isOwner ? "/dashboard-proprietario.html#protecao" : "/dashboard-cliente.html#protecao"),
+          footerNote: "Mantemos as duas partes informadas em cada etapa do processo."
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          (isOwner
+            ? "O cliente abriu uma ocorrência sobre seu veículo " + (p.veiculo || "") + ".\n"
+            : "O proprietário abriu uma ocorrência sobre o " + (p.veiculo || "") + ".\n") +
+          "Tipo: " + (p.case_type_label || p.case_type || "—") + ".\n\n" +
+          "Painel: " + SITE + (isOwner ? "/dashboard-proprietario.html#protecao" : "/dashboard-cliente.html#protecao")
+      };
+    },
+
     lead_status_updated: function (p) {
       var statusLbl = p.status_label || p.status || "atualizada";
       var orangeStatus = p.status === "recusado" || p.status === "suspenso";
