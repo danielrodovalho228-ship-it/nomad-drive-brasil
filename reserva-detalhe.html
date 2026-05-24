@@ -461,14 +461,18 @@
         }
         if (!r || r.error || !r.data || !r.data.url) {
           btn.disabled = false; btn.textContent = label;
-          payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
+          // Mostra o erro real da Stripe pra facilitar diagnóstico
+          var detail = (r && r.data && r.data.error) ||
+                       (r && r.error && r.error.message) ||
+                       "tente novamente.";
+          payNotice("Não foi possível iniciar o pagamento: " + detail, "error");
           return;
         }
         window.location.href = r.data.url;
       }).catch(function (e) {
         console.error("stripe-checkout — exceção:", e);
         btn.disabled = false; btn.textContent = label;
-        payNotice("Não foi possível iniciar o pagamento agora. Tente novamente.", "error");
+        payNotice("Erro de rede ao iniciar pagamento: " + (e && e.message || e), "error");
       });
   }
   function wirePayButtons(c, bookingId) {

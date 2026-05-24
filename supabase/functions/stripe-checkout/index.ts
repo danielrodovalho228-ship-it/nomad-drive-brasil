@@ -443,26 +443,16 @@ Deno.serve(async (req) => {
         subData.transfer_data = { destination: ownerAcct2.stripe_account_id };
       }
 
-      // B2-v2 (Fase 31): Pix Automático agora aceita subscription mensal.
-      // Stripe BR lançou Pix Automático que cria mandato autorizado pelo cliente
-      // pra cobrança recorrente. Atualiza:
-      //   payment_method_types: ["card", "pix"]
-      //   payment_method_options.pix.mandate_options:
-      //     amount: valor máximo autorizado (usamos monthly_price)
-      //     payment_schedule: "monthly"
-      // Cartão continua sendo a opção principal; PIX é alternativa.
-      session = await stripe.checkout.sessions.create({
+      // B2-v2 (Fase 31): Pix Automático em subscription mensal.
+      // PIX é opt-in via env var ENABLE_PIX=true. Default off porque
+      // contas novas Stripe BR não têm PIX habilitado por padrão —
+      // precisa pedir ativação ao suporte Stripe. Quando ativarem,
+      // basta setar a secret ENABLE_PIX=true e re-deployar.
+      const enablePix = Deno.env.get("ENABLE_PIX") === "true";
+      const subscriptionParams: Stripe.Checkout.SessionCreateParams = {
         mode: "subscription",
         customer: customerId!,
-        payment_method_types: ["card", "pix"],
-        payment_method_options: {
-          pix: {
-            mandate_options: {
-              amount: amountCents,
-              payment_schedule: "monthly",
-            },
-          } as any,  // Pix Automático mandate_options ainda não no tipo oficial
-        },
+        payment_method_types: enablePix ? ["card", "pix"] : ["card"],
         line_items: [{
           quantity: 1,
           price_data: {
@@ -477,17 +467,30 @@ Deno.serve(async (req) => {
         cancel_url: `${SITE}/reserva-detalhe.html?id=${bookingId}&pagamento=cancelado`,
         client_reference_id: bookingId,
         metadata: { booking_id: bookingId, kind, client_id: user.id, billing_mode: "monthly" },
-      });
+      };
+      if (enablePix) {
+        subscriptionParams.payment_method_options = {
+          pix: {
+            mandate_options: {
+              amount: amountCents,
+              payment_schedule: "monthly",
+            },
+          } as any,  // Pix Automático mandate_options ainda não no tipo oficial
+        };
+      }
+      session = await stripe.checkout.sessions.create(subscriptionParams);
     } else {
       // ---- modo one-off (padrão atual: payment com app_fee_amount) ----
       //
-      // B2 (Fase 28): PIX como método alternativo
+      // B2 (Fase 28): PIX como método alternativo (one-off).
+      // PIX opt-in via env var ENABLE_PIX (mesma do modo subscription) —
+      // contas Stripe BR novas precisam pedir ativação ao suporte.
       // - Caução: SÓ cartão (precisa de pré-autorização — PIX não suporta)
-      // - Mensalidade one-off: cartão OU PIX (cliente escolhe na Stripe)
-      // - PIX expira em 30 min por padrão; o webhook trata o paid quando vier.
+      // - Mensalidade one-off: cartão OU PIX (se ENABLE_PIX=true)
+      const enablePixOneOff = Deno.env.get("ENABLE_PIX") === "true";
       const paymentMethods = isDeposit
         ? ["card"]
-        : ["card", "pix"];
+        : (enablePixOneOff ? ["card", "pix"] : ["card"]);
 
       session = await stripe.checkout.sessions.create({
         mode: "payment",
