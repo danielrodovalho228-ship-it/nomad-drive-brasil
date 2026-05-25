@@ -580,17 +580,21 @@
   } catch (e) {}
   syncCards();
 
-  /* Toggle olho senha */
+  /* Toggle olho senha — fix code-review M4: aria-label dinâmico
+     pra screen readers entenderem o estado atual */
   var pwdToggle = document.getElementById("pwdToggle");
   var pwdInput = document.getElementById("senha");
   pwdToggle.addEventListener("click", function () {
     var showing = pwdInput.type === "text";
     pwdInput.type = showing ? "password" : "text";
     pwdToggle.textContent = showing ? "👁" : "🙈";
+    pwdToggle.setAttribute("aria-label", showing ? "Mostrar senha" : "Esconder senha");
+    pwdToggle.setAttribute("aria-pressed", showing ? "false" : "true");
   });
 
   /* Estado pós-cadastro com reenvio */
   var lastSignupEmail = null;
+  var resendCooldownTimer = null;  // fix code-review M3: clearable
   var successCard  = document.getElementById("successCard");
   var signupArea   = document.getElementById("signupArea");
   var successEmail = document.getElementById("successEmail");
@@ -640,10 +644,13 @@
       }
       btnResend.textContent = "✓ E-mail reenviado";
       setResendFeedback("✓ Reenviamos o e-mail pra " + lastSignupEmail + ". Verifique sua caixa de entrada e spam.", "ok");
-      // Habilita de novo após 30s pra evitar spam
-      setTimeout(function () {
+      // Habilita de novo após 30s pra evitar spam.
+      // Fix code-review M3: armazena timer pra poder cancelar se user clicar "Corrigir"
+      if (resendCooldownTimer) clearTimeout(resendCooldownTimer);
+      resendCooldownTimer = setTimeout(function () {
         btnResend.disabled = false;
         btnResend.textContent = "📧 Reenviar de novo";
+        resendCooldownTimer = null;
       }, 30000);
     }).catch(function (e) {
       btnResend.disabled = false; btnResend.textContent = orig;
@@ -653,6 +660,12 @@
 
   /* "Corrigir e-mail" — volta pro formulário com email atual pré-preenchido */
   btnCorrect.addEventListener("click", function () {
+    // Fix code-review M3: cancela cooldown pendente do Reenviar
+    // (evita botão hidden mudar texto 30s depois)
+    if (resendCooldownTimer) {
+      clearTimeout(resendCooldownTimer);
+      resendCooldownTimer = null;
+    }
     successCard.hidden = true;
     signupArea.hidden = false;
     var emailInput = document.getElementById("email");
