@@ -15,7 +15,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-ui" />
 <link rel="stylesheet" href="style.css?v=20260524-landing-opt" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-ui" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-ui" />
 
 <!-- Fase 47: Schema.org markup pra SEO (LocalBusiness + Service) -->
 <script type="application/ld+json">
@@ -143,26 +146,26 @@
 <!-- ============ HERO ============ -->
 <section class="hero" id="inicio">
   <div class="container hero__inner">
-    <div class="hero__copy">
-      <span class="badge">🚀 Pré-lançamento · Uberlândia-MG</span>
-      <h1>Alugue o carro perfeito por mês <em>sem burocracia de locadora</em>.</h1>
-      <p class="hero__sub">Plataforma local de Uberlândia que conecta você a proprietários verificados. Contrato, vistoria, proteção e suporte WhatsApp — tudo simples. <strong>Cliente Gold/Platinum: aprovação na hora.</strong></p>
-      <div class="hero__cta">
-        <a href="#orcamento" class="btn btn--solid btn--lg">⚡ Pedir orçamento em 2 min</a>
-        <a href="#frota" class="btn btn--outline btn--lg">Ver carros disponíveis</a>
+    <div class="hero__copy fm-stagger-slow">
+      <span class="badge fm-pop-in" style="--fm-delay: 200ms;">🚀 Pré-lançamento · Uberlândia-MG</span>
+      <h1 class="fm-blur-in" style="--fm-delay: 100ms;">Alugue o carro perfeito por mês <em>sem burocracia de locadora</em>.</h1>
+      <p class="hero__sub fm-slide-up" style="--fm-delay: 400ms;">Plataforma local de Uberlândia que conecta você a proprietários verificados. Contrato, vistoria, proteção e suporte WhatsApp — tudo simples. <strong>Cliente Gold/Platinum: aprovação na hora.</strong></p>
+      <div class="hero__cta fm-slide-up" style="--fm-delay: 600ms;">
+        <a href="#orcamento" class="btn btn--solid btn--lg fm-hover-glow">⚡ Pedir orçamento em 2 min</a>
+        <a href="#frota" class="btn btn--outline btn--lg fm-hover-scale">Ver carros disponíveis</a>
       </div>
-      <ul class="hero__badges">
+      <ul class="hero__badges fm-fade-in" style="--fm-delay: 800ms;">
         <li>📄 Contrato e vistoria</li>
         <li>✅ Veículos aprovados em oficina parceira</li>
         <li>🛡️ Proteção por contrato</li>
         <li>💬 Suporte humano por WhatsApp</li>
       </ul>
-      <!-- Fase 47: Faixa de prova social (honesta — pré-lançamento) -->
-      <div class="hero__proof" style="display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.15);">
-        <div><strong style="font-size:18px;color:var(--ink);font-family:var(--font-d);">4</strong><br><span style="font-size:12px;color:var(--muted);">categorias de veículo</span></div>
-        <div><strong style="font-size:18px;color:var(--ink);font-family:var(--font-d);">30+</strong><br><span style="font-size:12px;color:var(--muted);">dias mínimo de locação</span></div>
-        <div><strong style="font-size:18px;color:var(--ink);font-family:var(--font-d);">100%</strong><br><span style="font-size:12px;color:var(--muted);">veículos verificados</span></div>
-        <div><strong style="font-size:18px;color:var(--ink);font-family:var(--font-d);">5min</strong><br><span style="font-size:12px;color:var(--muted);">pra pedir orçamento</span></div>
+      <!-- Fase 47/53: Faixa de prova social com counter animado -->
+      <div class="hero__proof fm-fade-in" style="--fm-delay: 1000ms; display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.15);">
+        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="4">0</strong><br><span style="font-size:12px;color:var(--muted);">categorias de veículo</span></div>
+        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="30">0</strong><span style="font-size:14px;">+</span><br><span style="font-size:12px;color:var(--muted);">dias mínimo de locação</span></div>
+        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="100">0</strong><span style="font-size:14px;">%</span><br><span style="font-size:12px;color:var(--muted);">veículos verificados</span></div>
+        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="5">0</strong><span style="font-size:14px;">min</span><br><span style="font-size:12px;color:var(--muted);">pra pedir orçamento</span></div>
       </div>
     </div>
     <div class="hero__visual">
@@ -294,7 +297,7 @@
 <!-- ============ FROTA ============ -->
 <section class="section" id="frota">
   <div class="container">
-    <div class="section__head">
+    <div class="section__head" data-fm-reveal>
       <span class="eyebrow">Frota e categorias</span>
       <h2>Exemplos de veículos da rede</h2>
       <p>Carros de proprietários locais, organizados por categoria. <strong>São exemplos</strong> — disponibilidade, preço final, caução e proteção são confirmados individualmente por orçamento e contrato.</p>
@@ -712,6 +715,7 @@
 <script src="auth.js" defer></script>
 <script src="car-data.js" defer></script>
 <script src="script.js?v=20260524-landing-opt" defer></script>
+<script src="fm-reveal.js?v=20260524-ui" defer></script>
 
 <!-- Fase 47: Mostra sticky CTA só após scroll de 600px (não polui o topo) -->
 <script>

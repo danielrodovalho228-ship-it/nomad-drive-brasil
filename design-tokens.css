@@ -1,0 +1,226 @@
+/* ====================================================================
+   Nomade Drive Brasil — Design Tokens (Sistema Unificado)
+   --------------------------------------------------------------------
+   Sistema de tokens inspirado em:
+   - Material Design 3 (cores semânticas + elevação)
+   - Tailwind CSS (escala de spacing/typography)
+   - Radix UI (sombras semânticas)
+   - shadcn/ui (border radius escala)
+
+   USO: importar ANTES de style.css. Tokens viram CSS variables
+   reutilizáveis em qualquer lugar.
+
+   Por que tokens? — Mudar 1 variável atualiza o app inteiro.
+   Garante consistência. Facilita dark mode futuro.
+   ==================================================================== */
+
+:root {
+  /* ============================
+     CORES SEMÂNTICAS
+     ============================ */
+
+  /* Brand */
+  --color-brand-50:  #e8f6ee;
+  --color-brand-100: #c8e9d4;
+  --color-brand-200: #95d1ab;
+  --color-brand-300: #5fb781;
+  --color-brand-400: #2da473;
+  --color-brand-500: #145f3e;   /* primary */
+  --color-brand-600: #0f4f33;
+  --color-brand-700: #0a3e28;
+  --color-brand-800: #062d1d;
+  --color-brand-900: #031c12;
+
+  /* Accent (gold) */
+  --color-accent-50:  #fefce8;
+  --color-accent-100: #fef9c3;
+  --color-accent-200: #fef08a;
+  --color-accent-300: #fde047;
+  --color-accent-400: #facc15;
+  --color-accent-500: #d4af37;   /* gold primary */
+  --color-accent-600: #b8941f;
+  --color-accent-700: #92731a;
+  --color-accent-800: #6e5413;
+  --color-accent-900: #4a3a0e;
+
+  /* Neutros */
+  --color-gray-50:  #f9fafb;
+  --color-gray-100: #f4f5f7;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Status */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error:   #ef4444;
+  --color-info:    #3b82f6;
+
+  /* ============================
+     SPACING (escala 4px)
+     ============================ */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ============================
+     TYPOGRAPHY
+     ============================ */
+  --font-display: 'Sora', sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  --text-xs:   11px;
+  --text-sm:   12.5px;
+  --text-base: 14px;
+  --text-md:   15.5px;
+  --text-lg:   17px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  30px;
+  --text-4xl:  38px;
+  --text-5xl:  48px;
+  --text-6xl:  60px;
+
+  --leading-tight:   1.2;
+  --leading-snug:    1.4;
+  --leading-normal:  1.6;
+  --leading-relaxed: 1.7;
+  --leading-loose:   1.9;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.05em;
+  --tracking-wider:  0.1em;
+  --tracking-widest: 0.15em;
+
+  /* ============================
+     BORDER RADIUS (shadcn-style)
+     ============================ */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-3xl:  24px;
+  --radius-full: 9999px;
+
+  /* ============================
+     SHADOWS (elevação Material)
+     ============================ */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.05);
+  --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,.18);
+  --shadow-inner: inset 0 2px 4px rgba(0,0,0,.05);
+
+  /* Shadows coloridas pra CTAs */
+  --shadow-brand: 0 10px 25px -5px rgba(20,95,62,.35);
+  --shadow-accent: 0 10px 25px -5px rgba(212,175,55,.35);
+  --shadow-success: 0 10px 25px -5px rgba(16,185,129,.35);
+
+  /* ============================
+     MOTION (curves & durations — Framer Motion-inspired)
+     ============================ */
+
+  /* Durations */
+  --duration-instant: 100ms;
+  --duration-fast:    150ms;
+  --duration-normal:  250ms;
+  --duration-slow:    400ms;
+  --duration-slower:  600ms;
+  --duration-slowest: 1000ms;
+
+  /* Easing curves (Framer Motion presets) */
+  --ease-linear:    linear;
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Spring physics (mais natural — recomendado pra UI moderna) */
+  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);  /* "bouncy" suave */
+  --ease-spring-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-anticipate: cubic-bezier(0.18, 0.89, 0.32, 1.28); /* overshoot */
+
+  /* Combos comuns */
+  --transition-base: all var(--duration-normal) var(--ease-out);
+  --transition-fast: all var(--duration-fast) var(--ease-out);
+  --transition-spring: all var(--duration-slow) var(--ease-spring);
+
+  /* ============================
+     Z-INDEX (organizado)
+     ============================ */
+  --z-base:     0;
+  --z-dropdown: 10;
+  --z-sticky:   20;
+  --z-overlay:  30;
+  --z-modal:    40;
+  --z-popover:  50;
+  --z-toast:    60;
+  --z-tooltip:  70;
+
+  /* ============================
+     LAYOUT
+     ============================ */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+
+  /* Breakpoints (uso em @media) */
+  --bp-mobile:  640px;
+  --bp-tablet:  900px;
+  --bp-desktop: 1280px;
+
+  /* ============================
+     GLASS / BLUR (efeitos modernos)
+     ============================ */
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-dark: rgba(20, 32, 27, 0.75);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+  --glass-blur: blur(12px);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================
+   DARK MODE (preparado pra futuro)
+   ============================ */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --color-gray-50:  #111827;
+    --color-gray-100: #1f2937;
+    --color-gray-900: #f9fafb;
+    /* ... resto seria inverso */
+  }
+}
+
+/* ============================
+   RESPECT USER PREFERENCES (a11y)
+   ============================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast:    0ms;
+    --duration-normal:  0ms;
+    --duration-slow:    0ms;
+    --duration-slower:  0ms;
+    --duration-slowest: 0ms;
+  }
+}

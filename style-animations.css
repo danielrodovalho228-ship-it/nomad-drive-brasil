@@ -1,0 +1,325 @@
+/* ====================================================================
+   Nomade Drive Brasil — Sistema de Animações (Framer Motion-inspired)
+   --------------------------------------------------------------------
+   Animações modernas em CSS puro + JavaScript mínimo.
+   Inspirado nos padrões do Framer Motion (React lib top de animação).
+
+   USO:
+     <div class="fm-fade-in fm-stagger" style="--fm-delay: 100ms;">
+   Ou via IntersectionObserver (data-fm-reveal — scroll-triggered).
+
+   PERFORMANCE: usa transform + opacity (GPU-accelerated). Evita
+   reflows. respeita prefers-reduced-motion.
+   ==================================================================== */
+
+/* ============================================================
+   1. ANIMAÇÕES DE ENTRADA (entrance animations)
+   ============================================================ */
+
+/* Fade in com delay opcional via --fm-delay */
+@keyframes fmFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fm-fade-in {
+  opacity: 0;
+  animation: fmFadeIn var(--duration-slow, 400ms) var(--ease-out, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Slide up + fade (clássico hero entrance) */
+@keyframes fmSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fm-slide-up {
+  opacity: 0;
+  animation: fmSlideUp var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Slide down */
+@keyframes fmSlideDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fm-slide-down {
+  opacity: 0;
+  animation: fmSlideDown var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Slide left/right */
+@keyframes fmSlideLeft {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fm-slide-left {
+  opacity: 0;
+  animation: fmSlideLeft var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+@keyframes fmSlideRight {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fm-slide-right {
+  opacity: 0;
+  animation: fmSlideRight var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Scale up (cards, modals) */
+@keyframes fmScaleUp {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.fm-scale-up {
+  opacity: 0;
+  animation: fmScaleUp var(--duration-normal, 250ms) var(--ease-spring, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Pop in (bouncy — botões, ícones) */
+@keyframes fmPopIn {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.fm-pop-in {
+  opacity: 0;
+  animation: fmPopIn var(--duration-slow, 400ms) var(--ease-anticipate, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* Blur in (estiloso pra hero) */
+@keyframes fmBlurIn {
+  from { opacity: 0; filter: blur(8px); transform: translateY(8px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+.fm-blur-in {
+  opacity: 0;
+  animation: fmBlurIn var(--duration-slower, 600ms) var(--ease-out, ease-out) forwards;
+  animation-delay: var(--fm-delay, 0ms);
+}
+
+/* ============================================================
+   2. STAGGER (cascata) — anima filhos com delay incremental
+   ============================================================ */
+.fm-stagger > * {
+  opacity: 0;
+  animation: fmSlideUp var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+}
+.fm-stagger > *:nth-child(1)  { animation-delay: 0ms; }
+.fm-stagger > *:nth-child(2)  { animation-delay: 80ms; }
+.fm-stagger > *:nth-child(3)  { animation-delay: 160ms; }
+.fm-stagger > *:nth-child(4)  { animation-delay: 240ms; }
+.fm-stagger > *:nth-child(5)  { animation-delay: 320ms; }
+.fm-stagger > *:nth-child(6)  { animation-delay: 400ms; }
+.fm-stagger > *:nth-child(7)  { animation-delay: 480ms; }
+.fm-stagger > *:nth-child(8)  { animation-delay: 560ms; }
+.fm-stagger > *:nth-child(9)  { animation-delay: 640ms; }
+.fm-stagger > *:nth-child(10) { animation-delay: 720ms; }
+
+/* Stagger lento (pra seções principais) */
+.fm-stagger-slow > * {
+  opacity: 0;
+  animation: fmSlideUp var(--duration-slower, 600ms) var(--ease-spring, ease-out) forwards;
+}
+.fm-stagger-slow > *:nth-child(1)  { animation-delay: 0ms; }
+.fm-stagger-slow > *:nth-child(2)  { animation-delay: 150ms; }
+.fm-stagger-slow > *:nth-child(3)  { animation-delay: 300ms; }
+.fm-stagger-slow > *:nth-child(4)  { animation-delay: 450ms; }
+
+/* ============================================================
+   3. HOVER INTERACTIONS (microinterações)
+   ============================================================ */
+
+/* Lift sutil no hover (cards) */
+.fm-hover-lift {
+  transition: transform var(--duration-normal, 250ms) var(--ease-out, ease-out),
+              box-shadow var(--duration-normal, 250ms) var(--ease-out, ease-out);
+}
+.fm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0,0,0,.1));
+}
+
+/* Scale no hover (botões/imagens) */
+.fm-hover-scale {
+  transition: transform var(--duration-normal, 250ms) var(--ease-spring, ease-out);
+}
+.fm-hover-scale:hover { transform: scale(1.03); }
+.fm-hover-scale:active { transform: scale(0.98); }
+
+/* Glow no hover (CTAs principais) */
+.fm-hover-glow {
+  position: relative;
+  transition: box-shadow var(--duration-normal, 250ms) var(--ease-out, ease-out);
+}
+.fm-hover-glow:hover {
+  box-shadow: var(--shadow-brand, 0 10px 25px -5px rgba(20,95,62,.35));
+}
+
+/* Tilt 3D (premium feel — usa preserve-3d) */
+.fm-hover-tilt {
+  transition: transform var(--duration-normal, 250ms) var(--ease-spring, ease-out);
+  transform-style: preserve-3d;
+}
+.fm-hover-tilt:hover {
+  transform: perspective(1000px) rotateY(-2deg) rotateX(2deg) scale(1.02);
+}
+
+/* Underline animado (links) */
+.fm-hover-underline {
+  position: relative;
+  text-decoration: none;
+}
+.fm-hover-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  height: 2px; width: 0;
+  background: currentColor;
+  transition: width var(--duration-normal, 250ms) var(--ease-out, ease-out);
+}
+.fm-hover-underline:hover::after { width: 100%; }
+
+/* ============================================================
+   4. SCROLL-TRIGGERED (data-fm-reveal — usa IntersectionObserver)
+   ============================================================ */
+
+/* Estado inicial — esconde até ser revelado */
+[data-fm-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-slower, 600ms) var(--ease-out, ease-out),
+              transform var(--duration-slower, 600ms) var(--ease-spring, ease-out);
+}
+
+/* Quando entra na viewport (classe adicionada via JS) */
+[data-fm-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variantes */
+[data-fm-reveal="slide-up"].is-revealed   { transform: translateY(0); }
+[data-fm-reveal="slide-left"]  { transform: translateX(20px); }
+[data-fm-reveal="slide-left"].is-revealed  { transform: translateX(0); }
+[data-fm-reveal="slide-right"] { transform: translateX(-20px); }
+[data-fm-reveal="slide-right"].is-revealed { transform: translateX(0); }
+[data-fm-reveal="scale"] { transform: scale(0.9); }
+[data-fm-reveal="scale"].is-revealed { transform: scale(1); }
+[data-fm-reveal="blur"] { filter: blur(8px); }
+[data-fm-reveal="blur"].is-revealed { filter: blur(0); }
+
+/* Delay incremental pra stagger via data attr */
+[data-fm-delay="100"] { transition-delay: 100ms; }
+[data-fm-delay="200"] { transition-delay: 200ms; }
+[data-fm-delay="300"] { transition-delay: 300ms; }
+[data-fm-delay="400"] { transition-delay: 400ms; }
+[data-fm-delay="500"] { transition-delay: 500ms; }
+
+/* ============================================================
+   5. CONTINUOUS ANIMATIONS (loops sutis)
+   ============================================================ */
+
+/* Pulse (botões CTA atenção) */
+@keyframes fmPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(20, 95, 62, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(20, 95, 62, 0); }
+}
+.fm-pulse { animation: fmPulse 2s var(--ease-out) infinite; }
+
+/* Float (cards "respirando") */
+@keyframes fmFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.fm-float { animation: fmFloat 3s var(--ease-in-out) infinite; }
+
+/* Shimmer (loading skeleton moderno) */
+@keyframes fmShimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.fm-skeleton {
+  background: linear-gradient(90deg,
+    var(--color-gray-200) 0%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 100%);
+  background-size: 1000px 100%;
+  animation: fmShimmer 1.5s linear infinite;
+  border-radius: var(--radius-md);
+}
+
+/* Spin (loaders) */
+@keyframes fmSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.fm-spin { animation: fmSpin 1s linear infinite; }
+
+/* Marquee (banner promocional rolando) */
+@keyframes fmMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.fm-marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: fmMarquee 30s linear infinite;
+}
+.fm-marquee:hover { animation-play-state: paused; }
+
+/* ============================================================
+   6. PAGE TRANSITIONS (entrada do main no load)
+   ============================================================ */
+
+main {
+  animation: fmFadeIn var(--duration-slower, 600ms) var(--ease-out, ease-out);
+}
+
+/* Body load reveal */
+body {
+  opacity: 0;
+  animation: fmFadeIn var(--duration-fast, 150ms) var(--ease-out, ease-out) forwards;
+}
+
+/* ============================================================
+   7. UTILITY ANIMATIONS (one-off)
+   ============================================================ */
+
+@keyframes fmShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.fm-shake { animation: fmShake 0.3s var(--ease-out); }
+
+@keyframes fmWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+.fm-wiggle { animation: fmWiggle 0.4s var(--ease-spring); }
+
+@keyframes fmBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.fm-bounce { animation: fmBounce 0.5s var(--ease-spring); }
+
+/* ============================================================
+   8. RESPECT MOTION PREFERENCE
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
