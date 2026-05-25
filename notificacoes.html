@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notificações — Nomade Drive Brasil</title>
+<meta name="description" content="Suas notificações da plataforma Nomade Drive Brasil — reservas, pagamentos, vistorias e mais." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+/* ============================================================
+ * Fase 58 — Página /notificacoes.html (Ver todas)
+ * ============================================================ */
+.notif-page { max-width: 880px; margin: 0 auto; padding: 24px 16px 64px; }
+.notif-page__head {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.notif-page__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px; font-weight: 800;
+  margin: 0; color: #14201b;
+  display: flex; align-items: center; gap: 10px;
+}
+.notif-page__count {
+  background: #145f3e; color: #fff;
+  padding: 2px 10px; border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+.notif-page__count[data-empty="1"] { background: #adb5bd; }
+
+.notif-filters {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #eef0ee;
+}
+.notif-filter {
+  background: transparent;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #5b6b63;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  font-family: inherit;
+}
+.notif-filter:hover { background: #f0f7f1; color: #145f3e; }
+.notif-filter.is-active {
+  background: #145f3e; color: #fff;
+}
+.notif-filter__count {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11.5px;
+  opacity: .85;
+  font-weight: 700;
+}
+
+.notif-actions {
+  display: flex; gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.notif-action {
+  background: #fff;
+  border: 1px solid #d4ddd8;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.notif-action:hover:not(:disabled) {
+  background: #f0f7f1;
+  border-color: #145f3e;
+  color: #145f3e;
+}
+.notif-action:disabled { opacity: .5; cursor: not-allowed; }
+.notif-action--danger:hover:not(:disabled) {
+  background: #fef0f1;
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.notif-list {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #eef0ee;
+  overflow: hidden;
+  min-height: 200px;
+}
+.notif-row {
+  display: flex; gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #f3f5f3;
+  transition: background .15s;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.notif-row:last-child { border-bottom: none; }
+.notif-row:hover { background: #fbfcfb; }
+.notif-row--unread {
+  background: linear-gradient(90deg, rgba(25,135,84,.06), transparent 60%);
+  border-left: 3px solid #198754;
+  padding-left: 15px;
+}
+.notif-row__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  background: #f0f7f1;
+  border-radius: 50%;
+}
+.notif-row--unread .notif-row__icon { background: #d1e7dd; }
+.notif-row__body { flex: 1; min-width: 0; }
+.notif-row__title {
+  font-size: 14.5px; font-weight: 600;
+  margin: 0 0 3px;
+  color: #14201b;
+}
+.notif-row__msg {
+  font-size: 13.5px; color: #5b6b63;
+  margin: 0 0 6px;
+  line-height: 1.45;
+  word-wrap: break-word;
+}
+.notif-row__meta {
+  display: flex; gap: 10px; align-items: center;
+  font-size: 11.5px; color: #98a09b;
+}
+.notif-row__meta-tag {
+  background: #f0f3f1;
+  color: #6b7670;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.notif-row__meta-tag--high { background: #fff3cd; color: #856404; }
+.notif-row__meta-tag--urgent { background: #fce4e6; color: #58151c; }
+.notif-row__actions {
+  flex-shrink: 0;
+  display: flex; gap: 4px;
+  align-items: flex-start;
+}
+.notif-row__action {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  color: #98a09b;
+  font-size: 14px;
+  transition: background .15s, color .15s;
+}
+.notif-row__action:hover { background: #f0f3f1; color: #14201b; }
+
+.notif-empty {
+  padding: 56px 24px;
+  text-align: center;
+  color: #98a09b;
+}
+.notif-empty__icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+  opacity: .5;
+}
+.notif-empty__msg {
+  font-size: 15px;
+  margin: 0 0 6px;
+  color: #6b7670;
+}
+.notif-empty__sub {
+  font-size: 13px;
+  margin: 0;
+}
+
+.notif-loading {
+  padding: 48px;
+  text-align: center;
+  color: #98a09b;
+}
+.notif-loading::before {
+  content: ""; display: inline-block;
+  width: 26px; height: 26px;
+  border: 3px solid #e9ecef;
+  border-top-color: #198754;
+  border-radius: 50%;
+  animation: notif-spin 0.9s linear infinite;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+@keyframes notif-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 540px) {
+  .notif-page { padding: 16px 12px 48px; }
+  .notif-page__title { font-size: 22px; }
+  .notif-row { padding: 14px 12px; }
+  .notif-row--unread { padding-left: 9px; }
+  .notif-row__icon { width: 36px; height: 36px; font-size: 16px; }
+  .notif-row__title { font-size: 14px; }
+  .notif-row__msg { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="#" id="notifBack">← Voltar pro painel</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="notif-page">
+
+  <div class="notif-page__head">
+    <h1 class="notif-page__title">
+      🔔 Notificações
+      <span class="notif-page__count" id="notifTotalCount" data-empty="1">0</span>
+    </h1>
+  </div>
+
+  <div class="notif-filters" role="tablist">
+    <button type="button" class="notif-filter is-active" data-filter="all" role="tab">
+      Todas <span class="notif-filter__count" id="cntAll">0</span>
+    </button>
+    <button type="button" class="notif-filter" data-filter="unread" role="tab">
+      Não lidas <span class="notif-filter__count" id="cntUnread">0</span>
+    </button>
+    <button type="button" class="notif-filter" data-filter="read" role="tab">
+      Lidas <span class="notif-filter__count" id="cntRead">0</span>
+    </button>
+    <button type="button" class="notif-filter" data-filter="urgent" role="tab">
+      🔥 Urgentes <span class="notif-filter__count" id="cntUrgent">0</span>
+    </button>
+  </div>
+
+  <div class="notif-actions">
+    <button type="button" class="notif-action" id="actMarkAll" disabled>
+      ✓ Marcar todas como lidas
+    </button>
+    <button type="button" class="notif-action notif-action--danger" id="actArchiveRead" disabled>
+      🗑 Arquivar lidas
+    </button>
+    <button type="button" class="notif-action" id="actRefresh">
+      ↻ Atualizar
+    </button>
+  </div>
+
+  <div class="notif-list" id="notifList">
+    <div class="notif-loading">Carregando suas notificações...</div>
+  </div>
+
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="nd-modal.js?v=20260524g"></script>
+<script src="supabase-config.js?v=20260523c"></script>
+<script src="auth.js?v=20260523c"></script>
+<script src="script.js?v=20260523c"></script>
+<script>
+(function () {
+  "use strict";
+
+  // Estado
+  var state = {
+    sb: null,
+    userId: null,
+    all: [],          // todas as notificações carregadas
+    filter: "all",    // all / unread / read / urgent
+    channel: null
+  };
+
+  // Refs
+  var listEl    = document.getElementById("notifList");
+  var totalEl   = document.getElementById("notifTotalCount");
+  var cntAll    = document.getElementById("cntAll");
+  var cntUnread = document.getElementById("cntUnread");
+  var cntRead   = document.getElementById("cntRead");
+  var cntUrgent = document.getElementById("cntUrgent");
+  var actMarkAll= document.getElementById("actMarkAll");
+  var actArchive= document.getElementById("actArchiveRead");
+  var actRefresh= document.getElementById("actRefresh");
+
+  // ---------- Helpers ----------
+  function safeStr(t, maxLen) {
+    var s = (t == null ? "" : String(t));
+    if (maxLen && s.length > maxLen) s = s.slice(0, maxLen);
+    return s;
+  }
+  function safeHref(url) {
+    if (!url) return "#";
+    var s = String(url).trim();
+    if (/^\//.test(s)) return s;
+    if (/^https?:\/\//i.test(s)) return s;
+    return "#";
+  }
+  function timeAgo(iso) {
+    if (!iso) return "";
+    var ms = Date.now() - new Date(iso).getTime();
+    if (ms < 60000) return "agora";
+    var m = Math.floor(ms / 60000);
+    if (m < 60) return m + " min atrás";
+    var h = Math.floor(m / 60);
+    if (h < 24) return h + "h atrás";
+    var d = Math.floor(h / 24);
+    if (d < 7) return d + "d atrás";
+    var w = Math.floor(d / 7);
+    if (w < 4) return w + " sem atrás";
+    var dt = new Date(iso);
+    return ("0" + dt.getDate()).slice(-2) + "/" +
+           ("0" + (dt.getMonth() + 1)).slice(-2) + "/" +
+           dt.getFullYear();
+  }
+  function priorityTag(p) {
+    if (p === "urgent") return { label: "Urgente", cls: "urgent" };
+    if (p === "high")   return { label: "Importante", cls: "high" };
+    return null;
+  }
+
+  // ---------- Render ----------
+  function getFiltered() {
+    if (state.filter === "all")    return state.all;
+    if (state.filter === "unread") return state.all.filter(function (n) { return n.status === "unread"; });
+    if (state.filter === "read")   return state.all.filter(function (n) { return n.status === "read"; });
+    if (state.filter === "urgent") return state.all.filter(function (n) { return n.priority === "urgent" || n.priority === "high"; });
+    return state.all;
+  }
+
+  function render() {
+    var unread = state.all.filter(function (n) { return n.status === "unread"; });
+    var read   = state.all.filter(function (n) { return n.status === "read"; });
+    var urgent = state.all.filter(function (n) { return n.priority === "urgent" || n.priority === "high"; });
+
+    cntAll.textContent    = state.all.length;
+    cntUnread.textContent = unread.length;
+    cntRead.textContent   = read.length;
+    cntUrgent.textContent = urgent.length;
+
+    totalEl.textContent = state.all.length;
+    totalEl.dataset.empty = state.all.length === 0 ? "1" : "0";
+
+    actMarkAll.disabled = unread.length === 0;
+    actArchive.disabled = read.length === 0;
+
+    var items = getFiltered();
+    listEl.innerHTML = "";
+
+    if (!items.length) {
+      var empty = document.createElement("div");
+      empty.className = "notif-empty";
+      var emojiMap = { all: "🔔", unread: "✉️", read: "✓", urgent: "🔥" };
+      var msgMap = {
+        all: "Nenhuma notificação ainda",
+        unread: "Tudo em dia! Sem notificações novas",
+        read: "Nenhuma notificação lida ainda",
+        urgent: "Nenhuma notificação urgente"
+      };
+      empty.innerHTML = '<span class="notif-empty__icon">' + (emojiMap[state.filter] || "🔔") + '</span>' +
+        '<p class="notif-empty__msg">' + msgMap[state.filter] + '</p>' +
+        '<p class="notif-empty__sub">Avisos sobre reservas, pagamentos e mais chegam aqui automaticamente.</p>';
+      listEl.appendChild(empty);
+      return;
+    }
+
+    items.forEach(function (n) {
+      var row = document.createElement("a");
+      row.className = "notif-row" + (n.status === "unread" ? " notif-row--unread" : "");
+      row.href = safeHref(n.link);
+      row.setAttribute("data-id", n.id);
+
+      // Click: marca lido se unread + navega
+      row.addEventListener("click", function (e) {
+        if (n.status === "unread") {
+          markAsRead([n.id]);
+        }
+        if (row.getAttribute("href") === "#") {
+          e.preventDefault();
+        }
+      });
+
+      var icon = document.createElement("div");
+      icon.className = "notif-row__icon";
+      icon.textContent = safeStr(n.icon || "🔔", 8);
+
+      var body = document.createElement("div");
+      body.className = "notif-row__body";
+
+      var title = document.createElement("p");
+      title.className = "notif-row__title";
+      title.textContent = safeStr(n.title, 200);
+      body.appendChild(title);
+
+      if (n.message) {
+        var msg = document.createElement("p");
+        msg.className = "notif-row__msg";
+        msg.textContent = safeStr(n.message, 500);
+        body.appendChild(msg);
+      }
+
+      var meta = document.createElement("div");
+      meta.className = "notif-row__meta";
+      var when = document.createElement("span");
+      when.textContent = timeAgo(n.created_at);
+      meta.appendChild(when);
+
+      var prioTag = priorityTag(n.priority);
+      if (prioTag) {
+        var tag = document.createElement("span");
+        tag.className = "notif-row__meta-tag notif-row__meta-tag--" + prioTag.cls;
+        tag.textContent = prioTag.label;
+        meta.appendChild(tag);
+      }
+      body.appendChild(meta);
+
+      // Botão "marcar lido" individual (só pra unread)
+      var actions = document.createElement("div");
+      actions.className = "notif-row__actions";
+      if (n.status === "unread") {
+        var markBtn = document.createElement("button");
+        markBtn.className = "notif-row__action";
+        markBtn.type = "button";
+        markBtn.title = "Marcar como lida";
+        markBtn.textContent = "✓";
+        markBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          markAsRead([n.id]);
+        });
+        actions.appendChild(markBtn);
+      }
+
+      row.appendChild(icon);
+      row.appendChild(body);
+      row.appendChild(actions);
+      listEl.appendChild(row);
+    });
+  }
+
+  // ---------- Data ----------
+  function load() {
+    if (!state.sb || !state.userId) return;
+    listEl.innerHTML = '<div class="notif-loading">Carregando suas notificações...</div>';
+    state.sb.from("user_notifications")
+      .select("id, type, title, message, link, icon, priority, status, created_at, read_at")
+      .eq("user_id", state.userId)
+      .neq("status", "archived")  // não mostra arquivadas
+      .order("created_at", { ascending: false })
+      .limit(200)
+      .then(function (r) {
+        if (r.error) {
+          listEl.innerHTML = '<div class="notif-empty"><span class="notif-empty__icon">⚠️</span>' +
+            '<p class="notif-empty__msg">Erro ao carregar</p>' +
+            '<p class="notif-empty__sub">' + safeStr(r.error.message, 200) + '</p></div>';
+          return;
+        }
+        state.all = (r.data || []);
+        render();
+      })
+      .catch(function (e) {
+        listEl.innerHTML = '<div class="notif-empty"><span class="notif-empty__icon">⚠️</span>' +
+          '<p class="notif-empty__msg">Erro de rede</p>' +
+          '<p class="notif-empty__sub">' + safeStr(e && e.message, 200) + '</p></div>';
+      });
+  }
+
+  function markAsRead(ids) {
+    if (!state.sb || !ids || !ids.length) return;
+    state.sb.from("user_notifications")
+      .update({ status: "read", read_at: new Date().toISOString() })
+      .in("id", ids)
+      .then(function () {
+        // Atualização otimista local
+        ids.forEach(function (id) {
+          var n = state.all.find(function (x) { return x.id === id; });
+          if (n) { n.status = "read"; n.read_at = new Date().toISOString(); }
+        });
+        render();
+      })
+      .catch(function (e) { console.warn("mark read failed:", e); });
+  }
+
+  function markAllRead() {
+    var unreadIds = state.all
+      .filter(function (n) { return n.status === "unread"; })
+      .map(function (n) { return n.id; });
+    if (unreadIds.length) markAsRead(unreadIds);
+  }
+
+  function archiveRead() {
+    var readIds = state.all
+      .filter(function (n) { return n.status === "read"; })
+      .map(function (n) { return n.id; });
+    if (!readIds.length) return;
+    ndModal.confirm({
+      title: "Arquivar " + readIds.length + " notificação(ões) lida(s)?",
+      body: "Elas saem desta lista mas continuam no banco pra histórico. Não podem ser desfeitas pela interface.",
+      okText: "Arquivar",
+      cancelText: "Cancelar",
+      danger: true,
+      icon: "🗑"
+    }).then(function (ok) {
+      if (!ok) return;
+      state.sb.from("user_notifications")
+        .update({ status: "archived" })
+        .in("id", readIds)
+        .then(function () {
+          state.all = state.all.filter(function (n) { return n.status !== "read"; });
+          render();
+        })
+        .catch(function () {
+          ndModal.alert({ title: "Erro", body: "Não foi possível arquivar agora." });
+        });
+    });
+  }
+
+  // ---------- Setup ----------
+  function setupRealtime() {
+    if (!state.sb || !state.userId || state.channel) return;
+    try {
+      state.channel = state.sb
+        .channel("ndb-notifs-page-" + state.userId)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "user_notifications", filter: "user_id=eq." + state.userId },
+          function () { load(); }
+        )
+        .subscribe();
+    } catch (e) {}
+  }
+
+  // Filtros
+  document.querySelectorAll(".notif-filter").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".notif-filter").forEach(function (b) { b.classList.remove("is-active"); });
+      btn.classList.add("is-active");
+      state.filter = btn.getAttribute("data-filter");
+      render();
+    });
+  });
+
+  // Bulk actions
+  actMarkAll.addEventListener("click", markAllRead);
+  actArchive.addEventListener("click", archiveRead);
+  actRefresh.addEventListener("click", load);
+
+  // Voltar (decide painel pelo role)
+  document.getElementById("notifBack").addEventListener("click", function (e) {
+    e.preventDefault();
+    var a = window.ndAuth;
+    if (a && a.destinationAfterLogin) {
+      a.destinationAfterLogin().then(function (dest) {
+        window.location.href = dest || "index.html";
+      });
+    } else {
+      window.history.back();
+    }
+  });
+
+  // Init
+  (function tryInit() {
+    var a = window.ndAuth;
+    if (!a || !a.ready) { setTimeout(tryInit, 250); return; }
+    a.requireAuth().then(function (s) {
+      if (!s) return;
+      state.sb = a.client();
+      state.userId = s.user.id;
+      load();
+      setupRealtime();
+    });
+  })();
+})();
+</script>
+<script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
+</body>
+</html>

@@ -337,13 +337,13 @@
         e.stopPropagation();
         markAllRead();
       });
-      // "Ver todas" — direciona pro painel de notificações específico de cada role
+      // "Ver todas" — agora vai pra página dedicada /notificacoes.html (Fase 58)
       state.refs.viewAll.addEventListener("click", function (e) {
         e.preventDefault();
-        // Não tem ainda /notificacoes.html — por enquanto só fecha + marca todas
-        markAllRead();
         closeDropdown();
+        window.location.href = "notificacoes.html";
       });
+      state.refs.viewAll.setAttribute("href", "notificacoes.html");
 
       // Fecha ao clicar fora
       document.addEventListener("click", function (e) {
