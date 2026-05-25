@@ -393,6 +393,9 @@
           <div class="dash-kpi"><span>Status do perfil</span><strong id="kpiStatus">—</strong></div>
         </div>
 
+        <!-- Fase 49: Onboarding guiado 5 passos (só aparece se algo incompleto) -->
+        <div id="onboardingWizard" style="display:none;"></div>
+
         <!-- Fase 45: Banner urgente "Configure sua conta bancária" -->
         <div id="connectBanner" style="display:none;"></div>
 
@@ -2086,6 +2089,149 @@
   })();
 
   /* ============================================================
+   * Fase 49 — Onboarding guiado 5 passos pro owner
+   * --------------------------------------------------------------
+   * Detecta automaticamente o que está completo e mostra wizard
+   * visual SÓ se algum passo está pendente. Auto-hide quando tudo ok.
+   * ============================================================ */
+  function loadOnboardingWizard() {
+    var sb = getSb(); if (!sb) return;
+    var box = $('onboardingWizard'); if (!box) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      // Coleta status dos 5 steps em paralelo
+      Promise.all([
+        // 1) Profile completo (verification_status != 'rascunho')
+        sb.from('profiles').select('verification_status, full_name, phone, city, state').eq('id', user.id).maybeSingle(),
+        // 2) Tem pelo menos 1 veículo cadastrado
+        sb.from('vehicles').select('id, status', { count: 'exact', head: false }).eq('owner_id', user.id),
+        // 3) Connect Stripe ativa
+        sb.from('payout_accounts').select('status, payouts_enabled').eq('user_id', user.id).maybeSingle(),
+        // 4) Pelo menos 1 veículo aprovado (passou vistoria)
+        sb.from('vehicles').select('id', { count: 'exact', head: false }).eq('owner_id', user.id).eq('status', 'aprovado')
+      ]).then(function (results) {
+        var profile = (results[0].data) || {};
+        var allVehicles = (results[1].data) || [];
+        var payoutAcc = (results[2].data) || {};
+        var approvedVehicles = (results[3].data) || [];
+
+        // Avalia cada step
+        var steps = [
+          {
+            n: 1, icon: '👤', title: 'Complete seu cadastro',
+            sub: 'Dados pessoais + verificação de identidade',
+            done: profile.verification_status === 'aprovado' || profile.verification_status === 'aprovado_com_ressalvas',
+            inProgress: profile.verification_status === 'em_analise' || profile.verification_status === 'documentos_pendentes',
+            ctaLabel: profile.verification_status === 'rascunho' ? 'Começar cadastro' : 'Ver status',
+            ctaHref: 'onboarding-proprietario.html'
+          },
+          {
+            n: 2, icon: '🚗', title: 'Cadastre seu 1º veículo',
+            sub: 'Modelo, ano, foto, documento',
+            done: allVehicles.length > 0,
+            inProgress: false,
+            ctaLabel: 'Cadastrar veículo',
+            ctaHref: 'onboarding-proprietario.html#vehicle'
+          },
+          {
+            n: 3, icon: '🏦', title: 'Conecte sua conta bancária',
+            sub: 'Stripe Express — verificação leva 5min',
+            done: payoutAcc.status === 'ativo' && payoutAcc.payouts_enabled === true,
+            inProgress: payoutAcc.status === 'em_analise' || payoutAcc.status === 'pendente',
+            ctaLabel: 'Conectar Stripe',
+            ctaHref: '#recebimentos'
+          },
+          {
+            n: 4, icon: '🔧', title: 'Vistoria em oficina parceira',
+            sub: 'Veículo aprovado após checklist técnico',
+            done: approvedVehicles.length > 0,
+            inProgress: allVehicles.length > 0 && approvedVehicles.length === 0,
+            ctaLabel: 'Ver veículos',
+            ctaHref: '#veiculos'
+          },
+          {
+            n: 5, icon: '🎉', title: 'Pronto pra alugar!',
+            sub: 'Aceite solicitações + receba pagamentos automaticamente',
+            done: false,  // Só "done" quando todos os anteriores estão done
+            inProgress: false,
+            ctaLabel: 'Ver dashboard',
+            ctaHref: '#visao'
+          }
+        ];
+
+        // Step 5 fica done apenas se 1-4 estão done
+        steps[4].done = steps[0].done && steps[1].done && steps[2].done && steps[3].done;
+
+        var doneCount = steps.filter(function (s) { return s.done; }).length;
+        var totalSteps = steps.length;
+
+        // Se TUDO completo, esconde wizard
+        if (doneCount === totalSteps) {
+          box.style.display = 'none';
+          return;
+        }
+
+        // Renderiza wizard
+        box.style.display = '';
+        renderOnboardingWizard(box, steps, doneCount, totalSteps);
+      });
+    });
+  }
+  window.loadOnboardingWizard = loadOnboardingWizard;
+
+  function renderOnboardingWizard(box, steps, doneCount, totalSteps) {
+    var pct = Math.round((doneCount / totalSteps) * 100);
+    var firstPending = steps.findIndex(function (s) { return !s.done; });
+
+    box.innerHTML =
+      '<div style="background:linear-gradient(135deg,#0f5132 0%,#1a7a4f 100%);color:#fff;padding:22px 24px;border-radius:14px;margin:14px 0;box-shadow:0 8px 24px -10px rgba(15,81,50,.4);">'
+      // Header com progresso
+      + '<div style="display:flex;justify-content:space-between;align-items:start;gap:14px;flex-wrap:wrap;margin-bottom:18px;">'
+      +   '<div>'
+      +     '<div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.88;margin-bottom:4px;">🚀 Bem-vindo à Nomade Drive</div>'
+      +     '<h3 style="font-size:22px;font-weight:800;line-height:1.2;margin:0 0 4px;">Comece a faturar em 5 passos</h3>'
+      +     '<p style="font-size:13px;opacity:.92;margin:0;">' + doneCount + ' de ' + totalSteps + ' completos · próximo: ' + steps[firstPending].title + '</p>'
+      +   '</div>'
+      +   '<div style="background:rgba(255,255,255,.18);padding:8px 14px;border-radius:99px;font-size:14px;font-weight:700;font-family:var(--font-d, sans-serif);">'
+      +     pct + '% completo'
+      +   '</div>'
+      + '</div>'
+      // Progress bar
+      + '<div style="height:8px;background:rgba(0,0,0,.2);border-radius:99px;overflow:hidden;margin-bottom:18px;">'
+      +   '<div style="height:100%;width:' + pct + '%;background:#fbbf24;border-radius:99px;transition:width .5s ease;"></div>'
+      + '</div>'
+      // Steps
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:10px;">'
+      +   steps.map(function (s, i) {
+            var isFirst = i === firstPending;
+            var bg = s.done ? 'rgba(34,197,94,.25)' :
+                     s.inProgress ? 'rgba(251,191,36,.25)' :
+                     isFirst ? 'rgba(255,255,255,.22)' : 'rgba(255,255,255,.08)';
+            var border = isFirst && !s.done ? '2px solid #fbbf24' : '2px solid transparent';
+            var statusIcon = s.done ? '✅' : s.inProgress ? '⏳' : (isFirst ? '👉' : '⭕');
+            var cta = (s.done || (!isFirst && !s.done))
+              ? ''
+              : '<a href="' + s.ctaHref + '" style="display:inline-block;background:#fbbf24;color:#0f5132;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12px;margin-top:8px;">' + s.ctaLabel + ' →</a>';
+            return '<div style="background:' + bg + ';border:' + border + ';padding:12px 14px;border-radius:10px;">'
+              + '<div style="font-size:11px;font-weight:700;opacity:.85;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">' + statusIcon + ' Passo ' + s.n + '</div>'
+              + '<div style="font-size:14px;font-weight:700;line-height:1.3;margin-bottom:4px;">' + s.icon + ' ' + s.title + '</div>'
+              + '<div style="font-size:11.5px;opacity:.85;line-height:1.4;">' + s.sub + '</div>'
+              + cta
+              + '</div>';
+          }).join('')
+      + '</div>'
+      // Footer com dica contextual
+      + '<div style="margin-top:16px;padding:12px 14px;background:rgba(0,0,0,.15);border-radius:8px;font-size:13px;line-height:1.5;">'
+      +   '💡 <strong>Próximo passo:</strong> ' + steps[firstPending].title + '. '
+      +   (steps[firstPending].sub) + '. Clica no botão amarelo acima ⬆️'
+      + '</div>'
+      + '</div>';
+  }
+
+  /* ============================================================
    * Fase 45 — Banner urgente "Configure conta bancária"
    * Aparece quando owner tem veículo aprovado mas Connect não está ativa.
    * ============================================================ */
@@ -2707,16 +2853,18 @@
    * ============================================================ */
   window.addEventListener('DOMContentLoaded', function () {
     // Aguarda auth iniciar
+    setTimeout(loadOnboardingWizard, 500); // Fase 49 — wizard onboarding (PRIMEIRO no topo)
     setTimeout(loadGreenPanel, 1000);
-    setTimeout(loadOwnerRequests, 800);  // Fase 44 — solicitações pendentes
-    setTimeout(loadConnectBanner, 600);  // Fase 45 — banner urgente connect
-    setTimeout(loadOwnerFinance, 1100);  // Fase 48 — painel saldo/extrato
+    setTimeout(loadOwnerRequests, 800);    // Fase 44 — solicitações pendentes
+    setTimeout(loadConnectBanner, 600);    // Fase 45 — banner urgente connect
+    setTimeout(loadOwnerFinance, 1100);    // Fase 48 — painel saldo/extrato
 
     // Refresh a cada 60s
     setInterval(loadGreenPanel, 60000);
-    setInterval(loadOwnerRequests, 30000);  // Refresh mais rápido pra solicitações novas
-    setInterval(loadConnectBanner, 90000);  // Fase 45 — recheca status conexão
-    setInterval(loadOwnerFinance, 45000);   // Fase 48 — refresh extrato
+    setInterval(loadOwnerRequests, 30000);    // Refresh mais rápido pra solicitações novas
+    setInterval(loadConnectBanner, 90000);    // Fase 45 — recheca status conexão
+    setInterval(loadOwnerFinance, 45000);     // Fase 48 — refresh extrato
+    setInterval(loadOnboardingWizard, 60000); // Fase 49 — re-checa progresso onboarding
 
     // Bind modal handlers
     var closeBtn = $('notifModalClose');
