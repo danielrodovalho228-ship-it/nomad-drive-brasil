@@ -81,9 +81,28 @@
 </head>
 <body>
 
-<!-- Fase 53c: BANNER ANNOUNCEMENT (top) — comprova que UI nova carregou -->
-<div style="background:linear-gradient(135deg,#145f3e 0%,#1a7a4f 50%,#d4af37 100%);color:#fff;padding:10px 20px;text-align:center;font-size:13px;font-weight:600;letter-spacing:.3px;position:relative;overflow:hidden;">
-  <span style="position:relative;z-index:2;">🚀 <strong>Pré-lançamento</strong> em Uberlândia · Cadastre-se e ganhe <strong>3 meses Silver gratuito</strong> (7% off na renovação) · <a href="#orcamento" style="color:#fff;text-decoration:underline;font-weight:700;">Pedir orçamento →</a></span>
+<!-- Fase 53c: BANNER ANNOUNCEMENT (top) — fica acima do nav fixed -->
+<style>
+  /* Banner fixed acima do nav. Ajusta nav e body pra dar espaço. */
+  .top-promo-banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 102;
+    background: linear-gradient(135deg,#145f3e 0%,#1a7a4f 50%,#d4af37 100%);
+    color: #fff; padding: 8px 16px; text-align: center;
+    font-size: 13px; font-weight: 600; letter-spacing: .3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .top-promo-banner a { color: #fff; text-decoration: underline; font-weight: 700; }
+  /* Desce o nav pra deixar espaço pro banner */
+  body { padding-top: 36px !important; }
+  .nav { top: 36px !important; }
+  @media (max-width: 700px) {
+    .top-promo-banner { font-size: 11.5px; padding: 7px 10px; }
+    body { padding-top: 32px !important; }
+    .nav { top: 32px !important; }
+  }
+</style>
+<div class="top-promo-banner">
+  🚀 <strong>Pré-lançamento</strong> em Uberlândia · Cadastre-se e ganhe <strong>3 meses Silver gratuito</strong> · <a href="#orcamento">Pedir orçamento →</a>
 </div>
 
 <!-- ============ HEADER ============ -->
