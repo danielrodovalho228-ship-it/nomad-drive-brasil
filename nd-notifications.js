@@ -94,8 +94,24 @@
   };
 
   // ---------- Helpers ----------
-  function escapeText(t) {
-    return String(t == null ? "" : t);
+  // Fix code-review M3: nome anterior (escapeText) era enganoso.
+  // Como usamos textContent em todo lugar que importa, o trabalho aqui
+  // é só normalizar pra string + truncar (defesa contra payload gigante).
+  function safeStr(t, maxLen) {
+    var s = (t == null ? "" : String(t));
+    if (maxLen && s.length > maxLen) s = s.slice(0, maxLen);
+    return s;
+  }
+  // Fix code-review C2: bloqueia javascript: / data: / vbscript: em links
+  // que vem do banco (n.link é text livre; admin malicioso ou trigger
+  // futuro poderia inserir XSS).
+  function safeHref(url) {
+    if (!url) return "#";
+    var s = String(url).trim();
+    // Aceita só path relativo (/foo) ou http(s)://
+    if (/^\//.test(s)) return s;
+    if (/^https?:\/\//i.test(s)) return s;
+    return "#";
   }
 
   function timeAgo(iso) {
@@ -144,7 +160,9 @@
     state.items.forEach(function (n) {
       var item = document.createElement("a");
       item.className = "ndb-bell__item" + (n.status === "unread" ? " ndb-bell__item--unread" : "");
-      item.href = n.link || "#";
+      // Fix code-review C2: safeHref bloqueia javascript:/data:/etc.
+      var href = safeHref(n.link);
+      item.href = href;
       item.setAttribute("role", "menuitem");
       item.setAttribute("data-id", n.id);
 
@@ -153,7 +171,7 @@
         if (n.status === "unread") {
           markAsRead([n.id]);
         }
-        if (!n.link || n.link === "#") {
+        if (href === "#") {
           e.preventDefault();
           closeDropdown();
         }
@@ -161,21 +179,22 @@
 
       var icon = document.createElement("div");
       icon.className = "ndb-bell__item-icon";
-      icon.textContent = n.icon || "🔔";
+      // Fix M3: truncar ícone (defesa contra payload longo no banco)
+      icon.textContent = safeStr(n.icon || "🔔", 8);
 
       var body = document.createElement("div");
       body.className = "ndb-bell__item-body";
 
       var title = document.createElement("p");
       title.className = "ndb-bell__item-title";
-      title.textContent = escapeText(n.title);
+      title.textContent = safeStr(n.title, 200);
 
       body.appendChild(title);
 
       if (n.message) {
         var msg = document.createElement("p");
         msg.className = "ndb-bell__item-msg";
-        msg.textContent = escapeText(n.message);
+        msg.textContent = safeStr(n.message, 500);
         body.appendChild(msg);
       }
 
@@ -290,6 +309,14 @@
         ? document.querySelector(selectorOrEl)
         : selectorOrEl;
       if (!host) { console.warn("[ndNotifs] host não encontrado:", selectorOrEl); return; }
+
+      // Fix code-review M2: previne double-mount (evita leak de listeners
+      // em document.addEventListener "click" + "keydown" que rodariam 2x)
+      if (state.mounted) {
+        console.warn("[ndNotifs] já montado — ignorando chamada duplicada");
+        return;
+      }
+      state.mounted = true;
 
       injectCSS();
       host.classList.add("ndb-bell");

@@ -43,16 +43,18 @@ var FLEET_FALLBACK = {
   D: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=480&h=320&fit=crop&q=80&auto=format"  // luxo
 };
 // Placeholder SVG inline (último recurso — se até o Unsplash falhar)
+// Fix code-review M1: variavel grad era morta — agora os stops do
+// linearGradient sao construidos dinamicamente pelo tier.
 function fleetPlaceholderSVG(tier) {
   var labels = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
   var label = labels[tier] || "Veículo";
-  var grad = tier === "D"
-    ? "linear-gradient(135deg,#1f2937,#374151)"
-    : "linear-gradient(135deg,#145f3e,#1a7a4f)";
+  // Cores por tier — D fica preto/dourado (luxo); outros verde
+  var c1 = tier === "D" ? "#1f2937" : "#145f3e";
+  var c2 = tier === "D" ? "#374151" : "#1a7a4f";
   return "data:image/svg+xml;utf8," + encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320">' +
       '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0%" stop-color="#145f3e"/><stop offset="100%" stop-color="#1a7a4f"/>' +
+        '<stop offset="0%" stop-color="' + c1 + '"/><stop offset="100%" stop-color="' + c2 + '"/>' +
       '</linearGradient></defs>' +
       '<rect width="480" height="320" fill="url(#g)"/>' +
       '<text x="240" y="160" font-family="Inter,sans-serif" font-size="44" fill="rgba(255,255,255,.95)" text-anchor="middle" font-weight="700">🚗</text>' +
@@ -167,31 +169,60 @@ window.fleetImgFallback = fleetImgFallback;
   var order = window.CAR_ORDER || Object.keys(window.CAR_CATALOG);
   var cards = [];
 
+  // Fix code-review C1: sanitiza tier (whitelist) + escapa nome/year/body
+  // via textContent (DOM API) — se CAR_CATALOG virar dinamico no futuro
+  // (Supabase ou admin input), atacante nao consegue injetar HTML.
+  var VALID_TIERS = { A: 1, B: 1, C: 1, D: 1 };
+  function setText(el, t) { el.textContent = (t == null ? "" : String(t)); return el; }
+  function makeEl(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+
   order.forEach(function (id) {
     var c = window.CAR_CATALOG[id];
     if (!c || id === "cybertruck") return;
-    var rate = FLEET_TIER_RATES[c.tier] || 0;
+    var safeTier = VALID_TIERS[c.tier] ? c.tier : "A";  // bloqueia tier malicioso
+    var rate = FLEET_TIER_RATES[safeTier] || 0;
     var mod = c.transmission === "manual" ? 0.9 : 1;
     var price = c.fipe ? c.fipe * rate * mod : 0;
     var trans = c.transmission === "manual" ? "Manual" : "Automático";
     var body = (c.body && c.body.pt) ? c.body.pt : "";
-    var a = document.createElement("a");
-    a.className = "fleet-car";
-    a.href = "car.html?id=" + c.id;
-    a.setAttribute("data-tier", c.tier);
-    a.innerHTML =
-      '<div class="fleet-car__img"><img src="images/car-' + c.id + '-1.jpg" alt="' + c.name +
-        '" loading="lazy" onerror="window.fleetImgFallback(this, \'' + c.tier + '\')" /></div>' +
-      '<div class="fleet-car__body">' +
-        '<span class="fleet-car__cat">' + (CAT_LABEL[c.tier] || "") + '</span>' +
-        '<span class="fleet-car__name">' + c.name + '</span>' +
-        '<span class="fleet-car__meta">' + c.year + ' · ' + trans + (body ? ' · ' + body : '') + '</span>' +
-        (price
-          ? '<span class="fleet-car__price">≈ ' + brl(price) + '<small>/mês</small></span>' +
-            '<span class="fleet-car__est">Faixa de referência — preço final por orçamento</span>'
-          : '<span class="fleet-car__price">Sob consulta</span>') +
-        '<span class="btn btn--outline btn--sm fleet-car__cta">Ver detalhes</span>' +
-      '</div>';
+
+    var a = makeEl("a", "fleet-car");
+    a.href = "car.html?id=" + encodeURIComponent(c.id);
+    a.setAttribute("data-tier", safeTier);
+
+    var imgWrap = makeEl("div", "fleet-car__img");
+    var img = makeEl("img");
+    img.src = "images/car-" + encodeURIComponent(c.id) + "-1.jpg";
+    img.alt = String(c.name || "");
+    img.loading = "lazy";
+    // Fallback via JS (sem inline onerror — assim safeTier nao vira string interp)
+    img.addEventListener("error", function () {
+      window.fleetImgFallback(img, safeTier);
+    });
+    imgWrap.appendChild(img);
+
+    var bodyEl = makeEl("div", "fleet-car__body");
+    bodyEl.appendChild(setText(makeEl("span", "fleet-car__cat"), CAT_LABEL[safeTier] || ""));
+    bodyEl.appendChild(setText(makeEl("span", "fleet-car__name"), c.name));
+    bodyEl.appendChild(setText(makeEl("span", "fleet-car__meta"),
+      c.year + " · " + trans + (body ? " · " + body : "")));
+
+    if (price) {
+      var priceEl = makeEl("span", "fleet-car__price");
+      priceEl.textContent = "≈ " + brl(price);
+      var small = makeEl("small");
+      small.textContent = "/mês";
+      priceEl.appendChild(small);
+      bodyEl.appendChild(priceEl);
+      bodyEl.appendChild(setText(makeEl("span", "fleet-car__est"),
+        "Faixa de referência — preço final por orçamento"));
+    } else {
+      bodyEl.appendChild(setText(makeEl("span", "fleet-car__price"), "Sob consulta"));
+    }
+    bodyEl.appendChild(setText(makeEl("span", "btn btn--outline btn--sm fleet-car__cta"), "Ver detalhes"));
+
+    a.appendChild(imgWrap);
+    a.appendChild(bodyEl);
     grid.appendChild(a);
     cards.push(a);
   });
@@ -218,22 +249,25 @@ window.fleetImgFallback = fleetImgFallback;
   var slides = [];
 
   rail.innerHTML = "";
+  // Fix code-review C1 (hero idem): sanitiza tier + encodeURIComponent no id
+  var VALID_TIERS_H = { A: 1, B: 1, C: 1, D: 1 };
   order.forEach(function (id) {
     var c = window.CAR_CATALOG[id];
     if (!c || id === "cybertruck") return;
+    var safeTier = VALID_TIERS_H[c.tier] ? c.tier : "A";
     // Slide vira <a> clicável → leva direto pra página do carro (UX #2 backlog mobile)
     var slide = document.createElement("a");
     slide.className = "hero-slide";
-    slide.href = "car.html?id=" + c.id;
-    slide.setAttribute("aria-label", "Ver detalhes do " + c.name);
+    slide.href = "car.html?id=" + encodeURIComponent(c.id);
+    slide.setAttribute("aria-label", "Ver detalhes do " + String(c.name || ""));
     var img = document.createElement("img");
-    img.src = "images/car-" + c.id + "-1.jpg";
-    img.alt = c.name;
+    img.src = "images/car-" + encodeURIComponent(c.id) + "-1.jpg";
+    img.alt = String(c.name || "");
     img.loading = "lazy";
-    img.onerror = function () { window.fleetImgFallback(img, c.tier); };
+    img.onerror = function () { window.fleetImgFallback(img, safeTier); };
     var cap = document.createElement("span");
     cap.className = "hero-slide__cap";
-    cap.textContent = c.name + " — ver detalhes →";
+    cap.textContent = (c.name || "") + " — ver detalhes →";
     slide.appendChild(img);
     slide.appendChild(cap);
     rail.appendChild(slide);
