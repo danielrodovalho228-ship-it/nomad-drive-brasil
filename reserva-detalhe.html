@@ -811,15 +811,24 @@
         .maybeSingle()
         .then(function (r) {
           var d = r && r.data;
-          if (d && d.coupons && d.coupons.code) {
-            renderCouponApplied(booking, d.coupons.code,
-              Number(d.applied_amount || 0), Number(d.final_amount || 0));
+          if (!d) return;
+          // Fix code-review #4: se RLS bloqueia o JOIN em coupons mas
+          // permite ler a redemption, ainda mostra estado "já aplicado"
+          // (sem o código, pra não confundir usuário tentando re-aplicar)
+          var displayCode = (d.coupons && d.coupons.code) ? d.coupons.code : "•••";
+          renderCouponApplied(booking, displayCode,
+            Number(d.applied_amount || 0), Number(d.final_amount || 0));
+          if (d.coupons && d.coupons.code) {
             couponFeedback("Cupom " + d.coupons.code + " já aplicado nesta reserva.", "ok");
+          } else {
+            couponFeedback("Um cupom já foi aplicado nesta reserva.", "ok");
           }
         }).catch(function () { /* silencioso — tabela pode não existir ainda */ });
     }
 
     function apply() {
+      // Fix code-review #2: bloqueia re-entrância via Enter no input
+      if (btn.disabled) return;
       var code = (input.value || "").trim().toUpperCase();
       if (!code) { couponFeedback("Digite o código do cupom.", "bad"); input.focus(); return; }
       if (!c || !c.rpc) { couponFeedback("Recurso indisponível nesta pré-visualização.", "bad"); return; }

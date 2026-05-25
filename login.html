@@ -348,7 +348,8 @@
 
   document.getElementById("recoveryRequestForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var email = recoveryEmailInput.value.trim();
+    // Fix code-review #6: normaliza email (lowercase + trim) antes de enviar
+    var email = recoveryEmailInput.value.trim().toLowerCase();
     if (!email) {
       setRecoveryFeedback("Digite seu e-mail.", "warn");
       recoveryEmailInput.focus();
@@ -470,7 +471,13 @@
     a.client().auth.updateUser({ password: np }).then(function (r) {
       if (r.error) {
         btn.disabled = false; btn.textContent = "Salvar nova senha";
-        showMsg(r.error.message || "Não foi possível salvar.", "error");
+        // Fix code-review #9: detectar sessão expirada e mostrar msg correta
+        var errMsg = String(r.error.message || "").toLowerCase();
+        if (errMsg.indexOf("session") >= 0 || errMsg.indexOf("auth") >= 0 || errMsg.indexOf("jwt") >= 0) {
+          showMsg("Sua sessão de recuperação expirou. Peça um novo link de redefinição.", "warn");
+        } else {
+          showMsg(r.error.message || "Não foi possível salvar.", "error");
+        }
         return;
       }
       btn.textContent = "✓ Senha salva";
@@ -481,9 +488,16 @@
       }).catch(function () {
         setTimeout(function () { window.location.href = "index.html"; }, 1100);
       });
-    }).catch(function () {
+    }).catch(function (err) {
       btn.disabled = false; btn.textContent = "Salvar nova senha";
-      showMsg("Erro de rede ao salvar a senha.", "error");
+      // Fix code-review (bonus): logar erro real pra debug
+      try { console.error("recovery updateUser failed:", err); } catch (e) {}
+      var errMsg = String((err && err.message) || "").toLowerCase();
+      if (errMsg.indexOf("session") >= 0 || errMsg.indexOf("auth") >= 0) {
+        showMsg("Sua sessão de recuperação expirou. Peça um novo link de redefinição.", "warn");
+      } else {
+        showMsg("Erro de rede ao salvar a senha. Tente novamente.", "error");
+      }
     });
   });
 })();
