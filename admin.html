@@ -186,6 +186,7 @@
       <a href="#config"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07 4.25 4.25M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07 4.25-4.25"/></svg>Configurações</a>
     </nav>
     <a href="index.html" class="admin-side__back">← Voltar ao site</a>
+    <div id="ndBell" style="display:flex;justify-content:center;margin:8px 0;"></div>
     <button type="button" class="admin-side__logout" data-logout>Sair da conta</button>
   </aside>
 
@@ -1178,6 +1179,8 @@
 <script src="nd-modal.js?v=20260524g"></script>
 <script src="auth.js?v=20260524e"></script>
 <script src="statuses.js?v=20260524e"></script>
+<script src="nd-notifications.js?v=20260525a"></script>
+<script>document.addEventListener("DOMContentLoaded", function () { if (window.ndNotifs) ndNotifs.mount("#ndBell"); });</script>
 <script src="emails-runtime.js?v=20260524f"></script>
 <script src="script.js?v=20260524e"></script>
 <script>

@@ -27,6 +27,7 @@
     <div class="dash-nav-actions">
       <a href="boas-vindas-cliente.html?force=1" title="Guia de primeiros passos">🎯 Próximos passos</a>
       <a href="index.html">Ver o site</a>
+      <div id="ndBell" style="display:inline-flex;align-items:center;"></div>
       <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
     </div>
   </div>
@@ -274,6 +275,8 @@
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="auth.js?v=20260523c"></script>
 <script src="statuses.js?v=20260523c"></script>
+<script src="nd-notifications.js?v=20260525a"></script>
+<script>document.addEventListener("DOMContentLoaded", function () { if (window.ndNotifs) ndNotifs.mount("#ndBell"); });</script>
 <script src="emails-runtime.js?v=20260524g"></script>
 <script src="script.js?v=20260523c"></script>
 <script>
