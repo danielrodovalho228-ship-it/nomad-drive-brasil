@@ -346,6 +346,135 @@
     .local-modern { grid-template-columns: 1fr; gap: 24px; }
     .local-modern__visual { aspect-ratio: 16/10; max-height: 260px; }
   }
+
+  /* ============================================================
+   * Fase 59b — #mensalidade: cards com SVG icons (sem emoji)
+   * ============================================================ */
+  .cards--pay .card--pay {
+    padding-top: 26px; position: relative;
+  }
+  .card--pay .card__icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 100%);
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 14px rgba(20,95,62,.18);
+  }
+  .card--pay .card__icon svg { width: 24px; height: 24px; }
+  .card--pay h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 17px; font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  /* ============================================================
+   * Fase 59b — Teaser modern (#ganhe + #parceiro)
+   * ============================================================ */
+  .teaser-modern {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .teaser-modern--rev { grid-template-columns: 1fr 1.05fr; }
+  .teaser-modern__visual {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(20,40,30,.15);
+    aspect-ratio: 4/3;
+    background: #f0f0f0;
+  }
+  .teaser-modern__visual img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .55s cubic-bezier(.22,1,.36,1);
+  }
+  .teaser-modern__visual:hover img { transform: scale(1.04); }
+  /* Stat flutuante na imagem (estilo "feature highlight") */
+  .teaser-modern__floating-stat {
+    position: absolute;
+    bottom: 20px; left: 20px;
+    background: #fff;
+    padding: 14px 18px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    min-width: 160px;
+    animation: fs-pop .55s cubic-bezier(.34,1.56,.64,1) .3s both;
+  }
+  .teaser-modern__floating-stat strong {
+    display: block;
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    color: #145f3e;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .teaser-modern__floating-stat span {
+    display: block;
+    font-size: 11.5px;
+    color: #6b7670;
+    margin-top: 3px;
+  }
+  .teaser-modern__floating-stat--gold strong { color: #d4af37; }
+  @keyframes fs-pop {
+    from { opacity: 0; transform: translateY(8px) scale(.94); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  /* Copy do teaser modern */
+  .teaser-modern__copy h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 800;
+    margin: 8px 0 14px;
+    line-height: 1.2;
+  }
+  .teaser-modern__copy h2 em {
+    color: #145f3e;
+    font-style: italic;
+  }
+  .teaser-modern__copy > p {
+    color: #5b6b63;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
+  .teaser-modern__list {
+    list-style: none; padding: 0; margin: 0 0 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .teaser-modern__list li {
+    display: flex; gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #3a4945;
+    line-height: 1.45;
+  }
+  .teaser-modern__list svg {
+    width: 18px; height: 18px;
+    color: #198754;
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: #d1e7dd;
+    padding: 3px;
+    border-radius: 50%;
+    box-sizing: content-box;
+  }
+  @media (max-width: 820px) {
+    .teaser-modern, .teaser-modern--rev {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .teaser-modern--rev .teaser-modern__visual { order: -1; }
+    .teaser-modern__visual { aspect-ratio: 16/10; max-height: 280px; }
+    .teaser-modern__floating-stat {
+      bottom: 14px; left: 14px;
+      padding: 10px 14px;
+    }
+    .teaser-modern__floating-stat strong { font-size: 18px; }
+  }
 </style>
 <div class="top-promo-banner">
   🚀 <strong>Pré-lançamento</strong> em Uberlândia · Cadastre-se e ganhe <strong>3 meses Silver gratuito</strong> · <a href="#orcamento">Pedir orçamento →</a>
@@ -880,17 +1009,26 @@
       <p>Você paga uma mensalidade pelo aluguel — esse valor é a sua única cobrança recorrente. Por trás, a plataforma faz a divisão automática entre quem opera o serviço e quem é o dono do carro.</p>
     </div>
 
-    <div class="cards cards--3">
-      <article class="card">
-        <h3>💳 Mensalidade única</h3>
+    <div class="cards cards--3 cards--pay">
+      <article class="card card--pay">
+        <div class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <h3>Mensalidade única</h3>
         <p>Você paga só o valor combinado no orçamento — uma cobrança por mês, no <strong>cartão de crédito ou PIX Automático</strong>, pela tela hospedada da Stripe. Sem taxa surpresa e sem mensalidade adicional escondida.</p>
       </article>
-      <article class="card">
-        <h3>🤝 Repasse transparente</h3>
+      <article class="card card--pay">
+        <div class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </div>
+        <h3>Repasse transparente</h3>
         <p>A cada mensalidade, <strong>90% vai direto pro proprietário</strong> do veículo e <strong>10% fica com a Nomade Drive</strong> pra cobrir operação, suporte, intermediação e proteção contratada. A divisão é automática via Stripe Connect.</p>
       </article>
-      <article class="card">
-        <h3>🛡️ Caução pré-autorizada</h3>
+      <article class="card card--pay">
+        <div class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Caução pré-autorizada</h3>
         <p>O cartão reserva um valor de caução <strong>sem cobrar</strong> — só vira cobrança real se houver avaria. No check-out aprovado, o limite volta ao cartão em até 5 dias úteis.</p>
       </article>
     </div>
@@ -1020,42 +1158,86 @@
   </div>
 </section>
 
-<!-- ============ GANHE (teaser) ============ -->
+<!-- ============ GANHE (Fase 59b: teaser com imagem + badges) ============ -->
 <section class="section section--surface" id="ganhe">
   <div class="container">
-    <div class="teaser">
-      <div class="teaser__copy">
-        <span class="eyebrow">Ganhe com seu carro</span>
-        <h2>Tem um carro parado? Pode virar renda.</h2>
-        <p>Coloque seu veículo na rede. A renda é estimada, não garantida, e o carro entra na frota só após aprovação documental, técnica e operacional. Veja as regras, simule uma faixa de ganho e inicie a análise.</p>
-        <a href="proprietarios.html" class="btn btn--solid">Quero cadastrar meu carro</a>
+    <div class="teaser-modern">
+      <div class="teaser-modern__visual">
+        <img
+          src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=720&h=540&fit=crop&q=80&auto=format"
+          alt="Proprietário ao lado do carro — receba renda mensal"
+          loading="lazy" decoding="async" />
+        <div class="teaser-modern__floating-stat">
+          <strong>R$ 2.250</strong>
+          <span>repasse médio/mês</span>
+        </div>
       </div>
-      <ul class="teaser__list">
-        <li>Aceite das regras antes de simular</li>
-        <li>Simulador de ganhos em faixa estimada</li>
-        <li>Checklist técnico em oficina credenciada</li>
-        <li>Aprovação operacional e publicação na frota</li>
-      </ul>
+      <div class="teaser-modern__copy">
+        <span class="eyebrow">Ganhe com seu carro</span>
+        <h2>Tem um carro parado? <em>Pode virar renda.</em></h2>
+        <p>Coloque seu veículo na rede. A renda é estimada, não garantida, e o carro entra na frota só após aprovação documental, técnica e operacional. <strong>90% da mensalidade vai pra você</strong> — 10% cobre operação da plataforma.</p>
+        <ul class="teaser-modern__list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Aceite das regras antes de simular</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Simulador de ganhos em faixa estimada</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Checklist técnico em oficina credenciada</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Aprovação operacional e publicação na frota</span>
+          </li>
+        </ul>
+        <a href="proprietarios.html" class="btn btn--solid">Quero cadastrar meu carro →</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ PARCEIROS (teaser) ============ -->
+<!-- ============ PARCEIROS (Fase 59b: teaser com imagem + lista visual) ============ -->
 <section class="section" id="parceiro">
   <div class="container">
-    <div class="teaser teaser--rev">
-      <div class="teaser__copy">
+    <div class="teaser-modern teaser-modern--rev">
+      <div class="teaser-modern__copy">
         <span class="eyebrow">Programa de parceiros</span>
-        <h2>Indique e ganhe crédito</h2>
-        <p>Conhece quem precisa de carro ou quem tem carro parado? Indique para a rede. Cada tipo de parceiro tem benefícios próprios — e os créditos são liberados após a validação real da indicação.</p>
-        <a href="parceiros.html" class="btn btn--solid">Conhecer o programa</a>
+        <h2>Indique e <em>ganhe crédito</em></h2>
+        <p>Conhece quem precisa de carro ou quem tem carro parado? Indique pra rede. Cada tipo de parceiro tem benefícios próprios — e os <strong>créditos são liberados após a validação real</strong> da indicação.</p>
+        <ul class="teaser-modern__list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Pessoa física, empresa, oficina, influenciador e corretor</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Benefícios e crédito por tipo de parceiro</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Acompanhamento do status de cada indicação</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Crédito liberado após a locação concluída</span>
+          </li>
+        </ul>
+        <a href="parceiros.html" class="btn btn--solid">Conhecer o programa →</a>
       </div>
-      <ul class="teaser__list">
-        <li>Pessoa física, empresa, oficina, influenciador e corretor</li>
-        <li>Benefícios e crédito por tipo de parceiro</li>
-        <li>Acompanhamento do status de cada indicação</li>
-        <li>Crédito liberado após a locação concluída</li>
-      </ul>
+      <div class="teaser-modern__visual">
+        <img
+          src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=720&h=540&fit=crop&q=80&auto=format"
+          alt="Equipe parceira — indique e ganhe crédito"
+          loading="lazy" decoding="async" />
+        <div class="teaser-modern__floating-stat teaser-modern__floating-stat--gold">
+          <strong>5 perfis</strong>
+          <span>de parceiro possíveis</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
