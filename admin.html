@@ -156,6 +156,7 @@
     </div>
     <nav class="admin-side__nav">
       <a href="#cockpit" style="background:#e6f4ec;font-weight:700;color:#0f5132;border-left:3px solid #0f5132;"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 14 21 8"/></svg>🎯 Cockpit CEO</a>
+      <a href="#saude"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>🩺 Saúde sistema</a>
       <a href="#crescimento"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>📈 Crescimento</a>
       <a href="#qualidade"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>⭐ Qualidade</a>
       <a href="#visao" class="is-current"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Visão geral</a>
@@ -808,6 +809,62 @@
     <!-- ============================================================
          Fase 40 — CRESCIMENTO
          ============================================================ -->
+
+    <!-- ============================================================
+         Fase 51 — SAÚDE DO SISTEMA
+         ============================================================ -->
+    <section class="admin-block" id="saude">
+      <h2>🩺 Saúde do sistema</h2>
+      <p class="note">Monitoramento em tempo real: e-mails, crons, Connect Stripe, funil aprovações, alertas críticos. Refresh a cada 30s.</p>
+
+      <!-- Alertas críticos (auto-hide se nada) -->
+      <div id="systemAlerts" style="display:none;margin-bottom:14px;"></div>
+
+      <!-- KPIs principais -->
+      <div class="kpi-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px;">
+        <div class="kpi" style="background:#e8f6ee;padding:14px 16px;border-radius:10px;border-left:4px solid #0f5132;">
+          <small style="color:#5b6b63;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">📧 E-mails 24h</small>
+          <b id="kpiEmailsTotal" style="font-size:24px;font-weight:800;color:#0f5132;display:block;margin:4px 0;">—</b>
+          <span id="kpiEmailsRate" style="font-size:11px;color:#5b6b63;">sucesso</span>
+        </div>
+        <div class="kpi" style="background:#dbeafe;padding:14px 16px;border-radius:10px;border-left:4px solid #3b82f6;">
+          <small style="color:#5b6b63;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">⏰ Crons ativos</small>
+          <b id="kpiCrons" style="font-size:24px;font-weight:800;color:#1e40af;display:block;margin:4px 0;">—</b>
+          <span id="kpiCronsSub" style="font-size:11px;color:#5b6b63;">de N total</span>
+        </div>
+        <div class="kpi" style="background:#fef9c3;padding:14px 16px;border-radius:10px;border-left:4px solid #d4af37;">
+          <small style="color:#5b6b63;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">🏦 Connect ativos</small>
+          <b id="kpiConnect" style="font-size:24px;font-weight:800;color:#854d0e;display:block;margin:4px 0;">—</b>
+          <span id="kpiConnectRate" style="font-size:11px;color:#5b6b63;">de owners</span>
+        </div>
+        <div class="kpi" style="background:#e0e7ff;padding:14px 16px;border-radius:10px;border-left:4px solid #6366f1;">
+          <small style="color:#5b6b63;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">✅ Aprovação 7d</small>
+          <b id="kpiApprovalRate" style="font-size:24px;font-weight:800;color:#3730a3;display:block;margin:4px 0;">—</b>
+          <span id="kpiApprovalSub" style="font-size:11px;color:#5b6b63;">N decisões</span>
+        </div>
+      </div>
+
+      <!-- Detalhes em 2 colunas -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <!-- Cron jobs -->
+        <div class="admin-card">
+          <h3 class="block-title" style="font-size:14px;">⏰ Cron jobs</h3>
+          <div id="cronJobsList"><p class="note">Carregando...</p></div>
+        </div>
+        <!-- Funil rental_requests -->
+        <div class="admin-card">
+          <h3 class="block-title" style="font-size:14px;">📊 Funil rental_requests (7d)</h3>
+          <div id="rentalFunnelView"><p class="note">Carregando...</p></div>
+        </div>
+      </div>
+
+      <!-- Connect breakdown -->
+      <div class="admin-card" style="margin-top:14px;">
+        <h3 class="block-title" style="font-size:14px;">🏦 Stripe Connect breakdown</h3>
+        <div id="connectBreakdown"><p class="note">Carregando...</p></div>
+      </div>
+    </section>
+
     <section class="admin-block" id="crescimento">
       <h2>📈 Crescimento</h2>
       <p class="note">Funil de aquisição + métricas por período + top proprietários. Atualiza em tempo real.</p>
@@ -2044,6 +2101,11 @@
   }
 
   function renderLeadCard(r) {
+    // escapeHtml local (a definição global está em outro bloco <script> fora deste escopo)
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
     var card = document.createElement("div");
     card.className = "lead-card";
     card.style.cssText = "background:#fff;border:1px solid #e5e7eb;border-left:3px solid " +
@@ -2055,7 +2117,7 @@
       ";border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;";
 
     // Fase 42 fix CRÍTICO: escapeHtml em TODOS os campos vindos do form público.
-    // Sem isso, atacante submete tag <script> no nome -> executa na sessao admin.
+    // Sem isso, atacante poderia injetar HTML/JS no nome e executar na sessao admin.
     var details = [];
     if (r.city) details.push("📍 " + escapeHtml(r.city));
     if (r.desired_months) details.push("📆 " + parseInt(r.desired_months, 10) + "m");
@@ -3364,6 +3426,103 @@
   }
   window.loadLoyaltyOverview = loadLoyaltyOverview;
 
+  /* Fase 51 — Dashboard saúde do sistema */
+  function loadSystemHealth() {
+    var sb = getClient(); if (!sb) return;
+
+    Promise.all([
+      sb.from('emails_health_24h').select('*').maybeSingle(),
+      sb.from('cron_jobs_health').select('*'),
+      sb.from('stripe_connect_health').select('*').maybeSingle(),
+      sb.from('rental_requests_funnel_7d').select('*').maybeSingle(),
+      sb.from('system_alerts').select('*')
+    ]).then(function (results) {
+      var emails = (results[0] && results[0].data) || {};
+      var crons = (results[1] && results[1].data) || [];
+      var connect = (results[2] && results[2].data) || {};
+      var funnel = (results[3] && results[3].data) || {};
+      var alerts = (results[4] && results[4].data) || [];
+
+      // KPIs
+      $('kpiEmailsTotal').textContent = emails.total_24h || 0;
+      $('kpiEmailsRate').textContent = (emails.success_rate_pct || 100) + '% sucesso';
+      if (emails.failure_24h > 0) $('kpiEmailsRate').textContent += ' (' + emails.failure_24h + ' falhas)';
+
+      var activeCrons = crons.filter(function (c) { return c.active; }).length;
+      $('kpiCrons').textContent = activeCrons;
+      $('kpiCronsSub').textContent = 'de ' + crons.length + ' total';
+
+      $('kpiConnect').textContent = connect.connect_active || 0;
+      $('kpiConnectRate').textContent = (connect.activation_rate_pct || 0) + '% de ' + (connect.total_owners || 0) + ' owners';
+
+      $('kpiApprovalRate').textContent = (funnel.approval_rate_pct || 0) + '%';
+      $('kpiApprovalSub').textContent = ((funnel.approved || 0) + (funnel.rejected || 0)) + ' decisões' +
+        (funnel.avg_hours_to_approve ? ' · ' + funnel.avg_hours_to_approve + 'h média' : '');
+
+      // Alertas
+      var alertsBox = $('systemAlerts');
+      if (alerts.length === 0) {
+        alertsBox.style.display = 'none';
+      } else {
+        alertsBox.style.display = '';
+        alertsBox.innerHTML = '<div style="background:#fee2e2;border-left:4px solid #b91c1c;padding:14px 18px;border-radius:10px;">'
+          + '<h3 style="font-size:14px;font-weight:800;color:#7c2d12;margin:0 0 8px;">⚠️ ' + alerts.length + ' alerta(s) crítico(s)</h3>'
+          + '<ul style="margin:0;padding-left:20px;color:#7c2d12;font-size:13px;line-height:1.7;">'
+          + alerts.map(function (a) {
+              var icon = a.severity === 'crítico' ? '🚨' : '⚠️';
+              return '<li>' + icon + ' <strong>[' + a.type + ']</strong> ' + escapeHtml(a.message) + '</li>';
+            }).join('')
+          + '</ul></div>';
+      }
+
+      // Cron jobs lista
+      var cronBox = $('cronJobsList');
+      if (crons.length === 0) {
+        cronBox.innerHTML = '<p class="note" style="color:#8a948e;">Nenhum cron configurado.</p>';
+      } else {
+        cronBox.innerHTML = crons.map(function (c) {
+          var statusIcon = !c.active ? '⛔' : c.last_status === 'failed' ? '❌' : c.last_status === 'succeeded' ? '✅' : '⏳';
+          var lastRun = c.last_run_at ? new Date(c.last_run_at).toLocaleString('pt-BR') : 'nunca executou';
+          var failures = c.failures_24h > 0 ? ' <span style="color:#b91c1c;font-weight:700;">(' + c.failures_24h + ' falhas 24h)</span>' : '';
+          return '<div style="padding:8px 0;border-bottom:1px solid #f0f3f1;font-size:13px;">'
+            + statusIcon + ' <strong>' + escapeHtml(c.jobname) + '</strong> '
+            + '<small style="color:#5b6b63;font-family:monospace;">(' + c.schedule + ')</small><br>'
+            + '<small style="color:#8a948e;">Última: ' + lastRun + failures + '</small>'
+            + '</div>';
+        }).join('');
+      }
+
+      // Funil rental_requests
+      var funnelBox = $('rentalFunnelView');
+      if (!funnel.total_7d) {
+        funnelBox.innerHTML = '<p class="note" style="color:#8a948e;">Nenhuma solicitação nos últimos 7 dias.</p>';
+      } else {
+        funnelBox.innerHTML =
+          '<div style="font-size:13px;line-height:1.8;">'
+          + '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f3f1;"><span>📥 Total recebidas</span><strong>' + funnel.total_7d + '</strong></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f3f1;"><span>⏳ Pendentes</span><strong style="color:#a16207;">' + funnel.pending + '</strong></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f3f1;"><span>✅ Aprovadas</span><strong style="color:#065f46;">' + funnel.approved + '</strong></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f3f1;"><span>❌ Recusadas</span><strong style="color:#991b1b;">' + funnel.rejected + '</strong></div>'
+          + '<div style="display:flex;justify-content:space-between;padding:6px 0;"><span>⏱️ Tempo médio aprovação</span><strong>' + (funnel.avg_hours_to_approve || '—') + 'h</strong></div>'
+          + '</div>';
+      }
+
+      // Connect breakdown
+      var connBox = $('connectBreakdown');
+      connBox.innerHTML =
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:10px;font-size:13px;">'
+        + '<div style="background:#d1fae5;padding:10px 12px;border-radius:6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#065f46;">' + (connect.connect_active || 0) + '</div><div style="font-size:11px;color:#5b6b63;">✅ Ativos</div></div>'
+        + '<div style="background:#fef9c3;padding:10px 12px;border-radius:6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#854d0e;">' + (connect.connect_in_review || 0) + '</div><div style="font-size:11px;color:#5b6b63;">⏳ Em análise</div></div>'
+        + '<div style="background:#f4f5f7;padding:10px 12px;border-radius:6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#6b7280;">' + (connect.connect_pending || 0) + '</div><div style="font-size:11px;color:#5b6b63;">⭕ Pendente</div></div>'
+        + '<div style="background:#fee2e2;padding:10px 12px;border-radius:6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#991b1b;">' + (connect.connect_restricted || 0) + '</div><div style="font-size:11px;color:#5b6b63;">🚨 Restrito</div></div>'
+        + '</div>'
+        + '<p style="margin-top:10px;font-size:12px;color:#5b6b63;">Taxa de ativação: <strong>' + (connect.activation_rate_pct || 0) + '%</strong> dos ' + (connect.total_owners || 0) + ' owners</p>';
+    }).catch(function (e) {
+      console.error('loadSystemHealth error:', e);
+    });
+  }
+  window.loadSystemHealth = loadSystemHealth;
+
   function loadQuality() {
     var sb = getClient(); if (!sb) return;
     sb.from('quality_summary').select('*').maybeSingle().then(function (r) {
@@ -3853,6 +4012,10 @@
     // ----- Fase 43 — Top clientes Nomade Gold -----
     loadLoyaltyOverview();
     setInterval(loadLoyaltyOverview, 300000); // refresh a cada 5min
+
+    // ----- Fase 51 — Saúde do sistema -----
+    loadSystemHealth();
+    setInterval(loadSystemHealth, 30000); // refresh a cada 30s
     setInterval(loadGrowth, 60000);
     setInterval(loadQuality, 60000);
 
