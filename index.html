@@ -160,6 +160,192 @@
     .bento-card--has-thumb.bento-card--big > h3 { padding-right: 70px; }
     .bento-card--has-thumb.bento-card--wide > div { padding-right: 64px; }
   }
+
+  /* ============================================================
+   * Fase 59 — Hero profissional (SVG icons, sem emojis "AI")
+   * ============================================================ */
+  /* Badge pré-lançamento com dot pulsante */
+  .badge--pulse {
+    display: inline-flex !important;
+    align-items: center; gap: 8px;
+    background: rgba(20,95,62,.08) !important;
+    color: #0f5132 !important;
+    border: 1px solid rgba(20,95,62,.22) !important;
+    padding: 6px 14px 6px 12px !important;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+  }
+  .badge__dot {
+    width: 8px; height: 8px;
+    background: #198754;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(25,135,84,.6);
+    animation: badge-pulse 1.8s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes badge-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(25,135,84,.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(25,135,84,0); }
+    100% { box-shadow: 0 0 0 0 rgba(25,135,84,0); }
+  }
+
+  /* CTA principal com arrow */
+  .hero-cta-primary { display: inline-flex !important; align-items: center; gap: 8px; }
+  .hero-cta-primary svg { width: 18px; height: 18px; transition: transform .2s; }
+  .hero-cta-primary:hover svg { transform: translateX(3px); }
+
+  /* Features inline com SVG (não emoji) */
+  .hero__features {
+    list-style: none; padding: 0; margin: 20px 0 0;
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+  }
+  .hero__features li {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13.5px; color: #3a4945;
+    line-height: 1.3;
+  }
+  .hero__features svg {
+    width: 18px; height: 18px;
+    color: #198754;
+    flex-shrink: 0;
+  }
+
+  /* Stats — tipografia maior e mais peso */
+  .hero__proof {
+    display: flex; gap: 28px; flex-wrap: wrap;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(20,40,30,.12);
+  }
+  .hero-stat { min-width: 80px; }
+  .hero-stat__num {
+    display: flex; align-items: baseline; gap: 2px;
+    font-family: 'Sora', sans-serif;
+  }
+  .hero-stat__num strong {
+    font-size: 28px; font-weight: 800;
+    color: #14201b;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-stat__num span {
+    font-size: 16px; font-weight: 700;
+    color: #145f3e;
+  }
+  .hero-stat__label {
+    display: block;
+    font-size: 11.5px;
+    color: #6b7670;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  @media (max-width: 640px) {
+    .hero__features { gap: 6px 14px; }
+    .hero__features li { font-size: 13px; }
+    .hero-stat__num strong { font-size: 24px; }
+    .hero__proof { gap: 18px; }
+  }
+
+  /* ============================================================
+   * Fase 59 — Cards de frota (badges coloridos por tier + hover)
+   * ============================================================ */
+  .fleet-car { transition: transform .25s, box-shadow .25s; }
+  .fleet-car:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(20,40,30,.12);
+  }
+  .fleet-car__img img {
+    transition: transform .55s cubic-bezier(.22,1,.36,1);
+  }
+  .fleet-car:hover .fleet-car__img img { transform: scale(1.06); }
+  /* Badge categoria colorido por tier */
+  .fleet-car[data-tier="A"] .fleet-car__cat {
+    background: #d1e7dd; color: #0f5132;
+  }
+  .fleet-car[data-tier="B"] .fleet-car__cat {
+    background: #cfe2ff; color: #084298;
+  }
+  .fleet-car[data-tier="C"] .fleet-car__cat {
+    background: #fff3cd; color: #856404;
+  }
+  .fleet-car[data-tier="D"] .fleet-car__cat {
+    background: #14201b; color: #ffd966;
+  }
+  .fleet-car__cat {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+
+  /* ============================================================
+   * Fase 59 — Pricing tiers com imagem
+   * ============================================================ */
+  .pricing-tier { position: relative; padding-top: 0 !important; overflow: hidden; }
+  .pricing-tier__img {
+    width: calc(100% + 48px);
+    height: 140px;
+    object-fit: cover;
+    margin: -24px -24px 18px;
+    display: block;
+    background: #f0f0f0;
+    transition: transform .55s cubic-bezier(.22,1,.36,1);
+  }
+  .pricing-tier:hover .pricing-tier__img { transform: scale(1.04); }
+  /* Card featured (Confort) tem efeito mais forte */
+  .pricing-tier--featured .pricing-tier__img {
+    height: 160px;
+  }
+  @media (max-width: 540px) {
+    .pricing-tier__img { height: 120px; }
+  }
+
+  /* ============================================================
+   * Fase 59 — Local Uberlândia com imagem hero
+   * ============================================================ */
+  .local-modern {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .local-modern__visual {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(20,40,30,.15);
+    aspect-ratio: 4/3;
+    background: #f0f0f0;
+    position: relative;
+  }
+  .local-modern__visual img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .55s cubic-bezier(.22,1,.36,1);
+  }
+  .local-modern__visual:hover img { transform: scale(1.04); }
+  .local-modern__pin {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: rgba(20,32,27,.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid rgba(255,255,255,.15);
+    font-size: 13px;
+  }
+  .local-modern__pin svg { width: 18px; height: 18px; color: #ffd966; flex-shrink: 0; }
+  @media (max-width: 820px) {
+    .local-modern { grid-template-columns: 1fr; gap: 24px; }
+    .local-modern__visual { aspect-ratio: 16/10; max-height: 260px; }
+  }
 </style>
 <div class="top-promo-banner">
   🚀 <strong>Pré-lançamento</strong> em Uberlândia · Cadastre-se e ganhe <strong>3 meses Silver gratuito</strong> · <a href="#orcamento">Pedir orçamento →</a>
@@ -231,25 +417,55 @@
 <section class="hero" id="inicio">
   <div class="container hero__inner">
     <div class="hero__copy fm-stagger-slow">
-      <span class="badge fm-pop-in" style="--fm-delay: 200ms;">🚀 Pré-lançamento · Uberlândia-MG</span>
+      <span class="badge badge--pulse fm-pop-in" style="--fm-delay: 200ms;">
+        <span class="badge__dot" aria-hidden="true"></span>
+        Pré-lançamento · Uberlândia-MG
+      </span>
       <h1 class="fm-blur-in" style="--fm-delay: 100ms;">Alugue o carro perfeito por mês <em>sem burocracia de locadora</em>.</h1>
       <p class="hero__sub fm-slide-up" style="--fm-delay: 400ms;">Plataforma local de Uberlândia que conecta você a proprietários verificados. Contrato, vistoria, proteção e suporte WhatsApp — tudo simples. <strong>Cliente Gold/Platinum: aprovação na hora.</strong></p>
       <div class="hero__cta fm-slide-up" style="--fm-delay: 600ms;">
-        <a href="#orcamento" class="btn btn--solid btn--lg fm-hover-glow">⚡ Pedir orçamento em 2 min</a>
+        <a href="#orcamento" class="btn btn--solid btn--lg fm-hover-glow hero-cta-primary">
+          <span>Pedir orçamento em 2 min</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
         <a href="#frota" class="btn btn--outline btn--lg fm-hover-scale">Ver carros disponíveis</a>
       </div>
-      <ul class="hero__badges fm-fade-in" style="--fm-delay: 800ms;">
-        <li>📄 Contrato e vistoria</li>
-        <li>✅ Veículos aprovados em oficina parceira</li>
-        <li>🛡️ Proteção por contrato</li>
-        <li>💬 Suporte humano por WhatsApp</li>
+      <ul class="hero__features fm-fade-in" style="--fm-delay: 800ms;">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>Contrato e vistoria</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Veículos aprovados em oficina parceira</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Proteção por contrato</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>Suporte humano por WhatsApp</span>
+        </li>
       </ul>
-      <!-- Fase 47/53: Faixa de prova social com counter animado -->
-      <div class="hero__proof fm-fade-in" style="--fm-delay: 1000ms; display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.15);">
-        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="4">0</strong><br><span style="font-size:12px;color:var(--muted);">categorias de veículo</span></div>
-        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="30">0</strong><span style="font-size:14px;">+</span><br><span style="font-size:12px;color:var(--muted);">dias mínimo de locação</span></div>
-        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="100">0</strong><span style="font-size:14px;">%</span><br><span style="font-size:12px;color:var(--muted);">veículos verificados</span></div>
-        <div><strong style="font-size:20px;color:var(--ink);font-family:var(--font-d);" data-fm-counter="5">0</strong><span style="font-size:14px;">min</span><br><span style="font-size:12px;color:var(--muted);">pra pedir orçamento</span></div>
+      <!-- Faixa de prova social com counter animado — tipografia maior + mais peso -->
+      <div class="hero__proof fm-fade-in" style="--fm-delay: 1000ms;">
+        <div class="hero-stat">
+          <div class="hero-stat__num"><strong data-fm-counter="4">0</strong></div>
+          <span class="hero-stat__label">categorias de veículo</span>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num"><strong data-fm-counter="30">0</strong><span>+</span></div>
+          <span class="hero-stat__label">dias mínimo de locação</span>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num"><strong data-fm-counter="100">0</strong><span>%</span></div>
+          <span class="hero-stat__label">veículos verificados</span>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num"><strong data-fm-counter="5">0</strong><span>min</span></div>
+          <span class="hero-stat__label">pra pedir orçamento</span>
+        </div>
       </div>
     </div>
     <div class="hero__visual">
@@ -567,7 +783,10 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:24px;align-items:stretch;" class="fm-stagger" data-fm-reveal>
       <!-- Econômico -->
       <div class="pricing-tier fm-hover-lift">
-        <span class="badge-modern badge-modern--info" style="margin-bottom:12px;">🚗 Econômico</span>
+        <img class="pricing-tier__img"
+          src="https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=480&h=320&fit=crop&q=80&auto=format"
+          alt="Hatch compacto — categoria Econômico" loading="lazy" decoding="async" />
+        <span class="badge-modern badge-modern--info" style="margin-bottom:12px;">Econômico</span>
         <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 1.400<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–2.000/mês</small></div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Hatch compacto, econômico no consumo. Ideal para uso urbano.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
@@ -580,7 +799,10 @@
 
       <!-- Confort (featured) -->
       <div class="pricing-tier pricing-tier--featured fm-hover-lift">
-        <span class="badge-modern badge-modern--brand" style="margin-bottom:12px;">⭐ Confort · MAIS PROCURADA</span>
+        <img class="pricing-tier__img"
+          src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=480&h=320&fit=crop&q=80&auto=format"
+          alt="Sedã médio — categoria Confort" loading="lazy" decoding="async" />
+        <span class="badge-modern badge-modern--brand" style="margin-bottom:12px;">Confort · MAIS PROCURADA</span>
         <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 2.000<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–3.600/mês</small></div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Sedãs e hatches médios, automáticos. Categoria mais procurada.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
@@ -594,7 +816,10 @@
 
       <!-- Premium -->
       <div class="pricing-tier fm-hover-lift">
-        <span class="badge-modern badge-modern--accent" style="margin-bottom:12px;">💎 Premium</span>
+        <img class="pricing-tier__img"
+          src="https://images.unsplash.com/photo-1568844293986-8d0400bd4745?w=480&h=320&fit=crop&q=80&auto=format"
+          alt="SUV premium — categoria Premium" loading="lazy" decoding="async" />
+        <span class="badge-modern badge-modern--accent" style="margin-bottom:12px;">Premium</span>
         <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 3.500<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–5.500/mês</small></div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">SUVs e sedãs premium. Mais espaço e conforto de estrada.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
@@ -608,7 +833,10 @@
 
       <!-- Luxo -->
       <div class="pricing-tier fm-hover-lift">
-        <span class="badge-modern" style="margin-bottom:12px;background:#1f2937;color:#fbbf24;">👑 Luxo</span>
+        <img class="pricing-tier__img"
+          src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=480&h=320&fit=crop&q=80&auto=format"
+          alt="Carro de luxo — categoria Luxo" loading="lazy" decoding="async" />
+        <span class="badge-modern" style="margin-bottom:12px;background:#1f2937;color:#fbbf24;">Luxo</span>
         <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">Sob consulta</div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Alto padrão. Condições avaliadas caso a caso.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
@@ -1031,22 +1259,42 @@
 </section>
 
 <!-- ============ LOCAL ============ -->
+<!-- ============ LOCAL (Fase 59: imagem aeroporto + layout moderno) ============ -->
 <section class="section" id="local">
   <div class="container">
-    <div class="local">
-      <div class="local__copy">
+    <div class="local-modern">
+      <div class="local-modern__copy">
         <span class="eyebrow">Retirada</span>
         <h2>Retirada em Uberlândia-MG</h2>
-        <p>A entrega é feita em mãos em Uberlândia. O ponto exato é confirmado após a reserva, conforme a disponibilidade e a logística. Encontro no aeroporto pode ser combinado.</p>
-        <div class="local__btns">
-          <a href="https://www.google.com/maps/place/Uberl%C3%A2ndia,+MG" target="_blank" rel="noopener" class="btn btn--outline">Ver Uberlândia no Google Maps</a>
+        <p style="color:#5b6b63;font-size:15.5px;line-height:1.6;margin:10px 0 18px;">A entrega é feita em mãos em Uberlândia. O ponto exato é confirmado após a reserva, conforme a disponibilidade e a logística. <strong>Encontro no aeroporto pode ser combinado</strong> — ideal pra quem chega de viagem.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
           <a href="#orcamento" class="btn btn--solid">Combinar retirada</a>
+          <a href="https://www.google.com/maps/place/Uberl%C3%A2ndia,+MG" target="_blank" rel="noopener" class="btn btn--outline">Ver no Google Maps →</a>
+        </div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;padding-top:18px;border-top:1px solid #eef0ee;">
+          <div>
+            <strong style="font-size:13px;color:#14201b;display:block;font-family:'Sora',sans-serif;">✈️ Aeroporto César Bombonato</strong>
+            <span style="font-size:12px;color:#6b7670;">Encontro combinado · sem custo extra</span>
+          </div>
+          <div>
+            <strong style="font-size:13px;color:#14201b;display:block;font-family:'Sora',sans-serif;">📍 Centro de Uberlândia</strong>
+            <span style="font-size:12px;color:#6b7670;">Ponto a confirmar após reserva</span>
+          </div>
         </div>
       </div>
-      <div class="local__card" aria-hidden="true">
-        <span class="local__pin">📍</span>
-        <strong>Uberlândia · Minas Gerais</strong>
-        <span>Centro do Brasil — fácil acesso por rodovia e aeroporto</span>
+
+      <div class="local-modern__visual">
+        <img
+          src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?w=720&h=540&fit=crop&q=80&auto=format"
+          alt="Aeroporto — retirada combinada em Uberlândia"
+          loading="lazy" decoding="async" />
+        <div class="local-modern__pin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div>
+            <strong style="display:block;font-size:13px;line-height:1.2;">Uberlândia · Minas Gerais</strong>
+            <span style="font-size:11.5px;opacity:.85;">Centro do Brasil · rodovia + aeroporto</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
