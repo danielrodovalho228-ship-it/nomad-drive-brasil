@@ -1,0 +1,310 @@
+/* ====================================================================
+   Nomade Drive — Modernização dos Dashboards (overrides sutis)
+   --------------------------------------------------------------------
+   Aplica visual moderno em cima dos estilos legados SEM quebrar layout.
+   Atua via cascata + propriedades específicas. Carrega DEPOIS do style.css.
+
+   APLICA EM:
+   - dashboard-cliente.html
+   - dashboard-proprietario.html
+   - admin.html
+   ==================================================================== */
+
+/* ============================================================
+   PANEL CARDS — sombra moderna + hover lift
+   ============================================================ */
+.dash-panel,
+.admin-card,
+.admin-block > .admin-card {
+  transition: transform var(--duration-normal, 250ms) var(--ease-out, ease-out),
+              box-shadow var(--duration-normal, 250ms) var(--ease-out, ease-out);
+  border-radius: var(--radius-xl, 16px) !important;
+  border: 1px solid var(--color-gray-200, #e5e7eb) !important;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.06));
+}
+
+.dash-panel:hover,
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0,0,0,.08));
+}
+
+/* Títulos de seção (h2) com peso moderno */
+.dash-panel > h2,
+.admin-block > h2 {
+  font-family: var(--font-display, 'Sora', sans-serif);
+  font-weight: 800 !important;
+  letter-spacing: var(--tracking-tight, -0.02em);
+}
+
+/* ============================================================
+   KPI CARDS — visual moderno
+   ============================================================ */
+.dash-kpi,
+.kpi {
+  border-radius: var(--radius-xl, 16px) !important;
+  border: 1px solid var(--color-gray-200, #e5e7eb) !important;
+  transition: all var(--duration-normal) var(--ease-out);
+  background: #fff;
+}
+
+.dash-kpi:hover,
+.kpi:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-brand-300, #5fb781) !important;
+}
+
+.dash-kpi strong,
+.kpi b {
+  font-family: var(--font-display, 'Sora', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: var(--tracking-tight, -0.02em);
+}
+
+/* ============================================================
+   STATUS PILLS modernizadas
+   ============================================================ */
+.dash-pill {
+  border-radius: var(--radius-full, 9999px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px;
+  font-size: 11.5px !important;
+  padding: 4px 12px !important;
+  text-transform: uppercase;
+  transition: var(--transition-fast);
+}
+
+.dash-pill--ok,
+.cad-status[value="aprovado"],
+.dash-pill--green {
+  background: var(--color-brand-100, #c8e9d4) !important;
+  color: var(--color-brand-700, #0a3e28) !important;
+}
+
+.dash-pill--warn {
+  background: var(--color-accent-100, #fef9c3) !important;
+  color: var(--color-accent-700, #92731a) !important;
+}
+
+.dash-pill--bad,
+.dash-pill--error {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.dash-pill--neutral {
+  background: var(--color-gray-100, #f4f5f7) !important;
+  color: var(--color-gray-700, #374151) !important;
+}
+
+/* ============================================================
+   BOTÕES — adicionar hover modernos
+   ============================================================ */
+.btn--solid,
+.btn.btn--solid,
+.dash-cta.btn--solid {
+  transition: var(--transition-spring, all .4s cubic-bezier(0.34, 1.56, 0.64, 1)) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+}
+
+.btn--solid:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-brand, 0 10px 25px -5px rgba(20,95,62,.35));
+}
+
+.btn--solid:active {
+  transform: translateY(0);
+}
+
+.btn--outline {
+  transition: var(--transition-base);
+  font-weight: 600 !important;
+}
+
+.btn--outline:hover {
+  transform: translateY(-1px);
+  border-width: 2px;
+}
+
+/* ============================================================
+   SIDEBAR ADMIN — visual mais clean
+   ============================================================ */
+.admin-side__nav a {
+  border-radius: var(--radius-md, 8px) !important;
+  transition: var(--transition-fast) !important;
+  font-weight: 500 !important;
+}
+
+.admin-side__nav a:hover {
+  background: rgba(255,255,255,.1) !important;
+  transform: translateX(2px);
+}
+
+.admin-side__nav a.is-current {
+  background: var(--color-brand-500, #145f3e) !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   FORM FIELDS — visual moderno
+   ============================================================ */
+.field input,
+.field select,
+.field textarea,
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+select,
+textarea {
+  border-radius: var(--radius-md, 8px) !important;
+  border: 1.5px solid var(--color-gray-300, #d1d5db) !important;
+  transition: border-color var(--duration-fast, 150ms) var(--ease-out, ease-out),
+              box-shadow var(--duration-fast, 150ms) var(--ease-out, ease-out) !important;
+  font-size: 14px !important;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--color-brand-500, #145f3e) !important;
+  box-shadow: 0 0 0 3px rgba(20, 95, 62, 0.12) !important;
+}
+
+/* ============================================================
+   ROWS / LIST ITEMS — separação suave
+   ============================================================ */
+.dash-row {
+  transition: var(--transition-base);
+  padding: var(--space-3, 12px) var(--space-4, 16px) !important;
+  border-radius: var(--radius-md, 8px);
+}
+
+.dash-row:hover {
+  background: var(--color-gray-50, #f9fafb);
+}
+
+/* ============================================================
+   ANIMAÇÃO DE ENTRADA dos panels (stagger automático)
+   ============================================================ */
+.dash-cards .dash-kpi,
+.kpi-grid .kpi,
+.cockpit-kpis .cockpit-kpi {
+  opacity: 0;
+  animation: fmSlideUp var(--duration-slow, 400ms) var(--ease-spring, ease-out) forwards;
+}
+.dash-cards .dash-kpi:nth-child(1),
+.kpi-grid .kpi:nth-child(1),
+.cockpit-kpis .cockpit-kpi:nth-child(1) { animation-delay: 50ms; }
+.dash-cards .dash-kpi:nth-child(2),
+.kpi-grid .kpi:nth-child(2),
+.cockpit-kpis .cockpit-kpi:nth-child(2) { animation-delay: 150ms; }
+.dash-cards .dash-kpi:nth-child(3),
+.kpi-grid .kpi:nth-child(3),
+.cockpit-kpis .cockpit-kpi:nth-child(3) { animation-delay: 250ms; }
+.dash-cards .dash-kpi:nth-child(4),
+.kpi-grid .kpi:nth-child(4),
+.cockpit-kpis .cockpit-kpi:nth-child(4) { animation-delay: 350ms; }
+
+/* ============================================================
+   ADMIN BLOCK títulos com gradient sutil
+   ============================================================ */
+.admin-block > h2 {
+  background: linear-gradient(135deg, var(--color-gray-900, #111827) 0%, var(--color-brand-600, #0f4f33) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+/* ============================================================
+   ALERTAS / MENSAGENS — moderno
+   ============================================================ */
+.auth-msg,
+.dash-empty {
+  border-radius: var(--radius-md, 8px) !important;
+  padding: var(--space-3, 12px) var(--space-4, 16px) !important;
+  font-size: 13.5px !important;
+  line-height: var(--leading-relaxed, 1.7);
+}
+
+/* ============================================================
+   TABELAS — modernização sutil
+   ============================================================ */
+.admin-table {
+  border-radius: var(--radius-xl, 16px) !important;
+  overflow: hidden;
+}
+
+.admin-table thead {
+  background: var(--color-brand-50, #e8f6ee) !important;
+}
+
+.admin-table th {
+  font-family: var(--font-display, 'Sora', sans-serif);
+  font-weight: 700 !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-brand-700, #0a3e28) !important;
+  padding: var(--space-3, 12px) var(--space-4, 16px) !important;
+}
+
+.admin-table td {
+  padding: var(--space-3, 12px) var(--space-4, 16px) !important;
+  font-size: 13.5px !important;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.admin-table tr {
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.admin-table tbody tr:hover td {
+  background: var(--color-gray-50, #f9fafb);
+}
+
+/* ============================================================
+   COCKPIT HERO (admin) — modernização
+   ============================================================ */
+.cockpit-hero {
+  border-radius: var(--radius-2xl, 20px) !important;
+  box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0,0,0,.1)) !important;
+}
+
+.cockpit-kpi {
+  border-radius: var(--radius-lg, 12px) !important;
+  transition: var(--transition-base) !important;
+}
+
+.cockpit-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   RESERVA-DETALHE TIMELINE
+   ============================================================ */
+.timeline-step {
+  transition: var(--transition-base);
+}
+
+.timeline-step:hover {
+  transform: translateX(2px);
+}
+
+/* ============================================================
+   NOTIFICAÇÕES (bell + dropdown)
+   ============================================================ */
+.notif-dot {
+  animation: fmPulse 2s var(--ease-out) infinite;
+}
