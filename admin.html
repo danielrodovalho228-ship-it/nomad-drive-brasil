@@ -157,6 +157,7 @@
     <nav class="admin-side__nav">
       <a href="#cockpit" style="background:#e6f4ec;font-weight:700;color:#0f5132;border-left:3px solid #0f5132;"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 14 21 8"/></svg>🎯 Cockpit CEO</a>
       <a href="#saude"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>🩺 Saúde sistema</a>
+      <a href="#cupons"><svg viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><circle cx="16" cy="14" r="2"/></svg>🎟️ Cupons</a>
       <a href="#crescimento"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>📈 Crescimento</a>
       <a href="#qualidade"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>⭐ Qualidade</a>
       <a href="#visao" class="is-current"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Visão geral</a>
@@ -809,6 +810,52 @@
     <!-- ============================================================
          Fase 40 — CRESCIMENTO
          ============================================================ -->
+
+    <!-- ============================================================
+         Fase 52 — CUPONS / PROMOÇÕES
+         ============================================================ -->
+    <section class="admin-block" id="cupons">
+      <h2>🎟️ Cupons e promoções</h2>
+      <p class="note">Crie códigos promocionais pra Instagram Ads, parcerias, lançamento. Cliente aplica no checkout.</p>
+
+      <!-- Form criar cupom -->
+      <div class="admin-card" style="margin-bottom:14px;">
+        <h3 class="block-title">➕ Criar novo cupom</h3>
+        <form id="newCouponForm">
+          <div class="form__grid">
+            <label class="field"><span>Código</span><input type="text" id="ncCode" placeholder="PRIMEIRO10" required style="text-transform:uppercase;" /></label>
+            <label class="field"><span>Tipo desconto</span><select id="ncType"><option value="percentage">% Percentual</option><option value="fixed_amount">R$ Valor fixo</option></select></label>
+            <label class="field"><span>Valor</span><input type="number" id="ncValue" step="0.01" min="0.01" placeholder="10" required /></label>
+            <label class="field"><span>Aplica em</span><select id="ncAppliesTo"><option value="first_month">1ª mensalidade</option><option value="all_months">Todas mensalidades</option><option value="deposit">Caução</option></select></label>
+            <label class="field"><span>Nome interno</span><input type="text" id="ncName" placeholder="Promoção Instagram" /></label>
+            <label class="field"><span>Campanha</span><input type="text" id="ncCampaign" placeholder="instagram_ads" /></label>
+            <label class="field"><span>Válido até</span><input type="date" id="ncValidUntil" /></label>
+            <label class="field"><span>Uso máximo total</span><input type="number" id="ncMaxTotal" placeholder="vazio = ilimitado" min="1" /></label>
+            <label class="field"><span>Uso máximo por cliente</span><input type="number" id="ncMaxPerClient" value="1" min="1" /></label>
+            <label class="field"><span>Tier mínimo</span><select id="ncMinTier"><option value="">Qualquer</option><option value="silver">Silver+</option><option value="gold">Gold+</option><option value="platinum">Platinum</option></select></label>
+            <label class="field"><input type="checkbox" id="ncOnlyNew" /> <span>Só novos clientes (sem booking prévia)</span></label>
+          </div>
+          <button type="submit" class="btn btn--solid btn--sm">Criar cupom</button>
+        </form>
+      </div>
+
+      <!-- Lista de cupons -->
+      <div class="admin-card">
+        <h3 class="block-title">📋 Cupons criados</h3>
+        <table class="admin-table">
+          <thead><tr>
+            <th>Código</th>
+            <th>Desconto</th>
+            <th>Usos</th>
+            <th>Desconto total dado</th>
+            <th>Receita gerada</th>
+            <th>Campanha</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody id="couponsList"><tr><td colspan="7">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
 
     <!-- ============================================================
          Fase 51 — SAÚDE DO SISTEMA
@@ -3426,6 +3473,86 @@
   }
   window.loadLoyaltyOverview = loadLoyaltyOverview;
 
+  /* ============================================================
+   * Fase 52 — Cupons / Promoções
+   * ============================================================ */
+  function loadCoupons() {
+    var sb = getClient(); if (!sb) return;
+    sb.from('coupon_stats').select('*').then(function (r) {
+      var rows = (r && r.data) || [];
+      var tb = $('couponsList'); if (!tb) return;
+      if (!rows.length) {
+        tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8a948e;padding:14px;">Nenhum cupom criado ainda. Use o form acima.</td></tr>';
+        return;
+      }
+      tb.innerHTML = rows.map(function (c) {
+        var discLabel = c.discount_type === 'percentage'
+          ? c.discount_value + '%'
+          : 'R$ ' + Number(c.discount_value).toFixed(2);
+        var validity = c.valid_until
+          ? 'até ' + new Date(c.valid_until).toLocaleDateString('pt-BR')
+          : 'sem expiração';
+        var status = c.is_active
+          ? '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">✅ Ativo</span>'
+          : '<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;">⛔ Inativo</span>';
+        return '<tr>' +
+          '<td><strong style="font-family:monospace;">' + escapeHtml(c.code) + '</strong><br><small style="color:#8a948e;">' + escapeHtml(c.name || '—') + '</small></td>' +
+          '<td><strong>' + discLabel + '</strong><br><small style="color:#8a948e;">' + validity + '</small></td>' +
+          '<td><strong style="font-size:16px;color:#1e40af;">' + c.uses_count + '</strong><br><small style="color:#8a948e;">' + c.unique_clients + ' únicos</small></td>' +
+          '<td style="font-family:monospace;color:#991b1b;">-R$ ' + Number(c.total_discount_given).toFixed(2) + '</td>' +
+          '<td style="font-family:monospace;color:#065f46;font-weight:700;">R$ ' + Number(c.total_revenue_with_coupon).toFixed(2) + '</td>' +
+          '<td><small style="color:#5b6b63;">' + escapeHtml(c.campaign_source || '—') + '</small></td>' +
+          '<td>' + status + ' <button class="btn btn--outline btn--sm toggleCouponBtn" data-id="' + c.id + '" data-active="' + c.is_active + '" style="margin-left:6px;font-size:11px;">' + (c.is_active ? 'Desativar' : 'Ativar') + '</button></td>' +
+          '</tr>';
+      }).join('');
+      // Bind toggle
+      document.querySelectorAll('.toggleCouponBtn').forEach(function (btn) {
+        btn.onclick = function () {
+          var id = btn.getAttribute('data-id');
+          var currentActive = btn.getAttribute('data-active') === 'true';
+          sb.from('coupons').update({ is_active: !currentActive }).eq('id', id)
+            .then(function (r) { if (!r.error) loadCoupons(); });
+        };
+      });
+    }).catch(function () {});
+  }
+  window.loadCoupons = loadCoupons;
+
+  // Form criar cupom (1x bind)
+  (function bindNewCouponForm() {
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = $('newCouponForm');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var sb = getClient(); if (!sb) return;
+        var payload = {
+          code: $('ncCode').value.trim().toUpperCase(),
+          discount_type: $('ncType').value,
+          discount_value: parseFloat($('ncValue').value),
+          applies_to: $('ncAppliesTo').value,
+          name: $('ncName').value.trim() || null,
+          campaign_source: $('ncCampaign').value.trim() || null,
+          valid_until: $('ncValidUntil').value || null,
+          max_uses_total: $('ncMaxTotal').value ? parseInt($('ncMaxTotal').value, 10) : null,
+          max_uses_per_client: parseInt($('ncMaxPerClient').value, 10) || 1,
+          min_tier: $('ncMinTier').value || null,
+          only_new_clients: $('ncOnlyNew').checked
+        };
+        sb.from('coupons').insert(payload).then(function (r) {
+          if (r.error) {
+            if (window.ndModal) ndModal.alert({ title: 'Erro', body: r.error.message, icon: '⚠️' });
+            else alert('Erro: ' + r.error.message);
+            return;
+          }
+          form.reset();
+          if (window.ndModal) ndModal.alert({ title: 'Cupom criado!', body: 'Compartilhe o código com seus clientes.', icon: '🎟️' });
+          loadCoupons();
+        });
+      });
+    });
+  })();
+
   /* Fase 51 — Dashboard saúde do sistema */
   function loadSystemHealth() {
     var sb = getClient(); if (!sb) return;
@@ -4016,6 +4143,10 @@
     // ----- Fase 51 — Saúde do sistema -----
     loadSystemHealth();
     setInterval(loadSystemHealth, 30000); // refresh a cada 30s
+
+    // ----- Fase 52 — Cupons / Promoções -----
+    loadCoupons();
+    setInterval(loadCoupons, 120000); // refresh a cada 2min
     setInterval(loadGrowth, 60000);
     setInterval(loadQuality, 60000);
 
