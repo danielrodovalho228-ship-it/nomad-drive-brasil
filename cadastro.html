@@ -26,6 +26,21 @@
   position: relative;
   overflow: hidden;
 }
+/* Fase 71: fix mobile — nav fixo + banner top cobriam o titulo em iPhone */
+@media (max-width: 640px) {
+  .signup-hero {
+    padding: 90px 20px 48px !important;
+  }
+  .signup-hero__copy h1 {
+    font-size: clamp(22px, 7vw, 30px) !important;
+    line-height: 1.2 !important;
+  }
+  .signup-hero__sub { font-size: 14.5px !important; }
+}
+@media (max-width: 380px) {
+  .signup-hero { padding: 80px 16px 40px !important; }
+  .signup-hero__copy h1 { font-size: 21px !important; }
+}
 .signup-hero::before {
   content: "";
   position: absolute; inset: 0;
@@ -403,8 +418,8 @@
           <label class="role-card-modern">
             <input type="radio" name="perfil" value="client" />
             <img class="role-card-modern__img"
-              src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=480&h=300&fit=crop&q=80&auto=format"
-              alt="Chaves de carro — alugar" loading="lazy" decoding="async" />
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Cliente sorrindo — quero alugar" loading="lazy" decoding="async" />
             <div class="role-card-modern__body">
               <span class="role-card-modern__tag">Cliente locatário</span>
               <h3 class="role-card-modern__title">Quero alugar um veículo</h3>
