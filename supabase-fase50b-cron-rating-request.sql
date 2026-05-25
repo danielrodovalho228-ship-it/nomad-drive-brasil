@@ -25,6 +25,17 @@ exception when others then null;
 end $$;
 
 -- Agenda novo cron — todo dia às 18:00 UTC (15:00 BRT)
+-- FIX 2026-05-24: agora envia x-cron-secret header pra Edge Function
+-- validar (anti-abuse). REQUER CRON_SECRET configurado nos Secrets
+-- do Supabase E aqui hardcoded (substituir 'COLE-AQUI-O-CRON-SECRET').
+--
+-- COMO SETAR:
+--   1) Gera um secret aleatório: openssl rand -hex 32
+--      OU em qualquer site tipo: https://generate-secret.vercel.app/32
+--   2) Supabase Dashboard → Edge Functions → Secrets
+--      CRON_SECRET = <o valor gerado>
+--   3) Substitui 'COLE-AQUI-O-CRON-SECRET' abaixo pelo MESMO valor
+--   4) Re-roda este SQL
 select cron.schedule(
   'rating_requests_daily',
   '0 18 * * *',
@@ -33,9 +44,10 @@ select cron.schedule(
     url := 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/send-rating-request',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
-      'Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8'
+      'Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8',
+      'x-cron-secret', 'COLE-AQUI-O-CRON-SECRET'
     ),
-    body := jsonb_build_object('source', 'pg_cron_daily')
+    body := jsonb_build_object('source', 'pg_cron_daily', 'cron_secret', 'COLE-AQUI-O-CRON-SECRET')
   );
   $$
 );

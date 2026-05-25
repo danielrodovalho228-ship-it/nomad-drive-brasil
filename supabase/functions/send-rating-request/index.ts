@@ -132,8 +132,32 @@ function emailRatingRequest(d: {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  if (req.method !== "POST" && req.method !== "GET") {
+
+  // FIX CRÍTICO 2026-05-24: aceitava GET — qualquer um com anon key
+  // podia invocar repetidamente (custo Supabase + Resend escalando).
+  // Agora: SÓ POST + valida shared secret no body OU header.
+  if (req.method !== "POST") {
     return json({ error: "Método não permitido." }, 405);
+  }
+
+  // Anti-abuse: exige CRON_SECRET (env var) no body OU header
+  // Sem isso, cron precisa ser atualizado pra mandar o secret
+  const cronSecret = Deno.env.get("CRON_SECRET");
+  if (cronSecret) {
+    const headerSecret = req.headers.get("x-cron-secret");
+    let bodySecret: string | null = null;
+    try {
+      const cloned = req.clone();
+      const body = await cloned.json();
+      bodySecret = body?.cron_secret ?? null;
+    } catch {}
+    if (headerSecret !== cronSecret && bodySecret !== cronSecret) {
+      return json({ error: "unauthorized" }, 403);
+    }
+  }
+  // Se CRON_SECRET não estiver setado, função aceita (modo dev — log warning)
+  if (!cronSecret) {
+    console.warn("CRON_SECRET não configurado — função aberta. Configura em Secrets pra produção.");
   }
 
   const result = { checked: 0, sent: 0, skipped: 0, failed: 0, details: [] as any[] };
@@ -160,24 +184,36 @@ Deno.serve(async (req) => {
       result.checked++;
 
       // 2) Skip se cliente já avaliou
-      const { data: existingRating } = await admin
+      // FIX 2026-05-24: tratar erro de query (RLS, indisponibilidade)
+      // pra não reenviar e-mail acidentalmente quando DB engasga
+      const { data: existingRating, error: ratingErr } = await admin
         .from("ratings")
         .select("id")
         .eq("booking_id", b.id)
         .eq("direction", "client_rates_owner")
         .limit(1);
+      if (ratingErr) {
+        console.error("ratings query failed:", ratingErr.message);
+        result.failed++;
+        continue;  // não envia em caso de dúvida
+      }
       if (Array.isArray(existingRating) && existingRating.length > 0) {
         result.skipped++;
         continue;
       }
 
       // 3) Skip se já mandamos e-mail pra essa booking
-      const { data: priorEmail } = await admin
+      const { data: priorEmail, error: priorEmailErr } = await admin
         .from("admin_audit_logs")
         .select("id")
         .eq("action", "rating_request_email_sent")
         .eq("target_id", b.id)
         .limit(1);
+      if (priorEmailErr) {
+        console.error("audit logs query failed:", priorEmailErr.message);
+        result.failed++;
+        continue;  // não envia em caso de dúvida
+      }
       if (Array.isArray(priorEmail) && priorEmail.length > 0) {
         result.skipped++;
         continue;
