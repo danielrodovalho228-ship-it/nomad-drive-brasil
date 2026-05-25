@@ -291,6 +291,17 @@
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
+  // Fix code-review M1: respeita "Não mostrar de novo" se já clicou antes.
+  // Permite ?force=1 pra ainda ver (útil pro link no header do dashboard).
+  try {
+    var dismissed = localStorage.getItem("ndb-welcome-cliente-dismissed") === "1";
+    var forced = new URLSearchParams(window.location.search).get("force") === "1";
+    if (dismissed && !forced) {
+      window.location.replace("dashboard-cliente.html");
+      return;
+    }
+  } catch (e) {}
+
   var stepsEl = document.getElementById("welcomeSteps");
   var nameEl  = document.getElementById("welcomeName");
   var progLbl = document.getElementById("welcomeProgressLabel");

@@ -170,9 +170,15 @@
       var isOwner = (p.role === "owner" ||
                      roleLblLow.indexOf("proprietár") >= 0 ||
                      dashPathLow.indexOf("proprietario") >= 0);
-      var isClient = !isOwner && (p.role === "client" ||
-                     roleLblLow.indexOf("cliente") >= 0 ||
-                     dashPathLow.indexOf("cliente") >= 0);
+      // Fix code-review M4: cobre variações de label ("Cliente", "Locatário",
+      // "Usuário") usadas em diferentes lugares do app.
+      var isClient = !isOwner && (
+        p.role === "client" ||
+        roleLblLow.indexOf("cliente") >= 0 ||
+        roleLblLow.indexOf("locat") >= 0 ||
+        roleLblLow.indexOf("usu") >= 0 ||
+        dashPathLow.indexOf("cliente") >= 0
+      );
 
       var ctaUrl, ctaText, extraNote;
       if (isOwner) {

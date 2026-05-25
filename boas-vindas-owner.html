@@ -305,6 +305,17 @@
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
+  // Fix code-review M1: respeita "Não mostrar de novo" se já clicou antes.
+  // Permite ?force=1 pra ainda ver (útil pro link no header do dashboard).
+  try {
+    var dismissed = localStorage.getItem("ndb-welcome-owner-dismissed") === "1";
+    var forced = new URLSearchParams(window.location.search).get("force") === "1";
+    if (dismissed && !forced) {
+      window.location.replace("dashboard-proprietario.html");
+      return;
+    }
+  } catch (e) {}
+
   var stepsEl = document.getElementById("welcomeSteps");
   var nameEl  = document.getElementById("welcomeName");
   var progLbl = document.getElementById("welcomeProgressLabel");
@@ -344,15 +355,17 @@
         ctaHref: "dashboard-proprietario.html#vehicles"
       },
       {
-        id: "photos",
-        done: state.hasPhotos,
-        icon: state.hasPhotos ? "✓" : "3",
-        title: "Adicionar fotos e preço",
-        desc: state.hasPhotos
-          ? "Fotos e preço definidos — pronto pra anunciar."
-          : "Sem foto e preço, seu carro não aparece na busca. Use a luz do dia.",
-        ctaText: state.hasPhotos ? "Ver anúncio" : "Adicionar fotos",
-        ctaHref: "dashboard-proprietario.html#vehicles"
+        id: "approved",
+        done: state.hasApproved,
+        icon: state.hasApproved ? "✓" : "3",
+        title: "Veículo aprovado pra rodar",
+        desc: state.hasApproved
+          ? "Pelo menos 1 carro já passou pela vistoria e está liberado."
+          : "Após cadastrar, a equipe + oficina credenciada vistoria seu carro. Análise em até 48h úteis.",
+        ctaText: state.hasApproved ? "Ver meus carros" : "Como funciona vistoria",
+        ctaHref: state.hasApproved
+          ? "dashboard-proprietario.html#vehicles"
+          : "proprietarios.html#vistoria"
       },
       {
         id: "booking",
@@ -438,13 +451,17 @@
       var c = a.client();
       if (!c) return;
 
-      // Carrega em paralelo: profile (nome + stripe status) + vehicles + bookings
+      // Carrega em paralelo: profile (nome + stripe) + vehicles + bookings
+      // FIX code-review C1+C2: vehicles NÃO tem coluna price_monthly nem relação photos.
+      // Schema real (supabase-schema.sql): vehicles tem só status (entity_status).
+      // hasApproved = pelo menos 1 vehicle com status='aprovado' (vistoria passou =
+      // fotos validadas + tudo OK pra rodar). É o sinal mais forte que existe.
       Promise.all([
         c.from("profiles")
           .select("full_name, stripe_account_id, stripe_account_status, main_role, verification_status")
           .eq("id", s.user.id).maybeSingle(),
         c.from("vehicles")
-          .select("id, photos_count:photos(count), price_monthly", { count: "exact" })
+          .select("id, status", { count: "exact" })
           .eq("owner_id", s.user.id),
         c.from("bookings")
           .select("id", { count: "exact", head: true })
@@ -461,11 +478,10 @@
                        profile.stripe_account_status === "verified" ||
                        (profile.stripe_account_id && profile.stripe_account_status !== "pending" && profile.stripe_account_status !== "rejected");
         var hasCar = vCount > 0;
-        // hasPhotos: pelo menos 1 carro com photos > 0 E price definido
-        var hasPhotos = vehicles.some(function (v) {
-          var hasPics = v.photos_count && (Array.isArray(v.photos_count) ? v.photos_count[0] && v.photos_count[0].count > 0 : v.photos_count > 0);
-          var hasPrice = v.price_monthly != null && Number(v.price_monthly) > 0;
-          return hasPics && hasPrice;
+        // Veículo "pronto pra rodar" = passou pela vistoria (status=aprovado).
+        // Implica: fotos validadas + checklist completo + tudo ok.
+        var hasApproved = vehicles.some(function (v) {
+          return v.status === "aprovado" || v.status === "aprovado_com_ressalvas";
         });
         var hasBooking = bCount > 0;
 
@@ -473,7 +489,7 @@
           stripeOk: !!stripeOk,
           hasCar: hasCar,
           carCount: vCount,
-          hasPhotos: !!hasPhotos,
+          hasApproved: hasApproved,
           hasBooking: hasBooking
         });
       }).catch(function (err) {
@@ -482,7 +498,7 @@
         nameEl.textContent = firstName(s.user.user_metadata && s.user.user_metadata.full_name);
         renderSteps({
           stripeOk: false, hasCar: false, carCount: 0,
-          hasPhotos: false, hasBooking: false
+          hasApproved: false, hasBooking: false
         });
       });
     });

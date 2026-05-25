@@ -103,11 +103,14 @@
 
   /* ============================================================
    * Fase 56a — Thumbnails realistas nos cards "Para quem é"
+   * Fix code-review M2 + M3: offset aumentado + classe helper em vez
+   * de padding-right inline + scale-only no hover (sem rotate pra
+   * evitar clipping na borda do card com overflow:hidden).
    * ============================================================ */
   .bento-card { position: relative; }
   .bento-card__thumb {
     position: absolute;
-    top: 16px; right: 16px;
+    top: 20px; right: 20px;
     width: 64px; height: 64px;
     border-radius: 50%;
     object-fit: cover;
@@ -118,22 +121,30 @@
     z-index: 1;
   }
   .bento-card:hover .bento-card__thumb {
-    transform: scale(1.08) rotate(-3deg);
+    /* Scale-only — rotate causava chanfro reto no clipping de overflow:hidden */
+    transform: scale(1.10);
     box-shadow: 0 8px 22px rgba(0,0,0,.25);
   }
-  /* Card grande (Turistas) e wide (Nômades): thumb maior */
+  /* Card grande (Turistas) e wide (Nômades): thumb maior + offset maior */
   .bento-card--big .bento-card__thumb,
   .bento-card--wide .bento-card__thumb {
     width: 88px; height: 88px;
-    top: 20px; right: 20px;
+    top: 24px; right: 24px;
     border-color: rgba(255,255,255,.7);
   }
-  /* Em cards normais, reserva espaço pro thumb não cobrir o título */
-  .bento-card:not(.bento-card--big):not(.bento-card--wide) > h3,
-  .bento-card:not(.bento-card--big):not(.bento-card--wide) > p {
-    padding-right: 70px;
+  /* Reserva espaço pro thumb não cobrir o título */
+  .bento-card--has-thumb:not(.bento-card--big):not(.bento-card--wide) > h3,
+  .bento-card--has-thumb:not(.bento-card--big):not(.bento-card--wide) > p {
+    padding-right: 78px;
   }
-  /* Cards accent/gold: o título é branco/escuro mas o thumb fica visível */
+  /* Card grande: padding no h3 só (não no parágrafo, pra texto fluir) */
+  .bento-card--has-thumb.bento-card--big > h3 {
+    padding-right: 110px;
+  }
+  .bento-card--has-thumb.bento-card--wide > div {
+    padding-right: 88px;
+  }
+  /* Cards accent/gold: borda mais sutil pra contrastar com bg colorido */
   .bento-card--accent .bento-card__thumb,
   .bento-card--gold .bento-card__thumb {
     border-color: rgba(255,255,255,.85);
@@ -141,11 +152,13 @@
   @media (max-width: 540px) {
     .bento-card__thumb { width: 52px; height: 52px; top: 12px; right: 12px; border-width: 2px; }
     .bento-card--big .bento-card__thumb,
-    .bento-card--wide .bento-card__thumb { width: 64px; height: 64px; }
-    .bento-card:not(.bento-card--big):not(.bento-card--wide) > h3,
-    .bento-card:not(.bento-card--big):not(.bento-card--wide) > p {
-      padding-right: 56px;
+    .bento-card--wide .bento-card__thumb { width: 60px; height: 60px; top: 14px; right: 14px; }
+    .bento-card--has-thumb:not(.bento-card--big):not(.bento-card--wide) > h3,
+    .bento-card--has-thumb:not(.bento-card--big):not(.bento-card--wide) > p {
+      padding-right: 64px;
     }
+    .bento-card--has-thumb.bento-card--big > h3 { padding-right: 70px; }
+    .bento-card--has-thumb.bento-card--wide > div { padding-right: 64px; }
   }
 </style>
 <div class="top-promo-banner">
@@ -555,12 +568,12 @@
     <!-- Bento Grid moderno (estilo iOS) -->
     <div class="bento-grid fm-stagger" data-fm-reveal>
       <!-- Card grande de destaque -->
-      <div class="bento-card bento-card--big bento-card--accent fm-hover-lift">
+      <div class="bento-card bento-card--big bento-card--accent bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=200&h=200&fit=crop&q=80&auto=format"
           alt="Turista com mala olhando mapa" loading="lazy" decoding="async" />
         <span style="font-size:48px;display:block;margin-bottom:12px;">🌎</span>
-        <h3 style="font-size:22px;font-weight:800;margin:0 0 8px;color:#fff;padding-right:100px;">Turistas estrangeiros</h3>
+        <h3 style="font-size:22px;font-weight:800;margin:0 0 8px;color:#fff;">Turistas estrangeiros</h3>
         <p style="font-size:14.5px;line-height:1.6;opacity:.95;color:#fff;margin:0;">De longa permanência (negócios, estudos, family visa) que precisam de carro <strong>sem o custo e a burocracia</strong> de comprar.</p>
         <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
           <span class="badge-modern" style="background:rgba(255,255,255,.22);color:#fff;">VISA</span>
@@ -568,7 +581,7 @@
         </div>
       </div>
 
-      <div class="bento-card fm-hover-lift">
+      <div class="bento-card bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=160&h=160&fit=crop&q=80&auto=format"
           alt="Profissional em escritório novo" loading="lazy" decoding="async" />
@@ -577,7 +590,7 @@
         <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Mudança de cidade, troca de emprego, consultório novo.</p>
       </div>
 
-      <div class="bento-card fm-hover-lift">
+      <div class="bento-card bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=160&h=160&fit=crop&q=80&auto=format"
           alt="Profissional de saúde com estetoscópio" loading="lazy" decoding="async" />
@@ -586,11 +599,11 @@
         <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Pacientes ou acompanhantes em tratamento prolongado em UDI.</p>
       </div>
 
-      <div class="bento-card bento-card--wide bento-card--gold fm-hover-lift">
+      <div class="bento-card bento-card--wide bento-card--gold bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=200&h=200&fit=crop&q=80&auto=format"
           alt="Nômade digital trabalhando com laptop em café" loading="lazy" decoding="async" />
-        <div style="display:flex;align-items:center;gap:14px;padding-right:80px;">
+        <div style="display:flex;align-items:center;gap:14px;">
           <span style="font-size:40px;">💻</span>
           <div>
             <h3 style="font-size:18px;font-weight:800;margin:0 0 4px;">Nômades digitais</h3>
@@ -599,7 +612,7 @@
         </div>
       </div>
 
-      <div class="bento-card fm-hover-lift">
+      <div class="bento-card bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=160&h=160&fit=crop&q=80&auto=format"
           alt="Família feliz em mudança com caixas" loading="lazy" decoding="async" />
@@ -608,7 +621,7 @@
         <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Em transição de casa, reforma, aguardando veículo próprio.</p>
       </div>
 
-      <div class="bento-card fm-hover-lift">
+      <div class="bento-card bento-card--has-thumb fm-hover-lift">
         <img class="bento-card__thumb"
           src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=160&h=160&fit=crop&q=80&auto=format"
           alt="Equipe pequena em escritório" loading="lazy" decoding="async" />
