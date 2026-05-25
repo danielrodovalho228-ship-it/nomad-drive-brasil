@@ -14,6 +14,23 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+  /* Fase 58c: img realista em vez de emoji nos fit-card */
+  img.fit-card__ico {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    background: #f0f0f0;
+    flex-shrink: 0;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .fit-card:hover img.fit-card__ico { transform: scale(1.08); }
+  @media (max-width: 540px) {
+    img.fit-card__ico { width: 48px; height: 48px; }
+  }
+</style>
 </head>
 <body>
 
@@ -90,27 +107,37 @@
       <div class="fit-col fit-col--yes">
         <div class="fit-col__head">✅ Pode fazer sentido para você</div>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">🅿️</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1493238792000-8113da705763?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Carro estacionado em garagem" loading="lazy" decoding="async" />
           <div><h4>Carro parado na garagem</h4>
           <p>Você tem um veículo que quase não usa e continua pagando IPVA, seguro, manutenção e depreciação mesmo com ele parado.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">👨‍👩‍👧</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1542362567-b07e54358753?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Carro clássico de família" loading="lazy" decoding="async" />
           <div><h4>Carro de herança ou família</h4>
           <p>Você recebeu um veículo de herança, de familiar ou mantém um carro extra que não faz parte da sua rotina diária.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">🚙</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Dois carros na garagem" loading="lazy" decoding="async" />
           <div><h4>Segundo carro da casa</h4>
           <p>A família tem mais de um veículo e um deles passa muitos dias sem uso.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">🕒</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1501139083538-0139583c060f?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Relógio — tempo parado" loading="lazy" decoding="async" />
           <div><h4>Veículo subutilizado</h4>
           <p>O carro está em bom estado, mas roda pouco, fica parado durante a semana ou é usado apenas eventualmente.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">📆</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Calendário mensal" loading="lazy" decoding="async" />
           <div><h4>Aceita disponibilidade mensal</h4>
           <p>Você entende que o veículo pode ficar alugado por 30 dias ou mais e não precisa dele todos os dias.</p></div>
         </article>
@@ -119,22 +146,30 @@
       <div class="fit-col fit-col--no">
         <div class="fit-col__head">⚠️ Talvez não seja ideal para você</div>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">🔁</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Pessoa dirigindo no dia a dia" loading="lazy" decoding="async" />
           <div><h4>Você depende do carro diariamente</h4>
           <p>Se o veículo é essencial para trabalho, família, faculdade, consultas, viagens frequentes ou rotina diária, talvez esse modelo não seja adequado.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">⚡</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Carro em movimento rápido" loading="lazy" decoding="async" />
           <div><h4>Você precisa do carro sem aviso prévio</h4>
           <p>Como as locações podem ser mensais ou superiores a 30 dias, o carro não deve ser cadastrado se você precisa dele disponível a qualquer momento.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">🔧</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Ferramentas — manutenção" loading="lazy" decoding="async" />
           <div><h4>O carro está com manutenção pendente</h4>
           <p>Veículos com problemas mecânicos, documentação irregular ou manutenção atrasada não devem entrar na frota antes de regularização.</p></div>
         </article>
         <article class="fit-card">
-          <span class="fit-card__ico" aria-hidden="true">📉</span>
+          <img class="fit-card__ico"
+            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=160&h=160&fit=crop&q=80&auto=format"
+            alt="Documentos — renda variável" loading="lazy" decoding="async" />
           <div><h4>Você espera renda fixa e previsível</h4>
           <p>A Nomade Drive pode estimar potencial de ganhos, mas a renda depende de demanda, aprovação, disponibilidade, contrato e ocupação — varia mês a mês e não é assegurada.</p></div>
         </article>

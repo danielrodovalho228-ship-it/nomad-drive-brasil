@@ -14,6 +14,20 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+  /* Fase 58c: img realista em vez de emoji nos partner-card */
+  img.partner-card__ico {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 3px 10px rgba(0,0,0,.12);
+    background: #f0f0f0;
+    margin-bottom: 4px;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .partner-card:hover img.partner-card__ico { transform: scale(1.08); }
+</style>
 </head>
 <body>
 
@@ -113,7 +127,9 @@
     </div>
     <div class="partner-grid">
       <article class="partner-card">
-        <span class="partner-card__ico">👤</span>
+        <img class="partner-card__ico"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Pessoa física parceira" loading="lazy" decoding="async" />
         <h3>Pessoa física</h3>
         <p class="partner-card__who">Indica amigos, familiares e conhecidos.</p>
         <strong class="partner-card__benef">Benefícios</strong>
@@ -125,7 +141,9 @@
         </ul>
       </article>
       <article class="partner-card">
-        <span class="partner-card__ico">🏢</span>
+        <img class="partner-card__ico"
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Empresa — prédio corporativo" loading="lazy" decoding="async" />
         <h3>Empresa</h3>
         <p class="partner-card__who">Indica colaboradores, clientes ou parceiros.</p>
         <strong class="partner-card__benef">Benefícios</strong>
@@ -137,7 +155,9 @@
         </ul>
       </article>
       <article class="partner-card">
-        <span class="partner-card__ico">🔧</span>
+        <img class="partner-card__ico"
+          src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Ferramentas de oficina" loading="lazy" decoding="async" />
         <h3>Oficina</h3>
         <p class="partner-card__who">Oficina parceira ou credenciada na rede.</p>
         <strong class="partner-card__benef">Benefícios</strong>
@@ -149,7 +169,9 @@
         </ul>
       </article>
       <article class="partner-card">
-        <span class="partner-card__ico">📣</span>
+        <img class="partner-card__ico"
+          src="https://images.unsplash.com/photo-1485579149621-3123dd979885?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Microfone — influenciador" loading="lazy" decoding="async" />
         <h3>Influenciador local</h3>
         <p class="partner-card__who">Divulga para a audiência da região.</p>
         <strong class="partner-card__benef">Benefícios</strong>
@@ -161,7 +183,9 @@
         </ul>
       </article>
       <article class="partner-card">
-        <span class="partner-card__ico">🧭</span>
+        <img class="partner-card__ico"
+          src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Consultor — escritório profissional" loading="lazy" decoding="async" />
         <h3>Corretor / consultor</h3>
         <p class="partner-card__who">Corretor de seguros, despachante, consultor automotivo.</p>
         <strong class="partner-card__benef">Benefícios</strong>

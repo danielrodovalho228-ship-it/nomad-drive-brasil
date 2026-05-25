@@ -14,6 +14,21 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+  /* Fase 58c: img realista em vez de emoji nos prot-card */
+  img.prot-card__ico {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 0 12px;
+    border: 2px solid #fff;
+    box-shadow: 0 3px 10px rgba(0,0,0,.12);
+    background: #f0f0f0;
+    transition: transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .prot-card:hover img.prot-card__ico { transform: scale(1.08); }
+</style>
 </head>
 <body>
 
@@ -108,47 +123,65 @@
     </div>
     <div class="prot-cards">
       <article class="prot-card">
-        <span class="prot-card__ico">🔒</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Cadeado — segurança" loading="lazy" decoding="async" />
         <h3>Roubo e furto</h3>
         <p>Proteção em casos de roubo ou furto do veículo, conforme as regras e a elegibilidade do plano. Sujeita a análise e ao registro de boletim de ocorrência.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">💥</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Ferramentas — reparo de colisão" loading="lazy" decoding="async" />
         <h3>Colisão</h3>
         <p>Contempla danos de colisão ao veículo locado, conforme o plano e as condições. Em sinistro coberto, aplica-se a cota de participação.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🚙</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Aperto de mãos — entendimento com terceiros" loading="lazy" decoding="async" />
         <h3>Danos a terceiros</h3>
         <p>Proteção para danos materiais e corporais causados a terceiros, dentro dos limites e condições previstos no plano contratado.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🧍</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Família protegida no carro" loading="lazy" decoding="async" />
         <h3>APP — Acidentes Pessoais de Passageiros</h3>
         <p>Amparo a passageiros em caso de acidente, conforme o plano. Limites e condições definidos no contrato.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🩺</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Profissional de saúde" loading="lazy" decoding="async" />
         <h3>Despesas médicas</h3>
         <p>Apoio a despesas médicas decorrentes de acidente, dentro dos limites previstos no plano e nas condições contratadas.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🔁</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Chaves de carro reserva" loading="lazy" decoding="async" />
         <h3>Carro reserva</h3>
         <p>Veículo substituto em situações previstas, conforme a disponibilidade da rede e as regras do plano.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🛻</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Guincho — assistência 24h" loading="lazy" decoding="async" />
         <h3>Guincho e assistência 24h</h3>
         <p>Reboque e assistência em caso de pane ou acidente, conforme a cobertura e os limites do plano.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">🪟</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Farol de carro" loading="lazy" decoding="async" />
         <h3>Vidros, faróis e lanternas</h3>
         <p>Proteção para vidros, faróis e lanternas. Em geral com cota de participação reduzida, conforme o plano.</p>
       </article>
       <article class="prot-card">
-        <span class="prot-card__ico">📊</span>
+        <img class="prot-card__ico"
+          src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=160&h=160&fit=crop&q=80&auto=format"
+          alt="Documentos — cota de participação" loading="lazy" decoding="async" />
         <h3>Cota de participação</h3>
         <p>Valor de participação do condutor quando um sinistro coberto acontece e a proteção é acionada. Definida por categoria e plano, informada no contrato.</p>
       </article>
