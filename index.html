@@ -15,10 +15,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="design-tokens.css?v=20260524-bento-1700" />
-<link rel="stylesheet" href="style.css?v=20260524-bento-1700" />
-<link rel="stylesheet" href="style-animations.css?v=20260524-bento-1700" />
-<link rel="stylesheet" href="style-components-modern.css?v=20260524-bento-1700" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 
 <!-- Fase 47: Schema.org markup pra SEO (LocalBusiness + Service) -->
 <script type="application/ld+json">
@@ -271,14 +271,36 @@
   </div>
 </section>
 
-<!-- ============ TRUST BAR ============ -->
-<section class="trustbar" aria-label="Garantias">
-  <div class="container trustbar__inner">
-    <div class="trustbar__item"><strong>Contrato</strong><span>de locação registrado</span></div>
-    <div class="trustbar__item"><strong>Veículos aprovados</strong><span>análise documental e técnica</span></div>
-    <div class="trustbar__item"><strong>Vistoria</strong><span>com foto e vídeo</span></div>
-    <div class="trustbar__item"><strong>Atendimento humano</strong><span>por WhatsApp</span></div>
-    <div class="trustbar__item"><strong>Disponibilidade</strong><span>sob confirmação</span></div>
+<!-- ============ TRUST BAR (Fase 53d: bento + ícones grandes) ============ -->
+<section class="section" aria-label="Garantias" style="padding:32px 0;background:#fff;">
+  <div class="container">
+    <div class="bento-grid fm-stagger" data-fm-reveal style="grid-template-columns:repeat(5,1fr);">
+      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;margin-bottom:4px;">📄</div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Contrato</div>
+        <small style="font-size:11px;color:var(--color-gray-500);">registrado</small>
+      </div>
+      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;margin-bottom:4px;">✅</div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Veículos aprovados</div>
+        <small style="font-size:11px;color:var(--color-gray-500);">análise técnica</small>
+      </div>
+      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;margin-bottom:4px;">📸</div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Vistoria</div>
+        <small style="font-size:11px;color:var(--color-gray-500);">foto e vídeo</small>
+      </div>
+      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;margin-bottom:4px;">💬</div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Suporte humano</div>
+        <small style="font-size:11px;color:var(--color-gray-500);">WhatsApp</small>
+      </div>
+      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
+        <div style="font-size:28px;margin-bottom:4px;">🛡️</div>
+        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Proteção</div>
+        <small style="font-size:11px;color:var(--color-gray-500);">por contrato</small>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -320,26 +342,91 @@
 </section>
 
 <!-- ============ PREÇOS ============ -->
+<!-- ============ PREÇOS (Fase 53d: pricing tiers modernos) ============ -->
 <section class="section section--surface" id="precos">
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Preços</span>
-      <h2>Faixas de referência por categoria</h2>
-      <p>O valor final depende de datas, categoria, quilometragem, caução, proteção, disponibilidade e da análise do condutor — e é confirmado por escrito.</p>
+    <div class="section-header-modern" data-fm-reveal>
+      <span class="section-header-modern__eyebrow">Preços</span>
+      <h2 class="section-header-modern__title">Escolha sua <em>categoria</em></h2>
+      <p class="section-header-modern__sub">Faixas de referência por categoria. O valor final depende de datas, quilometragem, proteção e análise — confirmado por escrito.</p>
     </div>
-    <div class="tiers">
-      <article class="tier"><span class="tier__cat">Econômico</span><div class="tier__price">R$ 1.400 – 2.000<small>/mês*</small></div><p class="tier__desc">Hatch compacto, econômico no consumo. Ideal para uso urbano.</p></article>
-      <article class="tier tier--featured"><span class="tier__cat">Confort</span><div class="tier__price">R$ 2.000 – 3.600<small>/mês*</small></div><p class="tier__desc">Sedãs e hatches médios, automáticos. Categoria mais procurada.</p></article>
-      <article class="tier"><span class="tier__cat">Premium</span><div class="tier__price">R$ 3.500 – 5.500<small>/mês*</small></div><p class="tier__desc">SUVs e sedãs premium. Mais espaço e conforto de estrada.</p></article>
-      <article class="tier"><span class="tier__cat">Luxo</span><div class="tier__price">Sob consulta</div><p class="tier__desc">Alto padrão. Condições avaliadas caso a caso.</p></article>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:24px;align-items:stretch;" class="fm-stagger" data-fm-reveal>
+      <!-- Econômico -->
+      <div class="pricing-tier fm-hover-lift">
+        <span class="badge-modern badge-modern--info" style="margin-bottom:12px;">🚗 Econômico</span>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 1.400<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–2.000/mês</small></div>
+        <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Hatch compacto, econômico no consumo. Ideal para uso urbano.</p>
+        <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
+          <li>✓ Consumo até 14km/L</li>
+          <li>✓ 4 lugares confortáveis</li>
+          <li>✓ Câmbio manual ou auto</li>
+        </ul>
+        <a href="#orcamento" class="btn-modern btn-modern--outline" style="width:100%;justify-content:center;">Pedir orçamento</a>
+      </div>
+
+      <!-- Confort (featured) -->
+      <div class="pricing-tier pricing-tier--featured fm-hover-lift">
+        <span class="badge-modern badge-modern--brand" style="margin-bottom:12px;">⭐ Confort · MAIS PROCURADA</span>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 2.000<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–3.600/mês</small></div>
+        <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Sedãs e hatches médios, automáticos. Categoria mais procurada.</p>
+        <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
+          <li>✓ Câmbio automático</li>
+          <li>✓ Ar-condicionado digital</li>
+          <li>✓ Central multimídia</li>
+          <li>✓ Bancos em couro</li>
+        </ul>
+        <a href="#orcamento" class="btn-modern btn-modern--primary fm-hover-glow" style="width:100%;justify-content:center;">Pedir orçamento <span class="btn-modern__arrow">→</span></a>
+      </div>
+
+      <!-- Premium -->
+      <div class="pricing-tier fm-hover-lift">
+        <span class="badge-modern badge-modern--accent" style="margin-bottom:12px;">💎 Premium</span>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 3.500<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–5.500/mês</small></div>
+        <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">SUVs e sedãs premium. Mais espaço e conforto de estrada.</p>
+        <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
+          <li>✓ SUV ou sedã grande</li>
+          <li>✓ Teto solar (alguns)</li>
+          <li>✓ Bancos elétricos</li>
+          <li>✓ Sensores avançados</li>
+        </ul>
+        <a href="#orcamento" class="btn-modern btn-modern--outline" style="width:100%;justify-content:center;">Pedir orçamento</a>
+      </div>
+
+      <!-- Luxo -->
+      <div class="pricing-tier fm-hover-lift">
+        <span class="badge-modern" style="margin-bottom:12px;background:#1f2937;color:#fbbf24;">👑 Luxo</span>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">Sob consulta</div>
+        <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Alto padrão. Condições avaliadas caso a caso.</p>
+        <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
+          <li>✓ Veículos top de linha</li>
+          <li>✓ Para ocasiões especiais</li>
+          <li>✓ Aprovação caso a caso</li>
+        </ul>
+        <a href="#orcamento" class="btn-modern btn-modern--ghost" style="width:100%;justify-content:center;">Falar com a gente</a>
+      </div>
     </div>
-    <div class="discount-strip">
-      <span><strong>1 mês</strong> · valor cheio da categoria</span>
-      <span><strong>2 meses</strong> · cerca de 5% de desconto por mês</span>
-      <span><strong>3+ meses</strong> · cerca de 10% de desconto · condições customizadas</span>
+
+    <!-- Desconto strip estilizado -->
+    <div class="bento-grid" style="margin-top:28px;grid-template-columns:repeat(3,1fr);">
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#e8f6ee 0%,#f4f5f7 100%);">
+        <div style="font-size:28px;font-weight:800;color:var(--color-brand-500);font-family:var(--font-display);">1 mês</div>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);">valor cheio da categoria</p>
+      </div>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#fef9c3 0%,#f4f5f7 100%);border-color:var(--color-accent-300);">
+        <div style="font-size:28px;font-weight:800;color:var(--color-accent-700);font-family:var(--font-display);">~5% off</div>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);"><strong>2 meses</strong> — desconto por mês</p>
+      </div>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#dbeafe 0%,#f4f5f7 100%);border-color:var(--color-info);">
+        <div style="font-size:28px;font-weight:800;color:#1e40af;font-family:var(--font-display);">~10% off</div>
+        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);"><strong>3+ meses</strong> · condições custom</p>
+      </div>
     </div>
-    <p class="note note--center">* Valores são exemplos de referência. Sujeitos a disponibilidade, categoria, caução, análise e contrato.</p>
-    <div class="precos-cta"><a href="#orcamento" class="btn btn--solid btn--lg">Pedir meu orçamento</a></div>
+
+    <p class="note note--center" style="margin-top:20px;">* Valores são exemplos de referência. Sujeitos a disponibilidade, categoria, caução, análise e contrato.</p>
+    <div class="precos-cta" style="text-align:center;margin-top:24px;">
+      <a href="#orcamento" class="btn-modern btn-modern--primary btn-modern--lg fm-hover-glow">Pedir meu orçamento <span class="btn-modern__arrow">→</span></a>
+    </div>
   </div>
 </section>
 
@@ -734,8 +821,8 @@
 <script src="supabase-config.js" defer></script>
 <script src="auth.js" defer></script>
 <script src="car-data.js" defer></script>
-<script src="script.js?v=20260524-bento-1700" defer></script>
-<script src="fm-reveal.js?v=20260524-bento-1700" defer></script>
+<script src="script.js?v=20260524-modern-1800" defer></script>
+<script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
 
 <!-- Fase 47: Mostra sticky CTA só após scroll de 600px (não polui o topo) -->
 <script>
