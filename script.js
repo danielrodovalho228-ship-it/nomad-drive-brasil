@@ -34,6 +34,49 @@ var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
 var CAT_LABEL = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
 function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 
+/* ---- Fase 57c: fallback de imagem da frota (Unsplash por tier) ---- */
+var FLEET_FALLBACK = {
+  // Cada URL é uma foto Unsplash genérica do tipo de carro. ?w=480&h=320 = card thumb.
+  A: "https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=480&h=320&fit=crop&q=80&auto=format", // hatch compacto
+  B: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=480&h=320&fit=crop&q=80&auto=format", // sedan mediano
+  C: "https://images.unsplash.com/photo-1568844293986-8d0400bd4745?w=480&h=320&fit=crop&q=80&auto=format", // SUV premium
+  D: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=480&h=320&fit=crop&q=80&auto=format"  // luxo
+};
+// Placeholder SVG inline (último recurso — se até o Unsplash falhar)
+function fleetPlaceholderSVG(tier) {
+  var labels = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
+  var label = labels[tier] || "Veículo";
+  var grad = tier === "D"
+    ? "linear-gradient(135deg,#1f2937,#374151)"
+    : "linear-gradient(135deg,#145f3e,#1a7a4f)";
+  return "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320">' +
+      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="#145f3e"/><stop offset="100%" stop-color="#1a7a4f"/>' +
+      '</linearGradient></defs>' +
+      '<rect width="480" height="320" fill="url(#g)"/>' +
+      '<text x="240" y="160" font-family="Inter,sans-serif" font-size="44" fill="rgba(255,255,255,.95)" text-anchor="middle" font-weight="700">🚗</text>' +
+      '<text x="240" y="220" font-family="Inter,sans-serif" font-size="22" fill="rgba(255,255,255,.85)" text-anchor="middle" font-weight="600">' + label + '</text>' +
+    '</svg>'
+  );
+}
+// Handler de erro: tenta Unsplash → placeholder SVG
+function fleetImgFallback(img, tier) {
+  // Step 1: imagem local falhou → tenta Unsplash do tier
+  if (img.dataset.fallbackStep !== "unsplash" && img.dataset.fallbackStep !== "svg") {
+    img.dataset.fallbackStep = "unsplash";
+    img.src = FLEET_FALLBACK[tier] || FLEET_FALLBACK.A;
+    return;
+  }
+  // Step 2: Unsplash também falhou → SVG placeholder local (não pode falhar)
+  if (img.dataset.fallbackStep === "unsplash") {
+    img.dataset.fallbackStep = "svg";
+    img.src = fleetPlaceholderSVG(tier);
+  }
+}
+// Expõe globalmente pro onerror inline poder chamar
+window.fleetImgFallback = fleetImgFallback;
+
 /* ====================================================================
    NAV — scroll state + drawer mobile
    ==================================================================== */
@@ -138,7 +181,7 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     a.setAttribute("data-tier", c.tier);
     a.innerHTML =
       '<div class="fleet-car__img"><img src="images/car-' + c.id + '-1.jpg" alt="' + c.name +
-        '" loading="lazy" onerror="this.style.display=\'none\'" /></div>' +
+        '" loading="lazy" onerror="window.fleetImgFallback(this, \'' + c.tier + '\')" /></div>' +
       '<div class="fleet-car__body">' +
         '<span class="fleet-car__cat">' + (CAT_LABEL[c.tier] || "") + '</span>' +
         '<span class="fleet-car__name">' + c.name + '</span>' +
@@ -187,7 +230,7 @@ function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
     img.src = "images/car-" + c.id + "-1.jpg";
     img.alt = c.name;
     img.loading = "lazy";
-    img.onerror = function () { slide.style.display = "none"; };
+    img.onerror = function () { window.fleetImgFallback(img, c.tier); };
     var cap = document.createElement("span");
     cap.className = "hero-slide__cap";
     cap.textContent = c.name + " — ver detalhes →";
