@@ -10,227 +10,277 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="design-tokens.css?v=20260525b" />
-<link rel="stylesheet" href="style.css?v=20260525b" />
-<link rel="stylesheet" href="style-animations.css?v=20260525b" />
-<link rel="stylesheet" href="style-components-modern.css?v=20260525b" />
-<link rel="stylesheet" href="style-dashboards-modern.css?v=20260525b" />
+<link rel="stylesheet" href="design-tokens.css?v=20260525c" />
+<link rel="stylesheet" href="style.css?v=20260525c" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260525c" />
 <style>
-/* ============================================================
- * Fase 64 — Boas-vindas cliente RESPONSIVO + sem "AI"
- * ============================================================ */
 * { box-sizing: border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f8f6;
+  color: #14201b;
+  margin: 0;
+  line-height: 1.5;
+}
 
-.bv-hero {
-  background: linear-gradient(135deg, #0f5132 0%, #1a7a4f 50%, #20c997 100%);
+/* ============================================================
+ * Fase 67 — Hero ASIMÉTRICO compacto com avatar
+ * ============================================================ */
+.wcm-hero {
+  background:
+    linear-gradient(135deg, #0f5132 0%, #1a7a4f 60%, #20c997 100%);
   color: #fff;
-  padding: 48px 20px 72px;
+  padding: 28px 24px 36px;
   position: relative;
   overflow: hidden;
-  min-height: auto;
 }
-.bv-hero::before {
+.wcm-hero::before {
   content: "";
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(circle at 18% 25%, rgba(255,255,255,.12) 0, transparent 38%),
-    radial-gradient(circle at 82% 75%, rgba(212,175,55,.22) 0, transparent 38%);
+    radial-gradient(circle at 15% 0%, rgba(255,255,255,.12) 0, transparent 35%),
+    radial-gradient(circle at 88% 100%, rgba(255,217,102,.22) 0, transparent 38%);
   pointer-events: none;
 }
-.bv-hero__inner {
-  max-width: 760px;
+.wcm-hero__inner {
+  max-width: 1100px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  text-align: center;
-  padding: 0 12px;
-}
-.bv-hero__badge {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 22px;
   align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,.16);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 7px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 18px;
-  border: 1px solid rgba(255,255,255,.28);
-  animation: bv-pop .55s cubic-bezier(.34,1.56,.64,1) both;
 }
-.bv-hero__badge svg { width: 16px; height: 16px; }
 
-.bv-hero h1 {
+.wcm-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd966 0%, #f4c430 100%);
+  color: #14201b;
+  display: flex; align-items: center; justify-content: center;
   font-family: 'Sora', sans-serif;
-  font-size: clamp(26px, 6vw, 44px);
+  font-size: 30px;
   font-weight: 800;
-  margin: 0 0 14px;
-  line-height: 1.15;
-  letter-spacing: -.5px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-  animation: bv-fade-up .55s ease .12s both;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(255,193,7,.3);
+  border: 3px solid rgba(255,255,255,.4);
 }
-.bv-hero h1 .bv-hero__name {
+
+.wcm-greet {
+  min-width: 0;
+}
+.wcm-greet__hello {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px;
   color: #ffd966;
-  display: inline-block;
-  max-width: 100%;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.wcm-greet__hello svg { width: 14px; height: 14px; }
+.wcm-greet__name {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(20px, 3.2vw, 30px);
+  font-weight: 800;
+  margin: 0 0 4px;
+  line-height: 1.15;
   overflow-wrap: break-word;
 }
-.bv-hero__sub {
-  font-size: clamp(14.5px, 2.2vw, 16.5px);
-  max-width: 560px;
-  margin: 0 auto 28px;
-  opacity: .94;
-  line-height: 1.55;
-  animation: bv-fade-up .55s ease .25s both;
+.wcm-greet__sub {
+  font-size: 13.5px;
+  opacity: .9;
+  margin: 0;
+  line-height: 1.5;
 }
-.bv-hero__progress {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,.14);
-  padding: 12px 20px;
+
+.wcm-progress-pill {
+  background: rgba(255,255,255,.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 18px;
   border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  text-align: center;
+  flex-shrink: 0;
+}
+.wcm-progress-pill__num {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+}
+.wcm-progress-pill__num em {
   font-size: 14px;
   font-weight: 600;
-  border: 1px solid rgba(255,255,255,.22);
-  animation: bv-fade-up .55s ease .4s both;
-  flex-wrap: wrap;
-  justify-content: center;
+  opacity: .8;
+  font-style: normal;
 }
-.bv-hero__progress-bar {
-  width: 160px;
-  height: 8px;
-  background: rgba(255,255,255,.25);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.bv-hero__progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ffd966 0%, #ffc107 100%);
-  border-radius: 999px;
-  width: 0%;
-  transition: width 1.4s cubic-bezier(.22,1,.36,1);
-  box-shadow: 0 0 12px rgba(255,193,7,.5);
-}
-@keyframes bv-pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
-@keyframes bv-fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Steps section */
-.bv-steps-section {
-  max-width: 780px;
-  margin: -42px auto 56px;
-  padding: 0 16px;
-  position: relative;
-  z-index: 2;
+.wcm-progress-pill__label {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.8);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  display: block;
+  margin-top: 2px;
 }
 
-.bv-step {
+@media (max-width: 720px) {
+  .wcm-hero__inner {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 14px 16px;
+  }
+  .wcm-progress-pill {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .wcm-progress-pill__num { display: inline; }
+  .wcm-progress-pill__label { display: inline; margin-top: 0; }
+}
+@media (max-width: 420px) {
+  .wcm-hero { padding: 20px 18px 28px; }
+  .wcm-avatar { width: 56px; height: 56px; font-size: 24px; }
+  .wcm-greet__name { font-size: 20px; }
+}
+
+/* ============================================================
+ * Steps section
+ * ============================================================ */
+.wcm-body {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.wcm-section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: #14201b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wcm-section-title svg { width: 18px; height: 18px; color: #145f3e; }
+
+.wcm-steps { display: flex; flex-direction: column; gap: 12px; }
+
+.wcm-step {
   background: #fff;
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 14px;
-  box-shadow: 0 8px 28px rgba(20,40,30,.08), 0 2px 4px rgba(0,0,0,.03);
+  border-radius: 14px;
+  padding: 18px 20px;
   display: grid;
-  grid-template-columns: 56px 1fr auto;
+  grid-template-columns: 48px 1fr auto;
   gap: 16px;
   align-items: center;
-  border: 2px solid transparent;
-  transition: transform .25s, box-shadow .25s, border-color .25s;
-  opacity: 0;
-  animation: bv-fade-up .5s ease both;
+  border: 1px solid #e5e9e6;
+  box-shadow: 0 2px 8px rgba(20,40,30,.04);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
   position: relative;
+  opacity: 0;
+  animation: wcm-fade-up .4s ease both;
 }
-.bv-step:nth-child(1) { animation-delay: .5s; }
-.bv-step:nth-child(2) { animation-delay: .6s; }
-.bv-step:nth-child(3) { animation-delay: .7s; }
-.bv-step:nth-child(4) { animation-delay: .8s; }
+.wcm-step:nth-child(1) { animation-delay: .08s; }
+.wcm-step:nth-child(2) { animation-delay: .16s; }
+.wcm-step:nth-child(3) { animation-delay: .24s; }
+.wcm-step:nth-child(4) { animation-delay: .32s; }
 
-.bv-step--done {
-  background: linear-gradient(135deg, #f8fdf9 0%, #f0f9f3 100%);
+.wcm-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(20,40,30,.08);
+}
+
+/* Variant cores por tipo de step */
+.wcm-step--done {
+  background: linear-gradient(135deg, #f0f9f3 0%, #e8f5ec 100%);
   border-color: #198754;
 }
-.bv-step--current {
+.wcm-step--current {
   border-color: #ffc107;
-  box-shadow: 0 12px 32px rgba(255,193,7,.20), 0 4px 8px rgba(0,0,0,.05);
+  border-width: 2px;
+  box-shadow: 0 10px 28px rgba(255,193,7,.18);
+  padding: 17px 19px;
 }
-.bv-step--current::after {
-  content: "PRÓXIMO PASSO";
+.wcm-step--current::after {
+  content: "Próximo";
   position: absolute;
   top: -10px;
-  right: 18px;
+  left: 16px;
   background: #ffc107;
   color: #14201b;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 999px;
   font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: .8px;
-  box-shadow: 0 3px 10px rgba(255,193,7,.45);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  box-shadow: 0 3px 8px rgba(255,193,7,.4);
 }
 
-.bv-step__icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #e9ecef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Sora', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
+.wcm-step__icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: #f0f3f1;
   color: #6b7670;
-  transition: background .3s, color .3s, transform .3s;
   flex-shrink: 0;
+  transition: background .25s, color .25s;
 }
-.bv-step--done .bv-step__icon {
-  background: linear-gradient(135deg, #198754, #145f3e);
-  color: #fff;
-}
-.bv-step--current .bv-step__icon {
-  background: linear-gradient(135deg, #ffc107, #f39c12);
-  color: #fff;
-  animation: bv-pulse 2s ease-in-out infinite;
-}
-@keyframes bv-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,.5); }
-  50%      { box-shadow: 0 0 0 14px rgba(255,193,7,0); }
-}
-.bv-step__icon svg { width: 24px; height: 24px; }
+.wcm-step__icon svg { width: 22px; height: 22px; }
+/* Cores específicas por tipo */
+.wcm-step[data-type="docs"] .wcm-step__icon { background: #cfe2ff; color: #084298; }
+.wcm-step[data-type="email"] .wcm-step__icon { background: #ffe5d0; color: #a8580e; }
+.wcm-step[data-type="rent"] .wcm-step__icon { background: #e0d4ff; color: #5e3a99; }
+.wcm-step[data-type="rate"] .wcm-step__icon { background: #fff3cd; color: #856404; }
 
-.bv-step__body {
-  min-width: 0;
+.wcm-step--done .wcm-step__icon {
+  background: linear-gradient(135deg, #198754, #145f3e) !important;
+  color: #fff !important;
 }
-.bv-step__title {
+.wcm-step--current .wcm-step__icon {
+  background: linear-gradient(135deg, #ffc107, #f39c12) !important;
+  color: #fff !important;
+  animation: wcm-pulse 2s ease-in-out infinite;
+}
+@keyframes wcm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(255,193,7,0); }
+}
+
+.wcm-step__body { min-width: 0; }
+.wcm-step__title {
   font-family: 'Sora', sans-serif;
-  font-size: 16.5px;
+  font-size: 15.5px;
   font-weight: 700;
-  margin: 0 0 4px;
+  margin: 0 0 3px;
   color: #14201b;
   line-height: 1.3;
 }
-.bv-step__desc {
-  font-size: 13.5px;
+.wcm-step__desc {
+  font-size: 13px;
   color: #5b6b63;
-  line-height: 1.5;
+  line-height: 1.45;
   margin: 0;
 }
 
-.bv-step__cta {
+.wcm-step__cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #198754;
+  background: #145f3e;
   color: #fff;
   text-decoration: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-size: 13.5px;
+  padding: 9px 16px;
+  border-radius: 9px;
+  font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
   transition: background .2s, transform .15s;
@@ -238,113 +288,130 @@
   cursor: pointer;
   font-family: inherit;
 }
-.bv-step__cta:hover {
-  background: #146c43;
-  transform: translateY(-1px);
-}
-.bv-step--done .bv-step__cta {
+.wcm-step__cta:hover { background: #0f5132; transform: translateY(-1px); }
+.wcm-step--done .wcm-step__cta {
   background: transparent;
-  color: #198754;
+  color: #145f3e;
   border: 1.5px solid #198754;
 }
-.bv-step--done .bv-step__cta:hover {
-  background: #f0f9f3;
-}
+.wcm-step--done .wcm-step__cta:hover { background: #f0f9f3; }
 
-/* Mobile: cards verticais */
 @media (max-width: 580px) {
-  .bv-step {
-    grid-template-columns: 48px 1fr;
+  .wcm-step {
+    grid-template-columns: 44px 1fr;
     grid-template-rows: auto auto;
-    padding: 18px 16px;
-    gap: 12px;
   }
-  .bv-step__icon { width: 48px; height: 48px; font-size: 18px; }
-  .bv-step__cta {
+  .wcm-step__icon { width: 44px; height: 44px; }
+  .wcm-step__icon svg { width: 20px; height: 20px; }
+  .wcm-step__cta {
     grid-column: 1 / -1;
     justify-content: center;
     margin-top: 4px;
   }
 }
 
-/* Gold info box */
-.bv-gold-info {
-  margin-top: 22px;
-  padding: 18px 22px;
+/* Gold info compacto */
+.wcm-gold {
+  margin-top: 24px;
+  padding: 18px 20px;
   background: linear-gradient(135deg, #fff8e7 0%, #fff3cd 100%);
   border-left: 4px solid #d4af37;
   border-radius: 12px;
-  font-size: 13.5px;
-  color: #5b4d20;
-  line-height: 1.55;
   display: flex;
   gap: 14px;
   align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5b4d20;
 }
-.bv-gold-info svg {
-  width: 24px;
-  height: 24px;
-  color: #d4af37;
+.wcm-gold__icon {
+  width: 36px; height: 36px;
+  background: rgba(212,175,55,.18);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  margin-top: 2px;
 }
-.bv-gold-info strong { color: #856404; }
+.wcm-gold__icon svg { width: 20px; height: 20px; color: #856404; }
+.wcm-gold strong { color: #856404; }
+.wcm-gold__link {
+  color: #856404;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-left: 4px;
+}
 
-.bv-actions {
+/* Actions */
+.wcm-actions {
   margin-top: 28px;
   display: flex;
   gap: 10px;
-  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.wcm-actions__primary {
+  display: flex;
+  gap: 10px;
   flex-wrap: wrap;
 }
-.bv-actions__dismiss {
-  font-size: 13px;
+.wcm-actions__dismiss {
+  font-size: 12.5px;
   color: #6b7670;
-  text-decoration: underline;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 10px 14px;
+  padding: 8px 4px;
   font-family: inherit;
+  text-decoration: underline;
 }
-.bv-actions__dismiss:hover { color: #145f3e; }
+.wcm-actions__dismiss:hover { color: #14201b; }
 
-.bv-loading {
+@media (max-width: 480px) {
+  .wcm-actions { flex-direction: column; align-items: stretch; }
+  .wcm-actions__primary { flex-direction: column; }
+  .wcm-actions__primary .btn { width: 100%; justify-content: center; }
+  .wcm-actions__dismiss { text-align: center; }
+}
+
+/* Loading */
+.wcm-loading {
   text-align: center;
-  padding: 36px;
+  padding: 32px;
   color: #6b7670;
   font-size: 14px;
 }
-.bv-loading::before {
+.wcm-loading::before {
   content: "";
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 22px; height: 22px;
   border: 3px solid #e9ecef;
   border-top-color: #198754;
   border-radius: 50%;
-  animation: bv-spin .9s linear infinite;
+  animation: wcm-spin .9s linear infinite;
   vertical-align: middle;
-  margin-right: 12px;
+  margin-right: 10px;
 }
-@keyframes bv-spin { to { transform: rotate(360deg); } }
+@keyframes wcm-spin { to { transform: rotate(360deg); } }
+@keyframes wcm-fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Cards completos */
-.bv-complete {
+/* Complete celebration */
+.wcm-complete {
   text-align: center;
   margin-top: 22px;
-  padding: 28px;
+  padding: 22px;
   background: linear-gradient(135deg, #d1e7dd 0%, #f0f9f3 100%);
-  border-radius: 16px;
+  border-radius: 14px;
   border: 2px solid #198754;
-  animation: bv-pop .55s cubic-bezier(.34,1.56,.64,1);
 }
-.bv-complete__emoji {
-  font-size: 40px;
-  display: block;
-  margin-bottom: 8px;
-  animation: bv-pulse 1.8s ease-in-out infinite;
+.wcm-complete__icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, #198754, #145f3e);
+  color: #fff;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
 }
+.wcm-complete__icon svg { width: 28px; height: 28px; }
 </style>
 </head>
 <body>
@@ -364,35 +431,51 @@
 
 <main>
 
-<!-- HERO -->
-<section class="bv-hero">
-  <div class="bv-hero__inner">
-    <span class="bv-hero__badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-      Cadastro pronto
-    </span>
-    <h1>Bem-vindo, <span class="bv-hero__name" id="welcomeName">amigo</span>!</h1>
-    <p class="bv-hero__sub">Sua conta está criada. Em 4 passos rápidos você consegue alugar seu primeiro carro com tudo verificado pela equipe Nomade Drive.</p>
-    <div class="bv-hero__progress">
-      <span id="welcomeProgressLabel">0 de 4 concluídos</span>
-      <span class="bv-hero__progress-bar">
-        <span class="bv-hero__progress-fill" id="welcomeProgressFill"></span>
-      </span>
+<!-- HERO ASIMÉTRICO -->
+<section class="wcm-hero">
+  <div class="wcm-hero__inner">
+
+    <!-- Avatar com inicial -->
+    <div class="wcm-avatar" id="wcmAvatar" aria-hidden="true">A</div>
+
+    <!-- Saudação -->
+    <div class="wcm-greet">
+      <div class="wcm-greet__hello">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <span id="wcmHello">Olá</span> · <span id="wcmDate">—</span>
+      </div>
+      <h1 class="wcm-greet__name">Bem-vindo, <span id="wcmName">amigo</span>!</h1>
+      <p class="wcm-greet__sub" id="wcmSub">Sua conta tá criada. Em alguns passos rápidos você aluga seu primeiro carro com tudo verificado.</p>
+    </div>
+
+    <!-- Progresso compacto -->
+    <div class="wcm-progress-pill">
+      <span class="wcm-progress-pill__num"><span id="wcmDone">0</span><em>/4</em></span>
+      <span class="wcm-progress-pill__label">concluídos</span>
     </div>
   </div>
 </section>
 
-<!-- STEPS -->
-<section class="bv-steps-section">
-  <div id="welcomeSteps">
-    <div class="bv-loading">Carregando seu progresso...</div>
+<!-- BODY -->
+<section class="wcm-body">
+
+  <h2 class="wcm-section-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Seus próximos passos
+  </h2>
+
+  <div class="wcm-steps" id="wcmSteps">
+    <div class="wcm-loading">Carregando seu progresso...</div>
   </div>
 
-  <div class="bv-actions">
-    <a href="frota.html" class="btn btn--solid">Ver frota disponível →</a>
-    <a href="dashboard-cliente.html" class="btn btn--outline">Ir pro painel agora</a>
-    <button type="button" class="bv-actions__dismiss" id="welcomeDismiss">Não mostrar de novo</button>
+  <div class="wcm-actions">
+    <div class="wcm-actions__primary">
+      <a href="frota.html" class="btn btn--solid">Ver frota disponível →</a>
+      <a href="dashboard-cliente.html" class="btn btn--outline">Ir pro painel</a>
+    </div>
+    <button type="button" class="wcm-actions__dismiss" id="wcmDismiss">Não mostrar de novo</button>
   </div>
+
 </section>
 
 </main>
@@ -410,7 +493,9 @@
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
-  // Fix code-review M1: respeita "Não mostrar de novo"
+  "use strict";
+
+  // Respeita "Não mostrar de novo"
   try {
     var dismissed = localStorage.getItem("ndb-welcome-cliente-dismissed") === "1";
     var forced = new URLSearchParams(window.location.search).get("force") === "1";
@@ -420,71 +505,86 @@
     }
   } catch (e) {}
 
-  var stepsEl = document.getElementById("welcomeSteps");
-  var nameEl  = document.getElementById("welcomeName");
-  var progLbl = document.getElementById("welcomeProgressLabel");
-  var progFill= document.getElementById("welcomeProgressFill");
+  var stepsEl = document.getElementById("wcmSteps");
+  var nameEl  = document.getElementById("wcmName");
+  var avatarEl = document.getElementById("wcmAvatar");
+  var helloEl = document.getElementById("wcmHello");
+  var dateEl  = document.getElementById("wcmDate");
+  var doneEl  = document.getElementById("wcmDone");
 
   function firstName(full) {
     if (!full) return "amigo";
     var parts = String(full).trim().split(/\s+/);
     return parts[0] || "amigo";
   }
+  function initial(full) {
+    if (!full) return "?";
+    return String(full).trim().charAt(0).toUpperCase();
+  }
+  function timeBasedHello() {
+    var h = new Date().getHours();
+    if (h < 5) return "Boa madrugada";
+    if (h < 12) return "Bom dia";
+    if (h < 18) return "Boa tarde";
+    return "Boa noite";
+  }
+  function todayBr() {
+    var dias = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+    var meses = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+    var d = new Date();
+    return dias[d.getDay()] + ", " + d.getDate() + " de " + meses[d.getMonth()];
+  }
 
-  // SVG icons inline pra cada step (sem emoji "AI")
+  // SVG icons inline
   var ICONS = {
     docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
-    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
-    car: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>',
-    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+    rent: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>',
+    rate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
   };
 
   function renderSteps(state) {
     var steps = [
       {
-        id: "docs",
+        type: "docs",
         done: state.kycOk,
-        icon: state.kycOk ? ICONS.check : ICONS.docs,
-        title: "Enviar documentos pessoais",
+        title: "Documentos pessoais",
         desc: state.kycOk
-          ? "Documentos aprovados — sua conta está verificada e pronta pra alugar."
-          : "CNH + comprovante de residência + selfie pra verificação. Análise da equipe em até 24h úteis.",
-        ctaText: state.kycOk ? "Ver meus documentos" : "Enviar documentos →",
+          ? "Aprovados pela equipe — conta verificada."
+          : "Envie CNH + comprovante de residência + selfie. Análise em até 24h úteis.",
+        ctaText: state.kycOk ? "Ver documentos" : "Enviar",
         ctaHref: "dashboard-cliente.html#documentos"
       },
       {
-        id: "email",
+        type: "email",
         done: state.emailOk,
-        icon: state.emailOk ? ICONS.check : ICONS.mail,
-        title: "Confirmar e-mail",
+        title: "E-mail confirmado",
         desc: state.emailOk
-          ? "E-mail confirmado — você vai receber atualizações da reserva por e-mail."
-          : "Abra o e-mail que enviamos pra você e clique no link de confirmação. Verifique sua caixa de spam se não encontrar.",
-        ctaText: state.emailOk ? "E-mail verificado" : "Reenviar e-mail →",
+          ? "Você vai receber atualizações da reserva por e-mail."
+          : "Abra o e-mail que mandamos e clique no link de confirmação. Verifique a pasta de spam.",
+        ctaText: state.emailOk ? "Verificado" : "Reenviar",
         ctaHref: state.emailOk ? "dashboard-cliente.html" : "javascript:void(0)",
         action: state.emailOk ? null : "resend_email"
       },
       {
-        id: "rent",
+        type: "rent",
         done: state.hasBooking,
-        icon: state.hasBooking ? ICONS.check : ICONS.car,
-        title: "Fazer sua primeira reserva",
+        title: "Sua primeira reserva",
         desc: state.hasBooking
-          ? "Você já tem " + state.bookingCount + " reserva(s)! Acompanhe tudo no seu painel."
-          : "Escolha um carro da frota verificada e solicite o aluguel — aprovação da equipe em até 24h úteis.",
-        ctaText: state.hasBooking ? "Minhas reservas" : "Ver frota disponível →",
+          ? "Você já tem " + state.bookingCount + " reserva(s). Acompanhe no painel."
+          : "Escolha um carro da frota e solicite. Aprovação em até 24h úteis.",
+        ctaText: state.hasBooking ? "Minhas reservas" : "Ver frota",
         ctaHref: state.hasBooking ? "dashboard-cliente.html#bookings" : "frota.html"
       },
       {
-        id: "rate",
+        type: "rate",
         done: state.hasRating,
-        icon: state.hasRating ? ICONS.check : ICONS.star,
-        title: "Avaliar sua experiência",
+        title: "Avalie e suba de tier",
         desc: state.hasRating
-          ? "Você já avaliou — obrigado! Cada avaliação conta pra subir de tier no Programa Nomade Gold."
-          : "Após a 1ª locação, avalie o proprietário com estrelas. Suas avaliações sobem você no Programa Nomade Gold (Bronze → Silver → Gold → Platinum) com descontos e benefícios crescentes.",
-        ctaText: state.hasRating ? "Minhas avaliações" : "Como funciona o Gold →",
+          ? "Você já avaliou — obrigado! Cada avaliação conta no Programa Gold."
+          : "Após a 1ª locação, avalie o proprietário. Avaliações sobem você de tier (Bronze→Silver→Gold→Platinum) com descontos crescentes.",
+        ctaText: state.hasRating ? "Avaliações" : "Como funciona",
         ctaHref: state.hasRating ? "dashboard-cliente.html#avaliacoes" : "programa-gold.html?from=boas-vindas"
       }
     ];
@@ -494,42 +594,36 @@
       if (!steps[i].done) { currentIdx = i; break; }
     }
     var doneCount = steps.filter(function (s) { return s.done; }).length;
-
-    progLbl.textContent = doneCount + " de " + steps.length + " concluídos";
-    setTimeout(function () {
-      progFill.style.width = ((doneCount / steps.length) * 100) + "%";
-    }, 150);
+    doneEl.textContent = doneCount;
 
     stepsEl.innerHTML = "";
     steps.forEach(function (s, idx) {
       var step = document.createElement("div");
-      var cls = "bv-step";
-      if (s.done) cls += " bv-step--done";
-      else if (idx === currentIdx) cls += " bv-step--current";
+      var cls = "wcm-step";
+      if (s.done) cls += " wcm-step--done";
+      else if (idx === currentIdx) cls += " wcm-step--current";
       step.className = cls;
+      step.setAttribute("data-type", s.type);
 
       var icon = document.createElement("div");
-      icon.className = "bv-step__icon";
-      icon.innerHTML = s.icon;
+      icon.className = "wcm-step__icon";
+      icon.innerHTML = s.done ? ICONS.check : ICONS[s.type];
 
       var body = document.createElement("div");
-      body.className = "bv-step__body";
-
+      body.className = "wcm-step__body";
       var title = document.createElement("h3");
-      title.className = "bv-step__title";
+      title.className = "wcm-step__title";
       title.textContent = s.title;
       body.appendChild(title);
-
       var desc = document.createElement("p");
-      desc.className = "bv-step__desc";
+      desc.className = "wcm-step__desc";
       desc.textContent = s.desc;
       body.appendChild(desc);
 
       var cta = document.createElement("a");
-      cta.className = "bv-step__cta";
+      cta.className = "wcm-step__cta";
       cta.href = s.ctaHref;
-      cta.textContent = s.ctaText;
-
+      cta.textContent = s.ctaText + (s.done ? "" : " →");
       if (s.action === "resend_email") {
         cta.addEventListener("click", function (e) {
           e.preventDefault();
@@ -543,24 +637,24 @@
       stepsEl.appendChild(step);
     });
 
-    // Box dica do Programa Gold (sempre visível, educativo)
+    // Gold info compacto (só se ainda não avaliou)
     if (!state.hasRating) {
-      var goldInfo = document.createElement("div");
-      goldInfo.className = "bv-gold-info";
-      goldInfo.innerHTML =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6-7 6 7"/><path d="M6 9l1 9h10l1-9"/></svg>' +
-        '<div><strong>Programa Nomade Gold:</strong> a cada locação concluída + avaliação enviada, você sobe de tier. Bronze → Silver (7% off) → Gold (12% off) → Platinum (18% off) — com auto-aprovação a partir do Gold.</div>';
-      stepsEl.appendChild(goldInfo);
+      var gold = document.createElement("div");
+      gold.className = "wcm-gold";
+      gold.innerHTML =
+        '<div class="wcm-gold__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>' +
+        '<div><strong>Programa Nomade Gold:</strong> a cada locação concluída + avaliação enviada, você sobe de tier. Bronze → Silver (7% off) → Gold (12% off) → Platinum (18% off) — com auto-aprovação a partir do Gold.<a href="programa-gold.html?from=boas-vindas" class="wcm-gold__link">Saiba mais →</a></div>';
+      stepsEl.appendChild(gold);
     }
 
     // Celebração 4/4
     if (doneCount === steps.length) {
       var party = document.createElement("div");
-      party.className = "bv-complete";
+      party.className = "wcm-complete";
       party.innerHTML =
-        '<span class="bv-complete__emoji" aria-hidden="true">🎉</span>' +
-        '<strong style="font-size:18px;color:#14201b;display:block;font-family:Sora,sans-serif;">Tudo pronto!</strong>' +
-        '<p style="margin:6px 0 0;color:#5b6b63;font-size:14px;">Você completou os 4 passos. Continue alugando e avaliando pra subir no Programa Gold.</p>';
+        '<div class="wcm-complete__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+        '<strong style="font-size:17px;color:#14201b;display:block;font-family:Sora,sans-serif;">Tudo pronto!</strong>' +
+        '<p style="margin:6px 0 0;color:#5b6b63;font-size:13.5px;">Continue alugando e avaliando pra subir de tier no Programa Gold.</p>';
       stepsEl.appendChild(party);
     }
   }
@@ -582,7 +676,7 @@
             icon: "⚠️"
           });
         } else {
-          btn.textContent = "E-mail enviado ✓";
+          btn.textContent = "Enviado ✓";
           if (window.ndModal) ndModal.alert({
             title: "E-mail enviado!",
             body: "Verifique sua caixa de entrada e a pasta de spam.",
@@ -593,13 +687,16 @@
     });
   }
 
+  // Init: saudação e data
+  helloEl.textContent = timeBasedHello();
+  dateEl.textContent = todayBr();
+
   function loadState() {
     var a = window.ndAuth;
     if (!a) {
       stepsEl.innerHTML = '<p style="text-align:center;color:#b00020;">Autenticação indisponível.</p>';
       return;
     }
-
     a.requireAuth().then(function (s) {
       if (!s) return;
       var c = a.client();
@@ -607,7 +704,7 @@
 
       Promise.all([
         c.from("profiles")
-          .select("full_name, verification_status, main_role")
+          .select("full_name, verification_status, main_role, avatar_url")
           .eq("id", s.user.id).maybeSingle(),
         c.from("bookings")
           .select("id", { count: "exact", head: true })
@@ -621,8 +718,15 @@
         var bCount  = (results[1] && results[1].count) || 0;
         var rCount  = (results[2] && results[2].count) || 0;
 
-        nameEl.textContent = firstName(profile.full_name ||
-          (s.user.user_metadata && s.user.user_metadata.full_name));
+        var fullName = profile.full_name || (s.user.user_metadata && s.user.user_metadata.full_name) || "";
+        nameEl.textContent = firstName(fullName);
+        avatarEl.textContent = initial(fullName);
+
+        // Se tem avatar_url, mostra foto em vez da inicial
+        if (profile.avatar_url) {
+          avatarEl.innerHTML = '<img src="' + String(profile.avatar_url).replace(/"/g, '&quot;') +
+            '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />';
+        }
 
         var kycOk = (profile.verification_status === "aprovado" ||
                      profile.verification_status === "aprovado_com_ressalvas");
@@ -636,8 +740,10 @@
           hasRating: rCount > 0
         });
       }).catch(function (err) {
-        console.warn("welcome cliente load:", err && err.message);
-        nameEl.textContent = firstName(s.user.user_metadata && s.user.user_metadata.full_name);
+        console.warn("welcome load:", err && err.message);
+        var fullName = (s.user.user_metadata && s.user.user_metadata.full_name) || "";
+        nameEl.textContent = firstName(fullName);
+        avatarEl.textContent = initial(fullName);
         renderSteps({
           kycOk: false,
           emailOk: !!(s.user.email_confirmed_at || s.user.confirmed_at),
@@ -647,7 +753,7 @@
     });
   }
 
-  document.getElementById("welcomeDismiss").addEventListener("click", function () {
+  document.getElementById("wcmDismiss").addEventListener("click", function () {
     try { localStorage.setItem("ndb-welcome-cliente-dismissed", "1"); } catch (e) {}
     window.location.href = "dashboard-cliente.html";
   });
@@ -655,6 +761,5 @@
   loadState();
 })();
 </script>
-<script src="fm-reveal.js?v=20260525b" defer></script>
 </body>
 </html>
