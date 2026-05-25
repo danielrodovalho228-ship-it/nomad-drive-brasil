@@ -307,7 +307,7 @@
   </div>
 </section>
 
-<!-- ============ CARDS DE DECISÃO ============ -->
+<!-- ============ CARDS DE DECISÃO (Fase 58b: imagens realistas) ============ -->
 <section class="section paths-section" aria-label="Escolha seu caminho">
   <div class="container">
     <div class="section__head">
@@ -316,71 +316,147 @@
       <p>Cada perfil tem uma página própria, com as regras e os passos certos.</p>
     </div>
     <div class="paths">
-      <a href="#orcamento" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🚗</span>
+      <a href="#orcamento" class="path-card path-card--img">
+        <img class="path-card__img"
+          src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=320&h=200&fit=crop&q=80&auto=format"
+          alt="Chaves de carro — alugar"
+          loading="lazy" decoding="async" />
         <h3>Quero alugar</h3>
         <p>Ver categorias, requisitos e pedir um orçamento sem compromisso.</p>
         <span class="path-card__go">Pedir orçamento →</span>
       </a>
-      <a href="proprietarios.html" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🔑</span>
+      <a href="proprietarios.html" class="path-card path-card--img">
+        <img class="path-card__img"
+          src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=320&h=200&fit=crop&q=80&auto=format"
+          alt="Carro estacionado — proprietário"
+          loading="lazy" decoding="async" />
         <h3>Tenho um carro</h3>
         <p>Aceitar as regras, simular ganhos e iniciar a análise do veículo.</p>
         <span class="path-card__go">Cadastrar meu carro →</span>
       </a>
-      <a href="parceiros.html" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🤝</span>
+      <a href="parceiros.html" class="path-card path-card--img">
+        <img class="path-card__img"
+          src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=320&h=200&fit=crop&q=80&auto=format"
+          alt="Aperto de mãos — parceria"
+          loading="lazy" decoding="async" />
         <h3>Sou parceiro</h3>
         <p>Indicar locatários, proprietários ou empresas e ganhar crédito.</p>
         <span class="path-card__go">Quero indicar →</span>
       </a>
-      <a href="oficinas.html" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🔧</span>
+      <a href="oficinas.html" class="path-card path-card--img">
+        <img class="path-card__img"
+          src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=320&h=200&fit=crop&q=80&auto=format"
+          alt="Ferramentas de oficina"
+          loading="lazy" decoding="async" />
         <h3>Sou oficina</h3>
         <p>Credenciar a oficina e emitir o checklist técnico padronizado.</p>
         <span class="path-card__go">Solicitar credenciamento →</span>
       </a>
-      <a href="shield-protecao.html" class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🛡️</span>
+      <a href="shield-protecao.html" class="path-card path-card--img">
+        <img class="path-card__img"
+          src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=320&h=200&fit=crop&q=80&auto=format"
+          alt="Contrato e documentos — proteção"
+          loading="lazy" decoding="async" />
         <h3>Proteção e sinistros</h3>
         <p>Entender Shield, caução, cota de participação e o que fazer em sinistro.</p>
         <span class="path-card__go">Ver proteção →</span>
       </a>
     </div>
   </div>
+  <style>
+    /* Fase 58b: cards "Escolha seu caminho" com imagem em vez de emoji */
+    .path-card--img {
+      padding: 0; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .path-card__img {
+      width: 100%; height: 130px;
+      object-fit: cover;
+      display: block;
+      background: #f0f0f0;
+      transition: transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    .path-card--img:hover .path-card__img {
+      transform: scale(1.06);
+    }
+    .path-card--img h3,
+    .path-card--img p,
+    .path-card--img .path-card__go { padding-left: 22px; padding-right: 22px; }
+    .path-card--img h3 { margin-top: 16px; }
+    .path-card--img p { flex: 1; }
+    .path-card--img .path-card__go { padding-bottom: 22px; padding-top: 4px; }
+    @media (max-width: 540px) {
+      .path-card__img { height: 110px; }
+    }
+  </style>
 </section>
 
-<!-- ============ TRUST BAR (Fase 53d: bento + ícones grandes) ============ -->
+<!-- ============ TRUST BAR (Fase 58b: micro-imagens em vez de emoji) ============ -->
 <section class="section" aria-label="Garantias" style="padding:32px 0;background:#fff;">
   <div class="container">
     <div class="bento-grid fm-stagger" data-fm-reveal style="grid-template-columns:repeat(5,1fr);">
-      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">📄</div>
-        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Contrato</div>
-        <small style="font-size:11px;color:var(--color-gray-500);">registrado</small>
+      <div class="bento-card fm-hover-lift trust-mini">
+        <img class="trust-mini__img"
+          src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=120&h=120&fit=crop&q=80&auto=format"
+          alt="Mãos assinando contrato" loading="lazy" decoding="async" />
+        <div class="trust-mini__label">Contrato</div>
+        <small class="trust-mini__sub">registrado</small>
       </div>
-      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">✅</div>
-        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Veículos aprovados</div>
-        <small style="font-size:11px;color:var(--color-gray-500);">análise técnica</small>
+      <div class="bento-card fm-hover-lift trust-mini">
+        <img class="trust-mini__img"
+          src="https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=120&h=120&fit=crop&q=80&auto=format"
+          alt="Veículo aprovado pela vistoria" loading="lazy" decoding="async" />
+        <div class="trust-mini__label">Veículos aprovados</div>
+        <small class="trust-mini__sub">análise técnica</small>
       </div>
-      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">📸</div>
-        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Vistoria</div>
-        <small style="font-size:11px;color:var(--color-gray-500);">foto e vídeo</small>
+      <div class="bento-card fm-hover-lift trust-mini">
+        <img class="trust-mini__img"
+          src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=120&h=120&fit=crop&q=80&auto=format"
+          alt="Câmera registrando vistoria" loading="lazy" decoding="async" />
+        <div class="trust-mini__label">Vistoria</div>
+        <small class="trust-mini__sub">foto e vídeo</small>
       </div>
-      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">💬</div>
-        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Suporte humano</div>
-        <small style="font-size:11px;color:var(--color-gray-500);">WhatsApp</small>
+      <div class="bento-card fm-hover-lift trust-mini">
+        <img class="trust-mini__img"
+          src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=120&h=120&fit=crop&q=80&auto=format"
+          alt="Atendente humano por WhatsApp" loading="lazy" decoding="async" />
+        <div class="trust-mini__label">Suporte humano</div>
+        <small class="trust-mini__sub">WhatsApp</small>
       </div>
-      <div class="bento-card fm-hover-lift" style="text-align:center;padding:16px;">
-        <div style="font-size:28px;margin-bottom:4px;">🛡️</div>
-        <div style="font-size:13px;font-weight:700;color:var(--color-brand-500);">Proteção</div>
-        <small style="font-size:11px;color:var(--color-gray-500);">por contrato</small>
+      <div class="bento-card fm-hover-lift trust-mini">
+        <img class="trust-mini__img"
+          src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=120&h=120&fit=crop&q=80&auto=format"
+          alt="Cofre — proteção" loading="lazy" decoding="async" />
+        <div class="trust-mini__label">Proteção</div>
+        <small class="trust-mini__sub">por contrato</small>
       </div>
     </div>
   </div>
+  <style>
+    /* Fase 58b: trustbar mini-cards com imagem em vez de emoji */
+    .trust-mini {
+      text-align: center; padding: 14px 12px 16px !important;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .trust-mini__img {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      border: 2px solid #fff;
+      background: #f0f0f0;
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    .trust-mini:hover .trust-mini__img { transform: scale(1.10); }
+    .trust-mini__label {
+      font-size: 13px; font-weight: 700;
+      color: var(--color-brand-500, #145f3e);
+      margin-top: 4px;
+    }
+    .trust-mini__sub {
+      font-size: 11px; color: var(--color-gray-500, #6b7670);
+    }
+  </style>
 </section>
 
 <!-- ============ COMO FUNCIONA (Fase 57b: hero imagem + steps) ============ -->
