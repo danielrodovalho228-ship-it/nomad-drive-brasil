@@ -15,10 +15,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="design-tokens.css?v=20260524-ui" />
-<link rel="stylesheet" href="style.css?v=20260524-landing-opt" />
-<link rel="stylesheet" href="style-animations.css?v=20260524-ui" />
-<link rel="stylesheet" href="style-components-modern.css?v=20260524-ui" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-bento-1700" />
+<link rel="stylesheet" href="style.css?v=20260524-bento-1700" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-bento-1700" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-bento-1700" />
 
 <!-- Fase 47: Schema.org markup pra SEO (LocalBusiness + Service) -->
 <script type="application/ld+json">
@@ -385,45 +385,60 @@
   </div>
 </section>
 
-<!-- ============ PARA QUEM É ============ -->
+<!-- ============ PARA QUEM É (Fase 53: bento grid + fm-stagger + reveal) ============ -->
 <section class="section section--surface" id="para-quem">
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Para quem é a Nomade Drive</span>
-      <h2>Locatários verificados, perfis claros</h2>
-      <p>A Nomade Drive é desenhada para aluguel mensal de carro em Uberlândia — o nicho de quem precisa de mobilidade por <strong>30 dias ou mais</strong>. Conheça os perfis típicos que escolhem a plataforma.</p>
+    <div class="section-header-modern" data-fm-reveal>
+      <span class="section-header-modern__eyebrow">Para quem é</span>
+      <h2 class="section-header-modern__title">Locatários verificados, <em>perfis claros</em></h2>
+      <p class="section-header-modern__sub">A Nomade Drive é desenhada para <strong>aluguel mensal de carro em Uberlândia</strong> — o nicho de quem precisa de mobilidade por <strong>30 dias ou mais</strong>.</p>
     </div>
 
-    <div class="paths">
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🌎</span>
-        <h3>Turistas estrangeiros</h3>
-        <p>De longa permanência (negócios, estudos, family visa) que precisam de carro sem o custo e a burocracia de comprar.</p>
+    <!-- Bento Grid moderno (estilo iOS) -->
+    <div class="bento-grid fm-stagger" data-fm-reveal>
+      <!-- Card grande de destaque -->
+      <div class="bento-card bento-card--big bento-card--accent fm-hover-lift">
+        <span style="font-size:48px;display:block;margin-bottom:12px;">🌎</span>
+        <h3 style="font-size:22px;font-weight:800;margin:0 0 8px;color:#fff;">Turistas estrangeiros</h3>
+        <p style="font-size:14.5px;line-height:1.6;opacity:.95;color:#fff;margin:0;">De longa permanência (negócios, estudos, family visa) que precisam de carro <strong>sem o custo e a burocracia</strong> de comprar.</p>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge-modern" style="background:rgba(255,255,255,.22);color:#fff;">VISA</span>
+          <span class="badge-modern" style="background:rgba(255,255,255,.22);color:#fff;">3+ meses</span>
+        </div>
       </div>
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">💼</span>
-        <h3>Profissionais em transição</h3>
-        <p>Em mudança de cidade, troca de emprego, abertura de consultório ou novo empreendimento — período de adaptação onde locação é mais sensato do que financiamento.</p>
+
+      <div class="bento-card fm-hover-lift">
+        <span style="font-size:32px;display:block;margin-bottom:8px;">💼</span>
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 6px;">Profissionais em transição</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Mudança de cidade, troca de emprego, consultório novo.</p>
       </div>
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🏥</span>
-        <h3>Pessoas em tratamento médico</h3>
-        <p>Acompanhantes ou pacientes em tratamento prolongado em Uberlândia que precisam de autonomia para idas a consultas e exames.</p>
+
+      <div class="bento-card fm-hover-lift">
+        <span style="font-size:32px;display:block;margin-bottom:8px;">🏥</span>
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 6px;">Tratamento médico</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Pacientes ou acompanhantes em tratamento prolongado em UDI.</p>
       </div>
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">💻</span>
-        <h3>Nômades digitais</h3>
-        <p>Profissionais remotos passando temporadas em diferentes cidades. Querem flexibilidade sem se comprometer com financiamento.</p>
+
+      <div class="bento-card bento-card--wide bento-card--gold fm-hover-lift">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="font-size:40px;">💻</span>
+          <div>
+            <h3 style="font-size:18px;font-weight:800;margin:0 0 4px;">Nômades digitais</h3>
+            <p style="font-size:13.5px;line-height:1.5;margin:0;">Profissionais remotos passando temporadas em diferentes cidades. <strong>Flexibilidade total sem comprometer com financiamento.</strong></p>
+          </div>
+        </div>
       </div>
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">👨‍👩‍👧</span>
-        <h3>Famílias em mudança</h3>
-        <p>Em transição de casa, reforma ou aguardando a entrega de veículo próprio. Aluguel mensal cobre o intervalo sem stress.</p>
+
+      <div class="bento-card fm-hover-lift">
+        <span style="font-size:32px;display:block;margin-bottom:8px;">👨‍👩‍👧</span>
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 6px;">Famílias em mudança</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Em transição de casa, reforma, aguardando veículo próprio.</p>
       </div>
-      <div class="path-card">
-        <span class="path-card__ico" aria-hidden="true">🏢</span>
-        <h3>Pequenas empresas</h3>
-        <p>Que precisam de veículo para colaboradores em projetos pontuais, sem o custo fixo de comprar uma frota.</p>
+
+      <div class="bento-card fm-hover-lift">
+        <span style="font-size:32px;display:block;margin-bottom:8px;">🏢</span>
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 6px;">Pequenas empresas</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:var(--color-gray-600);margin:0;">Frota pontual sem custo fixo de comprar.</p>
       </div>
     </div>
 
@@ -714,8 +729,8 @@
 <script src="supabase-config.js" defer></script>
 <script src="auth.js" defer></script>
 <script src="car-data.js" defer></script>
-<script src="script.js?v=20260524-landing-opt" defer></script>
-<script src="fm-reveal.js?v=20260524-ui" defer></script>
+<script src="script.js?v=20260524-bento-1700" defer></script>
+<script src="fm-reveal.js?v=20260524-bento-1700" defer></script>
 
 <!-- Fase 47: Mostra sticky CTA só após scroll de 600px (não polui o topo) -->
 <script>
