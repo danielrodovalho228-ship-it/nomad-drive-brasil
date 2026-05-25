@@ -1388,155 +1388,43 @@
   </div>
 </section>
 
-<!-- ============ DEPOIMENTOS (Fase 47 — placeholder pra trocar) ============ -->
-<!--
-  ⚠️ DEPOIMENTOS REAIS aqui quando tiver clientes/owners reais.
-  Por enquanto, mostra a essência do produto (o que clientes vão dizer).
-  Quando tiver 3+ depoimentos reais, troca os <blockquote> por fotos+nome+frase real.
--->
-<section class="section" id="depoimentos" style="padding:48px 0;">
+<!-- ============ DEPOIMENTOS (Fase 61: HONESTO — sem testemunhos fake) ============ -->
+<section class="section section--surface" id="depoimentos" style="padding:48px 0;">
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Como é alugar na Nomade Drive</span>
-      <h2>O que esperar da operação</h2>
-      <p>Pré-lançamento — depoimentos reais aparecem aqui assim que tivermos os primeiros clientes (cadastre-se e seja o primeiro!). <strong>Os depoimentos abaixo são exemplos do que prometemos.</strong></p>
+    <div class="testi-coming">
+      <div class="testi-coming__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <span class="eyebrow" style="color:#145f3e;">Depoimentos</span>
+      <h2 style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin:8px 0 12px;">Histórias reais em breve</h2>
+      <p style="color:#5b6b63;font-size:15.5px;line-height:1.6;max-width:560px;margin:0 auto 8px;">Estamos em pré-lançamento. As histórias dos primeiros clientes e proprietários da rede aparecerão aqui em breve. <strong>Preferimos não inventar depoimentos</strong> — só publicamos o que for real.</p>
+      <p style="color:#5b6b63;font-size:14px;margin:18px auto 0;max-width:520px;">Quer ser uma das primeiras vozes? Cadastre-se durante o pré-lançamento e ganha <strong>3 meses Silver gratuito</strong> (7% off na renovação) pelo Programa Nomade Gold.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+        <a href="cadastro.html?perfil=cliente" class="btn btn--solid">Quero alugar →</a>
+        <a href="programa-gold.html" class="btn btn--outline">Conhecer o Programa Gold</a>
+      </div>
     </div>
-    <div class="testimonials-grid">
-
-      <article class="testimonial-card testimonial-card--cliente">
-        <span class="testimonial-card__example">Exemplo · Cliente</span>
-        <div class="testimonial-card__quote-mark">"</div>
-        <p class="testimonial-card__quote">Cadastro em 5 minutos, contrato claro, proteção por contrato. Sem letras miúdas tipo locadora.</p>
-        <footer class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80&auto=format"
-            alt="Avatar ilustrativo de cliente"
-            loading="lazy" decoding="async" />
-          <div>
-            <strong>Mariana C.</strong>
-            <span>Cliente · Uberlândia/MG</span>
-          </div>
-        </footer>
-      </article>
-
-      <article class="testimonial-card testimonial-card--owner">
-        <span class="testimonial-card__example">Exemplo · Proprietário</span>
-        <div class="testimonial-card__quote-mark">"</div>
-        <p class="testimonial-card__quote">Meu carro parado virou renda passiva. Eles cuidam de tudo: cliente, contrato, pagamento. Recebo direto na conta.</p>
-        <footer class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&q=80&auto=format"
-            alt="Avatar ilustrativo de proprietário"
-            loading="lazy" decoding="async" />
-          <div>
-            <strong>Carlos M.</strong>
-            <span>Proprietário · Uberlândia/MG</span>
-          </div>
-        </footer>
-      </article>
-
-      <article class="testimonial-card testimonial-card--suporte">
-        <span class="testimonial-card__example">Exemplo · Suporte</span>
-        <div class="testimonial-card__quote-mark">"</div>
-        <p class="testimonial-card__quote">Atendimento humano por WhatsApp, sem call center. Resolveu rapidão quando precisei trocar a data.</p>
-        <footer class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&q=80&auto=format"
-            alt="Avatar ilustrativo de cliente em tratamento médico"
-            loading="lazy" decoding="async" />
-          <div>
-            <strong>Ana P.</strong>
-            <span>Cliente · Tratamento médico em UDI</span>
-          </div>
-        </footer>
-      </article>
-
-    </div>
-    <p class="note note--center" style="margin-top:18px;font-size:13px;">📝 Quer ser o primeiro? Cadastre-se e ganha <strong>3 meses Silver gratuito</strong> (7% off na renovação).</p>
   </div>
   <style>
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-      margin-top: 18px;
-    }
-    .testimonial-card {
-      position: relative;
+    .testi-coming {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 32px;
+      text-align: center;
       background: #fff;
-      border-radius: 14px;
-      padding: 22px 22px 18px;
-      box-shadow: 0 8px 24px rgba(20,40,30,.06), 0 2px 4px rgba(0,0,0,.03);
-      border: 1px solid #eef0ee;
-      transition: transform .25s ease, box-shadow .25s ease;
-      overflow: hidden;
+      border-radius: 20px;
+      border: 2px dashed #d1e7dd;
+      box-shadow: 0 8px 28px rgba(20,95,62,.06);
     }
-    .testimonial-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px rgba(20,40,30,.10), 0 4px 8px rgba(0,0,0,.04);
-    }
-    .testimonial-card--cliente { border-top: 3px solid #145f3e; }
-    .testimonial-card--owner   { border-top: 3px solid #d4af37; }
-    .testimonial-card--suporte { border-top: 3px solid #6366f1; }
-    .testimonial-card__example {
-      display: inline-block;
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      color: #6b7670;
-      background: #f0f3f1;
-      padding: 3px 9px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-    .testimonial-card__quote-mark {
-      position: absolute;
-      top: -6px; right: 14px;
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: 90px;
-      color: rgba(20,95,62,.08);
-      line-height: 1;
-      pointer-events: none;
-      font-weight: 700;
-    }
-    .testimonial-card__quote {
-      font-size: 14.5px;
-      line-height: 1.6;
-      color: #3a4945;
-      margin: 0 0 16px;
-      font-style: italic;
-      position: relative;
-      z-index: 1;
-    }
-    .testimonial-card__author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed #eef0ee;
-    }
-    .testimonial-card__avatar {
-      width: 44px; height: 44px;
+    .testi-coming__icon {
+      width: 64px; height: 64px;
+      margin: 0 auto 14px;
+      background: linear-gradient(135deg, #d1e7dd, #f0f9f3);
+      color: #145f3e;
       border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 2px 8px rgba(0,0,0,.12);
-      border: 2px solid #fff;
-      background: #f0f0f0;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
     }
-    .testimonial-card__author strong {
-      display: block;
-      font-size: 13.5px;
-      color: #14201b;
-      font-weight: 700;
-    }
-    .testimonial-card__author span {
-      display: block;
-      font-size: 11.5px;
-      color: #6b7670;
-      margin-top: 1px;
-    }
+    .testi-coming__icon svg { width: 30px; height: 30px; }
   </style>
 </section>
 
@@ -1624,17 +1512,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ DEPOIMENTOS ============ -->
-<section class="section section--surface">
-  <div class="container">
-    <div class="testi-soon">
-      <span class="eyebrow">Depoimentos</span>
-      <h2>Histórias reais em breve</h2>
-      <p>As histórias dos primeiros clientes e proprietários da rede aparecerão aqui em breve. Preferimos não inventar depoimentos — só publicamos o que for real.</p>
     </div>
   </div>
 </section>
