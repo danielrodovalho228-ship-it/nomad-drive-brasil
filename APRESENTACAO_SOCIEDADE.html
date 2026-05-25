@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nomade Drive Brasil — Estrutura Societária Proposta</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #145f3e;
+    --green-light: #1a7a4f;
+    --green-pale: #e8f6ee;
+    --gold: #d4af37;
+    --gold-light: #fef9c3;
+    --ink: #14201b;
+    --muted: #5b6b63;
+    --bg: #f4f5f7;
+    --white: #fff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: 'Sora', sans-serif; line-height: 1.2; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: var(--white);
+    padding: 48px 0 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(212,175,55,.2) 0%, transparent 70%);
+  }
+  .header__eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: .85;
+    margin-bottom: 8px;
+  }
+  .header h1 { font-size: 38px; font-weight: 800; margin-bottom: 12px; }
+  .header__sub { font-size: 18px; opacity: .92; max-width: 720px; }
+  .header__meta {
+    margin-top: 24px;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .header__meta strong { display: block; font-size: 22px; font-weight: 700; }
+
+  /* SECTIONS */
+  .section { padding: 48px 0; }
+  .section--alt { background: var(--white); }
+  .section__title {
+    font-size: 12px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+  }
+  .section h2 { font-size: 28px; font-weight: 800; margin-bottom: 14px; }
+  .section__sub { color: var(--muted); margin-bottom: 28px; max-width: 720px; }
+
+  /* CARDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 800px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid #e3e9e5;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 4px 14px -8px rgba(0,0,0,.06);
+  }
+  .card--green { border-left: 4px solid var(--green); }
+  .card--gold { border-left: 4px solid var(--gold); }
+  .card__title {
+    font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+  .card__value {
+    font-size: 32px; font-weight: 800; font-family: 'Sora', sans-serif;
+    color: var(--green); margin-bottom: 4px;
+  }
+  .card__sub { font-size: 13px; color: var(--muted); }
+
+  /* APORTES VISUAL */
+  .aportes {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px -8px rgba(0,0,0,.06);
+  }
+  .aporte-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1px solid #f0f3f1;
+    gap: 14px;
+  }
+  .aporte-row:last-child { border-bottom: 0; background: var(--green-pale); }
+  .aporte-row__label { font-weight: 600; color: var(--ink); }
+  .aporte-row__bar {
+    height: 28px; border-radius: 6px;
+    background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 100%);
+    color: #fff; padding: 0 12px;
+    display: flex; align-items: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .aporte-row__bar--gold {
+    background: linear-gradient(90deg, var(--gold) 0%, #b8941f 100%);
+    color: #14201b;
+  }
+  .aporte-row__value {
+    text-align: right; font-weight: 800; font-size: 18px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* DIVISÃO PIZZA */
+  .divisao {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 4px 14px -8px rgba(0,0,0,.06);
+  }
+  .pizza {
+    width: 220px; height: 220px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background: conic-gradient(var(--green) 0% 60%, var(--gold) 60% 100%);
+    position: relative;
+    box-shadow: 0 8px 24px -8px rgba(20,95,62,.3);
+  }
+  .pizza::after {
+    content: '60% / 40%';
+    position: absolute;
+    inset: 30px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: 22px; color: var(--green);
+  }
+  .pizza-legenda {
+    display: flex; justify-content: center; gap: 24px;
+  }
+  .pizza-legenda__item {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pizza-legenda__color {
+    width: 16px; height: 16px; border-radius: 4px;
+  }
+
+  /* TABELA */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px -8px rgba(0,0,0,.06);
+  }
+  th, td {
+    text-align: left; padding: 14px 18px;
+    border-bottom: 1px solid #f0f3f1;
+    font-size: 14px;
+  }
+  th {
+    background: var(--green-pale); color: var(--green);
+    font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  }
+  td.right { text-align: right; font-weight: 700; font-family: 'Sora', sans-serif; }
+  tr:last-child td { border-bottom: 0; }
+  tr.total { background: var(--green-pale); font-weight: 800; }
+  tr.total td { font-size: 15px; color: var(--green); }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative; padding-left: 32px;
+  }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 12px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--green-pale);
+  }
+  .timeline-item {
+    position: relative; padding-bottom: 24px;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute;
+    left: -27px; top: 4px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 2px var(--green);
+  }
+  .timeline-item strong {
+    display: block; font-size: 14px; color: var(--green); margin-bottom: 4px;
+  }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .badge--green { background: var(--green-pale); color: var(--green); }
+  .badge--gold { background: var(--gold-light); color: #854d0e; }
+  .badge--red { background: #fee2e2; color: #991b1b; }
+
+  /* FAIXA DESTAQUE */
+  .highlight-box {
+    background: linear-gradient(135deg, var(--gold-light) 0%, #fef3c7 100%);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .highlight-box h3 {
+    font-size: 18px; color: #854d0e; margin-bottom: 8px;
+  }
+
+  /* CTA FINAL */
+  .cta {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: var(--white);
+    padding: 48px 0;
+    text-align: center;
+  }
+  .cta h2 { font-size: 28px; margin-bottom: 14px; color: #fff; }
+  .cta p { opacity: .95; max-width: 600px; margin: 0 auto 24px; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 10px 0; padding-left: 28px;
+    position: relative;
+    border-bottom: 1px solid #f0f3f1;
+    font-size: 14px;
+  }
+  .checklist li::before {
+    content: '☐';
+    position: absolute; left: 0; top: 8px;
+    color: var(--green); font-size: 18px;
+  }
+
+  .footer {
+    background: var(--ink); color: #9fb3a8;
+    padding: 24px 0; text-align: center; font-size: 12px;
+  }
+
+  .icon-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--green-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 12px;
+  }
+
+  @media print {
+    .section { padding: 24px 0; page-break-inside: avoid; }
+    .cta { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <div class="header__eyebrow">🏢 Nomade Drive Brasil · Estrutura Societária Proposta</div>
+    <h1>Sociedade entre Daniel & Danilo Tomaz Rodovalho</h1>
+    <p class="header__sub">Plataforma tecnológica de aluguel mensal de carros em Uberlândia-MG. Proposta de constituição de Microempresa (ME) com divisão profissional 60/40 que respeita aportes e papéis de cada sócio.</p>
+    <div class="header__meta">
+      <div><strong>R$ 172k</strong>Capital total aportado</div>
+      <div><strong>60% / 40%</strong>Daniel / Danilo</div>
+      <div><strong>R$ 5.000</strong>Capital social ME</div>
+      <div><strong>R$ 167k</strong>Conta corrente de sócios</div>
+    </div>
+  </div>
+</header>
+
+<!-- SEÇÃO 1: APORTES -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__title">01 · Aportes</div>
+    <h2>O que cada sócio coloca na empresa</h2>
+    <p class="section__sub">Cada sócio contribui com bens e capital. A divisão 60/40 reflete poder de decisão, não apenas valor financeiro — Danilo entra com 40% porque assumirá a gestão operacional no Brasil.</p>
+
+    <div class="aportes">
+      <div class="aporte-row">
+        <div class="aporte-row__label">🚗 Daniel<br><small style="color:var(--muted);font-weight:400;">Chevrolet Cobalt (FIPE)</small></div>
+        <div class="aporte-row__bar" style="width: 33%;">R$ 57.000</div>
+        <div class="aporte-row__value" style="color: var(--green);">R$ 57.000</div>
+      </div>
+      <div class="aporte-row">
+        <div class="aporte-row__label">💻 Daniel<br><small style="color:var(--muted);font-weight:400;">Software Nomade Drive (47 fases)</small></div>
+        <div class="aporte-row__bar" style="width: 58%;">R$ 100.000</div>
+        <div class="aporte-row__value" style="color: var(--green);">R$ 100.000</div>
+      </div>
+      <div class="aporte-row">
+        <div class="aporte-row__label">💰 Danilo<br><small style="color:var(--muted);font-weight:400;">Capital em dinheiro</small></div>
+        <div class="aporte-row__bar aporte-row__bar--gold" style="width: 9%;">R$ 15.000</div>
+        <div class="aporte-row__value" style="color: var(--gold);">R$ 15.000</div>
+      </div>
+      <div class="aporte-row">
+        <div class="aporte-row__label" style="font-weight:800;color:var(--green);">TOTAL</div>
+        <div></div>
+        <div class="aporte-row__value" style="color: var(--green); font-size: 22px;">R$ 172.000</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h3>💎 Como o software foi avaliado em R$ 100.000?</h3>
+      <p style="color:#3a4945;font-size:14px;">3 métodos cruzados:</p>
+      <ul style="margin-top:8px;padding-left:20px;font-size:13.5px;color:#3a4945;line-height:1.7;">
+        <li><strong>Custo de reposição:</strong> uma agência cobraria R$ 120k-450k pra construir do zero</li>
+        <li><strong>Mercado SaaS:</strong> plataformas similares vendidas/avaliadas R$ 80k-150k</li>
+        <li><strong>Múltiplo de receita futura:</strong> 3-5x ARR projetado = R$ 300k-500k</li>
+      </ul>
+      <p style="margin-top:10px;font-size:13px;color:#854d0e;font-weight:600;">Valor escolhido: R$ 100.000 (conservador e defensável)</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 2: DIVISÃO 60/40 -->
+<section class="section">
+  <div class="container">
+    <div class="section__title">02 · Estrutura Societária</div>
+    <h2>Divisão 60 / 40 com Conta Corrente de Sócios</h2>
+    <p class="section__sub">Modelo profissional que respeita aportes desproporcionais sem prejudicar nenhum sócio. Daniel mantém poder majoritário (60%) e Danilo entra como sócio operacional pleno (40%).</p>
+
+    <div class="grid-2" style="margin-top: 14px;">
+      <div class="divisao">
+        <div class="pizza"></div>
+        <div class="pizza-legenda">
+          <div class="pizza-legenda__item">
+            <div class="pizza-legenda__color" style="background: var(--green);"></div>
+            <strong>Daniel · 60%</strong>
+          </div>
+          <div class="pizza-legenda__item">
+            <div class="pizza-legenda__color" style="background: var(--gold);"></div>
+            <strong>Danilo · 40%</strong>
+          </div>
+        </div>
+        <p style="text-align:center;margin-top:18px;font-size:13px;color:var(--muted);">Distribuição das quotas do capital social</p>
+      </div>
+
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Sócio</th>
+              <th class="right">Aportou</th>
+              <th class="right">Capital</th>
+              <th class="right">Conta Sócio (crédito)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Daniel</strong><br><small style="color:var(--muted);">60% quotas</small></td>
+              <td class="right">R$ 157.000</td>
+              <td class="right" style="color:var(--green);">R$ 3.000</td>
+              <td class="right" style="color:var(--gold);">R$ 154.000</td>
+            </tr>
+            <tr>
+              <td><strong>Danilo</strong><br><small style="color:var(--muted);">40% quotas</small></td>
+              <td class="right">R$ 15.000</td>
+              <td class="right" style="color:var(--green);">R$ 2.000</td>
+              <td class="right" style="color:var(--gold);">R$ 13.000</td>
+            </tr>
+            <tr class="total">
+              <td>TOTAL</td>
+              <td class="right">R$ 172.000</td>
+              <td class="right">R$ 5.000</td>
+              <td class="right">R$ 167.000</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:14px;font-size:13px;color:var(--muted);line-height:1.5;">A <strong style="color:var(--green);">Conta Corrente de Sócios</strong> é a parte que excede o capital social — é um <strong>crédito que a empresa tem com os sócios</strong>, devolvido conforme caixa positivo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 3: PAPÉIS -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__title">03 · Papéis e Remuneração</div>
+    <h2>Pró-labore por dedicação (separado das quotas)</h2>
+    <p class="section__sub">Pró-labore é a remuneração pelo <strong>trabalho de gestão</strong>, paga mensalmente. Independe do % de quotas. Quem dedica mais tempo recebe mais — isso não desequilibra a sociedade.</p>
+
+    <div class="grid-2">
+      <div class="card card--green">
+        <div class="icon-circle">🇧🇷</div>
+        <h3 style="font-size:20px;margin-bottom:6px;">Danilo Tomaz Rodovalho</h3>
+        <span class="badge badge--green">Administrador Operacional</span>
+        <p style="margin:14px 0;font-size:14px;color:var(--muted);line-height:1.6;">Sócio responsável pela <strong>gestão completa da empresa no Brasil</strong>: operação diária, relacionamento com proprietários e clientes, oficinas parceiras, fiscalização de veículos, decisões operacionais.</p>
+        <div style="background:var(--green-pale);padding:14px 16px;border-radius:8px;margin-top:14px;">
+          <div style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Pró-labore sugerido</div>
+          <div style="font-size:24px;font-weight:800;color:var(--green);font-family:'Sora';">R$ 2.500 a R$ 3.500/mês</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Cresce conforme empresa escala</div>
+        </div>
+      </div>
+
+      <div class="card card--gold">
+        <div class="icon-circle" style="background:var(--gold-light);">🇺🇸</div>
+        <h3 style="font-size:20px;margin-bottom:6px;">Daniel Tomaz Rodovalho</h3>
+        <span class="badge badge--gold">Conselheiro Estratégico & CTO</span>
+        <p style="margin:14px 0;font-size:14px;color:var(--muted);line-height:1.6;">Sócio responsável por <strong>tecnologia, produto, estratégia e relações internacionais</strong>. Atuação remota dos EUA. Mantém o software, define roadmap, suporta decisões estratégicas.</p>
+        <div style="background:var(--gold-light);padding:14px 16px;border-radius:8px;margin-top:14px;">
+          <div style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Pró-labore sugerido</div>
+          <div style="font-size:24px;font-weight:800;color:#854d0e;font-family:'Sora';">R$ 0 a R$ 1.500/mês</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Opcional — pode receber só via dividendos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:24px;">
+      <h3>🎯 Por que isso é justo</h3>
+      <p style="color:#3a4945;font-size:14px;line-height:1.7;">Danilo recebe mais por mês <strong>porque trabalha mais diariamente</strong> — não porque tem mais quotas. Daniel ganha menos pró-labore mas recebe <strong>60% dos lucros distribuídos</strong> (proporção do capital). Essa estrutura é padrão em sociedades familiares profissionalizadas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 4: COMO DANIEL RECUPERA -->
+<section class="section">
+  <div class="container">
+    <div class="section__title">04 · Segurança Patrimonial</div>
+    <h2>Como Daniel recupera os R$ 154 mil</h2>
+    <p class="section__sub">O excedente do aporte (R$ 154k do Daniel + R$ 13k do Danilo) fica registrado como <strong>crédito dos sócios</strong>. A empresa devolve esse valor de 3 formas combinadas no contrato:</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="icon-circle">📅</div>
+        <h3 style="font-size:16px;margin-bottom:6px;">Pagamento programado</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Quando empresa faturar acima de X/mês, devolve R$ Y/mês ao sócio em parcelas. Critério definido no contrato.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">💰</div>
+        <h3 style="font-size:16px;margin-bottom:6px;">Antes dos lucros</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Em cada distribuição de lucros, primeiro paga o crédito da Conta Sócios. Resto é dividido 60/40.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">📈</div>
+        <h3 style="font-size:16px;margin-bottom:6px;">Conversão em quotas</h3>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Se Daniel quiser aumentar participação, o crédito vira mais % de capital (com acordo do Danilo).</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:24px;">
+      <h3>⚖️ Cláusula crítica: saída antecipada</h3>
+      <p style="color:#3a4945;font-size:14px;line-height:1.7;">Se algum sócio sair da empresa em <strong>menos de 5 anos</strong>, o crédito da Conta de Sócios vai <strong>junto com ele</strong>. Isso protege ambos — ninguém perde o que aportou se a sociedade não der certo. Software volta ao Daniel automaticamente se a sociedade for desfeita.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 5: FLUXO DE CAIXA -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__title">05 · Projeção Financeira</div>
+    <h2>Simulação de caixa nos primeiros 6 meses</h2>
+    <p class="section__sub">Estimativa conservadora começando com o Cobalt do Daniel + crescimento orgânico via marketing.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Locações ativas</th>
+          <th class="right">Receita bruta</th>
+          <th class="right">Comissão (10%)</th>
+          <th class="right">Custos</th>
+          <th class="right">Caixa final</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mês 1</strong></td>
+          <td>1 (Cobalt)</td>
+          <td class="right">R$ 2.000</td>
+          <td class="right">R$ 200</td>
+          <td class="right">R$ 800</td>
+          <td class="right" style="color:#b91c1c;">-R$ 600</td>
+        </tr>
+        <tr>
+          <td><strong>Mês 2</strong></td>
+          <td>3</td>
+          <td class="right">R$ 6.000</td>
+          <td class="right">R$ 600</td>
+          <td class="right">R$ 1.000</td>
+          <td class="right" style="color:#b91c1c;">-R$ 400</td>
+        </tr>
+        <tr>
+          <td><strong>Mês 3</strong></td>
+          <td>5</td>
+          <td class="right">R$ 10.000</td>
+          <td class="right">R$ 1.000</td>
+          <td class="right">R$ 1.200</td>
+          <td class="right" style="color:#b91c1c;">-R$ 200</td>
+        </tr>
+        <tr style="background:var(--green-pale);">
+          <td><strong>Mês 4 ✅</strong></td>
+          <td>8 <span class="badge badge--green">break-even</span></td>
+          <td class="right">R$ 16.000</td>
+          <td class="right">R$ 1.600</td>
+          <td class="right">R$ 1.500</td>
+          <td class="right" style="color:var(--green);">+R$ 100</td>
+        </tr>
+        <tr>
+          <td><strong>Mês 5</strong></td>
+          <td>12</td>
+          <td class="right">R$ 24.000</td>
+          <td class="right">R$ 2.400</td>
+          <td class="right">R$ 1.800</td>
+          <td class="right" style="color:var(--green);">+R$ 600</td>
+        </tr>
+        <tr>
+          <td><strong>Mês 6</strong></td>
+          <td>18</td>
+          <td class="right">R$ 36.000</td>
+          <td class="right">R$ 3.600</td>
+          <td class="right">R$ 2.500</td>
+          <td class="right" style="color:var(--green);">+R$ 1.100</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grid-3" style="margin-top:24px;">
+      <div class="card card--green">
+        <div class="card__title">Custo fixo mensal</div>
+        <div class="card__value">R$ 700</div>
+        <div class="card__sub">Infra + contador + DAS mínimo</div>
+      </div>
+      <div class="card card--green">
+        <div class="card__title">Break-even</div>
+        <div class="card__value">8</div>
+        <div class="card__sub">Locações ativas (~R$ 1.6k receita)</div>
+      </div>
+      <div class="card card--green">
+        <div class="card__title">Caixa pra queima inicial</div>
+        <div class="card__value">3-4 meses</div>
+        <div class="card__sub">Cobertos pelo aporte do Danilo + Cobalt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 6: CLÁUSULAS DE PROTEÇÃO -->
+<section class="section">
+  <div class="container">
+    <div class="section__title">06 · Cláusulas de Proteção</div>
+    <h2>O que vai no contrato social</h2>
+    <p class="section__sub">Cláusulas que protegem ambos os sócios. Sempre revisar com advogado especializado em societário.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">🛡️ Não-concorrência</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Sócio que sair não pode abrir negócio similar em UDI/região por 5 anos.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">🤝 Direito de preferência</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Quem quer vender quotas oferece primeiro pro outro sócio antes de terceiros.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">📅 Reunião mensal de sócios</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Alinhamento obrigatório mensal com ata. Decisões estratégicas exigem ambos.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">💵 Reserva de caixa</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Mínimo R$ 5.000 sempre em caixa antes de distribuir lucros.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">🔗 Tag Along</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Se Daniel vender 60%, Danilo pode vender os 40% nas mesmas condições.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">🚪 Cláusula Buyout</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Regra clara de saída: preço das quotas = avaliação contábil ou múltiplo de receita.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">💻 Reversão do Software</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Se sociedade desfeita, software (avaliado em R$ 100k) volta automaticamente ao Daniel.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;color:var(--green);margin-bottom:8px;">🔒 NDA + Sigilo</h3>
+        <p style="font-size:13.5px;color:var(--muted);">Confidencialidade sobre código, dados de clientes, proprietários e parceiros.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 7: PRÓXIMOS PASSOS -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__title">07 · Roadmap de Constituição</div>
+    <h2>Como abrir a ME em 15-20 dias úteis</h2>
+
+    <div class="timeline" style="margin-top:14px;">
+      <div class="timeline-item">
+        <strong>Semana 1 — Decisões + contador</strong>
+        Daniel + Danilo alinham as 12 decisões pendentes. Escolhem contador (Contabilizei online R$ 89/mês ou local em Uberlândia).
+      </div>
+      <div class="timeline-item">
+        <strong>Semana 2 — Contrato social</strong>
+        Contador prepara contrato social com cláusulas listadas. Daniel + Danilo assinam digitalmente via gov.br.
+      </div>
+      <div class="timeline-item">
+        <strong>Semana 3 — Junta Comercial MG</strong>
+        JUCEMG registra o contrato e emite NIRE. Receita Federal emite CNPJ (1-3 dias após NIRE).
+      </div>
+      <div class="timeline-item">
+        <strong>Semana 4 — Pós-CNPJ</strong>
+        Opção pelo Simples Nacional. Alvará Prefeitura Uberlândia. Conta PJ (Cora/Conta Simples). Certificado digital e-CNPJ.
+      </div>
+      <div class="timeline-item">
+        <strong>Pronto — Operação começa</strong>
+        Plataforma já está 95% pronta. Atualizamos termos.html, Cockpit Fiscal e configurações com novo CNPJ. Primeira locação real do Cobalt.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 8: CHECKLIST FINAL -->
+<section class="section">
+  <div class="container">
+    <div class="section__title">08 · Decisões Pendentes</div>
+    <h2>O que precisamos combinar juntos</h2>
+
+    <div class="grid-2">
+      <div>
+        <h3 style="color:var(--green);font-size:16px;margin-bottom:12px;">📋 Sobre a empresa</h3>
+        <ul class="checklist">
+          <li>Razão social (sugestão: <em>Nomade Drive Tecnologia LTDA</em>)</li>
+          <li>Capital social inicial (R$ 5.000 sugerido)</li>
+          <li>Quem assina como administrador (Danilo? Ambos?)</li>
+          <li>Endereço comercial (residencial UDI ou coworking)</li>
+          <li>Contador escolhido</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--green);font-size:16px;margin-bottom:12px;">💰 Sobre os valores</h3>
+        <ul class="checklist">
+          <li>Avaliação do software (sugestão R$ 100.000)</li>
+          <li>Pró-labore inicial Danilo (R$ 2.500-3.500)</li>
+          <li>Pró-labore inicial Daniel (R$ 0-1.500)</li>
+          <li>Cláusula de devolução da Conta de Sócios</li>
+          <li>Reserva mínima de caixa (R$ 5.000 sugerido)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:24px;">
+      <div>
+        <h3 style="color:var(--green);font-size:16px;margin-bottom:12px;">🛡️ Sobre proteção</h3>
+        <ul class="checklist">
+          <li>Tempo de não-concorrência (5 anos sugerido)</li>
+          <li>Reunião mensal obrigatória de sócios</li>
+          <li>Reversão automática do software ao Daniel</li>
+          <li>Tag along ativo</li>
+          <li>Direito de preferência</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--green);font-size:16px;margin-bottom:12px;">🚀 Sobre operação</h3>
+        <ul class="checklist">
+          <li>O Cobalt entra como frota da plataforma desde o mês 1?</li>
+          <li>Marketing inicial — orçamento mensal</li>
+          <li>Conta PJ — qual banco/fintech</li>
+          <li>NotaZZ pra NF eletrônica desde o início</li>
+          <li>Quem assina contratos com proprietários e oficinas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta">
+  <div class="container">
+    <h2>🚀 Pronto pra começar</h2>
+    <p>Estrutura societária 60/40 justa, profissional e protetora pra ambos. Próximo passo: alinhar com o contador e começar a constituição da ME.</p>
+    <p style="margin-top:14px;font-size:13px;opacity:.85;">Documento de proposta gerado em 2026-05-24<br>Nomade Drive Brasil · Uberlândia/MG</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>Documento orientativo. Decisões finais devem ser revisadas com contador e advogado especializado em direito societário.</p>
+  </div>
+</footer>
+
+</body>
+</html>
