@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bem-vindo! — Nomade Drive Brasil</title>
+<meta name="description" content="Sua conta está pronta — siga estes 4 passos pra alugar seu primeiro carro pela Nomade Drive Brasil." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+/* ============================================================
+ * Fase 56 — Boas-vindas cliente pós-cadastro
+ * ============================================================ */
+.welcome-hero {
+  background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 55%, #20c997 100%);
+  color: #fff;
+  padding: 56px 24px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.welcome-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 30%, rgba(255,255,255,.13) 0, transparent 38%),
+    radial-gradient(circle at 75% 70%, rgba(212,175,55,.20) 0, transparent 38%);
+  pointer-events: none;
+}
+.welcome-hero__inner {
+  max-width: 720px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.welcome-hero__badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,.25);
+  animation: w-bounce-in .55s cubic-bezier(.34,1.56,.64,1) both;
+}
+.welcome-hero h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 800;
+  margin: 0 0 10px;
+  line-height: 1.15;
+  animation: w-fade-up .5s ease .15s both;
+}
+.welcome-hero h1 span { color: #ffd966; }
+.welcome-hero__sub {
+  font-size: 16px; max-width: 540px; margin: 0 auto 24px;
+  opacity: .92; line-height: 1.55;
+  animation: w-fade-up .5s ease .3s both;
+}
+.welcome-hero__progress {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.12);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,.2);
+  animation: w-fade-up .5s ease .45s both;
+}
+.welcome-hero__progress-bar {
+  width: 140px; height: 8px;
+  background: rgba(255,255,255,.25);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.welcome-hero__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd966, #ffc107);
+  border-radius: 999px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+}
+@keyframes w-bounce-in { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+@keyframes w-fade-up   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+.welcome-steps {
+  max-width: 760px; margin: -32px auto 64px;
+  padding: 0 16px;
+  position: relative; z-index: 2;
+}
+.welcome-step {
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 24px rgba(20,40,30,.08);
+  display: flex; gap: 18px; align-items: flex-start;
+  border: 2px solid transparent;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  opacity: 0;
+  animation: w-fade-up .5s ease both;
+  position: relative;
+}
+.welcome-step:nth-child(1) { animation-delay: .55s; }
+.welcome-step:nth-child(2) { animation-delay: .65s; }
+.welcome-step:nth-child(3) { animation-delay: .75s; }
+.welcome-step:nth-child(4) { animation-delay: .85s; }
+.welcome-step--done { background: #f0f9f3; border-color: #198754; }
+.welcome-step--current {
+  border-color: #ffc107;
+  box-shadow: 0 10px 30px rgba(255,193,7,.18);
+  transform: translateY(-2px);
+}
+.welcome-step--current::after {
+  content: "👉 próximo passo";
+  position: absolute;
+  top: -10px; right: 16px;
+  background: #ffc107;
+  color: #14201b;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .3px;
+}
+.welcome-step__icon {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700;
+  color: #6b7670;
+  transition: background .3s, color .3s;
+}
+.welcome-step--done .welcome-step__icon { background: #198754; color: #fff; }
+.welcome-step--current .welcome-step__icon {
+  background: linear-gradient(135deg, #ffc107, #f39c12);
+  color: #fff;
+  animation: w-pulse 2s ease-in-out infinite;
+}
+@keyframes w-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,.5); }
+  50%      { box-shadow: 0 0 0 12px rgba(255,193,7,0); }
+}
+.welcome-step__body { flex: 1; min-width: 0; }
+.welcome-step__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px; font-weight: 700;
+  margin: 0 0 4px;
+  color: #14201b;
+}
+.welcome-step__desc {
+  font-size: 14px; color: #5b6b63;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.welcome-step__cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #198754; color: #fff;
+  text-decoration: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  transition: background .2s, transform .15s;
+  border: none; cursor: pointer;
+}
+.welcome-step__cta:hover { background: #146c43; transform: translateY(-1px); }
+.welcome-step--done .welcome-step__cta {
+  background: transparent;
+  color: #198754;
+  border: 1.5px solid #198754;
+}
+.welcome-step--done .welcome-step__cta:hover { background: #f0f9f3; color: #146c43; }
+
+.welcome-actions {
+  margin: 32px auto 0;
+  max-width: 760px;
+  padding: 0 16px;
+  display: flex; gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.welcome-link-subtle {
+  font-size: 13px; color: #6b7670;
+  text-decoration: underline;
+  background: transparent;
+  border: none; cursor: pointer;
+  padding: 8px 12px;
+  font-family: inherit;
+}
+.welcome-link-subtle:hover { color: #198754; }
+
+.welcome-loading {
+  text-align: center;
+  padding: 32px;
+  color: #6b7670;
+  font-size: 14px;
+}
+.welcome-loading::before {
+  content: ""; display: inline-block;
+  width: 22px; height: 22px;
+  border: 3px solid #e9ecef;
+  border-top-color: #198754;
+  border-radius: 50%;
+  animation: w-spin .9s linear infinite;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+@keyframes w-spin { to { transform: rotate(360deg); } }
+
+/* Gold tier celebration badge */
+.welcome-tier-info {
+  margin-top: 18px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #fff8e7, #fff3cd);
+  border-left: 4px solid #d4af37;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #5b4d20;
+  line-height: 1.55;
+}
+.welcome-tier-info strong { color: #856404; }
+
+@media (max-width: 540px) {
+  .welcome-step { padding: 16px 18px; gap: 14px; }
+  .welcome-step__icon { width: 38px; height: 38px; font-size: 17px; }
+  .welcome-step__title { font-size: 15px; }
+  .welcome-step__desc { font-size: 13.5px; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="dashboard-cliente.html">Ir pro painel</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="welcome-hero">
+  <div class="welcome-hero__inner">
+    <span class="welcome-hero__badge">✅ Cadastro pronto</span>
+    <h1>Bem-vindo, <span id="welcomeName">amigo</span>!</h1>
+    <p class="welcome-hero__sub">Sua conta está criada. Em 4 passos rápidos você consegue alugar seu primeiro carro com tudo verificado pela equipe Nomade Drive.</p>
+    <div class="welcome-hero__progress">
+      <span id="welcomeProgressLabel">0 de 4 concluídos</span>
+      <span class="welcome-hero__progress-bar">
+        <span class="welcome-hero__progress-fill" id="welcomeProgressFill"></span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<div class="welcome-steps" id="welcomeSteps">
+  <div class="welcome-loading">Carregando seu progresso...</div>
+</div>
+
+<div class="welcome-actions">
+  <a href="frota.html" class="btn btn--solid btn--sm">🚗 Ver frota disponível</a>
+  <a href="dashboard-cliente.html" class="btn btn--outline btn--sm">Ir pro painel agora</a>
+  <button type="button" class="welcome-link-subtle" id="welcomeDismiss">Não mostrar esta tela de novo</button>
+</div>
+
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="nd-modal.js?v=20260524g"></script>
+<script src="supabase-config.js?v=20260523c"></script>
+<script src="auth.js?v=20260523c"></script>
+<script src="script.js?v=20260523c"></script>
+<script>
+(function () {
+  var stepsEl = document.getElementById("welcomeSteps");
+  var nameEl  = document.getElementById("welcomeName");
+  var progLbl = document.getElementById("welcomeProgressLabel");
+  var progFill= document.getElementById("welcomeProgressFill");
+
+  function firstName(full) {
+    if (!full) return "amigo";
+    var parts = String(full).trim().split(/\s+/);
+    return parts[0] || "amigo";
+  }
+
+  function renderSteps(state) {
+    var steps = [
+      {
+        id: "kyc",
+        done: state.kycOk,
+        icon: state.kycOk ? "✓" : "1",
+        title: "Enviar documentos (KYC)",
+        desc: state.kycOk
+          ? "Documentos aprovados — sua conta está verificada."
+          : "CNH + comprovante de residência + selfie. Análise em até 24h úteis.",
+        ctaText: state.kycOk ? "Ver documentos" : "Enviar documentos",
+        ctaHref: "dashboard-cliente.html#documentos"
+      },
+      {
+        id: "verify",
+        done: state.emailOk,
+        icon: state.emailOk ? "✓" : "2",
+        title: "Verificar e-mail",
+        desc: state.emailOk
+          ? "E-mail confirmado — você vai receber atualizações da reserva."
+          : "Clique no link que enviamos pro seu e-mail pra confirmar a conta.",
+        ctaText: state.emailOk ? "Conta verificada" : "Reenviar e-mail",
+        ctaHref: state.emailOk ? "dashboard-cliente.html" : "javascript:void(0)",
+        action: state.emailOk ? null : "resend_email"
+      },
+      {
+        id: "rent",
+        done: state.hasBooking,
+        icon: state.hasBooking ? "✓" : "3",
+        title: "Fazer sua primeira reserva",
+        desc: state.hasBooking
+          ? "Você já tem " + state.bookingCount + " reserva(s)! Acompanhe no painel."
+          : "Escolha um carro da frota verificada e solicite o aluguel — aprovação em até 24h.",
+        ctaText: state.hasBooking ? "Ver minhas reservas" : "Ver frota disponível",
+        ctaHref: state.hasBooking ? "dashboard-cliente.html#bookings" : "frota.html"
+      },
+      {
+        id: "rate",
+        done: state.hasRating,
+        icon: state.hasRating ? "🎉" : "4",
+        title: "Avaliar sua experiência (sobe pra Silver/Gold)",
+        desc: state.hasRating
+          ? "Você já avaliou — obrigado! Cada avaliação conta pro seu tier de fidelidade."
+          : "Após a 1ª locação, avalie o proprietário. Avaliações = pontos no Programa Nomade Gold.",
+        ctaText: state.hasRating ? "Ver minhas avaliações" : "Como funciona o Gold",
+        ctaHref: state.hasRating
+          ? "dashboard-cliente.html#avaliacoes"
+          : "index.html#fidelidade"
+      }
+    ];
+
+    var currentIdx = -1;
+    for (var i = 0; i < steps.length; i++) {
+      if (!steps[i].done) { currentIdx = i; break; }
+    }
+    var doneCount = steps.filter(function (s) { return s.done; }).length;
+
+    progLbl.textContent = doneCount + " de " + steps.length + " concluídos";
+    setTimeout(function () {
+      progFill.style.width = ((doneCount / steps.length) * 100) + "%";
+    }, 100);
+
+    stepsEl.innerHTML = "";
+    steps.forEach(function (s, idx) {
+      var step = document.createElement("div");
+      var cls = "welcome-step";
+      if (s.done) cls += " welcome-step--done";
+      else if (idx === currentIdx) cls += " welcome-step--current";
+      step.className = cls;
+
+      var icon = document.createElement("div");
+      icon.className = "welcome-step__icon";
+      icon.textContent = s.icon;
+
+      var body = document.createElement("div");
+      body.className = "welcome-step__body";
+
+      var title = document.createElement("h3");
+      title.className = "welcome-step__title";
+      title.textContent = s.title;
+
+      var desc = document.createElement("p");
+      desc.className = "welcome-step__desc";
+      desc.textContent = s.desc;
+
+      var cta = document.createElement("a");
+      cta.className = "welcome-step__cta";
+      cta.href = s.ctaHref;
+      cta.textContent = (s.done ? "" : "→ ") + s.ctaText;
+
+      // Ação especial: reenviar e-mail de verificação
+      if (s.action === "resend_email") {
+        cta.addEventListener("click", function (e) {
+          e.preventDefault();
+          resendVerificationEmail(cta);
+        });
+      }
+
+      body.appendChild(title);
+      body.appendChild(desc);
+      body.appendChild(cta);
+
+      step.appendChild(icon);
+      step.appendChild(body);
+      stepsEl.appendChild(step);
+    });
+
+    // Adiciona dica do Programa Gold se ainda não fez avaliação
+    if (!state.hasRating) {
+      var tierInfo = document.createElement("div");
+      tierInfo.className = "welcome-tier-info";
+      tierInfo.innerHTML =
+        '🏆 <strong>Programa Nomade Gold:</strong> a cada locação concluída + avaliação enviada, você sobe de tier. ' +
+        'Bronze → Silver → Gold → Platinum, com descontos e benefícios crescentes (auto-aprovação Gold/Platinum).';
+      stepsEl.appendChild(tierInfo);
+    }
+
+    // Celebração 4/4
+    if (doneCount === steps.length) {
+      var party = document.createElement("div");
+      party.style.cssText = "text-align:center;margin-top:20px;padding:20px;background:linear-gradient(135deg,#fff3cd,#ffeaa7);border-radius:14px;animation:w-bounce-in .5s ease;";
+      party.innerHTML = '<div style="font-size:32px;margin-bottom:6px;">🎉</div>' +
+        '<strong style="font-size:17px;color:#14201b;">Você completou os 4 passos!</strong>' +
+        '<p style="margin:6px 0 0;color:#5b6b63;font-size:14px;">Use o painel pra acompanhar reservas, documentos e o Programa Nomade Gold.</p>';
+      stepsEl.appendChild(party);
+    }
+  }
+
+  function resendVerificationEmail(btn) {
+    if (!window.ndAuth || !window.ndAuth.client) return;
+    var orig = btn.textContent;
+    btn.textContent = "Enviando...";
+    var c = window.ndAuth.client();
+    c.auth.getUser().then(function (u) {
+      var email = u && u.data && u.data.user && u.data.user.email;
+      if (!email) { btn.textContent = orig; return; }
+      c.auth.resend({ type: "signup", email: email }).then(function (r) {
+        if (r.error) {
+          btn.textContent = orig;
+          if (window.ndModal) {
+            ndModal.alert({ title: "Não foi possível reenviar", body: r.error.message || "Tente novamente em alguns minutos.", icon: "⚠️" });
+          }
+        } else {
+          btn.textContent = "✓ E-mail enviado";
+          if (window.ndModal) {
+            ndModal.alert({ title: "E-mail enviado!", body: "Verifique sua caixa de entrada e a pasta de spam.", icon: "📧" });
+          }
+        }
+      });
+    });
+  }
+
+  function loadState() {
+    var a = window.ndAuth;
+    if (!a) { stepsEl.innerHTML = '<p style="text-align:center;color:#b00020;">Autenticação indisponível.</p>'; return; }
+
+    a.requireAuth().then(function (s) {
+      if (!s) return;
+      var c = a.client();
+      if (!c) return;
+
+      // Em paralelo: profile + bookings + ratings
+      Promise.all([
+        c.from("profiles")
+          .select("full_name, verification_status, main_role")
+          .eq("id", s.user.id).maybeSingle(),
+        c.from("bookings")
+          .select("id", { count: "exact", head: true })
+          .eq("client_id", s.user.id),
+        c.from("ratings")
+          .select("id", { count: "exact", head: true })
+          .eq("rater_id", s.user.id)
+          .eq("direction", "client_rates_owner")
+      ]).then(function (results) {
+        var profile = (results[0] && results[0].data) || {};
+        var bCount  = (results[1] && results[1].count) || 0;
+        var rCount  = (results[2] && results[2].count) || 0;
+
+        nameEl.textContent = firstName(profile.full_name || (s.user.user_metadata && s.user.user_metadata.full_name));
+
+        // KYC ok = verification_status é aprovado ou aprovado_com_ressalvas
+        var kycOk = (profile.verification_status === "aprovado" ||
+                     profile.verification_status === "aprovado_com_ressalvas");
+        // E-mail ok = Supabase já tem email_confirmed_at preenchido
+        var emailOk = !!(s.user.email_confirmed_at || (s.user.confirmed_at));
+
+        renderSteps({
+          kycOk: kycOk,
+          emailOk: emailOk,
+          hasBooking: bCount > 0,
+          bookingCount: bCount,
+          hasRating: rCount > 0
+        });
+      }).catch(function (err) {
+        console.warn("welcome cliente load:", err && err.message);
+        nameEl.textContent = firstName(s.user.user_metadata && s.user.user_metadata.full_name);
+        // Fallback: mostra tudo pendente exceto email se já confirmado
+        renderSteps({
+          kycOk: false,
+          emailOk: !!(s.user.email_confirmed_at || s.user.confirmed_at),
+          hasBooking: false, bookingCount: 0, hasRating: false
+        });
+      });
+    });
+  }
+
+  document.getElementById("welcomeDismiss").addEventListener("click", function () {
+    try { localStorage.setItem("ndb-welcome-cliente-dismissed", "1"); } catch (e) {}
+    window.location.href = "dashboard-cliente.html";
+  });
+
+  loadState();
+})();
+</script>
+<script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
+</body>
+</html>
