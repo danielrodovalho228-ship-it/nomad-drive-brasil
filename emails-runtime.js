@@ -160,6 +160,23 @@
     profile_approved: function (p) {
       var roleLabel = p.role_label || "perfil";
       var dashUrl = SITE + "/" + (p.dashboard_path || "dashboard-cliente.html");
+
+      // Fase 55b: owner aprovado vai direto pro guia de boas-vindas em vez
+      // do painel vazio (reduz churn — owner aprovado sem saber por onde começar).
+      // Detecção robusta: caller pode passar role="owner", role_label="Proprietário"
+      // (admin usa a.roleLabel), ou dashboard_path="dashboard-proprietario.html"
+      // (admin usa a.dashboardFor).
+      var roleLblLow = String(p.role_label || "").toLowerCase();
+      var dashPathLow = String(p.dashboard_path || "").toLowerCase();
+      var isOwner = (p.role === "owner" ||
+                     roleLblLow.indexOf("proprietár") >= 0 ||
+                     dashPathLow.indexOf("proprietario") >= 0);
+      var ctaUrl = isOwner ? (SITE + "/boas-vindas-owner.html") : dashUrl;
+      var ctaText = isOwner ? "🎯 Ver meus próximos passos" : "Acessar meu painel";
+      var ownerExtra = isOwner
+        ? "Preparamos um <strong>guia rápido de 4 passos</strong> pra você colocar seu carro pra render: conectar conta bancária, cadastrar veículo, adicionar fotos e receber a primeira reserva."
+        : null;
+
       return {
         replyTo: "contato@nomadedrive.com.br",
         subject: "Seu cadastro foi aprovado — Nomade Drive Brasil",
@@ -170,15 +187,17 @@
           body: [
             "Olá " + escapeHtml(p.full_name || "") + ", boas notícias!",
             "Seu cadastro como <strong>" + escapeHtml(roleLabel) + "</strong> foi <strong>aprovado</strong> pela equipe Nomade Drive. Você já pode acessar seu painel completo.",
+            ownerExtra,
             (p.notes ? "<strong>Observação da equipe:</strong> " + escapeHtml(p.notes) : "")
           ].filter(Boolean),
-          ctaText: "Acessar meu painel",
-          ctaUrl: dashUrl
+          ctaText: ctaText,
+          ctaUrl: ctaUrl
         }),
         text: "Olá " + (p.full_name || "") + ",\n\n" +
           "Seu cadastro como " + roleLabel + " foi APROVADO.\n" +
-          (p.notes ? "Observação: " + p.notes + "\n\n" : "\n") +
-          "Acesse: " + dashUrl
+          (isOwner ? "\nVeja seus próximos passos (4 etapas): " + SITE + "/boas-vindas-owner.html\n\n" : "\n") +
+          (p.notes ? "Observação: " + p.notes + "\n\n" : "") +
+          "Painel: " + dashUrl
       };
     },
 
