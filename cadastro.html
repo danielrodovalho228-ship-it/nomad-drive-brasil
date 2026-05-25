@@ -15,10 +15,312 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+/* ============================================================
+ * Fase 58d — Cadastro redesenhado (hero + imagens + UX reenvio)
+ * ============================================================ */
+.signup-hero {
+  background: linear-gradient(135deg, #0f5132 0%, #1a7a4f 55%, #20c997 100%);
+  color: #fff;
+  padding: 56px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.signup-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 25%, rgba(255,255,255,.12) 0, transparent 35%),
+    radial-gradient(circle at 82% 75%, rgba(212,175,55,.18) 0, transparent 35%);
+  pointer-events: none;
+}
+.signup-hero__inner {
+  max-width: 1100px; margin: 0 auto;
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: center;
+}
+.signup-hero__copy h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 800;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  animation: sh-fade-up .5s ease .1s both;
+}
+.signup-hero__copy h1 span { color: #ffd966; }
+.signup-hero__sub {
+  font-size: 16.5px; opacity: .94;
+  line-height: 1.55; max-width: 560px; margin: 0 0 20px;
+  animation: sh-fade-up .5s ease .25s both;
+}
+.signup-hero__badges {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  animation: sh-fade-up .5s ease .4s both;
+}
+.signup-hero__badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 12.5px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,.22);
+}
+.signup-hero__visual {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,.25);
+  aspect-ratio: 4/5;
+  background: rgba(0,0,0,.2);
+  animation: sh-scale .6s cubic-bezier(.34,1.56,.64,1) .35s both;
+}
+.signup-hero__visual img { width:100%; height:100%; object-fit:cover; display:block; }
+@keyframes sh-fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sh-scale { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
+
+.signup-body {
+  max-width: 1100px; margin: -48px auto 64px;
+  padding: 0 16px;
+  position: relative; z-index: 2;
+}
+.signup-step {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.signup-step__num {
+  width: 32px; height: 32px;
+  background: #145f3e; color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px;
+  font-family: 'Sora', sans-serif;
+}
+.signup-step__label {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: #14201b;
+}
+
+.signup-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(20,40,30,.08);
+  margin-bottom: 18px;
+  border: 1px solid #eef0ee;
+}
+
+/* Role grid com imagens (Fase 58d — substitui emojis por imagens) */
+.role-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  padding: 0; border: 0; margin: 0;
+}
+.role-card-modern {
+  position: relative;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, box-shadow .25s;
+  display: flex; flex-direction: column;
+}
+.role-card-modern:hover {
+  border-color: #198754;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(20,40,30,.10);
+}
+.role-card-modern input { position: absolute; opacity: 0; pointer-events: none; }
+.role-card-modern.is-selected {
+  border-color: #145f3e;
+  box-shadow: 0 10px 28px rgba(20,95,62,.18);
+  background: #f8fdf9;
+}
+.role-card-modern.is-selected::before {
+  content: "✓";
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 28px; height: 28px;
+  background: #145f3e; color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(20,95,62,.4);
+  animation: rcm-pop .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes rcm-pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+.role-card-modern__img {
+  width: 100%; height: 130px;
+  object-fit: cover;
+  display: block;
+  background: #f0f0f0;
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
+}
+.role-card-modern:hover .role-card-modern__img { transform: scale(1.06); }
+.role-card-modern__body { padding: 16px 18px 18px; flex: 1; }
+.role-card-modern__tag {
+  display: inline-block;
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .5px; text-transform: uppercase;
+  background: #e7f1ec; color: #0f5132;
+  padding: 3px 9px; border-radius: 999px;
+  margin-bottom: 8px;
+}
+.role-card-modern__tag--manual { background: #fff3cd; color: #856404; }
+.role-card-modern__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px; font-weight: 700;
+  margin: 0 0 6px;
+  color: #14201b;
+}
+.role-card-modern__desc {
+  font-size: 13px;
+  color: #5b6b63;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Form Passo 2 */
+.signup-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.signup-form-grid .full { grid-column: 1 / -1; }
+@media (max-width: 640px) {
+  .signup-form-grid { grid-template-columns: 1fr; }
+  .signup-hero__inner { grid-template-columns: 1fr; }
+  .signup-hero__visual { aspect-ratio: 16/10; max-height: 260px; }
+}
+
+.signup-pwd-wrap { position: relative; }
+.signup-pwd-toggle {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  background: transparent; border: none;
+  cursor: pointer; padding: 6px;
+  color: #6b7670; font-size: 14px;
+  border-radius: 6px;
+}
+.signup-pwd-toggle:hover { color: #198754; background: #f0f7f1; }
+
+/* Estado pós-cadastro (success card grande) */
+.success-card {
+  background: linear-gradient(135deg,#f0f9f3 0%, #fff 100%);
+  border: 2px solid #198754;
+  border-radius: 20px;
+  padding: 36px 32px;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 600px;
+  animation: sc-bounce-in .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes sc-bounce-in { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+.success-card__icon {
+  width: 80px; height: 80px;
+  background: #145f3e; color: #fff;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 40px; margin-bottom: 14px;
+  animation: sc-bell-shake 1s ease .3s 1;
+  box-shadow: 0 8px 24px rgba(20,95,62,.25);
+}
+@keyframes sc-bell-shake {
+  0%, 100% { transform: rotate(0); }
+  20%, 60% { transform: rotate(-8deg); }
+  40%, 80% { transform: rotate(8deg); }
+}
+.success-card h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px; font-weight: 800;
+  margin: 0 0 8px; color: #14201b;
+}
+.success-card__email-shown {
+  display: inline-block;
+  background: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #14201b;
+  margin: 4px 0 12px;
+  border: 1px solid #d1e7dd;
+  font-family: 'Inter', sans-serif;
+}
+.success-card__hint {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: left;
+  margin: 18px 0 22px;
+  font-size: 13.5px;
+  color: #664d03;
+  line-height: 1.55;
+}
+.success-card__hint strong { color: #856404; }
+.success-card__actions {
+  display: flex; gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.btn-resend, .btn-correct {
+  font-family: inherit; cursor: pointer;
+  border-radius: 10px; font-weight: 600;
+  font-size: 14px;
+  padding: 11px 20px;
+  transition: background .2s, transform .15s;
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none;
+}
+.btn-resend {
+  background: #198754; color: #fff;
+}
+.btn-resend:hover:not(:disabled) { background: #146c43; transform: translateY(-1px); }
+.btn-resend:disabled { background: #adb5bd; cursor: not-allowed; }
+.btn-correct {
+  background: #fff; color: #145f3e;
+  border: 1.5px solid #d1e7dd;
+}
+.btn-correct:hover { background: #f0f9f3; border-color: #198754; }
+
+.success-resend-feedback {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: none;
+  animation: src-fade .3s ease;
+}
+.success-resend-feedback[data-shown="1"] { display: block; }
+.success-resend-feedback--ok { background: #d1e7dd; color: #0a3622; border-left: 3px solid #198754; }
+.success-resend-feedback--bad { background: #f8d7da; color: #58151c; border-left: 3px solid #dc3545; }
+@keyframes src-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.success-card__next {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px dashed #d1e7dd;
+  font-size: 13px;
+  color: #5b6b63;
+}
+.success-card__next a {
+  color: #145f3e; font-weight: 600;
+  text-decoration: none;
+}
+.success-card__next a:hover { text-decoration: underline; }
+</style>
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
 <header class="nav nav--solid" id="nav">
   <div class="container nav__inner">
     <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
@@ -29,84 +331,153 @@
 </header>
 
 <main>
-<section class="auth auth--signup">
-  <div class="container">
 
-    <div class="auth-head">
-      <span class="eyebrow">Passo 1 — Criar conta</span>
-      <h1>O que você quer fazer na Nomade Drive?</h1>
-      <p>A experiência muda conforme o seu objetivo. Você pode adicionar outros perfis depois — papéis como oficina, parceiro de proteção e administração passam por aprovação manual.</p>
+<!-- ============ HERO ============ -->
+<section class="signup-hero">
+  <div class="signup-hero__inner">
+    <div class="signup-hero__copy">
+      <h1>Comece sua jornada na <span>Nomade Drive</span></h1>
+      <p class="signup-hero__sub">Mobilidade mensal com proteção, contrato e suporte humano. Escolha seu perfil abaixo — pode ser cliente, proprietário ou parceiro — e a gente cuida do resto.</p>
+      <div class="signup-hero__badges">
+        <span class="signup-hero__badge">✓ Sem balcão</span>
+        <span class="signup-hero__badge">✓ Contrato online</span>
+        <span class="signup-hero__badge">✓ Suporte WhatsApp</span>
+      </div>
     </div>
+    <div class="signup-hero__visual">
+      <img
+        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&h=750&fit=crop&q=80&auto=format"
+        alt="Estrada e horizonte — comece sua jornada"
+        loading="eager" decoding="async" />
+    </div>
+  </div>
+</section>
+
+<!-- ============ BODY ============ -->
+<section class="signup-body">
+
+  <!-- Estado: SUCESSO pós-cadastro -->
+  <div class="success-card" id="successCard" hidden>
+    <div class="success-card__icon">✉️</div>
+    <h2>Conta criada!</h2>
+    <p style="margin:0 0 4px;color:#5b6b63;font-size:14.5px;">Enviamos um e-mail de confirmação para:</p>
+    <div class="success-card__email-shown" id="successEmail">—</div>
+
+    <div class="success-card__hint">
+      💡 <strong>Não recebeu em até 2 minutos?</strong>
+      <ul style="margin:6px 0 0;padding-left:18px;line-height:1.6;">
+        <li>Verifique a pasta de <strong>spam / lixo eletrônico</strong></li>
+        <li>Confira se o e-mail está correto (sem espaços ou typos)</li>
+        <li>Use o botão <strong>"Reenviar"</strong> abaixo se ainda não chegou</li>
+      </ul>
+    </div>
+
+    <div class="success-card__actions">
+      <button type="button" class="btn-resend" id="btnResend">📧 Reenviar e-mail</button>
+      <button type="button" class="btn-correct" id="btnCorrect">✏️ Corrigir e-mail</button>
+    </div>
+
+    <div class="success-resend-feedback" id="resendFeedback"></div>
+
+    <p class="success-card__next">
+      Já recebeu e confirmou? <a href="login.html">Entrar agora →</a>
+    </p>
+  </div>
+
+  <!-- Estado: FORMULÁRIO de cadastro (default) -->
+  <div id="signupArea">
 
     <div class="auth-msg" id="authMsg" hidden></div>
 
     <form id="signupForm" novalidate>
-      <fieldset class="role-grid" id="roleGrid">
-        <legend class="sr-only">Escolha o seu perfil</legend>
 
-        <label class="role-card">
-          <input type="radio" name="perfil" value="client" />
-          <span class="role-card__body">
-            <span class="role-card__tag">Cliente locatário</span>
-            <strong>Quero alugar um veículo</strong>
-            <span class="role-card__desc">Busque veículos para locações mensais ou de longa duração, envie seus documentos e acompanhe suas solicitações.</span>
-          </span>
-          <span class="role-card__check" aria-hidden="true">&#10003;</span>
-        </label>
+      <!-- Passo 1: escolha do perfil -->
+      <div class="signup-step">
+        <div class="signup-step__num">1</div>
+        <div class="signup-step__label">O que você quer fazer?</div>
+      </div>
+      <div class="signup-card">
+        <fieldset class="role-grid-modern" id="roleGrid">
+          <legend class="sr-only">Escolha o seu perfil</legend>
 
-        <label class="role-card">
-          <input type="radio" name="perfil" value="owner" />
-          <span class="role-card__body">
-            <span class="role-card__tag">Proprietário</span>
-            <strong>Quero adicionar meu carro</strong>
-            <span class="role-card__desc">Veja se o seu veículo tem perfil, simule meses alugados por ano, aceite os termos e avance para o checklist.</span>
-          </span>
-          <span class="role-card__check" aria-hidden="true">&#10003;</span>
-        </label>
+          <label class="role-card-modern">
+            <input type="radio" name="perfil" value="client" />
+            <img class="role-card-modern__img"
+              src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Chaves de carro — alugar" loading="lazy" decoding="async" />
+            <div class="role-card-modern__body">
+              <span class="role-card-modern__tag">Cliente locatário</span>
+              <h3 class="role-card-modern__title">Quero alugar um veículo</h3>
+              <p class="role-card-modern__desc">Busque veículos para locações mensais ou de longa duração, envie seus documentos e acompanhe suas solicitações.</p>
+            </div>
+          </label>
 
-        <label class="role-card">
-          <input type="radio" name="perfil" value="referral_partner" />
-          <span class="role-card__body">
-            <span class="role-card__tag">Parceiro de indicação</span>
-            <strong>Quero ser parceiro de indicação</strong>
-            <span class="role-card__desc">Indique clientes, proprietários ou empresas e acompanhe seus leads em um painel próprio.</span>
-          </span>
-          <span class="role-card__check" aria-hidden="true">&#10003;</span>
-        </label>
+          <label class="role-card-modern">
+            <input type="radio" name="perfil" value="owner" />
+            <img class="role-card-modern__img"
+              src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Carro estacionado — proprietário" loading="lazy" decoding="async" />
+            <div class="role-card-modern__body">
+              <span class="role-card-modern__tag">Proprietário</span>
+              <h3 class="role-card-modern__title">Quero adicionar meu carro</h3>
+              <p class="role-card-modern__desc">Veja se o seu veículo tem perfil, simule meses alugados por ano, aceite os termos e avance para o checklist.</p>
+            </div>
+          </label>
 
-        <label class="role-card">
-          <input type="radio" name="perfil" value="workshop" />
-          <span class="role-card__body">
-            <span class="role-card__tag">Oficina &middot; aprovação manual</span>
-            <strong>Sou oficina mecânica</strong>
-            <span class="role-card__desc">Cadastre sua oficina para realizar checklist, fotos, laudos e aprovação técnica dos veículos.</span>
-          </span>
-          <span class="role-card__check" aria-hidden="true">&#10003;</span>
-        </label>
+          <label class="role-card-modern">
+            <input type="radio" name="perfil" value="referral_partner" />
+            <img class="role-card-modern__img"
+              src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Aperto de mãos — parceria" loading="lazy" decoding="async" />
+            <div class="role-card-modern__body">
+              <span class="role-card-modern__tag">Parceiro de indicação</span>
+              <h3 class="role-card-modern__title">Quero ser parceiro de indicação</h3>
+              <p class="role-card-modern__desc">Indique clientes, proprietários ou empresas e acompanhe seus leads em um painel próprio.</p>
+            </div>
+          </label>
 
-        <label class="role-card">
-          <input type="radio" name="perfil" value="protection_partner" />
-          <span class="role-card__body">
-            <span class="role-card__tag">Proteção &middot; aprovação manual</span>
-            <strong>Sou parceiro de proteção/seguro</strong>
-            <span class="role-card__desc">Cadastre regras, coberturas, documentos e fluxo de análise para a proteção dos veículos.</span>
-          </span>
-          <span class="role-card__check" aria-hidden="true">&#10003;</span>
-        </label>
-      </fieldset>
+          <label class="role-card-modern">
+            <input type="radio" name="perfil" value="workshop" />
+            <img class="role-card-modern__img"
+              src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Ferramentas de oficina" loading="lazy" decoding="async" />
+            <div class="role-card-modern__body">
+              <span class="role-card-modern__tag role-card-modern__tag--manual">Oficina · aprovação manual</span>
+              <h3 class="role-card-modern__title">Sou oficina mecânica</h3>
+              <p class="role-card-modern__desc">Cadastre sua oficina para realizar checklist, fotos, laudos e aprovação técnica dos veículos.</p>
+            </div>
+          </label>
 
-      <div class="auth-signup-card">
-        <h2 class="block-title">Passo 2 — Seus dados</h2>
-        <div class="auth-form">
-          <div class="auth-field">
+          <label class="role-card-modern">
+            <input type="radio" name="perfil" value="protection_partner" />
+            <img class="role-card-modern__img"
+              src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=480&h=300&fit=crop&q=80&auto=format"
+              alt="Contrato — proteção" loading="lazy" decoding="async" />
+            <div class="role-card-modern__body">
+              <span class="role-card-modern__tag role-card-modern__tag--manual">Proteção · aprovação manual</span>
+              <h3 class="role-card-modern__title">Sou parceiro de proteção/seguro</h3>
+              <p class="role-card-modern__desc">Cadastre regras, coberturas, documentos e fluxo de análise para a proteção dos veículos.</p>
+            </div>
+          </label>
+        </fieldset>
+      </div>
+
+      <!-- Passo 2: dados -->
+      <div class="signup-step">
+        <div class="signup-step__num">2</div>
+        <div class="signup-step__label">Seus dados</div>
+      </div>
+      <div class="signup-card">
+        <div class="signup-form-grid">
+          <div class="auth-field full">
             <label for="nome">Nome completo</label>
             <input type="text" id="nome" name="nome" autocomplete="name" required placeholder="Como no documento" />
           </div>
-          <div class="auth-field">
+          <div class="auth-field full">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" autocomplete="email" required placeholder="voce@email.com" />
           </div>
-          <div class="auth-field">
+          <div class="auth-field full">
             <label for="fone">Telefone <span class="opt">(país + DDD + número)</span></label>
             <div class="tel-group">
               <select id="foneDDI" class="tel-ddi" aria-label="Código do país">
@@ -140,18 +511,24 @@
               <input type="tel" id="fone" name="fone" autocomplete="tel" placeholder="DDD + número" />
             </div>
           </div>
-          <div class="auth-field">
+          <div class="auth-field full">
             <label for="senha">Senha</label>
-            <input type="password" id="senha" name="senha" autocomplete="new-password" minlength="6" required placeholder="Mínimo de 6 caracteres" />
+            <div class="signup-pwd-wrap">
+              <input type="password" id="senha" name="senha" autocomplete="new-password" minlength="6" required placeholder="Mínimo de 6 caracteres" />
+              <button type="button" class="signup-pwd-toggle" id="pwdToggle" aria-label="Mostrar/esconder senha">👁</button>
+            </div>
           </div>
-          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="signupBtn">Criar minha conta</button>
         </div>
-        <p class="auth-note">Ao criar a conta você receberá um e-mail de confirmação. A verificação de e-mail é obrigatória. A Nomade Drive prioriza usuários verificados e pode recusar solicitações que não atendam aos critérios da plataforma.</p>
-        <p class="auth-alt">Já tem conta? <a href="login.html">Entrar</a></p>
-      </div>
-    </form>
 
+        <button type="submit" class="btn btn--solid btn--lg auth-submit" id="signupBtn" style="margin-top:18px;width:100%;">Criar minha conta</button>
+
+        <p class="auth-note" style="margin-top:14px;">Ao criar a conta você receberá um e-mail de confirmação. A verificação de e-mail é obrigatória. A Nomade Drive prioriza usuários verificados e pode recusar solicitações que não atendam aos critérios da plataforma.</p>
+        <p class="auth-alt" style="margin-top:6px;">Já tem conta? <a href="login.html">Entrar</a></p>
+      </div>
+
+    </form>
   </div>
+
 </section>
 </main>
 
@@ -178,18 +555,17 @@
     showMsg(a ? a.notConfiguredMessage() : "Cadastro indisponível nesta página.", "warn");
   }
 
-  /* destaca visualmente o card do perfil selecionado */
+  /* Destaca card de perfil selecionado */
   var roleGrid = document.getElementById("roleGrid");
   function syncCards() {
-    var cards = roleGrid.querySelectorAll(".role-card");
-    cards.forEach(function (card) {
+    roleGrid.querySelectorAll(".role-card-modern").forEach(function (card) {
       var input = card.querySelector('input[type="radio"]');
       card.classList.toggle("is-selected", !!(input && input.checked));
     });
   }
   roleGrid.addEventListener("change", syncCards);
 
-  /* pré-seleção do perfil via ?perfil= */
+  /* Pré-seleção do perfil via ?perfil= */
   var PERFIL_MAP = {
     cliente: "client", proprietario: "owner", parceiro: "referral_partner",
     oficina: "workshop", protecao: "protection_partner"
@@ -204,6 +580,88 @@
   } catch (e) {}
   syncCards();
 
+  /* Toggle olho senha */
+  var pwdToggle = document.getElementById("pwdToggle");
+  var pwdInput = document.getElementById("senha");
+  pwdToggle.addEventListener("click", function () {
+    var showing = pwdInput.type === "text";
+    pwdInput.type = showing ? "password" : "text";
+    pwdToggle.textContent = showing ? "👁" : "🙈";
+  });
+
+  /* Estado pós-cadastro com reenvio */
+  var lastSignupEmail = null;
+  var successCard  = document.getElementById("successCard");
+  var signupArea   = document.getElementById("signupArea");
+  var successEmail = document.getElementById("successEmail");
+  var btnResend    = document.getElementById("btnResend");
+  var btnCorrect   = document.getElementById("btnCorrect");
+  var resendFb     = document.getElementById("resendFeedback");
+
+  function showSuccess(email) {
+    lastSignupEmail = email;
+    successEmail.textContent = email;
+    successCard.hidden = false;
+    signupArea.hidden = true;
+    resendFb.removeAttribute("data-shown");
+    resendFb.textContent = "";
+    btnResend.disabled = false;
+    btnResend.textContent = "📧 Reenviar e-mail";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setResendFeedback(text, kind) {
+    if (!text) { resendFb.removeAttribute("data-shown"); resendFb.textContent = ""; return; }
+    resendFb.className = "success-resend-feedback success-resend-feedback--" + (kind || "ok");
+    resendFb.textContent = text;
+    resendFb.setAttribute("data-shown", "1");
+  }
+
+  /* "Reenviar e-mail" */
+  btnResend.addEventListener("click", function () {
+    if (!lastSignupEmail || !a || !a.ready) return;
+    var orig = btnResend.textContent;
+    btnResend.disabled = true; btnResend.textContent = "Enviando...";
+    setResendFeedback("", null);
+
+    var client = a.client();
+    client.auth.resend({ type: "signup", email: lastSignupEmail }).then(function (r) {
+      if (r.error) {
+        btnResend.disabled = false; btnResend.textContent = orig;
+        var em = String(r.error.message || "").toLowerCase();
+        if (em.indexOf("already") >= 0 || em.indexOf("confirmed") >= 0) {
+          setResendFeedback("✓ Esse e-mail já foi confirmado! Faça login pra continuar.", "ok");
+        } else if (em.indexOf("rate") >= 0 || em.indexOf("too many") >= 0) {
+          setResendFeedback("⏳ Aguarde 1 minuto antes de reenviar.", "bad");
+        } else {
+          setResendFeedback("Não foi possível reenviar: " + r.error.message, "bad");
+        }
+        return;
+      }
+      btnResend.textContent = "✓ E-mail reenviado";
+      setResendFeedback("✓ Reenviamos o e-mail pra " + lastSignupEmail + ". Verifique sua caixa de entrada e spam.", "ok");
+      // Habilita de novo após 30s pra evitar spam
+      setTimeout(function () {
+        btnResend.disabled = false;
+        btnResend.textContent = "📧 Reenviar de novo";
+      }, 30000);
+    }).catch(function (e) {
+      btnResend.disabled = false; btnResend.textContent = orig;
+      setResendFeedback("Erro de rede ao reenviar. Tente em alguns segundos.", "bad");
+    });
+  });
+
+  /* "Corrigir e-mail" — volta pro formulário com email atual pré-preenchido */
+  btnCorrect.addEventListener("click", function () {
+    successCard.hidden = true;
+    signupArea.hidden = false;
+    var emailInput = document.getElementById("email");
+    if (lastSignupEmail) emailInput.value = lastSignupEmail;
+    setTimeout(function () { emailInput.focus(); emailInput.select(); }, 100);
+    window.scrollTo({ top: signupArea.offsetTop - 80, behavior: "smooth" });
+  });
+
+  /* Submit do form */
   document.getElementById("signupForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var checked = document.querySelector('#roleGrid input[name="perfil"]:checked');
@@ -213,12 +671,13 @@
       return;
     }
     var nome = document.getElementById("nome").value.trim();
-    var email = document.getElementById("email").value.trim();
+    var email = document.getElementById("email").value.trim().toLowerCase();
     var foneNum = document.getElementById("fone").value.trim();
     var fone = foneNum ? document.getElementById("foneDDI").value + " " + foneNum : "";
     var senha = document.getElementById("senha").value;
     if (!nome || !email || !senha) { showMsg("Preencha nome, e-mail e senha.", "warn"); return; }
     if (senha.length < 6) { showMsg("A senha deve ter pelo menos 6 caracteres.", "warn"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg("E-mail inválido — confira se digitou certo.", "warn"); return; }
     if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Cadastro indisponível.", "warn"); return; }
 
     var btn = document.getElementById("signupBtn");
@@ -228,14 +687,14 @@
         btn.disabled = false; btn.textContent = "Criar minha conta";
         if (!r.ok) { showMsg(r.error, "error"); return; }
         if (r.needsConfirmation) {
-          showMsg("Conta criada! Enviamos um e-mail de confirmação para " + email +
-            ". Confirme o e-mail e depois faça login para continuar o cadastro do seu perfil.", "ok");
+          // Mostra success card com reenvio + correção
+          showSuccess(email);
           document.getElementById("signupForm").reset();
+          syncCards();
         } else {
           showMsg("Conta criada! Redirecionando para o login...", "ok");
           setTimeout(function () { window.location.href = "login.html"; }, 1200);
         }
-        window.scrollTo({ top: 0, behavior: "smooth" });
       });
   });
 })();
