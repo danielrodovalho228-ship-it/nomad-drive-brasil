@@ -15,6 +15,116 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<style>
+/* ============================================================
+ * Fase 54 — Recuperação de senha (UX melhorada)
+ * ============================================================ */
+.pwd-field-wrap { position: relative; }
+.pwd-toggle {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  background: transparent; border: none;
+  cursor: pointer; padding: 6px; line-height: 1;
+  color: #6b7670; font-size: 14px;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+.pwd-toggle:hover { color: #198754; background: #f0f7f1; }
+.pwd-toggle:focus-visible { outline: 2px solid #198754; outline-offset: 1px; }
+
+.pwd-checklist {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #f8fafb;
+  border-radius: 8px;
+  font-size: 12.5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 14px;
+}
+.pwd-check {
+  display: flex; align-items: center; gap: 6px;
+  color: #98a09b;
+  transition: color .2s;
+}
+.pwd-check::before {
+  content: "○";
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-block;
+  width: 14px; text-align: center;
+}
+.pwd-check--ok { color: #198754; }
+.pwd-check--ok::before { content: "✓"; }
+
+.recovery-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(20,40,30,0.5);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: rmb-fade-in .2s ease both;
+}
+.recovery-modal-backdrop[data-open="1"] { display: flex; }
+@keyframes rmb-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.recovery-modal {
+  background: #fff;
+  border-radius: 14px;
+  max-width: 440px; width: 100%;
+  padding: 24px 24px 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: rmb-slide-up .25s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes rmb-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.recovery-modal h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-family: 'Sora', sans-serif;
+}
+.recovery-modal p { margin: 0 0 16px; color: #5b6b63; font-size: 14px; }
+.recovery-modal input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #d4ddd8;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+}
+.recovery-modal input:focus {
+  outline: none; border-color: #198754;
+  box-shadow: 0 0 0 3px rgba(25,135,84,0.15);
+}
+.recovery-modal__feedback {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: none;
+  animation: rmb-fade-in .25s ease both;
+}
+.recovery-modal__feedback[data-shown="1"] { display: block; }
+.recovery-modal__feedback--ok { background: #d1e7dd; color: #0a3622; border-left: 3px solid #198754; }
+.recovery-modal__feedback--bad { background: #f8d7da; color: #58151c; border-left: 3px solid #dc3545; }
+.recovery-modal__feedback--warn { background: #fff3cd; color: #664d03; border-left: 3px solid #ffc107; }
+.recovery-modal__actions {
+  display: flex; gap: 8px; margin-top: 16px;
+  justify-content: flex-end;
+}
+.recovery-modal__hint {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #e7f1ff;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #084298;
+  display: flex; gap: 8px;
+  border-left: 3px solid #0d6efd;
+}
+</style>
 </head>
 <body>
 
@@ -53,7 +163,10 @@
           </div>
           <div class="auth-field">
             <label for="password">Senha</label>
-            <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Sua senha" />
+            <div class="pwd-field-wrap">
+              <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Sua senha" />
+              <button type="button" class="pwd-toggle" id="loginPwdToggle" aria-label="Mostrar/esconder senha">👁</button>
+            </div>
           </div>
           <div class="auth-row">
             <a href="#" id="forgotLink" class="auth-link">Esqueci minha senha</a>
@@ -65,7 +178,23 @@
         <form class="auth-form" id="recoveryForm" hidden>
           <div class="auth-field">
             <label for="newPassword">Nova senha</label>
-            <input type="password" id="newPassword" autocomplete="new-password" minlength="6" placeholder="Mínimo de 6 caracteres" />
+            <div class="pwd-field-wrap">
+              <input type="password" id="newPassword" autocomplete="new-password" minlength="8" placeholder="Crie uma senha forte" />
+              <button type="button" class="pwd-toggle" id="newPwdToggle" aria-label="Mostrar/esconder senha">👁</button>
+            </div>
+            <div class="pwd-checklist" id="pwdChecklist">
+              <span class="pwd-check" data-rule="len">Mínimo 8 caracteres</span>
+              <span class="pwd-check" data-rule="upper">1 letra maiúscula</span>
+              <span class="pwd-check" data-rule="num">1 número</span>
+              <span class="pwd-check" data-rule="lower">1 letra minúscula</span>
+            </div>
+          </div>
+          <div class="auth-field">
+            <label for="newPassword2">Confirmar nova senha</label>
+            <div class="pwd-field-wrap">
+              <input type="password" id="newPassword2" autocomplete="new-password" placeholder="Repita a senha" />
+              <button type="button" class="pwd-toggle" id="newPwd2Toggle" aria-label="Mostrar/esconder senha">👁</button>
+            </div>
           </div>
           <button type="submit" class="btn btn--solid btn--lg auth-submit" id="recoveryBtn">Salvar nova senha</button>
         </form>
@@ -89,6 +218,27 @@
     <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
   </div>
 </footer>
+
+<!-- ============================================================
+     Fase 54 — Modal "Esqueci minha senha"
+     ============================================================ -->
+<div class="recovery-modal-backdrop" id="recoveryBackdrop" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
+  <div class="recovery-modal">
+    <h2 id="recoveryTitle">🔑 Recuperar senha</h2>
+    <p>Digite o e-mail da sua conta. Vamos enviar um link seguro pra você criar uma nova senha.</p>
+    <form id="recoveryRequestForm" novalidate>
+      <input type="email" id="recoveryEmail" placeholder="seu@email.com" autocomplete="email" required />
+      <div class="recovery-modal__feedback" id="recoveryFeedback"></div>
+      <div class="recovery-modal__hint" id="recoveryHint" style="display:none;">
+        💡 <span>Não recebeu? Verifique a pasta de <strong>spam/lixo eletrônico</strong>. O link expira em 1 hora.</span>
+      </div>
+      <div class="recovery-modal__actions">
+        <button type="button" class="btn btn--ghost btn--sm" id="recoveryCancel">Cancelar</button>
+        <button type="submit" class="btn btn--solid btn--sm" id="recoverySend">Enviar link</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
@@ -148,17 +298,127 @@
     });
   }
 
-  /* esqueci a senha */
+  /* ---------- Fase 54: Modal "Esqueci minha senha" ---------- */
+  var backdrop = document.getElementById("recoveryBackdrop");
+  var recoveryEmailInput = document.getElementById("recoveryEmail");
+  var recoveryFeedback = document.getElementById("recoveryFeedback");
+  var recoveryHint = document.getElementById("recoveryHint");
+  var recoverySendBtn = document.getElementById("recoverySend");
+
+  function openRecoveryModal() {
+    // Pré-preenche se já digitou no campo de login
+    var prefill = document.getElementById("email").value.trim();
+    if (prefill) recoveryEmailInput.value = prefill;
+    recoveryFeedback.removeAttribute("data-shown");
+    recoveryFeedback.textContent = "";
+    recoveryHint.style.display = "none";
+    recoverySendBtn.disabled = false;
+    recoverySendBtn.textContent = "Enviar link";
+    backdrop.setAttribute("data-open", "1");
+    setTimeout(function () { recoveryEmailInput.focus(); }, 100);
+  }
+  function closeRecoveryModal() {
+    backdrop.removeAttribute("data-open");
+  }
+  function setRecoveryFeedback(text, kind) {
+    if (!text) {
+      recoveryFeedback.removeAttribute("data-shown");
+      recoveryFeedback.textContent = "";
+      return;
+    }
+    recoveryFeedback.className = "recovery-modal__feedback recovery-modal__feedback--" + (kind || "bad");
+    recoveryFeedback.textContent = text;
+    recoveryFeedback.setAttribute("data-shown", "1");
+  }
+  function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
   document.getElementById("forgotLink").addEventListener("click", function (e) {
     e.preventDefault();
-    var email = document.getElementById("email").value.trim();
-    if (!email) { showMsg("Digite seu e-mail no campo acima para receber o link de redefinição.", "warn"); return; }
-    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Indisponível.", "warn"); return; }
+    openRecoveryModal();
+  });
+  document.getElementById("recoveryCancel").addEventListener("click", closeRecoveryModal);
+  backdrop.addEventListener("click", function (e) {
+    if (e.target === backdrop) closeRecoveryModal();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && backdrop.hasAttribute("data-open")) closeRecoveryModal();
+  });
+
+  document.getElementById("recoveryRequestForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = recoveryEmailInput.value.trim();
+    if (!email) {
+      setRecoveryFeedback("Digite seu e-mail.", "warn");
+      recoveryEmailInput.focus();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setRecoveryFeedback("E-mail inválido — confira se digitou certo.", "warn");
+      recoveryEmailInput.focus();
+      return;
+    }
+    if (!a || !a.ready) {
+      setRecoveryFeedback(a ? a.notConfiguredMessage() : "Recuperação indisponível.", "warn");
+      return;
+    }
+    setRecoveryFeedback("", null);
+    recoverySendBtn.disabled = true;
+    recoverySendBtn.textContent = "Enviando...";
     a.resetPassword(email).then(function (r) {
-      if (r.ok) showMsg("Se houver uma conta com este e-mail, enviamos um link para redefinir a senha.", "ok");
-      else showMsg(r.error, "error");
+      if (r.ok) {
+        setRecoveryFeedback("✓ E-mail enviado pra " + email + " (se a conta existir).", "ok");
+        recoveryHint.style.display = "flex";
+        recoverySendBtn.textContent = "Reenviar";
+        recoverySendBtn.disabled = false;
+      } else {
+        recoverySendBtn.disabled = false;
+        recoverySendBtn.textContent = "Tentar novamente";
+        setRecoveryFeedback(r.error || "Não foi possível enviar agora.", "bad");
+      }
+    }).catch(function (err) {
+      recoverySendBtn.disabled = false;
+      recoverySendBtn.textContent = "Tentar novamente";
+      setRecoveryFeedback("Erro de rede. Tente novamente.", "bad");
     });
   });
+
+  /* ---------- Fase 54: Toggle mostrar/esconder senha ---------- */
+  function wirePwdToggle(toggleId, inputId) {
+    var t = document.getElementById(toggleId);
+    var i = document.getElementById(inputId);
+    if (!t || !i) return;
+    t.addEventListener("click", function () {
+      var showing = i.type === "text";
+      i.type = showing ? "password" : "text";
+      t.textContent = showing ? "👁" : "🙈";
+      t.setAttribute("aria-label", showing ? "Mostrar senha" : "Esconder senha");
+    });
+  }
+  wirePwdToggle("loginPwdToggle", "password");
+  wirePwdToggle("newPwdToggle", "newPassword");
+  wirePwdToggle("newPwd2Toggle", "newPassword2");
+
+  /* ---------- Fase 54: Checklist requisitos de senha (live) ---------- */
+  var newPwdInput = document.getElementById("newPassword");
+  if (newPwdInput) {
+    newPwdInput.addEventListener("input", function () {
+      var v = newPwdInput.value;
+      var rules = {
+        len: v.length >= 8,
+        upper: /[A-Z]/.test(v),
+        lower: /[a-z]/.test(v),
+        num: /[0-9]/.test(v)
+      };
+      Object.keys(rules).forEach(function (k) {
+        var el = document.querySelector('.pwd-check[data-rule="' + k + '"]');
+        if (!el) return;
+        if (rules[k]) el.classList.add("pwd-check--ok");
+        else el.classList.remove("pwd-check--ok");
+      });
+    });
+  }
 
   /* login */
   document.getElementById("loginForm").addEventListener("submit", function (e) {
@@ -182,16 +442,48 @@
   /* salvar nova senha (recuperação) */
   document.getElementById("recoveryForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var np = document.getElementById("newPassword").value;
-    if (!np || np.length < 6) { showMsg("A nova senha deve ter pelo menos 6 caracteres.", "warn"); return; }
+    var np  = document.getElementById("newPassword").value;
+    var np2 = document.getElementById("newPassword2").value;
+
+    // Validação: requisitos mínimos
+    var rules = {
+      len: np.length >= 8,
+      upper: /[A-Z]/.test(np),
+      lower: /[a-z]/.test(np),
+      num: /[0-9]/.test(np)
+    };
+    var failed = Object.keys(rules).filter(function (k) { return !rules[k]; });
+    if (failed.length) {
+      showMsg("A senha não atende todos os requisitos abaixo.", "warn");
+      document.getElementById("newPassword").focus();
+      return;
+    }
+    if (np !== np2) {
+      showMsg("As duas senhas não conferem.", "warn");
+      document.getElementById("newPassword2").focus();
+      return;
+    }
     if (!a || !a.ready) { showMsg("Indisponível.", "warn"); return; }
+
     var btn = document.getElementById("recoveryBtn");
     btn.disabled = true; btn.textContent = "Salvando...";
     a.client().auth.updateUser({ password: np }).then(function (r) {
+      if (r.error) {
+        btn.disabled = false; btn.textContent = "Salvar nova senha";
+        showMsg(r.error.message || "Não foi possível salvar.", "error");
+        return;
+      }
+      btn.textContent = "✓ Senha salva";
+      showMsg("Senha atualizada com sucesso! Redirecionando pro seu painel...", "ok");
+      // Redireciona pro dashboard correto baseado no role do usuário
+      a.destinationAfterLogin().then(function (dest) {
+        setTimeout(function () { window.location.href = dest || "index.html"; }, 1100);
+      }).catch(function () {
+        setTimeout(function () { window.location.href = "index.html"; }, 1100);
+      });
+    }).catch(function () {
       btn.disabled = false; btn.textContent = "Salvar nova senha";
-      if (r.error) { showMsg(r.error.message || "Não foi possível salvar.", "error"); return; }
-      showMsg("Senha atualizada. Redirecionando...", "ok");
-      setTimeout(function () { window.location.href = "index.html"; }, 1100);
+      showMsg("Erro de rede ao salvar a senha.", "error");
     });
   });
 })();
