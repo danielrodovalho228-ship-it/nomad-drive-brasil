@@ -102,6 +102,9 @@
         <!-- Fase 44 — Reservas aprovadas aguardando pagamento (prioridade máxima!) -->
         <div id="approvedPendingPaymentContainer"></div>
 
+        <!-- Fase 50 — Avaliações pendentes (CTA "Avalie sua experiência") -->
+        <div id="pendingRatingsContainer"></div>
+
         <!-- Fase 43 — Card Nomade Gold (loyalty tier) -->
         <div id="loyaltyContainer"></div>
 
@@ -1606,6 +1609,112 @@
   }
 
   /* ====================================================================
+     Fase 50 — Avaliações pendentes (CTA "Avalie sua experiência")
+     ==================================================================== */
+  function loadPendingRatings() {
+    var sb = getSb(); if (!sb) return;
+    var container = $('pendingRatingsContainer'); if (!container) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      sb.from('pending_ratings').select('*').eq('client_id', user.id).eq('client_rated', false)
+        .order('booking_closed_at', { ascending: false })
+        .limit(3)
+        .then(function (r) {
+          var rows = (r && r.data) || [];
+          if (!rows.length) { container.innerHTML = ''; return; }
+          container.innerHTML = rows.map(renderPendingRatingCard).join('');
+          bindRatingActions();
+        }).catch(function () {});
+    });
+  }
+  window.loadPendingRatings = loadPendingRatings;
+
+  function renderPendingRatingCard(b) {
+    var vehName = [b.make, b.model, b.year_model].filter(Boolean).join(' ') || 'Veículo';
+    return '<div style="background:linear-gradient(135deg,#fef9c3 0%,#fef3c7 100%);border:1px solid #fbbf24;border-left:4px solid #d97706;padding:18px 22px;border-radius:12px;margin:12px 0;">'
+      + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">'
+      +   '<span style="background:#92400e;color:#fff;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">⭐ Avaliar</span>'
+      +   '<strong style="font-size:15px;color:#7c2d12;">Como foi sua experiência com o ' + escapeHtmlSafe(vehName) + '?</strong>'
+      + '</div>'
+      + '<p style="margin:0 0 14px;font-size:13.5px;color:#3a4945;">'
+      +   'Sua avaliação ajuda outros clientes e mostra reconhecimento ao proprietário. <strong>Leva 30 segundos.</strong>'
+      + '</p>'
+      + '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">'
+      +   '<button class="rateBtn" data-booking="' + b.booking_id + '" data-stars="5" style="background:#fff;border:2px solid #d97706;color:#7c2d12;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;">⭐⭐⭐⭐⭐ Ótimo</button>'
+      +   '<button class="rateBtn" data-booking="' + b.booking_id + '" data-stars="4" style="background:#fff;border:2px solid #d97706;color:#7c2d12;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;">⭐⭐⭐⭐ Bom</button>'
+      +   '<button class="rateBtn" data-booking="' + b.booking_id + '" data-stars="3" style="background:#fff;border:2px solid #d97706;color:#7c2d12;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:700;font-size:13px;">⭐⭐⭐ Regular</button>'
+      +   '<button class="rateBtn" data-booking="' + b.booking_id + '" data-stars="2" style="background:#fff;border:1px solid #cda;color:#5b6b63;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;">⭐⭐</button>'
+      +   '<button class="rateBtn" data-booking="' + b.booking_id + '" data-stars="1" style="background:#fff;border:1px solid #cda;color:#5b6b63;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;">⭐</button>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function bindRatingActions() {
+    document.querySelectorAll('.rateBtn').forEach(function (btn) {
+      btn.onclick = function () { handleRating(btn); };
+    });
+  }
+
+  async function handleRating(btn) {
+    var bookingId = btn.getAttribute('data-booking');
+    var stars = parseInt(btn.getAttribute('data-stars'), 10);
+
+    var modal = window.ndModal;
+    var comment = '';
+    if (modal) {
+      var promptResult = await modal.prompt({
+        title: 'Avaliação ' + '⭐'.repeat(stars),
+        body: 'Quer adicionar um comentário? (opcional, mas ajuda outros clientes)',
+        placeholder: 'Ex: Owner muito atencioso, carro limpo, entrega no horário...',
+        okText: 'Enviar avaliação',
+        icon: '⭐'
+      });
+      if (promptResult === null) return; // cancelou
+      comment = promptResult || '';
+    } else {
+      comment = window.prompt('Comentário opcional:') || '';
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    var sb = getSb(); if (!sb) return;
+    var user = (await sb.auth.getUser()).data.user;
+
+    // Pega owner_id + vehicle_id da booking
+    var bk = (await sb.from('bookings').select('owner_id, vehicle_id').eq('id', bookingId).maybeSingle()).data;
+    if (!bk) { if (modal) modal.alert({ title: 'Erro', body: 'Reserva não encontrada.' }); return; }
+
+    sb.from('ratings').insert({
+      booking_id: bookingId,
+      direction: 'client_rates_owner',
+      rater_id: user.id,
+      ratee_id: bk.owner_id,
+      vehicle_id: bk.vehicle_id,
+      stars: stars,
+      comment: comment.slice(0, 1000) || null,
+      is_public: true
+    }).then(function (r) {
+      btn.disabled = false;
+      if (r.error) {
+        if (modal) modal.alert({ title: 'Erro', body: r.error.message, icon: '⚠️' });
+        return;
+      }
+      if (modal) {
+        modal.alert({
+          title: '⭐ Obrigado pela avaliação!',
+          body: 'Sua avaliação foi registrada e ajuda outros clientes a escolherem bem.',
+          icon: '🎉'
+        });
+      }
+      loadPendingRatings(); // recarrega (esse card some)
+    });
+  }
+
+  /* ====================================================================
      Fase 44 — Reservas aprovadas AGUARDANDO PAGAMENTO
      ==================================================================== */
   function loadApprovedPending() {
@@ -1745,9 +1854,11 @@
 
   window.addEventListener('DOMContentLoaded', function () {
     setTimeout(loadApprovedPending, 600);   // Fase 44 — prioridade máxima (reservas aprovadas)
+    setTimeout(loadPendingRatings, 700);    // Fase 50 — CTA avaliar
     setTimeout(loadLoyalty, 800);
     setTimeout(loadRenewals, 1200);
     setInterval(loadApprovedPending, 30000); // refresh rápido pra ver aprovação chegar
+    setInterval(loadPendingRatings, 120000); // Fase 50 — recheca a cada 2min
     setInterval(loadRenewals, 300000); // refresh a cada 5min
     setInterval(loadLoyalty, 600000); // loyalty refresh a cada 10min
   });

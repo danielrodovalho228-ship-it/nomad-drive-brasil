@@ -396,6 +396,9 @@
         <!-- Fase 49: Onboarding guiado 5 passos (só aparece se algo incompleto) -->
         <div id="onboardingWizard" style="display:none;"></div>
 
+        <!-- Fase 50: Reputação do owner (avaliações recebidas) -->
+        <div id="ownerReputationCard" style="display:none;"></div>
+
         <!-- Fase 45: Banner urgente "Configure sua conta bancária" -->
         <div id="connectBanner" style="display:none;"></div>
 
@@ -2089,6 +2092,64 @@
   })();
 
   /* ============================================================
+   * Fase 50 — Card reputação do owner (avaliações recebidas)
+   * ============================================================ */
+  function loadOwnerReputation() {
+    var sb = getSb(); if (!sb) return;
+    var box = $('ownerReputationCard'); if (!box) return;
+
+    sb.auth.getUser().then(function (uRes) {
+      var user = uRes && uRes.data && uRes.data.user;
+      if (!user) return;
+
+      Promise.all([
+        sb.from('owner_ratings_summary').select('*').eq('owner_id', user.id).maybeSingle(),
+        sb.from('ratings').select('id, stars, comment, response, created_at, vehicle_id, vehicles(make,model)')
+          .eq('ratee_id', user.id).eq('direction', 'client_rates_owner').eq('is_public', true)
+          .order('created_at', { ascending: false }).limit(3)
+      ]).then(function (results) {
+        var summary = (results[0] && results[0].data) || {};
+        var recentRatings = (results[1] && results[1].data) || [];
+
+        if (!summary.total_ratings || summary.total_ratings === 0) {
+          box.style.display = 'none';
+          return;
+        }
+
+        box.style.display = '';
+        var stars = Math.round(summary.avg_stars || 0);
+        var starsHtml = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
+
+        var recentHtml = recentRatings.map(function (r) {
+          var v = r.vehicles || {};
+          var vehName = [v.make, v.model].filter(Boolean).join(' ') || 'Veículo';
+          return '<div style="background:#f4f5f7;padding:10px 12px;border-radius:6px;margin:6px 0;font-size:12.5px;">'
+            + '<div style="color:#d97706;margin-bottom:4px;">' + '⭐'.repeat(r.stars) + '<span style="color:#5b6b63;margin-left:8px;">' + escapeHtml(vehName) + '</span></div>'
+            + (r.comment ? '<p style="margin:0;color:#3a4945;line-height:1.5;font-style:italic;">"' + escapeHtml(r.comment) + '"</p>' : '<p style="margin:0;color:#8a948e;font-size:12px;">Sem comentário</p>')
+            + '</div>';
+        }).join('');
+
+        box.innerHTML =
+          '<div style="background:linear-gradient(135deg,#fef9c3 0%,#fef3c7 100%);border:1px solid #fbbf24;padding:18px 22px;border-radius:12px;margin:14px 0;">'
+          + '<div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:14px;margin-bottom:14px;">'
+          +   '<div>'
+          +     '<div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#92400e;margin-bottom:4px;">⭐ Sua reputação</div>'
+          +     '<div style="font-size:30px;font-weight:800;color:#7c2d12;line-height:1;">' + (summary.avg_stars || '—') + ' <small style="font-size:14px;font-weight:400;">/ 5</small></div>'
+          +     '<div style="font-size:13px;color:#5b6b63;margin-top:4px;">' + starsHtml + ' · ' + summary.total_ratings + ' avaliação(ões)</div>'
+          +   '</div>'
+          +   '<div style="display:flex;gap:14px;align-items:center;">'
+          +     '<div style="text-align:center;"><div style="font-size:18px;font-weight:800;color:#065f46;">' + (summary.positive_count || 0) + '</div><div style="font-size:11px;color:#5b6b63;">positivas</div></div>'
+          +     (summary.negative_count > 0 ? '<div style="text-align:center;"><div style="font-size:18px;font-weight:800;color:#991b1b;">' + summary.negative_count + '</div><div style="font-size:11px;color:#5b6b63;">negativas</div></div>' : '')
+          +   '</div>'
+          + '</div>'
+          + (recentHtml ? '<div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:#92400e;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Últimas avaliações</div>' + recentHtml + '</div>' : '')
+          + '</div>';
+      });
+    });
+  }
+  window.loadOwnerReputation = loadOwnerReputation;
+
+  /* ============================================================
    * Fase 49 — Onboarding guiado 5 passos pro owner
    * --------------------------------------------------------------
    * Detecta automaticamente o que está completo e mostra wizard
@@ -2854,6 +2915,7 @@
   window.addEventListener('DOMContentLoaded', function () {
     // Aguarda auth iniciar
     setTimeout(loadOnboardingWizard, 500); // Fase 49 — wizard onboarding (PRIMEIRO no topo)
+    setTimeout(loadOwnerReputation, 1200); // Fase 50 — reputação owner
     setTimeout(loadGreenPanel, 1000);
     setTimeout(loadOwnerRequests, 800);    // Fase 44 — solicitações pendentes
     setTimeout(loadConnectBanner, 600);    // Fase 45 — banner urgente connect
