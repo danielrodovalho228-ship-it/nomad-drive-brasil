@@ -353,6 +353,123 @@ body {
   .sim-share__btns { grid-template-columns: 1fr; }
 }
 
+/* SIMULADOR INVERSO (meta de renda) */
+.sim-goal {
+  margin-top: 18px;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(212,175,55,.12), rgba(255,217,102,.08));
+  border: 1px solid rgba(212,175,55,.3);
+  border-radius: 12px;
+}
+.sim-goal__title {
+  display: flex; align-items: center; gap: 8px;
+  color: #ffd966;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.sim-goal__title svg { width: 16px; height: 16px; }
+.sim-goal__caption {
+  font-size: 12px;
+  color: rgba(255,255,255,.7);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.sim-goal__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sim-goal__currency {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  color: #ffd966;
+  font-size: 16px;
+}
+.sim-goal__input {
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.2);
+  color: #fff;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  width: 110px;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+.sim-goal__input:focus {
+  border-color: #ffd966;
+  background: rgba(255,255,255,.12);
+}
+.sim-goal__input::-webkit-outer-spin-button,
+.sim-goal__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.sim-goal__input { -moz-appearance: textfield; }
+.sim-goal__per {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.65);
+  margin-right: 6px;
+}
+.sim-goal__btn {
+  background: linear-gradient(135deg, #d4af37, #f4c430);
+  color: #14201b;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 12.5px;
+  white-space: nowrap;
+  transition: transform .15s, box-shadow .2s;
+  margin-left: auto;
+}
+.sim-goal__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(212,175,55,.4);
+}
+
+.sim-goal__result {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  font-size: 13px;
+  color: rgba(255,255,255,.9);
+  line-height: 1.55;
+  animation: sg-fade .3s ease;
+}
+.sim-goal__result strong { color: #ffd966; }
+.sim-goal__result em {
+  font-style: normal;
+  color: #4ade80;
+  font-weight: 700;
+}
+.sim-goal__result--negative em { color: #ff6b6b; }
+.sim-goal__result-btn {
+  display: inline-block;
+  background: #ffd966;
+  color: #14201b;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+  margin-top: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.sim-goal__result-btn:hover { background: #ffc107; }
+@keyframes sg-fade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 540px) {
+  .sim-goal__btn { width: 100%; margin-left: 0; margin-top: 8px; }
+  .sim-goal__input { width: 90px; }
+}
+
 /* Turo case study */
 .sim-turo {
   background: linear-gradient(135deg, #14201b 0%, #0f1814 100%);
@@ -1054,6 +1171,22 @@ body {
         <span id="verdictText">Calculando...</span>
       </div>
 
+      <!-- Simulador inverso: defina sua meta -->
+      <div class="sim-goal">
+        <p class="sim-goal__title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          Tem uma meta em mente?
+        </p>
+        <p class="sim-goal__caption">Diga quanto quer ganhar por mês — calculamos o valor de carro (FIPE) necessário pra atingir essa meta com seus outros parâmetros atuais.</p>
+        <div class="sim-goal__row">
+          <span class="sim-goal__currency">R$</span>
+          <input type="number" id="goalInput" class="sim-goal__input" placeholder="2000" min="200" max="20000" step="100" />
+          <span class="sim-goal__per">/mês líquido</span>
+          <button type="button" class="sim-goal__btn" id="goalBtn">Calcular FIPE necessário →</button>
+        </div>
+        <div class="sim-goal__result" id="goalResult" hidden></div>
+      </div>
+
       <!-- Compartilhar simulação -->
       <div class="sim-share">
         <p class="sim-share__title">
@@ -1131,16 +1264,23 @@ body {
   };
   var state = Object.assign({}, defaults);
 
-  // Carrega valores da URL (pra share funcionar)
+  // Carrega valores da URL (pra share funcionar).
+  // Fix code-review M2: usar Number.isFinite() em vez de `||` que descarta
+  // 0 como falsy (`?fipe=0` caía no fallback em vez de clampar pra 20000).
+  function parseClamp(raw, min, max, fallback, isFloat) {
+    var n = isFloat ? parseFloat(raw) : parseInt(raw, 10);
+    if (!Number.isFinite(n)) return fallback;
+    return Math.max(min, Math.min(max, n));
+  }
   try {
     var qs = new URLSearchParams(window.location.search);
-    if (qs.has("fipe"))   state.fipe = Math.max(20000, Math.min(250000, parseInt(qs.get("fipe"), 10) || defaults.fipe));
+    if (qs.has("fipe"))   state.fipe   = parseClamp(qs.get("fipe"),   20000, 250000, defaults.fipe);
     if (qs.has("cat") && ["A","B","C","D"].indexOf(qs.get("cat")) !== -1) state.cat = qs.get("cat");
     if (qs.has("trans") && ["manual","automatico"].indexOf(qs.get("trans")) !== -1) state.trans = qs.get("trans");
-    if (qs.has("meses"))  state.meses = Math.max(1, Math.min(12, parseInt(qs.get("meses"), 10) || defaults.meses));
-    if (qs.has("manut"))  state.manut = Math.max(100, Math.min(800, parseInt(qs.get("manut"), 10) || defaults.manut));
-    if (qs.has("deprec")) state.deprec = Math.max(5, Math.min(15, parseInt(qs.get("deprec"), 10) || defaults.deprec));
-    if (qs.has("ipva"))   state.ipva = Math.max(2, Math.min(5, parseFloat(qs.get("ipva")) || defaults.ipva));
+    if (qs.has("meses"))  state.meses  = parseClamp(qs.get("meses"),  1,  12,  defaults.meses);
+    if (qs.has("manut"))  state.manut  = parseClamp(qs.get("manut"),  100, 800, defaults.manut);
+    if (qs.has("deprec")) state.deprec = parseClamp(qs.get("deprec"), 5,  15,  defaults.deprec);
+    if (qs.has("ipva"))   state.ipva   = parseClamp(qs.get("ipva"),   2,  5,   defaults.ipva, true);
     if (qs.has("trib") && ["pf","me","nenhum"].indexOf(qs.get("trib")) !== -1) state.trib = qs.get("trib");
   } catch (e) {}
 
@@ -1361,18 +1501,21 @@ body {
 
   var copyBtn = document.getElementById("shareCopy");
   var copyText = document.getElementById("shareCopyText");
+  // Fix code-review M3: clearTimeout previne race se user clicar 2x rápido
+  function flashCopied() {
+    copyText.textContent = "Link copiado!";
+    copyBtn.classList.add("is-copied");
+    if (copyBtn._resetTimer) clearTimeout(copyBtn._resetTimer);
+    copyBtn._resetTimer = setTimeout(function () {
+      copyText.textContent = "Copiar link";
+      copyBtn.classList.remove("is-copied");
+      copyBtn._resetTimer = null;
+    }, 2500);
+  }
   copyBtn.addEventListener("click", function () {
     var url = buildShareUrl();
-    // Tenta API moderna primeiro
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(function () {
-        copyText.textContent = "Link copiado!";
-        copyBtn.classList.add("is-copied");
-        setTimeout(function () {
-          copyText.textContent = "Copiar link";
-          copyBtn.classList.remove("is-copied");
-        }, 2500);
-      }).catch(function () { fallbackCopy(url); });
+      navigator.clipboard.writeText(url).then(flashCopied).catch(function () { fallbackCopy(url); });
     } else {
       fallbackCopy(url);
     }
@@ -1385,17 +1528,121 @@ body {
     ta.select();
     try {
       document.execCommand("copy");
-      copyText.textContent = "Link copiado!";
-      copyBtn.classList.add("is-copied");
-      setTimeout(function () {
-        copyText.textContent = "Copiar link";
-        copyBtn.classList.remove("is-copied");
-      }, 2500);
+      flashCopied();
     } catch (e) {
       prompt("Copie o link abaixo:", text);
     }
     document.body.removeChild(ta);
   }
+
+  // ============================================================
+  // SIMULADOR INVERSO — meta de renda → FIPE necessário
+  // ============================================================
+  // Calcula qual FIPE precisa o carro pra atingir meta líquida mensal,
+  // mantendo os OUTROS parâmetros (cat, trans, meses, manut, ipva, deprec, trib).
+  // Equação:
+  //   liquidoAnual = receitaAnual - comissao - imposto - custos
+  //   receitaAnual = FIPE × tierRate × transMod × meses
+  //   comissao = receitaAnual × 0.10
+  //   imposto = (receitaAnual - comissao) × tribRate
+  //   custos = manutAnual + (FIPE × ipvaPct) + (FIPE × deprecPct × 0.5)
+  //
+  // Isolando FIPE:
+  //   liquidoAnual = FIPE × tierRate × transMod × meses × (1 - 0.10) × (1 - tribRate)
+  //                  - manutAnual
+  //                  - FIPE × (ipvaPct + deprecPct × 0.5)
+  //
+  // Seja R = tierRate × transMod × meses × 0.9 × (1 - tribRate) (multiplicador receita líquida)
+  // Seja C = ipvaPct + deprecPct × 0.5 (multiplicador custo proporcional FIPE)
+  // Então: liquidoAnual = FIPE × (R - C) - manutAnual
+  // Logo:  FIPE = (liquidoAnual + manutAnual) / (R - C)
+  function calcFipeForGoal(metaMensalLiquido) {
+    var metaAnual = metaMensalLiquido * 12;
+    var tierRate = TIER_RATES[state.cat] || 0.045;
+    var transMod = TRANS_MOD[state.trans] || 1;
+    var tribRate = TRIB_RATES[state.trib] || 0;
+    var ipvaPct = state.ipva / 100;
+    var deprecPct = state.deprec / 100;
+    var manutAnual = state.manut * state.meses;
+
+    var R = tierRate * transMod * state.meses * (1 - COMISSAO_NDB) * (1 - tribRate);
+    var C = ipvaPct + deprecPct * 0.5;
+    var denom = R - C;
+
+    if (denom <= 0) {
+      // Custos comem toda a receita — impossível bater meta com esses parâmetros
+      return { possivel: false, motivo: "Seus custos atuais (IPVA + depreciação) consomem tudo o que o aluguel gera nessa categoria. Reduza manutenção/depreciação ou suba pra categoria menor (Econômico/Confort)." };
+    }
+    var fipeNecessario = (metaAnual + manutAnual) / denom;
+    if (fipeNecessario < 20000) {
+      return { possivel: true, fipe: 20000, baixo: true };
+    }
+    if (fipeNecessario > 500000) {
+      return { possivel: false, motivo: "Pra atingir essa meta seu carro precisaria valer mais de R$ 500.000 nessa categoria. Tente aumentar meses alugados/ano ou subir de categoria (ex: Premium pra Luxo)." };
+    }
+    return { possivel: true, fipe: Math.round(fipeNecessario / 1000) * 1000 };
+  }
+
+  var goalInput = document.getElementById("goalInput");
+  var goalBtn = document.getElementById("goalBtn");
+  var goalResult = document.getElementById("goalResult");
+
+  function runGoal() {
+    var meta = parseFloat(goalInput.value);
+    if (!Number.isFinite(meta) || meta < 200) {
+      goalResult.hidden = false;
+      goalResult.className = "sim-goal__result sim-goal__result--negative";
+      goalResult.textContent = "Digite uma meta entre R$ 200 e R$ 20.000/mês.";
+      return;
+    }
+    if (meta > 20000) {
+      goalResult.hidden = false;
+      goalResult.className = "sim-goal__result sim-goal__result--negative";
+      goalResult.textContent = "Meta muito alta pra 1 carro só (>R$ 20k/mês). Considere ter 2-3 carros na frota.";
+      return;
+    }
+
+    var result = calcFipeForGoal(meta);
+    goalResult.hidden = false;
+
+    if (!result.possivel) {
+      goalResult.className = "sim-goal__result sim-goal__result--negative";
+      goalResult.textContent = "❌ " + result.motivo;
+      return;
+    }
+
+    goalResult.className = "sim-goal__result";
+    if (result.baixo) {
+      goalResult.innerHTML = "✅ Pra atingir <strong>" + brl(meta) +
+        "/mês</strong> líquido você precisaria de um carro de pelo menos <em>R$ 20.000</em> (categoria " +
+        TIER_NAMES[state.cat] + "). Já dá com carros bem populares! " +
+        '<br><button type="button" class="sim-goal__result-btn" id="goalApplyBtn">Aplicar R$ 20.000 no simulador →</button>';
+    } else {
+      goalResult.innerHTML = "🎯 Pra atingir <strong>" + brl(meta) +
+        "/mês</strong> líquido com seus parâmetros atuais (" + TIER_NAMES[state.cat] +
+        ", " + state.meses + " meses, " + TRIB_NAMES[state.trib] + "), seu carro precisa valer cerca de <em>" +
+        brl(result.fipe) + "</em> (FIPE). " +
+        '<br><button type="button" class="sim-goal__result-btn" id="goalApplyBtn">Aplicar ' +
+        brl(result.fipe) + ' no simulador →</button>';
+    }
+
+    // Wire botão "aplicar"
+    var applyBtn = document.getElementById("goalApplyBtn");
+    if (applyBtn) {
+      applyBtn.addEventListener("click", function () {
+        state.fipe = result.fipe;
+        document.getElementById("fipe").value = result.fipe;
+        updateSliderTrack(document.getElementById("fipe"));
+        render();
+        // Scroll suave pro topo do simulador
+        document.querySelector(".sim-main").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+  goalBtn.addEventListener("click", runGoal);
+  goalInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") runGoal();
+  });
 
   // Auto-categoria baseada em FIPE (sugestão inicial)
   var fipeInput = document.getElementById("fipe");
