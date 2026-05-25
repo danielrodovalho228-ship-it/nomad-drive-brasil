@@ -214,9 +214,45 @@
     <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
       <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="brand__img" />
     </a>
-    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+    <a href="#" class="nav__back" id="navBack">&larr; Voltar</a>
   </div>
 </header>
+<script>
+// Fase 64: navegação inteligente — volta pra página anterior em vez do index
+(function () {
+  var btn = document.getElementById("navBack");
+  if (!btn) return;
+
+  // Decide o destino correto:
+  // 1. Se veio do boas-vindas (?from=boas-vindas), volta pra boas-vindas-cliente.html
+  // 2. Se history tem mais de 1 entrada (clicou de algum lugar), usa history.back()
+  // 3. Fallback: vai pro index
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var from = params.get("from");
+    if (from === "boas-vindas") {
+      btn.href = "boas-vindas-cliente.html?force=1";
+      btn.textContent = "← Voltar pros próximos passos";
+      return;
+    }
+    if (from === "dashboard") {
+      btn.href = "dashboard-cliente.html";
+      btn.textContent = "← Voltar pro painel";
+      return;
+    }
+  } catch (e) {}
+
+  // Sem hint, usa history.back() se possível
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) >= 0) {
+      window.history.back();
+    } else {
+      window.location.href = "index.html";
+    }
+  });
+})();
+</script>
 
 <main>
 

@@ -10,229 +10,340 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="design-tokens.css?v=20260525b" />
+<link rel="stylesheet" href="style.css?v=20260525b" />
+<link rel="stylesheet" href="style-animations.css?v=20260525b" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260525b" />
+<link rel="stylesheet" href="style-dashboards-modern.css?v=20260525b" />
 <style>
 /* ============================================================
- * Fase 56 — Boas-vindas cliente pós-cadastro
+ * Fase 64 — Boas-vindas cliente RESPONSIVO + sem "AI"
  * ============================================================ */
-.welcome-hero {
-  background: linear-gradient(135deg, #145f3e 0%, #1a7a4f 55%, #20c997 100%);
+* { box-sizing: border-box; }
+
+.bv-hero {
+  background: linear-gradient(135deg, #0f5132 0%, #1a7a4f 50%, #20c997 100%);
   color: #fff;
-  padding: 56px 24px 64px;
-  text-align: center;
+  padding: 48px 20px 72px;
   position: relative;
   overflow: hidden;
+  min-height: auto;
 }
-.welcome-hero::before {
+.bv-hero::before {
   content: "";
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(circle at 25% 30%, rgba(255,255,255,.13) 0, transparent 38%),
-    radial-gradient(circle at 75% 70%, rgba(212,175,55,.20) 0, transparent 38%);
+    radial-gradient(circle at 18% 25%, rgba(255,255,255,.12) 0, transparent 38%),
+    radial-gradient(circle at 82% 75%, rgba(212,175,55,.22) 0, transparent 38%);
   pointer-events: none;
 }
-.welcome-hero__inner {
-  max-width: 720px; margin: 0 auto;
-  position: relative; z-index: 1;
+.bv-hero__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 12px;
 }
-.welcome-hero__badge {
-  display: inline-flex; align-items: center; gap: 6px;
+.bv-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: rgba(255,255,255,.16);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 6px 14px;
+  padding: 7px 16px;
   border-radius: 999px;
-  font-size: 13px; font-weight: 600;
-  margin-bottom: 16px;
-  border: 1px solid rgba(255,255,255,.25);
-  animation: w-bounce-in .55s cubic-bezier(.34,1.56,.64,1) both;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,.28);
+  animation: bv-pop .55s cubic-bezier(.34,1.56,.64,1) both;
 }
-.welcome-hero h1 {
+.bv-hero__badge svg { width: 16px; height: 16px; }
+
+.bv-hero h1 {
   font-family: 'Sora', sans-serif;
-  font-size: clamp(28px, 5vw, 42px);
+  font-size: clamp(26px, 6vw, 44px);
   font-weight: 800;
-  margin: 0 0 10px;
+  margin: 0 0 14px;
   line-height: 1.15;
-  animation: w-fade-up .5s ease .15s both;
+  letter-spacing: -.5px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  animation: bv-fade-up .55s ease .12s both;
 }
-.welcome-hero h1 span { color: #ffd966; }
-.welcome-hero__sub {
-  font-size: 16px; max-width: 540px; margin: 0 auto 24px;
-  opacity: .92; line-height: 1.55;
-  animation: w-fade-up .5s ease .3s both;
+.bv-hero h1 .bv-hero__name {
+  color: #ffd966;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
-.welcome-hero__progress {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,.12);
-  padding: 10px 18px;
+.bv-hero__sub {
+  font-size: clamp(14.5px, 2.2vw, 16.5px);
+  max-width: 560px;
+  margin: 0 auto 28px;
+  opacity: .94;
+  line-height: 1.55;
+  animation: bv-fade-up .55s ease .25s both;
+}
+.bv-hero__progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,.14);
+  padding: 12px 20px;
   border-radius: 999px;
-  font-size: 14px; font-weight: 600;
-  border: 1px solid rgba(255,255,255,.2);
-  animation: w-fade-up .5s ease .45s both;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,.22);
+  animation: bv-fade-up .55s ease .4s both;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.welcome-hero__progress-bar {
-  width: 140px; height: 8px;
+.bv-hero__progress-bar {
+  width: 160px;
+  height: 8px;
   background: rgba(255,255,255,.25);
   border-radius: 999px;
   overflow: hidden;
 }
-.welcome-hero__progress-fill {
+.bv-hero__progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ffd966, #ffc107);
+  background: linear-gradient(90deg, #ffd966 0%, #ffc107 100%);
   border-radius: 999px;
   width: 0%;
-  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  transition: width 1.4s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 0 12px rgba(255,193,7,.5);
 }
-@keyframes w-bounce-in { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
-@keyframes w-fade-up   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bv-pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+@keyframes bv-fade-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-.welcome-steps {
-  max-width: 760px; margin: -32px auto 64px;
+/* Steps section */
+.bv-steps-section {
+  max-width: 780px;
+  margin: -42px auto 56px;
   padding: 0 16px;
-  position: relative; z-index: 2;
+  position: relative;
+  z-index: 2;
 }
-.welcome-step {
+
+.bv-step {
   background: #fff;
   border-radius: 16px;
-  padding: 22px 24px;
+  padding: 22px;
   margin-bottom: 14px;
-  box-shadow: 0 6px 24px rgba(20,40,30,.08);
-  display: flex; gap: 18px; align-items: flex-start;
+  box-shadow: 0 8px 28px rgba(20,40,30,.08), 0 2px 4px rgba(0,0,0,.03);
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 16px;
+  align-items: center;
   border: 2px solid transparent;
   transition: transform .25s, box-shadow .25s, border-color .25s;
   opacity: 0;
-  animation: w-fade-up .5s ease both;
+  animation: bv-fade-up .5s ease both;
   position: relative;
 }
-.welcome-step:nth-child(1) { animation-delay: .55s; }
-.welcome-step:nth-child(2) { animation-delay: .65s; }
-.welcome-step:nth-child(3) { animation-delay: .75s; }
-.welcome-step:nth-child(4) { animation-delay: .85s; }
-.welcome-step--done { background: #f0f9f3; border-color: #198754; }
-.welcome-step--current {
-  border-color: #ffc107;
-  box-shadow: 0 10px 30px rgba(255,193,7,.18);
-  transform: translateY(-2px);
+.bv-step:nth-child(1) { animation-delay: .5s; }
+.bv-step:nth-child(2) { animation-delay: .6s; }
+.bv-step:nth-child(3) { animation-delay: .7s; }
+.bv-step:nth-child(4) { animation-delay: .8s; }
+
+.bv-step--done {
+  background: linear-gradient(135deg, #f8fdf9 0%, #f0f9f3 100%);
+  border-color: #198754;
 }
-.welcome-step--current::after {
-  content: "👉 próximo passo";
+.bv-step--current {
+  border-color: #ffc107;
+  box-shadow: 0 12px 32px rgba(255,193,7,.20), 0 4px 8px rgba(0,0,0,.05);
+}
+.bv-step--current::after {
+  content: "PRÓXIMO PASSO";
   position: absolute;
-  top: -10px; right: 16px;
+  top: -10px;
+  right: 18px;
   background: #ffc107;
   color: #14201b;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: .3px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  box-shadow: 0 3px 10px rgba(255,193,7,.45);
 }
-.welcome-step__icon {
-  flex-shrink: 0;
-  width: 44px; height: 44px;
+
+.bv-step__icon {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: #e9ecef;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
   color: #6b7670;
-  transition: background .3s, color .3s;
+  transition: background .3s, color .3s, transform .3s;
+  flex-shrink: 0;
 }
-.welcome-step--done .welcome-step__icon { background: #198754; color: #fff; }
-.welcome-step--current .welcome-step__icon {
+.bv-step--done .bv-step__icon {
+  background: linear-gradient(135deg, #198754, #145f3e);
+  color: #fff;
+}
+.bv-step--current .bv-step__icon {
   background: linear-gradient(135deg, #ffc107, #f39c12);
   color: #fff;
-  animation: w-pulse 2s ease-in-out infinite;
+  animation: bv-pulse 2s ease-in-out infinite;
 }
-@keyframes w-pulse {
+@keyframes bv-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,.5); }
-  50%      { box-shadow: 0 0 0 12px rgba(255,193,7,0); }
+  50%      { box-shadow: 0 0 0 14px rgba(255,193,7,0); }
 }
-.welcome-step__body { flex: 1; min-width: 0; }
-.welcome-step__title {
+.bv-step__icon svg { width: 24px; height: 24px; }
+
+.bv-step__body {
+  min-width: 0;
+}
+.bv-step__title {
   font-family: 'Sora', sans-serif;
-  font-size: 17px; font-weight: 700;
+  font-size: 16.5px;
+  font-weight: 700;
   margin: 0 0 4px;
   color: #14201b;
+  line-height: 1.3;
 }
-.welcome-step__desc {
-  font-size: 14px; color: #5b6b63;
+.bv-step__desc {
+  font-size: 13.5px;
+  color: #5b6b63;
   line-height: 1.5;
-  margin: 0 0 10px;
+  margin: 0;
 }
-.welcome-step__cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #198754; color: #fff;
+
+.bv-step__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #198754;
+  color: #fff;
   text-decoration: none;
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 14px; font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
   transition: background .2s, transform .15s;
-  border: none; cursor: pointer;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
-.welcome-step__cta:hover { background: #146c43; transform: translateY(-1px); }
-.welcome-step--done .welcome-step__cta {
+.bv-step__cta:hover {
+  background: #146c43;
+  transform: translateY(-1px);
+}
+.bv-step--done .bv-step__cta {
   background: transparent;
   color: #198754;
   border: 1.5px solid #198754;
 }
-.welcome-step--done .welcome-step__cta:hover { background: #f0f9f3; color: #146c43; }
+.bv-step--done .bv-step__cta:hover {
+  background: #f0f9f3;
+}
 
-.welcome-actions {
-  margin: 32px auto 0;
-  max-width: 760px;
-  padding: 0 16px;
-  display: flex; gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
+/* Mobile: cards verticais */
+@media (max-width: 580px) {
+  .bv-step {
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: auto auto;
+    padding: 18px 16px;
+    gap: 12px;
+  }
+  .bv-step__icon { width: 48px; height: 48px; font-size: 18px; }
+  .bv-step__cta {
+    grid-column: 1 / -1;
+    justify-content: center;
+    margin-top: 4px;
+  }
 }
-.welcome-link-subtle {
-  font-size: 13px; color: #6b7670;
-  text-decoration: underline;
-  background: transparent;
-  border: none; cursor: pointer;
-  padding: 8px 12px;
-  font-family: inherit;
-}
-.welcome-link-subtle:hover { color: #198754; }
 
-.welcome-loading {
-  text-align: center;
-  padding: 32px;
-  color: #6b7670;
-  font-size: 14px;
-}
-.welcome-loading::before {
-  content: ""; display: inline-block;
-  width: 22px; height: 22px;
-  border: 3px solid #e9ecef;
-  border-top-color: #198754;
-  border-radius: 50%;
-  animation: w-spin .9s linear infinite;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-@keyframes w-spin { to { transform: rotate(360deg); } }
-
-/* Gold tier celebration badge */
-.welcome-tier-info {
-  margin-top: 18px;
-  padding: 14px 18px;
-  background: linear-gradient(135deg, #fff8e7, #fff3cd);
+/* Gold info box */
+.bv-gold-info {
+  margin-top: 22px;
+  padding: 18px 22px;
+  background: linear-gradient(135deg, #fff8e7 0%, #fff3cd 100%);
   border-left: 4px solid #d4af37;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13.5px;
   color: #5b4d20;
   line-height: 1.55;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
 }
-.welcome-tier-info strong { color: #856404; }
+.bv-gold-info svg {
+  width: 24px;
+  height: 24px;
+  color: #d4af37;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.bv-gold-info strong { color: #856404; }
 
-@media (max-width: 540px) {
-  .welcome-step { padding: 16px 18px; gap: 14px; }
-  .welcome-step__icon { width: 38px; height: 38px; font-size: 17px; }
-  .welcome-step__title { font-size: 15px; }
-  .welcome-step__desc { font-size: 13.5px; }
+.bv-actions {
+  margin-top: 28px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.bv-actions__dismiss {
+  font-size: 13px;
+  color: #6b7670;
+  text-decoration: underline;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  font-family: inherit;
+}
+.bv-actions__dismiss:hover { color: #145f3e; }
+
+.bv-loading {
+  text-align: center;
+  padding: 36px;
+  color: #6b7670;
+  font-size: 14px;
+}
+.bv-loading::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e9ecef;
+  border-top-color: #198754;
+  border-radius: 50%;
+  animation: bv-spin .9s linear infinite;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+@keyframes bv-spin { to { transform: rotate(360deg); } }
+
+/* Cards completos */
+.bv-complete {
+  text-align: center;
+  margin-top: 22px;
+  padding: 28px;
+  background: linear-gradient(135deg, #d1e7dd 0%, #f0f9f3 100%);
+  border-radius: 16px;
+  border: 2px solid #198754;
+  animation: bv-pop .55s cubic-bezier(.34,1.56,.64,1);
+}
+.bv-complete__emoji {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+  animation: bv-pulse 1.8s ease-in-out infinite;
 }
 </style>
 </head>
@@ -252,29 +363,37 @@
 </header>
 
 <main>
-<section class="welcome-hero">
-  <div class="welcome-hero__inner">
-    <span class="welcome-hero__badge">✅ Cadastro pronto</span>
-    <h1>Bem-vindo, <span id="welcomeName">amigo</span>!</h1>
-    <p class="welcome-hero__sub">Sua conta está criada. Em 4 passos rápidos você consegue alugar seu primeiro carro com tudo verificado pela equipe Nomade Drive.</p>
-    <div class="welcome-hero__progress">
+
+<!-- HERO -->
+<section class="bv-hero">
+  <div class="bv-hero__inner">
+    <span class="bv-hero__badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      Cadastro pronto
+    </span>
+    <h1>Bem-vindo, <span class="bv-hero__name" id="welcomeName">amigo</span>!</h1>
+    <p class="bv-hero__sub">Sua conta está criada. Em 4 passos rápidos você consegue alugar seu primeiro carro com tudo verificado pela equipe Nomade Drive.</p>
+    <div class="bv-hero__progress">
       <span id="welcomeProgressLabel">0 de 4 concluídos</span>
-      <span class="welcome-hero__progress-bar">
-        <span class="welcome-hero__progress-fill" id="welcomeProgressFill"></span>
+      <span class="bv-hero__progress-bar">
+        <span class="bv-hero__progress-fill" id="welcomeProgressFill"></span>
       </span>
     </div>
   </div>
 </section>
 
-<div class="welcome-steps" id="welcomeSteps">
-  <div class="welcome-loading">Carregando seu progresso...</div>
-</div>
+<!-- STEPS -->
+<section class="bv-steps-section">
+  <div id="welcomeSteps">
+    <div class="bv-loading">Carregando seu progresso...</div>
+  </div>
 
-<div class="welcome-actions">
-  <a href="frota.html" class="btn btn--solid btn--sm">🚗 Ver frota disponível</a>
-  <a href="dashboard-cliente.html" class="btn btn--outline btn--sm">Ir pro painel agora</a>
-  <button type="button" class="welcome-link-subtle" id="welcomeDismiss">Não mostrar esta tela de novo</button>
-</div>
+  <div class="bv-actions">
+    <a href="frota.html" class="btn btn--solid">Ver frota disponível →</a>
+    <a href="dashboard-cliente.html" class="btn btn--outline">Ir pro painel agora</a>
+    <button type="button" class="bv-actions__dismiss" id="welcomeDismiss">Não mostrar de novo</button>
+  </div>
+</section>
 
 </main>
 
@@ -291,8 +410,7 @@
 <script src="script.js?v=20260523c"></script>
 <script>
 (function () {
-  // Fix code-review M1: respeita "Não mostrar de novo" se já clicou antes.
-  // Permite ?force=1 pra ainda ver (útil pro link no header do dashboard).
+  // Fix code-review M1: respeita "Não mostrar de novo"
   try {
     var dismissed = localStorage.getItem("ndb-welcome-cliente-dismissed") === "1";
     var forced = new URLSearchParams(window.location.search).get("force") === "1";
@@ -313,54 +431,61 @@
     return parts[0] || "amigo";
   }
 
+  // SVG icons inline pra cada step (sem emoji "AI")
+  var ICONS = {
+    docs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+    car: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+  };
+
   function renderSteps(state) {
     var steps = [
       {
-        id: "kyc",
+        id: "docs",
         done: state.kycOk,
-        icon: state.kycOk ? "✓" : "1",
-        title: "Enviar documentos (KYC)",
+        icon: state.kycOk ? ICONS.check : ICONS.docs,
+        title: "Enviar documentos pessoais",
         desc: state.kycOk
-          ? "Documentos aprovados — sua conta está verificada."
-          : "CNH + comprovante de residência + selfie. Análise em até 24h úteis.",
-        ctaText: state.kycOk ? "Ver documentos" : "Enviar documentos",
+          ? "Documentos aprovados — sua conta está verificada e pronta pra alugar."
+          : "CNH + comprovante de residência + selfie pra verificação. Análise da equipe em até 24h úteis.",
+        ctaText: state.kycOk ? "Ver meus documentos" : "Enviar documentos →",
         ctaHref: "dashboard-cliente.html#documentos"
       },
       {
-        id: "verify",
+        id: "email",
         done: state.emailOk,
-        icon: state.emailOk ? "✓" : "2",
-        title: "Verificar e-mail",
+        icon: state.emailOk ? ICONS.check : ICONS.mail,
+        title: "Confirmar e-mail",
         desc: state.emailOk
-          ? "E-mail confirmado — você vai receber atualizações da reserva."
-          : "Clique no link que enviamos pro seu e-mail pra confirmar a conta.",
-        ctaText: state.emailOk ? "Conta verificada" : "Reenviar e-mail",
+          ? "E-mail confirmado — você vai receber atualizações da reserva por e-mail."
+          : "Abra o e-mail que enviamos pra você e clique no link de confirmação. Verifique sua caixa de spam se não encontrar.",
+        ctaText: state.emailOk ? "E-mail verificado" : "Reenviar e-mail →",
         ctaHref: state.emailOk ? "dashboard-cliente.html" : "javascript:void(0)",
         action: state.emailOk ? null : "resend_email"
       },
       {
         id: "rent",
         done: state.hasBooking,
-        icon: state.hasBooking ? "✓" : "3",
+        icon: state.hasBooking ? ICONS.check : ICONS.car,
         title: "Fazer sua primeira reserva",
         desc: state.hasBooking
-          ? "Você já tem " + state.bookingCount + " reserva(s)! Acompanhe no painel."
-          : "Escolha um carro da frota verificada e solicite o aluguel — aprovação em até 24h.",
-        ctaText: state.hasBooking ? "Ver minhas reservas" : "Ver frota disponível",
+          ? "Você já tem " + state.bookingCount + " reserva(s)! Acompanhe tudo no seu painel."
+          : "Escolha um carro da frota verificada e solicite o aluguel — aprovação da equipe em até 24h úteis.",
+        ctaText: state.hasBooking ? "Minhas reservas" : "Ver frota disponível →",
         ctaHref: state.hasBooking ? "dashboard-cliente.html#bookings" : "frota.html"
       },
       {
         id: "rate",
         done: state.hasRating,
-        icon: state.hasRating ? "🎉" : "4",
-        title: "Avaliar sua experiência (sobe pra Silver/Gold)",
+        icon: state.hasRating ? ICONS.check : ICONS.star,
+        title: "Avaliar sua experiência",
         desc: state.hasRating
-          ? "Você já avaliou — obrigado! Cada avaliação conta pro seu tier de fidelidade."
-          : "Após a 1ª locação, avalie o proprietário. Avaliações = pontos no Programa Nomade Gold.",
-        ctaText: state.hasRating ? "Ver minhas avaliações" : "Como funciona o Gold",
-        ctaHref: state.hasRating
-          ? "dashboard-cliente.html#avaliacoes"
-          : "programa-gold.html"
+          ? "Você já avaliou — obrigado! Cada avaliação conta pra subir de tier no Programa Nomade Gold."
+          : "Após a 1ª locação, avalie o proprietário com estrelas. Suas avaliações sobem você no Programa Nomade Gold (Bronze → Silver → Gold → Platinum) com descontos e benefícios crescentes.",
+        ctaText: state.hasRating ? "Minhas avaliações" : "Como funciona o Gold →",
+        ctaHref: state.hasRating ? "dashboard-cliente.html#avaliacoes" : "programa-gold.html?from=boas-vindas"
       }
     ];
 
@@ -373,37 +498,38 @@
     progLbl.textContent = doneCount + " de " + steps.length + " concluídos";
     setTimeout(function () {
       progFill.style.width = ((doneCount / steps.length) * 100) + "%";
-    }, 100);
+    }, 150);
 
     stepsEl.innerHTML = "";
     steps.forEach(function (s, idx) {
       var step = document.createElement("div");
-      var cls = "welcome-step";
-      if (s.done) cls += " welcome-step--done";
-      else if (idx === currentIdx) cls += " welcome-step--current";
+      var cls = "bv-step";
+      if (s.done) cls += " bv-step--done";
+      else if (idx === currentIdx) cls += " bv-step--current";
       step.className = cls;
 
       var icon = document.createElement("div");
-      icon.className = "welcome-step__icon";
-      icon.textContent = s.icon;
+      icon.className = "bv-step__icon";
+      icon.innerHTML = s.icon;
 
       var body = document.createElement("div");
-      body.className = "welcome-step__body";
+      body.className = "bv-step__body";
 
       var title = document.createElement("h3");
-      title.className = "welcome-step__title";
+      title.className = "bv-step__title";
       title.textContent = s.title;
+      body.appendChild(title);
 
       var desc = document.createElement("p");
-      desc.className = "welcome-step__desc";
+      desc.className = "bv-step__desc";
       desc.textContent = s.desc;
+      body.appendChild(desc);
 
       var cta = document.createElement("a");
-      cta.className = "welcome-step__cta";
+      cta.className = "bv-step__cta";
       cta.href = s.ctaHref;
-      cta.textContent = (s.done ? "" : "→ ") + s.ctaText;
+      cta.textContent = s.ctaText;
 
-      // Ação especial: reenviar e-mail de verificação
       if (s.action === "resend_email") {
         cta.addEventListener("click", function (e) {
           e.preventDefault();
@@ -411,32 +537,30 @@
         });
       }
 
-      body.appendChild(title);
-      body.appendChild(desc);
-      body.appendChild(cta);
-
       step.appendChild(icon);
       step.appendChild(body);
+      step.appendChild(cta);
       stepsEl.appendChild(step);
     });
 
-    // Adiciona dica do Programa Gold se ainda não fez avaliação
+    // Box dica do Programa Gold (sempre visível, educativo)
     if (!state.hasRating) {
-      var tierInfo = document.createElement("div");
-      tierInfo.className = "welcome-tier-info";
-      tierInfo.innerHTML =
-        '🏆 <strong>Programa Nomade Gold:</strong> a cada locação concluída + avaliação enviada, você sobe de tier. ' +
-        'Bronze → Silver → Gold → Platinum, com descontos e benefícios crescentes (auto-aprovação Gold/Platinum).';
-      stepsEl.appendChild(tierInfo);
+      var goldInfo = document.createElement("div");
+      goldInfo.className = "bv-gold-info";
+      goldInfo.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6-7 6 7"/><path d="M6 9l1 9h10l1-9"/></svg>' +
+        '<div><strong>Programa Nomade Gold:</strong> a cada locação concluída + avaliação enviada, você sobe de tier. Bronze → Silver (7% off) → Gold (12% off) → Platinum (18% off) — com auto-aprovação a partir do Gold.</div>';
+      stepsEl.appendChild(goldInfo);
     }
 
     // Celebração 4/4
     if (doneCount === steps.length) {
       var party = document.createElement("div");
-      party.style.cssText = "text-align:center;margin-top:20px;padding:20px;background:linear-gradient(135deg,#fff3cd,#ffeaa7);border-radius:14px;animation:w-bounce-in .5s ease;";
-      party.innerHTML = '<div style="font-size:32px;margin-bottom:6px;">🎉</div>' +
-        '<strong style="font-size:17px;color:#14201b;">Você completou os 4 passos!</strong>' +
-        '<p style="margin:6px 0 0;color:#5b6b63;font-size:14px;">Use o painel pra acompanhar reservas, documentos e o Programa Nomade Gold.</p>';
+      party.className = "bv-complete";
+      party.innerHTML =
+        '<span class="bv-complete__emoji" aria-hidden="true">🎉</span>' +
+        '<strong style="font-size:18px;color:#14201b;display:block;font-family:Sora,sans-serif;">Tudo pronto!</strong>' +
+        '<p style="margin:6px 0 0;color:#5b6b63;font-size:14px;">Você completou os 4 passos. Continue alugando e avaliando pra subir no Programa Gold.</p>';
       stepsEl.appendChild(party);
     }
   }
@@ -452,14 +576,18 @@
       c.auth.resend({ type: "signup", email: email }).then(function (r) {
         if (r.error) {
           btn.textContent = orig;
-          if (window.ndModal) {
-            ndModal.alert({ title: "Não foi possível reenviar", body: r.error.message || "Tente novamente em alguns minutos.", icon: "⚠️" });
-          }
+          if (window.ndModal) ndModal.alert({
+            title: "Não foi possível reenviar",
+            body: r.error.message || "Tente novamente em alguns minutos.",
+            icon: "⚠️"
+          });
         } else {
-          btn.textContent = "✓ E-mail enviado";
-          if (window.ndModal) {
-            ndModal.alert({ title: "E-mail enviado!", body: "Verifique sua caixa de entrada e a pasta de spam.", icon: "📧" });
-          }
+          btn.textContent = "E-mail enviado ✓";
+          if (window.ndModal) ndModal.alert({
+            title: "E-mail enviado!",
+            body: "Verifique sua caixa de entrada e a pasta de spam.",
+            icon: "📧"
+          });
         }
       });
     });
@@ -467,14 +595,16 @@
 
   function loadState() {
     var a = window.ndAuth;
-    if (!a) { stepsEl.innerHTML = '<p style="text-align:center;color:#b00020;">Autenticação indisponível.</p>'; return; }
+    if (!a) {
+      stepsEl.innerHTML = '<p style="text-align:center;color:#b00020;">Autenticação indisponível.</p>';
+      return;
+    }
 
     a.requireAuth().then(function (s) {
       if (!s) return;
       var c = a.client();
       if (!c) return;
 
-      // Em paralelo: profile + bookings + ratings
       Promise.all([
         c.from("profiles")
           .select("full_name, verification_status, main_role")
@@ -491,13 +621,12 @@
         var bCount  = (results[1] && results[1].count) || 0;
         var rCount  = (results[2] && results[2].count) || 0;
 
-        nameEl.textContent = firstName(profile.full_name || (s.user.user_metadata && s.user.user_metadata.full_name));
+        nameEl.textContent = firstName(profile.full_name ||
+          (s.user.user_metadata && s.user.user_metadata.full_name));
 
-        // KYC ok = verification_status é aprovado ou aprovado_com_ressalvas
         var kycOk = (profile.verification_status === "aprovado" ||
                      profile.verification_status === "aprovado_com_ressalvas");
-        // E-mail ok = Supabase já tem email_confirmed_at preenchido
-        var emailOk = !!(s.user.email_confirmed_at || (s.user.confirmed_at));
+        var emailOk = !!(s.user.email_confirmed_at || s.user.confirmed_at);
 
         renderSteps({
           kycOk: kycOk,
@@ -509,7 +638,6 @@
       }).catch(function (err) {
         console.warn("welcome cliente load:", err && err.message);
         nameEl.textContent = firstName(s.user.user_metadata && s.user.user_metadata.full_name);
-        // Fallback: mostra tudo pendente exceto email se já confirmado
         renderSteps({
           kycOk: false,
           emailOk: !!(s.user.email_confirmed_at || s.user.confirmed_at),
@@ -527,6 +655,6 @@
   loadState();
 })();
 </script>
-<script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
+<script src="fm-reveal.js?v=20260525b" defer></script>
 </body>
 </html>
