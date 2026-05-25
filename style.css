@@ -922,8 +922,8 @@ ul, ol { list-style: none; }
 .banner-dot { width: 9px; height: 9px; border-radius: 50%; cursor: pointer; border: none; background: var(--line); padding: 0; }
 .banner-dot.is-active { background: var(--green); }
 
-/* paths: 5 cards */
-.paths { grid-template-columns: repeat(5, 1fr); }
+/* paths: 4 cards (Fase 62 removeu "Sou oficina") */
+.paths { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 1000px) { .paths { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .paths { grid-template-columns: 1fr; } }
 
