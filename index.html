@@ -383,7 +383,7 @@
   </div>
 </section>
 
-<!-- ============ COMO FUNCIONA ============ -->
+<!-- ============ COMO FUNCIONA (Fase 57b: hero imagem + steps) ============ -->
 <section class="section section--surface" id="como">
   <div class="container">
     <div class="section__head">
@@ -391,13 +391,71 @@
       <h2>Simples, pessoal e transparente</h2>
       <p>Quatro passos, sem balcão e sem letras miúdas. Uma pessoa de verdade do outro lado da conversa.</p>
     </div>
-    <ol class="steps">
-      <li class="step"><span class="step__num">1</span><h3>Conte o que você precisa</h3><p>Datas, cidade de retirada, duração e a categoria de carro. Você pede um orçamento sem compromisso.</p></li>
-      <li class="step"><span class="step__num">2</span><h3>Receba a proposta por escrito</h3><p>Confirmamos disponibilidade e enviamos preço, caução, proteção e condições — tudo claro, antes de qualquer reserva.</p></li>
-      <li class="step"><span class="step__num">3</span><h3>Assine e garanta</h3><p>Contrato de locação, verificação de CNH e documentos, caução e vistoria com foto e vídeo na retirada.</p></li>
-      <li class="step"><span class="step__num">4</span><h3>Retire e use</h3><p>Entrega em mãos em Uberlândia. Suporte por WhatsApp durante todo o período da locação.</p></li>
-    </ol>
+
+    <div class="como-grid">
+      <!-- Visual hero da seção: atendimento humano via WhatsApp -->
+      <div class="como-visual">
+        <img
+          src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=720&h=900&fit=crop&q=80&auto=format"
+          alt="Atendimento humano via WhatsApp — sem call center, resposta de pessoa real"
+          loading="lazy" decoding="async" />
+        <div class="como-visual__badge">
+          <span style="font-size:18px;">💬</span>
+          <div>
+            <strong style="display:block;font-size:13px;">Resposta em até 1h</strong>
+            <small style="font-size:11.5px;opacity:.85;">WhatsApp · pessoa real</small>
+          </div>
+        </div>
+      </div>
+
+      <ol class="steps">
+        <li class="step"><span class="step__num">1</span><h3>Conte o que você precisa</h3><p>Datas, cidade de retirada, duração e a categoria de carro. Você pede um orçamento sem compromisso.</p></li>
+        <li class="step"><span class="step__num">2</span><h3>Receba a proposta por escrito</h3><p>Confirmamos disponibilidade e enviamos preço, caução, proteção e condições — tudo claro, antes de qualquer reserva.</p></li>
+        <li class="step"><span class="step__num">3</span><h3>Assine e garanta</h3><p>Contrato de locação, verificação de CNH e documentos, caução e vistoria com foto e vídeo na retirada.</p></li>
+        <li class="step"><span class="step__num">4</span><h3>Retire e use</h3><p>Entrega em mãos em Uberlândia. Suporte por WhatsApp durante todo o período da locação.</p></li>
+      </ol>
+    </div>
   </div>
+  <style>
+    .como-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
+      align-items: start;
+      margin-top: 18px;
+    }
+    .como-visual {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 32px rgba(20,40,30,.14);
+      aspect-ratio: 4/5;
+      background: #e5e7eb;
+    }
+    .como-visual img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    .como-visual:hover img { transform: scale(1.04); }
+    .como-visual__badge {
+      position: absolute;
+      bottom: 16px; left: 16px; right: 16px;
+      background: rgba(20,32,27,.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      display: flex; gap: 10px; align-items: center;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    @media (max-width: 820px) {
+      .como-grid { grid-template-columns: 1fr; gap: 24px; }
+      .como-visual { aspect-ratio: 16/10; max-height: 280px; }
+    }
+  </style>
 </section>
 
 <!-- ============ FROTA ============ -->
@@ -717,24 +775,145 @@
     <div class="section__head">
       <span class="eyebrow">Como é alugar na Nomade Drive</span>
       <h2>O que esperar da operação</h2>
-      <p>Pré-lançamento — depoimentos reais aparecem aqui assim que tivermos os primeiros clientes (cadastre-se e seja o primeiro!).</p>
+      <p>Pré-lançamento — depoimentos reais aparecem aqui assim que tivermos os primeiros clientes (cadastre-se e seja o primeiro!). <strong>Os depoimentos abaixo são exemplos do que prometemos.</strong></p>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:14px;">
-      <blockquote style="background:#fff;border-left:4px solid #145f3e;padding:18px 22px;margin:0;border-radius:8px;box-shadow:0 4px 14px -8px rgba(0,0,0,.08);">
-        <p style="margin:0 0 10px;font-size:14.5px;line-height:1.6;color:#3a4945;font-style:italic;">"Cadastro em 5 minutos, contrato claro, proteção por contrato. Sem letras miúdas tipo locadora."</p>
-        <footer style="font-size:12.5px;color:#5b6b63;">— O que prometemos ao cliente</footer>
-      </blockquote>
-      <blockquote style="background:#fff;border-left:4px solid #d4af37;padding:18px 22px;margin:0;border-radius:8px;box-shadow:0 4px 14px -8px rgba(0,0,0,.08);">
-        <p style="margin:0 0 10px;font-size:14.5px;line-height:1.6;color:#3a4945;font-style:italic;">"Meu carro parado virou R$ X/mês de renda passiva. Eles cuidam de tudo: cliente, contrato, pagamento."</p>
-        <footer style="font-size:12.5px;color:#5b6b63;">— O que prometemos ao proprietário</footer>
-      </blockquote>
-      <blockquote style="background:#fff;border-left:4px solid #6366f1;padding:18px 22px;margin:0;border-radius:8px;box-shadow:0 4px 14px -8px rgba(0,0,0,.08);">
-        <p style="margin:0 0 10px;font-size:14.5px;line-height:1.6;color:#3a4945;font-style:italic;">"Atendimento humano por WhatsApp, sem call center. Resolveu rapidão quando precisei."</p>
-        <footer style="font-size:12.5px;color:#5b6b63;">— Nossa promessa de suporte</footer>
-      </blockquote>
+    <div class="testimonials-grid">
+
+      <article class="testimonial-card testimonial-card--cliente">
+        <span class="testimonial-card__example">Exemplo · Cliente</span>
+        <div class="testimonial-card__quote-mark">"</div>
+        <p class="testimonial-card__quote">Cadastro em 5 minutos, contrato claro, proteção por contrato. Sem letras miúdas tipo locadora.</p>
+        <footer class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80&auto=format"
+            alt="Avatar ilustrativo de cliente"
+            loading="lazy" decoding="async" />
+          <div>
+            <strong>Mariana C.</strong>
+            <span>Cliente · Uberlândia/MG</span>
+          </div>
+        </footer>
+      </article>
+
+      <article class="testimonial-card testimonial-card--owner">
+        <span class="testimonial-card__example">Exemplo · Proprietário</span>
+        <div class="testimonial-card__quote-mark">"</div>
+        <p class="testimonial-card__quote">Meu carro parado virou renda passiva. Eles cuidam de tudo: cliente, contrato, pagamento. Recebo direto na conta.</p>
+        <footer class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&q=80&auto=format"
+            alt="Avatar ilustrativo de proprietário"
+            loading="lazy" decoding="async" />
+          <div>
+            <strong>Carlos M.</strong>
+            <span>Proprietário · Uberlândia/MG</span>
+          </div>
+        </footer>
+      </article>
+
+      <article class="testimonial-card testimonial-card--suporte">
+        <span class="testimonial-card__example">Exemplo · Suporte</span>
+        <div class="testimonial-card__quote-mark">"</div>
+        <p class="testimonial-card__quote">Atendimento humano por WhatsApp, sem call center. Resolveu rapidão quando precisei trocar a data.</p>
+        <footer class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&q=80&auto=format"
+            alt="Avatar ilustrativo de cliente em tratamento médico"
+            loading="lazy" decoding="async" />
+          <div>
+            <strong>Ana P.</strong>
+            <span>Cliente · Tratamento médico em UDI</span>
+          </div>
+        </footer>
+      </article>
+
     </div>
     <p class="note note--center" style="margin-top:18px;font-size:13px;">📝 Quer ser o primeiro? Cadastre-se e ganha <strong>3 meses Silver gratuito</strong> (7% off na renovação).</p>
   </div>
+  <style>
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .testimonial-card {
+      position: relative;
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 8px 24px rgba(20,40,30,.06), 0 2px 4px rgba(0,0,0,.03);
+      border: 1px solid #eef0ee;
+      transition: transform .25s ease, box-shadow .25s ease;
+      overflow: hidden;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(20,40,30,.10), 0 4px 8px rgba(0,0,0,.04);
+    }
+    .testimonial-card--cliente { border-top: 3px solid #145f3e; }
+    .testimonial-card--owner   { border-top: 3px solid #d4af37; }
+    .testimonial-card--suporte { border-top: 3px solid #6366f1; }
+    .testimonial-card__example {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: #6b7670;
+      background: #f0f3f1;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .testimonial-card__quote-mark {
+      position: absolute;
+      top: -6px; right: 14px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 90px;
+      color: rgba(20,95,62,.08);
+      line-height: 1;
+      pointer-events: none;
+      font-weight: 700;
+    }
+    .testimonial-card__quote {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #3a4945;
+      margin: 0 0 16px;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-card__author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #eef0ee;
+    }
+    .testimonial-card__avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
+      border: 2px solid #fff;
+      background: #f0f0f0;
+      flex-shrink: 0;
+    }
+    .testimonial-card__author strong {
+      display: block;
+      font-size: 13.5px;
+      color: #14201b;
+      font-weight: 700;
+    }
+    .testimonial-card__author span {
+      display: block;
+      font-size: 11.5px;
+      color: #6b7670;
+      margin-top: 1px;
+    }
+  </style>
 </section>
 
 <!-- ============ ORÇAMENTO ============ -->
