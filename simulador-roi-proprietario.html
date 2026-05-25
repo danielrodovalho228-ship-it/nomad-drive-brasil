@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulador de ROI — Proprietário · Nomade Drive Brasil</title>
+<meta name="description" content="Calcule em tempo real se vale a pena colocar seu carro na frota Nomade Drive. Sliders interativos com cálculos descontando comissão, impostos, manutenção, IPVA e depreciação." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: linear-gradient(180deg, #f5f8f6 0%, #e8f1ec 100%);
+  color: #14201b;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* HEADER */
+.sim-header {
+  background: #fff;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eef0ee;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,.94);
+}
+.sim-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #14201b;
+}
+.sim-brand strong {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+}
+.sim-brand span { color: #145f3e; }
+.sim-brand__icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #145f3e, #1a7a4f);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+}
+.sim-brand__icon svg { width: 20px; height: 20px; }
+.sim-header__back {
+  color: #145f3e;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.sim-header__back:hover { background: #f0f9f3; }
+
+/* HERO */
+.sim-hero {
+  background: linear-gradient(135deg, #0f5132 0%, #1a7a4f 60%, #20c997 100%);
+  color: #fff;
+  padding: 40px 24px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.sim-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.12) 0, transparent 38%),
+    radial-gradient(circle at 80% 70%, rgba(212,175,55,.20) 0, transparent 38%);
+  pointer-events: none;
+}
+.sim-hero__inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+.sim-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.16);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.sim-hero h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(24px, 4.5vw, 38px);
+  font-weight: 800;
+  margin: 0 0 10px;
+  line-height: 1.15;
+}
+.sim-hero h1 em { color: #ffd966; font-style: italic; }
+.sim-hero__sub {
+  font-size: clamp(14px, 2vw, 16px);
+  opacity: .92;
+  line-height: 1.55;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* MAIN GRID */
+.sim-main {
+  max-width: 1240px;
+  margin: -28px auto 60px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* PANEL */
+.sim-panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(20,40,30,.08), 0 2px 4px rgba(0,0,0,.03);
+}
+.sim-panel__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #14201b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sim-panel__title svg {
+  width: 20px; height: 20px;
+  color: #145f3e;
+}
+
+/* CONTROLS */
+.sim-field { margin-bottom: 22px; }
+.sim-field__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.sim-field__name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #14201b;
+}
+.sim-field__hint {
+  font-size: 11.5px;
+  color: #6b7670;
+  font-weight: 500;
+}
+.sim-field__value {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #145f3e;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Slider customizado */
+.sim-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to right, #198754 var(--pct, 50%), #e9ecef var(--pct, 50%));
+  border-radius: 8px;
+  outline: none;
+  margin: 4px 0 0;
+}
+.sim-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 3px solid #145f3e;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(20,95,62,.3);
+  transition: transform .15s, box-shadow .15s;
+}
+.sim-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.sim-slider::-webkit-slider-thumb:active { box-shadow: 0 4px 14px rgba(20,95,62,.5); }
+.sim-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 3px solid #145f3e;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(20,95,62,.3);
+}
+
+/* Botões de opção (categoria, câmbio, tributação) */
+.sim-options {
+  display: grid;
+  gap: 6px;
+}
+.sim-options--2 { grid-template-columns: 1fr 1fr; }
+.sim-options--3 { grid-template-columns: 1fr 1fr 1fr; }
+.sim-options--4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.sim-options button {
+  background: #fff;
+  border: 1.5px solid #e0e6e3;
+  padding: 10px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #5b6b63;
+  transition: all .15s;
+  text-align: center;
+  line-height: 1.3;
+}
+.sim-options button:hover {
+  border-color: #145f3e;
+  color: #145f3e;
+}
+.sim-options button.is-active {
+  background: linear-gradient(135deg, #145f3e, #1a7a4f);
+  border-color: #145f3e;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(20,95,62,.25);
+}
+.sim-options button small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  margin-top: 2px;
+  opacity: .85;
+}
+
+/* RESULTS PANEL */
+.sim-results {
+  background: linear-gradient(135deg, #0f1814 0%, #14201b 100%);
+  color: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 14px 36px rgba(0,0,0,.18);
+  position: relative;
+  overflow: hidden;
+}
+.sim-results::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(212,175,55,.15) 0, transparent 50%);
+  pointer-events: none;
+}
+.sim-results__inner { position: relative; z-index: 1; }
+.sim-results h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffd966;
+}
+.sim-results h2 svg { width: 20px; height: 20px; }
+.sim-results__caption {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 22px;
+}
+
+.sim-bignum {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+.sim-bignum__label {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.7);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+}
+.sim-bignum__value {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.sim-bignum--hero {
+  background: linear-gradient(135deg, rgba(25,135,84,.25) 0%, rgba(212,175,55,.12) 100%);
+  border-color: rgba(212,175,55,.4);
+  margin-bottom: 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.sim-bignum--hero .sim-bignum__value {
+  font-size: 36px;
+  color: #ffd966;
+}
+.sim-bignum--hero .sim-bignum__label {
+  color: rgba(255,255,255,.85);
+}
+
+/* Breakdown table */
+.sim-breakdown {
+  background: rgba(255,255,255,.04);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 16px 0;
+}
+.sim-breakdown__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-size: 13px;
+}
+.sim-breakdown__row:last-child { border-bottom: none; }
+.sim-breakdown__row--total {
+  font-weight: 700;
+  font-size: 14px;
+  border-top: 2px solid rgba(255,217,102,.4);
+  padding-top: 12px;
+  margin-top: 4px;
+  color: #ffd966;
+}
+.sim-breakdown__label { color: rgba(255,255,255,.85); }
+.sim-breakdown__label small {
+  color: rgba(255,255,255,.5);
+  margin-left: 4px;
+  font-size: 11px;
+}
+.sim-breakdown__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #fff;
+}
+.sim-breakdown__value--negative { color: #ff6b6b; }
+.sim-breakdown__value--positive { color: #4ade80; }
+
+/* Verdict */
+.sim-verdict {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sim-verdict__icon { font-size: 24px; }
+.sim-verdict--excellent { background: rgba(74,222,128,.15); border: 1px solid rgba(74,222,128,.4); color: #4ade80; }
+.sim-verdict--good { background: rgba(212,175,55,.15); border: 1px solid rgba(212,175,55,.4); color: #ffd966; }
+.sim-verdict--risk { background: rgba(255,107,107,.15); border: 1px solid rgba(255,107,107,.4); color: #ff6b6b; }
+
+/* Footer panel */
+.sim-disclaimer {
+  margin-top: 26px;
+  padding: 16px 18px;
+  background: #fff8e7;
+  border-left: 4px solid #d4af37;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #5b4d20;
+  line-height: 1.55;
+}
+.sim-disclaimer strong { color: #856404; }
+
+.sim-cta-final {
+  margin-top: 22px;
+  padding: 22px;
+  background: linear-gradient(135deg, #f8fdf9 0%, #e8f5ec 100%);
+  border: 2px dashed #198754;
+  border-radius: 14px;
+  text-align: center;
+}
+.sim-cta-final h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  margin: 0 0 8px;
+  color: #14201b;
+}
+.sim-cta-final p {
+  font-size: 13.5px;
+  color: #5b6b63;
+  margin: 0 0 14px;
+}
+.sim-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #145f3e, #1a7a4f);
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform .15s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(20,95,62,.25);
+  font-family: inherit;
+}
+.sim-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(20,95,62,.35); }
+.sim-btn svg { width: 18px; height: 18px; }
+
+@media (max-width: 880px) {
+  .sim-main { grid-template-columns: 1fr; }
+  .sim-options--4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 540px) {
+  .sim-hero { padding: 32px 18px 44px; }
+  .sim-panel, .sim-results { padding: 20px 16px; }
+  .sim-bignum__value { font-size: 22px; }
+  .sim-bignum--hero .sim-bignum__value { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+
+<header class="sim-header">
+  <a href="index.html" class="sim-brand">
+    <span class="sim-brand__icon">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+    </span>
+    <strong>Nomade Drive <span>Brasil</span></strong>
+  </a>
+  <a href="proprietarios.html" class="sim-header__back">← Voltar</a>
+</header>
+
+<section class="sim-hero">
+  <div class="sim-hero__inner">
+    <span class="sim-hero__badge">📊 Calculadora interativa</span>
+    <h1>Vale a pena colocar <em>seu carro</em> na frota?</h1>
+    <p class="sim-hero__sub">Mexa nas barras à esquerda. Os números à direita atualizam ao vivo — já descontando comissão da plataforma, IPVA, manutenção, depreciação e imposto sobre a renda do aluguel.</p>
+  </div>
+</section>
+
+<main class="sim-main">
+
+  <!-- LEFT: CONFIGURAÇÃO -->
+  <div class="sim-panel">
+    <h2 class="sim-panel__title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Configure seu carro
+    </h2>
+
+    <!-- Valor FIPE -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Valor de mercado (FIPE)</span>
+        <span class="sim-field__value" id="vFipe">R$ 50.000</span>
+      </div>
+      <input type="range" id="fipe" class="sim-slider" min="20000" max="250000" step="1000" value="50000" />
+      <div class="sim-field__hint" style="margin-top:4px;">Consulte em <a href="https://veiculos.fipe.org.br" target="_blank" rel="noopener" style="color:#145f3e;">veiculos.fipe.org.br</a></div>
+    </div>
+
+    <!-- Categoria -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Categoria do veículo</span>
+        <span class="sim-field__value" id="vCat">Confort</span>
+      </div>
+      <div class="sim-options sim-options--4" id="catBtns">
+        <button data-cat="A">Econômico<small>5,5% FIPE</small></button>
+        <button data-cat="B" class="is-active">Confort<small>4,5% FIPE</small></button>
+        <button data-cat="C">Premium<small>4,0% FIPE</small></button>
+        <button data-cat="D">Luxo<small>2,8% FIPE</small></button>
+      </div>
+    </div>
+
+    <!-- Câmbio -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Câmbio</span>
+        <span class="sim-field__value" id="vTrans">Automático</span>
+      </div>
+      <div class="sim-options sim-options--2" id="transBtns">
+        <button data-trans="manual">Manual<small>−10% no aluguel</small></button>
+        <button data-trans="automatico" class="is-active">Automático<small>preço cheio</small></button>
+      </div>
+    </div>
+
+    <!-- Meses alugado/ano -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Meses alugado por ano</span>
+        <span class="sim-field__value" id="vMeses">10 meses</span>
+      </div>
+      <input type="range" id="meses" class="sim-slider" min="1" max="12" step="1" value="10" />
+      <div class="sim-field__hint" style="margin-top:4px;">Realista: 8-11 meses. Resto é vacância (entre locações ou manutenção).</div>
+    </div>
+
+    <!-- Manutenção -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Manutenção extra pelo aluguel</span>
+        <span class="sim-field__value" id="vManut">R$ 300/mês</span>
+      </div>
+      <input type="range" id="manut" class="sim-slider" min="100" max="800" step="50" value="300" />
+      <div class="sim-field__hint" style="margin-top:4px;">Desgaste extra: pneus, óleo, freios, revisões mais frequentes pelo uso intensivo.</div>
+    </div>
+
+    <!-- Depreciação -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Depreciação anual (% FIPE)</span>
+        <span class="sim-field__value" id="vDeprec">8%</span>
+      </div>
+      <input type="range" id="deprec" class="sim-slider" min="5" max="15" step="1" value="8" />
+      <div class="sim-field__hint" style="margin-top:4px;">Carro 0-3 anos: ~10-12%. Carro 4-7 anos: ~6-8%. Carro 8+: ~5%.</div>
+    </div>
+
+    <!-- IPVA -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">IPVA anual (% FIPE)</span>
+        <span class="sim-field__value" id="vIpva">4%</span>
+      </div>
+      <input type="range" id="ipva" class="sim-slider" min="2" max="5" step="0.5" value="4" />
+      <div class="sim-field__hint" style="margin-top:4px;">MG: 4% pra carros particulares. SP: 4%. PR: 3,5%.</div>
+    </div>
+
+    <!-- Tributação -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Como você declara essa renda?</span>
+        <span class="sim-field__value" id="vTrib">ME (6%)</span>
+      </div>
+      <div class="sim-options sim-options--3" id="tribBtns">
+        <button data-trib="pf">Pessoa física<small>até 27,5%</small></button>
+        <button data-trib="me" class="is-active">ME Simples<small>~6%</small></button>
+        <button data-trib="nenhum">Não tributo<small>arriscado</small></button>
+      </div>
+      <div class="sim-field__hint" style="margin-top:4px;">PF: tabela progressiva via Carnê-Leão. ME (Anexo III Simples Nacional): alíquota inicial ~6%. Falar com contador.</div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: RESULTADOS -->
+  <div class="sim-results">
+    <div class="sim-results__inner">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Seu retorno líquido
+      </h2>
+      <p class="sim-results__caption">Atualiza ao vivo conforme você mexe nas barras. Já abate comissão, impostos e custos.</p>
+
+      <div class="sim-bignum sim-bignum--hero">
+        <span class="sim-bignum__label">💰 Líquido por mês (médio)</span>
+        <span class="sim-bignum__value" id="rMensal">R$ 0</span>
+      </div>
+
+      <div class="sim-bignum">
+        <span class="sim-bignum__label">Líquido por ano</span>
+        <span class="sim-bignum__value" id="rAnual">R$ 0</span>
+      </div>
+
+      <div class="sim-bignum">
+        <span class="sim-bignum__label">% retorno sobre o FIPE/ano</span>
+        <span class="sim-bignum__value" id="rPct">0%</span>
+      </div>
+
+      <!-- Breakdown -->
+      <div class="sim-breakdown">
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">Receita bruta <small>(FIPE × tier × câmbio)</small></span>
+          <span class="sim-breakdown__value sim-breakdown__value--positive" id="bReceita">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">× Meses alugado/ano</span>
+          <span class="sim-breakdown__value sim-breakdown__value--positive" id="bMeses">× 10</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">Receita anual bruta</span>
+          <span class="sim-breakdown__value sim-breakdown__value--positive" id="bReceitaAnual">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">− Comissão Nomade Drive <small>(10%)</small></span>
+          <span class="sim-breakdown__value sim-breakdown__value--negative" id="bComissao">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">− Imposto sobre renda</span>
+          <span class="sim-breakdown__value sim-breakdown__value--negative" id="bImposto">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">− Manutenção extra <small>(meses alugado)</small></span>
+          <span class="sim-breakdown__value sim-breakdown__value--negative" id="bManut">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">− IPVA anual</span>
+          <span class="sim-breakdown__value sim-breakdown__value--negative" id="bIpva">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row">
+          <span class="sim-breakdown__label">− Depreciação extra pelo aluguel <small>(50% do total)</small></span>
+          <span class="sim-breakdown__value sim-breakdown__value--negative" id="bDeprec">R$ 0</span>
+        </div>
+        <div class="sim-breakdown__row sim-breakdown__row--total">
+          <span class="sim-breakdown__label">= Líquido anual</span>
+          <span class="sim-breakdown__value" id="bLiquido">R$ 0</span>
+        </div>
+      </div>
+
+      <!-- Verdict -->
+      <div class="sim-verdict" id="verdict">
+        <span class="sim-verdict__icon">⏳</span>
+        <span id="verdictText">Calculando...</span>
+      </div>
+
+      <div class="sim-cta-final">
+        <h3>Bateu o número que você queria?</h3>
+        <p>Cadastre seu carro e dê o primeiro passo. Você sempre pode tirar da frota depois.</p>
+        <a href="cadastro.html?perfil=proprietario" class="sim-btn">
+          Cadastrar meu carro
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="sim-disclaimer">
+        <strong>⚠️ Estimativa — não é promessa.</strong> Renda real depende de aprovação documental e técnica do veículo, demanda pela categoria, ocupação real, contratos vigentes e variações sazonais. A Nomade Drive <strong>não garante renda</strong>. Consulte seu contador para a tributação correta no seu caso.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // CONSTANTES — baseadas em script.js do app (FLEET_TIER_RATES)
+  // ============================================================
+  var TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
+  var TIER_NAMES = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
+  var TRANS_NAMES = { manual: "Manual", automatico: "Automático" };
+  var TRANS_MOD = { manual: 0.9, automatico: 1.0 };
+  var TRIB_NAMES = { pf: "PF (15% médio)", me: "ME (6%)", nenhum: "Não tributo (0%)" };
+  // Alíquotas médias estimadas
+  var TRIB_RATES = {
+    pf: 0.15,    // Carnê-Leão progressivo — 15% como aproximação média realista
+    me: 0.06,    // Simples Nacional Anexo III faixa inicial
+    nenhum: 0.0  // Owner declara como informal (não recomendado)
+  };
+  var COMISSAO_NDB = 0.10;
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  var state = {
+    fipe: 50000,
+    cat: "B",
+    trans: "automatico",
+    meses: 10,
+    manut: 300,
+    deprec: 8,
+    ipva: 4,
+    trib: "me"
+  };
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
+  function brl(v) {
+    return "R$ " + Math.round(v).toLocaleString("pt-BR");
+  }
+  function pct(v) {
+    return v.toFixed(1).replace(".", ",") + "%";
+  }
+  function updateSliderTrack(input) {
+    var min = parseFloat(input.min);
+    var max = parseFloat(input.max);
+    var val = parseFloat(input.value);
+    var p = ((val - min) / (max - min)) * 100;
+    input.style.setProperty("--pct", p + "%");
+  }
+
+  // ============================================================
+  // CÁLCULO
+  // ============================================================
+  function calc() {
+    var fipe = state.fipe;
+    var rate = TIER_RATES[state.cat] || 0.045;
+    var mod = TRANS_MOD[state.trans] || 1;
+    var meses = state.meses;
+    var manutMes = state.manut;
+    var deprecAnualPct = state.deprec / 100;
+    var ipvaPct = state.ipva / 100;
+    var tribRate = TRIB_RATES[state.trib] || 0;
+
+    // Receita
+    var aluguelMes = fipe * rate * mod;
+    var receitaAnual = aluguelMes * meses;
+    var comissao = receitaAnual * COMISSAO_NDB;
+    var receitaLiquidaPreImposto = receitaAnual - comissao;
+    var imposto = receitaLiquidaPreImposto * tribRate;
+
+    // Custos
+    var manutAnual = manutMes * meses; // só nos meses alugado
+    var ipvaAnual = fipe * ipvaPct;
+    // Depreciação: 50% atribuível ao aluguel (mesmo parado o carro deprecia)
+    var deprecExtra = fipe * deprecAnualPct * 0.5;
+
+    var custos = manutAnual + ipvaAnual + deprecExtra;
+    var liquidoAnual = receitaLiquidaPreImposto - imposto - custos;
+    var liquidoMensal = liquidoAnual / 12;
+    var pctRetorno = (liquidoAnual / fipe) * 100;
+
+    return {
+      aluguelMes: aluguelMes,
+      receitaAnual: receitaAnual,
+      comissao: comissao,
+      imposto: imposto,
+      manutAnual: manutAnual,
+      ipvaAnual: ipvaAnual,
+      deprecExtra: deprecExtra,
+      liquidoAnual: liquidoAnual,
+      liquidoMensal: liquidoMensal,
+      pctRetorno: pctRetorno
+    };
+  }
+
+  // ============================================================
+  // RENDER
+  // ============================================================
+  function render() {
+    // Labels dos sliders
+    document.getElementById("vFipe").textContent = brl(state.fipe);
+    document.getElementById("vCat").textContent = TIER_NAMES[state.cat];
+    document.getElementById("vTrans").textContent = TRANS_NAMES[state.trans];
+    document.getElementById("vMeses").textContent = state.meses + (state.meses === 1 ? " mês" : " meses");
+    document.getElementById("vManut").textContent = brl(state.manut) + "/mês";
+    document.getElementById("vDeprec").textContent = state.deprec + "%";
+    document.getElementById("vIpva").textContent = state.ipva.toFixed(1).replace(".", ",") + "%";
+    document.getElementById("vTrib").textContent = TRIB_NAMES[state.trib];
+
+    var r = calc();
+
+    // Resultados
+    document.getElementById("rMensal").textContent = brl(r.liquidoMensal);
+    document.getElementById("rAnual").textContent = brl(r.liquidoAnual);
+    document.getElementById("rPct").textContent = pct(r.pctRetorno);
+
+    // Breakdown
+    document.getElementById("bReceita").textContent = brl(r.aluguelMes) + "/mês";
+    document.getElementById("bMeses").textContent = "× " + state.meses;
+    document.getElementById("bReceitaAnual").textContent = brl(r.receitaAnual);
+    document.getElementById("bComissao").textContent = "− " + brl(r.comissao);
+    document.getElementById("bImposto").textContent = "− " + brl(r.imposto);
+    document.getElementById("bManut").textContent = "− " + brl(r.manutAnual);
+    document.getElementById("bIpva").textContent = "− " + brl(r.ipvaAnual);
+    document.getElementById("bDeprec").textContent = "− " + brl(r.deprecExtra);
+    document.getElementById("bLiquido").textContent = brl(r.liquidoAnual);
+
+    // Verdict semáforo
+    var verdict = document.getElementById("verdict");
+    var verdictText = document.getElementById("verdictText");
+    var icon = verdict.querySelector(".sim-verdict__icon");
+    verdict.className = "sim-verdict";
+
+    if (r.liquidoAnual < 0) {
+      verdict.classList.add("sim-verdict--risk");
+      icon.textContent = "⚠️";
+      verdictText.textContent = "Negativo. Não compensa neste cenário — ajuste as variáveis.";
+    } else if (r.pctRetorno < 4) {
+      verdict.classList.add("sim-verdict--risk");
+      icon.textContent = "🟡";
+      verdictText.textContent = "Retorno baixo (<4% ao ano). Compare com CDB/Tesouro Selic antes de decidir.";
+    } else if (r.pctRetorno < 10) {
+      verdict.classList.add("sim-verdict--good");
+      icon.textContent = "👍";
+      verdictText.textContent = "Retorno razoável (" + pct(r.pctRetorno) + " a.a.). Acima da renda fixa, mas com risco operacional.";
+    } else if (r.pctRetorno < 20) {
+      verdict.classList.add("sim-verdict--excellent");
+      icon.textContent = "🚀";
+      verdictText.textContent = "Excelente! " + pct(r.pctRetorno) + " a.a. supera bem ações e renda fixa.";
+    } else {
+      verdict.classList.add("sim-verdict--excellent");
+      icon.textContent = "💎";
+      verdictText.textContent = "Retorno acima de 20%! Vale a pena — confirme se os custos estão realistas.";
+    }
+  }
+
+  // ============================================================
+  // WIRING
+  // ============================================================
+  function wireSlider(id, key, isFloat) {
+    var input = document.getElementById(id);
+    input.addEventListener("input", function () {
+      state[key] = isFloat ? parseFloat(input.value) : parseInt(input.value, 10);
+      updateSliderTrack(input);
+      render();
+    });
+    updateSliderTrack(input);
+  }
+
+  function wireOptions(containerId, key, attr) {
+    var container = document.getElementById(containerId);
+    container.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        container.querySelectorAll("button").forEach(function (b) { b.classList.remove("is-active"); });
+        btn.classList.add("is-active");
+        state[key] = btn.getAttribute(attr);
+        render();
+      });
+    });
+  }
+
+  wireSlider("fipe", "fipe", false);
+  wireSlider("meses", "meses", false);
+  wireSlider("manut", "manut", false);
+  wireSlider("deprec", "deprec", false);
+  wireSlider("ipva", "ipva", true);
+  wireOptions("catBtns", "cat", "data-cat");
+  wireOptions("transBtns", "trans", "data-trans");
+  wireOptions("tribBtns", "trib", "data-trib");
+
+  // Auto-categoria baseada em FIPE (sugestão inicial)
+  var fipeInput = document.getElementById("fipe");
+  fipeInput.addEventListener("change", function () {
+    var v = state.fipe;
+    var sugCat;
+    if (v < 65000) sugCat = "A";
+    else if (v < 130000) sugCat = "B";
+    else if (v < 200000) sugCat = "C";
+    else sugCat = "D";
+    // Não força — só destaca pra ele
+    // (poderia auto-selecionar mas é melhor deixar manual pra ele decidir)
+  });
+
+  // Primeira render
+  render();
+})();
+</script>
+
+</body>
+</html>
