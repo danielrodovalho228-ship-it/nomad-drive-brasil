@@ -591,6 +591,35 @@
     color: #198754;
     flex-shrink: 0;
   }
+
+  /* ============================================================
+   * Fase 62 — Responsividade (gaps que a auditoria identificou)
+   * ============================================================ */
+  /* .cards--3 estava saltando de 3 cols → 1 col diretamente em 1000px.
+     Adiciona 2 cols pra tablet 540-1000px. */
+  @media (max-width: 1000px) and (min-width: 540px) {
+    .cards--3 { grid-template-columns: 1fr 1fr !important; }
+  }
+  /* .testi-coming sem padding mobile — texto colava nas bordas */
+  @media (max-width: 540px) {
+    .testi-coming { padding: 28px 18px !important; }
+    .testi-coming__icon { width: 56px; height: 56px; margin-bottom: 10px; }
+    .testi-coming h2 { font-size: 22px !important; }
+  }
+  /* Trustbar agora tem 4 cols; em mobile <540 fica 2x2 */
+  @media (max-width: 540px) {
+    section[aria-label="Garantias"] .bento-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+  /* Hero badges em 320px (iPhone SE) — quebra de linha mais agressiva */
+  @media (max-width: 380px) {
+    .hero__features { gap: 5px 12px; }
+    .hero__features li { font-size: 12.5px; }
+    .hero__features svg { width: 16px; height: 16px; }
+    .hero__proof { gap: 14px; }
+    .hero-stat__num strong { font-size: 22px; }
+  }
 </style>
 <div class="top-promo-banner">
   🚀 <strong>Pré-lançamento</strong> em Uberlândia · Cadastre-se e ganhe <strong>3 meses Silver gratuito</strong> · <a href="#orcamento">Pedir orçamento →</a>
@@ -804,15 +833,6 @@
         <p>Indicar locatários, proprietários ou empresas e ganhar crédito.</p>
         <span class="path-card__go">Quero indicar →</span>
       </a>
-      <a href="oficinas.html" class="path-card path-card--img">
-        <img class="path-card__img"
-          src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=320&h=200&fit=crop&q=80&auto=format"
-          alt="Ferramentas de oficina"
-          loading="lazy" decoding="async" />
-        <h3>Sou oficina</h3>
-        <p>Credenciar a oficina e emitir o checklist técnico padronizado.</p>
-        <span class="path-card__go">Solicitar credenciamento →</span>
-      </a>
       <a href="shield-protecao.html" class="path-card path-card--img">
         <img class="path-card__img"
           src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=320&h=200&fit=crop&q=80&auto=format"
@@ -855,7 +875,7 @@
 <!-- ============ TRUST BAR (Fase 58b: micro-imagens em vez de emoji) ============ -->
 <section class="section" aria-label="Garantias" style="padding:32px 0;background:#fff;">
   <div class="container">
-    <div class="bento-grid fm-stagger" data-fm-reveal style="grid-template-columns:repeat(5,1fr);">
+    <div class="bento-grid fm-stagger" data-fm-reveal style="grid-template-columns:repeat(4,1fr);">
       <div class="bento-card fm-hover-lift trust-mini">
         <img class="trust-mini__img"
           src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=120&h=120&fit=crop&q=80&auto=format"
@@ -883,13 +903,6 @@
           alt="Atendente humano por WhatsApp" loading="lazy" decoding="async" />
         <div class="trust-mini__label">Suporte humano</div>
         <small class="trust-mini__sub">WhatsApp</small>
-      </div>
-      <div class="bento-card fm-hover-lift trust-mini">
-        <img class="trust-mini__img"
-          src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=120&h=120&fit=crop&q=80&auto=format"
-          alt="Cofre — proteção" loading="lazy" decoding="async" />
-        <div class="trust-mini__label">Proteção</div>
-        <small class="trust-mini__sub">por contrato</small>
       </div>
     </div>
   </div>
