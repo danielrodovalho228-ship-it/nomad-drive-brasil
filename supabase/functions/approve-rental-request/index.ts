@@ -232,6 +232,24 @@ Deno.serve(async (req) => {
       return json({ error: "Solicitação não está mais pendente (status: " + rr.status + ")." }, 409);
     }
 
+    // RACE GUARD (fix 2026-05-24): trava a request ANTES de criar booking.
+    // Update condicional atômico: se outro request paralelo já mudou pra
+    // 'aprovado', este UPDATE retorna 0 rows e abortamos sem criar booking
+    // duplicada. Sem esse gate, double-click do owner criava 2 bookings.
+    const { data: claimed, error: claimErr } = await admin
+      .from("rental_requests")
+      .update({ status: "aprovado" })
+      .eq("id", rental_request_id)
+      .eq("status", "em_analise")
+      .select("id");
+
+    if (claimErr || !Array.isArray(claimed) || claimed.length === 0) {
+      return json({
+        error: "Solicitação já está sendo processada por outra ação.",
+        detail: claimErr?.message
+      }, 409);
+    }
+
     // Valida que o owner logado é dono do veículo (ou super_admin)
     let isAuthorized = false;
     if (rr.vehicle_id) {
@@ -376,11 +394,8 @@ Deno.serve(async (req) => {
 
     const bookingId = bookingIns.id;
 
-    // Atualiza rental_request
-    await admin
-      .from("rental_requests")
-      .update({ status: "aprovado" })
-      .eq("id", rental_request_id);
+    // rental_request já marcada como 'aprovado' no claim atômico acima
+    // (race guard). Não precisa atualizar de novo.
 
     // Pega dados do cliente
     const { data: cliProfile } = await admin

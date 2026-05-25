@@ -2038,22 +2038,29 @@
       if (window.ndModal) ndModal.alert({ title: 'Sem dados', body: 'Nenhum extrato pra exportar com os filtros atuais.', icon: 'ℹ️' });
       return;
     }
-    var csv = 'Data,Veiculo,Placa,Cliente,Marco,Protocolo,Bruto,Taxa,Liquido,Status,Pago em,Stripe Payout ID\n';
+    // FIX 2026-05-24: helper csvCell pra escape consistente + BOM UTF-8
+    // (Excel pt-BR mostrava acentos quebrados sem o BOM)
+    function csvCell(v) {
+      if (v == null) return '';
+      var s = String(v);
+      return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+    var csv = '﻿' + 'Data,Veiculo,Placa,Cliente,Marco,Protocolo,Bruto,Taxa,Liquido,Status,Pago em,Stripe Payout ID\n';
     rows.forEach(function (r) {
       var vehName = [r.make, r.model, r.year_model].filter(Boolean).join(' ');
       var line = [
-        r.milestone_date || '',
-        '"' + (vehName || '').replace(/"/g, '""') + '"',
-        r.license_plate || '',
-        '"' + (r.client_name || '').replace(/"/g, '""') + '"',
-        r.milestone_number || '',
-        r.booking_protocol || '',
-        r.amount_gross || 0,
-        r.platform_fee || 0,
-        r.amount_net || 0,
-        r.status || '',
-        r.paid_at || '',
-        r.stripe_payout_id || ''
+        csvCell(r.milestone_date),
+        csvCell(vehName),
+        csvCell(r.license_plate),
+        csvCell(r.client_name),
+        csvCell(r.milestone_number),
+        csvCell(r.booking_protocol),
+        csvCell(r.amount_gross || 0),
+        csvCell(r.platform_fee || 0),
+        csvCell(r.amount_net || 0),
+        csvCell(r.status),
+        csvCell(r.paid_at),
+        csvCell(r.stripe_payout_id)
       ].join(',');
       csv += line + '\n';
     });

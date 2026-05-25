@@ -47,6 +47,15 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
+// FIX 2026-05-24: fmtBRL estava sendo chamada mas não definida —
+// auto-aprovação Gold/Platinum quebrava SILENCIOSAMENTE (try/catch
+// engolia o ReferenceError, booking era criada mas e-mail VIP
+// nunca chegava). Cliente VIP ficava sem notificação.
+function fmtBRL(n: number | null | undefined): string {
+  const v = n == null ? 0 : Number(n);
+  return v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 function fmtDateBR(iso?: string | null): string {
   if (!iso) return "—";
   try {
@@ -367,6 +376,21 @@ Deno.serve(async (req) => {
               return d.toISOString().slice(0, 10);
             })();
 
+            // RACE GUARD (fix 2026-05-24): claim atômico do rental_request
+            // ANTES de criar booking. Sem isso, 2 chamadas simultâneas
+            // pra mesmo veículo Gold/Platinum criariam 2 bookings duplicadas.
+            const { data: claimedRR } = await admin
+              .from("rental_requests")
+              .update({ status: "aprovado" })
+              .eq("id", rrId)
+              .eq("status", "em_analise")
+              .select("id");
+
+            if (!Array.isArray(claimedRR) || claimedRR.length === 0) {
+              // Outra chamada já processou — abort sem criar booking
+              throw new Error("rental_request_already_processed");
+            }
+
             const { data: bookingIns } = await admin
               .from("bookings")
               .insert({
@@ -388,11 +412,7 @@ Deno.serve(async (req) => {
             if (bookingIns?.id) {
               autoApprovedBookingId = bookingIns.id;
 
-              // Marca rental_request como aprovado
-              await admin
-                .from("rental_requests")
-                .update({ status: "aprovado" })
-                .eq("id", rrId);
+              // rental_request já marcada como 'aprovado' no claim atômico acima
 
               // E-mail "aprovado automaticamente" especial pra tier VIP
               const tierLabel = tier === "platinum" ? "💎 Platinum" : "🥇 Gold";
