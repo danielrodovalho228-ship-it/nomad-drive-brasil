@@ -1228,6 +1228,62 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 .nav__back { margin-left: auto; font-size: 14px; font-weight: 600; color: var(--muted); transition: color .14s; }
 .nav__back:hover { color: var(--green-d); }
 
+/* ============================================================
+ * Fase 71b — Fix GLOBAL responsividade: nav fixo (70px) cobria
+ * conteudo no topo de varias paginas em mobile. Padding-top
+ * extra nos heroes mais problematicos pra garantir que nada
+ * fique escondido atras do nav. !important pra sobrescrever
+ * declaracoes inline e specificity de outros arquivos.
+ * ============================================================ */
+.wcm-hero,
+.welcome-hero,
+.gold-hero,
+.signup-hero {
+  padding-top: 96px !important;
+}
+.notif-page {
+  padding-top: 92px !important;
+}
+@media (max-width: 640px) {
+  .wcm-hero,
+  .welcome-hero,
+  .gold-hero,
+  .signup-hero {
+    padding-top: 92px !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .notif-page {
+    padding-top: 88px !important;
+  }
+}
+@media (max-width: 380px) {
+  .wcm-hero,
+  .welcome-hero,
+  .gold-hero,
+  .signup-hero {
+    padding-top: 84px !important;
+  }
+}
+/* H1 responsivo dos heroes — clamp menor pra nao quebrar em iPhone SE */
+.wcm-greet__name,
+.welcome-hero h1,
+.gold-hero h1,
+.signup-hero__copy h1 {
+  font-size: clamp(20px, 6vw, 36px) !important;
+  line-height: 1.18 !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+}
+@media (max-width: 380px) {
+  .wcm-greet__name,
+  .welcome-hero h1,
+  .gold-hero h1,
+  .signup-hero__copy h1 {
+    font-size: 19px !important;
+  }
+}
+
 .footer--slim { padding: 26px 0; }
 .footer--slim p { color: #8fa399; font-size: 12.5px; text-align: center; margin: 0; }
 
