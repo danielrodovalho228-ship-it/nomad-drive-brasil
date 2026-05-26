@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Histórico de reservas — Nomade Drive Brasil</title>
+<meta name="description" content="Histórico completo de reservas — filtros por status, período e veículo." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260525d" />
+<link rel="stylesheet" href="style.css?v=20260525d" />
+<link rel="stylesheet" href="style-animations.css?v=20260525d" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260525d" />
+<link rel="stylesheet" href="style-dashboards-modern.css?v=20260525d" />
+<style>
+/* ============================================================
+ * Fase 76 — /historico.html (reservas com filtros + busca)
+ * ============================================================ */
+.hist-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 16px 64px;
+}
+.hist-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.hist-head__title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(22px, 3.5vw, 30px);
+  font-weight: 800;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #14201b;
+}
+.hist-head__title svg { width: 24px; height: 24px; color: #145f3e; }
+.hist-head__count {
+  background: #145f3e;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.hist-head__count[data-empty="1"] { background: #adb5bd; }
+
+.hist-toolbar {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(20,40,30,.04);
+  border: 1px solid #eef0ee;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.hist-search {
+  position: relative;
+}
+.hist-search input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border: 1px solid #d4e2db;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fafbfa;
+  transition: border-color .15s, background .15s;
+}
+.hist-search input:focus {
+  outline: none;
+  border-color: #145f3e;
+  background: #fff;
+}
+.hist-search__icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #6b7670;
+  pointer-events: none;
+}
+
+.hist-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hist-filter {
+  background: #fff;
+  border: 1px solid #d4e2db;
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b6b63;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.hist-filter:hover { border-color: #145f3e; color: #145f3e; }
+.hist-filter.is-active {
+  background: #145f3e;
+  border-color: #145f3e;
+  color: #fff;
+}
+.hist-filter__count {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+  opacity: .8;
+  font-weight: 700;
+}
+
+.hist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px;
+}
+.hist-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  border: 1px solid #eef0ee;
+  box-shadow: 0 2px 8px rgba(20,40,30,.04);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.hist-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(20,40,30,.08);
+  border-color: #d1e7dd;
+}
+
+.hist-card__icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: #f0f7f1;
+  color: #145f3e;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hist-card__icon svg { width: 26px; height: 26px; }
+.hist-card[data-status="aprovado"] .hist-card__icon,
+.hist-card[data-status="confirmada"] .hist-card__icon { background: #d1e7dd; color: #0f5132; }
+.hist-card[data-status="em_uso"] .hist-card__icon { background: #cfe2ff; color: #084298; }
+.hist-card[data-status="encerrada"] .hist-card__icon { background: #e2e3e5; color: #41464b; }
+.hist-card[data-status="cancelada"] .hist-card__icon,
+.hist-card[data-status="recusada"] .hist-card__icon,
+.hist-card[data-status="recusado"] .hist-card__icon { background: #f8d7da; color: #842029; }
+.hist-card[data-status="em_analise"] .hist-card__icon { background: #fff3cd; color: #856404; }
+
+.hist-card__body { min-width: 0; }
+.hist-card__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.hist-card__veiculo {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #14201b;
+  margin: 0;
+}
+.hist-card__status {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  background: #f0f3f1;
+  color: #6b7670;
+}
+.hist-card[data-status="aprovado"] .hist-card__status,
+.hist-card[data-status="confirmada"] .hist-card__status { background: #d1e7dd; color: #0f5132; }
+.hist-card[data-status="em_uso"] .hist-card__status { background: #cfe2ff; color: #084298; }
+.hist-card[data-status="encerrada"] .hist-card__status { background: #e2e3e5; color: #41464b; }
+.hist-card[data-status="cancelada"] .hist-card__status,
+.hist-card[data-status="recusada"] .hist-card__status,
+.hist-card[data-status="recusado"] .hist-card__status { background: #f8d7da; color: #842029; }
+.hist-card[data-status="em_analise"] .hist-card__status { background: #fff3cd; color: #856404; }
+
+.hist-card__meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #5b6b63;
+}
+.hist-card__meta span { display: inline-flex; align-items: center; gap: 4px; }
+.hist-card__meta svg { width: 14px; height: 14px; opacity: .7; flex-shrink: 0; }
+
+.hist-card__price {
+  text-align: right;
+  flex-shrink: 0;
+}
+.hist-card__price-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #14201b;
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+.hist-card__price-label {
+  font-size: 11px;
+  color: #6b7670;
+  display: block;
+  margin-top: 2px;
+}
+.hist-card__arrow {
+  color: #6b7670;
+  opacity: .6;
+}
+
+@media (max-width: 580px) {
+  .hist-toolbar { grid-template-columns: 1fr; }
+  .hist-card {
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .hist-card__price {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-top: 8px;
+    border-top: 1px solid #f3f5f3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hist-card__icon { width: 48px; height: 48px; }
+  .hist-card__icon svg { width: 22px; height: 22px; }
+}
+
+.hist-empty {
+  background: #fff;
+  border-radius: 14px;
+  padding: 48px 24px;
+  text-align: center;
+  border: 2px dashed #d4e2db;
+}
+.hist-empty__icon {
+  width: 64px; height: 64px;
+  margin: 0 auto 12px;
+  background: linear-gradient(135deg, #d1e7dd, #f0f9f3);
+  color: #145f3e;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.hist-empty__icon svg { width: 32px; height: 32px; }
+.hist-empty__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: #14201b;
+}
+.hist-empty__sub {
+  font-size: 14px;
+  color: #5b6b63;
+  margin: 0 0 16px;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.hist-loading {
+  padding: 56px;
+  text-align: center;
+  color: #6b7670;
+  font-size: 14px;
+}
+.hist-loading::before {
+  content: "";
+  display: inline-block;
+  width: 24px; height: 24px;
+  border: 3px solid #e9ecef;
+  border-top-color: #198754;
+  border-radius: 50%;
+  animation: hist-spin .9s linear infinite;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+@keyframes hist-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header class="nav nav--solid" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
+    </a>
+    <div class="dash-nav-actions">
+      <a href="#" id="histBack">← Voltar pro painel</a>
+      <div id="ndBell" style="display:inline-flex;align-items:center;"></div>
+      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hist-page">
+
+  <div class="hist-head">
+    <h1 class="hist-head__title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+      Histórico de reservas
+    </h1>
+    <span class="hist-head__count" id="histCount" data-empty="1">0</span>
+  </div>
+
+  <div class="hist-toolbar">
+    <div class="hist-search">
+      <svg class="hist-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="histSearch" placeholder="Buscar por veículo ou protocolo..." autocomplete="off" />
+    </div>
+    <div class="hist-filters" role="tablist">
+      <button type="button" class="hist-filter is-active" data-filter="all" role="tab">
+        Todas <span class="hist-filter__count" id="cntAll">0</span>
+      </button>
+      <button type="button" class="hist-filter" data-filter="ativas" role="tab">
+        Ativas <span class="hist-filter__count" id="cntAtivas">0</span>
+      </button>
+      <button type="button" class="hist-filter" data-filter="encerradas" role="tab">
+        Encerradas <span class="hist-filter__count" id="cntEncerradas">0</span>
+      </button>
+      <button type="button" class="hist-filter" data-filter="canceladas" role="tab">
+        Canceladas <span class="hist-filter__count" id="cntCanceladas">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="hist-list" id="histList">
+    <div class="hist-loading">Carregando suas reservas...</div>
+  </div>
+
+</section>
+</main>
+
+<footer class="footer footer--slim">
+  <div class="container">
+    <p>&copy; 2026 Nomade Drive Brasil.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="nd-modal.js?v=20260524g"></script>
+<script src="supabase-config.js?v=20260523c"></script>
+<script src="auth.js?v=20260523c"></script>
+<script src="statuses.js?v=20260523c"></script>
+<script src="nd-notifications.js?v=20260525a"></script>
+<script>
+(function () {
+  "use strict";
+
+  var state = {
+    sb: null,
+    userId: null,
+    role: null,         // "client" | "owner" | "admin"
+    all: [],            // todas reservas carregadas
+    filter: "all",      // all / ativas / encerradas / canceladas
+    search: ""
+  };
+
+  var listEl   = document.getElementById("histList");
+  var countEl  = document.getElementById("histCount");
+  var cntAll   = document.getElementById("cntAll");
+  var cntAt    = document.getElementById("cntAtivas");
+  var cntEnc   = document.getElementById("cntEncerradas");
+  var cntCanc  = document.getElementById("cntCanceladas");
+
+  // ---------- Helpers ----------
+  function safeStr(t, max) { var s = t == null ? "" : String(t); return max ? s.slice(0, max) : s; }
+  function brl(n) {
+    var v = Number(n);
+    return isNaN(v) ? "—" : "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    var p = String(d).slice(0, 10).split("-");
+    return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0].slice(2) : String(d);
+  }
+  function vehText(v) {
+    if (!v) return "Veículo";
+    var t = [v.make, v.model].filter(Boolean).join(" ") || "Veículo";
+    if (v.year_model) t += " (" + v.year_model + ")";
+    return t;
+  }
+  function isAtiva(s)     { return ["aprovado","confirmada","em_uso","aprovado_com_ressalvas","em_analise","solicitado","documentos_pendentes"].indexOf(s) !== -1; }
+  function isEncerrada(s) { return ["encerrada","concluida"].indexOf(s) !== -1; }
+  function isCancelada(s) { return ["cancelada","recusada","recusado","suspenso","bloqueado_para_revisao"].indexOf(s) !== -1; }
+
+  // ---------- SVG icons por status ----------
+  var ICONS = {
+    aprovado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    em_uso:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>',
+    encerrada:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+    cancelada:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    em_analise:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    default:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
+  };
+  function iconFor(status) {
+    if (ICONS[status]) return ICONS[status];
+    if (status === "confirmada") return ICONS.aprovado;
+    if (status === "aprovado_com_ressalvas") return ICONS.aprovado;
+    if (status === "recusada" || status === "recusado") return ICONS.cancelada;
+    return ICONS.default;
+  }
+  function statusLabel(s) {
+    if (window.ndAuth && window.ndAuth.statusLabel) return window.ndAuth.statusLabel(s);
+    return s || "—";
+  }
+
+  // ---------- Filtros + busca ----------
+  function getFiltered() {
+    var arr = state.all;
+    if (state.filter === "ativas")     arr = arr.filter(function (b) { return isAtiva(b.status); });
+    else if (state.filter === "encerradas") arr = arr.filter(function (b) { return isEncerrada(b.status); });
+    else if (state.filter === "canceladas") arr = arr.filter(function (b) { return isCancelada(b.status); });
+
+    if (state.search) {
+      var q = state.search.toLowerCase();
+      arr = arr.filter(function (b) {
+        var v = vehText(b.vehicles).toLowerCase();
+        var prot = String(b.protocol_number || "").toLowerCase();
+        return v.indexOf(q) !== -1 || prot.indexOf(q) !== -1;
+      });
+    }
+    return arr;
+  }
+
+  // ---------- Render ----------
+  function render() {
+    var ativas = state.all.filter(function (b) { return isAtiva(b.status); }).length;
+    var enc    = state.all.filter(function (b) { return isEncerrada(b.status); }).length;
+    var canc   = state.all.filter(function (b) { return isCancelada(b.status); }).length;
+
+    cntAll.textContent  = state.all.length;
+    cntAt.textContent   = ativas;
+    cntEnc.textContent  = enc;
+    cntCanc.textContent = canc;
+
+    countEl.textContent = state.all.length;
+    countEl.dataset.empty = state.all.length === 0 ? "1" : "0";
+
+    var items = getFiltered();
+    listEl.innerHTML = "";
+
+    if (!items.length) {
+      var empty = document.createElement("div");
+      empty.className = "hist-empty";
+      var hasAny = state.all.length > 0;
+      empty.innerHTML =
+        '<div class="hist-empty__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg></div>' +
+        '<h3 class="hist-empty__title">' + (hasAny ? "Nenhuma reserva nesse filtro" : "Você ainda não tem reservas") + '</h3>' +
+        '<p class="hist-empty__sub">' + (hasAny
+          ? "Tente outro filtro ou limpe a busca."
+          : (state.role === "owner"
+              ? "Quando alguém alugar seu carro, aparece aqui."
+              : "Encontre um carro na frota verificada e faça sua primeira solicitação.")
+        ) + '</p>' +
+        (hasAny ? "" : '<a href="' + (state.role === "owner" ? "dashboard-proprietario.html" : "frota.html") + '" class="btn btn--solid btn--sm">' +
+          (state.role === "owner" ? "Ir pro meu painel" : "Ver frota disponível") + '</a>');
+      listEl.appendChild(empty);
+      return;
+    }
+
+    items.forEach(function (b) {
+      var a = document.createElement("a");
+      a.className = "hist-card";
+      a.href = "reserva-detalhe.html?id=" + encodeURIComponent(b.id);
+      a.setAttribute("data-status", b.status || "");
+
+      var icon = document.createElement("div");
+      icon.className = "hist-card__icon";
+      icon.innerHTML = iconFor(b.status);
+
+      var body = document.createElement("div");
+      body.className = "hist-card__body";
+
+      var top = document.createElement("div");
+      top.className = "hist-card__top";
+      var veic = document.createElement("h3");
+      veic.className = "hist-card__veiculo";
+      veic.textContent = vehText(b.vehicles);
+      var stat = document.createElement("span");
+      stat.className = "hist-card__status";
+      stat.textContent = statusLabel(b.status);
+      top.appendChild(veic);
+      top.appendChild(stat);
+      body.appendChild(top);
+
+      var meta = document.createElement("div");
+      meta.className = "hist-card__meta";
+      meta.innerHTML =
+        '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
+          safeStr(fmtDate(b.start_date)) + ' – ' + safeStr(fmtDate(b.end_date)) + '</span>' +
+        (b.protocol_number ? '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' + safeStr(b.protocol_number, 40) + '</span>' : '');
+      body.appendChild(meta);
+
+      var price = document.createElement("div");
+      price.className = "hist-card__price";
+      var pVal = document.createElement("span");
+      pVal.className = "hist-card__price-value";
+      pVal.textContent = brl(b.monthly_price);
+      var pLab = document.createElement("span");
+      pLab.className = "hist-card__price-label";
+      pLab.textContent = "/mês";
+      price.appendChild(pVal);
+      price.appendChild(pLab);
+
+      a.appendChild(icon);
+      a.appendChild(body);
+      a.appendChild(price);
+      listEl.appendChild(a);
+    });
+  }
+
+  // ---------- Data ----------
+  function load() {
+    if (!state.sb || !state.userId) return;
+    listEl.innerHTML = '<div class="hist-loading">Carregando suas reservas...</div>';
+
+    // Query depende do role
+    var query = state.sb.from("bookings")
+      .select("id, status, start_date, end_date, monthly_price, protocol_number, created_at, vehicles(make, model, year_model, category)")
+      .order("created_at", { ascending: false })
+      .limit(200);
+
+    // Filtra por role
+    if (state.role === "client") {
+      query = query.eq("client_id", state.userId);
+    } else if (state.role === "owner") {
+      query = query.eq("owner_id", state.userId);
+    }
+    // Admin: sem filtro (vê todas via RLS já permitida)
+
+    query.then(function (r) {
+      if (r.error) {
+        listEl.innerHTML = '<div class="hist-empty"><div class="hist-empty__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>' +
+          '<h3 class="hist-empty__title">Erro ao carregar</h3>' +
+          '<p class="hist-empty__sub">' + safeStr(r.error.message, 200) + '</p></div>';
+        return;
+      }
+      state.all = (r.data || []);
+      render();
+    }).catch(function (e) {
+      listEl.innerHTML = '<div class="hist-empty"><h3 class="hist-empty__title">Erro de rede</h3><p class="hist-empty__sub">Tente recarregar a página.</p></div>';
+    });
+  }
+
+  // ---------- Wiring ----------
+  document.querySelectorAll(".hist-filter").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".hist-filter").forEach(function (b) { b.classList.remove("is-active"); });
+      btn.classList.add("is-active");
+      state.filter = btn.getAttribute("data-filter");
+      render();
+    });
+  });
+
+  var searchInput = document.getElementById("histSearch");
+  var searchTimer = null;
+  searchInput.addEventListener("input", function () {
+    if (searchTimer) clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+      state.search = searchInput.value.trim();
+      render();
+    }, 250);
+  });
+
+  // Voltar inteligente baseado no role
+  document.getElementById("histBack").addEventListener("click", function (e) {
+    e.preventDefault();
+    var dest = "index.html";
+    if (state.role === "client") dest = "dashboard-cliente.html";
+    else if (state.role === "owner") dest = "dashboard-proprietario.html";
+    else if (state.role === "admin") dest = "admin.html";
+    window.location.href = dest;
+  });
+
+  // Pré-filtro via querystring
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    var filtroQs = qs.get("filtro");
+    if (filtroQs && ["ativas","encerradas","canceladas"].indexOf(filtroQs) !== -1) {
+      state.filter = filtroQs;
+      document.querySelectorAll(".hist-filter").forEach(function (b) {
+        b.classList.toggle("is-active", b.getAttribute("data-filter") === filtroQs);
+      });
+    }
+  } catch (e) {}
+
+  // Init
+  function init() {
+    var a = window.ndAuth;
+    if (!a || !a.ready) { setTimeout(init, 250); return; }
+    a.requireAuth().then(function (s) {
+      if (!s) return;
+      state.sb = a.client();
+      state.userId = s.user.id;
+      // Detecta role
+      a.getProfile().then(function (p) {
+        var role = (p && p.main_role) || "client";
+        a.isAdmin().then(function (isAdm) {
+          state.role = isAdm ? "admin" : role;
+          load();
+        });
+        // Bell
+        if (window.ndNotifs) ndNotifs.mount("#ndBell");
+      });
+    });
+  }
+  init();
+})();
+</script>
+</body>
+</html>
