@@ -400,6 +400,8 @@
   // ---------- Helpers ----------
   function safeStr(t, max) { var s = t == null ? "" : String(t); return max ? s.slice(0, max) : s; }
   function brl(n) {
+    // Fix code-review M4: Number(null) = 0 (não NaN). Trata null/undefined explicitamente.
+    if (n == null || n === "") return "—";
     var v = Number(n);
     return isNaN(v) ? "—" : "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
@@ -518,12 +520,33 @@
       top.appendChild(stat);
       body.appendChild(top);
 
+      // Fix code-review C1+C2: usar DOM API em vez de innerHTML.
+      // Antes: meta.innerHTML += ... + safeStr(b.protocol_number) — XSS via banco.
+      // Agora: createElement + textContent — browser escapa automaticamente.
       var meta = document.createElement("div");
       meta.className = "hist-card__meta";
-      meta.innerHTML =
-        '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
-          safeStr(fmtDate(b.start_date)) + ' – ' + safeStr(fmtDate(b.end_date)) + '</span>' +
-        (b.protocol_number ? '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' + safeStr(b.protocol_number, 40) + '</span>' : '');
+
+      // Span 1: período (calendar icon + datas)
+      var dateSpan = document.createElement("span");
+      var dateSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+      // SVG é literal hardcoded, OK em innerHTML
+      dateSpan.innerHTML = dateSvg;
+      // Datas via textContent (escape automático contra XSS)
+      var dateText = document.createTextNode(
+        safeStr(fmtDate(b.start_date), 20) + " – " + safeStr(fmtDate(b.end_date), 20)
+      );
+      dateSpan.appendChild(dateText);
+      meta.appendChild(dateSpan);
+
+      // Span 2: protocolo (só se existe)
+      if (b.protocol_number) {
+        var protSpan = document.createElement("span");
+        var protSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+        protSpan.innerHTML = protSvg;
+        var protText = document.createTextNode(safeStr(b.protocol_number, 40));
+        protSpan.appendChild(protText);
+        meta.appendChild(protSpan);
+      }
       body.appendChild(meta);
 
       var price = document.createElement("div");
@@ -631,7 +654,25 @@
       a.getProfile().then(function (p) {
         var role = (p && p.main_role) || "client";
         a.isAdmin().then(function (isAdm) {
-          state.role = isAdm ? "admin" : role;
+          if (isAdm) {
+            state.role = "admin";
+          } else if (role === "client" || role === "owner") {
+            state.role = role;
+          } else {
+            // Fix code-review M3: parceiro/oficina/proteção não têm "reservas"
+            // tradicionais. Mostra mensagem específica em vez de filtrar
+            // por client_id (que retornaria 0 silenciosamente).
+            state.role = role; // mantém pra mensagem dinâmica
+            listEl.innerHTML = '<div class="hist-empty">' +
+              '<div class="hist-empty__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>' +
+              '<h3 class="hist-empty__title">Esta página é para clientes e proprietários</h3>' +
+              '<p class="hist-empty__sub">Seu perfil atual (' + safeStr(role, 30) + ') tem seu próprio painel — veja por lá.</p>' +
+              '<a href="index.html" class="btn btn--solid btn--sm">Voltar ao site</a>' +
+              '</div>';
+            countEl.textContent = "0";
+            countEl.dataset.empty = "1";
+            return;
+          }
           load();
         });
         // Bell
