@@ -1127,7 +1127,7 @@ body {
     </h2>
 
     <!-- FASE 80c: Toggle Modo Simples / Detalhado -->
-    <div style="background:#e8f6ee;border:1px solid #c5e8d2;border-radius:12px;padding:14px 16px;margin-bottom:18px;">
+    <div style="background:#e8f6ee;border:1px solid #c5e8d2;border-radius:12px;padding:14px 16px;margin-bottom:12px;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div style="flex:1;min-width:200px;">
           <strong style="color:#145f3e;font-size:14px;">Modo de cálculo</strong>
@@ -1140,6 +1140,19 @@ body {
           <button type="button" id="modeAdvancedBtn" style="border:none;background:transparent;color:#5b6b63;font-weight:600;font-size:13px;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:inherit;">⚙️ Detalhado</button>
         </div>
       </div>
+    </div>
+
+    <!-- FASE 80c: Checkbox descontar custos do veículo (IPVA/manutenção/depreciação) -->
+    <div style="background:#fff8e7;border:1px solid #fde68a;border-radius:12px;padding:12px 16px;margin-bottom:18px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;">
+        <input type="checkbox" id="includeCosts" checked style="margin-top:3px;width:18px;height:18px;cursor:pointer;accent-color:#d97706;flex-shrink:0;" />
+        <div style="flex:1;">
+          <span style="font-weight:700;color:#a16207;font-size:14px;">💸 Descontar custos do veículo (IPVA, manutenção, depreciação)</span>
+          <p style="margin:4px 0 0;font-size:12.5px;color:#5b6b63;line-height:1.5;" id="costsHint">
+            <strong>Marcado:</strong> mostra valor <em>realista no bolso</em> (jeito Nomade — honesto). <strong>Desmarcado:</strong> mostra só receita bruta − comissão (jeito tradicional — owner que se vire com custos depois).
+          </p>
+        </div>
+      </label>
     </div>
 
     <!-- FASE 80c: Dropdown de MODELO (auto-popula categoria, câmbio, FIPE) -->
@@ -1608,7 +1621,8 @@ body {
     contract: "1",       // FASE 79: duração típica do contrato (chave de CONTRACT_DISCOUNTS)
     override: null,      // FASE 79: preço mensal personalizado (null = usa cálculo automático)
     oficinas: false,     // FASE 80: usa oficinas parceiras (desconto 5% manutenção)
-    simpleMode: true     // FASE 80c: modo simples (default true — owner não mexe em nada avançado)
+    simpleMode: true,    // FASE 80c: modo simples (default true — owner não mexe em nada avançado)
+    includeCosts: true   // FASE 80c: descontar IPVA/manutenção/depreciação (default true — honesto)
   };
   var OFICINAS_DISCOUNT_PCT = 5;  // % de desconto na manutenção quando oficinas parceiras ON
   var state = Object.assign({}, defaults);
@@ -1707,10 +1721,20 @@ body {
     // FASE 80: desconto oficinas parceiras (5% no custo de manutenção)
     var oficinasEcon = state.oficinas ? (manutAnualBruto * OFICINAS_DISCOUNT_PCT / 100) : 0;
     var manutAnual = manutAnualBruto - oficinasEcon;
+    // FASE 80c: se owner desmarcou "descontar custos", zera tudo (modo "ganho bruto Turo style")
+    if (!state.includeCosts) {
+      manutAnual = 0;
+      oficinasEcon = 0;
+    }
     var ipvaAnual = fipe * ipvaPct;
     // Depreciação: 50% atribuível ao aluguel (mesmo parado o carro deprecia)
     var deprecExtra = fipe * deprecAnualPct * 0.5;
 
+    // FASE 80c: zerar IPVA e depreciação também se "descontar custos" desmarcado
+    if (!state.includeCosts) {
+      ipvaAnual = 0;
+      deprecExtra = 0;
+    }
     var custos = manutAnual + ipvaAnual + deprecExtra;
     var liquidoAnual = receitaLiquidaPreImposto - imposto - custos;
     var liquidoMensal = liquidoAnual / 12;
@@ -1937,6 +1961,25 @@ body {
         render();
       }
     });
+  })();
+
+  // FASE 80c: wiring do checkbox "Descontar custos do veículo"
+  (function wireIncludeCosts() {
+    var cb = document.getElementById("includeCosts");
+    var hint = document.getElementById("costsHint");
+    if (!cb) return;
+    function updateHint() {
+      if (!hint) return;
+      hint.innerHTML = cb.checked
+        ? '<strong>Marcado:</strong> mostra valor <em>realista no bolso</em> (jeito Nomade — honesto). <strong>Desmarcado:</strong> mostra só receita bruta − comissão (jeito tradicional — owner que se vire com custos depois).'
+        : '<strong>Desmarcado (modo bruto):</strong> mostra só receita − 10% comissão da plataforma. Igual outras plataformas globais fazem. Você ajusta IPVA/manutenção/depreciação por fora.';
+    }
+    cb.addEventListener("change", function () {
+      state.includeCosts = cb.checked;
+      updateHint();
+      render();
+    });
+    updateHint();
   })();
 
   // FASE 80: wiring do toggle oficinas parceiras
