@@ -1026,13 +1026,13 @@ body {
       <h3 class="sim-card__title">Como calculamos o valor do aluguel</h3>
     </div>
     <p style="color:#5b6b63;font-size:14px;margin:0 0 18px;line-height:1.6;">
-      Locadoras tradicionais (Localiza, Movida, Unidas) cobram em torno de <strong>8-10% do FIPE/mês</strong> porque mantêm <strong>frota própria, agências físicas, gestores, marketing massivo e overhead corporativo</strong>. A Nomade Drive é uma <strong>plataforma P2P</strong> que conecta direto proprietário ↔ cliente — sem essa estrutura toda. Resultado: <strong>aluguel mais barato pro cliente</strong> (mais demanda) e <strong>mais dinheiro pra você dono do carro</strong>.
+      As grandes locadoras tradicionais cobram em torno de <strong>8-10% do FIPE/mês</strong> porque mantêm <strong>frota própria comprada/financiada, agências físicas, gestores, marketing massivo e overhead corporativo</strong>. A Nomade Drive é uma <strong>plataforma P2P</strong> que conecta direto proprietário ↔ cliente — sem essa estrutura toda. Resultado: <strong>aluguel mais barato pro cliente</strong> (mais demanda) e <strong>mais dinheiro pra você dono do carro</strong>.
     </p>
 
     <div class="sim-compare">
       <div class="sim-compare__col sim-compare__col--traditional">
         <span class="sim-compare__tag">Locadora tradicional</span>
-        <div class="sim-compare__name">Localiza · Movida · Unidas</div>
+        <div class="sim-compare__name">Grandes locadoras nacionais</div>
         <div class="sim-compare__rate">~10%<small> FIPE/mês</small></div>
         <ul class="sim-compare__list">
           <li>Frota própria (compra e financia carros)</li>
@@ -1675,16 +1675,16 @@ body {
                     : "sim-verdict--risk";
         compEl.className = "sim-verdict " + classe;
         compEl.innerHTML =
-          '<div style="font-size:13px;opacity:0.7;margin-bottom:6px;">Comparativo com locadora tradicional (Localiza ' + r.catLabel + ')</div>' +
+          '<div style="font-size:13px;opacity:0.7;margin-bottom:6px;">Comparativo com média de locadoras tradicionais (' + r.catLabel + ')</div>' +
           '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;">' +
-            '<div><span style="font-size:11px;opacity:0.6;">🏢 Localiza</span><br><strong style="font-size:18px;">' + brl(r.localizaPrice) + '/mês</strong></div>' +
+            '<div><span style="font-size:11px;opacity:0.6;">🏢 Locadora tradicional</span><br><strong style="font-size:18px;">' + brl(r.localizaPrice) + '/mês</strong></div>' +
             '<div style="text-align:center;font-size:20px;">→</div>' +
             '<div><span style="font-size:11px;opacity:0.6;">🚗 Nomade Drive</span><br><strong style="font-size:18px;">' + brl(r.aluguelMes) + '/mês</strong></div>' +
           '</div>' +
           '<div style="margin-top:8px;font-size:14px;">' +
             (r.economiaCliente > 0
               ? '💸 Cliente economiza <strong>' + brl(r.economiaCliente) + '/mês</strong> (' + pct(r.descontoVsLocalizaPct) + ' ' + sinal + ') = <strong>' + brl(r.economiaCliente * 12) + '/ano</strong>'
-              : '⚠️ Seu preço está <strong>' + brl(Math.abs(r.economiaCliente)) + '/mês mais caro</strong> que Localiza (' + pct(Math.abs(r.descontoVsLocalizaPct)) + '). Considere baixar.') +
+              : '⚠️ Seu preço está <strong>' + brl(Math.abs(r.economiaCliente)) + '/mês mais caro</strong> que a média do mercado (' + pct(Math.abs(r.descontoVsLocalizaPct)) + '). Considere baixar.') +
           '</div>';
       } else {
         compEl.className = "sim-verdict";
@@ -1872,7 +1872,7 @@ body {
     var contratoLine = "🤝 Contrato típico: " + CONTRACT_LABELS[state.contract] +
       (r.descontoPct > 0 ? " (−" + r.descontoPct + "% desconto)" : "");
     var compLine = (r.localizaPrice != null && r.economiaCliente > 0)
-      ? "🏆 " + pct(r.descontoVsLocalizaPct) + " MAIS BARATO que Localiza (" + brl(r.localizaPrice) + "/mês)\n"
+      ? "🏆 " + pct(r.descontoVsLocalizaPct) + " MAIS BARATO que locadora tradicional (~" + brl(r.localizaPrice) + "/mês)\n"
       : "";
     return "Olha o que simulei na Nomade Drive Brasil pro meu carro:\n\n" +
       "🚗 " + catLabel + " · " + state.year + " · " + state.km.toLocaleString("pt-BR") + " km · " + TRANS_NAMES[state.trans] + "\n" +
