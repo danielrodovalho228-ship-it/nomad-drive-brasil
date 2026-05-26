@@ -361,14 +361,27 @@ Deno.serve(async (req) => {
             // Tudo OK — cria booking imediatamente
             const discountPct = loyalty?.renewal_discount_pct ?? 5;
             const depositReductionPct = loyalty?.deposit_reduction_pct ?? 0;
-            const basePrice = vehicleFipeValue ? Math.round(vehicleFipeValue * 0.045) : 1800;
+            // FASE 80: usar preço sugerido market-based via RPC
+            const months = desired_months || 1;
+            let basePrice = 1800;
+            if (resolvedVehicleId) {
+              const { data: priceRow } = await admin
+                .rpc("calculate_suggested_monthly_price", { p_vehicle_id: resolvedVehicleId, p_num_months: months });
+              if (priceRow != null && Number(priceRow) > 0) {
+                basePrice = Math.round(Number(priceRow));
+              } else if (vehicleFipeValue) {
+                basePrice = Math.round(vehicleFipeValue * 0.045); // fallback se categoria não setada
+              }
+            } else if (vehicleFipeValue) {
+              basePrice = Math.round(vehicleFipeValue * 0.045);
+            }
             const baseDeposit = Math.max(1000, Math.round(basePrice * 0.8));
             const finalPrice = Math.round(basePrice * (1 - discountPct / 100) * 100) / 100;
             const finalDeposit = Math.round(baseDeposit * (1 - depositReductionPct / 100) * 100) / 100;
             const platformFee = Math.round(finalPrice * 0.10 * 100) / 100;
             const ownerNet = finalPrice - platformFee;
 
-            const months = desired_months || 1;
+            // months já declarado acima (FASE 80) — não redeclarar
             const startDate = desired_start_date || new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 10);
             const endDate = (() => {
               const d = new Date(startDate + "T12:00:00");

@@ -29,8 +29,13 @@ function waHref(msg) {
     "&body=" + encodeURIComponent(msg);
 }
 
-/* ---- fleet pricing (FIPE × taxa da categoria) ---- */
-var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
+/* ---- fleet pricing (FASE 80: market-based, não FIPE × %) ---- */
+// Preço base pra cards da frota — pra cálculo detalhado (ano/km/cidade/desconto)
+// owner usa /simulador-roi-proprietario.html
+var FLEET_TIER_PRICES = { A: 2400, B: 3300, C: 4300, D: 6000 };
+// Compat: alguns trechos ainda referenciam FLEET_TIER_RATES — mantemos como zero pra
+// não quebrar (qualquer referência multiplica por FIPE × 0 = 0, e o código já tem fallback).
+var FLEET_TIER_RATES = { A: 0, B: 0, C: 0, D: 0 };
 var CAT_LABEL = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
 function brl(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
 
@@ -180,9 +185,8 @@ window.fleetImgFallback = fleetImgFallback;
     var c = window.CAR_CATALOG[id];
     if (!c || id === "cybertruck") return;
     var safeTier = VALID_TIERS[c.tier] ? c.tier : "A";  // bloqueia tier malicioso
-    var rate = FLEET_TIER_RATES[safeTier] || 0;
-    var mod = c.transmission === "manual" ? 0.9 : 1;
-    var price = c.fipe ? c.fipe * rate * mod : 0;
+    // FASE 80: preço de mercado por tier (não FIPE × %)
+    var price = FLEET_TIER_PRICES[safeTier] || 0;
     var trans = c.transmission === "manual" ? "Manual" : "Automático";
     var body = (c.body && c.body.pt) ? c.body.pt : "";
 
@@ -215,7 +219,7 @@ window.fleetImgFallback = fleetImgFallback;
       priceEl.appendChild(small);
       bodyEl.appendChild(priceEl);
       bodyEl.appendChild(setText(makeEl("span", "fleet-car__est"),
-        "Faixa de referência — preço final por orçamento"));
+        "Preço de mercado — ajustado por ano/km/cidade no orçamento"));
     } else {
       bodyEl.appendChild(setText(makeEl("span", "fleet-car__price"), "Sob consulta"));
     }
@@ -320,11 +324,14 @@ window.fleetImgFallback = fleetImgFallback;
   var mesesEl = document.getElementById("simMeses");
   if (!mesesEl) return;
 
+  // FASE 80: preços agora são MARKET-BASED (não % FIPE).
+  // Cada tier legado mapeia pra uma categoria nova de mercado.
+  // Pra cálculo detalhado com ano/km/cidade/desconto, ver /simulador-roi-proprietario.html
   var TIERS = {
-    A: { price: 1650, rate: 0.055, repFipe: 30000 },
-    B: { price: 2565, rate: 0.045, repFipe: 57000 },
-    C: { price: 4800, rate: 0.040, repFipe: 120000 },
-    D: { price: 7000, rate: 0.028, repFipe: 250000 }
+    A: { price: 2400, rate: 0,      repFipe: 50000,  marketCat: "Hatch Econômico (Onix 1.0, HB20 manual)" },
+    B: { price: 3300, rate: 0,      repFipe: 80000,  marketCat: "Hatch Automático (HB20 AT, Onix AT)" },
+    C: { price: 4300, rate: 0,      repFipe: 135000, marketCat: "SUV Médio (Tracker, T-Cross, Renegade)" },
+    D: { price: 6000, rate: 0,      repFipe: 250000, marketCat: "Luxo Importado (BMW, Audi, Tesla)" }
   };
   var ESTADO = { otimo: 1.0, bom: 0.92, regular: 0.82 };
   var OWNER_SHARE = 0.828;  // parte estimada do proprietário (taxa da plataforma já descontada)
@@ -341,8 +348,8 @@ window.fleetImgFallback = fleetImgFallback;
   var el = function (id) { return document.getElementById(id); };
 
   function priceMonthly() {
-    var f = parseFloat(fipeEl.value);
-    if (f && f > 0) return Math.round(f * TIERS[tier].rate);
+    // FASE 80: ignora FIPE — preço agora vem da categoria (market-based).
+    // FIPE é coletado pra cálculo de ROI/depreciação, não pra definir aluguel.
     return TIERS[tier].price;
   }
   function cenario(meses) {

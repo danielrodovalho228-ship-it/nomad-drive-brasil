@@ -2,7 +2,9 @@
    Nomade Drive Brasil — página de detalhe do veículo (PT-only)
    ==================================================================== */
 (function () {
-  var FLEET_TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
+  // FASE 80: legacy tiers mapeiam pra preço de mercado (não % FIPE)
+  // Pra cálculo detalhado com ano/km/cidade/desconto, ver /simulador-roi-proprietario.html
+  var FLEET_TIER_PRICES = { A: 2400, B: 3300, C: 4300, D: 6000 };
   var CAT_LABEL = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
   // link de contato seguro — usa waHref do script.js (wa.me ou e-mail, nunca número falso)
   var link = (typeof waHref === "function")
@@ -24,12 +26,12 @@
   }
   el("carDetail").hidden = false;
 
-  /* ---- preço ---- */
+  /* ---- preço (FASE 80: market-based, não FIPE) ---- */
   function monthlyPrice() {
     if (car.customPrice) return null;
-    var rate = FLEET_TIER_RATES[car.tier] || 0;
-    var mod = car.transmission === "manual" ? 0.9 : 1;
-    return Math.round(car.fipe * rate * mod);
+    var base = FLEET_TIER_PRICES[car.tier] || 0;
+    // Câmbio manual = preço base. Automático ainda mantém base (já refletido nas categorias de mercado).
+    return base;
   }
 
   /* ---- galeria ---- */

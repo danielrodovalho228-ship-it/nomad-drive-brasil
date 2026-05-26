@@ -698,8 +698,8 @@
         <span class="badge__dot" aria-hidden="true"></span>
         Pré-lançamento · Uberlândia-MG
       </span>
-      <h1 class="fm-blur-in" style="--fm-delay: 100ms;">Alugue o carro perfeito por mês <em>sem burocracia de locadora</em>.</h1>
-      <p class="hero__sub fm-slide-up" style="--fm-delay: 400ms;">Plataforma local de Uberlândia que conecta você a proprietários verificados. Contrato, vistoria, proteção e suporte WhatsApp — tudo simples. <strong>Cliente Gold/Platinum: aprovação na hora.</strong></p>
+      <h1 class="fm-blur-in" style="--fm-delay: 100ms;">Alugue por mês com preço <em>15-30% abaixo de Localiza</em>.</h1>
+      <p class="hero__sub fm-slide-up" style="--fm-delay: 400ms;">Plataforma P2P que conecta você a proprietários verificados — em <strong>qualquer cidade onde tenha owner cadastrado</strong>. Contrato, vistoria, proteção e suporte WhatsApp. <strong>Cliente Gold/Platinum: aprovação na hora.</strong></p>
       <div class="hero__cta fm-slide-up" style="--fm-delay: 600ms;">
         <a href="#orcamento" class="btn btn--solid btn--lg fm-hover-glow hero-cta-primary">
           <span>Pedir orçamento em 2 min</span>
@@ -816,36 +816,40 @@
     <div class="paths">
       <a href="#orcamento" class="path-card path-card--img">
         <img class="path-card__img"
-          src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=320&h=200&fit=crop&q=80&auto=format"
-          alt="Chaves de carro — alugar"
-          loading="lazy" decoding="async" />
+          src="images/hero-orcamento.jpg"
+          alt="Cliente recebendo as chaves de um carro de aluguel"
+          loading="lazy" decoding="async"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=320&h=200&fit=crop&q=80&auto=format'" />
         <h3>Quero alugar</h3>
         <p>Ver categorias, requisitos e pedir um orçamento sem compromisso.</p>
         <span class="path-card__go">Pedir orçamento →</span>
       </a>
       <a href="proprietarios.html" class="path-card path-card--img">
         <img class="path-card__img"
-          src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=320&h=200&fit=crop&q=80&auto=format"
-          alt="Carro estacionado — proprietário"
-          loading="lazy" decoding="async" />
+          src="images/hero-proprietarios.jpg"
+          alt="Proprietário apresentando carro pra cadastro na frota"
+          loading="lazy" decoding="async"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=320&h=200&fit=crop&q=80&auto=format'" />
         <h3>Tenho um carro</h3>
         <p>Aceitar as regras, simular ganhos e iniciar a análise do veículo.</p>
         <span class="path-card__go">Cadastrar meu carro →</span>
       </a>
       <a href="parceiros.html" class="path-card path-card--img">
         <img class="path-card__img"
-          src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=320&h=200&fit=crop&q=80&auto=format"
-          alt="Aperto de mãos — parceria"
-          loading="lazy" decoding="async" />
+          src="images/hero-parceiros.jpg"
+          alt="Parceiros fechando acordo de indicação"
+          loading="lazy" decoding="async"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=320&h=200&fit=crop&q=80&auto=format'" />
         <h3>Sou parceiro</h3>
         <p>Indicar locatários, proprietários ou empresas e ganhar crédito.</p>
         <span class="path-card__go">Quero indicar →</span>
       </a>
       <a href="shield-protecao.html" class="path-card path-card--img">
         <img class="path-card__img"
-          src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=320&h=200&fit=crop&q=80&auto=format"
-          alt="Contrato e documentos — proteção"
-          loading="lazy" decoding="async" />
+          src="images/hero-shield.jpg"
+          alt="Proteção e cobertura do Shield"
+          loading="lazy" decoding="async"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=320&h=200&fit=crop&q=80&auto=format'" />
         <h3>Proteção e sinistros</h3>
         <p>Entender Shield, caução, cota de participação e o que fazer em sinistro.</p>
         <span class="path-card__go">Ver proteção →</span>
@@ -1032,7 +1036,7 @@
       <button class="fleet-filter" data-filter="D">Luxo</button>
     </div>
     <div class="fleet" id="fleet"></div>
-    <p class="note note--center">Preços estimados como percentual da tabela FIPE por categoria. O valor final é sempre confirmado por escrito no orçamento.</p>
+    <p class="note note--center">Preços baseados em valor de mercado (categoria + ano + km + cidade) — não em fórmula sobre FIPE. <strong>15-30% abaixo</strong> de Localiza, Movida e Unidas. Valor final confirmado por escrito no orçamento. <a href="simulador-roi-proprietario.html" style="color:var(--color-brand-500);">Calcule preço exato →</a></p>
   </div>
 </section>
 
@@ -1041,9 +1045,9 @@
 <section class="section section--surface" id="precos">
   <div class="container">
     <div class="section-header-modern" data-fm-reveal>
-      <span class="section-header-modern__eyebrow">Preços</span>
-      <h2 class="section-header-modern__title">Escolha sua <em>categoria</em></h2>
-      <p class="section-header-modern__sub">Faixas de referência por categoria. O valor final depende de datas, quilometragem, proteção e análise — confirmado por escrito.</p>
+      <span class="section-header-modern__eyebrow">Preços de mercado</span>
+      <h2 class="section-header-modern__title">Escolha sua <em>categoria</em> — <strong style="color:var(--color-brand-500);">15-30% abaixo</strong> de Localiza</h2>
+      <p class="section-header-modern__sub">Preços baseados em mercado real (Localiza, Movida, Unidas). Valor final ajustado por ano, km, cidade e duração do contrato — confirmado por escrito.</p>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:24px;align-items:stretch;" class="fm-stagger" data-fm-reveal>
@@ -1056,7 +1060,8 @@
           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=480&h=320&fit=crop&q=80&auto=format'" />
         <span class="badge-modern badge-modern--info" style="margin-bottom:8px;">Econômico</span>
         <a href="car.html?id=hb20" style="font-size:11.5px;color:#6b7670;text-decoration:none;margin-bottom:8px;display:inline-flex;align-items:center;gap:4px;">Ex.: Hyundai HB20 →</a>
-        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 1.400<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–2.000/mês</small></div>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 2.400<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–2.900/mês</small></div>
+        <div style="font-size:11px;color:#a16207;background:#fef9c3;padding:3px 8px;border-radius:6px;display:inline-block;margin-bottom:8px;font-weight:600;">Localiza cobra R$ 3.415 · você economiza ~21%</div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Hatch compacto, econômico no consumo. Ideal para uso urbano.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
           <li>✓ Consumo até 14km/L</li>
@@ -1075,7 +1080,8 @@
           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=480&h=320&fit=crop&q=80&auto=format'" />
         <span class="badge-modern badge-modern--brand" style="margin-bottom:8px;">Confort · MAIS PROCURADA</span>
         <a href="car.html?id=cobalt" style="font-size:11.5px;color:#6b7670;text-decoration:none;margin-bottom:8px;display:inline-flex;align-items:center;gap:4px;">Ex.: Chevrolet Cobalt →</a>
-        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 2.000<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–3.600/mês</small></div>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 3.100<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–3.700/mês</small></div>
+        <div style="font-size:11px;color:#a16207;background:#fef9c3;padding:3px 8px;border-radius:6px;display:inline-block;margin-bottom:8px;font-weight:600;">Localiza cobra R$ 4.270 · você economiza ~23%</div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Sedãs e hatches médios, automáticos. Categoria mais procurada.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
           <li>✓ Câmbio automático</li>
@@ -1095,7 +1101,8 @@
           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1568844293986-8d0400bd4745?w=480&h=320&fit=crop&q=80&auto=format'" />
         <span class="badge-modern badge-modern--accent" style="margin-bottom:8px;">Premium</span>
         <a href="car.html?id=tracker" style="font-size:11.5px;color:#6b7670;text-decoration:none;margin-bottom:8px;display:inline-flex;align-items:center;gap:4px;">Ex.: Chevrolet Tracker →</a>
-        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 3.500<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–5.500/mês</small></div>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 4.000<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">–4.900/mês</small></div>
+        <div style="font-size:11px;color:#a16207;background:#fef9c3;padding:3px 8px;border-radius:6px;display:inline-block;margin-bottom:8px;font-weight:600;">Localiza cobra R$ 5.221 · você economiza ~18%</div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">SUVs e sedãs premium. Mais espaço e conforto de estrada.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
           <li>✓ SUV ou sedã grande</li>
@@ -1115,7 +1122,8 @@
           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=480&h=320&fit=crop&q=80&auto=format'" />
         <span class="badge-modern" style="margin-bottom:8px;background:#1f2937;color:#fbbf24;">Luxo</span>
         <a href="car.html?id=cybertruck" style="font-size:11.5px;color:#6b7670;text-decoration:none;margin-bottom:8px;display:inline-flex;align-items:center;gap:4px;">Ex.: Tesla Cybertruck →</a>
-        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">Sob consulta</div>
+        <div style="font-size:28px;font-weight:800;font-family:var(--font-display);color:var(--color-brand-500);margin-bottom:4px;">R$ 6.000<small style="font-size:14px;font-weight:500;color:var(--color-gray-500);">+/mês</small></div>
+        <div style="font-size:11px;color:#a16207;background:#fef9c3;padding:3px 8px;border-radius:6px;display:inline-block;margin-bottom:8px;font-weight:600;">Sob consulta · BMW, Audi, Tesla, Mercedes</div>
         <p style="margin:8px 0 16px;font-size:13.5px;color:var(--color-gray-600);line-height:1.5;">Alto padrão. Condições avaliadas caso a caso.</p>
         <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--color-gray-700);">
           <li>✓ Veículos top de linha</li>
@@ -1126,23 +1134,38 @@
       </div>
     </div>
 
-    <!-- Desconto strip estilizado -->
-    <div class="bento-grid" style="margin-top:28px;grid-template-columns:repeat(3,1fr);">
-      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#e8f6ee 0%,#f4f5f7 100%);">
-        <div style="font-size:28px;font-weight:800;color:var(--color-brand-500);font-family:var(--font-display);">1 mês</div>
-        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);">valor cheio da categoria</p>
+    <!-- FASE 80: Desconto progressivo crescente (até 20% em 12 meses) -->
+    <div style="margin-top:28px;text-align:center;">
+      <p style="font-size:14px;color:var(--color-gray-700);font-weight:600;margin:0 0 12px;">🎯 Desconto progressivo — quanto mais tempo, mais economia</p>
+    </div>
+    <div class="bento-grid" style="grid-template-columns:repeat(6,1fr);gap:8px;">
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#e8f6ee 0%,#f4f5f7 100%);padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:var(--color-brand-500);font-family:var(--font-display);">1 mês</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);">cheio</p>
       </div>
-      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#fef9c3 0%,#f4f5f7 100%);border-color:var(--color-accent-300);">
-        <div style="font-size:28px;font-weight:800;color:var(--color-accent-700);font-family:var(--font-display);">~5% off</div>
-        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);"><strong>2 meses</strong> — desconto por mês</p>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#fef9c3 0%,#f4f5f7 100%);border-color:var(--color-accent-300);padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:var(--color-accent-700);font-family:var(--font-display);">−5%</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);"><strong>2 meses</strong></p>
       </div>
-      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#dbeafe 0%,#f4f5f7 100%);border-color:var(--color-info);">
-        <div style="font-size:28px;font-weight:800;color:#1e40af;font-family:var(--font-display);">~10% off</div>
-        <p style="margin:6px 0 0;font-size:13px;color:var(--color-gray-600);"><strong>3+ meses</strong> · condições custom</p>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#fef3c7 0%,#f4f5f7 100%);border-color:var(--color-accent-300);padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:#a16207;font-family:var(--font-display);">−10%</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);"><strong>3 meses</strong></p>
+      </div>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#fed7aa 0%,#f4f5f7 100%);border-color:#fb923c;padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:#c2410c;font-family:var(--font-display);">−12%</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);"><strong>4 meses</strong></p>
+      </div>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#dbeafe 0%,#f4f5f7 100%);border-color:var(--color-info);padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:#1e40af;font-family:var(--font-display);">−15%</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);"><strong>6 meses</strong></p>
+      </div>
+      <div class="bento-card" style="text-align:center;background:linear-gradient(135deg,#c7d2fe 0%,#f4f5f7 100%);border-color:#6366f1;padding:12px 6px;">
+        <div style="font-size:18px;font-weight:800;color:#3730a3;font-family:var(--font-display);">−20%</div>
+        <p style="margin:4px 0 0;font-size:11px;color:var(--color-gray-600);"><strong>12 meses</strong></p>
       </div>
     </div>
 
-    <p class="note note--center" style="margin-top:20px;">* Valores são exemplos de referência. Sujeitos a disponibilidade, categoria, caução, análise e contrato.</p>
+    <p class="note note--center" style="margin-top:20px;">* Faixas baseadas em preço de mercado (Localiza, Movida, Unidas) com ajustes por ano, km e cidade. Valor final no orçamento + simulador interativo em <a href="simulador-roi-proprietario.html" style="color:var(--color-brand-500);">/simulador-roi-proprietario.html</a>.</p>
     <div class="precos-cta" style="text-align:center;margin-top:24px;">
       <a href="#orcamento" class="btn-modern btn-modern--primary btn-modern--lg fm-hover-glow">Pedir meu orçamento <span class="btn-modern__arrow">→</span></a>
     </div>
@@ -1487,30 +1510,30 @@
           loading="lazy" decoding="async"
           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=720&h=540&fit=crop&q=80&auto=format'" />
         <div class="teaser-modern__floating-stat">
-          <strong>R$ 2.250</strong>
-          <span>repasse médio · Confort</span>
+          <strong>R$ 2.340</strong>
+          <span>repasse owner · HB20 manual (90% de R$ 2.600)</span>
         </div>
       </div>
       <div class="teaser-modern__copy">
-        <span class="eyebrow">Ganhe com seu carro</span>
-        <h2>Tem um carro parado? <em>Pode virar renda.</em></h2>
-        <p>Coloque seu veículo na rede. A renda é estimada, não garantida, e o carro entra na frota só após aprovação documental, técnica e operacional. <strong>90% da mensalidade vai pra você</strong> — 10% cobre operação da plataforma.</p>
+        <span class="eyebrow">Renda passiva com seu carro parado</span>
+        <h2>Seu carro <em>na garagem</em> pode virar renda mensal.</h2>
+        <p>Coloque seu veículo na rede e transforme um ativo parado em receita previsível. O preço é <strong>baseado em mercado real</strong> (Localiza/Movida/Unidas) — não em fórmula sobre FIPE. <strong>90% da mensalidade vai pra você</strong> — 10% cobre operação da plataforma. Renda estimada, não garantida.</p>
         <ul class="teaser-modern__list">
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Aceite das regras antes de simular</span>
+            <span>Preço <strong>15-30% abaixo</strong> de Localiza, Movida, Unidas</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Simulador de ganhos em faixa estimada</span>
+            <span>Simulador interativo com ano, km, cidade e duração do contrato</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Checklist técnico em oficina credenciada</span>
+            <span>Desconto progressivo até 20% pra contratos de 12 meses</span>
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Aprovação operacional e publicação na frota</span>
+            <span>Sua cidade, sua moeda — operação onde tem proprietário cadastrado</span>
           </li>
         </ul>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">

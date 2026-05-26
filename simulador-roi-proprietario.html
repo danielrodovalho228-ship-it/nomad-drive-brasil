@@ -1116,28 +1116,28 @@ body {
       Configure seu carro
     </h2>
 
-    <!-- Valor FIPE -->
-    <div class="sim-field">
-      <div class="sim-field__label">
-        <span class="sim-field__name">Valor de mercado (FIPE)</span>
-        <span class="sim-field__value" id="vFipe">R$ 50.000</span>
-      </div>
-      <input type="range" id="fipe" class="sim-slider" min="20000" max="250000" step="1000" value="50000" />
-      <div class="sim-field__hint" style="margin-top:4px;">Consulte em <a href="https://veiculos.fipe.org.br" target="_blank" rel="noopener" style="color:#145f3e;">veiculos.fipe.org.br</a></div>
-    </div>
-
-    <!-- Categoria -->
+    <!-- FASE 80: Categoria (substitui FIPE+A/B/C/D — agora dropdown de 13 categorias de mercado) -->
     <div class="sim-field">
       <div class="sim-field__label">
         <span class="sim-field__name">Categoria do veículo</span>
-        <span class="sim-field__value" id="vCat">Confort</span>
+        <span class="sim-field__value" id="vCat">Hatch Automático</span>
       </div>
-      <div class="sim-options sim-options--4" id="catBtns">
-        <button data-cat="A">Econômico<small>5,5% FIPE</small></button>
-        <button data-cat="B" class="is-active">Confort<small>4,5% FIPE</small></button>
-        <button data-cat="C">Premium<small>4,0% FIPE</small></button>
-        <button data-cat="D">Luxo<small>2,8% FIPE</small></button>
-      </div>
+      <select id="categorySelect" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
+        <option value="B">Compacto Básico — Mobi, Kwid (base R$ 2.200)</option>
+        <option value="CH">Hatch Econômico — Onix 1.0 (base R$ 2.400)</option>
+        <option value="CE">Hatch Econômico Plus — HB20, Argo, Polo (base R$ 2.600)</option>
+        <option value="CS">Sedan Compacto — Cronos, Onix Plus (base R$ 2.800)</option>
+        <option value="FS">Sedan Intermediário — Cronos 1.3, Onix Turbo (base R$ 3.200)</option>
+        <option value="FH" selected>Hatch Automático — HB20 AT, Onix AT (base R$ 3.300)</option>
+        <option value="FX">Sedan Automático — Onix Plus Turbo AT (base R$ 3.500)</option>
+        <option value="G">SUV Compacto — Basalt, VW Tera (base R$ 3.700)</option>
+        <option value="GC">SUV Compacto Plus — VW Tera AT (base R$ 3.900)</option>
+        <option value="GI">SUV Premium — Nissan Kicks AT (base R$ 4.100)</option>
+        <option value="GX">SUV Médio — Tracker, T-Cross, Renegade (base R$ 4.300)</option>
+        <option value="GH">SUV Luxo — Tracker Premier, T-Cross Highline (base R$ 4.600)</option>
+        <option value="LUXO">Luxo Importado — BMW, Audi, Tesla (base R$ 6.000+)</option>
+      </select>
+      <div class="sim-field__hint" style="margin-top:4px;">Categoria de mercado define o preço base. Ajustes por ano/km/cidade vêm depois.</div>
     </div>
 
     <!-- Câmbio -->
@@ -1147,12 +1147,81 @@ body {
         <span class="sim-field__value" id="vTrans">Automático</span>
       </div>
       <div class="sim-options sim-options--2" id="transBtns">
-        <button data-trans="manual">Manual<small>−10% no aluguel</small></button>
-        <button data-trans="automatico" class="is-active">Automático<small>preço cheio</small></button>
+        <button data-trans="manual">Manual<small>preço base</small></button>
+        <button data-trans="automatico" class="is-active">Automático<small>+5% no aluguel</small></button>
       </div>
     </div>
 
+    <!-- FASE 80: Ano do veículo -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Ano do veículo</span>
+        <span class="sim-field__value" id="vYear">2023</span>
+      </div>
+      <input type="range" id="yearModel" class="sim-slider" min="2010" max="2026" step="1" value="2023" />
+      <div class="sim-field__hint" style="margin-top:4px;">0-2 anos: +8% · 3-5 anos: +3% · 6-8 anos: −5% · 9+ anos: −10%</div>
+    </div>
+
+    <!-- FASE 80: Quilometragem -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Quilometragem</span>
+        <span class="sim-field__value" id="vMileage">40.000 km</span>
+      </div>
+      <input type="range" id="mileage" class="sim-slider" min="0" max="200000" step="5000" value="40000" />
+      <div class="sim-field__hint" style="margin-top:4px;">&lt;30k: +5% · 30-60k: padrão · 60-100k: −5% · &gt;100k: −10%</div>
+    </div>
+
+    <!-- FASE 80: Cidade tier -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Tipo da cidade</span>
+        <span class="sim-field__value" id="vCity">Cidade média</span>
+      </div>
+      <div class="sim-options sim-options--3" id="cityBtns">
+        <button data-city="capital">Capital<small>+10%</small></button>
+        <button data-city="media" class="is-active">Cidade média<small>padrão</small></button>
+        <button data-city="interior">Interior<small>−10%</small></button>
+      </div>
+      <div class="sim-field__hint" style="margin-top:4px;">SP, RJ, BH, BSB = capital. Uberlândia, Campinas, Ribeirão = média. Cidades menores = interior.</div>
+    </div>
+
+    <!-- FIPE (apenas pra ROI — não influencia mais o aluguel) -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Valor de mercado (FIPE)</span>
+        <span class="sim-field__value" id="vFipe">R$ 80.000</span>
+      </div>
+      <input type="range" id="fipe" class="sim-slider" min="20000" max="500000" step="1000" value="80000" />
+      <div class="sim-field__hint" style="margin-top:4px;">Usado <strong>apenas pra calcular seu retorno sobre investimento</strong> (não influencia o aluguel). Consulte em <a href="https://veiculos.fipe.org.br" target="_blank" rel="noopener" style="color:#145f3e;">veiculos.fipe.org.br</a>.</div>
+    </div>
+
     <!-- Meses alugado/ano -->
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Preço personalizado (opcional)</span>
+        <span class="sim-field__value" id="vOverride">Automático</span>
+      </div>
+      <input id="override" type="number" min="0" max="20000" step="50" placeholder="Deixe vazio = usa cálculo automático" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;">
+      <div class="sim-field__hint" style="margin-top:4px;">Se preferir cobrar um valor fixo, digite aqui. Senão, usamos categoria + ajustes. <strong>Sugestão automática:</strong> <span id="hintAuto">R$ 3.300/mês</span>.</div>
+    </div>
+
+    <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Duração típica do contrato</span>
+        <span class="sim-field__value" id="vContract">1 mês</span>
+      </div>
+      <div class="sim-options sim-options--6" id="contractBtns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        <button data-contract="1" class="is-active">1 mês<small>0%</small></button>
+        <button data-contract="2">2 meses<small>−5%</small></button>
+        <button data-contract="3">3 meses<small>−10%</small></button>
+        <button data-contract="4">4 meses<small>−12%</small></button>
+        <button data-contract="6">6 meses<small>−15%</small></button>
+        <button data-contract="12">12+ meses<small>−20%</small></button>
+      </div>
+      <div class="sim-field__hint" style="margin-top:4px;">FASE 80: descontos progressivos. Owner ajusta no painel do veículo.</div>
+    </div>
+
     <div class="sim-field">
       <div class="sim-field__label">
         <span class="sim-field__name">Meses alugado por ano</span>
@@ -1278,6 +1347,11 @@ body {
         </div>
       </div>
 
+      <!-- FASE 80: Comparativo com Localiza (preço final c/ taxas + seguros) -->
+      <div class="sim-verdict" id="comparativoLocaliza" style="margin-bottom:12px;">
+        <div style="font-size:13px;opacity:0.7;">Calculando comparativo...</div>
+      </div>
+
       <!-- Verdict -->
       <div class="sim-verdict" id="verdict">
         <span class="sim-verdict__icon">⏳</span>
@@ -1290,12 +1364,12 @@ body {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           Tem uma meta em mente?
         </p>
-        <p class="sim-goal__caption">Diga quanto quer ganhar por mês — calculamos o valor de carro (FIPE) necessário pra atingir essa meta com seus outros parâmetros atuais.</p>
+        <p class="sim-goal__caption">Diga quanto quer ganhar por mês — sugerimos qual categoria de carro precisaria pra atingir essa meta. <em>Lembrando que o preço agora vem de mercado, não do valor do carro.</em></p>
         <div class="sim-goal__row">
           <span class="sim-goal__currency">R$</span>
           <input type="number" id="goalInput" class="sim-goal__input" placeholder="2000" min="200" max="20000" step="100" />
           <span class="sim-goal__per">/mês líquido</span>
-          <button type="button" class="sim-goal__btn" id="goalBtn">Calcular FIPE necessário →</button>
+          <button type="button" class="sim-goal__btn" id="goalBtn">Sugerir categoria →</button>
         </div>
         <div class="sim-goal__result" id="goalResult" hidden></div>
       </div>
@@ -1361,12 +1435,53 @@ body {
   "use strict";
 
   // ============================================================
-  // CONSTANTES — baseadas em script.js do app (FLEET_TIER_RATES)
+  // CONSTANTES — FASE 80: MARKET-BASED PRICING
+  // (substitui FLEET_TIER_RATES — agora preço nasce de categoria de mercado,
+  //  não de % FIPE. FIPE só serve pra calcular ROI sobre investimento.)
   // ============================================================
-  var TIER_RATES = { A: 0.055, B: 0.045, C: 0.040, D: 0.028 };
-  var TIER_NAMES = { A: "Econômico", B: "Confort", C: "Premium", D: "Luxo" };
+
+  // Categorias de mercado — base_price em R$ + referencia Localiza (preço final c/ taxas)
+  var PRICING_CATEGORIES = {
+    "B":    { label: "Compacto Básico",      base: 2200, localiza: 3040 },
+    "CH":   { label: "Hatch Econômico",      base: 2400, localiza: 3200 },
+    "CE":   { label: "Hatch Econômico Plus", base: 2600, localiza: 3415 },
+    "CS":   { label: "Sedan Compacto",       base: 2800, localiza: 3575 },
+    "FS":   { label: "Sedan Intermediário",  base: 3200, localiza: 4215 },
+    "FH":   { label: "Hatch Automático",     base: 3300, localiza: 4270 },
+    "FX":   { label: "Sedan Automático",     base: 3500, localiza: 4480 },
+    "G":    { label: "SUV Compacto",         base: 3700, localiza: 4640 },
+    "GC":   { label: "SUV Compacto Plus",    base: 3900, localiza: 4860 },
+    "GI":   { label: "SUV Premium",          base: 4100, localiza: 5120 },
+    "GX":   { label: "SUV Médio",            base: 4300, localiza: 5221 },
+    "GH":   { label: "SUV Luxo",             base: 4600, localiza: 5445 },
+    "LUXO": { label: "Luxo Importado",       base: 6000, localiza: null }
+  };
+
+  // Ajustes automáticos (espelham as funções SQL pricing_*_adjustment)
+  function ageMultiplier(year) {
+    var age = (new Date()).getFullYear() - year;
+    if (age <= 2) return 1.08;
+    if (age <= 5) return 1.03;
+    if (age <= 8) return 0.95;
+    return 0.90;
+  }
+  function mileageMultiplier(km) {
+    if (km < 30000) return 1.05;
+    if (km <= 60000) return 1.00;
+    if (km <= 100000) return 0.95;
+    return 0.90;
+  }
+  function transmissionMultiplier(trans) {
+    return trans === "automatico" ? 1.05 : 1.00;
+  }
+  function cityMultiplier(tier) {
+    if (tier === "capital") return 1.10;
+    if (tier === "interior") return 0.90;
+    return 1.00;
+  }
+
   var TRANS_NAMES = { manual: "Manual", automatico: "Automático" };
-  var TRANS_MOD = { manual: 0.9, automatico: 1.0 };
+  var CITY_NAMES = { capital: "Capital", media: "Cidade média", interior: "Interior" };
   var TRIB_NAMES = { pf: "PF (15% médio)", me: "ME (6%)", nenhum: "Não tributo (0%)" };
   // Alíquotas médias estimadas
   var TRIB_RATES = {
@@ -1376,18 +1491,27 @@ body {
   };
   var COMISSAO_NDB = 0.10;
 
+  // FASE 80 — Descontos progressivos atualizados (6 tiers)
+  var CONTRACT_DISCOUNTS = { "1": 0, "2": 5, "3": 10, "4": 12, "6": 15, "12": 20 };
+  var CONTRACT_LABELS = { "1": "1 mês", "2": "2 meses", "3": "3 meses", "4": "4 meses", "6": "6 meses", "12": "12+ meses" };
+
   // ============================================================
   // ESTADO — pré-popula via query string se houver
   // ============================================================
   var defaults = {
-    fipe: 50000,
-    cat: "B",
+    fipe: 80000,
+    cat: "FH",           // FASE 80: default agora é Hatch Automático (categoria popular)
     trans: "automatico",
+    year: 2023,          // FASE 80: ano do veículo
+    km: 40000,           // FASE 80: quilometragem
+    city: "media",       // FASE 80: tier cidade
     meses: 10,
     manut: 300,
     deprec: 8,
     ipva: 4,
-    trib: "me"
+    trib: "me",
+    contract: "1",       // FASE 79: duração típica do contrato (chave de CONTRACT_DISCOUNTS)
+    override: null       // FASE 79: preço mensal personalizado (null = usa cálculo automático)
   };
   var state = Object.assign({}, defaults);
 
@@ -1401,14 +1525,24 @@ body {
   }
   try {
     var qs = new URLSearchParams(window.location.search);
-    if (qs.has("fipe"))   state.fipe   = parseClamp(qs.get("fipe"),   20000, 250000, defaults.fipe);
-    if (qs.has("cat") && ["A","B","C","D"].indexOf(qs.get("cat")) !== -1) state.cat = qs.get("cat");
+    if (qs.has("fipe"))   state.fipe   = parseClamp(qs.get("fipe"),   20000, 500000, defaults.fipe);
+    // FASE 80: nova lista de categorias (13)
+    if (qs.has("cat") && PRICING_CATEGORIES[qs.get("cat")]) state.cat = qs.get("cat");
     if (qs.has("trans") && ["manual","automatico"].indexOf(qs.get("trans")) !== -1) state.trans = qs.get("trans");
+    if (qs.has("year"))   state.year   = parseClamp(qs.get("year"),   2010, 2026, defaults.year);
+    if (qs.has("km"))     state.km     = parseClamp(qs.get("km"),     0,    200000, defaults.km);
+    if (qs.has("city") && ["capital","media","interior"].indexOf(qs.get("city")) !== -1) state.city = qs.get("city");
     if (qs.has("meses"))  state.meses  = parseClamp(qs.get("meses"),  1,  12,  defaults.meses);
     if (qs.has("manut"))  state.manut  = parseClamp(qs.get("manut"),  100, 800, defaults.manut);
     if (qs.has("deprec")) state.deprec = parseClamp(qs.get("deprec"), 5,  15,  defaults.deprec);
     if (qs.has("ipva"))   state.ipva   = parseClamp(qs.get("ipva"),   2,  5,   defaults.ipva, true);
     if (qs.has("trib") && ["pf","me","nenhum"].indexOf(qs.get("trib")) !== -1) state.trib = qs.get("trib");
+    // FASE 79 + 80
+    if (qs.has("contract") && CONTRACT_DISCOUNTS[qs.get("contract")] !== undefined) state.contract = qs.get("contract");
+    if (qs.has("override")) {
+      var ov = parseFloat(qs.get("override"));
+      if (Number.isFinite(ov) && ov > 0 && ov <= 20000) state.override = ov;
+    }
   } catch (e) {}
 
   // ============================================================
@@ -1433,16 +1567,29 @@ body {
   // ============================================================
   function calc() {
     var fipe = state.fipe;
-    var rate = TIER_RATES[state.cat] || 0.045;
-    var mod = TRANS_MOD[state.trans] || 1;
     var meses = state.meses;
     var manutMes = state.manut;
     var deprecAnualPct = state.deprec / 100;
     var ipvaPct = state.ipva / 100;
     var tribRate = TRIB_RATES[state.trib] || 0;
 
+    // FASE 80: preço base = categoria_base × ajustes (ano, km, câmbio, cidade)
+    var catData = PRICING_CATEGORIES[state.cat] || PRICING_CATEGORIES["FH"];
+    var aluguelAuto = catData.base
+      * ageMultiplier(state.year)
+      * mileageMultiplier(state.km)
+      * transmissionMultiplier(state.trans)
+      * cityMultiplier(state.city);
+
+    // FASE 79: preço base usa override se setado, senão usa aluguelAuto
+    var aluguelBruto = (state.override != null && state.override > 0)
+      ? state.override
+      : aluguelAuto;
+    // FASE 80: desconto progressivo (até 20% em 12 meses)
+    var descontoPct = CONTRACT_DISCOUNTS[state.contract] || 0;
+
     // Receita
-    var aluguelMes = fipe * rate * mod;
+    var aluguelMes = aluguelBruto * (1 - descontoPct / 100);
     var receitaAnual = aluguelMes * meses;
     var comissao = receitaAnual * COMISSAO_NDB;
     var receitaLiquidaPreImposto = receitaAnual - comissao;
@@ -1459,8 +1606,25 @@ body {
     var liquidoMensal = liquidoAnual / 12;
     var pctRetorno = (liquidoAnual / fipe) * 100;
 
+    // FASE 80: comparativo com Localiza
+    var localizaPrice = catData.localiza;
+    var economiaCliente = null;
+    var descontoVsLocalizaPct = null;
+    if (localizaPrice != null && localizaPrice > 0) {
+      economiaCliente = localizaPrice - aluguelMes;
+      descontoVsLocalizaPct = (economiaCliente / localizaPrice) * 100;
+    }
+
     return {
       aluguelMes: aluguelMes,
+      aluguelBruto: aluguelBruto,   // FASE 79: preço antes do desconto progressivo
+      aluguelAuto: aluguelAuto,     // FASE 80: cálculo automático (categoria + ajustes)
+      catBase: catData.base,        // FASE 80: preço base da categoria (referência)
+      catLabel: catData.label,      // FASE 80: nome da categoria
+      descontoPct: descontoPct,     // FASE 79: % desconto progressivo aplicado
+      localizaPrice: localizaPrice, // FASE 80: preço de referência Localiza
+      economiaCliente: economiaCliente, // FASE 80: R$ economizado por mês vs Localiza
+      descontoVsLocalizaPct: descontoVsLocalizaPct, // FASE 80: % mais barato vs Localiza
       receitaAnual: receitaAnual,
       comissao: comissao,
       imposto: imposto,
@@ -1477,17 +1641,56 @@ body {
   // RENDER
   // ============================================================
   function render() {
-    // Labels dos sliders
+    // Labels dos sliders / botões
     document.getElementById("vFipe").textContent = brl(state.fipe);
-    document.getElementById("vCat").textContent = TIER_NAMES[state.cat];
+    document.getElementById("vCat").textContent = (PRICING_CATEGORIES[state.cat] && PRICING_CATEGORIES[state.cat].label) || "—";
     document.getElementById("vTrans").textContent = TRANS_NAMES[state.trans];
     document.getElementById("vMeses").textContent = state.meses + (state.meses === 1 ? " mês" : " meses");
     document.getElementById("vManut").textContent = brl(state.manut) + "/mês";
     document.getElementById("vDeprec").textContent = state.deprec + "%";
     document.getElementById("vIpva").textContent = state.ipva.toFixed(1).replace(".", ",") + "%";
     document.getElementById("vTrib").textContent = TRIB_NAMES[state.trib];
+    // FASE 80 — novos labels
+    document.getElementById("vYear").textContent = state.year;
+    document.getElementById("vMileage").textContent = state.km.toLocaleString("pt-BR") + " km";
+    document.getElementById("vCity").textContent = CITY_NAMES[state.city] || "Cidade média";
+    // FASE 79
+    document.getElementById("vOverride").textContent = (state.override != null && state.override > 0)
+      ? (brl(state.override) + "/mês")
+      : "Automático";
+    document.getElementById("vContract").textContent = CONTRACT_LABELS[state.contract] || "1 mês";
 
     var r = calc();
+    // FASE 80: hint mostra preço auto calculado (categoria × ajustes)
+    var hintEl = document.getElementById("hintAuto");
+    if (hintEl) hintEl.textContent = brl(r.aluguelAuto) + "/mês";
+
+    // FASE 80: atualiza bloco comparativo Localiza (se existir no DOM)
+    var compEl = document.getElementById("comparativoLocaliza");
+    if (compEl) {
+      if (r.localizaPrice != null) {
+        var sinal = r.descontoVsLocalizaPct >= 0 ? "mais barato" : "mais caro";
+        var classe = r.descontoVsLocalizaPct >= 15 ? "sim-verdict--excellent"
+                    : r.descontoVsLocalizaPct >= 0 ? "sim-verdict--good"
+                    : "sim-verdict--risk";
+        compEl.className = "sim-verdict " + classe;
+        compEl.innerHTML =
+          '<div style="font-size:13px;opacity:0.7;margin-bottom:6px;">Comparativo com locadora tradicional (Localiza ' + r.catLabel + ')</div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;">' +
+            '<div><span style="font-size:11px;opacity:0.6;">🏢 Localiza</span><br><strong style="font-size:18px;">' + brl(r.localizaPrice) + '/mês</strong></div>' +
+            '<div style="text-align:center;font-size:20px;">→</div>' +
+            '<div><span style="font-size:11px;opacity:0.6;">🚗 Nomade Drive</span><br><strong style="font-size:18px;">' + brl(r.aluguelMes) + '/mês</strong></div>' +
+          '</div>' +
+          '<div style="margin-top:8px;font-size:14px;">' +
+            (r.economiaCliente > 0
+              ? '💸 Cliente economiza <strong>' + brl(r.economiaCliente) + '/mês</strong> (' + pct(r.descontoVsLocalizaPct) + ' ' + sinal + ') = <strong>' + brl(r.economiaCliente * 12) + '/ano</strong>'
+              : '⚠️ Seu preço está <strong>' + brl(Math.abs(r.economiaCliente)) + '/mês mais caro</strong> que Localiza (' + pct(Math.abs(r.descontoVsLocalizaPct)) + '). Considere baixar.') +
+          '</div>';
+      } else {
+        compEl.className = "sim-verdict";
+        compEl.innerHTML = '<div style="font-size:13px;opacity:0.7;">Sem referência de mercado pra categoria "' + r.catLabel + '". Precifique baseado em valor justo.</div>';
+      }
+    }
 
     // Resultados
     document.getElementById("rMensal").textContent = brl(r.liquidoMensal);
@@ -1566,7 +1769,19 @@ body {
     document.getElementById("manut").value = state.manut;
     document.getElementById("deprec").value = state.deprec;
     document.getElementById("ipva").value = state.ipva;
-    [["catBtns","cat","data-cat"],["transBtns","trans","data-trans"],["tribBtns","trib","data-trib"]].forEach(function (cfg) {
+    // FASE 80: novos inputs
+    var yearInput = document.getElementById("yearModel");
+    if (yearInput) yearInput.value = state.year;
+    var mileageInput = document.getElementById("mileage");
+    if (mileageInput) mileageInput.value = state.km;
+    // FASE 80: dropdown de categoria
+    var catSelect = document.getElementById("categorySelect");
+    if (catSelect) catSelect.value = state.cat;
+    // FASE 79: input numérico de override
+    var ovInput = document.getElementById("override");
+    if (ovInput) ovInput.value = (state.override != null && state.override > 0) ? state.override : "";
+    // FASE 79 + 80: incluir contractBtns e cityBtns no loop de botões (catBtns REMOVIDO — agora é select)
+    [["transBtns","trans","data-trans"],["tribBtns","trib","data-trib"],["contractBtns","contract","data-contract"],["cityBtns","city","data-city"]].forEach(function (cfg) {
       var container = document.getElementById(cfg[0]);
       if (!container) return;
       container.querySelectorAll("button").forEach(function (b) {
@@ -1581,33 +1796,91 @@ body {
   wireSlider("manut", "manut", false);
   wireSlider("deprec", "deprec", false);
   wireSlider("ipva", "ipva", true);
-  wireOptions("catBtns", "cat", "data-cat");
+  // FASE 80: novos sliders
+  wireSlider("yearModel", "year", false);
+  wireSlider("mileage", "km", false);
+  // catBtns REMOVIDO — substituído por dropdown
   wireOptions("transBtns", "trans", "data-trans");
   wireOptions("tribBtns", "trib", "data-trib");
+  wireOptions("contractBtns", "contract", "data-contract");
+  wireOptions("cityBtns", "city", "data-city");
+
+  // FASE 80: wiring do dropdown de categoria
+  (function wireCategorySelect() {
+    var sel = document.getElementById("categorySelect");
+    if (!sel) return;
+    sel.addEventListener("change", function () {
+      if (PRICING_CATEGORIES[sel.value]) {
+        state.cat = sel.value;
+        render();
+      }
+    });
+  })();
+
+  // FASE 79: wiring do input numérico de preço personalizado (override)
+  (function wireOverride() {
+    var input = document.getElementById("override");
+    if (!input) return;
+    input.addEventListener("input", function () {
+      var raw = input.value.trim();
+      if (raw === "") {
+        state.override = null;
+      } else {
+        var n = parseFloat(raw);
+        // Clamp pra range razoável (R$ 500 - R$ 20.000/mês)
+        if (Number.isFinite(n) && n > 0) {
+          state.override = Math.max(0, Math.min(20000, n));
+        } else {
+          state.override = null;
+        }
+      }
+      render();
+    });
+  })();
 
   // ============================================================
   // COMPARTILHAR SIMULAÇÃO
   // ============================================================
   function buildShareUrl() {
     var base = window.location.origin + window.location.pathname;
-    var params = new URLSearchParams({
+    var paramsObj = {
       fipe: state.fipe,
       cat: state.cat,
       trans: state.trans,
+      year: state.year,     // FASE 80
+      km: state.km,         // FASE 80
+      city: state.city,     // FASE 80
       meses: state.meses,
       manut: state.manut,
       deprec: state.deprec,
       ipva: state.ipva,
-      trib: state.trib
-    });
+      trib: state.trib,
+      contract: state.contract
+    };
+    if (state.override != null && state.override > 0) {
+      paramsObj.override = state.override;
+    }
+    var params = new URLSearchParams(paramsObj);
     return base + "?" + params.toString();
   }
   function buildShareMessage() {
     var r = calc();
+    var catLabel = (PRICING_CATEGORIES[state.cat] && PRICING_CATEGORIES[state.cat].label) || state.cat;
+    var precoLine = (state.override != null && state.override > 0)
+      ? ("💵 Preço personalizado: " + brl(state.override) + "/mês")
+      : ("💵 Preço sugerido: " + brl(r.aluguelAuto) + "/mês (categoria " + catLabel + " + ajustes)");
+    var contratoLine = "🤝 Contrato típico: " + CONTRACT_LABELS[state.contract] +
+      (r.descontoPct > 0 ? " (−" + r.descontoPct + "% desconto)" : "");
+    var compLine = (r.localizaPrice != null && r.economiaCliente > 0)
+      ? "🏆 " + pct(r.descontoVsLocalizaPct) + " MAIS BARATO que Localiza (" + brl(r.localizaPrice) + "/mês)\n"
+      : "";
     return "Olha o que simulei na Nomade Drive Brasil pro meu carro:\n\n" +
-      "🚗 " + TIER_NAMES[state.cat] + " · FIPE " + brl(state.fipe) + " · " + TRANS_NAMES[state.trans] + "\n" +
+      "🚗 " + catLabel + " · " + state.year + " · " + state.km.toLocaleString("pt-BR") + " km · " + TRANS_NAMES[state.trans] + "\n" +
+      precoLine + "\n" +
+      contratoLine + "\n" +
       "📅 " + state.meses + " meses alugado/ano\n" +
       "📊 Tributação: " + TRIB_NAMES[state.trib] + "\n\n" +
+      compLine +
       "💰 LÍQUIDO POR MÊS: " + brl(r.liquidoMensal) + "\n" +
       "💰 LÍQUIDO POR ANO: " + brl(r.liquidoAnual) + "\n" +
       "📈 Retorno sobre o FIPE: " + pct(r.pctRetorno) + " a.a.\n\n" +
@@ -1697,31 +1970,40 @@ body {
   // Seja C = ipvaPct + deprecPct × 0.5 (multiplicador custo proporcional FIPE)
   // Então: liquidoAnual = FIPE × (R - C) - manutAnual
   // Logo:  FIPE = (liquidoAnual + manutAnual) / (R - C)
-  function calcFipeForGoal(metaMensalLiquido) {
-    var metaAnual = metaMensalLiquido * 12;
-    var tierRate = TIER_RATES[state.cat] || 0.045;
-    var transMod = TRANS_MOD[state.trans] || 1;
-    var tribRate = TRIB_RATES[state.trib] || 0;
-    var ipvaPct = state.ipva / 100;
-    var deprecPct = state.deprec / 100;
+  // FASE 80: simulador inverso — agora retorna CATEGORIA necessária pra atingir meta
+  // (antes retornava FIPE, mas FIPE não influencia mais o aluguel)
+  function calcCategoryForGoal(metaMensalLiquido) {
     var manutAnual = state.manut * state.meses;
+    var tribRate = TRIB_RATES[state.trib] || 0;
+    var ipvaAnual = state.fipe * (state.ipva / 100);
+    var deprecExtra = state.fipe * (state.deprec / 100) * 0.5;
+    var descontoPct = CONTRACT_DISCOUNTS[state.contract] || 0;
 
-    var R = tierRate * transMod * state.meses * (1 - COMISSAO_NDB) * (1 - tribRate);
-    var C = ipvaPct + deprecPct * 0.5;
-    var denom = R - C;
+    // Ajustes que NÃO dependem da categoria (multiplicador único)
+    var multAjustes = ageMultiplier(state.year)
+      * mileageMultiplier(state.km)
+      * transmissionMultiplier(state.trans)
+      * cityMultiplier(state.city);
 
-    if (denom <= 0) {
-      // Custos comem toda a receita — impossível bater meta com esses parâmetros
-      return { possivel: false, motivo: "Seus custos atuais (IPVA + depreciação) consomem tudo o que o aluguel gera nessa categoria. Reduza manutenção/depreciação ou suba pra categoria menor (Econômico/Confort)." };
+    // Ordena categorias por preço base (menor pro maior) — queremos a MENOR que atinge
+    var sortedKeys = Object.keys(PRICING_CATEGORIES).sort(function (a, b) {
+      return PRICING_CATEGORIES[a].base - PRICING_CATEGORIES[b].base;
+    });
+
+    for (var i = 0; i < sortedKeys.length; i++) {
+      var key = sortedKeys[i];
+      var cat = PRICING_CATEGORIES[key];
+      var aluguelMes = cat.base * multAjustes * (1 - descontoPct / 100);
+      var receitaAnual = aluguelMes * state.meses;
+      var receitaPreImposto = receitaAnual * (1 - COMISSAO_NDB);
+      var imposto = receitaPreImposto * tribRate;
+      var liquidoAnual = receitaPreImposto - imposto - manutAnual - ipvaAnual - deprecExtra;
+      var liquidoMensal = liquidoAnual / 12;
+      if (liquidoMensal >= metaMensalLiquido) {
+        return { possivel: true, categoryKey: key, label: cat.label, base: cat.base, liquidoMensal: liquidoMensal };
+      }
     }
-    var fipeNecessario = (metaAnual + manutAnual) / denom;
-    if (fipeNecessario < 20000) {
-      return { possivel: true, fipe: 20000, baixo: true };
-    }
-    if (fipeNecessario > 500000) {
-      return { possivel: false, motivo: "Pra atingir essa meta seu carro precisaria valer mais de R$ 500.000 nessa categoria. Tente aumentar meses alugados/ano ou subir de categoria (ex: Premium pra Luxo)." };
-    }
-    return { possivel: true, fipe: Math.round(fipeNecessario / 1000) * 1000 };
+    return { possivel: false, motivo: "Nem a categoria Luxo Importado (R$ 6.000 base) atinge essa meta com seus parâmetros atuais. Tente: aumentar meses alugados/ano, reduzir manutenção/depreciação, ou mudar pra ME (6% imposto)." };
   }
 
   var goalInput = document.getElementById("goalInput");
@@ -1729,6 +2011,14 @@ body {
   var goalResult = document.getElementById("goalResult");
 
   function runGoal() {
+    // FASE 79: se override está setado, FIPE virou irrelevante pra cálculo de receita
+    if (state.override != null && state.override > 0) {
+      goalResult.hidden = false;
+      goalResult.className = "sim-goal__result sim-goal__result--negative";
+      goalResult.textContent = "Você definiu um preço personalizado (" + brl(state.override) +
+        "/mês). O FIPE não influencia mais a receita — apague o campo 'Preço personalizado' pra usar este simulador inverso.";
+      return;
+    }
     var meta = parseFloat(goalInput.value);
     if (!Number.isFinite(meta) || meta < 200) {
       goalResult.hidden = false;
@@ -1743,7 +2033,8 @@ body {
       return;
     }
 
-    var result = calcFipeForGoal(meta);
+    // FASE 80: agora retorna CATEGORIA, não FIPE
+    var result = calcCategoryForGoal(meta);
     goalResult.hidden = false;
 
     if (!result.possivel) {
@@ -1753,27 +2044,18 @@ body {
     }
 
     goalResult.className = "sim-goal__result";
-    if (result.baixo) {
-      goalResult.innerHTML = "✅ Pra atingir <strong>" + brl(meta) +
-        "/mês</strong> líquido você precisaria de um carro de pelo menos <em>R$ 20.000</em> (categoria " +
-        TIER_NAMES[state.cat] + "). Já dá com carros bem populares! " +
-        '<br><button type="button" class="sim-goal__result-btn" id="goalApplyBtn">Aplicar R$ 20.000 no simulador →</button>';
-    } else {
-      goalResult.innerHTML = "🎯 Pra atingir <strong>" + brl(meta) +
-        "/mês</strong> líquido com seus parâmetros atuais (" + TIER_NAMES[state.cat] +
-        ", " + state.meses + " meses, " + TRIB_NAMES[state.trib] + "), seu carro precisa valer cerca de <em>" +
-        brl(result.fipe) + "</em> (FIPE). " +
-        '<br><button type="button" class="sim-goal__result-btn" id="goalApplyBtn">Aplicar ' +
-        brl(result.fipe) + ' no simulador →</button>';
-    }
+    goalResult.innerHTML = "🎯 Pra atingir <strong>" + brl(meta) +
+      "/mês</strong> líquido, a menor categoria que cabe é <strong>" + result.label + "</strong> (base R$ " +
+      result.base.toLocaleString("pt-BR") + "). Líquido projetado: " + brl(result.liquidoMensal) + "/mês. " +
+      '<br><button type="button" class="sim-goal__result-btn" id="goalApplyBtn">Aplicar categoria ' + result.label + ' →</button>';
 
     // Wire botão "aplicar"
     var applyBtn = document.getElementById("goalApplyBtn");
     if (applyBtn) {
       applyBtn.addEventListener("click", function () {
-        state.fipe = result.fipe;
-        document.getElementById("fipe").value = result.fipe;
-        updateSliderTrack(document.getElementById("fipe"));
+        state.cat = result.categoryKey;
+        var sel = document.getElementById("categorySelect");
+        if (sel) sel.value = result.categoryKey;
         render();
         // Scroll suave pro topo do simulador
         document.querySelector(".sim-main").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1785,18 +2067,8 @@ body {
     if (e.key === "Enter") runGoal();
   });
 
-  // Auto-categoria baseada em FIPE (sugestão inicial)
-  var fipeInput = document.getElementById("fipe");
-  fipeInput.addEventListener("change", function () {
-    var v = state.fipe;
-    var sugCat;
-    if (v < 65000) sugCat = "A";
-    else if (v < 130000) sugCat = "B";
-    else if (v < 200000) sugCat = "C";
-    else sugCat = "D";
-    // Não força — só destaca pra ele
-    // (poderia auto-selecionar mas é melhor deixar manual pra ele decidir)
-  });
+  // FASE 80: removida lógica antiga "auto-categoria por FIPE"
+  // (FIPE não influencia mais a categoria — owner escolhe pelo dropdown).
 
   // Primeira render
   render();

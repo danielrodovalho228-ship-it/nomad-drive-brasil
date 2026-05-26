@@ -336,8 +336,14 @@ Deno.serve(async (req) => {
       if (veh) {
         vehicleName = [veh.make, veh.model, veh.year_model].filter(Boolean).join(" ");
         vehicleOwnerId = veh.owner_id;
-        // Sugestão de preço: ~4.5% do FIPE (B-tier default)
-        if (veh.fipe_value) {
+        // FASE 80: sugestão via função SQL market-based (categoria + ajustes + override)
+        const { data: priceRow } = await admin
+          .rpc("calculate_suggested_monthly_price", { p_vehicle_id: veh.id, p_num_months: 1 });
+        if (priceRow != null && Number(priceRow) > 0) {
+          suggestedMonthly = Math.round(Number(priceRow));
+          suggestedDeposit = Math.max(1000, Math.round(suggestedMonthly * 0.8));
+        } else if (veh.fipe_value) {
+          // Fallback se categoria não tiver sido configurada ainda
           suggestedMonthly = Math.round(veh.fipe_value * 0.045);
           suggestedDeposit = Math.max(1000, Math.round(suggestedMonthly * 0.8));
         }
