@@ -236,35 +236,43 @@
 
         <div class="cockpit-kpis">
           <div class="cockpit-kpi cockpit-kpi--green">
-            <span class="cockpit-kpi__icon">💰</span>
+            <span class="cockpit-kpi__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </span>
             <div class="cockpit-kpi__data">
               <span class="cockpit-kpi__label">Receita do mês</span>
               <span class="cockpit-kpi__value" id="kpiReceitaMes">R$ —</span>
-              <span class="cockpit-kpi__sub" id="kpiReceitaSub">— ano</span>
+              <span class="cockpit-kpi__sub" id="kpiReceitaSub">aguardando 1ª locação</span>
             </div>
           </div>
           <div class="cockpit-kpi cockpit-kpi--orange">
-            <span class="cockpit-kpi__icon">⏳</span>
+            <span class="cockpit-kpi__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
             <div class="cockpit-kpi__data">
               <span class="cockpit-kpi__label">Contas a pagar (7d)</span>
               <span class="cockpit-kpi__value" id="kpiContasPagar">R$ —</span>
-              <span class="cockpit-kpi__sub" id="kpiContasPagarSub">— em 30d</span>
+              <span class="cockpit-kpi__sub" id="kpiContasPagarSub">nenhuma pendência</span>
             </div>
           </div>
           <div class="cockpit-kpi cockpit-kpi--blue">
-            <span class="cockpit-kpi__icon">🚗</span>
+            <span class="cockpit-kpi__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><path d="M19 17H5l-1.5-5a2 2 0 0 1 .14-1.42l1.79-3.58A2 2 0 0 1 7.24 6h9.52a2 2 0 0 1 1.81 1.16l1.78 3.57A2 2 0 0 1 20.5 12L19 17z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+            </span>
             <div class="cockpit-kpi__data">
               <span class="cockpit-kpi__label">Frota</span>
               <span class="cockpit-kpi__value" id="kpiFrota">—</span>
-              <span class="cockpit-kpi__sub" id="kpiFrotaSub">— em uso</span>
+              <span class="cockpit-kpi__sub" id="kpiFrotaSub">aguardando aprovações</span>
             </div>
           </div>
           <div class="cockpit-kpi cockpit-kpi--purple">
-            <span class="cockpit-kpi__icon">👥</span>
+            <span class="cockpit-kpi__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
             <div class="cockpit-kpi__data">
               <span class="cockpit-kpi__label">Base de clientes</span>
               <span class="cockpit-kpi__value" id="kpiBase">—</span>
-              <span class="cockpit-kpi__sub" id="kpiBaseSub">— novos no mês</span>
+              <span class="cockpit-kpi__sub" id="kpiBaseSub">novos no mês</span>
             </div>
           </div>
         </div>

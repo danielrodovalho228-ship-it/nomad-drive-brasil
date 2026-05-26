@@ -156,6 +156,15 @@
   border-radius: 12px;
   backdrop-filter: blur(4px);
 }
+/* Fase 72: fix audit Plan agent — .earnings-meta sem mobile breakpoint */
+@media (max-width: 640px) {
+  .earnings-meta { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 14px; }
+  .meta-value { font-size: 15px !important; }
+  .meta-label { font-size: 10.5px !important; }
+}
+@media (max-width: 400px) {
+  .earnings-meta { grid-template-columns: 1fr; }
+}
 .meta-item { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .meta-label { font-size: 11.5px; opacity: 0.82; font-weight: 500; }
 .meta-value {

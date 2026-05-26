@@ -306,7 +306,7 @@ body {
 }
 .sim-share__btns {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 .sim-share__btn {
@@ -344,14 +344,121 @@ body {
   border-color: #d4af37;
   color: #14201b;
 }
+.sim-share__btn--pdf:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+}
 .sim-share__btn.is-copied {
   background: #198754 !important;
   border-color: #198754 !important;
   color: #fff !important;
 }
-@media (max-width: 460px) {
+@media (max-width: 640px) {
+  .sim-share__btns { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 360px) {
   .sim-share__btns { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+ * Fase 72: CSS PRINT — relatório PDF profissional pro contador
+ * ============================================================ */
+@media print {
+  /* Esconde tudo que não é resultado */
+  .sim-header, .sim-hero, .sim-explain,
+  .sim-panel,  /* painel de configuração */
+  .sim-share, .sim-cta-final, .sim-goal,
+  .sim-header__back, footer { display: none !important; }
+
+  body {
+    background: #fff !important;
+    color: #14201b !important;
+    font-size: 11pt;
+  }
+  .sim-main {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .sim-results {
+    background: #fff !important;
+    color: #14201b !important;
+    border: 2px solid #145f3e !important;
+    padding: 24px !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  .sim-results::before { display: none !important; }
+  .sim-results h2 { color: #145f3e !important; font-size: 18pt !important; }
+  .sim-results__caption { color: #5b6b63 !important; }
+
+  /* Big numbers em preto/verde no PDF */
+  .sim-bignum {
+    background: #f8fdf9 !important;
+    border: 1px solid #d1e7dd !important;
+    color: #14201b !important;
+  }
+  .sim-bignum__label { color: #5b6b63 !important; }
+  .sim-bignum__value { color: #14201b !important; }
+  .sim-bignum--hero { background: #e7f5ec !important; border-color: #145f3e !important; }
+  .sim-bignum--hero .sim-bignum__value { color: #145f3e !important; }
+
+  /* Breakdown em preto/cinza no PDF */
+  .sim-breakdown {
+    background: #fafafa !important;
+    border: 1px solid #e0e6e3 !important;
+    padding: 16px !important;
+  }
+  .sim-breakdown__row { border-bottom: 1px solid #e0e6e3 !important; }
+  .sim-breakdown__label { color: #14201b !important; }
+  .sim-breakdown__value { color: #14201b !important; }
+  .sim-breakdown__value--positive { color: #145f3e !important; }
+  .sim-breakdown__value--negative { color: #842029 !important; }
+  .sim-breakdown__row--total { color: #145f3e !important; border-top: 2px solid #145f3e !important; }
+
+  /* Verdict */
+  .sim-verdict { border: 1px solid #d4af37 !important; color: #5b4d20 !important; background: #fff8e7 !important; }
+
+  /* Disclaimer */
+  .sim-disclaimer { color: #14201b !important; background: #fafafa !important; border-left-color: #d4af37 !important; }
+
+  /* Cabeçalho do PDF (visível só no print) */
+  .pdf-print-header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #145f3e;
+  }
+  .pdf-print-header h1 {
+    font-family: 'Sora', sans-serif;
+    color: #145f3e !important;
+    font-size: 22pt;
+    margin: 0 0 4px;
+  }
+  .pdf-print-header p {
+    color: #5b6b63 !important;
+    font-size: 10pt;
+    margin: 0;
+  }
+  .pdf-print-footer {
+    display: block !important;
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #e0e6e3;
+    text-align: center;
+    font-size: 9pt;
+    color: #6b7670 !important;
+  }
+
+  @page {
+    margin: 14mm 12mm;
+    size: A4;
+  }
+}
+.pdf-print-header, .pdf-print-footer { display: none; }
 
 /* SIMULADOR INVERSO (meta de renda) */
 .sim-goal {
@@ -1103,6 +1210,12 @@ body {
 
   <!-- RIGHT: RESULTADOS -->
   <div class="sim-results">
+    <!-- Header/footer visíveis SÓ no PDF print -->
+    <div class="pdf-print-header">
+      <h1>Simulação de ROI — Nomade Drive Brasil</h1>
+      <p>Gerado em <span id="pdfDate">—</span> · nomadedrive.com.br/simulador-roi-proprietario.html</p>
+    </div>
+
     <div class="sim-results__inner">
       <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -1207,6 +1320,10 @@ body {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <span id="shareCopyText">Copiar link</span>
           </button>
+          <button type="button" class="sim-share__btn sim-share__btn--pdf" id="sharePDF" title="Baixar PDF da simulação">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            PDF
+          </button>
         </div>
       </div>
 
@@ -1223,6 +1340,11 @@ body {
         <strong>⚠️ Estimativa — não é promessa.</strong> Renda real depende de aprovação documental e técnica do veículo, demanda pela categoria, ocupação real, contratos vigentes e variações sazonais. A Nomade Drive <strong>não garante renda</strong>. Consulte seu contador para a tributação correta no seu caso.
         <br><br>
         <strong>Sobre o cálculo de imposto (PF):</strong> a simulação usa alíquota fixa de 15% (média do Carnê-Leão). Na prática, PF pode <strong>deduzir despesas</strong> (IPVA, manutenção, depreciação) da base tributável — o líquido real pode ser <strong>maior</strong> que o mostrado. Para precisão, calcule com seu contador.
+      </div>
+
+      <!-- Footer visível só no PDF -->
+      <div class="pdf-print-footer">
+        Nomade Drive Brasil · Plataforma de aluguel mensal de carro em Uberlândia-MG · contato@nomadedrive.com.br
       </div>
     </div>
   </div>
@@ -1497,6 +1619,20 @@ body {
     var subject = "Simulação Nomade Drive — " + brl(calc().liquidoMensal) + "/mês líquido";
     var body = buildShareMessage();
     window.location.href = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  });
+
+  // Fase 72: PDF via window.print() + CSS print-friendly
+  document.getElementById("sharePDF").addEventListener("click", function () {
+    // Atualiza data no header do PDF
+    var d = new Date();
+    var meses = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+    var dateStr = d.getDate() + " de " + meses[d.getMonth()] + " de " + d.getFullYear() +
+      " · " + ("0"+d.getHours()).slice(-2) + ":" + ("0"+d.getMinutes()).slice(-2);
+    var pdfDateEl = document.getElementById("pdfDate");
+    if (pdfDateEl) pdfDateEl.textContent = dateStr;
+
+    // Pequeno timeout pra garantir que o DOM atualizou antes do print
+    setTimeout(function () { window.print(); }, 100);
   });
 
   var copyBtn = document.getElementById("shareCopy");
