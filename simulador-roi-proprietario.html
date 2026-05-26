@@ -577,6 +577,9 @@ body {
   .sim-goal__input { width: 90px; }
 }
 
+/* FASE 80c: Modo simples esconde campos avançados */
+.sim-panel.is-simple-mode .sim-advanced { display: none !important; }
+
 /* Global P2P case study (referencia generica, sem citar marca) */
 .sim-global-example {
   background: linear-gradient(135deg, #14201b 0%, #0f1814 100%);
@@ -1123,6 +1126,22 @@ body {
       Configure seu carro
     </h2>
 
+    <!-- FASE 80c: Toggle Modo Simples / Detalhado -->
+    <div style="background:#e8f6ee;border:1px solid #c5e8d2;border-radius:12px;padding:14px 16px;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <strong style="color:#145f3e;font-size:14px;">Modo de cálculo</strong>
+          <p style="margin:4px 0 0;font-size:12.5px;color:#5b6b63;line-height:1.5;" id="modeHint">
+            <strong>Modo simples:</strong> a plataforma já desconta manutenção, IPVA, depreciação e impostos. Você vê o valor <strong>realista no bolso</strong>.
+          </p>
+        </div>
+        <div style="display:flex;gap:4px;background:#fff;border-radius:8px;padding:3px;border:1px solid #c5e8d2;">
+          <button type="button" id="modeSimpleBtn" class="is-active" style="border:none;background:#145f3e;color:#fff;font-weight:700;font-size:13px;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:inherit;">🎯 Simples</button>
+          <button type="button" id="modeAdvancedBtn" style="border:none;background:transparent;color:#5b6b63;font-weight:600;font-size:13px;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:inherit;">⚙️ Detalhado</button>
+        </div>
+      </div>
+    </div>
+
     <!-- FASE 80: Categoria (substitui FIPE+A/B/C/D — agora dropdown de 13 categorias de mercado) -->
     <div class="sim-field">
       <div class="sim-field__label">
@@ -1204,7 +1223,7 @@ body {
     </div>
 
     <!-- Meses alugado/ano -->
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Preço personalizado (opcional)</span>
         <span class="sim-field__value" id="vOverride">Automático</span>
@@ -1220,13 +1239,13 @@ body {
       </div>
       <div class="sim-options sim-options--6" id="contractBtns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
         <button data-contract="1" class="is-active">1 mês<small>0%</small></button>
-        <button data-contract="2">2 meses<small>−5%</small></button>
-        <button data-contract="3">3 meses<small>−10%</small></button>
-        <button data-contract="4">4 meses<small>−12%</small></button>
-        <button data-contract="6">6 meses<small>−15%</small></button>
-        <button data-contract="12">12+ meses<small>−20%</small></button>
+        <button data-contract="2">2 meses<small>−2%</small></button>
+        <button data-contract="3">3 meses<small>−4%</small></button>
+        <button data-contract="4">4 meses<small>−5%</small></button>
+        <button data-contract="6">6 meses<small>−7%</small></button>
+        <button data-contract="12">12+ meses<small>−10%</small></button>
       </div>
-      <div class="sim-field__hint" style="margin-top:4px;">FASE 80: descontos progressivos. Owner ajusta no painel do veículo.</div>
+      <div class="sim-field__hint" style="margin-top:4px;">Descontos conservadores — incentivam fidelidade sem comprometer seu ganho.</div>
     </div>
 
     <div class="sim-field">
@@ -1239,7 +1258,7 @@ body {
     </div>
 
     <!-- Manutenção -->
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Manutenção extra pelo aluguel</span>
         <span class="sim-field__value" id="vManut">R$ 300/mês</span>
@@ -1249,7 +1268,7 @@ body {
     </div>
 
     <!-- FASE 80: Desconto oficinas parceiras Nomade Drive -->
-    <div class="sim-field" style="background:#e8f6ee;padding:14px 16px;border-radius:10px;border:1px solid #c5e8d2;">
+    <div class="sim-field sim-advanced" style="background:#e8f6ee;padding:14px 16px;border-radius:10px;border:1px solid #c5e8d2;">
       <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;">
         <input type="checkbox" id="oficinasParceiras" style="margin-top:3px;width:18px;height:18px;cursor:pointer;accent-color:#145f3e;" />
         <div style="flex:1;">
@@ -1262,7 +1281,7 @@ body {
     </div>
 
     <!-- Depreciação -->
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Depreciação anual (% FIPE)</span>
         <span class="sim-field__value" id="vDeprec">8%</span>
@@ -1272,7 +1291,7 @@ body {
     </div>
 
     <!-- IPVA -->
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">IPVA anual (% FIPE)</span>
         <span class="sim-field__value" id="vIpva">4%</span>
@@ -1282,7 +1301,7 @@ body {
     </div>
 
     <!-- Tributação -->
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Como você declara essa renda?</span>
         <span class="sim-field__value" id="vTrib">ME (6%)</span>
@@ -1513,8 +1532,9 @@ body {
   };
   var COMISSAO_NDB = 0.10;
 
-  // FASE 80 — Descontos progressivos atualizados (6 tiers)
-  var CONTRACT_DISCOUNTS = { "1": 0, "2": 5, "3": 10, "4": 12, "6": 15, "12": 20 };
+  // FASE 80b — Descontos conservadores: incentivam fidelidade SEM destruir ganho do owner
+  // Daniel pediu: "incentivar alugueis longos mas manter bons ganhos"
+  var CONTRACT_DISCOUNTS = { "1": 0, "2": 2, "3": 4, "4": 5, "6": 7, "12": 10 };
   var CONTRACT_LABELS = { "1": "1 mês", "2": "2 meses", "3": "3 meses", "4": "4 meses", "6": "6 meses", "12": "12+ meses" };
 
   // ============================================================
@@ -1868,6 +1888,39 @@ body {
       state.oficinas = cb.checked;
       render();
     });
+  })();
+
+  // FASE 80c: toggle Modo Simples / Detalhado
+  (function wireSimpleAdvancedMode() {
+    var panel = document.querySelector(".sim-panel");
+    var simpleBtn = document.getElementById("modeSimpleBtn");
+    var advBtn = document.getElementById("modeAdvancedBtn");
+    var hint = document.getElementById("modeHint");
+    if (!panel || !simpleBtn || !advBtn) return;
+
+    // Default: simples ON
+    panel.classList.add("is-simple-mode");
+
+    function applyMode(simple) {
+      if (simple) {
+        panel.classList.add("is-simple-mode");
+        simpleBtn.style.background = "#145f3e";
+        simpleBtn.style.color = "#fff";
+        advBtn.style.background = "transparent";
+        advBtn.style.color = "#5b6b63";
+        if (hint) hint.innerHTML = '<strong>Modo simples:</strong> a plataforma já desconta manutenção, IPVA, depreciação e impostos. Você vê o valor <strong>realista no bolso</strong>.';
+      } else {
+        panel.classList.remove("is-simple-mode");
+        advBtn.style.background = "#145f3e";
+        advBtn.style.color = "#fff";
+        simpleBtn.style.background = "transparent";
+        simpleBtn.style.color = "#5b6b63";
+        if (hint) hint.innerHTML = '<strong>Modo detalhado:</strong> ajuste cada custo (manutenção, depreciação, IPVA, tributação, oficinas) pra ver impacto no líquido.';
+      }
+      render();
+    }
+    simpleBtn.addEventListener("click", function () { applyMode(true); });
+    advBtn.addEventListener("click", function () { applyMode(false); });
   })();
 
   // FASE 79: wiring do input numérico de preço personalizado (override)
