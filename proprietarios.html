@@ -244,8 +244,9 @@
       <span class="eyebrow">Passo 2 — Simulação</span>
       <h2>Faixa estimada de receita e ganho líquido prudente</h2>
       <p>Uma estimativa de referência — <strong>nunca um valor garantido</strong>. Os números reais dependem de demanda, categoria, conservação, reservas para custos e aprovação do veículo.</p>
-      <p style="margin-top:14px;padding:12px 16px;background:#fff8e7;border-left:4px solid #d4af37;border-radius:8px;font-size:13.5px;color:#5b4d20;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.55;">
-        💡 <strong>Quer um cálculo mais detalhado?</strong> O <a href="simulador-roi-proprietario.html" style="color:#856404;font-weight:700;text-decoration:underline;">simulador interativo de ROI</a> mostra ganho líquido <em>já descontando</em> impostos, IPVA, manutenção e depreciação — e permite compartilhar com seu contador.
+      <p style="margin-top:14px;padding:12px 16px;background:#e8f6ee;border-left:4px solid #145f3e;border-radius:8px;font-size:13.5px;color:#14201b;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.55;">
+        💎 <strong>Use o simulador completo pra cálculo preciso →</strong> <a href="simulador-roi-proprietario.html" style="color:#145f3e;font-weight:700;text-decoration:underline;">/simulador-roi-proprietario.html</a><br>
+        <span style="font-size:12.5px;opacity:0.85;">Lá você tem: 13 categorias de mercado · ajuste por ano/km/cidade · desconto progressivo até <strong>−20%</strong> em contratos de 12 meses · economia de <strong>~5%</strong> via oficinas parceiras · comparativo com média de locadoras · compartilhamento por WhatsApp.</span>
       </p>
     </div>
     <div class="sim sim--2col">
@@ -253,15 +254,16 @@
         <div class="sim-field">
           <label>Categoria do veículo</label>
           <div class="tier-picker" id="tierPicker">
-            <button type="button" class="tier-opt" data-tier="A">Econômico</button>
-            <button type="button" class="tier-opt is-active" data-tier="B">Confort</button>
-            <button type="button" class="tier-opt" data-tier="C">Premium</button>
-            <button type="button" class="tier-opt" data-tier="D">Luxo</button>
+            <button type="button" class="tier-opt" data-tier="A" title="Onix 1.0, HB20 manual, Argo">Econômico<br><small style="opacity:0.75;font-size:11px;">~R$ 2.400/mês</small></button>
+            <button type="button" class="tier-opt is-active" data-tier="B" title="HB20 AT, Onix AT, Cobalt AT">Hatch/Sedan AT<br><small style="opacity:0.75;font-size:11px;">~R$ 3.300/mês</small></button>
+            <button type="button" class="tier-opt" data-tier="C" title="Tracker, T-Cross, Renegade, Kicks">SUV<br><small style="opacity:0.75;font-size:11px;">~R$ 4.300/mês</small></button>
+            <button type="button" class="tier-opt" data-tier="D" title="BMW, Audi, Mercedes, Tesla">Luxo<br><small style="opacity:0.75;font-size:11px;">~R$ 6.000+/mês</small></button>
           </div>
+          <p class="sim-hint" style="margin-top:8px;font-size:12.5px;color:#5b6b63;">Preços <strong>baseados em mercado real</strong> das grandes locadoras tradicionais — não em fórmula sobre FIPE.</p>
         </div>
         <div class="sim-field">
-          <label for="simFipe">Valor FIPE aproximado <span class="opt">(opcional)</span></label>
-          <input type="number" id="simFipe" inputmode="numeric" placeholder="ex: 57000" />
+          <label for="simFipe">Valor FIPE aproximado <span class="opt">(opcional — usado pra calcular ROI, não influencia aluguel)</span></label>
+          <input type="number" id="simFipe" inputmode="numeric" placeholder="ex: 78000" />
         </div>
         <div class="sim-field">
           <label for="simMeses">Meses que pretende deixar alugado por ano: <strong id="simMesesVal">6</strong></label>
@@ -328,7 +330,7 @@
     <!-- EXEMPLO EDUCATIVO -->
     <div class="why-box">
       <h3>Exemplo educativo</h3>
-      <p>Se um veículo gera R$ 2.124 por mês alugado e fica alugado por 6 meses no ano, a receita estimada seria de R$ 12.744. Se o proprietário separar 40% para IPVA, pneus, manutenção, depreciação e imprevistos, o valor prudente para uso pessoal seria de aproximadamente R$ 7.646 no ano. Essa é apenas uma simulação educativa, não uma promessa de rendimento.</p>
+      <p>Se um HB20 manual (categoria Hatch Econômico Plus) gera <strong>R$ 2.600/mês</strong> de aluguel — o owner recebe 90% (<strong>R$ 2.340/mês</strong>). Em 6 meses alugados no ano, isso vira <strong>R$ 14.040</strong>. Separando 40% para IPVA, pneus, manutenção, depreciação e imprevistos, o valor prudente para uso pessoal seria de aproximadamente <strong>R$ 8.424 no ano</strong>. Com <strong>oficinas parceiras</strong>, ainda economiza ~5% em manutenção (~R$ 100-200/ano extra). Simulação educativa, não promessa de rendimento.</p>
     </div>
 
     <!-- CENÁRIOS DE OCUPAÇÃO -->
@@ -351,7 +353,7 @@
     </div>
     <ol class="steps steps--6">
       <li class="step"><span class="step__num">1</span><h3>Aceite dos termos</h3><p>Você confirma que entende as regras e que a renda não é garantida.</p></li>
-      <li class="step"><span class="step__num">2</span><h3>Simulação</h3><p>Estimativa de faixa de ganho com FIPE, categoria e disponibilidade.</p></li>
+      <li class="step"><span class="step__num">2</span><h3>Simulação</h3><p>Estimativa baseada em mercado real: categoria, ano, km, cidade e duração do contrato.</p></li>
       <li class="step"><span class="step__num">3</span><h3>Documentos</h3><p>Envio de CRLV, fotos do veículo e histórico de manutenção.</p></li>
       <li class="step"><span class="step__num">4</span><h3>Checklist em oficina</h3><p>Checklist técnico em oficina credenciada, com laudo.</p></li>
       <li class="step"><span class="step__num">5</span><h3>Aprovação operacional</h3><p>Análise final. O veículo pode ser aprovado ou recusado.</p></li>
