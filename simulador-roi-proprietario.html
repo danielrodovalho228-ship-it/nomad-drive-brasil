@@ -1241,6 +1241,19 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">Desgaste extra: pneus, óleo, freios, revisões mais frequentes pelo uso intensivo.</div>
     </div>
 
+    <!-- FASE 80: Desconto oficinas parceiras Nomade Drive -->
+    <div class="sim-field" style="background:#e8f6ee;padding:14px 16px;border-radius:10px;border:1px solid #c5e8d2;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:0;">
+        <input type="checkbox" id="oficinasParceiras" style="margin-top:3px;width:18px;height:18px;cursor:pointer;accent-color:#145f3e;" />
+        <div style="flex:1;">
+          <span style="font-weight:700;color:#145f3e;font-size:14px;">🔧 Uso oficinas parceiras Nomade Drive</span>
+          <p style="margin:4px 0 0;font-size:12.5px;color:#5b6b63;line-height:1.5;">
+            Owners ativos têm <strong>~5% de desconto em manutenção</strong> nas oficinas credenciadas. Categoria do veículo, peças e mão de obra negociados pela plataforma. <span id="vOficinas" style="font-weight:600;color:#145f3e;">Desconto aplicado: R$ 0/ano</span>
+          </p>
+        </div>
+      </label>
+    </div>
+
     <!-- Depreciação -->
     <div class="sim-field">
       <div class="sim-field__label">
@@ -1440,21 +1453,23 @@ body {
   //  não de % FIPE. FIPE só serve pra calcular ROI sobre investimento.)
   // ============================================================
 
-  // Categorias de mercado — base_price em R$ + referencia Localiza (preço final c/ taxas)
+  // Categorias de mercado — base_price em R$ + referencia mercado (preço final c/ taxas)
+  // typicalFipe: FIPE média de carros desta categoria (pra preencher quando user aplica sugestão da meta)
+  // defaultTrans: cambio tipico da categoria (pra preencher quando user aplica sugestão da meta)
   var PRICING_CATEGORIES = {
-    "B":    { label: "Compacto Básico",      base: 2200, localiza: 3040 },
-    "CH":   { label: "Hatch Econômico",      base: 2400, localiza: 3200 },
-    "CE":   { label: "Hatch Econômico Plus", base: 2600, localiza: 3415 },
-    "CS":   { label: "Sedan Compacto",       base: 2800, localiza: 3575 },
-    "FS":   { label: "Sedan Intermediário",  base: 3200, localiza: 4215 },
-    "FH":   { label: "Hatch Automático",     base: 3300, localiza: 4270 },
-    "FX":   { label: "Sedan Automático",     base: 3500, localiza: 4480 },
-    "G":    { label: "SUV Compacto",         base: 3700, localiza: 4640 },
-    "GC":   { label: "SUV Compacto Plus",    base: 3900, localiza: 4860 },
-    "GI":   { label: "SUV Premium",          base: 4100, localiza: 5120 },
-    "GX":   { label: "SUV Médio",            base: 4300, localiza: 5221 },
-    "GH":   { label: "SUV Luxo",             base: 4600, localiza: 5445 },
-    "LUXO": { label: "Luxo Importado",       base: 6000, localiza: null }
+    "B":    { label: "Compacto Básico",      base: 2200, localiza: 3040, typicalFipe: 50000,  defaultTrans: "manual"     },
+    "CH":   { label: "Hatch Econômico",      base: 2400, localiza: 3200, typicalFipe: 70000,  defaultTrans: "manual"     },
+    "CE":   { label: "Hatch Econômico Plus", base: 2600, localiza: 3415, typicalFipe: 78000,  defaultTrans: "manual"     },
+    "CS":   { label: "Sedan Compacto",       base: 2800, localiza: 3575, typicalFipe: 88000,  defaultTrans: "manual"     },
+    "FS":   { label: "Sedan Intermediário",  base: 3200, localiza: 4215, typicalFipe: 95000,  defaultTrans: "manual"     },
+    "FH":   { label: "Hatch Automático",     base: 3300, localiza: 4270, typicalFipe: 85000,  defaultTrans: "automatico" },
+    "FX":   { label: "Sedan Automático",     base: 3500, localiza: 4480, typicalFipe: 110000, defaultTrans: "automatico" },
+    "G":    { label: "SUV Compacto",         base: 3700, localiza: 4640, typicalFipe: 110000, defaultTrans: "manual"     },
+    "GC":   { label: "SUV Compacto Plus",    base: 3900, localiza: 4860, typicalFipe: 120000, defaultTrans: "automatico" },
+    "GI":   { label: "SUV Premium",          base: 4100, localiza: 5120, typicalFipe: 130000, defaultTrans: "automatico" },
+    "GX":   { label: "SUV Médio",            base: 4300, localiza: 5221, typicalFipe: 140000, defaultTrans: "automatico" },
+    "GH":   { label: "SUV Luxo",             base: 4600, localiza: 5445, typicalFipe: 170000, defaultTrans: "automatico" },
+    "LUXO": { label: "Luxo Importado",       base: 6000, localiza: null, typicalFipe: 280000, defaultTrans: "automatico" }
   };
 
   // Ajustes automáticos (espelham as funções SQL pricing_*_adjustment)
@@ -1511,8 +1526,10 @@ body {
     ipva: 4,
     trib: "me",
     contract: "1",       // FASE 79: duração típica do contrato (chave de CONTRACT_DISCOUNTS)
-    override: null       // FASE 79: preço mensal personalizado (null = usa cálculo automático)
+    override: null,      // FASE 79: preço mensal personalizado (null = usa cálculo automático)
+    oficinas: false      // FASE 80: usa oficinas parceiras (desconto 5% manutenção)
   };
+  var OFICINAS_DISCOUNT_PCT = 5;  // % de desconto na manutenção quando oficinas parceiras ON
   var state = Object.assign({}, defaults);
 
   // Carrega valores da URL (pra share funcionar).
@@ -1542,6 +1559,10 @@ body {
     if (qs.has("override")) {
       var ov = parseFloat(qs.get("override"));
       if (Number.isFinite(ov) && ov > 0 && ov <= 20000) state.override = ov;
+    }
+    // FASE 80: oficinas parceiras
+    if (qs.has("oficinas") && (qs.get("oficinas") === "1" || qs.get("oficinas") === "true")) {
+      state.oficinas = true;
     }
   } catch (e) {}
 
@@ -1596,7 +1617,10 @@ body {
     var imposto = receitaLiquidaPreImposto * tribRate;
 
     // Custos
-    var manutAnual = manutMes * meses; // só nos meses alugado
+    var manutAnualBruto = manutMes * meses; // só nos meses alugado
+    // FASE 80: desconto oficinas parceiras (5% no custo de manutenção)
+    var oficinasEcon = state.oficinas ? (manutAnualBruto * OFICINAS_DISCOUNT_PCT / 100) : 0;
+    var manutAnual = manutAnualBruto - oficinasEcon;
     var ipvaAnual = fipe * ipvaPct;
     // Depreciação: 50% atribuível ao aluguel (mesmo parado o carro deprecia)
     var deprecExtra = fipe * deprecAnualPct * 0.5;
@@ -1631,6 +1655,7 @@ body {
       manutAnual: manutAnual,
       ipvaAnual: ipvaAnual,
       deprecExtra: deprecExtra,
+      oficinasEcon: oficinasEcon, // FASE 80: economia anual via oficinas parceiras
       liquidoAnual: liquidoAnual,
       liquidoMensal: liquidoMensal,
       pctRetorno: pctRetorno
@@ -1654,6 +1679,7 @@ body {
     document.getElementById("vYear").textContent = state.year;
     document.getElementById("vMileage").textContent = state.km.toLocaleString("pt-BR") + " km";
     document.getElementById("vCity").textContent = CITY_NAMES[state.city] || "Cidade média";
+    // FASE 80: label da economia oficinas (atualizado depois do calc())
     // FASE 79
     document.getElementById("vOverride").textContent = (state.override != null && state.override > 0)
       ? (brl(state.override) + "/mês")
@@ -1664,6 +1690,13 @@ body {
     // FASE 80: hint mostra preço auto calculado (categoria × ajustes)
     var hintEl = document.getElementById("hintAuto");
     if (hintEl) hintEl.textContent = brl(r.aluguelAuto) + "/mês";
+    // FASE 80: atualiza label da economia oficinas parceiras
+    var vOficinasEl = document.getElementById("vOficinas");
+    if (vOficinasEl) {
+      vOficinasEl.textContent = state.oficinas
+        ? "Desconto aplicado: " + brl(r.oficinasEcon) + "/ano economizados ✓"
+        : "Marque pra ver economia (~R$ " + Math.round((state.manut * state.meses * OFICINAS_DISCOUNT_PCT / 100)) + "/ano)";
+    }
 
     // FASE 80: atualiza bloco comparativo Localiza (se existir no DOM)
     var compEl = document.getElementById("comparativoLocaliza");
@@ -1777,6 +1810,9 @@ body {
     // FASE 80: dropdown de categoria
     var catSelect = document.getElementById("categorySelect");
     if (catSelect) catSelect.value = state.cat;
+    // FASE 80: checkbox oficinas parceiras
+    var oficinasInput = document.getElementById("oficinasParceiras");
+    if (oficinasInput) oficinasInput.checked = !!state.oficinas;
     // FASE 79: input numérico de override
     var ovInput = document.getElementById("override");
     if (ovInput) ovInput.value = (state.override != null && state.override > 0) ? state.override : "";
@@ -1814,6 +1850,16 @@ body {
         state.cat = sel.value;
         render();
       }
+    });
+  })();
+
+  // FASE 80: wiring do toggle oficinas parceiras
+  (function wireOficinas() {
+    var cb = document.getElementById("oficinasParceiras");
+    if (!cb) return;
+    cb.addEventListener("change", function () {
+      state.oficinas = cb.checked;
+      render();
     });
   })();
 
@@ -1860,6 +1906,7 @@ body {
     if (state.override != null && state.override > 0) {
       paramsObj.override = state.override;
     }
+    if (state.oficinas) paramsObj.oficinas = "1";  // FASE 80
     var params = new URLSearchParams(paramsObj);
     return base + "?" + params.toString();
   }
@@ -1874,6 +1921,9 @@ body {
     var compLine = (r.localizaPrice != null && r.economiaCliente > 0)
       ? "🏆 " + pct(r.descontoVsLocalizaPct) + " MAIS BARATO que locadora tradicional (~" + brl(r.localizaPrice) + "/mês)\n"
       : "";
+    var oficinasLine = state.oficinas
+      ? "🔧 Oficinas parceiras: −" + brl(r.oficinasEcon) + "/ano em manutenção\n"
+      : "";
     return "Olha o que simulei na Nomade Drive Brasil pro meu carro:\n\n" +
       "🚗 " + catLabel + " · " + state.year + " · " + state.km.toLocaleString("pt-BR") + " km · " + TRANS_NAMES[state.trans] + "\n" +
       precoLine + "\n" +
@@ -1881,6 +1931,7 @@ body {
       "📅 " + state.meses + " meses alugado/ano\n" +
       "📊 Tributação: " + TRIB_NAMES[state.trib] + "\n\n" +
       compLine +
+      oficinasLine +
       "💰 LÍQUIDO POR MÊS: " + brl(r.liquidoMensal) + "\n" +
       "💰 LÍQUIDO POR ANO: " + brl(r.liquidoAnual) + "\n" +
       "📈 Retorno sobre o FIPE: " + pct(r.pctRetorno) + " a.a.\n\n" +
@@ -1973,7 +2024,10 @@ body {
   // FASE 80: simulador inverso — agora retorna CATEGORIA necessária pra atingir meta
   // (antes retornava FIPE, mas FIPE não influencia mais o aluguel)
   function calcCategoryForGoal(metaMensalLiquido) {
-    var manutAnual = state.manut * state.meses;
+    // FASE 80: considera economia de oficinas parceiras se ativado
+    var manutAnualBruto = state.manut * state.meses;
+    var oficinasEconAnual = state.oficinas ? (manutAnualBruto * OFICINAS_DISCOUNT_PCT / 100) : 0;
+    var manutAnual = manutAnualBruto - oficinasEconAnual;
     var tribRate = TRIB_RATES[state.trib] || 0;
     var ipvaAnual = state.fipe * (state.ipva / 100);
     var deprecExtra = state.fipe * (state.deprec / 100) * 0.5;
@@ -2053,9 +2107,30 @@ body {
     var applyBtn = document.getElementById("goalApplyBtn");
     if (applyBtn) {
       applyBtn.addEventListener("click", function () {
+        var catData = PRICING_CATEGORIES[result.categoryKey];
+        if (!catData) return;
+
+        // FASE 80 fix: aplicar TUDO da categoria — não só o key
         state.cat = result.categoryKey;
+        state.fipe = catData.typicalFipe || state.fipe;
+        state.trans = catData.defaultTrans || state.trans;
+
+        // Sincronizar UI: dropdown + slider FIPE + botões câmbio
         var sel = document.getElementById("categorySelect");
         if (sel) sel.value = result.categoryKey;
+        var fipeInput = document.getElementById("fipe");
+        if (fipeInput) {
+          fipeInput.value = state.fipe;
+          updateSliderTrack(fipeInput);
+        }
+        // Atualizar botões câmbio (manual / automatico)
+        var transContainer = document.getElementById("transBtns");
+        if (transContainer) {
+          transContainer.querySelectorAll("button").forEach(function (b) {
+            b.classList.toggle("is-active", b.getAttribute("data-trans") === state.trans);
+          });
+        }
+
         render();
         // Scroll suave pro topo do simulador
         document.querySelector(".sim-main").scrollIntoView({ behavior: "smooth", block: "start" });
