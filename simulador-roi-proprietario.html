@@ -1142,8 +1142,32 @@ body {
       </div>
     </div>
 
-    <!-- FASE 80: Categoria (substitui FIPE+A/B/C/D — agora dropdown de 13 categorias de mercado) -->
+    <!-- FASE 80c: Dropdown de MODELO (auto-popula categoria, câmbio, FIPE) -->
     <div class="sim-field">
+      <div class="sim-field__label">
+        <span class="sim-field__name">Modelo do seu carro</span>
+        <span class="sim-field__value" id="vModel">Onix AT</span>
+      </div>
+      <select id="carModelSelect" style="width:100%;padding:12px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:15px;font-family:inherit;background:#fff;font-weight:600;">
+        <option value="mobi">Fiat Mobi / Renault Kwid (manual)</option>
+        <option value="hb20-manual">Hyundai HB20 manual / Fiat Argo</option>
+        <option value="onix-1.0">Chevrolet Onix 1.0 manual</option>
+        <option value="cobalt">Chevrolet Cobalt automático</option>
+        <option value="onix-at" selected>Chevrolet Onix AT / HB20 AT (automático)</option>
+        <option value="cronos">Fiat Cronos / Onix Plus (sedan)</option>
+        <option value="virtus">VW Virtus / Onix Plus Turbo (sedan AT)</option>
+        <option value="basalt">Citroën Basalt / VW Tera (SUV compacto)</option>
+        <option value="kicks">Nissan Kicks (SUV automático)</option>
+        <option value="tracker">Chevrolet Tracker / VW T-Cross / Jeep Renegade (SUV médio)</option>
+        <option value="compass">Jeep Compass / Toyota Corolla Cross (SUV grande)</option>
+        <option value="luxo">BMW / Audi / Mercedes / Tesla (luxo importado)</option>
+        <option value="outro">Outro modelo — me deixe escolher categoria</option>
+      </select>
+      <div class="sim-field__hint" style="margin-top:6px;font-size:12.5px;">A gente já preenche categoria, câmbio e FIPE típica. Use "Outro" se quiser configurar manual.</div>
+    </div>
+
+    <!-- FASE 80: Categoria (avançado — escondido por default) -->
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Categoria do veículo</span>
         <span class="sim-field__value" id="vCat">Hatch Automático</span>
@@ -1166,8 +1190,8 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">Categoria de mercado define o preço base. Ajustes por ano/km/cidade vêm depois.</div>
     </div>
 
-    <!-- Câmbio -->
-    <div class="sim-field">
+    <!-- Câmbio (avançado) -->
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Câmbio</span>
         <span class="sim-field__value" id="vTrans">Automático</span>
@@ -1198,8 +1222,8 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">&lt;30k: +5% · 30-60k: padrão · 60-100k: −5% · &gt;100k: −10%</div>
     </div>
 
-    <!-- FASE 80: Cidade tier -->
-    <div class="sim-field">
+    <!-- FASE 80: Cidade tier (avançado) -->
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Tipo da cidade</span>
         <span class="sim-field__value" id="vCity">Cidade média</span>
@@ -1212,8 +1236,8 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">SP, RJ, BH, BSB = capital. Uberlândia, Campinas, Ribeirão = média. Cidades menores = interior.</div>
     </div>
 
-    <!-- FIPE (apenas pra ROI — não influencia mais o aluguel) -->
-    <div class="sim-field">
+    <!-- FIPE (avançado — auto-preenchido pelo modelo) -->
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Valor de mercado (FIPE)</span>
         <span class="sim-field__value" id="vFipe">R$ 80.000</span>
@@ -1232,7 +1256,7 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">Se preferir cobrar um valor fixo, digite aqui. Senão, usamos categoria + ajustes. <strong>Sugestão automática:</strong> <span id="hintAuto">R$ 3.300/mês</span>.</div>
     </div>
 
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Duração típica do contrato</span>
         <span class="sim-field__value" id="vContract">1 mês</span>
@@ -1248,7 +1272,7 @@ body {
       <div class="sim-field__hint" style="margin-top:4px;">Descontos conservadores — incentivam fidelidade sem comprometer seu ganho.</div>
     </div>
 
-    <div class="sim-field">
+    <div class="sim-field sim-advanced">
       <div class="sim-field__label">
         <span class="sim-field__name">Meses alugado por ano</span>
         <span class="sim-field__value" id="vMeses">10 meses</span>
@@ -1537,6 +1561,35 @@ body {
   var CONTRACT_DISCOUNTS = { "1": 0, "2": 2, "3": 4, "4": 5, "6": 7, "12": 10 };
   var CONTRACT_LABELS = { "1": "1 mês", "2": "2 meses", "3": "3 meses", "4": "4 meses", "6": "6 meses", "12": "12+ meses" };
 
+  // FASE 80c — Modelos populares brasileiros — auto-preenche categoria + câmbio + FIPE típica
+  // Mapping baseado em PRICING_CATEGORIES + valores FIPE médios do mercado
+  var CAR_MODELS = {
+    "mobi":        { label: "Mobi / Kwid (manual)",            cat: "B",    trans: "manual",     fipe: 50000 },
+    "hb20-manual": { label: "HB20 manual / Argo / Polo",       cat: "CE",   trans: "manual",     fipe: 78000 },
+    "onix-1.0":    { label: "Onix 1.0 manual",                 cat: "CH",   trans: "manual",     fipe: 70000 },
+    "cobalt":      { label: "Cobalt automático",               cat: "CS",   trans: "automatico", fipe: 57000 },
+    "onix-at":     { label: "Onix AT / HB20 AT",               cat: "FH",   trans: "automatico", fipe: 85000 },
+    "cronos":      { label: "Cronos / Onix Plus",              cat: "CS",   trans: "manual",     fipe: 88000 },
+    "virtus":      { label: "Virtus / Onix Plus Turbo AT",     cat: "FX",   trans: "automatico", fipe: 110000 },
+    "basalt":      { label: "Basalt / VW Tera",                cat: "G",    trans: "manual",     fipe: 110000 },
+    "kicks":       { label: "Nissan Kicks AT",                 cat: "GI",   trans: "automatico", fipe: 130000 },
+    "tracker":     { label: "Tracker / T-Cross / Renegade",    cat: "GX",   trans: "automatico", fipe: 140000 },
+    "compass":     { label: "Compass / Corolla Cross",         cat: "GH",   trans: "automatico", fipe: 170000 },
+    "luxo":        { label: "BMW / Audi / Mercedes / Tesla",   cat: "LUXO", trans: "automatico", fipe: 280000 },
+    "outro":       { label: "Outro — configurar manual",        cat: null,   trans: null,         fipe: null   }
+  };
+
+  // FASE 80c — Reservas automáticas no modo simples (% do aluguel bruto)
+  // Owner não precisa configurar — plataforma usa defaults sensatos brasileiros
+  var SIMPLE_MODE_RESERVES = {
+    manutencao_pct: 0.08,   // 8% manutenção (vs slider de R$ 100-800)
+    ipva_pct: 0.04,         // 4% FIPE (média BR)
+    depreciacao_pct: 0.03,  // 3% (parte atribuível ao aluguel — metade de 6%)
+    tribRate: 0.06,         // ME 6% Simples Nacional
+    mesesAlugado: 10,       // realista: 8-11
+    contractDefault: "1"    // mês a mês (sem desconto progressivo)
+  };
+
   // ============================================================
   // ESTADO — pré-popula via query string se houver
   // ============================================================
@@ -1554,7 +1607,8 @@ body {
     trib: "me",
     contract: "1",       // FASE 79: duração típica do contrato (chave de CONTRACT_DISCOUNTS)
     override: null,      // FASE 79: preço mensal personalizado (null = usa cálculo automático)
-    oficinas: false      // FASE 80: usa oficinas parceiras (desconto 5% manutenção)
+    oficinas: false,     // FASE 80: usa oficinas parceiras (desconto 5% manutenção)
+    simpleMode: true     // FASE 80c: modo simples (default true — owner não mexe em nada avançado)
   };
   var OFICINAS_DISCOUNT_PCT = 5;  // % de desconto na manutenção quando oficinas parceiras ON
   var state = Object.assign({}, defaults);
@@ -1615,11 +1669,14 @@ body {
   // ============================================================
   function calc() {
     var fipe = state.fipe;
-    var meses = state.meses;
-    var manutMes = state.manut;
-    var deprecAnualPct = state.deprec / 100;
-    var ipvaPct = state.ipva / 100;
-    var tribRate = TRIB_RATES[state.trib] || 0;
+
+    // FASE 80c: em modo simples, FORCE defaults conservadores (owner não mexe em nada)
+    // Em modo detalhado, usa o que owner setou nos sliders
+    var simple = !!state.simpleMode;
+    var meses = simple ? SIMPLE_MODE_RESERVES.mesesAlugado : state.meses;
+    var deprecAnualPct = simple ? (SIMPLE_MODE_RESERVES.depreciacao_pct * 2) : (state.deprec / 100);
+    var ipvaPct = simple ? SIMPLE_MODE_RESERVES.ipva_pct : (state.ipva / 100);
+    var tribRate = simple ? SIMPLE_MODE_RESERVES.tribRate : (TRIB_RATES[state.trib] || 0);
 
     // FASE 80: preço base = categoria_base × ajustes (ano, km, câmbio, cidade)
     var catData = PRICING_CATEGORIES[state.cat] || PRICING_CATEGORIES["FH"];
@@ -1627,14 +1684,16 @@ body {
       * ageMultiplier(state.year)
       * mileageMultiplier(state.km)
       * transmissionMultiplier(state.trans)
-      * cityMultiplier(state.city);
+      * cityMultiplier(simple ? "media" : state.city);
 
     // FASE 79: preço base usa override se setado, senão usa aluguelAuto
-    var aluguelBruto = (state.override != null && state.override > 0)
-      ? state.override
-      : aluguelAuto;
-    // FASE 80: desconto progressivo (até 20% em 12 meses)
-    var descontoPct = CONTRACT_DISCOUNTS[state.contract] || 0;
+    var aluguelBruto = simple
+      ? aluguelAuto
+      : ((state.override != null && state.override > 0) ? state.override : aluguelAuto);
+    // FASE 80: desconto progressivo — IGNORADO no modo simples
+    var descontoPct = simple ? 0 : (CONTRACT_DISCOUNTS[state.contract] || 0);
+    // FASE 80c: manutenção em % do aluguel no modo simples (mais didático)
+    var manutMes = simple ? (aluguelBruto * SIMPLE_MODE_RESERVES.manutencao_pct) : state.manut;
 
     // Receita
     var aluguelMes = aluguelBruto * (1 - descontoPct / 100);
@@ -1890,6 +1949,48 @@ body {
     });
   })();
 
+  // FASE 80c: Wiring do dropdown de MODELO — auto-popula categoria, câmbio, FIPE
+  (function wireCarModelSelect() {
+    var sel = document.getElementById("carModelSelect");
+    if (!sel) return;
+    sel.addEventListener("change", function () {
+      var modelKey = sel.value;
+      var model = CAR_MODELS[modelKey];
+      if (!model) return;
+      // "outro" = não auto-popula, deixa user configurar
+      if (modelKey === "outro") {
+        // Apenas atualiza label, não muda state
+        var vModelEl = document.getElementById("vModel");
+        if (vModelEl) vModelEl.textContent = model.label;
+        render();
+        return;
+      }
+      // Auto-popula
+      if (model.cat && PRICING_CATEGORIES[model.cat]) state.cat = model.cat;
+      if (model.trans) state.trans = model.trans;
+      if (model.fipe) state.fipe = model.fipe;
+
+      // Sincronizar UI dos campos avançados
+      var catSelect = document.getElementById("categorySelect");
+      if (catSelect) catSelect.value = state.cat;
+      var fipeInput = document.getElementById("fipe");
+      if (fipeInput) {
+        fipeInput.value = state.fipe;
+        updateSliderTrack(fipeInput);
+      }
+      var transContainer = document.getElementById("transBtns");
+      if (transContainer) {
+        transContainer.querySelectorAll("button").forEach(function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-trans") === state.trans);
+        });
+      }
+      // Atualiza label visivel
+      var vModelEl = document.getElementById("vModel");
+      if (vModelEl) vModelEl.textContent = model.label;
+      render();
+    });
+  })();
+
   // FASE 80c: toggle Modo Simples / Detalhado
   (function wireSimpleAdvancedMode() {
     var panel = document.querySelector(".sim-panel");
@@ -1902,6 +2003,7 @@ body {
     panel.classList.add("is-simple-mode");
 
     function applyMode(simple) {
+      state.simpleMode = simple;  // FASE 80c: state controla cálculo (forçar defaults)
       if (simple) {
         panel.classList.add("is-simple-mode");
         simpleBtn.style.background = "#145f3e";
