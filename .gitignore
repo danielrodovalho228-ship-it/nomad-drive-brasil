@@ -39,3 +39,9 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+.claude.json
+# Pastas locais de notas e backup
+INBOX_COWORKER/
+Imagens parceiros/
+Novas atualizacoes 6 arquivos/
+Testes QA/
