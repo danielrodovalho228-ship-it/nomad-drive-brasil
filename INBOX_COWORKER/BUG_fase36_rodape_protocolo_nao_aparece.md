@@ -85,3 +85,8 @@ Se ainda não aparecer após backfill + redeploy Edge Functions, suspeitas:
 ### Crítério de aceite (você confere)
 Triar um caso novo + capturar uma avaria → e-mails devem ter rodapé
 "📋 Protocolo: PR-####" ou "AV-####" conforme entidade.
+
+
+## ✅ Force-backfill RODADO por Claude QA — 2026-05-24
+Rodei o `supabase-fase36d-force-backfill-protocolos.sql` no Supabase. **0 nulos em todas as 5 entidades** (protection_cases=8, damages=4, bookings=4, rental_inspections=8, payments=6 — todos com protocol_number). A causa-raiz (cs.protocol_number nulo) está resolvida.
+**Falta só:** redeploy das Edge Functions `damage-capture` e `liberar-saque-parcial` (rodapé AV-/RS- nos e-mails de captura/saque). O rodapé da triagem (PR-) é renderizado no navegador → deve aparecer no próximo triagem. Aviso quando reterar.

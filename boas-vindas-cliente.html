@@ -724,7 +724,7 @@ body {
 
         // Se tem avatar_url, mostra foto em vez da inicial
         // Fix code-review: DOM API em vez de innerHTML com escape manual.
-        // Browser rejeita javascript:/data: schemes em <img src> automaticamente.
+        // Browser rejeita javascript:/data: schemes em <img src alt=""> automaticamente.
         if (profile.avatar_url) {
           var img = document.createElement("img");
           img.src = String(profile.avatar_url);

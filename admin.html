@@ -398,7 +398,7 @@
           <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="convertido">💰 Convertidos</button>
           <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="perdido">✗ Perdidos</button>
           <button type="button" class="btn btn--outline btn--sm leadsFilter" data-filter="sla_critico" style="border-color:#dc2626;color:#dc2626;">⏰ SLA crítico</button>
-          <input type="search" id="leadsSearch" placeholder="Buscar nome ou contato..." style="flex:1;min-width:200px;padding:8px 12px;border:1px solid #cde0d4;border-radius:6px;font-size:14px;" />
+          <input type="search" id="leadsSearch" aria-label="Buscar leads" placeholder="Buscar nome ou contato..." style="flex:1;min-width:200px;padding:8px 12px;border:1px solid #cde0d4;border-radius:6px;font-size:14px;" />
           <button type="button" class="btn btn--outline btn--sm" id="leadsReload">🔄 Atualizar</button>
         </div>
       </div>
@@ -433,14 +433,14 @@
           <div class="form__grid">
             <label class="field"><span>Cliente</span><select id="nbClient"><option value="">Carregando...</option></select></label>
             <label class="field"><span>Veículo</span><select id="nbVehicle"><option value="">Carregando...</option></select></label>
-            <label class="field"><span>Data de início</span><input type="date" id="nbStart" /></label>
-            <label class="field"><span>Data de fim</span><input type="date" id="nbEnd" /></label>
-            <label class="field"><span>Valor mensal (R$)</span><input type="number" id="nbPrice" min="0" inputmode="numeric" /></label>
+            <label class="field"><span>Data de início</span><input type="date" id="nbStart" aria-label="Data início" /></label>
+            <label class="field"><span>Data de fim</span><input type="date" id="nbEnd" aria-label="Data fim" /></label>
+            <label class="field"><span>Valor mensal (R$)</span><input type="number" id="nbPrice" aria-label="Preço mensal" min="0" inputmode="numeric" /></label>
             <label class="field"><span>Cobrança</span><select id="nbBillingMode">
               <option value="monthly" selected>Mensal recorrente (recomendado)</option>
               <option value="one_off">Cobrança única</option>
             </select></label>
-            <label class="field"><span>Caução sugerida (R$) <span class="opt" id="nbDepositHint" style="font-weight:normal;color:#5b6b63;">— escolha um cliente</span></span><input type="number" id="nbDeposit" min="0" inputmode="numeric" placeholder="ex: 1000" /></label>
+            <label class="field"><span>Caução sugerida (R$) <span class="opt" id="nbDepositHint" style="font-weight:normal;color:#5b6b63;">— escolha um cliente</span></span><input type="number" id="nbDeposit" aria-label="Caução" min="0" inputmode="numeric" placeholder="ex: 1000" /></label>
           </div>
           <p class="form__err" id="nbErr" hidden>Selecione cliente, veículo e as datas.</p>
           <p class="note" style="margin:6px 0 12px;color:#5b6b63;">A caução é pré-autorizada no cartão do cliente (não cobrada) e liberada no check-out aprovado. O valor sugerido é baseado no tier do cliente — você pode sobrescrever.</p>
@@ -635,13 +635,13 @@
               </select>
             </label>
             <label class="field"><span>Fornecedor</span>
-              <input type="text" id="expVendor" placeholder="ex: Hostinger" />
+              <input type="text" id="expVendor" aria-label="Fornecedor" placeholder="ex: Hostinger" />
             </label>
             <label class="field"><span>Valor (R$) *</span>
-              <input type="number" id="expAmount" min="0.01" step="0.01" required />
+              <input type="number" id="expAmount" aria-label="Valor despesa" min="0.01" step="0.01" required />
             </label>
             <label class="field"><span>Vencimento</span>
-              <input type="date" id="expDueDate" />
+              <input type="date" id="expDueDate" aria-label="Vencimento" />
             </label>
             <label class="field"><span>Recorrência *</span>
               <select id="expRecurrence" required>
@@ -652,7 +652,7 @@
             </label>
           </div>
           <label class="field" style="margin-top:10px;"><span>Descrição *</span>
-            <input type="text" id="expDescription" required placeholder="ex: Hospedagem Cloud Startup - renovação anual" />
+            <input type="text" id="expDescription" aria-label="Descrição" required placeholder="ex: Hospedagem Cloud Startup - renovação anual" />
           </label>
           <label class="field" style="margin-top:8px;"><span>Notas (opcional)</span>
             <textarea id="expNotes" rows="2"></textarea>
@@ -760,16 +760,16 @@
         <form id="employeeForm">
           <div class="form__grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
             <label class="field"><span>Nome completo *</span>
-              <input type="text" id="empName" required />
+              <input type="text" id="empName" aria-label="Nome" required />
             </label>
             <label class="field"><span>E-mail</span>
-              <input type="email" id="empEmail" />
+              <input type="email" id="empEmail" aria-label="E-mail" />
             </label>
             <label class="field"><span>Telefone</span>
-              <input type="text" id="empPhone" />
+              <input type="text" id="empPhone" aria-label="Telefone" />
             </label>
             <label class="field"><span>Cargo</span>
-              <input type="text" id="empRole" placeholder="ex: CTO, Desenvolvedor, Suporte" />
+              <input type="text" id="empRole" aria-label="Cargo" placeholder="ex: CTO, Desenvolvedor, Suporte" />
             </label>
             <label class="field"><span>Tipo de contrato *</span>
               <select id="empContract" required>
@@ -782,13 +782,13 @@
               </select>
             </label>
             <label class="field"><span>Salário/Pró-labore mensal (R$)</span>
-              <input type="number" id="empSalary" min="0" step="0.01" />
+              <input type="number" id="empSalary" aria-label="Salário" min="0" step="0.01" />
             </label>
             <label class="field"><span>Benefícios (R$/mês)</span>
-              <input type="number" id="empBenefits" min="0" step="0.01" value="0" />
+              <input type="number" id="empBenefits" aria-label="Benefícios" min="0" step="0.01" value="0" />
             </label>
             <label class="field"><span>Data admissão</span>
-              <input type="date" id="empHireDate" />
+              <input type="date" id="empHireDate" aria-label="Admissão" />
             </label>
           </div>
           <label class="field" style="margin-top:8px;"><span>Notas</span>
