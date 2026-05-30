@@ -329,6 +329,7 @@
   }
   .foot__row { display: grid; gap: 28px; grid-template-columns: 1fr; margin-bottom: 28px; }
   @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  @media (min-width: 900px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; } }
   .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 14px; margin-bottom: 14px; }
   .foot__col a { display: block; color: rgba(255,255,255,0.65); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
   .foot__col a:hover { color: var(--amber); }
@@ -339,6 +340,84 @@
     padding-top: 20px; text-align: center;
     font-size: 12px; color: rgba(255,255,255,0.45);
   }
+
+  /* ============= CARSHARING ============= */
+  .impact-banner {
+    background: linear-gradient(135deg, var(--green-darker) 0%, var(--green) 100%);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 38px 32px;
+    text-align: center;
+    margin-bottom: 56px;
+    box-shadow: var(--shadow-lg);
+  }
+  .impact-banner__big {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 1; margin-bottom: 8px;
+    letter-spacing: -0.03em;
+  }
+  .impact-banner__big small { font-size: 0.5em; opacity: 0.7; }
+  .impact-banner p { font-size: 16px; color: rgba(255,255,255,0.85); max-width: 500px; margin: 0 auto; }
+  .impact-banner p strong { color: #fff; }
+
+  .audience { display: grid; gap: 22px; grid-template-columns: 1fr; margin-bottom: 56px; }
+  @media (min-width: 800px) { .audience { grid-template-columns: 1fr 1fr; } }
+  .aud {
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: border-color .2s, transform .2s;
+    display: flex; flex-direction: column;
+  }
+  .aud:hover { border-color: var(--green); transform: translateY(-4px); }
+  .aud--amber:hover { border-color: var(--amber-dark); }
+  .aud__tag {
+    display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1px;
+    padding: 5px 12px; border-radius: 999px; margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .aud--green .aud__tag { background: var(--green-pale); color: var(--green); }
+  .aud--amber .aud__tag { background: rgba(251,191,36,0.18); color: var(--amber-dark); }
+  .aud h3 { font-family: 'Sora', sans-serif; font-size: 22px; margin-bottom: 8px; color: var(--ink); }
+  .aud > p { color: var(--ink-mute); font-size: 14.5px; margin-bottom: 18px; line-height: 1.6; }
+  .aud__list { list-style: none; margin-bottom: 22px; flex-grow: 1; }
+  .aud__list li { padding: 7px 0 7px 26px; position: relative; font-size: 14px; color: var(--ink-soft); }
+  .aud__list li::before {
+    content: '✓'; position: absolute; left: 0; top: 7px;
+    width: 18px; height: 18px; background: var(--green); color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+  }
+  .aud--amber .aud__list li::before { background: var(--amber-dark); }
+  .aud .btn { align-self: flex-start; }
+
+  .cs-steps { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); max-width: 1000px; margin: 0 auto 56px; }
+  .cs-step {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    text-align: center;
+    position: relative;
+  }
+  .cs-step__icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--green-pale);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 26px;
+  }
+  .cs-step__num {
+    position: absolute; top: 12px; right: 14px;
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px;
+    color: var(--green); opacity: 0.4;
+  }
+  .cs-step h4 { font-family: 'Sora', sans-serif; font-size: 14.5px; color: var(--ink); margin-bottom: 5px; }
+  .cs-step p { font-size: 12.5px; color: var(--ink-mute); line-height: 1.4; margin: 0; }
 
   /* preview banner */
   .preview-banner {
@@ -367,8 +446,9 @@
     </a>
     <nav class="nav__links" aria-label="Navegação">
       <a href="#frota">Carros</a>
-      <a href="#como">Como funciona</a>
+      <a href="#carsharing">Carsharing</a>
       <a href="#franquia">Franquia</a>
+      <a href="#como">Como funciona</a>
       <a href="#faq">Ajuda</a>
     </nav>
     <div class="nav__cta">
@@ -382,17 +462,17 @@
 <section class="hero" id="topo">
   <div class="wrap hero__inner">
     <div>
-      <span class="hero__badge">Operando em Uberlândia · Frota própria</span>
-      <h1>Aluguel mensal de carro <em>sem dor de cabeça.</em></h1>
-      <p class="hero__sub">Locadora especializada em locações de longa duração. Frota própria, contrato claro, suporte WhatsApp e preço <strong>15-30% mais barato</strong> que as grandes locadoras. Quer empreender? <strong>Seja franqueado em sua cidade.</strong></p>
+      <span class="hero__badge">Mobilidade inteligente · Uberlândia e expansão</span>
+      <h1>Seu próximo carro <em>sem precisar comprar um.</em></h1>
+      <p class="hero__sub">3 jeitos de andar com a Nomade Drive: <strong>aluguel mensal</strong> sem fiador, <strong>carsharing</strong> no seu próprio condomínio, ou <strong>franquia</strong> pra empreender. Tudo com frota própria, app e suporte WhatsApp.</p>
       <div class="hero__cta">
-        <a href="#frota" class="btn btn--primary">🚗 Ver carros disponíveis</a>
-        <a href="#franquia" class="btn btn--ghost-light">🏢 Quero ser franqueado</a>
+        <a href="#frota" class="btn btn--primary">🚗 Alugar por mês</a>
+        <a href="#carsharing" class="btn btn--ghost-light">🏢 Carsharing no meu prédio</a>
       </div>
       <div class="hero__metrics">
-        <div class="hero__metric"><strong>R$ 2.5k</strong><span>preço a partir de /mês</span></div>
-        <div class="hero__metric"><strong>0</strong><span>fiador ou caução abusiva</span></div>
-        <div class="hero__metric"><strong>24h</strong><span>aprovação rápida</span></div>
+        <div class="hero__metric"><strong>1 = 13</strong><span>cada carro compartilhado substitui 13 carros próprios</span></div>
+        <div class="hero__metric"><strong>R$ 0</strong><span>sem fiador, sem caução abusiva</span></div>
+        <div class="hero__metric"><strong>2026</strong><span>operando há 1 ano em Uberlândia</span></div>
       </div>
     </div>
     <div class="hero__visual">
@@ -428,28 +508,28 @@
 <section class="block">
   <div class="wrap">
     <div class="head">
-      <span class="eyebrow">Para você</span>
-      <h2>O que você está procurando?</h2>
-      <p>3 caminhos pra começar com a Nomade Drive — escolhe o seu.</p>
+      <span class="eyebrow">3 produtos · 1 plataforma</span>
+      <h2>O que faz sentido pra você?</h2>
+      <p>Cada perfil tem um caminho próprio com a Nomade Drive — escolhe o seu.</p>
     </div>
     <div class="pillars">
       <article class="pillar">
         <div class="pillar__icon">🚗</div>
-        <h3>Alugar carro</h3>
-        <p>Aluguel mensal a partir de R$ 2.500/mês. Frota própria revisada, contrato simples, sem fiador. Retire em até 48h após aprovação.</p>
+        <h3>Alugar mensal</h3>
+        <p>Aluguel mensal a partir de R$ 2.500. Frota própria revisada, sem fiador, contrato digital. Pra quem precisa de carro por meses, não por horas.</p>
         <a href="#frota" class="pillar__cta">Ver carros disponíveis</a>
       </article>
       <article class="pillar">
-        <div class="pillar__icon pillar__icon--amber">🏢</div>
-        <h3>Ser franqueado</h3>
-        <p>Empreenda no aluguel mensal em sua cidade. Modelo testado, plataforma pronta, suporte completo. Investimento a partir de R$ 130k.</p>
-        <a href="#franquia" class="pillar__cta">Conhecer franquia</a>
+        <div class="pillar__icon">🏢</div>
+        <h3>Carsharing no condomínio</h3>
+        <p>Carro disponível 24h na garagem do seu prédio. Reserva pelo app, paga por hora. Síndico: ofereça mobilidade sem ônus pro condomínio.</p>
+        <a href="#carsharing" class="pillar__cta">Trazer pro meu prédio</a>
       </article>
       <article class="pillar">
-        <div class="pillar__icon">💬</div>
-        <h3>Tirar dúvidas</h3>
-        <p>Como funciona, requisitos, preços, devolução, manutenção. Tudo explicado de forma direta — ou fala com a gente no WhatsApp.</p>
-        <a href="#faq" class="pillar__cta">Ver perguntas frequentes</a>
+        <div class="pillar__icon pillar__icon--amber">💼</div>
+        <h3>Ser franqueado</h3>
+        <p>Empreenda em sua cidade com modelo testado + plataforma pronta. Investimento a partir de R$ 130k. Royalty 30% matriz · 70% franqueado.</p>
+        <a href="#franquia" class="pillar__cta">Conhecer franquia</a>
       </article>
     </div>
   </div>
@@ -499,6 +579,117 @@
     </div>
     <div style="text-align:center; margin-top:36px;">
       <a href="../frota.html" class="btn btn--green">Ver frota completa →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARSHARING — NOVA SEÇÃO ============ -->
+<section class="block" id="carsharing">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow" style="color:var(--amber-dark);">🆕 Novo · B2B2C</span>
+      <h2>Carsharing <em style="color:var(--green); font-style:normal;">no seu próprio condomínio</em></h2>
+      <p>Carro disponível 24h na garagem do prédio. Morador reserva pelo app, paga por hora. Síndico oferece mobilidade sem ônus pro condomínio.</p>
+    </div>
+
+    <!-- IMPACT METRIC -->
+    <div class="impact-banner">
+      <div class="impact-banner__big">1 <small>=</small> 13</div>
+      <p>Cada Nomade Drive compartilhado em condomínio <strong>substitui até 13 carros particulares</strong> da garagem — liberando vagas, reduzindo trânsito e baixando custo de mobilidade pra todo morador.</p>
+    </div>
+
+    <!-- DUAL AUDIENCE -->
+    <div class="audience">
+
+      <!-- SÍNDICO / ADMINISTRADORA -->
+      <article class="aud aud--green">
+        <span class="aud__tag">Pra síndico · administradora</span>
+        <h3>Mobilidade pro seu condomínio — sem custo</h3>
+        <p>A gente coloca os carros, gerencia tudo, divide receita com o condomínio. Você só oferece um benefício novo aos moradores e ainda gera grana pra obras.</p>
+        <ul class="aud__list">
+          <li>Zero investimento do condomínio</li>
+          <li>Receita compartilhada (% por reserva)</li>
+          <li>2-4 vagas dedicadas (negociável)</li>
+          <li>Vistoria + seguro + manutenção por nossa conta</li>
+          <li>Aumenta valor de venda/aluguel das unidades</li>
+          <li>Reduz vagas de carro paradas</li>
+        </ul>
+        <a href="#carsharing-form" class="btn btn--green">📋 Trazer pro meu prédio</a>
+      </article>
+
+      <!-- MORADOR -->
+      <article class="aud aud--amber">
+        <span class="aud__tag">Pra morador do prédio</span>
+        <h3>Carro na garagem quando precisar — sem comprar</h3>
+        <p>Reserva pelo app, vai até a garagem, dirige. Devolve quando terminar. Sem IPVA, sem seguro, sem manutenção, sem dor de cabeça. Paga só pelo tempo que usar.</p>
+        <ul class="aud__list">
+          <li>Reserva em 3 toques pelo app</li>
+          <li>R$ 19/h ou R$ 149/dia (preço social pra residentes)</li>
+          <li>Combustível, seguro e manutenção inclusos</li>
+          <li>Sem fiador, sem caução, cadastro em 5 min</li>
+          <li>Carro sempre no seu prédio — não precisa sair andando</li>
+          <li>Disponibilidade em tempo real no app</li>
+        </ul>
+        <a href="#carsharing-form" class="btn btn--primary">📱 Quero no meu prédio</a>
+      </article>
+    </div>
+
+    <!-- 5 PASSOS -->
+    <h3 style="text-align:center; font-family:'Sora',sans-serif; font-size:22px; margin-bottom:24px;">Como funciona em 5 passos</h3>
+    <div class="cs-steps">
+      <div class="cs-step">
+        <span class="cs-step__num">01</span>
+        <div class="cs-step__icon">🤝</div>
+        <h4>Síndico fecha</h4>
+        <p>Contrato + vagas reservadas + divisão de receita</p>
+      </div>
+      <div class="cs-step">
+        <span class="cs-step__num">02</span>
+        <div class="cs-step__icon">🚗</div>
+        <h4>Carros chegam</h4>
+        <p>Frota Nomade instalada na garagem em 7 dias</p>
+      </div>
+      <div class="cs-step">
+        <span class="cs-step__num">03</span>
+        <div class="cs-step__icon">📱</div>
+        <h4>Morador baixa app</h4>
+        <p>Cadastro com CNH em 5 min, aprovação 24h</p>
+      </div>
+      <div class="cs-step">
+        <span class="cs-step__num">04</span>
+        <div class="cs-step__icon">🔑</div>
+        <h4>Reserva e usa</h4>
+        <p>Escolhe horário no app, destrava com celular</p>
+      </div>
+      <div class="cs-step">
+        <span class="cs-step__num">05</span>
+        <div class="cs-step__icon">💳</div>
+        <h4>Pagamento automático</h4>
+        <p>Cobrado por hora no cartão. Sem fim de mês surpresa</p>
+      </div>
+    </div>
+
+    <!-- FORM SÍNDICO -->
+    <div id="carsharing-form" style="max-width:560px; margin:0 auto; background:#fff; padding:32px; border-radius:var(--radius-lg); border:1px solid var(--line); box-shadow: var(--shadow);">
+      <span class="aud__tag" style="background:var(--green-pale); color:var(--green); display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:1px; padding:5px 12px; border-radius:999px; margin-bottom:14px; text-transform:uppercase;">Cadastrar prédio</span>
+      <h3 style="font-family:'Sora',sans-serif; font-size:22px; margin-bottom:6px;">Quero Nomade no meu condomínio</h3>
+      <p style="color:var(--ink-mute); font-size:14px; margin-bottom:22px;">Síndico, administradora ou morador interessado: preenche e a gente entra em contato em até 48h úteis.</p>
+      <form id="formCarsharing" style="display:flex; flex-direction:column; gap:14px;">
+        <input type="text" id="cs-name" required placeholder="Seu nome" style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Nome" />
+        <select id="cs-role" required style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px; background:#fff;" aria-label="Sua relação com o condomínio">
+          <option value="">Sua relação com o condomínio...</option>
+          <option>Sou síndico</option>
+          <option>Sou administradora</option>
+          <option>Sou morador interessado</option>
+          <option>Sou conselheiro/membro de comissão</option>
+        </select>
+        <input type="text" id="cs-cond" required placeholder="Nome do condomínio" style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Nome do condomínio" />
+        <input type="text" id="cs-city" required placeholder="Cidade do condomínio (ex: Uberlândia, MG)" style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Cidade" />
+        <input type="number" id="cs-units" placeholder="Quantas unidades (apartamentos)?" min="1" style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Número de unidades" />
+        <input type="tel" id="cs-phone" required placeholder="WhatsApp (com DDD)" style="padding:13px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="WhatsApp" />
+        <button type="submit" class="btn btn--green" style="justify-content:center; padding:15px;">Quero saber mais →</button>
+        <p style="font-size:12px; color:var(--ink-mute); text-align:center; margin-top:4px;">Vai abrir o WhatsApp com sua mensagem pronta.</p>
+      </form>
     </div>
   </div>
 </section>
@@ -626,6 +817,18 @@
     </div>
     <div class="faq">
       <details class="faq__item">
+        <summary>🏢 Como funciona o carsharing no meu condomínio?</summary>
+        <div class="faq__a">O condomínio aprova em assembleia, a gente assina contrato, traz 2-4 carros e instala em vagas dedicadas. Moradores baixam o app, cadastram CNH e reservam por hora ou dia. Sem custo pro condomínio — pelo contrário, condomínio recebe % por reserva como receita extra.</div>
+      </details>
+      <details class="faq__item">
+        <summary>🏢 Quantas vagas o condomínio precisa ceder?</summary>
+        <div class="faq__a">Em geral 2-4 vagas, dependendo do tamanho do prédio. Como cada carro Nomade substitui ~13 carros particulares, no médio prazo o condomínio TEM mais vagas livres pra moradores que dispensam carro próprio. ROI calculado caso a caso.</div>
+      </details>
+      <details class="faq__item">
+        <summary>🏢 Sou morador. Como entro pra fila de espera?</summary>
+        <div class="faq__a">Cadastra seu prédio no formulário acima. Quando atingirmos massa crítica de interessados (geralmente 8-12 moradores), apresentamos a proposta pra síndico/administradora. Quanto mais gente, mais rápido.</div>
+      </details>
+      <details class="faq__item">
         <summary>Preciso de fiador?</summary>
         <div class="faq__a">Não. Trabalhamos com caução refundável de 1 mensalidade. Análise é por comportamento (CNH, biometria, histórico), não por fiador ou score agressivo.</div>
       </details>
@@ -657,10 +860,11 @@
 <section class="cta-final">
   <div class="wrap">
     <h2>Pronto pra começar?</h2>
-    <p>Escolha seu caminho: alugue um carro mensal em Uberlândia ou empreenda como franqueado em sua cidade.</p>
+    <p>3 caminhos: alugue um carro por mês, traga carsharing pro seu condomínio, ou empreenda como franqueado.</p>
     <div class="cta-final__row">
-      <a href="#frota" class="btn btn--primary">🚗 Ver carros disponíveis</a>
-      <a href="#franquia-form" class="btn btn--ghost-light">🏢 Quero franquia</a>
+      <a href="#frota" class="btn btn--primary">🚗 Alugar mensal</a>
+      <a href="#carsharing-form" class="btn btn--ghost-light">🏢 Carsharing no prédio</a>
+      <a href="#franquia-form" class="btn btn--ghost-light">💼 Franquia</a>
     </div>
   </div>
 </section>
@@ -679,6 +883,11 @@
         <a href="#como">Como funciona</a>
         <a href="#faq">Ajuda</a>
         <a href="../login.html">Entrar</a>
+      </div>
+      <div class="foot__col">
+        <h5>Para condomínios</h5>
+        <a href="#carsharing">Sobre o carsharing</a>
+        <a href="#carsharing-form">Trazer pro meu prédio</a>
       </div>
       <div class="foot__col">
         <h5>Para empreendedores</h5>
@@ -713,6 +922,25 @@ document.getElementById('formFranquia').addEventListener('submit', function(e) {
     'WhatsApp: ' + ph + '\n' +
     'Cidade alvo: ' + ci + '\n' +
     'Capital: ' + (cap || 'a definir');
+  window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+});
+
+document.getElementById('formCarsharing').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var n = document.getElementById('cs-name').value.trim();
+  var r = document.getElementById('cs-role').value;
+  var co = document.getElementById('cs-cond').value.trim();
+  var ci = document.getElementById('cs-city').value.trim();
+  var u = document.getElementById('cs-units').value;
+  var ph = document.getElementById('cs-phone').value.trim();
+  if (!n || !r || !co || !ci || !ph) return;
+  var msg = '🏢 *Interesse em Carsharing Nomade Drive (Condomínio)*\n\n' +
+    'Nome: ' + n + '\n' +
+    'Relação: ' + r + '\n' +
+    'Condomínio: ' + co + '\n' +
+    'Cidade: ' + ci + '\n' +
+    (u ? 'Unidades: ' + u + '\n' : '') +
+    'WhatsApp: ' + ph;
   window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
 });
 </script>
