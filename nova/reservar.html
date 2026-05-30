@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reservar Chevrolet Tracker — Nomade Drive</title>
+<meta name="description" content="Fluxo de reserva passo a passo." />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg-soft); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; }
+  .btn--primary:hover { background: var(--green-dark); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn--ghost:hover { background: var(--bg-soft); border-color: var(--ink); }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; }
+  .btn--block { width: 100%; padding: 16px; font-size: 16px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+
+  /* STEPPER */
+  .stepper { background: #fff; border-bottom: 1px solid var(--line); padding: 22px 0; }
+  .stepper__row { display: flex; align-items: center; justify-content: space-between; max-width: 720px; margin: 0 auto; gap: 8px; }
+  .step-num { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .step-num__bullet { width: 36px; height: 36px; border-radius: 50%; background: var(--line); color: var(--ink-mute); display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px; transition: all .25s; }
+  .step-num.done .step-num__bullet { background: var(--green); color: #fff; }
+  .step-num.active .step-num__bullet { background: var(--green); color: #fff; box-shadow: 0 0 0 6px rgba(20,95,62,0.15); }
+  .step-num__label { font-size: 11.5px; color: var(--ink-mute); font-weight: 600; text-align: center; line-height: 1.2; }
+  .step-num.active .step-num__label { color: var(--green); }
+  .step-line { flex: 1; height: 2px; background: var(--line); margin-top: 18px; }
+  .step-line.done { background: var(--green); }
+
+  /* MAIN */
+  main { padding: 32px 0 64px; }
+  .grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1.4fr 1fr; } }
+
+  .panel { background: #fff; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); }
+  .panel h2 { font-size: 24px; margin-bottom: 8px; }
+  .panel p.lead { color: var(--ink-mute); font-size: 14.5px; margin-bottom: 26px; }
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* FORM */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 13px 16px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 14.5px; background: #fff; }
+  .field input:focus, .field select:focus { outline: 2px solid var(--green); border-color: var(--green); }
+  .field-row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+
+  /* HORARIOS GRID */
+  .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .slot { padding: 12px 8px; border: 2px solid var(--line); border-radius: 8px; text-align: center; font-weight: 600; font-size: 13.5px; cursor: pointer; transition: all .15s; background: #fff; }
+  .slot:hover { border-color: var(--green); }
+  .slot.on { background: var(--green); color: #fff; border-color: var(--green); }
+  .slot.off { opacity: 0.35; cursor: not-allowed; background: var(--bg-soft); }
+
+  /* PAYMENT MOCK */
+  .pay-method { display: flex; gap: 10px; margin-bottom: 18px; }
+  .pay-opt { flex: 1; padding: 14px; border: 2px solid var(--line); border-radius: 10px; text-align: center; cursor: pointer; transition: all .15s; font-weight: 600; font-size: 13.5px; }
+  .pay-opt.on { border-color: var(--green); background: var(--green-pale); color: var(--green); }
+
+  /* RESUMO LADO DIREITO */
+  .summary { background: #fff; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); position: sticky; top: 90px; }
+  .summary__car { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .summary__car img { width: 96px; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; }
+  .summary__car h4 { font-family: 'Sora', sans-serif; font-size: 15px; margin-bottom: 2px; }
+  .summary__car p { font-size: 12.5px; color: var(--ink-mute); }
+  .summary__row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: var(--ink-soft); }
+  .summary__row strong { color: var(--ink); }
+  .summary__row.total { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 16px; font-size: 18px; }
+  .summary__row.total strong { font-family: 'Sora', sans-serif; font-size: 26px; color: var(--green); }
+  .summary__caution { font-size: 12px; color: var(--ink-mute); margin-top: 12px; padding: 10px 12px; background: var(--bg-soft); border-radius: 6px; line-height: 1.5; }
+
+  /* BUTTONS GROUP */
+  .actions { display: flex; gap: 12px; margin-top: 28px; }
+  .actions .btn { flex: 1; }
+
+  /* CONFIRMATION ITEMS */
+  .confirm-row { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .confirm-row__icon { width: 36px; height: 36px; background: var(--green-pale); color: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .confirm-row__icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .confirm-row__label { font-size: 11.5px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; }
+  .confirm-row__val { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+
+  .foot { background: #050c09; color: rgba(255,255,255,0.6); padding: 28px 0; text-align: center; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <div class="nav__cta">
+      <a href="carro.html?carro=tracker" class="btn btn--ghost btn--sm">← Voltar pro carro</a>
+    </div>
+  </div>
+</header>
+
+<!-- STEPPER -->
+<div class="stepper">
+  <div class="wrap">
+    <div class="stepper__row">
+      <div class="step-num active" id="num1"><div class="step-num__bullet">1</div><div class="step-num__label">Horário</div></div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-num" id="num2"><div class="step-num__bullet">2</div><div class="step-num__label">Dados</div></div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-num" id="num3"><div class="step-num__bullet">3</div><div class="step-num__label">Pagamento</div></div>
+      <div class="step-line" id="line3"></div>
+      <div class="step-num" id="num4"><div class="step-num__bullet">4</div><div class="step-num__label">Revisar</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="grid">
+
+      <!-- COLUNA ESQUERDA: wizard -->
+      <div class="panel">
+
+        <!-- STEP 1: HORARIO -->
+        <div class="step active" id="step1">
+          <h2>Quando você quer usar?</h2>
+          <p class="lead">Escolha data e horário de retirada e devolução.</p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="date-start">Data retirada</label>
+              <input type="date" id="date-start" value="2026-05-31" />
+            </div>
+            <div class="field">
+              <label for="date-end">Data devolução</label>
+              <input type="date" id="date-end" value="2026-05-31" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Horário de retirada</label>
+            <div class="slots">
+              <div class="slot off">08:00</div>
+              <div class="slot off">09:00</div>
+              <div class="slot">10:00</div>
+              <div class="slot on" id="slotStart">11:00</div>
+              <div class="slot">12:00</div>
+              <div class="slot">13:00</div>
+              <div class="slot off">14:00</div>
+              <div class="slot">15:00</div>
+              <div class="slot">16:00</div>
+            </div>
+            <p style="font-size:12px; color:var(--ink-mute);">⚪ disponível · 🟢 selecionado · ⚫ ocupado</p>
+          </div>
+
+          <div class="field">
+            <label>Duração da reserva</label>
+            <select id="duration" onchange="updateSummary()">
+              <option value="2">2 horas — R$ 38</option>
+              <option value="4">4 horas — R$ 76</option>
+              <option value="6" selected>6 horas — R$ 114</option>
+              <option value="8">8 horas — R$ 149 (teto diária)</option>
+              <option value="12">12 horas — R$ 149 (teto diária)</option>
+              <option value="24">1 dia (24h) — R$ 149</option>
+              <option value="48">2 dias — R$ 298</option>
+            </select>
+            <p style="font-size:12px; color:var(--ink-mute); margin-top:6px;">💡 Teto automático: você nunca paga mais que a diária (R$ 149) num período de 24h.</p>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--ghost" disabled style="opacity:0.5;">← Voltar</button>
+            <button class="btn btn--primary" onclick="goStep(2)">Continuar →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: DADOS -->
+        <div class="step" id="step2">
+          <h2>Seus dados</h2>
+          <p class="lead">Confirme os dados pra emissão da NF e contrato.</p>
+
+          <div class="field">
+            <label for="name">Nome completo</label>
+            <input type="text" id="name" value="Daniel Trodovalho" />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" value="dtrodovalho40@gmail.com" />
+            </div>
+            <div class="field">
+              <label for="phone">WhatsApp</label>
+              <input type="tel" id="phone" value="(34) 9 8406-4864" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="cpf">CPF</label>
+              <input type="text" id="cpf" value="123.456.789-00" />
+            </div>
+            <div class="field">
+              <label for="cnh">CNH</label>
+              <input type="text" id="cnh" value="01234567890 (B)" />
+            </div>
+          </div>
+
+          <div style="background:var(--green-pale); padding:14px 16px; border-radius:10px; font-size:13.5px; color:var(--green); margin-top:18px;">
+            ✓ <strong>Conta verificada</strong> · CNH validada em 28/05/2026
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--ghost" onclick="goStep(1)">← Voltar</button>
+            <button class="btn btn--primary" onclick="goStep(3)">Continuar →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: PAGAMENTO -->
+        <div class="step" id="step3">
+          <h2>Pagamento</h2>
+          <p class="lead">Caução R$ 200 pré-autorizada agora · cobrança final ao terminar.</p>
+
+          <div class="field">
+            <label>Método</label>
+            <div class="pay-method">
+              <div class="pay-opt on" onclick="selectPay(this)">💳 Cartão</div>
+              <div class="pay-opt" onclick="selectPay(this)">⚡ Pix</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cc">Número do cartão</label>
+            <input type="text" id="cc" value="•••• •••• •••• 4242" readonly />
+            <p style="font-size:12px; color:var(--ink-mute); margin-top:4px;">Cartão Visa terminado em 4242 (cadastrado)</p>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="cc-exp">Validade</label>
+              <input type="text" id="cc-exp" value="12/28" readonly />
+            </div>
+            <div class="field">
+              <label for="cc-cvc">CVC</label>
+              <input type="text" id="cc-cvc" placeholder="•••" />
+            </div>
+          </div>
+
+          <div style="background:var(--bg-soft); padding:14px 16px; border-radius:10px; font-size:13px; color:var(--ink-mute); margin-top:14px; line-height:1.55;">
+            🔒 <strong style="color:var(--ink);">Pagamento processado pelo Stripe</strong>. Caução de R$ 200 será apenas <strong>pré-autorizada</strong> (não desconta). O valor final é cobrado ao terminar a reserva.
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--ghost" onclick="goStep(2)">← Voltar</button>
+            <button class="btn btn--primary" onclick="goStep(4)">Continuar →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: REVISAR -->
+        <div class="step" id="step4">
+          <h2>Revisar reserva</h2>
+          <p class="lead">Confira os detalhes antes de confirmar.</p>
+
+          <div class="confirm-row">
+            <div class="confirm-row__icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+            <div>
+              <div class="confirm-row__label">Carro</div>
+              <div class="confirm-row__val">Chevrolet Tracker 2024 · SUV Automático</div>
+            </div>
+          </div>
+
+          <div class="confirm-row">
+            <div class="confirm-row__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div>
+              <div class="confirm-row__label">Horário</div>
+              <div class="confirm-row__val" id="confirmHour">31/05/2026 11:00 → 17:00 (6h)</div>
+            </div>
+          </div>
+
+          <div class="confirm-row">
+            <div class="confirm-row__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div>
+              <div class="confirm-row__label">Local</div>
+              <div class="confirm-row__val">Ed. Solar das Acácias · Vaga G2-12</div>
+            </div>
+          </div>
+
+          <div class="confirm-row">
+            <div class="confirm-row__icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+            <div>
+              <div class="confirm-row__label">Pagamento</div>
+              <div class="confirm-row__val">Visa •••• 4242 · caução R$ 200 pré-autorizada</div>
+            </div>
+          </div>
+
+          <div style="background:var(--green-pale); border-left:4px solid var(--green); padding:14px 18px; border-radius:8px; margin-top:18px; font-size:13.5px; color:var(--green-dark);">
+            <strong>Importante:</strong> ao confirmar, você concorda com os termos e regras de uso. O código do cofre eletrônico chega no seu celular em até 1 minuto.
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--ghost" onclick="goStep(3)">← Voltar</button>
+            <a href="reserva-ok.html?carro=tracker" class="btn btn--primary">Confirmar reserva ✓</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUNA DIREITA: resumo -->
+      <aside>
+        <div class="summary">
+          <h3 style="font-family:'Sora',sans-serif; font-size:14px; color:var(--ink-mute); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:14px;">Resumo da reserva</h3>
+
+          <div class="summary__car">
+            <img src="../images/car-tracker-1.jpg" alt="Tracker" />
+            <div>
+              <h4>Chevrolet Tracker 2024</h4>
+              <p>Ed. Solar das Acácias</p>
+            </div>
+          </div>
+
+          <div class="summary__row"><span>Data</span><strong id="sumDate">31/05/2026</strong></div>
+          <div class="summary__row"><span>Início</span><strong>11:00</strong></div>
+          <div class="summary__row"><span>Duração</span><strong id="sumDuration">6 horas</strong></div>
+          <div class="summary__row"><span>Tarifa</span><strong id="sumRate">R$ 19/hora</strong></div>
+          <div class="summary__row"><span>Combustível incluso</span><strong>50 km</strong></div>
+          <div class="summary__row total"><span>Total</span><strong id="sumTotal">R$ 114</strong></div>
+
+          <div class="summary__caution">+ Caução pré-autorizada de R$ 200 (não desconta). Liberada em até 5 dias após a devolução.</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG · <a href="../termos.html" style="color:var(--amber);">Termos</a></div>
+</footer>
+
+<script>
+function goStep(n) {
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('step' + n).classList.add('active');
+  for (var i = 1; i <= 4; i++) {
+    var num = document.getElementById('num' + i);
+    num.classList.remove('active', 'done');
+    if (i < n) num.classList.add('done');
+    if (i === n) num.classList.add('active');
+    if (i < 4) {
+      var line = document.getElementById('line' + i);
+      line.classList.toggle('done', i < n);
+    }
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectPay(el) {
+  document.querySelectorAll('.pay-opt').forEach(function(o) { o.classList.remove('on'); });
+  el.classList.add('on');
+}
+
+function updateSummary() {
+  var d = parseInt(document.getElementById('duration').value);
+  var hourly = 19;
+  var daily = 149;
+  var total = Math.min(d * hourly, Math.ceil(d / 24) * daily);
+  var dur = d < 24 ? d + ' horas' : (d / 24) + ' dia(s)';
+  document.getElementById('sumDuration').textContent = dur;
+  document.getElementById('sumTotal').textContent = 'R$ ' + total;
+  document.getElementById('sumRate').textContent = (d >= 8 ? 'R$ ' + daily + '/dia (teto)' : 'R$ ' + hourly + '/hora');
+  var endHour = (11 + d) % 24;
+  document.getElementById('confirmHour').textContent = '31/05/2026 11:00 → ' + (endHour < 10 ? '0' + endHour : endHour) + ':00 (' + dur + ')';
+}
+
+document.querySelectorAll('.slot:not(.off)').forEach(function(s) {
+  s.addEventListener('click', function() {
+    document.querySelectorAll('.slot').forEach(function(x) { x.classList.remove('on'); });
+    s.classList.add('on');
+  });
+});
+</script>
+
+</body>
+</html>

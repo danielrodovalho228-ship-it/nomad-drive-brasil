@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chevrolet Tracker 2024 — Nomade Drive · R$ 19/h ou R$ 149/dia</title>
+<meta name="description" content="Reserve um Chevrolet Tracker 2024 no Edifício Solar das Acácias. SUV automático, ar digital, multimídia. Disponível 24h." />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg-soft); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; }
+  .btn--primary:hover { background: var(--green-dark); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn--ghost:hover { background: var(--ink); color: #fff; }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; }
+  .btn--block { width: 100%; padding: 16px; font-size: 16px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); }
+  .nav__links a:hover { color: var(--green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 900px) { .nav__links { display: flex; } }
+
+  /* BREADCRUMB */
+  .crumb { background: #fff; border-bottom: 1px solid var(--line); padding: 12px 0; font-size: 13px; color: var(--ink-mute); }
+  .crumb a { color: var(--green); text-decoration: none; }
+  .crumb a:hover { text-decoration: underline; }
+  .crumb span { margin: 0 6px; opacity: 0.4; }
+
+  /* MAIN GRID */
+  main { padding: 32px 0 64px; }
+  .car-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .car-grid { grid-template-columns: 1.4fr 1fr; } }
+
+  /* GALLERY */
+  .gallery__main { background: #fff; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 14px; aspect-ratio: 4/3; }
+  .gallery__main img { width: 100%; height: 100%; object-fit: cover; }
+  .gallery__thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .gallery__thumb { background: #fff; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; cursor: pointer; border: 3px solid transparent; transition: border-color .15s, transform .15s; }
+  .gallery__thumb.on { border-color: var(--green); }
+  .gallery__thumb:hover { transform: translateY(-2px); }
+  .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* RESERVE CARD */
+  .res { background: #fff; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); position: sticky; top: 90px; }
+  .res__cat { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--green); text-transform: uppercase; margin-bottom: 6px; }
+  .res__title { font-family: 'Sora', sans-serif; font-size: 26px; margin-bottom: 6px; }
+  .res__rating { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-mute); margin-bottom: 18px; }
+  .res__stars { color: var(--amber); font-size: 16px; letter-spacing: 1px; }
+  .res__pricing { display: flex; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+  .res__price-block { flex: 1; }
+  .res__price-block strong { display: block; font-family: 'Sora', sans-serif; font-size: 26px; color: var(--green); }
+  .res__price-block small { font-size: 12px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; }
+  .res__teto { font-size: 12.5px; color: var(--ink-mute); margin-bottom: 18px; padding: 10px 12px; background: var(--bg-soft); border-radius: 6px; line-height: 1.5; }
+  .res__teto strong { color: var(--green); }
+  .res__status { background: var(--green-pale); color: var(--green); padding: 10px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .res__status::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--green-bright); }
+  .res__incluso { font-size: 13px; color: var(--ink-mute); margin-bottom: 20px; line-height: 1.6; }
+  .res__incluso strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 13.5px; }
+
+  /* SECTIONS */
+  .section-card { background: #fff; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); margin-bottom: 24px; }
+  .section-card h2 { font-size: 22px; margin-bottom: 18px; }
+
+  /* SPECS */
+  .specs { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .spec { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-soft); border-radius: var(--radius); }
+  .spec__icon { width: 38px; height: 38px; background: var(--green); color: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .spec__icon svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .spec__label { font-size: 11px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; }
+  .spec__val { font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+
+  /* LOCATION */
+  .loc-map { aspect-ratio: 16/8; background: linear-gradient(135deg, var(--green-pale) 0%, #c8e3cf 100%); border-radius: var(--radius); margin-bottom: 16px; position: relative; overflow: hidden; }
+  .loc-map::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(20,95,62,0.08) 1px, transparent 1px), linear-gradient(rgba(20,95,62,0.08) 1px, transparent 1px); background-size: 40px 40px; }
+  .loc-map__pin { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -100%); }
+  .loc-map__pin svg { width: 44px; height: 44px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  .loc-map__label { position: absolute; top: 60%; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink); box-shadow: var(--shadow); white-space: nowrap; }
+  .loc-info { display: flex; gap: 14px; align-items: flex-start; }
+  .loc-info__icon { width: 40px; height: 40px; background: var(--green-pale); color: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .loc-info__icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .loc-info h4 { font-family: 'Sora', sans-serif; font-size: 15.5px; margin-bottom: 2px; }
+  .loc-info p { font-size: 13.5px; color: var(--ink-mute); }
+
+  /* REVIEWS */
+  .review { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .review:last-child { border-bottom: none; }
+  .review__head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .review__avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; }
+  .review__who strong { font-family: 'Sora', sans-serif; font-size: 14px; display: block; }
+  .review__who span { font-size: 12px; color: var(--ink-mute); }
+  .review__stars { color: var(--amber); margin-left: auto; letter-spacing: 1px; font-size: 14px; }
+  .review__txt { font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+
+  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 48px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--amber); }
+  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
+  .foot__brand p { font-size: 13px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.45); }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html">Para empresas</a>
+      <a href="tecnologia.html">Tecnologia</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<nav class="crumb">
+  <div class="wrap">
+    <a href="index.html">Início</a> <span>›</span> <a href="index.html#locais">Carros</a> <span>›</span> <strong style="color:var(--ink);">Chevrolet Tracker 2024</strong>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="car-grid">
+
+      <!-- COLUNA ESQUERDA: galeria + specs + localização + avaliações -->
+      <div>
+        <!-- GALERIA -->
+        <div class="gallery">
+          <div class="gallery__main">
+            <img id="mainImg" src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker 2024" />
+          </div>
+          <div class="gallery__thumbs">
+            <div class="gallery__thumb on" onclick="setMain('../images/car-tracker-1.jpg', this)"><img src="../images/car-tracker-1.jpg" alt="Foto 1" /></div>
+            <div class="gallery__thumb" onclick="setMain('../images/car-tracker-2.jpg', this)"><img src="../images/car-tracker-2.jpg" alt="Foto 2" /></div>
+            <div class="gallery__thumb" onclick="setMain('../images/car-tracker-3.jpg', this)"><img src="../images/car-tracker-3.jpg" alt="Foto 3" /></div>
+          </div>
+        </div>
+
+        <!-- SPECS -->
+        <div class="section-card" style="margin-top:24px;">
+          <h2>Especificações</h2>
+          <div class="specs">
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><div class="spec__label">Câmbio</div><div class="spec__val">Automático</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/></svg></div><div><div class="spec__label">Combustível</div><div class="spec__val">Flex</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg></div><div><div class="spec__label">Ano</div><div class="spec__val">2024</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.39 0 4.68.94 6.36 2.64L21 8"/><polyline points="21 3 21 8 16 8"/></svg></div><div><div class="spec__label">Motor</div><div class="spec__val">1.2 Turbo</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div><div class="spec__label">Ar condicionado</div><div class="spec__val">Digital</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div><div><div class="spec__label">Multimídia</div><div class="spec__val">8" táctil</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></div><div><div class="spec__label">Bagageiro</div><div class="spec__val">393 L</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="spec__label">Lugares</div><div class="spec__val">5</div></div></div>
+          </div>
+        </div>
+
+        <!-- LOCALIZAÇÃO -->
+        <div class="section-card">
+          <h2>Onde está esse carro</h2>
+          <div class="loc-map">
+            <div class="loc-map__pin"><svg viewBox="0 0 24 24"><path d="M12 0C7.6 0 4 3.6 4 8c0 5.4 8 16 8 16s8-10.6 8-16c0-4.4-3.6-8-8-8z" fill="#145f3e"/><circle cx="12" cy="8" r="3" fill="#fff"/></svg></div>
+            <div class="loc-map__label">Edifício Solar das Acácias</div>
+          </div>
+          <div class="loc-info">
+            <div class="loc-info__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div>
+              <h4>Edifício Solar das Acácias · Vaga G2-12</h4>
+              <p>Av. Rondon Pacheco, 1234 · Centro · Uberlândia, MG · CEP 38400-150</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- AVALIAÇÕES -->
+        <div class="section-card">
+          <h2>Avaliações (4,8 ★ · 47 reservas)</h2>
+
+          <div class="review">
+            <div class="review__head">
+              <div class="review__avatar">MR</div>
+              <div class="review__who"><strong>Mariana R.</strong><span>2 dias atrás · usou 6h</span></div>
+              <div class="review__stars">★★★★★</div>
+            </div>
+            <p class="review__txt">Carro impecável, perfeito pra uma volta com a família. O cofre eletrônico funcionou direitinho, foi tudo bem rápido.</p>
+          </div>
+
+          <div class="review">
+            <div class="review__head">
+              <div class="review__avatar">JC</div>
+              <div class="review__who"><strong>João C.</strong><span>1 semana atrás · usou 1 dia</span></div>
+              <div class="review__stars">★★★★★</div>
+            </div>
+            <p class="review__txt">Usei pra ir até Araguari num final de semana. Carro novinho, dirige super bem. Recomendo!</p>
+          </div>
+
+          <div class="review">
+            <div class="review__head">
+              <div class="review__avatar">PL</div>
+              <div class="review__who"><strong>Patrícia L.</strong><span>2 semanas atrás · usou 3h</span></div>
+              <div class="review__stars">★★★★☆</div>
+            </div>
+            <p class="review__txt">Boa experiência. Único ponto: combustível estava no mínimo na retirada, precisei abastecer logo. Pelo resto, ótimo!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA: card de reserva sticky -->
+      <aside>
+        <div class="res">
+          <div class="res__cat">SUV Automático</div>
+          <h1 class="res__title">Chevrolet Tracker 2024</h1>
+          <div class="res__rating">
+            <div class="res__stars">★★★★★</div>
+            <span>4,8 · 47 reservas</span>
+          </div>
+
+          <div class="res__pricing">
+            <div class="res__price-block">
+              <strong>R$ 19</strong>
+              <small>/hora</small>
+            </div>
+            <div class="res__price-block">
+              <strong>R$ 149</strong>
+              <small>/dia</small>
+            </div>
+          </div>
+
+          <div class="res__teto"><strong>Teto automático:</strong> em reservas longas, você paga o menor entre tarifa por hora e diária.</div>
+
+          <div class="res__status">3 horários disponíveis nas próximas 24h</div>
+
+          <div class="res__incluso">
+            <strong>Já incluso:</strong>
+            ✓ 50 km de combustível · ✓ Seguro completo · ✓ Manutenção · ✓ Assistência 24h
+          </div>
+
+          <a href="reservar.html?carro=tracker" class="btn btn--primary btn--block">Reservar agora →</a>
+
+          <p style="text-align:center; font-size:12px; color:var(--ink-mute); margin-top:14px;">
+            Caução R$ 200 (pré-autorização) · Cancelamento grátis até 1h antes
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="tecnologia.html">Tecnologia</a>
+      </div>
+      <div class="foot__col">
+        <h5>Para empresas</h5>
+        <a href="parceiros.html">Condomínio/Shopping/Hospital</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+  </div>
+</footer>
+
+<script>
+function setMain(src, thumb) {
+  document.getElementById('mainImg').src = src;
+  document.querySelectorAll('.gallery__thumb').forEach(function(t) { t.classList.remove('on'); });
+  thumb.classList.add('on');
+}
+</script>
+
+</body>
+</html>

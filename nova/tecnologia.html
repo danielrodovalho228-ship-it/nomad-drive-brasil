@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tecnologia — Nomade Drive · Stack completo com fornecedores brasileiros</title>
+<meta name="description" content="Plataforma própria + Telemetria Maxtrack/Cobli + Cofre Yale/iLockey + Stripe Connect + Seguro Yelum + Validação CAF. Stack completo do MVP." />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+  h2 { font-size: clamp(28px, 4.4vw, 42px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; white-space: nowrap; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; }
+  .btn--primary:hover { background: var(--green-dark); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn--ghost:hover { background: var(--ink); color: #fff; }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); }
+  .nav__links a:hover, .nav__links a.on { color: var(--green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 900px) { .nav__links { display: flex; } }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 56px 0 72px; }
+  .hero h1 { color: #fff; font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 16px; }
+  .hero h1 em { color: var(--amber); font-style: normal; }
+  .hero p { color: rgba(255,255,255,0.88); font-size: clamp(16px, 2vw, 19px); max-width: 700px; }
+
+  /* STACK MAIN */
+  .stack { padding: 84px 0; }
+  .stack__grid { display: grid; gap: 48px; grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 900px) { .stack__grid { grid-template-columns: 1.05fr 1fr; } }
+
+  .vendor-list { display: flex; flex-direction: column; gap: 12px; }
+  .vendor { display: flex; gap: 14px; align-items: center; background: var(--bg-soft); border-left: 4px solid var(--amber); border-radius: 6px; padding: 16px 20px; transition: transform .2s; }
+  .vendor:hover { transform: translateX(4px); }
+  .vendor__dot { width: 12px; height: 12px; background: var(--amber); transform: rotate(45deg); flex-shrink: 0; }
+  .vendor__body { flex-grow: 1; }
+  .vendor__name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15.5px; color: var(--ink); }
+  .vendor__sub { font-size: 13px; color: var(--ink-mute); }
+  .vendor__cost { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; color: var(--green); white-space: nowrap; }
+
+  /* VISUAL APP+COFRE (igual ao slide) */
+  .demo { background: var(--green-dark); border-radius: var(--radius-lg); padding: 40px 30px; min-height: 380px; display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; box-shadow: var(--shadow-lg); position: relative; }
+  .demo::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3C/svg%3E"); border-radius: var(--radius-lg); pointer-events: none; }
+
+  .phone { position: relative; z-index: 1; width: 160px; aspect-ratio: 9/19; background: #0b1813; border-radius: 18px; padding: 8px; box-shadow: 0 14px 30px rgba(0,0,0,0.5); }
+  .phone__screen { width: 100%; height: 100%; background: #fff; border-radius: 12px; padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; }
+  .phone__brand { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid #f0f1f0; }
+  .phone__brand-mark { width: 22px; height: 22px; background: var(--green); color: #fff; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 11px; }
+  .phone__brand-txt strong { display: block; font-family: 'Sora', sans-serif; font-size: 9px; }
+  .phone__brand-txt span { font-size: 7px; color: var(--ink-mute); }
+  .phone__status { background: var(--green); color: #fff; padding: 6px 8px; border-radius: 6px; font-size: 8.5px; font-weight: 700; text-align: center; }
+  .phone__label { font-size: 7px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-top: 4px; }
+  .phone__code { background: var(--amber); color: var(--ink); padding: 10px; border-radius: 8px; text-align: center; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 6px; }
+  .phone__details { font-size: 7.5px; color: var(--ink-soft); line-height: 1.45; padding: 4px 2px; }
+  .phone__details b { color: var(--ink); }
+  .phone__cta { margin-top: auto; background: var(--amber); color: var(--ink); padding: 7px; border-radius: 6px; text-align: center; font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  .demo__arrow { width: 60px; color: var(--amber); position: relative; z-index: 1; }
+  .demo__arrow svg { width: 100%; }
+
+  .cofre { position: relative; z-index: 1; width: 170px; background: #1a2530; border: 3px solid var(--amber); border-radius: 12px; padding: 14px; box-shadow: 0 14px 30px rgba(0,0,0,0.5); }
+  .cofre__display { background: #0b1813; color: var(--green-bright); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 32px; text-align: center; padding: 10px; border-radius: 6px; margin-bottom: 12px; letter-spacing: 4px; box-shadow: inset 0 0 12px rgba(109,194,75,0.3); }
+  .cofre__keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .cofre__key { background: #2a3946; color: #fff; padding: 8px 0; border-radius: 4px; text-align: center; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 12px; }
+  .cofre__label { text-align: center; color: var(--amber); font-size: 9px; font-weight: 800; margin-top: 8px; letter-spacing: 2px; }
+
+  .cofre__key-icon { position: absolute; right: -42px; top: 50%; transform: translateY(-50%); width: 36px; color: var(--amber); z-index: 1; }
+  @media (max-width: 700px) { .cofre__key-icon { display: none; } }
+
+  /* SECTIONS */
+  .section { padding: 84px 0; }
+  .section--alt { background: var(--bg-soft); }
+  .head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+  .head h2 { margin-bottom: 14px; }
+  .head p { color: var(--ink-mute); font-size: 17px; }
+
+  /* INTEGRATIONS DEEP DIVE */
+  .integ { display: grid; gap: 28px; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .integ { grid-template-columns: repeat(2, 1fr); } }
+  .integ-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; transition: transform .2s, box-shadow .2s; }
+  .integ-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .integ-card__head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .integ-card__icon { width: 52px; height: 52px; background: var(--green-pale); color: var(--green); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .integ-card__icon svg { width: 26px; height: 26px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .integ-card__title { font-family: 'Sora', sans-serif; font-size: 18px; }
+  .integ-card__title small { display: block; font-size: 12px; color: var(--ink-mute); font-weight: 500; margin-top: 2px; }
+  .integ-card p { color: var(--ink-mute); font-size: 14.5px; line-height: 1.6; margin-bottom: 14px; }
+  .integ-card ul { list-style: none; padding-left: 0; }
+  .integ-card li { padding: 5px 0 5px 22px; position: relative; font-size: 13.5px; color: var(--ink-soft); }
+  .integ-card li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+
+  /* CTA */
+  .ctaf { padding: 84px 0; background: var(--ink); color: #fff; text-align: center; }
+  .ctaf h2 { color: #fff; margin-bottom: 16px; }
+  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
+
+  /* FOOTER */
+  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 48px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--amber); }
+  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
+  .foot__brand p { font-size: 13px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.45); }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html">Para empresas</a>
+      <a href="tecnologia.html" class="on">Tecnologia</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Stack completo, <em>fornecedores brasileiros.</em></h1>
+    <p>Plataforma própria + integrações de mercado pra garantir segurança, escala e suporte local. Tudo testado em produção.</p>
+  </div>
+</section>
+
+<!-- STACK PRINCIPAL (igual o slide) -->
+<section class="stack">
+  <div class="wrap">
+    <div class="stack__grid">
+
+      <!-- VENDORS LIST -->
+      <div>
+        <p style="color:var(--ink-mute); font-style:italic; margin-bottom:24px; font-size:15.5px;">Plataforma NomadeDrive (já existente) adaptada para suportar locação por hora/dia.</p>
+        <div class="vendor-list">
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Plataforma própria</div>
+              <div class="vendor__sub">NomadeDrive</div>
+            </div>
+            <div class="vendor__cost">Interno</div>
+          </div>
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Telemetria + bloqueio</div>
+              <div class="vendor__sub">Maxtrack / Cobli</div>
+            </div>
+            <div class="vendor__cost">R$ 80/carro</div>
+          </div>
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Cofre eletrônico</div>
+              <div class="vendor__sub">Yale / iLockey</div>
+            </div>
+            <div class="vendor__cost">R$ 700 único</div>
+          </div>
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Pagamento</div>
+              <div class="vendor__sub">Stripe Connect</div>
+            </div>
+            <div class="vendor__cost">3,5%</div>
+          </div>
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Seguro frota P2P</div>
+              <div class="vendor__sub">Yelum / Sulamérica</div>
+            </div>
+            <div class="vendor__cost">R$ 220/carro</div>
+          </div>
+          <div class="vendor">
+            <div class="vendor__dot"></div>
+            <div class="vendor__body">
+              <div class="vendor__name">Validação ID</div>
+              <div class="vendor__sub">Manual → CAF</div>
+            </div>
+            <div class="vendor__cost">R$ 5/cad.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO VISUAL (app + cofre) -->
+      <div class="demo">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__brand">
+              <div class="phone__brand-mark">N</div>
+              <div class="phone__brand-txt"><strong>NomadeDrive</strong><span>Carsharing</span></div>
+            </div>
+            <div class="phone__status">✓ RESERVA CONFIRMADA</div>
+            <div class="phone__label">SENHA DO COFRE</div>
+            <div class="phone__code">4827</div>
+            <div class="phone__details">
+              <b>DETALHES</b><br>
+              Carro: Onix Plus<br>
+              Período: 8h<br>
+              Local: Cond. Tabajara
+            </div>
+            <div class="phone__cta">VER INSTRUÇÕES</div>
+          </div>
+        </div>
+
+        <div class="demo__arrow"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="15" x2="50" y2="15" stroke="currentColor" stroke-width="3"/><polyline points="40,5 55,15 40,25" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+        <div class="cofre">
+          <div class="cofre__display">4 8 2 7</div>
+          <div class="cofre__keys">
+            <div class="cofre__key">1</div><div class="cofre__key">2</div><div class="cofre__key">3</div>
+            <div class="cofre__key">4</div><div class="cofre__key">5</div><div class="cofre__key">6</div>
+            <div class="cofre__key">7</div><div class="cofre__key">8</div><div class="cofre__key">9</div>
+            <div class="cofre__key">*</div><div class="cofre__key">0</div><div class="cofre__key">#</div>
+          </div>
+          <div class="cofre__label">COFRE</div>
+          <svg class="cofre__key-icon" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="11" y1="12" x2="32" y2="12" stroke="currentColor" stroke-width="2.5"/><line x1="26" y1="12" x2="26" y2="18" stroke="currentColor" stroke-width="2.5"/><line x1="30" y1="12" x2="30" y2="16" stroke="currentColor" stroke-width="2.5"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS DEEP DIVE -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="head">
+      <h2>Como cada peça funciona</h2>
+      <p>Detalhamento técnico das 6 integrações que rodam por trás do app.</p>
+    </div>
+
+    <div class="integ">
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div class="integ-card__title">Plataforma NomadeDrive<small>Frontend + Backend próprios · Já em produção</small></div>
+        </div>
+        <p>Site, app PWA, painel admin, painel de motorista, painel de parceiro B2B. Hospedado em GitHub Pages + Vercel + Supabase.</p>
+        <ul>
+          <li>App PWA (instalável sem App Store)</li>
+          <li>Painel admin com gestão de frota</li>
+          <li>Painel B2B pra parceiros (condomínios/shoppings/hospitais)</li>
+          <li>Notificações push + e-mail transacional (Resend)</li>
+        </ul>
+      </div>
+
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg></div>
+          <div class="integ-card__title">Telemetria & bloqueio<small>Maxtrack ou Cobli · R$ 80/carro/mês</small></div>
+        </div>
+        <p>Rastreamento em tempo real + bloqueio remoto via comando. Cobertura nacional, hardware instalado no veículo.</p>
+        <ul>
+          <li>Posição GPS atualizada a cada 30s</li>
+          <li>Histórico de trajetos por reserva</li>
+          <li>Alerta automático em caso de uso fora do polígono</li>
+          <li>Bloqueio remoto em casos de inadimplência grave</li>
+        </ul>
+      </div>
+
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <div class="integ-card__title">Cofre eletrônico<small>Yale ou iLockey · R$ 700 único por vaga</small></div>
+        </div>
+        <p>Caixa metálica instalada na vaga, com teclado numérico e bateria de 2 anos. Cliente recebe código de uso único via app, digita no teclado, pega a chave.</p>
+        <ul>
+          <li>Código gerado dinamicamente por reserva</li>
+          <li>Expira automaticamente no fim do uso</li>
+          <li>Resistente a chuva, vandalismo, queda</li>
+          <li>Sem dependência de WiFi/conectividade pra abrir</li>
+        </ul>
+      </div>
+
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div class="integ-card__title">Stripe Connect<small>Pagamento + caução · 3,5% por transação</small></div>
+        </div>
+        <p>Processamento de cartão + caução pré-autorizada + split B2B com parceiros (condomínios recebem direto). Suporta cartão internacional e Pix.</p>
+        <ul>
+          <li>Caução R$ 200 pré-autorizada (não desconta)</li>
+          <li>Cobrança final ao terminar reserva</li>
+          <li>Split automático: % pra Nomade, % pro condomínio</li>
+          <li>Compliance PCI nível 1 (Stripe gerencia)</li>
+        </ul>
+      </div>
+
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div class="integ-card__title">Seguro frota<small>Yelum ou Sulamérica · R$ 220/carro/mês</small></div>
+        </div>
+        <p>Cobertura completa pra carsharing: terceiros, roubo, furto, colisão. Franquia de R$ 1.500 paga pelo locatário (cobrança via caução).</p>
+        <ul>
+          <li>Cobertura ampla (terceiros, roubo, furto, colisão)</li>
+          <li>Aciona via WhatsApp 24h</li>
+          <li>Carro reserva sem custo enquanto reparado</li>
+          <li>Especializado em frota carsharing/P2P</li>
+        </ul>
+      </div>
+
+      <div class="integ-card">
+        <div class="integ-card__head">
+          <div class="integ-card__icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg></div>
+          <div class="integ-card__title">Validação de ID<small>Manual no MVP → CAF (Caf.io) · R$ 5/cadastro</small></div>
+        </div>
+        <p>Validação de CNH + biometria facial. No MVP: análise manual em até 24h. Próxima fase: integração CAF (instantâneo) quando atingir volume.</p>
+        <ul>
+          <li>Upload de foto da CNH (frente + verso)</li>
+          <li>Selfie biométrica (liveness detection)</li>
+          <li>Verificação OCR da carteira</li>
+          <li>Aprovação em até 24h úteis (instantâneo c/ CAF)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <h2>Roadmap de upgrades</h2>
+      <p>Algumas integrações são pra escala — só fazem sentido a partir de certo volume de frota/usuários.</p>
+    </div>
+
+    <div style="max-width:760px; margin:0 auto;">
+      <div style="background:var(--green-pale); border-radius:var(--radius); padding:20px 24px; margin-bottom:16px; border-left:4px solid var(--green);">
+        <strong style="font-family:'Sora',sans-serif; color:var(--green); display:block; margin-bottom:4px;">FASE 1 (MVP, 2-5 carros) · agora</strong>
+        Cofre eletrônico Yale + telemetria básica Maxtrack + análise manual de CNH + Stripe Connect + Yelum.
+      </div>
+      <div style="background:var(--bg-soft); border-radius:var(--radius); padding:20px 24px; margin-bottom:16px; border-left:4px solid var(--amber);">
+        <strong style="font-family:'Sora',sans-serif; color:var(--amber); display:block; margin-bottom:4px;">FASE 2 (8-15 carros) · Q4 2026</strong>
+        Migração pra CAF (validação ID instantânea) + bloqueio remoto Cobli + integração API multas Detran.
+      </div>
+      <div style="background:var(--bg-soft); border-radius:var(--radius); padding:20px 24px; margin-bottom:16px; border-left:4px solid var(--ink-mute);">
+        <strong style="font-family:'Sora',sans-serif; color:var(--ink-mute); display:block; margin-bottom:4px;">FASE 3 (20+ carros) · 2027</strong>
+        NFC integrado direto no veículo (substitui cofre eletrônico em parte da frota), parceria seguradora dedicada com franquia reduzida.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaf">
+  <div class="wrap">
+    <h2>Pronto pra ver funcionando?</h2>
+    <p>Crie sua conta grátis e teste o fluxo completo de reserva.</p>
+    <a href="index.html#cadastro" class="btn btn--primary" style="background:var(--amber); color:var(--ink);">Criar conta grátis</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="tecnologia.html">Tecnologia</a>
+      </div>
+      <div class="foot__col">
+        <h5>Para empresas</h5>
+        <a href="parceiros.html">Condomínio/Shopping/Hospital</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+  </div>
+</footer>
+
+</body>
+</html>

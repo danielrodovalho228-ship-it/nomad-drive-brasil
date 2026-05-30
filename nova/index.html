@@ -145,8 +145,8 @@
   /* ============ FROTA ============ */
   .fleet { background: var(--bg-soft); padding: 84px 0; }
   .fleet__grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .fleet__card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .2s, box-shadow .2s; }
-  .fleet__card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .fleet__card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; cursor: pointer; }
+  .fleet__card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green); }
   .fleet__card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
   .fleet__body { padding: 18px; }
   .fleet__cat { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
@@ -212,6 +212,7 @@
       <a href="precos.html">Preços</a>
       <a href="#locais">Onde tem carro</a>
       <a href="parceiros.html">Para empresas</a>
+      <a href="tecnologia.html">Tecnologia</a>
       <a href="#faq">Ajuda</a>
     </nav>
     <div class="nav__cta">
@@ -464,38 +465,38 @@
       <p>Carros novos (2023-2024), revisados, com IPVA, seguro e manutenção em dia. Você escolhe no app.</p>
     </div>
     <div class="fleet__grid">
-      <div class="fleet__card">
+      <a href="carro.html?carro=tracker" class="fleet__card">
         <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker 2024" loading="lazy" />
         <div class="fleet__body">
           <div class="fleet__cat">SUV Automático</div>
           <div class="fleet__name">Chevrolet Tracker 2024</div>
           <div class="fleet__price"><strong>R$ 19</strong> <small>/hora</small> · <strong>R$ 149</strong> <small>/dia</small></div>
         </div>
-      </div>
-      <div class="fleet__card">
+      </a>
+      <a href="carro.html?carro=cobalt" class="fleet__card">
         <img src="../images/car-cobalt-1.jpg" alt="Chevrolet Cobalt" loading="lazy" />
         <div class="fleet__body">
           <div class="fleet__cat">Sedan Compacto</div>
           <div class="fleet__name">Chevrolet Cobalt</div>
           <div class="fleet__price"><strong>R$ 15</strong> <small>/hora</small> · <strong>R$ 119</strong> <small>/dia</small></div>
         </div>
-      </div>
-      <div class="fleet__card">
+      </a>
+      <a href="carro.html?carro=hb20" class="fleet__card">
         <img src="../images/car-hb20-1.jpg" alt="Hyundai HB20" loading="lazy" />
         <div class="fleet__body">
           <div class="fleet__cat">Hatch Compacto</div>
           <div class="fleet__name">Hyundai HB20</div>
           <div class="fleet__price"><strong>R$ 12</strong> <small>/hora</small> · <strong>R$ 99</strong> <small>/dia</small></div>
         </div>
-      </div>
-      <div class="fleet__card">
+      </a>
+      <a href="carro.html?carro=renegade" class="fleet__card">
         <img src="../images/car-renegade-1.jpg" alt="Jeep Renegade" loading="lazy" />
         <div class="fleet__body">
           <div class="fleet__cat">SUV Premium</div>
           <div class="fleet__name">Jeep Renegade</div>
           <div class="fleet__price"><strong>R$ 23</strong> <small>/hora</small> · <strong>R$ 189</strong> <small>/dia</small></div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -618,8 +619,8 @@
         <a href="como-funciona.html">Como funciona</a>
         <a href="precos.html">Preços</a>
         <a href="#locais">Onde tem carro</a>
-        <a href="#">Frota</a>
-        <a href="#">Cobertura</a>
+        <a href="tecnologia.html">Tecnologia / Stack</a>
+        <a href="carro.html?carro=tracker">Ver um carro</a>
       </div>
       <div class="foot__col">
         <h5>Para empresas</h5>
