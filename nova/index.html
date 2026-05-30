@@ -544,8 +544,9 @@
       <input type="email" id="cad-email" required placeholder="Seu melhor e-mail" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="E-mail" />
       <input type="tel" id="cad-phone" required placeholder="WhatsApp (com DDD)" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="WhatsApp" />
       <input type="text" id="cad-city" required placeholder="Cidade onde você mora" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Cidade" />
-      <button type="submit" class="btn btn--primary btn--lg" style="margin-top: 8px;">Criar conta grátis →</button>
-      <p style="text-align:center; font-size:12.5px; color:var(--ink-mute); margin-top:4px;">Vai abrir o WhatsApp pra finalizar. Sem cartão necessário.</p>
+      <button type="submit" id="cad-submit" class="btn btn--primary btn--lg" style="margin-top: 8px;">Criar conta grátis →</button>
+      <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:10px; font-size:14px; text-align:center; line-height:1.5;"></div>
+      <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--ink-mute); margin-top:4px;">A gente entra em contato em até 24h úteis.</p>
     </form>
   </div>
 </section>
@@ -676,20 +677,58 @@ document.querySelectorAll('.locs__filter button').forEach(function(btn) {
   });
 });
 
-// Form de cadastro (abre WhatsApp pré-formatado)
-document.getElementById('formCadastro').addEventListener('submit', function(e) {
+// Form de cadastro — envia pra Edge Function nova-lead (salva no banco + email)
+var EDGE_LEAD = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
+var WA_PHONE = '5534984064864';
+
+function setFeedback(el, type, msg) {
+  el.style.display = 'block';
+  el.innerHTML = msg;
+  el.style.background = type === 'ok' ? '#e8f6ee' : type === 'err' ? '#fef2f2' : '#fef9e7';
+  el.style.color = type === 'ok' ? '#145f3e' : type === 'err' ? '#b91c1c' : '#92400e';
+  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d8b8' : type === 'err' ? '#fca5a5' : '#fbbf24');
+}
+
+document.getElementById('formCadastro').addEventListener('submit', async function(e) {
   e.preventDefault();
   var n = document.getElementById('cad-name').value.trim();
   var em = document.getElementById('cad-email').value.trim();
   var ph = document.getElementById('cad-phone').value.trim();
   var ci = document.getElementById('cad-city').value.trim();
   if (!n || !em || !ph || !ci) return;
-  var msg = '🚗 *Quero criar conta no Nomade Drive*\n\n' +
-    'Nome: ' + n + '\n' +
-    'E-mail: ' + em + '\n' +
-    'WhatsApp: ' + ph + '\n' +
-    'Cidade: ' + ci;
-  window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+
+  var btn = document.getElementById('cad-submit');
+  var fb = document.getElementById('cad-feedback');
+  var origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  setFeedback(fb, 'info', '⏳ Enviando seu cadastro...');
+
+  try {
+    var r = await fetch(EDGE_LEAD, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'nova-landing-cadastro',
+        name: n, email: em, phone: ph, city: ci,
+        intent: 'carsharing-cliente',
+        source_url: window.location.href
+      })
+    });
+    var data = await r.json();
+    if (r.ok && data.ok) {
+      setFeedback(fb, 'ok', '✅ <strong>Cadastro recebido!</strong><br>A gente entra em contato em até 24h.<br><br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Acabei de me cadastrar no Nomade Drive (' + em + '). Pode adiantar?') + '" target="_blank" rel="noopener" style="color:#145f3e; font-weight:600; text-decoration:underline;">💬 Quero adiantar pelo WhatsApp →</a>');
+      btn.textContent = '✓ Enviado';
+      document.getElementById('cad-hint').style.display = 'none';
+    } else {
+      throw new Error(data.error || 'Resposta inválida');
+    }
+  } catch (err) {
+    var wamsg = '🚗 *Quero criar conta no Nomade Drive*\n\nNome: ' + n + '\nE-mail: ' + em + '\nWhatsApp: ' + ph + '\nCidade: ' + ci;
+    setFeedback(fb, 'err', '⚠️ Não foi possível enviar agora.<br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" rel="noopener" style="color:#b91c1c; font-weight:600; text-decoration:underline;">💬 Fala com a gente direto pelo WhatsApp →</a>');
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
 });
 </script>
 

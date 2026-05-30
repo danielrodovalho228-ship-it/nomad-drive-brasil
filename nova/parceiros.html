@@ -184,7 +184,8 @@
           <option>Outro</option>
         </select>
         <input type="text" id="p-place" required placeholder="Nome do local + cidade" aria-label="Nome do local" />
-        <button type="submit">Falar com vendas →</button>
+        <button type="submit" id="p-submit">Falar com vendas →</button>
+        <div id="p-feedback" style="display:none; padding:14px 18px; border-radius:10px; font-size:14px; text-align:center; line-height:1.5; margin-top:4px;"></div>
       </form>
     </div>
   </div>
@@ -351,7 +352,19 @@
 </footer>
 
 <script>
-document.getElementById('formParceiros').addEventListener('submit', function(e) {
+// Form de parceiros — envia pra Edge Function nova-lead (salva no banco + email)
+var EDGE_LEAD = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
+var WA_PHONE = '5534984064864';
+
+function setFeedback(el, type, msg) {
+  el.style.display = 'block';
+  el.innerHTML = msg;
+  el.style.background = type === 'ok' ? '#e8f6ee' : type === 'err' ? '#fef2f2' : '#fef9e7';
+  el.style.color = type === 'ok' ? '#145f3e' : type === 'err' ? '#b91c1c' : '#92400e';
+  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d8b8' : type === 'err' ? '#fca5a5' : '#fbbf24');
+}
+
+document.getElementById('formParceiros').addEventListener('submit', async function(e) {
   e.preventDefault();
   var n = document.getElementById('p-name').value.trim();
   var em = document.getElementById('p-email').value.trim();
@@ -359,13 +372,40 @@ document.getElementById('formParceiros').addEventListener('submit', function(e) 
   var tp = document.getElementById('p-type').value;
   var pl = document.getElementById('p-place').value.trim();
   if (!n || !em || !ph || !tp || !pl) return;
-  var msg = '🏢 *Interesse em parceria Nomade Drive*\n\n' +
-    'Nome: ' + n + '\n' +
-    'E-mail: ' + em + '\n' +
-    'WhatsApp: ' + ph + '\n' +
-    'Tipo: ' + tp + '\n' +
-    'Local: ' + pl;
-  window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+
+  var btn = document.getElementById('p-submit');
+  var fb = document.getElementById('p-feedback');
+  var origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  setFeedback(fb, 'info', '⏳ Enviando seu interesse...');
+
+  try {
+    var r = await fetch(EDGE_LEAD, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'nova-landing-parceiros',
+        name: n, email: em, phone: ph,
+        city: pl,
+        intent: 'carsharing-parceiro-b2b',
+        extra: { tipo_local: tp, local: pl },
+        source_url: window.location.href
+      })
+    });
+    var data = await r.json();
+    if (r.ok && data.ok) {
+      setFeedback(fb, 'ok', '✅ <strong>Interesse recebido!</strong><br>Nosso time comercial retorna em até 48h úteis.<br><br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Acabei de me cadastrar como parceiro (' + tp + ' - ' + pl + '). Pode adiantar?') + '" target="_blank" rel="noopener" style="color:#145f3e; font-weight:600; text-decoration:underline;">💬 Quero adiantar pelo WhatsApp →</a>');
+      btn.textContent = '✓ Enviado';
+    } else {
+      throw new Error(data.error || 'Resposta inválida');
+    }
+  } catch (err) {
+    var wamsg = '🏢 *Interesse em parceria Nomade Drive*\n\nNome: ' + n + '\nE-mail: ' + em + '\nWhatsApp: ' + ph + '\nTipo: ' + tp + '\nLocal: ' + pl;
+    setFeedback(fb, 'err', '⚠️ Não foi possível enviar agora.<br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" rel="noopener" style="color:#b91c1c; font-weight:600; text-decoration:underline;">💬 Fala com nosso comercial direto pelo WhatsApp →</a>');
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
 });
 </script>
 
