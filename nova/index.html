@@ -481,6 +481,58 @@
   </div>
 </section>
 
+<!-- ============ CADASTRO (form pra criar conta) ============ -->
+<section style="padding: 84px 0; background: var(--green-pale);" id="cadastro">
+  <div class="wrap" style="max-width: 720px;">
+    <div class="head" style="margin-bottom: 36px;">
+      <h2>Crie sua conta grátis</h2>
+      <p>Em 5 minutos você está pronto pra reservar. Sem cobrança, sem cartão exigido.</p>
+    </div>
+    <form id="formCadastro" style="background:#fff; padding:32px; border-radius: var(--radius-lg); box-shadow: var(--shadow); display:flex; flex-direction:column; gap:14px;">
+      <input type="text" id="cad-name" required placeholder="Seu nome completo" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Nome completo" />
+      <input type="email" id="cad-email" required placeholder="Seu melhor e-mail" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="E-mail" />
+      <input type="tel" id="cad-phone" required placeholder="WhatsApp (com DDD)" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="WhatsApp" />
+      <input type="text" id="cad-city" required placeholder="Cidade onde você mora" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Cidade" />
+      <button type="submit" class="btn btn--primary btn--lg" style="margin-top: 8px;">Criar conta grátis →</button>
+      <p style="text-align:center; font-size:12.5px; color:var(--ink-mute); margin-top:4px;">Vai abrir o WhatsApp pra finalizar. Sem cartão necessário.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section style="padding: 84px 0;" id="faq">
+  <div class="wrap" style="max-width: 800px;">
+    <div class="head">
+      <h2>Perguntas frequentes</h2>
+      <p>As dúvidas que mais aparecem antes do primeiro uso.</p>
+    </div>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Preciso de fiador?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Não. Pré-autorização de R$ 200 no cartão como caução (liberada após o uso). Análise é por CNH + biometria, não por score agressivo.</div>
+    </details>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Quanto tempo demora a aprovação?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Até 24h úteis. Maioria aprova no mesmo dia. Você acompanha o status pelo app.</div>
+    </details>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Como funciona o pagamento?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Cobrança automática no cartão ao final da reserva. Plano Casual: R$ 0/mês + tarifa por hora. Mensalistas: R$ 49/mês + tarifa com 20% desconto.</div>
+    </details>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Não tem carro no meu prédio. Como faço?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Pode usar carros de outros locais (shopping, hospital próximo). Pra trazer carro pro seu prédio: cadastre-se em "<a href="parceiros.html" style="color:var(--green); font-weight:600;">Para empresas</a>" e a gente avalia.</div>
+    </details>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">E se o carro quebrar durante o uso?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Aciona o WhatsApp 24h. Guincho + carro reserva sem custo. Você não paga peça nem mão de obra.</div>
+    </details>
+    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
+      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Quem paga combustível e multas?</summary>
+      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">60 km grátis inclusos por reserva (100 km no Mensal). Acima disso, R$ 1,20/km. Multas durante o uso são do locatário — repassadas via Detran.</div>
+    </details>
+  </div>
+</section>
+
 <!-- ============ APP DOWNLOAD ============ -->
 <section class="app">
   <div class="wrap">
@@ -556,6 +608,7 @@
 </footer>
 
 <script>
+// Filtro de locais (Todos/Condominios/Shoppings/Hospitais)
 document.querySelectorAll('.locs__filter button').forEach(function(btn) {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.locs__filter button').forEach(function(b) { b.classList.remove('on'); });
@@ -566,6 +619,22 @@ document.querySelectorAll('.locs__filter button').forEach(function(btn) {
       loc.style.display = (f === 'all' || c === f) ? '' : 'none';
     });
   });
+});
+
+// Form de cadastro (abre WhatsApp pré-formatado)
+document.getElementById('formCadastro').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var n = document.getElementById('cad-name').value.trim();
+  var em = document.getElementById('cad-email').value.trim();
+  var ph = document.getElementById('cad-phone').value.trim();
+  var ci = document.getElementById('cad-city').value.trim();
+  if (!n || !em || !ph || !ci) return;
+  var msg = '🚗 *Quero criar conta no Nomade Drive*\n\n' +
+    'Nome: ' + n + '\n' +
+    'E-mail: ' + em + '\n' +
+    'WhatsApp: ' + ph + '\n' +
+    'Cidade: ' + ci;
+  window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
 });
 </script>
 
