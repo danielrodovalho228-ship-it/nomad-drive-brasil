@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preços — Nomade Drive · A partir de R$ 12/hora</title>
+<meta name="description" content="Planos casual (grátis), mensal (R$ 49) e anual (R$ 39/mês equivalente). Carros a partir de R$ 12/hora ou R$ 99/dia. Sem taxa de adesão." />
+<meta name="theme-color" content="#0d3a26" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+  h2 { font-size: clamp(28px, 4.4vw, 42px); } h3 { font-size: clamp(20px, 2.4vw, 24px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; white-space: nowrap; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; } .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .btn--amber { background: var(--amber); color: var(--ink); } .btn--amber:hover { background: #fbcb4a; transform: translateY(-1px); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); } .btn--ghost:hover { background: var(--ink); color: #fff; }
+  .btn--ghost-light { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); } .btn--ghost-light:hover { border-color: #fff; }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; } .btn--lg { padding: 16px 32px; font-size: 16px; }
+  .btn--outline-green { background: transparent; color: var(--green); border-color: var(--green); } .btn--outline-green:hover { background: var(--green); color: #fff; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; width: auto; display: block; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); }
+  .nav__links a:hover, .nav__links a.on { color: var(--green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 900px) { .nav__links { display: flex; } }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 64px 0 80px; text-align: center; }
+  .hero h1 { color: #fff; font-size: clamp(32px, 5.5vw, 56px); margin-bottom: 18px; }
+  .hero h1 em { color: var(--amber); font-style: normal; }
+  .hero p { color: rgba(255,255,255,0.85); font-size: clamp(16px, 2vw, 19px); max-width: 600px; margin: 0 auto; }
+
+  /* HEAD */
+  .head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+  .head h2 { margin-bottom: 14px; }
+  .head p { color: var(--ink-mute); font-size: 17px; }
+
+  /* PLANOS (3 cards) */
+  .planos { padding: 84px 0; }
+  .planos__grid { display: grid; gap: 22px; grid-template-columns: 1fr; max-width: 1100px; margin: 0 auto; }
+  @media (min-width: 800px) { .planos__grid { grid-template-columns: repeat(3, 1fr); } }
+  .plan { background: #fff; border: 2px solid var(--line); border-radius: var(--radius-lg); padding: 36px 28px; display: flex; flex-direction: column; position: relative; transition: transform .2s, box-shadow .2s, border-color .2s; }
+  .plan:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .plan--featured { border-color: var(--green); box-shadow: 0 20px 50px rgba(20,95,62,0.15); }
+  .plan__tag { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; padding: 6px 16px; border-radius: 999px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+  .plan__name { font-family: 'Sora', sans-serif; font-size: 22px; margin-bottom: 6px; }
+  .plan__tagline { color: var(--ink-mute); font-size: 13.5px; margin-bottom: 24px; }
+  .plan__price { margin-bottom: 6px; display: flex; align-items: baseline; gap: 6px; }
+  .plan__price-val { font-family: 'Sora', sans-serif; font-size: 48px; font-weight: 800; color: var(--ink); line-height: 1; }
+  .plan__price-sub { color: var(--ink-mute); font-size: 14px; }
+  .plan__price-note { font-size: 12.5px; color: var(--ink-mute); margin-bottom: 28px; }
+  .plan__feat { list-style: none; flex-grow: 1; margin-bottom: 28px; }
+  .plan__feat li { padding: 9px 0 9px 28px; position: relative; font-size: 14px; color: var(--ink-soft); }
+  .plan__feat li::before { content: ''; position: absolute; left: 0; top: 12px; width: 18px; height: 18px; background: var(--green); border-radius: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16 5l-8 8-4-4' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-size: 16px; background-position: center; background-repeat: no-repeat; }
+  .plan__feat li strong { color: var(--ink); }
+
+  /* TARIFAS POR CARRO */
+  .tarifas { padding: 84px 0; background: var(--bg-soft); }
+  .tarifas__grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); max-width: 1100px; margin: 0 auto; }
+  .tarifa-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .tarifa-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+  .tarifa-card__body { padding: 20px; }
+  .tarifa-card__cat { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .tarifa-card__name { font-family: 'Sora', sans-serif; font-size: 16.5px; margin-bottom: 14px; }
+  .tarifa-card__prices { display: flex; gap: 16px; }
+  .tarifa-card__prices div { flex: 1; }
+  .tarifa-card__prices strong { font-family: 'Sora', sans-serif; font-size: 22px; color: var(--green); display: block; }
+  .tarifa-card__prices small { color: var(--ink-mute); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* INCLUSO */
+  .incl { padding: 84px 0; }
+  .incl__grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-width: 1000px; margin: 0 auto; }
+  .incl-item { display: flex; gap: 14px; align-items: flex-start; padding: 20px; background: var(--bg-soft); border-radius: var(--radius); }
+  .incl-item__icon { width: 44px; height: 44px; background: var(--green); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .incl-item__icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .incl-item h4 { font-family: 'Sora', sans-serif; font-size: 14.5px; margin-bottom: 4px; }
+  .incl-item p { font-size: 13px; color: var(--ink-mute); line-height: 1.5; }
+
+  /* CTA */
+  .ctaf { padding: 84px 0; background: var(--ink); color: #fff; text-align: center; }
+  .ctaf h2 { color: #fff; margin-bottom: 16px; }
+  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
+  .ctaf__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  /* FOOTER */
+  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 64px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  @media (min-width: 1000px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; } }
+  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
+  .foot__col a:hover { color: var(--amber); }
+  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
+  .foot__brand p { font-size: 13px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.45); }
+  .foot__bottom a { color: rgba(255,255,255,0.45); margin: 0 6px; text-decoration: none; }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html" class="on">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html">Para empresas</a>
+      <a href="index.html#faq">Ajuda</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Preços <em>simples e transparentes</em></h1>
+    <p>Sem taxa de adesão, sem fidelidade, sem letra miúda. Comece grátis e veja se faz sentido pra você.</p>
+  </div>
+</section>
+
+<!-- 3 PLANOS -->
+<section class="planos">
+  <div class="wrap">
+    <div class="head">
+      <h2>Escolha seu plano</h2>
+      <p>Quanto mais você usa, mais barato fica. Pode trocar de plano a qualquer momento.</p>
+    </div>
+    <div class="planos__grid">
+
+      <!-- CASUAL -->
+      <div class="plan">
+        <div class="plan__name">Casual</div>
+        <div class="plan__tagline">Pra usar de vez em quando</div>
+        <div class="plan__price">
+          <span class="plan__price-val">R$ 0</span>
+          <span class="plan__price-sub">/mês</span>
+        </div>
+        <div class="plan__price-note">Sem mensalidade. Pague só pelo uso.</div>
+        <ul class="plan__feat">
+          <li>Carros a partir de <strong>R$ 19/hora</strong></li>
+          <li>Carros a partir de <strong>R$ 149/dia</strong></li>
+          <li>60 km grátis inclusos</li>
+          <li>Cancele quando quiser</li>
+          <li>Acesso a todas as cidades</li>
+        </ul>
+        <a href="index.html#cadastro" class="btn btn--outline-green">Começar grátis</a>
+      </div>
+
+      <!-- MENSAL (featured) -->
+      <div class="plan plan--featured">
+        <div class="plan__tag">Mais escolhido</div>
+        <div class="plan__name">Mensal</div>
+        <div class="plan__tagline">Pra quem usa toda semana</div>
+        <div class="plan__price">
+          <span class="plan__price-val">R$ 49</span>
+          <span class="plan__price-sub">/mês</span>
+        </div>
+        <div class="plan__price-note">Desconto de 20% em todas as reservas.</div>
+        <ul class="plan__feat">
+          <li>Carros a partir de <strong>R$ 15/hora</strong> (−20%)</li>
+          <li>Carros a partir de <strong>R$ 119/dia</strong> (−20%)</li>
+          <li>100 km grátis inclusos por reserva</li>
+          <li>Prioridade em reservas concorridas</li>
+          <li>Cancele com 30 dias de antecedência</li>
+        </ul>
+        <a href="index.html#cadastro" class="btn btn--primary">Assinar Mensal</a>
+      </div>
+
+      <!-- ANUAL -->
+      <div class="plan">
+        <div class="plan__name">Anual</div>
+        <div class="plan__tagline">Pra economizar de verdade</div>
+        <div class="plan__price">
+          <span class="plan__price-val">R$ 39</span>
+          <span class="plan__price-sub">/mês*</span>
+        </div>
+        <div class="plan__price-note">* Pago 1× R$ 468 — economize R$ 120/ano</div>
+        <ul class="plan__feat">
+          <li>Tudo do plano Mensal</li>
+          <li>Desconto adicional em diárias longas</li>
+          <li>Convite pra eventos VIP da marca</li>
+          <li>Suporte WhatsApp prioritário</li>
+          <li>Garantia: cancele em 30 dias 100% reembolsável</li>
+        </ul>
+        <a href="index.html#cadastro" class="btn btn--outline-green">Assinar Anual</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TARIFAS POR CARRO -->
+<section class="tarifas">
+  <div class="wrap">
+    <div class="head">
+      <h2>Tarifa por carro</h2>
+      <p>Preços abaixo são pro plano Casual. Mensalistas e anuais têm 20% de desconto adicional.</p>
+    </div>
+    <div class="tarifas__grid">
+      <div class="tarifa-card">
+        <img src="../images/car-hb20-1.jpg" alt="Hyundai HB20" loading="lazy" />
+        <div class="tarifa-card__body">
+          <div class="tarifa-card__cat">Hatch Compacto</div>
+          <div class="tarifa-card__name">Hyundai HB20</div>
+          <div class="tarifa-card__prices">
+            <div><strong>R$ 12</strong><small>/hora</small></div>
+            <div><strong>R$ 99</strong><small>/dia</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="tarifa-card">
+        <img src="../images/car-cobalt-1.jpg" alt="Chevrolet Cobalt" loading="lazy" />
+        <div class="tarifa-card__body">
+          <div class="tarifa-card__cat">Sedan Compacto</div>
+          <div class="tarifa-card__name">Chevrolet Cobalt</div>
+          <div class="tarifa-card__prices">
+            <div><strong>R$ 15</strong><small>/hora</small></div>
+            <div><strong>R$ 119</strong><small>/dia</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="tarifa-card">
+        <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker" loading="lazy" />
+        <div class="tarifa-card__body">
+          <div class="tarifa-card__cat">SUV Automático</div>
+          <div class="tarifa-card__name">Chevrolet Tracker</div>
+          <div class="tarifa-card__prices">
+            <div><strong>R$ 19</strong><small>/hora</small></div>
+            <div><strong>R$ 149</strong><small>/dia</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="tarifa-card">
+        <img src="../images/car-renegade-1.jpg" alt="Jeep Renegade" loading="lazy" />
+        <div class="tarifa-card__body">
+          <div class="tarifa-card__cat">SUV Premium</div>
+          <div class="tarifa-card__name">Jeep Renegade</div>
+          <div class="tarifa-card__prices">
+            <div><strong>R$ 23</strong><small>/hora</small></div>
+            <div><strong>R$ 189</strong><small>/dia</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE TÁ INCLUSO -->
+<section class="incl">
+  <div class="wrap">
+    <div class="head">
+      <h2>O que sempre está incluído</h2>
+      <p>Em qualquer plano, em qualquer carro. Sem taxa surpresa.</p>
+    </div>
+    <div class="incl__grid">
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/><path d="M17 9h2.5a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0V13"/></svg></div>
+        <div><h4>Combustível</h4><p>Até 60 km inclusos (Casual) / 100 km (Mensal/Anual)</p></div>
+      </div>
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><h4>Seguro</h4><p>Cobertura completa. Franquia R$ 1.500.</p></div>
+      </div>
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+        <div><h4>Manutenção</h4><p>Revisão, óleo, pneus — tudo por nossa conta.</p></div>
+      </div>
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <div><h4>Suporte 24/7</h4><p>WhatsApp humano, guincho, chaveiro.</p></div>
+      </div>
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div><h4>Caução</h4><p>Pré-autorização de R$ 200, liberada após uso.</p></div>
+      </div>
+      <div class="incl-item">
+        <div class="incl-item__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><h4>Cancelamento grátis</h4><p>Até 1h antes do horário sem custo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaf">
+  <div class="wrap">
+    <h2>Comece grátis hoje</h2>
+    <p>Primeiro mês de qualquer plano grátis com código BEMVINDO. Cadastro em 5 min.</p>
+    <div class="ctaf__row">
+      <a href="index.html#cadastro" class="btn btn--amber btn--lg">Criar conta grátis</a>
+      <a href="como-funciona.html" class="btn btn--ghost-light btn--lg">Como funciona</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="index.html#locais">Onde tem carro</a>
+      </div>
+      <div class="foot__col">
+        <h5>Para empresas</h5>
+        <a href="parceiros.html">Condomínio</a>
+        <a href="parceiros.html">Shopping</a>
+        <a href="parceiros.html">Hospital</a>
+      </div>
+      <div class="foot__col">
+        <h5>Cidades</h5>
+        <a href="#">Uberlândia</a>
+        <a href="#">Em breve · Goiânia</a>
+      </div>
+      <div class="foot__col">
+        <h5>Empresa</h5>
+        <a href="#">Sobre</a>
+        <a href="#">Carreiras</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">
+      <div>&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+      <div><a href="../termos.html">Privacidade</a> · <a href="../termos.html">Termos</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

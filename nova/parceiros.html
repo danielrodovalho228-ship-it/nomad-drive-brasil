@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Para empresas — Nomade Drive · Carsharing no seu condomínio, shopping ou hospital</title>
+<meta name="description" content="Traga Nomade Drive pro seu condomínio, shopping ou hospital. Sem custo de instalação. Receita compartilhada. Síndicos, administradoras e gestores: fale com vendas." />
+<meta name="theme-color" content="#0d3a26" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+  h2 { font-size: clamp(28px, 4.4vw, 42px); } h3 { font-size: clamp(20px, 2.4vw, 24px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; white-space: nowrap; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; } .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .btn--amber { background: var(--amber); color: var(--ink); } .btn--amber:hover { background: #fbcb4a; transform: translateY(-1px); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); } .btn--ghost:hover { background: var(--ink); color: #fff; }
+  .btn--ghost-light { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); } .btn--ghost-light:hover { border-color: #fff; }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; } .btn--lg { padding: 16px 32px; font-size: 16px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; width: auto; display: block; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); }
+  .nav__links a:hover, .nav__links a.on { color: var(--green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 900px) { .nav__links { display: flex; } }
+
+  /* HERO (com foto + form lado) */
+  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 56px 0 80px; position: relative; overflow: hidden; }
+  .hero__bg { position: absolute; inset: 0; opacity: 0.2; }
+  .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+  .hero__inner { position: relative; z-index: 1; display: grid; gap: 44px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.1fr 1fr; } }
+  .hero h1 { color: #fff; font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 18px; }
+  .hero h1 em { color: var(--amber); font-style: normal; }
+  .hero__sub { color: rgba(255,255,255,0.88); font-size: clamp(16px, 2vw, 18px); margin-bottom: 28px; }
+  .hero__bullets { list-style: none; margin-bottom: 32px; }
+  .hero__bullets li { padding: 8px 0 8px 30px; position: relative; color: rgba(255,255,255,0.92); font-size: 15px; }
+  .hero__bullets li::before { content: ''; position: absolute; left: 0; top: 11px; width: 20px; height: 20px; background: var(--amber); border-radius: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16 5l-8 8-4-4' stroke='%230b1813' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-size: 16px; background-position: center; background-repeat: no-repeat; }
+
+  .form-card { background: #fff; color: var(--ink); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+  .form-card h3 { margin-bottom: 6px; font-size: 22px; }
+  .form-card p { color: var(--ink-mute); font-size: 14px; margin-bottom: 22px; }
+  .form-card form { display: flex; flex-direction: column; gap: 12px; }
+  .form-card input, .form-card select { padding: 13px 16px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 14.5px; background: #fff; }
+  .form-card button { padding: 15px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: background .2s; }
+  .form-card button:hover { background: var(--green-dark); }
+
+  /* HEAD */
+  .head { text-align: center; max-width: 760px; margin: 0 auto 56px; }
+  .head h2 { margin-bottom: 14px; }
+  .head p { color: var(--ink-mute); font-size: 17px; }
+
+  /* 4 BENEFICIOS */
+  .benef { padding: 84px 0; }
+  .benef__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .benef__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .benef__grid { grid-template-columns: repeat(4, 1fr); } }
+  .benef-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px 24px; text-align: center; transition: transform .2s, box-shadow .2s, border-color .2s; }
+  .benef-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green); }
+  .benef-card__icon { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 18px; background: var(--green-pale); color: var(--green); display: flex; align-items: center; justify-content: center; }
+  .benef-card__icon svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .benef-card h4 { font-family: 'Sora', sans-serif; font-size: 17px; margin-bottom: 8px; }
+  .benef-card p { color: var(--ink-mute); font-size: 13.5px; line-height: 1.55; }
+
+  /* 3 TIPOS DE PARCEIRO */
+  .types { padding: 84px 0; background: var(--bg-soft); }
+  .types__grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .types__grid { grid-template-columns: repeat(3, 1fr); } }
+  .type { background: #fff; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform .2s; }
+  .type:hover { transform: translateY(-4px); }
+  .type__img { aspect-ratio: 16/10; overflow: hidden; }
+  .type__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+  .type:hover .type__img img { transform: scale(1.05); }
+  .type__body { padding: 28px; flex-grow: 1; display: flex; flex-direction: column; }
+  .type__tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1px; padding: 5px 12px; border-radius: 999px; background: var(--green-pale); color: var(--green); margin-bottom: 12px; text-transform: uppercase; align-self: flex-start; }
+  .type h3 { font-size: 22px; margin-bottom: 10px; }
+  .type p { color: var(--ink-mute); font-size: 14.5px; line-height: 1.6; margin-bottom: 16px; flex-grow: 1; }
+  .type__feats { list-style: none; margin-bottom: 22px; }
+  .type__feats li { padding: 5px 0 5px 22px; position: relative; font-size: 13.5px; color: var(--ink-soft); }
+  .type__feats li::before { content: '•'; position: absolute; left: 6px; color: var(--green); font-weight: 800; }
+
+  /* SOCIAL PROOF */
+  .proof { padding: 84px 0; }
+  .proof__quote { max-width: 800px; margin: 0 auto; text-align: center; padding: 48px 32px; background: var(--bg-soft); border-radius: var(--radius-lg); position: relative; }
+  .proof__quote::before { content: '"'; font-family: 'Sora', sans-serif; font-size: 100px; color: var(--green); position: absolute; top: -20px; left: 30px; line-height: 1; }
+  .proof__quote p { font-family: 'Sora', sans-serif; font-size: clamp(18px, 2.5vw, 24px); color: var(--ink); margin-bottom: 22px; line-height: 1.5; font-weight: 500; }
+  .proof__author { display: inline-flex; align-items: center; gap: 14px; }
+  .proof__avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 22px; }
+  .proof__who strong { font-family: 'Sora', sans-serif; display: block; }
+  .proof__who span { font-size: 13px; color: var(--ink-mute); }
+
+  /* CTA FINAL */
+  .ctaf { padding: 84px 0; background: var(--ink); color: #fff; text-align: center; }
+  .ctaf h2 { color: #fff; margin-bottom: 16px; }
+  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
+
+  /* FOOTER */
+  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 64px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  @media (min-width: 1000px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; } }
+  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
+  .foot__col a:hover { color: var(--amber); }
+  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
+  .foot__brand p { font-size: 13px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.45); }
+  .foot__bottom a { color: rgba(255,255,255,0.45); margin: 0 6px; text-decoration: none; }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html" class="on">Para empresas</a>
+      <a href="index.html#faq">Ajuda</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="#form" class="btn btn--primary btn--sm">Falar com vendas</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO com form lateral -->
+<section class="hero">
+  <div class="hero__bg"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80&auto=format&fit=crop" alt="" loading="eager" /></div>
+  <div class="wrap hero__inner">
+    <div>
+      <h1>Carsharing pro seu <em>condomínio, shopping ou hospital</em></h1>
+      <p class="hero__sub">Aumente o valor do seu empreendimento oferecendo mobilidade aos seus residentes, visitantes ou colaboradores. <strong>Zero investimento da sua parte</strong> — a gente cuida de tudo.</p>
+      <ul class="hero__bullets">
+        <li>Sem custo de instalação ou aluguel de vaga</li>
+        <li>Receita compartilhada por reserva</li>
+        <li>Carros novos, com seguro e manutenção</li>
+        <li>App + suporte 24h por nossa conta</li>
+      </ul>
+    </div>
+
+    <div class="form-card" id="form">
+      <h3>Quero falar com vendas</h3>
+      <p>Retornamos em até 48h úteis.</p>
+      <form id="formParceiros">
+        <input type="text" id="p-name" required placeholder="Seu nome" aria-label="Nome" />
+        <input type="email" id="p-email" required placeholder="E-mail corporativo" aria-label="E-mail" />
+        <input type="tel" id="p-phone" required placeholder="WhatsApp (com DDD)" aria-label="WhatsApp" />
+        <select id="p-type" required aria-label="Tipo de local">
+          <option value="">Tipo de local...</option>
+          <option>Condomínio residencial</option>
+          <option>Shopping center</option>
+          <option>Hospital</option>
+          <option>Empresa / Sede corporativa</option>
+          <option>Universidade</option>
+          <option>Outro</option>
+        </select>
+        <input type="text" id="p-place" required placeholder="Nome do local + cidade" aria-label="Nome do local" />
+        <button type="submit">Falar com vendas →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 4 BENEFÍCIOS -->
+<section class="benef">
+  <div class="wrap">
+    <div class="head">
+      <h2>Por que ser parceiro Nomade</h2>
+      <p>Você não precisa entender de carro, de tecnologia ou de operação. Só nos dar acesso ao espaço.</p>
+    </div>
+    <div class="benef__grid">
+      <div class="benef-card">
+        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h4>Zero investimento</h4>
+        <p>Não cobramos taxa de instalação, contratos ou equipamento. Você só cede o espaço.</p>
+      </div>
+      <div class="benef-card">
+        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h4>Receita extra</h4>
+        <p>Você recebe % por reserva feita no local. Sem investir, gera caixa pra obras ou folha.</p>
+      </div>
+      <div class="benef-card">
+        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h4>Valoriza o espaço</h4>
+        <p>Mobilidade integrada é diferencial competitivo. Aumenta valor de venda ou aluguel das unidades.</p>
+      </div>
+      <div class="benef-card">
+        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h4>Operação chave-na-mão</h4>
+        <p>App, pagamento, vistoria, manutenção — tudo nosso. Você não opera nada, nada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 TIPOS DE PARCEIRO -->
+<section class="types">
+  <div class="wrap">
+    <div class="head">
+      <h2>Qual perfil é o seu?</h2>
+      <p>A gente trabalha com 3 tipos principais de parceiros. Cada um tem uma proposta dedicada.</p>
+    </div>
+    <div class="types__grid">
+
+      <div class="type">
+        <div class="type__img"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80&auto=format&fit=crop" alt="Condomínio residencial" loading="lazy" /></div>
+        <div class="type__body">
+          <span class="type__tag">Condomínio residencial</span>
+          <h3>Síndicos & administradoras</h3>
+          <p>Ofereça mobilidade aos moradores e ainda gere receita pro caixa do condomínio. Sem ônus pra ninguém, sem aumentar taxa.</p>
+          <ul class="type__feats">
+            <li>2-4 vagas dedicadas</li>
+            <li>15% da receita pro condomínio</li>
+            <li>Aprovação em assembleia</li>
+            <li>Onboarding em 30 dias</li>
+          </ul>
+          <a href="#form" class="btn btn--primary">Falar sobre meu prédio</a>
+        </div>
+      </div>
+
+      <div class="type">
+        <div class="type__img"><img src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=800&q=80&auto=format&fit=crop" alt="Shopping center" loading="lazy" /></div>
+        <div class="type__body">
+          <span class="type__tag">Shopping center</span>
+          <h3>Gerentes & administração</h3>
+          <p>Aumente o tempo médio de visita e ofereça conveniência diferenciada aos clientes. Carros disponíveis nas vagas premium.</p>
+          <ul class="type__feats">
+            <li>3-8 vagas em local estratégico</li>
+            <li>10-20% da receita pro shopping</li>
+            <li>Branding e divulgação conjunta</li>
+            <li>Sem competição com lojas</li>
+          </ul>
+          <a href="#form" class="btn btn--primary">Falar sobre meu shopping</a>
+        </div>
+      </div>
+
+      <div class="type">
+        <div class="type__img"><img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800&q=80&auto=format&fit=crop" alt="Hospital" loading="lazy" /></div>
+        <div class="type__body">
+          <span class="type__tag">Hospital / clínica</span>
+          <h3>Diretoria de operações</h3>
+          <p>Mobilidade pra visitantes, acompanhantes e funcionários. Aumenta satisfação e reduz dependência de transporte público.</p>
+          <ul class="type__feats">
+            <li>2-5 vagas no estacionamento</li>
+            <li>15-20% da receita pro hospital</li>
+            <li>Tarifa especial pra funcionários</li>
+            <li>Integração com convênios</li>
+          </ul>
+          <a href="#form" class="btn btn--primary">Falar sobre meu hospital</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof">
+  <div class="wrap">
+    <div class="proof__quote">
+      <p>Trazer o Nomade pro nosso edifício foi a melhor decisão. Os moradores adoraram a conveniência e o condomínio passou a receber uma receita extra todo mês — sem complicação nenhuma.</p>
+      <div class="proof__author">
+        <div class="proof__avatar">MR</div>
+        <div class="proof__who">
+          <strong>Marcelo Ribeiro</strong>
+          <span>Síndico · Edifício Solar das Acácias, Uberlândia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaf">
+  <div class="wrap">
+    <h2>Vamos conversar?</h2>
+    <p>Reunião de 30 min pra entender se faz sentido pro seu local. Sem compromisso.</p>
+    <a href="#form" class="btn btn--amber btn--lg">Falar com vendas</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="index.html#locais">Onde tem carro</a>
+      </div>
+      <div class="foot__col">
+        <h5>Para empresas</h5>
+        <a href="parceiros.html">Condomínio</a>
+        <a href="parceiros.html">Shopping</a>
+        <a href="parceiros.html">Hospital</a>
+      </div>
+      <div class="foot__col">
+        <h5>Cidades</h5>
+        <a href="#">Uberlândia</a>
+        <a href="#">Em breve</a>
+      </div>
+      <div class="foot__col">
+        <h5>Empresa</h5>
+        <a href="#">Sobre</a>
+        <a href="#">Carreiras</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">
+      <div>&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+      <div><a href="../termos.html">Privacidade</a> · <a href="../termos.html">Termos</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('formParceiros').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var n = document.getElementById('p-name').value.trim();
+  var em = document.getElementById('p-email').value.trim();
+  var ph = document.getElementById('p-phone').value.trim();
+  var tp = document.getElementById('p-type').value;
+  var pl = document.getElementById('p-place').value.trim();
+  if (!n || !em || !ph || !tp || !pl) return;
+  var msg = '🏢 *Interesse em parceria Nomade Drive*\n\n' +
+    'Nome: ' + n + '\n' +
+    'E-mail: ' + em + '\n' +
+    'WhatsApp: ' + ph + '\n' +
+    'Tipo: ' + tp + '\n' +
+    'Local: ' + pl;
+  window.open('https://wa.me/5534984064864?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+});
+</script>
+
+</body>
+</html>
