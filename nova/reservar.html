@@ -150,11 +150,11 @@
           <div class="field-row">
             <div class="field">
               <label for="date-start">Data retirada</label>
-              <input type="date" id="date-start" value="2026-05-31" />
+              <input type="date" id="date-start" value="2026-05-31" aria-label="Data de retirada do carro" />
             </div>
             <div class="field">
               <label for="date-end">Data devolução</label>
-              <input type="date" id="date-end" value="2026-05-31" />
+              <input type="date" id="date-end" value="2026-05-31" aria-label="Data de devolução do carro" />
             </div>
           </div>
 
@@ -176,7 +176,7 @@
 
           <div class="field">
             <label>Duração da reserva</label>
-            <select id="duration" onchange="updateSummary()">
+            <select id="duration" onchange="updateSummary()" aria-label="Duração da reserva em horas">
               <option value="2">2 horas — R$ 38</option>
               <option value="4">4 horas — R$ 76</option>
               <option value="6" selected>6 horas — R$ 114</option>
@@ -201,28 +201,28 @@
 
           <div class="field">
             <label for="name">Nome completo</label>
-            <input type="text" id="name" value="Daniel Trodovalho" />
+            <input type="text" id="name" value="Daniel Trodovalho" aria-label="Nome completo" />
           </div>
 
           <div class="field-row">
             <div class="field">
               <label for="email">E-mail</label>
-              <input type="email" id="email" value="dtrodovalho40@gmail.com" />
+              <input type="email" id="email" value="dtrodovalho40@gmail.com" aria-label="E-mail de contato" />
             </div>
             <div class="field">
               <label for="phone">WhatsApp</label>
-              <input type="tel" id="phone" value="(34) 9 8406-4864" />
+              <input type="tel" id="phone" value="(34) 9 8406-4864" aria-label="WhatsApp com DDD" />
             </div>
           </div>
 
           <div class="field-row">
             <div class="field">
               <label for="cpf">CPF</label>
-              <input type="text" id="cpf" value="123.456.789-00" />
+              <input type="text" id="cpf" value="123.456.789-00" aria-label="CPF" />
             </div>
             <div class="field">
               <label for="cnh">CNH</label>
-              <input type="text" id="cnh" value="01234567890 (B)" />
+              <input type="text" id="cnh" value="01234567890 (B)" aria-label="Número da CNH" />
             </div>
           </div>
 
@@ -251,18 +251,18 @@
 
           <div class="field">
             <label for="cc">Número do cartão</label>
-            <input type="text" id="cc" value="•••• •••• •••• 4242" readonly />
+            <input type="text" id="cc" value="•••• •••• •••• 4242" readonly aria-label="Número do cartão de crédito" />
             <p style="font-size:12px; color:var(--ink-mute); margin-top:4px;">Cartão Visa terminado em 4242 (cadastrado)</p>
           </div>
 
           <div class="field-row">
             <div class="field">
               <label for="cc-exp">Validade</label>
-              <input type="text" id="cc-exp" value="12/28" readonly />
+              <input type="text" id="cc-exp" value="12/28" readonly aria-label="Validade do cartão MM/AA" />
             </div>
             <div class="field">
               <label for="cc-cvc">CVC</label>
-              <input type="text" id="cc-cvc" placeholder="•••" />
+              <input type="text" id="cc-cvc" placeholder="•••" aria-label="Código de segurança CVC" />
             </div>
           </div>
 
