@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Franquia Nomade Drive — Empreenda no aluguel mensal de carros</title>
+<meta name="description" content="Seja franqueado Nomade Drive em sua cidade. Modelo testado, plataforma pronta, suporte completo. Comece com R$ 80-150k de investimento inicial." />
+<meta name="keywords" content="franquia locadora de carros, franquia aluguel mensal, investir em locadora, franquia Nomade Drive" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
+<style>
+  .frq-hero {
+    background: linear-gradient(135deg, #0f5132 0%, #145f3e 60%, #1a7a4f 100%);
+    color: #fff;
+    padding: 60px 0 80px;
+    text-align: center;
+  }
+  .frq-hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(28px, 5vw, 46px); margin: 0 0 12px; line-height: 1.15; }
+  .frq-hero p { font-size: clamp(16px, 2.2vw, 19px); opacity: 0.92; max-width: 720px; margin: 0 auto 28px; line-height: 1.55; }
+  .frq-hero__cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .frq-hero__cta .btn { font-size: 16px; }
+
+  .frq-section { padding: 56px 0; }
+  .frq-section--alt { background: #f4f5f7; }
+  .frq-section__title { font-family: 'Sora', sans-serif; font-size: clamp(24px, 4vw, 34px); text-align: center; margin: 0 0 12px; color: #14201b; }
+  .frq-section__sub { text-align: center; color: #5b6b63; max-width: 640px; margin: 0 auto 36px; line-height: 1.55; }
+
+  .frq-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; max-width: 1100px; margin: 0 auto; }
+  .frq-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 24px; transition: transform .25s, box-shadow .25s; }
+  .frq-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(20,32,27,0.08); }
+  .frq-card__icon { width: 52px; height: 52px; background: #e8f6ee; color: #145f3e; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .frq-card__icon svg { width: 28px; height: 28px; }
+  .frq-card h3 { font-family: 'Sora', sans-serif; font-size: 17px; margin: 0 0 8px; color: #14201b; }
+  .frq-card p { font-size: 14px; color: #5b6b63; margin: 0; line-height: 1.6; }
+
+  .frq-invest { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; margin: 32px auto 0; }
+  .frq-invest-card { background: #fff; border-radius: 12px; padding: 22px; text-align: center; border: 1px solid #e5e7eb; }
+  .frq-invest-card__val { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; color: #145f3e; margin-bottom: 4px; }
+  .frq-invest-card__lbl { font-size: 13px; color: #5b6b63; }
+
+  .frq-roi { background: #14201b; color: #fff; border-radius: 16px; padding: 32px 28px; max-width: 760px; margin: 0 auto; }
+  .frq-roi h3 { font-family: 'Sora', sans-serif; font-size: 22px; margin: 0 0 16px; color: #fbbf24; }
+  .frq-roi__row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 14px; }
+  .frq-roi__row:last-child { border-bottom: none; font-weight: 700; font-size: 17px; padding-top: 16px; }
+  .frq-roi__row span:first-child { opacity: 0.85; }
+  .frq-roi__row span:last-child { color: #00d6b6; }
+
+  .frq-form { max-width: 540px; margin: 0 auto; background: #fff; border-radius: 14px; padding: 28px; border: 1px solid #e5e7eb; }
+  .frq-form__group { margin-bottom: 16px; }
+  .frq-form__group label { display: block; font-size: 13.5px; font-weight: 600; color: #14201b; margin-bottom: 6px; }
+  .frq-form__group input, .frq-form__group select, .frq-form__group textarea {
+    width: 100%; padding: 11px 14px; border: 1px solid #e5e7eb; border-radius: 8px;
+    font-size: 14px; font-family: inherit; background: #fff;
+  }
+  .frq-form__group textarea { min-height: 80px; resize: vertical; }
+  .frq-form button { width: 100%; padding: 13px; background: #145f3e; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .frq-form button:hover { background: #0f5132; }
+  .frq-form__hint { font-size: 12px; color: #6b7670; text-align: center; margin: 10px 0 0; }
+
+  @media (max-width: 640px) {
+    .frq-section { padding: 40px 0; }
+    .frq-hero { padding: 48px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__txt"><strong>Nomade Drive</strong><span>Brasil</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="index.html#como-funciona">Como funciona</a>
+      <a href="index.html#frota">Carros</a>
+      <a href="index.html#precos">Preços</a>
+      <a href="franquia.html" class="is-current" aria-current="page">Franquia</a>
+      <a href="index.html#faq">Ajuda</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="#franquia-form" class="btn btn--solid btn--sm">Quero franquia</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="frq-hero">
+  <div class="container">
+    <span class="badge badge--pulse" style="background:rgba(255,255,255,.15);color:#fff;margin-bottom:18px;display:inline-flex;">
+      <span class="badge__dot" aria-hidden="true"></span>
+      Modelo testado · Operação em Uberlândia desde 2026
+    </span>
+    <h1>Empreenda no aluguel mensal de carros<br><em style="color:#fbbf24;">com a marca Nomade Drive</em></h1>
+    <p>Locadora especializada em <strong>locações mensais de longa duração</strong>. Plataforma pronta, marca consolidada, suporte completo — você cuida da operação local, a gente cuida da tecnologia.</p>
+    <div class="frq-hero__cta">
+      <a href="#franquia-form" class="btn btn--solid btn--lg" style="background:#fbbf24;color:#14201b;">📨 Quero saber mais</a>
+      <a href="#investimento" class="btn btn--outline btn--lg" style="border-color:#fff;color:#fff;">💰 Ver investimento</a>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE -->
+<section class="frq-section">
+  <div class="container">
+    <h2 class="frq-section__title">Por que ser franqueado Nomade Drive</h2>
+    <p class="frq-section__sub">Você opera, a gente entrega tudo o que precisa pra rodar — tecnologia, marca, processos, suporte.</p>
+    <div class="frq-cards">
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3>Modelo testado</h3>
+        <p>Operação validada em Uberlândia desde 2026 com frota própria, fluxo de locação mensal e métricas reais.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3>Plataforma completa</h3>
+        <p>Site, painel admin, dashboard de clientes/owners, gateway de pagamento, vistoria digital, notificações por e-mail e push — tudo pronto.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <h3>Suporte completo</h3>
+        <p>Onboarding técnico, treinamento operacional, acesso à matriz pra dúvidas e atualizações constantes da plataforma.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h3>Marca consolidada</h3>
+        <p>Identidade visual, copy aprovado, materiais de marketing, presença no Google e site institucional — você economiza meses de construção.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h3>Royalty justo</h3>
+        <p><strong>30%</strong> pra matriz, <strong>70%</strong> pra você. Royalty cobre uso da plataforma, marca e suporte contínuo.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Território exclusivo</h3>
+        <p>Cada franqueado opera com exclusividade na sua cidade. Sem competição interna, foco total no seu mercado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTIMENTO -->
+<section class="frq-section frq-section--alt" id="investimento">
+  <div class="container">
+    <h2 class="frq-section__title">Investimento inicial estimado</h2>
+    <p class="frq-section__sub">Faixa de investimento pra começar com 3-5 carros e operar nos primeiros 6 meses.</p>
+
+    <div class="frq-invest">
+      <div class="frq-invest-card">
+        <div class="frq-invest-card__val">R$ 30k</div>
+        <div class="frq-invest-card__lbl">Taxa de franquia (uso da marca + plataforma)</div>
+      </div>
+      <div class="frq-invest-card">
+        <div class="frq-invest-card__val">R$ 80–120k</div>
+        <div class="frq-invest-card__lbl">Aquisição de 3-5 carros (entrada ou consórcio)</div>
+      </div>
+      <div class="frq-invest-card">
+        <div class="frq-invest-card__val">R$ 8k</div>
+        <div class="frq-invest-card__lbl">Telemetria + cofre eletrônico + setup inicial</div>
+      </div>
+      <div class="frq-invest-card">
+        <div class="frq-invest-card__val">R$ 15k</div>
+        <div class="frq-invest-card__lbl">Capital de giro 6 meses (seguro, mensalidades, marketing)</div>
+      </div>
+    </div>
+
+    <p class="frq-section__sub" style="margin-top:32px;">
+      <strong>Total estimado:</strong> R$ 130k – R$ 180k pra começar.
+      Valores aproximados — número final depende da cidade, frota escolhida e estrutura operacional.
+    </p>
+  </div>
+</section>
+
+<!-- ROI EXEMPLO -->
+<section class="frq-section">
+  <div class="container">
+    <h2 class="frq-section__title">Exemplo de receita mensal (5 carros)</h2>
+    <p class="frq-section__sub">Simulação conservadora com frota de 5 carros categoria Hatch Automático em cidade média.</p>
+
+    <div class="frq-roi">
+      <h3>📊 Exemplo: 5 carros · ocupação 80%</h3>
+      <div class="frq-roi__row"><span>Receita bruta mensal (5 carros × R$ 3.300 × 80%)</span><span>R$ 13.200</span></div>
+      <div class="frq-roi__row"><span>− Royalty matriz (30%)</span><span>− R$ 3.960</span></div>
+      <div class="frq-roi__row"><span>− Stripe / processamento (≈4%)</span><span>− R$ 528</span></div>
+      <div class="frq-roi__row"><span>− Manutenção + IPVA + seguro (≈25%)</span><span>− R$ 3.300</span></div>
+      <div class="frq-roi__row"><span><strong>= Receita líquida franqueado</strong></span><span><strong>R$ 5.412</strong></span></div>
+    </div>
+
+    <p class="frq-section__sub" style="margin-top:24px;font-size:13px;">
+      * Simulação educativa, não promessa. Resultado real depende de ocupação, custos locais e gestão operacional.
+    </p>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="frq-section frq-section--alt">
+  <div class="container">
+    <h2 class="frq-section__title">Como funciona o processo</h2>
+    <p class="frq-section__sub">Da primeira conversa até a inauguração da sua operação leva entre 60 e 120 dias.</p>
+
+    <div class="frq-cards">
+      <div class="frq-card">
+        <div class="frq-card__icon">1</div>
+        <h3>Conversa inicial</h3>
+        <p>Reunião online de 30 min pra entender seu perfil, cidade alvo e capital disponível.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon">2</div>
+        <h3>Análise de viabilidade</h3>
+        <p>Avaliamos demanda na cidade, concorrência local e potencial de retorno. Você recebe relatório.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon">3</div>
+        <h3>Assinatura do contrato</h3>
+        <p>Contrato de franquia, pagamento da taxa inicial e definição do território exclusivo.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon">4</div>
+        <h3>Setup técnico</h3>
+        <p>Onboarding na plataforma, treinamento operacional, configuração da conta Stripe Connect.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon">5</div>
+        <h3>Aquisição da frota</h3>
+        <p>Você compra/financia os carros conforme análise prévia. Matriz apoia na negociação.</p>
+      </div>
+      <div class="frq-card">
+        <div class="frq-card__icon">6</div>
+        <h3>Inauguração</h3>
+        <p>Lançamento na sua cidade com material de marketing. Você começa a faturar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="frq-section" id="franquia-form">
+  <div class="container">
+    <h2 class="frq-section__title">Quero ser franqueado</h2>
+    <p class="frq-section__sub">Preencha pra a gente entrar em contato em até 48h úteis.</p>
+
+    <form class="frq-form" id="formFranquia">
+      <div class="frq-form__group">
+        <label for="frq-name">Nome completo *</label>
+        <input type="text" id="frq-name" name="name" required aria-label="Nome completo" />
+      </div>
+      <div class="frq-form__group">
+        <label for="frq-email">E-mail *</label>
+        <input type="email" id="frq-email" name="email" required aria-label="E-mail de contato" />
+      </div>
+      <div class="frq-form__group">
+        <label for="frq-phone">WhatsApp *</label>
+        <input type="tel" id="frq-phone" name="phone" required placeholder="(34) 99999-9999" aria-label="Telefone WhatsApp" />
+      </div>
+      <div class="frq-form__group">
+        <label for="frq-city">Cidade alvo *</label>
+        <input type="text" id="frq-city" name="city" required placeholder="Ex: Goiânia, GO" aria-label="Cidade onde quer abrir franquia" />
+      </div>
+      <div class="frq-form__group">
+        <label for="frq-budget">Capital disponível</label>
+        <select id="frq-budget" name="budget" aria-label="Faixa de capital disponível pra investimento">
+          <option value="">Selecione...</option>
+          <option value="100-150k">R$ 100k – R$ 150k</option>
+          <option value="150-250k">R$ 150k – R$ 250k</option>
+          <option value="250-500k">R$ 250k – R$ 500k</option>
+          <option value="500k+">Acima de R$ 500k</option>
+          <option value="financiamento">Preciso de orientação sobre financiamento</option>
+        </select>
+      </div>
+      <div class="frq-form__group">
+        <label for="frq-notes">Observações (opcional)</label>
+        <textarea id="frq-notes" name="notes" placeholder="Experiência prévia, motivação, perguntas..." aria-label="Observações adicionais"></textarea>
+      </div>
+      <button type="submit" id="frq-submit">Quero ser franqueado →</button>
+      <p class="frq-form__hint">Seus dados são tratados conforme nossa <a href="termos.html" style="color:#145f3e;">política de privacidade</a>. Não compartilhamos com terceiros.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#14201b;color:#fff;padding:32px 0;text-align:center;font-size:13px;">
+  <div class="container">
+    <p style="margin:0 0 8px;">&copy; 2026 Nomade Drive Brasil. Todos os direitos reservados.</p>
+    <p style="margin:0;opacity:0.7;">
+      <a href="index.html" style="color:#fbbf24;">Início</a> ·
+      <a href="termos.html" style="color:#fbbf24;">Termos</a> ·
+      <a href="mailto:franquia@nomadedrive.com.br" style="color:#fbbf24;">franquia@nomadedrive.com.br</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+// Form submit: por enquanto, abre WhatsApp com mensagem pré-formatada (sem backend)
+document.getElementById('formFranquia').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('frq-name').value.trim();
+  var email = document.getElementById('frq-email').value.trim();
+  var phone = document.getElementById('frq-phone').value.trim();
+  var city = document.getElementById('frq-city').value.trim();
+  var budget = document.getElementById('frq-budget').value;
+  var notes = document.getElementById('frq-notes').value.trim();
+  if (!name || !email || !phone || !city) { return; }
+  var msg = '🤝 *Interesse em Franquia Nomade Drive*\n\n' +
+    'Nome: ' + name + '\n' +
+    'E-mail: ' + email + '\n' +
+    'WhatsApp: ' + phone + '\n' +
+    'Cidade alvo: ' + city + '\n' +
+    'Capital: ' + (budget || 'a definir') + '\n' +
+    (notes ? 'Observações: ' + notes : '');
+  var wa = 'https://wa.me/5534984064864?text=' + encodeURIComponent(msg);
+  window.open(wa, '_blank', 'noopener,noreferrer');
+});
+</script>
+
+</body>
+</html>

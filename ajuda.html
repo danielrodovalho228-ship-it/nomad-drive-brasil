@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Central de Ajuda — Nomade Drive Brasil</title>
+<meta name="description" content="Perguntas frequentes sobre aluguel mensal Nomade Drive: documentos, prazos, pagamento, manutenção, multas, devolução." />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
+<style>
+  .aj-hero { background: linear-gradient(135deg,#0f5132 0%,#145f3e 60%,#1a7a4f 100%); color:#fff; padding:48px 0 56px; text-align:center; }
+  .aj-hero h1 { font-family:'Sora',sans-serif; font-size:clamp(28px,5vw,38px); margin:0 0 10px; }
+  .aj-hero p { opacity:0.92; max-width:600px; margin:0 auto; }
+
+  .aj-section { padding:48px 0; }
+  .aj-section--alt { background:#f4f5f7; }
+  .aj-cat-title { font-family:'Sora',sans-serif; font-size:clamp(20px,3.5vw,26px); color:#14201b; margin:0 0 20px; padding-bottom:8px; border-bottom:2px solid #e8f6ee; }
+
+  .aj-faq { max-width:780px; margin:0 auto; }
+  .aj-faq__item { background:#fff; border:1px solid #e5e7eb; border-radius:10px; margin-bottom:10px; overflow:hidden; }
+  .aj-faq__q { width:100%; text-align:left; padding:16px 18px; background:#fff; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:600; color:#14201b; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .aj-faq__q:hover { background:#fafbfa; }
+  .aj-faq__q::after { content:'+'; font-size:22px; color:#145f3e; transition:transform .2s; }
+  .aj-faq__item[open] .aj-faq__q::after { content:'−'; }
+  .aj-faq__a { padding:0 18px 16px; font-size:14px; color:#5b6b63; line-height:1.65; }
+
+  .aj-contact { background:#14201b; color:#fff; padding:40px 0; text-align:center; }
+  .aj-contact h2 { font-family:'Sora',sans-serif; font-size:clamp(22px,3.5vw,28px); margin:0 0 10px; }
+  .aj-contact p { opacity:0.85; margin:0 0 22px; }
+  .aj-contact__cta { display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
+      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
+      <span class="brand__txt"><strong>Nomade Drive</strong><span>Brasil</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="index.html#frota">Carros</a>
+      <a href="index.html#precos">Preços</a>
+      <a href="franquia.html">Franquia</a>
+      <a href="ajuda.html" class="is-current" aria-current="page">Ajuda</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="btn btn--solid btn--sm">💬 WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<section class="aj-hero">
+  <div class="container">
+    <h1>Central de Ajuda</h1>
+    <p>Tudo o que você precisa saber sobre o aluguel mensal Nomade Drive.</p>
+  </div>
+</section>
+
+<!-- CADASTRO -->
+<section class="aj-section">
+  <div class="container aj-faq">
+    <h2 class="aj-cat-title">📄 Cadastro e documentos</h2>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Quais documentos preciso?</summary>
+      <div class="aj-faq__a">CNH válida (mínimo 2 anos de habilitação), comprovante de residência (até 90 dias), CPF e foto selfie pra validação biométrica. Tudo enviado pelo cadastro online — leva uns 5 minutos.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Preciso de fiador?</summary>
+      <div class="aj-faq__a">Não. Trabalhamos com caução refundável de 1 mensalidade. A análise é feita por comportamento (CNH, histórico de aluguel anterior, validação biométrica), não por fiador.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Quanto tempo demora a aprovação?</summary>
+      <div class="aj-faq__a">Até 24h úteis. Em geral, aprovamos no mesmo dia se os documentos estão completos. Você acompanha o status no painel ou recebe notificação por WhatsApp/email.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Posso alugar sendo estrangeiro?</summary>
+      <div class="aj-faq__a">Sim. Aceitamos CNH internacional (PID) + passaporte. Para estadias longas, recomendamos cadastro de visto/RNE. Suporte em inglês disponível pelo WhatsApp.</div>
+    </details>
+  </div>
+</section>
+
+<!-- PAGAMENTO -->
+<section class="aj-section aj-section--alt">
+  <div class="container aj-faq">
+    <h2 class="aj-cat-title">💳 Pagamento e preços</h2>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Como funciona o pagamento mensal?</summary>
+      <div class="aj-faq__a">Primeira mensalidade no ato da assinatura, demais cobradas automaticamente no mesmo dia do mês via cartão (Stripe). Sem boleto, sem fila no banco.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Tem desconto pra aluguéis longos?</summary>
+      <div class="aj-faq__a">Sim: 2% (2 meses), 4% (3 meses), 5% (4 meses), 7% (6 meses), 10% (12 meses). Aplicado automaticamente no checkout.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Quanto custa o caução?</summary>
+      <div class="aj-faq__a">Equivalente a 1 mensalidade. Cobrado como pré-autorização no cartão (não desconta o valor), liberado em até 5 dias úteis após devolução do carro sem avarias.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Posso pagar no Pix?</summary>
+      <div class="aj-faq__a">Atualmente o pagamento principal é via cartão (recorrência automática). Pix é aceito apenas pra ajustes pontuais (km excedente, multa). Estamos avaliando recorrência Pix pra 2026.</div>
+    </details>
+  </div>
+</section>
+
+<!-- USO DO CARRO -->
+<section class="aj-section">
+  <div class="container aj-faq">
+    <h2 class="aj-cat-title">🚗 Uso do carro</h2>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Quantos km posso rodar por mês?</summary>
+      <div class="aj-faq__a">Até 2.500 km/mês inclusos. Excedente: R$ 0,30/km, cobrado no fechamento. Sem multa surpresa — você vê o consumo no painel a qualquer momento.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Posso viajar pra outro estado?</summary>
+      <div class="aj-faq__a">Sim, dentro do território nacional. Só precisamos saber com antecedência (avisa pelo WhatsApp). Viagens internacionais (Argentina, Uruguai etc.) requerem autorização específica.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">E se o carro quebrar?</summary>
+      <div class="aj-faq__a">Aciona assistência 24h pelo WhatsApp. Guincho + carro reserva sem custo adicional. Manutenção mecânica por nossa conta (você não paga peça nem mão de obra).</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Quem paga combustível?</summary>
+      <div class="aj-faq__a">Você. O carro é entregue com tanque cheio e deve ser devolvido cheio (ou cobramos o reabastecimento + taxa de R$ 30).</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">E multas de trânsito?</summary>
+      <div class="aj-faq__a">Multas durante o aluguel são de responsabilidade do locatário. Repassamos a notificação no seu painel e você indica o condutor pelo Detran. Taxa administrativa de R$ 30 por multa transferida.</div>
+    </details>
+  </div>
+</section>
+
+<!-- DEVOLUÇÃO -->
+<section class="aj-section aj-section--alt">
+  <div class="container aj-faq">
+    <h2 class="aj-cat-title">🔄 Renovação e devolução</h2>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Posso renovar o aluguel?</summary>
+      <div class="aj-faq__a">Sim. 30 dias antes do término você recebe oferta de renovação (com possível desconto fidelidade). Renova pelo painel em 1 clique, sem precisar refazer cadastro.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Posso cancelar antes do prazo?</summary>
+      <div class="aj-faq__a">Sim, com multa proporcional ao desconto recebido. Ex: se contratou 6 meses (7% desc.) e devolve no 3º mês, paga a diferença pra reflitir tarifa de 3 meses. Sem juros nem taxa extra.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">Como funciona a devolução?</summary>
+      <div class="aj-faq__a">Agendamento pelo painel, vistoria digital na entrega (você confirma fotos), liberação do caução em até 5 dias úteis. Sem fila, sem espera no balcão.</div>
+    </details>
+
+    <details class="aj-faq__item">
+      <summary class="aj-faq__q">E se eu danificar o carro?</summary>
+      <div class="aj-faq__a">Pequenos arranhões: desgaste natural, sem cobrança. Avarias: orçamento transparente, descontado do caução. Acidente com terceiros: seguro acionado, franquia conforme contrato (R$ 3.500 padrão).</div>
+    </details>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="aj-contact">
+  <div class="container">
+    <h2>Não achou sua resposta?</h2>
+    <p>Fala com a gente — gente de verdade, em horário comercial e emergências 24h.</p>
+    <div class="aj-contact__cta">
+      <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="btn btn--solid btn--lg" style="background:#25d366;color:#fff;">💬 WhatsApp (34) 9 8406-4864</a>
+      <a href="mailto:contato@nomadedrive.com.br" class="btn btn--outline btn--lg" style="border-color:#fff;color:#fff;">📧 contato@nomadedrive.com.br</a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#14201b;color:#fff;padding:32px 0;text-align:center;font-size:13px;">
+  <div class="container">
+    <p style="margin:0 0 8px;">&copy; 2026 Nomade Drive Brasil. Todos os direitos reservados.</p>
+    <p style="margin:0;opacity:0.7;">
+      <a href="index.html" style="color:#fbbf24;">Início</a> ·
+      <a href="termos.html" style="color:#fbbf24;">Termos</a> ·
+      <a href="franquia.html" style="color:#fbbf24;">Franquia</a> ·
+      <a href="como-funciona.html" style="color:#fbbf24;">Como funciona</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
