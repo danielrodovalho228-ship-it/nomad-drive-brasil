@@ -42,9 +42,11 @@
   @media (min-width: 900px) { .nav__links { display: flex; } }
 
   /* HERO (com foto + form lado) */
-  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 56px 0 80px; position: relative; overflow: hidden; }
-  .hero__bg { position: absolute; inset: 0; opacity: 0.2; }
-  .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+  .hero { background:
+    radial-gradient(60% 50% at 90% 0%, rgba(251,191,36,0.15), transparent 60%),
+    radial-gradient(60% 50% at 0% 100%, rgba(109,194,75,0.25), transparent 70%),
+    linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+    color: #fff; padding: 56px 0 80px; position: relative; overflow: hidden; }
   .hero__inner { position: relative; z-index: 1; display: grid; gap: 44px; align-items: center; }
   @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.1fr 1fr; } }
   .hero h1 { color: #fff; font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 18px; }
@@ -153,7 +155,6 @@
 
 <!-- HERO com form lateral -->
 <section class="hero">
-  <div class="hero__bg"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80&auto=format&fit=crop" alt="" loading="eager" /></div>
   <div class="wrap hero__inner">
     <div>
       <h1>Carsharing pro seu <em>condomínio, shopping ou hospital</em></h1>
