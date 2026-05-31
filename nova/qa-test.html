@@ -320,8 +320,8 @@ document.getElementById('btn-list').onclick = async function() {
       log('log-list', '📭 Nenhuma reserva encontrada pra ' + email, '');
     } else {
       var resumo = '✓ ' + data.count + ' reserva(s) encontrada(s):\n\n' + data.bookings.map(function(b) {
-        return '[' + b.status.padEnd(17) + '] ' + b.protocol + ' · ' + b.vehicle_id.padEnd(9) + ' · R$ ' + String(b.amount_brl).padStart(4) + ' · cofre: ' + (b.pickup_code || '----') + ' · id: ' + b.id;
-      }).join('\n');
+        return '[' + b.status.padEnd(17) + '] ' + b.protocol + ' · ' + b.vehicle_id.padEnd(9) + ' · R$ ' + String(b.amount_brl).padStart(4) + ' · id: ' + b.id;
+      }).join('\n') + '\n\nℹ️ Senha do cofre não exibida aqui (segurança). Veja: (1) tela qa-pago.html após pagar, (2) e-mail "Reserva confirmada", ou (3) SQL no Supabase Studio.';
       log('log-list', resumo, 'ok');
     }
   } catch (e) { log('log-list', '❌ ' + e.message, 'err'); }
