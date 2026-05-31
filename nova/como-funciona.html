@@ -278,7 +278,6 @@
         </div>
       </div>
       <div class="slide__body">
-        <div class="slide__title">Como o Nomade funciona</div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:25%;"></div></div>
         <div class="slide__counter">1/4</div>
         <p class="slide__desc">Ache um carro perto de você — disponível 24/7.</p>
@@ -321,7 +320,6 @@
         </div>
       </div>
       <div class="slide__body">
-        <div class="slide__title">Como o Nomade funciona</div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:50%;"></div></div>
         <div class="slide__counter">2/4</div>
         <p class="slide__desc">Cadastre-se com CNH válida pra ser aprovado a dirigir.</p>
@@ -382,7 +380,6 @@
         </div>
       </div>
       <div class="slide__body">
-        <div class="slide__title">Como o Nomade funciona</div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:75%;"></div></div>
         <div class="slide__counter">3/4</div>
         <p class="slide__desc">Reserve por hora ou dia e pegue a chave no cofre eletrônico pelo app.</p>
@@ -406,38 +403,22 @@
             </span>
             <div class="ret-screen">
               <div class="ret-screen__close">✕</div>
-              <div class="ret-screen__illust">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Carro azul -->
-                  <path d="M30 110 h70 l8 15 v25 a2 2 0 0 1 -2 2 h-4 v6 h-8 v-6 h-50 v6 h-8 v-6 h-4 a2 2 0 0 1 -2 -2 v-25 z" fill="#3b82f6"/>
-                  <circle cx="44" cy="155" r="6" fill="#1a1a1a"/>
-                  <circle cx="86" cy="155" r="6" fill="#1a1a1a"/>
-                  <rect x="38" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
-                  <rect x="56" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
-                  <rect x="74" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
-                  <!-- Pessoa -->
-                  <circle cx="130" cy="78" r="14" fill="#92400e"/>
-                  <path d="M118 130 q4 -8 12 -8 q8 0 12 8 v25 h-24 z" fill="#FFC72C"/>
-                  <rect x="124" y="155" width="6" height="18" fill="#1e3a8a"/>
-                  <rect x="132" y="155" width="6" height="18" fill="#1e3a8a"/>
-                  <rect x="120" y="172" width="14" height="5" rx="2" fill="#1a1a1a"/>
-                  <rect x="128" y="172" width="14" height="5" rx="2" fill="#1a1a1a"/>
-                  <!-- Celular nas mãos -->
-                  <rect x="138" y="98" width="14" height="22" rx="2" fill="#1a1a1a"/>
-                  <rect x="140" y="101" width="10" height="14" fill="#4FA600"/>
-                  <!-- Pin de localização verde acima -->
-                  <circle cx="58" cy="98" r="5" fill="#4FA600"/>
-                  <circle cx="58" cy="98" r="2" fill="#fff"/>
-                </svg>
+              <!-- FOTO REAL do carro estacionado (substitui SVG ilustração ruim) -->
+              <div style="margin: 0 -20px 14px; height: 140px; overflow: hidden; position: relative;">
+                <img src="../images/car-tracker-2.jpg" alt="Carro Nomade estacionado pronto pra devolver" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                <!-- Badge verde de "Devolvido" -->
+                <div style="position: absolute; top: 10px; right: 10px; background: var(--zip-green); color: #fff; padding: 5px 11px; border-radius: 999px; font-size: 9px; font-weight: 800; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                  <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  DEVOLVIDO
+                </div>
               </div>
               <h4>Pronto pra devolver?</h4>
-              <p>Estacione o carro na vaga original com pelo menos ¼ de combustível e siga as instruções pra deixar pronto pra próxima pessoa.</p>
+              <p>Estacione o carro na vaga original com pelo menos ¼ de combustível. Devolva a chave no cofre eletrônico e pronto.</p>
             </div>
           </div>
         </div>
       </div>
       <div class="slide__body">
-        <div class="slide__title">Como o Nomade funciona</div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:100%;"></div></div>
         <div class="slide__counter">4/4</div>
         <p class="slide__desc">Devolva o carro no mesmo lugar e finalize sua viagem.</p>
@@ -448,6 +429,55 @@
       </div>
     </article>
 
+  </div>
+</section>
+
+<!-- ============ COMO É NA PRÁTICA — fotos REAIS ============ -->
+<section style="padding: 56px 0; background: var(--white);">
+  <div class="wrap">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto 36px;">
+      <h2>Como é na prática</h2>
+      <p style="color: var(--gray-700); font-size: 17px; margin-top: 10px;">Fotos reais do nosso processo em Uberlândia.</p>
+    </div>
+    <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); max-width: 1180px; margin: 0 auto;">
+
+      <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--white);">
+        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80&auto=format&fit=crop" alt="Edifício residencial onde fica o carro" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;" loading="lazy" />
+        <div style="padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;">1 · Localize</div>
+          <strong style="display: block; font-size: 15px; margin-bottom: 4px;">Encontre carros perto</strong>
+          <p style="font-size: 13px; color: var(--gray-700); line-height: 1.5;">Em condomínios, shoppings e hospitais parceiros.</p>
+        </div>
+      </div>
+
+      <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--white);">
+        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop" alt="Documentos sendo verificados" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;" loading="lazy" />
+        <div style="padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;">2 · Cadastre</div>
+          <strong style="display: block; font-size: 15px; margin-bottom: 4px;">CNH válida, aprovação 24h</strong>
+          <p style="font-size: 13px; color: var(--gray-700); line-height: 1.5;">Envie pelo app, sem precisar ir até nenhum balcão.</p>
+        </div>
+      </div>
+
+      <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--white);">
+        <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker da frota Nomade" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;" loading="lazy" />
+        <div style="padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;">3 · Reserve</div>
+          <strong style="display: block; font-size: 15px; margin-bottom: 4px;">Frota nova, revisada</strong>
+          <p style="font-size: 13px; color: var(--gray-700); line-height: 1.5;">Chevrolet Tracker, Cobalt, Hyundai HB20 e Jeep Renegade.</p>
+        </div>
+      </div>
+
+      <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); background: var(--white);">
+        <img src="../images/car-tracker-2.jpg" alt="Carro estacionado pronto pra devolução" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;" loading="lazy" />
+        <div style="padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px;">4 · Devolva</div>
+          <strong style="display: block; font-size: 15px; margin-bottom: 4px;">Mesma vaga, tanque ¼</strong>
+          <p style="font-size: 13px; color: var(--gray-700); line-height: 1.5;">Devolva no mesmo lugar e finalize pelo app em segundos.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
