@@ -17,6 +17,14 @@
 - ✅ **Mini-bug** Console QA "Minhas reservas" agora lista via Edge Function `qa-listar-reservas` (antes RLS bloqueava a anon key)
 - ✅ **Admin painel de Leads** `escapeHtml` local no `renderLeadCard` corrigido — se você viu "lista vazia mas KPIs corretos" na rodada anterior, faz `Ctrl+Shift+R` e re-loga
 - ✅ **Atalho** Botão flutuante "🧪 QA Console" no canto inferior direito do `admin.html` linka direto pro `qa-test.html`
+- ✅ **Falso positivo conflito** Reservas longas (48h+) eram rejeitadas por mocks fantasmas em 01/06 e 02/06. Removidos — datas futuras 100% livres.
+- ✅ **Alertas com visual de AI** (vermelho gritante + emojis 🚫/⚠️) substituídos por hints amber didáticos + SVG icons em `nova/reservar.html`.
+
+**Novo fluxo de autenticação (substitui magic link):**
+- ✅ **Login profissional**: `nova/login.html` agora usa **email + senha + "esqueci minha senha"** em vez de magic link (que dava erro de SMTP rate limit)
+- ✅ **Cadastro com senha**: `nova/index.html#cadastro` pede senha (mín 8 chars) + aceite de termos
+- ✅ **Recuperação de senha**: `nova/recuperar-senha.html` envia link de reset; `nova/nova-senha.html` recebe e permite definir nova senha
+- ✅ **Edge Function `nova-lead` v6**: aceita password, cria conta direto com senha (sem magic link)
 
 **Em paralelo (não afeta seus testes mas saber é bom):** corrigimos um vazamento de RLS em 15 views internas do banco (segurança LGPD). Já está em produção, não muda nada visualmente.
 
@@ -234,36 +242,56 @@ Já temos **8 contas** criadas no Supabase Auth, cada uma com role específico. 
 
 ---
 
-## FLUXO 5 — Magic Link de cadastro
+## FLUXO 5 — Cadastro com senha + Login + Recuperação
 
-**Objetivo:** validar criação automática de conta + login sem senha.
+**Objetivo:** validar fluxo completo de auth tradicional (sem magic link).
 
-**Conta sugerida:** novo email que NÃO existe ainda (ex: `qa-teste-novo+${timestamp}@example.com` ou criar uma conta nova no Gmail).
+**Conta sugerida:** novo email que NÃO existe ainda (ex: `qa-teste-pw+${timestamp}@example.com`).
 
-### Passos
-1. Abrir `/nova/index.html#cadastro`
-2. Preencher form:
-   - Nome: `QA Teste Magic`
-   - E-mail: **um email novo que você consegue acessar**
-   - WhatsApp: qualquer
-   - Cidade: `Uberlândia`
+### F5.1 — Criar conta com senha
+1. Abrir `https://nomadedrive.com.br/nova/index.html#cadastro`
+2. Preencher form completo:
+   - Nome, e-mail novo, WhatsApp, cidade
+   - **Senha**: digite menos de 8 chars → hint deve ficar vermelho. Digite ≥8 → hint verde "✓ Senha forte"
+   - **Marcar checkbox** "Aceito Termos"
 3. Clicar **"Criar conta grátis →"**
-4. Mensagem verde "✅ Cadastro recebido"
-5. Verificar inbox do email cadastrado
-6. Abrir e-mail *"🚗 Sua conta Nomade Drive está pronta"*
-7. Clicar botão **"🔐 Acessar minha conta"**
-8. Redireciona pra `https://nomadedrive.com.br/dashboard-cliente.html` **já logado**
+4. Mensagem verde "Conta criada com sucesso"
+5. Redireciona em ~1.8s pra `/nova/login.html?welcome=...`
+
+### F5.2 — Login com email + senha
+1. Em `/nova/login.html`, digite e-mail + senha cadastrados
+2. Use o ícone do olho pra mostrar/ocultar senha
+3. Clicar **"Entrar"** → mensagem verde "Bem-vindo de volta" → redireciona pra `/nova/index.html?logged=true`
+
+### F5.3 — Senha errada
+1. Em `/nova/login.html`, digite senha errada
+2. Deve aparecer hint vermelho com link "Esqueceu sua senha?"
+
+### F5.4 — Recuperar senha
+1. Em `/nova/login.html`, clicar "Esqueci minha senha"
+2. Cai em `/nova/recuperar-senha.html`
+3. Digite o email cadastrado → clicar "Enviar link"
+4. Mensagem verde aparece (genérica por segurança)
+5. Verificar Gmail — chega e-mail com link "Redefinir senha"
+6. Clicar no link → cai em `/nova/nova-senha.html`
+7. Digite nova senha + confirmação (≥8 chars cada)
+8. Clicar "Salvar" → mensagem "Senha atualizada" → redireciona pro login com `?reset=ok`
+9. Logar com nova senha → deve funcionar
 
 ### ✅ Critérios
-- [ ] Conta criada em `auth.users` (verificar via SQL ou dashboard Supabase)
-- [ ] Profile criado em `public.profiles` com `main_role='client'`
-- [ ] Lead criado em `public.leads`
-- [ ] Magic link funciona (não dá erro "redirect not allowed")
-- [ ] Usuário entra direto no dashboard, sem precisar senha
+- [ ] **F5.1** Conta criada em `auth.users` (verificar via SQL)
+- [ ] **F5.1** Profile criado em `public.profiles` com `main_role='client'`
+- [ ] **F5.1** Lead criado em `public.leads` com `notes.has_password = true`
+- [ ] **F5.1** E-mail "Sua conta Nomade Drive está pronta" chega (CTA pro login.html)
+- [ ] **F5.2** Login funciona, sessão Supabase ativa
+- [ ] **F5.3** Senha errada mostra erro com link recovery
+- [ ] **F5.4** Link de reset chega no e-mail e funciona
+- [ ] **F5.4** Após reset, login com nova senha funciona
 
 ### ⚠️ Pode falhar se
-- Magic link redirect URL não tá nas Allowed URLs do Supabase Auth → resolver em [Dashboard Auth Config](https://supabase.com/dashboard/project/zeexmbgacvsaciojcrwr/auth/url-configuration)
+- `nova-senha.html` redirect URL não tá nas Allowed URLs do Supabase Auth → resolver em [Dashboard Auth Config](https://supabase.com/dashboard/project/zeexmbgacvsaciojcrwr/auth/url-configuration). Adicionar `https://nomadedrive.com.br/nova/nova-senha.html`
 - E-mail caiu no SPAM (Gmail às vezes filtra)
+- Contas antigas (criadas via magic link sem senha) → cliente precisa usar "Esqueci minha senha" pra definir uma. Fluxo híbrido.
 
 ---
 
