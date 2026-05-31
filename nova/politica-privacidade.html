@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Política de Privacidade — Nomade Drive Brasil</title>
+<meta name="description" content="Como o Nomade Drive coleta, usa e protege seus dados pessoais. Conformidade com a LGPD (Lei 13.709/2018)." />
+<meta name="theme-color" content="#4FA600" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600; --zip-green-dark: #3F8500; --zip-green-darker: #2E6100; --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8; --zip-amber: #FFC72C;
+    --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-200: #e5e7eb; --gray-100: #f5f5f5; --gray-50: #fafafa; --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  a { color: var(--zip-green-dark); } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav simplificada */
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .nav__wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__cta { display: flex; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
+  .nav__cta a { text-decoration: none; padding: 8px 16px; border-radius: 999px; color: var(--gray-900); transition: all .15s; }
+  .nav__cta a:hover { background: var(--gray-100); }
+  .nav__cta a.btn-primary { background: var(--zip-green); color: var(--white); }
+  .nav__cta a.btn-primary:hover { background: var(--zip-green-dark); }
+
+  /* Hero */
+  .hero { padding: 64px 0 32px; background: linear-gradient(135deg, var(--zip-bg-blue) 0%, #d4eaf3 100%); }
+  .hero h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 8px; color: var(--black); }
+  .hero p.lead { font-size: 16.5px; color: var(--gray-700); max-width: 680px; }
+  .hero p.meta { font-size: 13px; color: var(--gray-500); margin-top: 16px; }
+
+  /* Conteúdo */
+  main { padding: 48px 0 80px; }
+  .toc { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 12px; padding: 20px 24px; margin-bottom: 36px; }
+  .toc h3 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-700); margin-bottom: 12px; }
+  .toc ol { padding-left: 22px; columns: 2; column-gap: 24px; }
+  @media (max-width: 640px) { .toc ol { columns: 1; } }
+  .toc li { font-size: 13.5px; color: var(--gray-900); margin-bottom: 6px; break-inside: avoid; }
+  .toc li a { color: inherit; text-decoration: none; font-weight: 600; }
+  .toc li a:hover { color: var(--zip-green-dark); text-decoration: underline; }
+
+  section.policy { margin-bottom: 44px; scroll-margin-top: 90px; }
+  section.policy h2 { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; margin-bottom: 14px; padding-top: 8px; }
+  section.policy h2 span.num { color: var(--zip-green-dark); margin-right: 8px; font-weight: 900; }
+  section.policy h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin: 20px 0 8px; }
+  section.policy p { font-size: 15.5px; color: var(--gray-900); margin-bottom: 14px; }
+  section.policy ul, section.policy ol { padding-left: 22px; margin-bottom: 14px; }
+  section.policy li { font-size: 15.5px; color: var(--gray-900); margin-bottom: 6px; }
+  section.policy strong { color: var(--black); font-weight: 700; }
+
+  /* Tabela */
+  table.data { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 14px; }
+  table.data th, table.data td { padding: 10px 14px; border: 1px solid var(--gray-200); text-align: left; vertical-align: top; }
+  table.data th { background: var(--gray-50); font-weight: 700; color: var(--gray-900); }
+  table.data tr:nth-child(even) td { background: var(--gray-50); }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 16px 18px; margin: 16px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 14.5px; line-height: 1.55; }
+  .callout svg { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .callout--info { background: var(--zip-green-pale); color: var(--zip-green-darker); border: 1px solid #a7d883; }
+  .callout--warn { background: #fef9e7; color: #78350f; border: 1px solid #fde68a; }
+
+  /* Footer */
+  .foot { background: var(--black); color: rgba(255,255,255,0.65); padding: 36px 0 24px; }
+  .foot__inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .foot__inner a { color: rgba(255,255,255,0.85); text-decoration: none; margin: 0 8px; font-size: 13.5px; }
+  .foot__inner a:hover { color: var(--zip-green); }
+  .foot__copy { font-size: 12.5px; color: rgba(255,255,255,0.45); margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <div class="nav__cta">
+      <a href="login.html">Entrar</a>
+      <a href="index.html#cadastro" class="btn-primary">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Política de Privacidade</h1>
+    <p class="lead">Como o Nomade Drive Brasil coleta, usa e protege seus dados pessoais. Conformidade com a <strong>LGPD — Lei 13.709/2018</strong>.</p>
+    <p class="meta">Versão 1.0 · Vigente a partir de 31 de Maio de 2026</p>
+  </div>
+</section>
+
+<main>
+  <div class="wrap">
+
+    <!-- Sumário navegável -->
+    <div class="toc">
+      <h3>Sumário</h3>
+      <ol>
+        <li><a href="#quem-somos">Quem somos</a></li>
+        <li><a href="#dados-coletados">Dados que coletamos</a></li>
+        <li><a href="#finalidade">Para que usamos seus dados</a></li>
+        <li><a href="#base-legal">Base legal do tratamento</a></li>
+        <li><a href="#compartilhamento">Com quem compartilhamos</a></li>
+        <li><a href="#retencao">Por quanto tempo guardamos</a></li>
+        <li><a href="#cookies">Cookies e rastreamento</a></li>
+        <li><a href="#direitos">Seus direitos</a></li>
+        <li><a href="#como-exercer">Como exercer seus direitos</a></li>
+        <li><a href="#seguranca">Segurança dos dados</a></li>
+        <li><a href="#menores">Menores de idade</a></li>
+        <li><a href="#mudancas">Mudanças nesta política</a></li>
+        <li><a href="#contato">Contato e DPO</a></li>
+      </ol>
+    </div>
+
+    <section class="policy" id="quem-somos">
+      <h2><span class="num">1.</span> Quem somos</h2>
+      <p><strong>Nomade Drive Brasil</strong> é uma plataforma de carsharing por hora e dia operando inicialmente em Uberlândia/MG.</p>
+      <p>Para os fins desta Política e da Lei Geral de Proteção de Dados (Lei 13.709/2018), atuamos como <strong>controladores dos dados pessoais</strong> que você nos fornece através do nosso site e aplicativo.</p>
+      <table class="data">
+        <tr><th>Razão social</th><td>Daniel Tomaz Rodovalho 03873195120 (MEI — em transição para ME)</td></tr>
+        <tr><th>CNPJ</th><td>(em registro)</td></tr>
+        <tr><th>Endereço</th><td>Uberlândia/MG (sede operacional)</td></tr>
+        <tr><th>E-mail oficial</th><td><a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a></td></tr>
+        <tr><th>Encarregado pelo tratamento (DPO)</th><td>Daniel Rodovalho — <a href="mailto:dpo@nomadedrive.com.br">dpo@nomadedrive.com.br</a></td></tr>
+      </table>
+    </section>
+
+    <section class="policy" id="dados-coletados">
+      <h2><span class="num">2.</span> Dados que coletamos</h2>
+
+      <h3>2.1 Dados que você nos fornece diretamente</h3>
+      <table class="data">
+        <tr><th>Categoria</th><th>Dados específicos</th><th>Quando</th></tr>
+        <tr><td>Identificação</td><td>Nome completo, CPF, data de nascimento, RG</td><td>Cadastro + KYC</td></tr>
+        <tr><td>Contato</td><td>E-mail, telefone (WhatsApp), cidade, endereço residencial</td><td>Cadastro</td></tr>
+        <tr><td>Habilitação</td><td>Número CNH, validade, categoria, foto frente e verso</td><td>KYC</td></tr>
+        <tr><td>Biometria facial</td><td>Selfie segurando a CNH</td><td>KYC</td></tr>
+        <tr><td>Comprovante</td><td>Conta de luz/água/internet (últimos 3 meses)</td><td>KYC</td></tr>
+        <tr><td>Profissional</td><td>Profissão, empresa, cargo, LinkedIn, Instagram (opcional)</td><td>Perfil (opcional)</td></tr>
+        <tr><td>Pet (se aplicável)</td><td>Nome, espécie, porte, foto, cartão de vacina</td><td>Perfil (opcional)</td></tr>
+        <tr><td>Pagamento</td><td>Tokenização do cartão (não armazenamos número do cartão)</td><td>Reserva</td></tr>
+      </table>
+
+      <h3>2.2 Dados coletados automaticamente</h3>
+      <ul>
+        <li><strong>Navegação:</strong> IP, navegador, sistema operacional, páginas visitadas, tempo de sessão</li>
+        <li><strong>Geolocalização:</strong> quando você permite no app, pra encontrar o carro mais próximo</li>
+        <li><strong>Telemetria do veículo durante a locação:</strong> posição GPS, velocidade, ignição on/off, alertas de geofence</li>
+        <li><strong>Cookies e similares:</strong> ver seção 7</li>
+      </ul>
+
+      <h3>2.3 Dados recebidos de terceiros</h3>
+      <ul>
+        <li><strong>Receita Federal:</strong> validação de CPF (via Caf ou Idwall)</li>
+        <li><strong>Denatran/Senatran:</strong> validação de CNH ativa e consulta de multas (via Infosimples)</li>
+        <li><strong>Stripe:</strong> status de pagamento, fraudes detectadas</li>
+      </ul>
+    </section>
+
+    <section class="policy" id="finalidade">
+      <h2><span class="num">3.</span> Para que usamos seus dados</h2>
+      <ol>
+        <li><strong>Criar e manter sua conta</strong> de cliente, proprietário ou parceiro empresarial</li>
+        <li><strong>Validar sua identidade</strong> (KYC) para reduzir fraude e garantir segurança da frota</li>
+        <li><strong>Processar reservas e pagamentos</strong> de locações</li>
+        <li><strong>Cobrar valores devidos</strong>: tarifas, taxas extras (limpeza pet, KM excedido, combustível), multas operacionais e infrações de trânsito</li>
+        <li><strong>Localizar o veículo</strong> em caso de roubo, furto, inadimplência prolongada ou emergência</li>
+        <li><strong>Enviar comunicações operacionais</strong>: confirmação de reserva, código do cofre, lembrete de devolução, recibos, alertas de segurança</li>
+        <li><strong>Enviar comunicações comerciais</strong>: promoções, novidades, recomendações (somente com seu consentimento, revogável a qualquer momento)</li>
+        <li><strong>Cumprir obrigações legais e fiscais</strong>: emissão de NF-e, retenções tributárias, atendimento a autoridades</li>
+        <li><strong>Prevenir fraudes e abusos</strong> contra a plataforma e outros usuários</li>
+        <li><strong>Melhorar nossos serviços</strong>: analisar uso agregado e anônimo pra evoluir o app</li>
+      </ol>
+    </section>
+
+    <section class="policy" id="base-legal">
+      <h2><span class="num">4.</span> Base legal do tratamento</h2>
+      <p>Tratamos seus dados com fundamento em uma das seguintes hipóteses da LGPD (art. 7º):</p>
+      <table class="data">
+        <tr><th>Base legal</th><th>Quando aplicamos</th></tr>
+        <tr><td><strong>Consentimento</strong> (art. 7º, I)</td><td>Marketing direto, geolocalização contínua, biometria facial, instalação de rastreador no veículo P2P</td></tr>
+        <tr><td><strong>Execução de contrato</strong> (art. 7º, V)</td><td>Cadastro, KYC, processamento de reservas, cobrança</td></tr>
+        <tr><td><strong>Cumprimento de obrigação legal</strong> (art. 7º, II)</td><td>Validação de CNH no Denatran, emissão de NF-e, atendimento a ordens judiciais</td></tr>
+        <tr><td><strong>Legítimo interesse</strong> (art. 7º, IX)</td><td>Prevenção de fraude, segurança da frota, melhoria do serviço</td></tr>
+        <tr><td><strong>Proteção da vida</strong> (art. 7º, VII)</td><td>Localização em emergências, socorro mecânico</td></tr>
+      </table>
+    </section>
+
+    <section class="policy" id="compartilhamento">
+      <h2><span class="num">5.</span> Com quem compartilhamos</h2>
+      <p>Compartilhamos seus dados <strong>apenas</strong> com terceiros estritamente necessários pra prestar o serviço, e sempre com contratos que exigem mesmo nível de proteção:</p>
+      <table class="data">
+        <tr><th>Terceiro</th><th>Tipo de dado</th><th>Finalidade</th><th>Local</th></tr>
+        <tr><td><strong>Stripe</strong> (gateway pagamento)</td><td>Nome, CPF, dados do cartão tokenizado, valor</td><td>Processar cobrança e split</td><td>EUA (com cláusulas LGPD)</td></tr>
+        <tr><td><strong>Resend</strong> (e-mail)</td><td>Nome, e-mail</td><td>Envio de e-mails transacionais</td><td>EUA</td></tr>
+        <tr><td><strong>Caf/Idwall</strong> (KYC)</td><td>CPF, CNH, biometria, comprovante</td><td>Validação de identidade</td><td>Brasil</td></tr>
+        <tr><td><strong>Infosimples</strong> (multas)</td><td>Placa do veículo, CPF condutor</td><td>Consulta de infrações</td><td>Brasil</td></tr>
+        <tr><td><strong>Supabase</strong> (banco de dados)</td><td>Todos os dados cadastrais e de uso</td><td>Armazenamento e processamento</td><td>EUA (us-west-1)</td></tr>
+        <tr><td><strong>SmartGPS/Cobli</strong> (rastreamento)</td><td>Posição GPS do veículo, telemetria</td><td>Localização do carro durante locação</td><td>Brasil</td></tr>
+        <tr><td><strong>NotaZZ</strong> (NF-e)</td><td>Razão social, CNPJ, valores</td><td>Emissão de notas fiscais</td><td>Brasil</td></tr>
+        <tr><td><strong>Z-API / Meta</strong> (WhatsApp)</td><td>Nome, telefone</td><td>Notificações via WhatsApp</td><td>Brasil/EUA</td></tr>
+        <tr><td><strong>Yelum</strong> (seguro veicular)</td><td>Dados do condutor e da locação</td><td>Apólice de seguro durante a viagem</td><td>Brasil</td></tr>
+        <tr><td><strong>Autoridades públicas</strong></td><td>O que for legalmente solicitado</td><td>Cumprimento de ordem judicial ou administrativa</td><td>Brasil</td></tr>
+      </table>
+      <p><strong>Não vendemos seus dados.</strong> Nunca compartilhamos dados pessoais identificáveis com terceiros pra fins comerciais, marketing de outras empresas ou ofertas não solicitadas.</p>
+    </section>
+
+    <section class="policy" id="retencao">
+      <h2><span class="num">6.</span> Por quanto tempo guardamos seus dados</h2>
+      <table class="data">
+        <tr><th>Tipo de dado</th><th>Prazo de retenção</th><th>Motivo</th></tr>
+        <tr><td>Conta e perfil</td><td>Enquanto sua conta estiver ativa + 5 anos após exclusão</td><td>Defesa em processos judiciais (CC art. 206)</td></tr>
+        <tr><td>Documentos KYC (CNH, comprovante, selfie)</td><td>5 anos após última locação</td><td>Compliance antifraude + fiscalização</td></tr>
+        <tr><td>Reservas e pagamentos</td><td>5 anos (obrigação fiscal)</td><td>Receita Federal exige (Lei 9.430/96)</td></tr>
+        <tr><td>NF-e emitidas</td><td>5 anos</td><td>Obrigação fiscal</td></tr>
+        <tr><td>Logs de navegação</td><td>6 meses</td><td>Marco Civil da Internet (Lei 12.965/14)</td></tr>
+        <tr><td>Dados de telemetria do veículo</td><td>90 dias após fim da locação (depois, anonimizado pra estatística)</td><td>Privacidade do condutor</td></tr>
+        <tr><td>Mensagens de atendimento (chat, WhatsApp)</td><td>2 anos</td><td>Histórico de relacionamento</td></tr>
+      </table>
+      <p>Após esses prazos, os dados são <strong>anonimizados</strong> (mantemos só estatísticas agregadas) ou <strong>permanentemente excluídos</strong>, conforme o caso.</p>
+    </section>
+
+    <section class="policy" id="cookies">
+      <h2><span class="num">7.</span> Cookies e tecnologias similares</h2>
+      <p>Usamos os seguintes tipos de cookies:</p>
+      <ul>
+        <li><strong>Essenciais:</strong> manter você logado, lembrar carrinho de reserva. Sem esses, o app não funciona.</li>
+        <li><strong>Funcionais:</strong> lembrar preferências (idioma, último carro visto, modo claro/escuro).</li>
+        <li><strong>Analíticos:</strong> Google Analytics (versão anonimizada) — entender quais páginas funcionam melhor.</li>
+        <li><strong>Marketing:</strong> Meta Pixel, Google Ads — somente se você consentir explicitamente.</li>
+      </ul>
+      <p>Você pode <strong>gerenciar cookies</strong> nas configurações do seu navegador ou recusar os opcionais no banner que aparece na primeira visita.</p>
+    </section>
+
+    <section class="policy" id="direitos">
+      <h2><span class="num">8.</span> Seus direitos como titular dos dados</h2>
+      <p>A LGPD (art. 18) garante a você os seguintes direitos:</p>
+      <ol>
+        <li><strong>Confirmação</strong> de que tratamos seus dados</li>
+        <li><strong>Acesso</strong> aos dados que temos sobre você</li>
+        <li><strong>Correção</strong> de dados incompletos, inexatos ou desatualizados</li>
+        <li><strong>Anonimização, bloqueio ou eliminação</strong> de dados desnecessários ou tratados em desconformidade com a LGPD</li>
+        <li><strong>Portabilidade</strong> dos dados pra outro fornecedor</li>
+        <li><strong>Eliminação</strong> dos dados pessoais tratados com seu consentimento (direito ao esquecimento)</li>
+        <li><strong>Informação</strong> sobre com quem compartilhamos seus dados</li>
+        <li><strong>Informação</strong> sobre a possibilidade de não dar consentimento e suas consequências</li>
+        <li><strong>Revogação do consentimento</strong> a qualquer momento</li>
+        <li><strong>Revisão</strong> de decisões tomadas exclusivamente por sistemas automatizados (ex: aprovação ou recusa de KYC)</li>
+      </ol>
+      <div class="callout callout--warn">
+        <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>Limitação:</strong> dados que precisamos manter por obrigação legal (5 anos fiscais, por exemplo) não podem ser excluídos a pedido. Após o prazo legal, podemos excluí-los.</span>
+      </div>
+    </section>
+
+    <section class="policy" id="como-exercer">
+      <h2><span class="num">9.</span> Como exercer seus direitos</h2>
+      <p>É simples e gratuito. Escolha um dos canais:</p>
+      <ul>
+        <li><strong>E-mail:</strong> <a href="mailto:dpo@nomadedrive.com.br">dpo@nomadedrive.com.br</a> — assunto: "LGPD — [seu direito]"</li>
+        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">+55 34 98406-4864</a></li>
+        <li><strong>App:</strong> em breve um botão "Solicitar exclusão da conta" no seu painel</li>
+      </ul>
+      <p>Vamos responder em até <strong>15 dias úteis</strong>. Pra solicitações sensíveis (exclusão total, portabilidade), podemos pedir confirmação adicional pra garantir que é você mesmo solicitando.</p>
+      <p>Se discordar da nossa resposta, você pode reclamar à <strong>Autoridade Nacional de Proteção de Dados (ANPD)</strong>: <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a>.</p>
+    </section>
+
+    <section class="policy" id="seguranca">
+      <h2><span class="num">10.</span> Segurança dos dados</h2>
+      <p>Levamos segurança muito a sério. Algumas das medidas que aplicamos:</p>
+      <ul>
+        <li><strong>Criptografia em trânsito</strong>: todas as comunicações usam HTTPS/TLS 1.3</li>
+        <li><strong>Criptografia em repouso</strong>: banco de dados Supabase com encryption-at-rest AES-256</li>
+        <li><strong>Tokenização de cartão</strong>: nunca armazenamos número do cartão — apenas o token da Stripe</li>
+        <li><strong>Controle de acesso</strong>: Row Level Security (RLS) no PostgreSQL, cada usuário só vê seus próprios dados</li>
+        <li><strong>Autenticação forte</strong>: senha mínima 8 caracteres + opção de recuperação por e-mail</li>
+        <li><strong>Auditoria</strong>: logs de todas as ações administrativas, retidos por 1 ano</li>
+        <li><strong>Backups</strong>: diários, retidos por 30 dias</li>
+        <li><strong>Resposta a incidentes</strong>: equipe avisa ANPD em até 2 dias úteis se houver vazamento relevante</li>
+      </ul>
+      <div class="callout callout--info">
+        <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span><strong>Mesmo com as melhores medidas, nenhum sistema é 100% seguro.</strong> Se houver incidente, comunicaremos você e a ANPD conforme exigido pela LGPD.</span>
+      </div>
+    </section>
+
+    <section class="policy" id="menores">
+      <h2><span class="num">11.</span> Menores de idade</h2>
+      <p>O Nomade Drive é destinado <strong>exclusivamente a pessoas com 18 anos ou mais</strong>, com CNH válida. Não coletamos intencionalmente dados de menores de idade.</p>
+      <p>Se identificarmos cadastro de menor, a conta é imediatamente bloqueada e os dados eliminados, salvo retenção por obrigação legal.</p>
+      <p>Se você é pai/mãe ou responsável e descobriu que um menor sob sua responsabilidade nos forneceu dados sem autorização, entre em contato em <a href="mailto:dpo@nomadedrive.com.br">dpo@nomadedrive.com.br</a>.</p>
+    </section>
+
+    <section class="policy" id="mudancas">
+      <h2><span class="num">12.</span> Mudanças nesta política</h2>
+      <p>Esta política pode ser atualizada a qualquer momento. Quando isso acontecer:</p>
+      <ul>
+        <li>Mudaremos a <strong>data da versão</strong> no topo</li>
+        <li>Se a mudança for <strong>relevante</strong>, vamos avisar você por e-mail e no app pelo menos <strong>30 dias antes</strong> da nova versão entrar em vigor</li>
+        <li>Mudanças <strong>menores</strong> (correção de redação, atualização de fornecedor) podem entrar em vigor imediatamente</li>
+      </ul>
+      <p>Versões anteriores ficam disponíveis sob solicitação ao DPO.</p>
+    </section>
+
+    <section class="policy" id="contato">
+      <h2><span class="num">13.</span> Contato e Encarregado (DPO)</h2>
+      <p>Pra qualquer dúvida sobre esta política, exercício de direitos LGPD, reclamação ou sugestão:</p>
+      <table class="data">
+        <tr><th>Encarregado pelo Tratamento de Dados (DPO)</th><td>Daniel Rodovalho</td></tr>
+        <tr><th>E-mail DPO</th><td><a href="mailto:dpo@nomadedrive.com.br">dpo@nomadedrive.com.br</a></td></tr>
+        <tr><th>E-mail geral</th><td><a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a></td></tr>
+        <tr><th>WhatsApp</th><td><a href="https://wa.me/5534984064864" target="_blank" rel="noopener">+55 34 98406-4864</a></td></tr>
+        <tr><th>Prazo de resposta</th><td>15 dias úteis (LGPD art. 19, § 1º)</td></tr>
+        <tr><th>Autoridade Nacional de Proteção de Dados</th><td><a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a></td></tr>
+      </table>
+    </section>
+
+    <div class="callout callout--info" style="margin-top: 40px;">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span><strong>Esta política foi escrita pra ser clara e direta.</strong> Se algo aqui não ficou claro, escreve pro DPO — vamos reescrever pra todo mundo entender.</span>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <a href="index.html">Início</a> ·
+      <a href="como-funciona.html">Como funciona</a> ·
+      <a href="precos.html">Preços</a> ·
+      <a href="../termos.html">Termos de uso</a> ·
+      <a href="politica-privacidade.html">Privacidade</a>
+    </div>
+    <p class="foot__copy">© 2026 Nomade Drive Brasil · Uberlândia/MG · CNPJ em registro</p>
+  </div>
+</footer>
+
+</body>
+</html>
