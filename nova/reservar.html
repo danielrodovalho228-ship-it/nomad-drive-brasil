@@ -462,8 +462,17 @@ function renderSlots() {
           // FIX F4-A: feedback visual no slot + toast destacado
           divRef.classList.add('shake');
           setTimeout(function() { divRef.classList.remove('shake'); }, 500);
-          showToast('🚫 ' + (hVal < 10 ? '0' + hVal : hVal) + ':00 — horário ocupado por outro usuário');
-          showConflict('Horário ' + (hVal < 10 ? '0' + hVal : hVal) + ':00 está reservado. Escolha outro horário ou clique em "Ver próximo disponível".');
+          var hh = (hVal < 10 ? '0' + hVal : hVal) + ':00';
+          showToast('🚫 ' + hh + ' — horário ocupado por outro usuário');
+          // FIX UX: alerta com link clicável real pro "Ver próximo disponível"
+          // (antes a mensagem referenciava o link mas ele só existia no banner de conflito de range)
+          var alertEl = document.getElementById('conflictAlert');
+          alertEl.style.display = 'block';
+          alertEl.innerHTML = '🚫 <strong>Horário ' + hh + ' está reservado.</strong> Escolha outro horário ou <a href="#suggest" id="suggestLink" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo disponível →</a>';
+          setTimeout(function() {
+            var lnk = document.getElementById('suggestLink');
+            if (lnk) lnk.addEventListener('click', function(ev) { ev.preventDefault(); suggestNextAvailable(); });
+          }, 0);
           return;
         }
         state.startHour = hVal;
@@ -602,7 +611,15 @@ function selectPay(el) {
 
 // ============ EVENT LISTENERS ============
 document.getElementById('date-start').addEventListener('change', function(e) {
-  state.startDate = e.target.value;
+  // FIX E8 (QA Test Plan): bloqueia data de retirada no passado
+  var today = fmtDate(new Date());
+  if (e.target.value < today) {
+    showToast('⚠️ Data de retirada deve ser hoje ou no futuro.');
+    e.target.value = today;
+    state.startDate = today;
+  } else {
+    state.startDate = e.target.value;
+  }
   renderSlots();
   recomputeAll();
 });
@@ -639,6 +656,8 @@ document.getElementById('duration').addEventListener('change', function(e) {
 });
 
 // Init
+// FIX E8 (QA Test Plan): browser-level — impede selecionar data passada no date-picker
+document.getElementById('date-start').min = fmtDate(new Date());
 renderSlots();
 recomputeAll();
 </script>
