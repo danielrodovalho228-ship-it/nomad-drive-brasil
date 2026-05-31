@@ -76,8 +76,9 @@
   @media (min-width: 1000px) { .benef__grid { grid-template-columns: repeat(4, 1fr); } }
   .benef-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px 24px; text-align: center; transition: transform .2s, box-shadow .2s, border-color .2s; }
   .benef-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green); }
-  .benef-card__icon { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 18px; background: var(--green-pale); color: var(--green); display: flex; align-items: center; justify-content: center; }
-  .benef-card__icon svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .benef-card__icon { width: 92px; height: 92px; margin: 0 auto 16px; border-radius: 18px; overflow: hidden; background: var(--green-pale); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(20,95,62,0.12); }
+  .benef-card__icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .benef-card__icon svg { width: 32px; height: 32px; stroke: var(--green); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .benef-card h4 { font-family: 'Sora', sans-serif; font-size: 17px; margin-bottom: 8px; }
   .benef-card p { color: var(--ink-mute); font-size: 13.5px; line-height: 1.55; }
 
@@ -200,22 +201,22 @@
     </div>
     <div class="benef__grid">
       <div class="benef-card">
-        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <div class="benef-card__icon"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&q=80&auto=format&fit=crop" alt="Aperto de mão de parceria" loading="lazy" /></div>
         <h4>Zero investimento</h4>
         <p>Não cobramos taxa de instalação, contratos ou equipamento. Você só cede o espaço.</p>
       </div>
       <div class="benef-card">
-        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="benef-card__icon"><img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&q=80&auto=format&fit=crop" alt="Receita mensal" loading="lazy" /></div>
         <h4>Receita garantida</h4>
         <p><strong>Taxa de disponibilidade R$ 800-1.200/mês</strong> pago pelo Nomade ao seu local, independente do volume de uso. Sem investir, gera caixa fixo.</p>
       </div>
       <div class="benef-card">
-        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="benef-card__icon"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=80&auto=format&fit=crop" alt="Prédio valorizado" loading="lazy" /></div>
         <h4>Valoriza o espaço</h4>
         <p>Mobilidade integrada é diferencial competitivo. Aumenta valor de venda ou aluguel das unidades.</p>
       </div>
       <div class="benef-card">
-        <div class="benef-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="benef-card__icon"><img src="../images/car-tracker-1.jpg" alt="Carro Nomade pronto pra usar" loading="lazy" /></div>
         <h4>Operação chave-na-mão</h4>
         <p>App, pagamento, vistoria, manutenção — tudo nosso. Você não opera nada, nada.</p>
       </div>
