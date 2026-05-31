@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meu perfil — Nomade Drive</title>
+<meta name="description" content="Complete seu perfil Nomade Drive. Dados pessoais, profissionais e informações do seu pet." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600; --zip-green-dark: #3F8500; --zip-green-darker: #2E6100; --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8; --zip-amber: #FFC72C;
+    --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-200: #e5e7eb; --gray-100: #f5f5f5; --gray-50: #fafafa; --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.1);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--gray-50); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.2; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 14.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn--ghost { background: transparent; color: var(--gray-900); border-color: var(--gray-300); }
+  .btn--ghost:hover { background: var(--gray-100); }
+  .btn--sm { padding: 8px 16px; font-size: 13px; }
+  .btn--block { width: 100%; }
+
+  /* Nav idêntico ao dashboard */
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .nav__wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__menu { display: flex; gap: 6px; align-items: center; }
+  .nav__menu a, .nav__menu button { padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--gray-700); text-decoration: none; transition: all .15s; }
+  .nav__menu a:hover, .nav__menu button:hover { background: var(--gray-100); color: var(--black); }
+  .nav__menu a.on { background: var(--zip-green-pale); color: var(--zip-green-dark); }
+  .nav__avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--zip-green); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+  @media (max-width: 640px) { .nav__menu a:not(.nav__avatar):not(.nav__sair) { display: none; } }
+
+  main { flex: 1; padding: 36px 0 64px; }
+
+  /* Hero */
+  .page-hero { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+  .page-hero h1 { font-size: clamp(22px, 4vw, 30px); }
+  .page-hero p { color: var(--gray-700); font-size: 14.5px; margin-top: 4px; }
+  .completion {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--white); border: 1px solid var(--gray-200);
+    padding: 9px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  }
+  .completion__pct { color: var(--zip-green-dark); font-size: 15px; }
+  .completion__bar { width: 60px; height: 5px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+  .completion__bar-fill { height: 100%; background: linear-gradient(90deg, var(--zip-green), var(--zip-green-dark)); transition: width .35s ease; }
+
+  /* Card */
+  .card { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); padding: 26px 24px; margin-bottom: 18px; }
+  .card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .card__title { font-size: 17px; font-weight: 800; }
+  .card__sub { color: var(--gray-500); font-size: 13px; margin-top: 3px; line-height: 1.4; }
+  .card__icon-wrap { display: flex; gap: 12px; align-items: center; flex: 1; min-width: 0; }
+  .card__icon { width: 42px; height: 42px; min-width: 42px; border-radius: 10px; background: var(--zip-green-pale); color: var(--zip-green-darker); display: flex; align-items: center; justify-content: center; }
+  .card__icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .card__perk { background: var(--zip-green-pale); color: var(--zip-green-darker); padding: 5px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; flex-shrink: 0; }
+
+  /* Form grid */
+  .form-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+  .form-row { display: flex; flex-direction: column; gap: 5px; }
+  .form-row.full { grid-column: 1 / -1; }
+  .form-row label { font-size: 12.5px; font-weight: 700; color: var(--gray-900); letter-spacing: 0.2px; }
+  .form-row label small { color: var(--gray-500); font-weight: 500; }
+  .form-row input, .form-row select, .form-row textarea {
+    padding: 11px 13px; border: 1.5px solid var(--gray-200); border-radius: 9px;
+    font: inherit; font-size: 14.5px; color: var(--black); background: var(--white);
+    transition: border-color .15s, box-shadow .15s;
+    width: 100%;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { outline: none; border-color: var(--zip-green); box-shadow: 0 0 0 3px rgba(79,166,0,0.12); }
+  .form-row input::placeholder { color: var(--gray-300); }
+  .form-prefix { position: relative; }
+  .form-prefix__txt { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--gray-500); font-size: 14px; pointer-events: none; }
+  .form-prefix input { padding-left: 160px; }
+
+  /* Info inline tip */
+  .info { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: var(--zip-green-pale); border-radius: 10px; font-size: 12.5px; color: var(--zip-green-darker); line-height: 1.5; margin-top: 14px; }
+  .info svg { width: 16px; height: 16px; min-width: 16px; stroke: currentColor; stroke-width: 2; fill: none; margin-top: 1px; }
+  .info strong { font-weight: 700; }
+
+  /* Pet toggle */
+  .pet-toggle { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--gray-50); border: 1.5px solid var(--gray-200); border-radius: 10px; cursor: pointer; transition: all .15s; }
+  .pet-toggle:hover { border-color: var(--gray-300); background: var(--gray-100); }
+  .pet-toggle input { width: 20px; height: 20px; accent-color: var(--zip-green); cursor: pointer; }
+  .pet-toggle__label { flex: 1; font-size: 14px; font-weight: 600; color: var(--gray-900); }
+  .pet-toggle__label small { display: block; color: var(--gray-500); font-size: 12.5px; margin-top: 2px; font-weight: 500; }
+  .pet-fields { margin-top: 16px; padding-top: 18px; border-top: 1px solid var(--gray-100); display: none; }
+  .pet-fields.show { display: block; }
+
+  /* Upload card */
+  .upload-grid { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 14px; }
+  @media (min-width: 640px) { .upload-grid { grid-template-columns: 1fr 1fr; } }
+  .upload-card { border: 2px dashed var(--gray-300); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all .15s; background: var(--gray-50); position: relative; overflow: hidden; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .upload-card:hover { border-color: var(--zip-green); background: var(--zip-green-pale); }
+  .upload-card svg { width: 28px; height: 28px; stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .upload-card:hover svg { stroke: var(--zip-green-dark); }
+  .upload-card__title { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+  .upload-card__sub { font-size: 11.5px; color: var(--gray-500); }
+  .upload-card.has-file { background: var(--zip-green-pale); border-color: var(--zip-green); border-style: solid; }
+  .upload-card.has-file svg { stroke: var(--zip-green-dark); }
+  .upload-card.has-file .upload-card__title { color: var(--zip-green-darker); }
+  .upload-card.uploading { opacity: 0.6; pointer-events: none; }
+  .upload-card input { display: none; }
+
+  /* Pet card visual (preview do que cadastrou) */
+  .pet-cards { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 16px; }
+  @media (min-width: 520px) { .pet-cards { grid-template-columns: 1fr 1fr; } }
+  .pet-card { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--gray-200); border-radius: 12px; align-items: center; }
+  .pet-card__img { width: 56px; height: 56px; border-radius: 10px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; color: var(--gray-500); flex-shrink: 0; }
+  .pet-card__img svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .pet-card__body { flex: 1; min-width: 0; }
+  .pet-card__name { font-size: 14px; font-weight: 700; color: var(--black); display: block; }
+  .pet-card__sub { font-size: 12px; color: var(--gray-500); display: block; }
+  .pet-card__remove { background: transparent; color: var(--gray-500); padding: 6px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; }
+  .pet-card__remove:hover { color: #b91c1c; background: #fef2f2; }
+
+  /* Tarifa box */
+  .fee-note { background: #fef9e7; border: 1px solid #fde68a; color: #78350f; padding: 11px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.5; display: flex; gap: 9px; align-items: flex-start; margin-top: 14px; }
+  .fee-note svg { width: 16px; height: 16px; min-width: 16px; stroke: currentColor; stroke-width: 2; fill: none; margin-top: 1px; }
+  .fee-note strong { font-weight: 700; }
+
+  /* Save bar (sticky bottom) */
+  .save-bar { position: sticky; bottom: 0; background: var(--white); border-top: 1px solid var(--gray-200); padding: 14px 0; box-shadow: 0 -4px 12px rgba(0,0,0,0.04); margin-top: 24px; }
+  .save-bar__inner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .save-bar__status { font-size: 13px; color: var(--gray-500); }
+  .save-bar__status.unsaved { color: #92400e; font-weight: 600; }
+  .save-bar__status.saved { color: var(--zip-green-dark); font-weight: 600; }
+  .save-bar__status.saving { color: var(--gray-700); font-weight: 600; }
+
+  /* Loading + toast */
+  .loading { text-align: center; padding: 80px 20px; color: var(--gray-500); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-100); border-top-color: var(--zip-green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 18px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .25s, top .25s; pointer-events: none; max-width: 90vw; border-left: 4px solid #767676; }
+  .toast.show { opacity: 1; top: 40px; }
+  .toast--warn { border-left-color: #FFC72C; }
+  .toast--ok { border-left-color: #4FA600; }
+  .toast--err { border-left-color: #ef4444; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__wrap nav__row">
+    <a href="dashboard.html" class="nav__brand" aria-label="Nomade Drive Brasil — meu painel">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__menu" aria-label="Navegação">
+      <a href="dashboard.html">Painel</a>
+      <a href="index.html#frota">Reservar</a>
+      <a href="dashboard.html#viagens">Viagens</a>
+      <a href="perfil.html" class="on">Conta</a>
+      <span class="nav__avatar" id="navAvatar" title="Seu perfil">—</span>
+      <button class="nav__sair btn btn--ghost btn--sm" id="btnSair" type="button">Sair</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="loading" id="loadingState">
+      <div class="spinner"></div>
+      Carregando seu perfil...
+    </div>
+
+    <div id="profileContent" style="display:none;">
+
+      <div class="page-hero">
+        <div>
+          <h1>Meu perfil</h1>
+          <p>Mantenha seus dados atualizados pra uma melhor experiência.</p>
+        </div>
+        <div class="completion" title="Quanto mais preenchido, mais rápida a aprovação">
+          <div class="completion__bar"><div class="completion__bar-fill" id="completionFill" style="width:0%;"></div></div>
+          <span><span class="completion__pct" id="completionPct">0%</span> completo</span>
+        </div>
+      </div>
+
+      <form id="profileForm" novalidate>
+
+        <!-- ====== Card: Dados pessoais ====== -->
+        <div class="card">
+          <div class="card__head">
+            <div class="card__icon-wrap">
+              <div class="card__icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+              </div>
+              <div>
+                <div class="card__title">Dados pessoais</div>
+                <div class="card__sub">Como a gente entra em contato com você.</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row full">
+              <label for="full_name">Nome completo</label>
+              <input type="text" id="full_name" autocomplete="name" />
+            </div>
+            <div class="form-row">
+              <label for="phone">Telefone (WhatsApp)</label>
+              <input type="tel" id="phone" autocomplete="tel" placeholder="(34) 9 9999-9999" />
+            </div>
+            <div class="form-row">
+              <label for="city">Cidade</label>
+              <input type="text" id="city" autocomplete="address-level2" placeholder="Uberlândia" />
+            </div>
+            <div class="form-row full">
+              <label for="email_display">E-mail <small>· não editável</small></label>
+              <input type="email" id="email_display" disabled style="background:var(--gray-50); color:var(--gray-500);" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== Card: Vida profissional ====== -->
+        <div class="card">
+          <div class="card__head">
+            <div class="card__icon-wrap">
+              <div class="card__icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div>
+                <div class="card__title">Vida profissional <span style="font-weight:500; color:var(--gray-500); font-size:13px;">— opcional</span></div>
+                <div class="card__sub">Cliente verificado ganha selo + 10% off no Pass.</div>
+              </div>
+            </div>
+            <span class="card__perk">10% off Pass</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="employment_type">Tipo de vínculo</label>
+              <select id="employment_type">
+                <option value="">Selecione...</option>
+                <option value="clt">CLT</option>
+                <option value="autonomo">Autônomo</option>
+                <option value="pj">PJ / Freelancer</option>
+                <option value="empresario">Empresário</option>
+                <option value="estudante">Estudante</option>
+                <option value="servidor">Servidor público</option>
+                <option value="aposentado">Aposentado</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="profession">Profissão</label>
+              <input type="text" id="profession" placeholder="Ex: Engenheira, Médico, Designer" />
+            </div>
+            <div class="form-row">
+              <label for="company_name">Empresa atual</label>
+              <input type="text" id="company_name" placeholder="Nome da empresa" />
+            </div>
+            <div class="form-row">
+              <label for="job_title">Cargo</label>
+              <input type="text" id="job_title" placeholder="Ex: Engenheira de Software" />
+            </div>
+            <div class="form-row full">
+              <label for="linkedin_url">Perfil LinkedIn</label>
+              <div class="form-prefix">
+                <span class="form-prefix__txt">linkedin.com/in/</span>
+                <input type="text" id="linkedin_url" placeholder="seu-perfil" />
+              </div>
+            </div>
+            <div class="form-row full">
+              <label for="instagram_handle">Instagram <small>· opcional</small></label>
+              <div class="form-prefix">
+                <span class="form-prefix__txt">instagram.com/</span>
+                <input type="text" id="instagram_handle" placeholder="seu_user" />
+              </div>
+            </div>
+          </div>
+          <div class="info">
+            <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span><strong>Por que pedimos?</strong> Dados profissionais ajudam a validar você como cliente e dão acesso a benefícios. Não compartilhamos com terceiros — só usamos pra análise interna conforme nossa <a href="../termos.html#privacidade" target="_blank" style="color:inherit; text-decoration:underline;">Política de Privacidade</a>.</span>
+          </div>
+        </div>
+
+        <!-- ====== Card: Meu pet ====== -->
+        <div class="card">
+          <div class="card__head">
+            <div class="card__icon-wrap">
+              <div class="card__icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="6.5" cy="14" r="2"/><circle cx="15.5" cy="14" r="2"/><path d="M8 18c0-2 1.79-4 4-4s4 2 4 4-1.79 3-4 3-4-1-4-3z"/></svg>
+              </div>
+              <div>
+                <div class="card__title">Meu pet</div>
+                <div class="card__sub">Se você viaja com pet, cadastre aqui pra liberar reservas pet-friendly.</div>
+              </div>
+            </div>
+          </div>
+
+          <label class="pet-toggle">
+            <input type="checkbox" id="has_pet" />
+            <div class="pet-toggle__label">
+              Tenho pet e quero viajar com ele
+              <small>Você precisa cadastrar nome, espécie, foto do pet e cartão de vacina.</small>
+            </div>
+          </label>
+
+          <div class="pet-fields" id="petFields">
+            <div class="form-grid" style="margin-top:14px;">
+              <div class="form-row">
+                <label for="pet_name">Nome do pet</label>
+                <input type="text" id="pet_name" placeholder="Ex: Theo" />
+              </div>
+              <div class="form-row">
+                <label for="pet_species">Espécie</label>
+                <select id="pet_species">
+                  <option value="cao">Cão</option>
+                  <option value="gato">Gato</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              <div class="form-row full">
+                <label for="pet_size">Porte</label>
+                <select id="pet_size">
+                  <option value="">Selecione...</option>
+                  <option value="pequeno">Pequeno (até 10kg)</option>
+                  <option value="medio">Médio (10–25kg)</option>
+                  <option value="grande">Grande (acima de 25kg)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="upload-grid">
+              <label class="upload-card" id="petPhotoCard">
+                <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span class="upload-card__title">Foto do pet</span>
+                <span class="upload-card__sub" id="petPhotoSub">JPG, PNG até 8MB</span>
+                <input type="file" id="petPhotoInput" accept="image/jpeg,image/png,image/webp" />
+              </label>
+              <label class="upload-card" id="vaccineCard">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                <span class="upload-card__title">Cartão de vacina</span>
+                <span class="upload-card__sub" id="vaccineSub">JPG, PNG ou PDF até 8MB</span>
+                <input type="file" id="vaccineInput" accept="image/jpeg,image/png,image/webp,application/pdf" />
+              </label>
+            </div>
+
+            <div class="fee-note">
+              <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+              <span>Reservas com pet incluem <strong>taxa de limpeza extra de R$ 30 por reserva</strong>. Cobrada automaticamente no fim da viagem.</span>
+            </div>
+
+            <!-- Lista de pets já cadastrados -->
+            <div id="petList" style="display:none;">
+              <h4 style="font-size:13px; color:var(--gray-700); margin: 20px 0 10px; font-weight:700;">Pets cadastrados</h4>
+              <div class="pet-cards" id="petCardsList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save bar sticky -->
+        <div class="save-bar">
+          <div class="save-bar__inner">
+            <span class="save-bar__status" id="saveStatus">Tudo salvo.</span>
+            <button type="submit" class="btn btn--primary" id="btnSave">Salvar alterações</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var BUCKET = 'kyc-docs';
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  var currentUser = null;
+  var profile = null;
+  var pets = [];
+  var pendingPetPhoto = null;
+  var pendingVaccine = null;
+  var originalState = '';
+
+  function showToast(msg, level) {
+    var t = document.getElementById('toast');
+    t.className = 'toast' + (level ? ' toast--' + level : '') + ' show';
+    t.textContent = msg;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() { t.className = 'toast'; }, 3500);
+  }
+  function initials(name) {
+    if (!name) return '?';
+    var parts = name.trim().split(/\s+/);
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+  function setSaveStatus(state) {
+    var s = document.getElementById('saveStatus');
+    s.className = 'save-bar__status ' + state;
+    s.textContent = state === 'saving' ? 'Salvando...' : state === 'saved' ? '✓ Salvo' : state === 'unsaved' ? 'Alterações não salvas' : 'Tudo salvo.';
+  }
+
+  async function init() {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session || !session.user) {
+      window.location.replace('login.html?next=perfil');
+      return;
+    }
+    currentUser = session.user;
+
+    var { data: prof } = await sb.from('profiles')
+      .select('full_name, email, phone, city, profession, employment_type, company_name, job_title, linkedin_url, instagram_handle, has_pet')
+      .eq('id', currentUser.id).maybeSingle();
+    profile = prof || { email: currentUser.email };
+
+    var { data: petsData } = await sb.from('user_pets')
+      .select('id, pet_name, pet_species, pet_size, pet_photo_path, vaccine_card_path, vaccine_status')
+      .eq('user_id', currentUser.id);
+    pets = petsData || [];
+
+    render();
+  }
+
+  function render() {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('profileContent').style.display = 'block';
+
+    document.getElementById('navAvatar').textContent = initials(profile.full_name || currentUser.email);
+    document.getElementById('full_name').value = profile.full_name || '';
+    document.getElementById('phone').value = profile.phone || '';
+    document.getElementById('city').value = profile.city || '';
+    document.getElementById('email_display').value = profile.email || currentUser.email || '';
+    document.getElementById('employment_type').value = profile.employment_type || '';
+    document.getElementById('profession').value = profile.profession || '';
+    document.getElementById('company_name').value = profile.company_name || '';
+    document.getElementById('job_title').value = profile.job_title || '';
+    document.getElementById('linkedin_url').value = profile.linkedin_url || '';
+    document.getElementById('instagram_handle').value = profile.instagram_handle || '';
+    document.getElementById('has_pet').checked = !!profile.has_pet;
+    togglePet();
+
+    renderPetList();
+    snapshotState();
+    updateCompletion();
+  }
+
+  function renderPetList() {
+    var listEl = document.getElementById('petList');
+    var cardsEl = document.getElementById('petCardsList');
+    if (!pets.length) { listEl.style.display = 'none'; return; }
+    listEl.style.display = 'block';
+    cardsEl.innerHTML = '';
+    pets.forEach(function(p) {
+      var div = document.createElement('div');
+      div.className = 'pet-card';
+      var speciesLabel = p.pet_species === 'cao' ? 'Cão' : p.pet_species === 'gato' ? 'Gato' : 'Outro';
+      var sizeLabel = p.pet_size ? (p.pet_size === 'pequeno' ? 'pequeno' : p.pet_size === 'medio' ? 'médio' : 'grande') : '';
+      var status = p.vaccine_status === 'aprovado' ? '✓ Aprovado' : 'Em análise';
+      div.innerHTML =
+        '<div class="pet-card__img"><svg viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="6.5" cy="14" r="2"/><circle cx="15.5" cy="14" r="2"/><path d="M8 18c0-2 1.79-4 4-4s4 2 4 4-1.79 3-4 3-4-1-4-3z"/></svg></div>' +
+        '<div class="pet-card__body">' +
+          '<span class="pet-card__name">' + escapeHtml(p.pet_name) + '</span>' +
+          '<span class="pet-card__sub">' + speciesLabel + (sizeLabel ? ' · ' + sizeLabel : '') + ' · ' + status + '</span>' +
+        '</div>' +
+        '<button type="button" class="pet-card__remove" data-id="' + p.id + '" title="Remover">Remover</button>';
+      cardsEl.appendChild(div);
+    });
+    cardsEl.querySelectorAll('.pet-card__remove').forEach(function(btn) {
+      btn.addEventListener('click', function() { removePet(btn.dataset.id); });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function togglePet() {
+    var checked = document.getElementById('has_pet').checked;
+    document.getElementById('petFields').classList.toggle('show', checked);
+  }
+
+  function updateCompletion() {
+    var fields = ['full_name','phone','city','profession','employment_type','company_name','job_title','linkedin_url'];
+    var total = fields.length;
+    var filled = fields.filter(function(f) { return (document.getElementById(f).value || '').trim() !== ''; }).length;
+    var pct = Math.round((filled / total) * 100);
+    document.getElementById('completionFill').style.width = pct + '%';
+    document.getElementById('completionPct').textContent = pct + '%';
+  }
+
+  function snapshotState() {
+    var ids = ['full_name','phone','city','employment_type','profession','company_name','job_title','linkedin_url','instagram_handle'];
+    var data = { has_pet: document.getElementById('has_pet').checked };
+    ids.forEach(function(id) { data[id] = document.getElementById(id).value; });
+    originalState = JSON.stringify(data);
+    setSaveStatus('');
+  }
+
+  function currentState() {
+    var ids = ['full_name','phone','city','employment_type','profession','company_name','job_title','linkedin_url','instagram_handle'];
+    var data = { has_pet: document.getElementById('has_pet').checked };
+    ids.forEach(function(id) { data[id] = document.getElementById(id).value; });
+    return JSON.stringify(data);
+  }
+
+  function watchChanges() {
+    document.querySelectorAll('#profileForm input, #profileForm select').forEach(function(el) {
+      el.addEventListener('input', function() {
+        updateCompletion();
+        if (currentState() !== originalState) setSaveStatus('unsaved');
+      });
+      el.addEventListener('change', function() {
+        updateCompletion();
+        if (currentState() !== originalState) setSaveStatus('unsaved');
+      });
+    });
+    document.getElementById('has_pet').addEventListener('change', togglePet);
+  }
+
+  // ============ Upload pet (foto + vacina) ============
+  async function uploadFile(file, prefix) {
+    if (file.size > 8 * 1024 * 1024) throw new Error('Arquivo muito grande (máx 8MB)');
+    var ext = file.name.split('.').pop().toLowerCase();
+    var path = currentUser.id + '/' + prefix + '-' + Date.now() + '.' + ext;
+    var { error } = await sb.storage.from(BUCKET).upload(path, file, { upsert: false, contentType: file.type });
+    if (error) throw error;
+    return path;
+  }
+
+  function setUploadVisual(cardId, file, subId) {
+    var card = document.getElementById(cardId);
+    var sub = document.getElementById(subId);
+    if (file) {
+      card.classList.add('has-file');
+      sub.textContent = '✓ ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+    } else {
+      card.classList.remove('has-file');
+    }
+  }
+
+  document.getElementById('petPhotoInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    pendingPetPhoto = file;
+    setUploadVisual('petPhotoCard', file, 'petPhotoSub');
+    setSaveStatus('unsaved');
+  });
+  document.getElementById('vaccineInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    pendingVaccine = file;
+    setUploadVisual('vaccineCard', file, 'vaccineSub');
+    setSaveStatus('unsaved');
+  });
+
+  // ============ Save (profile + pet) ============
+  document.getElementById('profileForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    setSaveStatus('saving');
+
+    try {
+      var hasPet = document.getElementById('has_pet').checked;
+
+      // 1) Update profile
+      var profileUpdate = {
+        full_name: document.getElementById('full_name').value.trim() || null,
+        phone: document.getElementById('phone').value.trim() || null,
+        city: document.getElementById('city').value.trim() || null,
+        employment_type: document.getElementById('employment_type').value || null,
+        profession: document.getElementById('profession').value.trim() || null,
+        company_name: document.getElementById('company_name').value.trim() || null,
+        job_title: document.getElementById('job_title').value.trim() || null,
+        linkedin_url: document.getElementById('linkedin_url').value.trim() || null,
+        instagram_handle: document.getElementById('instagram_handle').value.trim().replace(/^@/, '') || null,
+        has_pet: hasPet
+      };
+      var { error: pErr } = await sb.from('profiles').update(profileUpdate).eq('id', currentUser.id);
+      if (pErr) throw pErr;
+
+      // 2) Se has_pet e tem foto+vacina pendentes, cria pet novo (auto-aprovado conforme decisão Daniel)
+      if (hasPet && (pendingPetPhoto || pendingVaccine)) {
+        var petName = (document.getElementById('pet_name').value || '').trim();
+        var petSpecies = document.getElementById('pet_species').value;
+        var petSize = document.getElementById('pet_size').value || null;
+
+        if (!petName) throw new Error('Informe o nome do pet pra cadastrar.');
+        if (!pendingPetPhoto || !pendingVaccine) throw new Error('Envie a foto do pet e o cartão de vacina.');
+
+        var photoPath = await uploadFile(pendingPetPhoto, 'pet-photo');
+        var vacPath = await uploadFile(pendingVaccine, 'pet-vaccine');
+
+        var { error: petErr } = await sb.from('user_pets').insert({
+          user_id: currentUser.id,
+          pet_name: petName,
+          pet_species: petSpecies,
+          pet_size: petSize,
+          pet_photo_path: photoPath,
+          vaccine_card_path: vacPath,
+          vaccine_status: 'aprovado'  // auto-aprovação conforme decisão
+        });
+        if (petErr) throw petErr;
+
+        // Reset uploads
+        pendingPetPhoto = null; pendingVaccine = null;
+        document.getElementById('petPhotoInput').value = '';
+        document.getElementById('vaccineInput').value = '';
+        document.getElementById('pet_name').value = '';
+        document.getElementById('petPhotoCard').classList.remove('has-file');
+        document.getElementById('vaccineCard').classList.remove('has-file');
+        document.getElementById('petPhotoSub').textContent = 'JPG, PNG até 8MB';
+        document.getElementById('vaccineSub').textContent = 'JPG, PNG ou PDF até 8MB';
+
+        // Recarrega pets
+        var { data: petsData } = await sb.from('user_pets').select('id, pet_name, pet_species, pet_size, pet_photo_path, vaccine_card_path, vaccine_status').eq('user_id', currentUser.id);
+        pets = petsData || [];
+        renderPetList();
+      }
+
+      showToast('Perfil atualizado', 'ok');
+      setSaveStatus('saved');
+      snapshotState();
+      setTimeout(function() { setSaveStatus(''); }, 2000);
+    } catch (err) {
+      console.error(err);
+      showToast('Erro: ' + (err.message || 'desconhecido'), 'err');
+      setSaveStatus('unsaved');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  async function removePet(petId) {
+    if (!confirm('Tem certeza que quer remover esse pet?')) return;
+    try {
+      await sb.from('user_pets').delete().eq('id', petId);
+      pets = pets.filter(function(p) { return p.id !== petId; });
+      renderPetList();
+      showToast('Pet removido', 'ok');
+    } catch (err) {
+      showToast('Erro ao remover: ' + err.message, 'err');
+    }
+  }
+
+  document.getElementById('btnSair').addEventListener('click', async function() {
+    await sb.auth.signOut();
+    window.location.replace('login.html?signedout=true');
+  });
+
+  init().then(watchChanges);
+})();
+</script>
+</body>
+</html>

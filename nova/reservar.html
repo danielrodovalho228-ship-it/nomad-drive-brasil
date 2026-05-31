@@ -199,6 +199,15 @@
             <p style="font-size:12px; color:var(--ink-mute); margin-top:6px;">💡 Teto automático: você nunca paga mais que a diária (R$ 149) num período de 24h. A data de devolução ajusta automaticamente conforme você escolhe a duração.</p>
           </div>
 
+          <!-- CHECKBOX PET (taxa de limpeza opcional) -->
+          <label style="display:flex; align-items:flex-start; gap:10px; padding:12px 14px; background:var(--gray-50, #fafafa); border:1.5px solid var(--gray-200, #e5e7eb); border-radius:10px; cursor:pointer; transition:all .15s; margin-bottom:14px;" id="petFeeLabel">
+            <input type="checkbox" id="petFeeChk" style="width:18px; height:18px; margin-top:2px; accent-color:#4FA600; cursor:pointer;" />
+            <span style="flex:1; font-size:13.5px; color:#2a2a2a; line-height:1.45;">
+              <strong>Vou levar meu pet nessa viagem</strong>
+              <small style="display:block; color:#767676; font-size:12px; margin-top:2px;">Inclui taxa de limpeza extra de <strong>R$ 30</strong> · Precisa ter pet cadastrado no <a href="perfil.html" style="color:#3F8500; font-weight:600;">seu perfil</a></small>
+            </span>
+          </label>
+
           <!-- ALERTA DE INCONSISTENCIA -->
           <div id="dateAlert" class="hint" style="display:none;"></div>
 
@@ -437,6 +446,13 @@ function calcPrice(hours) {
   return Math.min(hours * state.hourly, Math.ceil(hours / 24) * state.daily);
 }
 
+// Tarifa pet (lida da tabela booking_extras no backend; valor fixo pra MVP)
+var PET_FEE = 30;
+function petFeeIncluded() {
+  var el = document.getElementById('petFeeChk');
+  return el && el.checked ? PET_FEE : 0;
+}
+
 function isSlotOccupied(date, hour) {
   return CONFLITOS_MOCK[date] && CONFLITOS_MOCK[date][hour] === true;
 }
@@ -550,9 +566,12 @@ function recomputeAll() {
   dateAlert.style.display = 'none';
 
   // Atualiza summary
-  var totalPrice = calcPrice(state.durationHours);
+  var basePrice = calcPrice(state.durationHours);
+  var petFee = petFeeIncluded();
+  var totalPrice = basePrice + petFee;
   var durLabel = state.durationHours < 24 ? state.durationHours + ' horas' : (state.durationHours / 24) + ' dia(s)';
   var rateLabel = state.durationHours >= 8 ? 'R$ ' + state.daily + '/dia (teto)' : 'R$ ' + state.hourly + '/hora';
+  if (petFee) rateLabel += ' + R$ 30 limpeza pet';
 
   document.getElementById('sumDate').textContent = fmtDateBR(dStart);
   document.getElementById('sumDuration').textContent = durLabel;
@@ -678,6 +697,9 @@ document.getElementById('duration').addEventListener('change', function(e) {
 // Init
 // FIX E8 (QA Test Plan): browser-level — impede selecionar data passada no date-picker
 document.getElementById('date-start').min = fmtDate(new Date());
+// Recalcular total quando o checkbox pet mudar
+var petChk = document.getElementById('petFeeChk');
+if (petChk) petChk.addEventListener('change', recomputeAll);
 renderSlots();
 recomputeAll();
 </script>

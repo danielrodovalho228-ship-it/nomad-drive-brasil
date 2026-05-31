@@ -498,6 +498,21 @@
           <input type="text" id="cad-city" required placeholder="Uberlândia" autocomplete="address-level2" />
         </div>
         <div class="cad__row">
+          <label for="cad-employment">Tipo de vínculo <span style="font-weight:500; color:var(--gray-500); font-size:12px;">· opcional</span></label>
+          <select id="cad-employment" style="padding:13px 14px; border:2px solid var(--gray-300); border-radius:10px; font:inherit; font-size:15px; background:var(--white); color:var(--black); width:100%;">
+            <option value="">Selecione (opcional)...</option>
+            <option value="clt">CLT</option>
+            <option value="autonomo">Autônomo</option>
+            <option value="pj">PJ / Freelancer</option>
+            <option value="empresario">Empresário</option>
+            <option value="estudante">Estudante</option>
+            <option value="servidor">Servidor público</option>
+            <option value="aposentado">Aposentado</option>
+            <option value="outro">Outro</option>
+          </select>
+          <span style="font-size:11.5px; color:var(--gray-500);">Cliente que preenche dados profissionais ganha selo verificado + 10% off no Pass.</span>
+        </div>
+        <div class="cad__row">
           <label for="cad-pw">Senha</label>
           <input type="password" id="cad-pw" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
           <span id="cad-pw-hint" class="cad__pwstrength">Use pelo menos 8 caracteres.</span>
@@ -680,6 +695,7 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
   var em = document.getElementById('cad-email').value.trim().toLowerCase();
   var ph = document.getElementById('cad-phone').value.trim();
   var ci = document.getElementById('cad-city').value.trim();
+  var employmentType = document.getElementById('cad-employment').value || null;
   var pw = document.getElementById('cad-pw').value;
   var terms = document.getElementById('cad-terms').checked;
   var fb = document.getElementById('cad-feedback');
@@ -708,6 +724,7 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
         source: 'nova-landing-cadastro',
         name: n, email: em, phone: ph, city: ci, password: pw,
         intent: 'carsharing-cliente',
+        employment_type: employmentType,
         source_url: window.location.href
       })
     });
