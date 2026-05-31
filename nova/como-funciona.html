@@ -4,111 +4,214 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Como funciona — Nomade Drive · Carsharing por hora</title>
-<meta name="description" content="3 passos pra começar: escolha um plano, verifique sua CNH, reserve no app. Sem fiador, sem caução abusiva." />
-<meta name="theme-color" content="#0d3a26" />
+<meta name="description" content="4 passos: ache um carro, cadastre sua CNH, reserve pelo app, devolva no mesmo lugar. Tudo digital." />
+<meta name="theme-color" content="#4FA600" />
 <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://images.unsplash.com" />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  :root {
+    --zip-green: #4FA600;
+    --zip-green-dark: #3F8500;
+    --zip-green-darker: #2E6100;
+    --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8;
+    --zip-amber: #FFC72C;
+    --black: #1a1a1a;
+    --gray-900: #2a2a2a;
+    --gray-700: #4a4a4a;
+    --gray-500: #767676;
+    --gray-300: #cccccc;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+    --white: #ffffff;
+    --radius: 6px;
+    --radius-lg: 14px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; height: auto; display: block; }
-  a { color: inherit; } button { font: inherit; cursor: pointer; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
-  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
-  h2 { font-size: clamp(28px, 4.4vw, 42px); } h3 { font-size: clamp(20px, 2.4vw, 24px); }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.1; font-weight: 800; }
+  h2 { font-size: clamp(28px, 4vw, 42px); }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; white-space: nowrap; cursor: pointer; }
-  .btn--primary { background: var(--green); color: #fff; } .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); }
-  .btn--amber { background: var(--amber); color: var(--ink); } .btn--amber:hover { background: #fbcb4a; transform: translateY(-1px); }
-  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); } .btn--ghost:hover { background: var(--ink); color: #fff; }
-  .btn--ghost-light { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); } .btn--ghost-light:hover { border-color: #fff; }
-  .btn--sm { padding: 10px 18px; font-size: 13.5px; } .btn--lg { padding: 16px 32px; font-size: 16px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
 
   /* NAV */
-  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
   .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
   .nav__brand { display: flex; align-items: center; text-decoration: none; }
-  .nav__logo { height: 44px; width: auto; display: block; }
+  .nav__logo { height: 42px; }
   @media (min-width: 700px) { .nav__logo { height: 48px; } }
-  .nav__links { display: none; gap: 28px; }
-  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); transition: color .15s; }
-  .nav__links a:hover, .nav__links a.on { color: var(--green); }
+  .nav__links { display: none; gap: 28px; align-items: center; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
+  .nav__links a:hover, .nav__links a.on { color: var(--zip-green); }
   .nav__cta { display: flex; gap: 10px; align-items: center; }
-  @media (min-width: 900px) { .nav__links { display: flex; } }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
 
   /* HERO compacto */
-  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 64px 0 80px; text-align: center; }
-  .hero h1 { color: #fff; font-size: clamp(32px, 5.5vw, 56px); margin-bottom: 18px; }
-  .hero h1 em { color: var(--amber); font-style: normal; }
-  .hero p { color: rgba(255,255,255,0.85); font-size: clamp(16px, 2vw, 19px); max-width: 600px; margin: 0 auto 28px; }
+  .hero { background: var(--white); padding: 40px 0 24px; text-align: center; }
+  .hero h1 { font-size: clamp(32px, 5vw, 48px); margin-bottom: 14px; font-weight: 900; }
+  .hero h1 em { color: var(--zip-green); font-style: normal; }
+  .hero p { color: var(--gray-700); font-size: 17px; max-width: 600px; margin: 0 auto; }
 
-  /* HEAD */
-  .head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
-  .head h2 { margin-bottom: 14px; }
-  .head p { color: var(--ink-mute); font-size: 17px; }
+  /* ============ CAROUSEL ZIPCAR-STYLE ============ */
+  /* Borda verde fina no topo (separator) */
+  .carousel { background: var(--zip-bg-blue); padding: 0; position: relative; border-top: 12px solid var(--zip-green); margin-top: 32px; }
+  .carousel__inner { padding: 56px 0 72px; min-height: 540px; }
 
-  /* 3 STEPS */
-  .steps { padding: 84px 0; }
-  .steps__grid { display: grid; gap: 36px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
-  @media (min-width: 800px) { .steps__grid { grid-template-columns: repeat(3, 1fr); } }
-  .step { text-align: center; position: relative; }
-  .step__num { width: 84px; height: 84px; margin: 0 auto 22px; background: var(--green); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 36px; box-shadow: 0 14px 28px rgba(20,95,62,0.25); position: relative; z-index: 2; }
-  .step__img { width: 100%; max-width: 280px; margin: 0 auto 18px; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
-  .step__svg { width: 100%; max-width: 280px; margin: 0 auto 18px; aspect-ratio: 4/3; border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; background: var(--green-pale); display: flex; align-items: center; justify-content: center; }
-  .step__svg svg { width: 80%; height: 80%; display: block; }
-  .step h3 { margin-bottom: 10px; }
-  .step p { color: var(--ink-mute); font-size: 15px; line-height: 1.6; padding: 0 16px; }
-  .step p strong { color: var(--ink); }
+  .slide { display: none; align-items: center; }
+  .slide.on { display: grid; }
+  @media (min-width: 880px) { .slide.on { grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; } }
 
-  /* BOOKING SECTION */
-  .booking { padding: 84px 0; background: var(--bg-soft); }
-  .booking__row { display: grid; gap: 48px; grid-template-columns: 1fr; align-items: center; }
-  @media (min-width: 800px) { .booking__row { grid-template-columns: 1fr 1fr; } }
-  .booking__img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
-  .booking__body h2 { margin-bottom: 18px; }
-  .booking__body p { color: var(--ink-mute); font-size: 16px; line-height: 1.6; margin-bottom: 18px; }
-  .booking__body p strong { color: var(--ink); }
-  .booking__feat { list-style: none; margin: 20px 0; }
-  .booking__feat li { padding: 8px 0 8px 32px; position: relative; font-size: 15px; color: var(--ink-soft); }
-  .booking__feat li::before { content: ''; position: absolute; left: 0; top: 12px; width: 20px; height: 20px; background: var(--green); border-radius: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath d='M16 5l-8 8-4-4' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-size: 18px; background-position: center; background-repeat: no-repeat; }
+  /* iPhone mockup */
+  .phone {
+    width: 100%; max-width: 320px;
+    aspect-ratio: 9/19;
+    margin: 0 auto;
+    background: var(--black);
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    position: relative;
+  }
+  .phone__notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px; background: var(--black); border-radius: 18px; z-index: 2;
+  }
+  .phone__screen {
+    width: 100%; height: 100%; background: var(--white); border-radius: 28px;
+    overflow: hidden; position: relative;
+  }
+  .phone__time { position: absolute; top: 16px; left: 20px; font-size: 13px; font-weight: 700; color: var(--black); z-index: 3; }
+  .phone__status { position: absolute; top: 16px; right: 20px; font-size: 13px; color: var(--black); z-index: 3; display: flex; gap: 4px; align-items: center; }
+  .phone__status svg { width: 14px; height: 14px; }
 
-  /* COMMUNITY RULES */
-  .rules { padding: 84px 0; }
-  .rules__grid { display: grid; gap: 28px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
-  @media (min-width: 760px) { .rules__grid { grid-template-columns: repeat(3, 1fr); } }
-  .rule { text-align: center; padding: 32px 24px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); }
-  .rule__icon { width: 80px; height: 80px; margin: 0 auto 18px; border-radius: 22px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; color: var(--green); }
-  .rule__icon svg { width: 42px; height: 42px; stroke: currentColor; stroke-width: 1.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .rule h3 { margin-bottom: 10px; font-size: 19px; }
-  .rule p { color: var(--ink-mute); font-size: 14.5px; line-height: 1.55; }
+  /* Slide content (right side) */
+  .slide__body { padding: 24px; text-align: center; }
+  @media (min-width: 880px) { .slide__body { text-align: left; padding: 0; } }
+  .slide__title { font-size: clamp(28px, 4vw, 40px); font-weight: 900; margin-bottom: 28px; }
+  .slide__progress { height: 4px; background: rgba(0,0,0,0.15); border-radius: 2px; margin-bottom: 12px; position: relative; overflow: hidden; }
+  .slide__progress-bar { position: absolute; left: 0; top: 0; height: 100%; background: var(--black); border-radius: 2px; transition: width .35s ease; }
+  .slide__counter { text-align: right; font-size: 14px; color: var(--gray-700); font-weight: 600; margin-bottom: 28px; }
+  .slide__desc { font-size: clamp(17px, 2vw, 19px); color: var(--gray-900); margin-bottom: 32px; line-height: 1.5; }
+
+  .slide__nav { display: flex; gap: 14px; justify-content: center; }
+  @media (min-width: 880px) { .slide__nav { justify-content: flex-start; } }
+  .slide__nav-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 2px solid var(--black);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .15s;
+  }
+  .slide__nav-btn:hover:not(:disabled) { background: var(--black); color: var(--white); }
+  .slide__nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .slide__nav-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ============ SLIDE 1 — MAPA ============ */
+  .map-screen { background: linear-gradient(135deg, #fff8e1 0%, #fdf3d0 50%, #f5e8b8 100%); width: 100%; height: 100%; padding-top: 60px; padding-bottom: 16px; position: relative; }
+  .map-screen__bar { background: var(--white); margin: 0 16px; padding: 11px 14px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; }
+  .map-screen__bar small { color: var(--gray-700); font-weight: 500; }
+  .map-pins { position: absolute; inset: 60px 16px 16px; pointer-events: none; }
+  .map-pin { position: absolute; width: 32px; height: 32px; background: var(--zip-green); border-radius: 50%; border: 3px solid var(--white); box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 900; font-size: 14px; font-family: 'Inter', sans-serif; }
+  .map-pin--center { width: 40px; height: 40px; font-size: 18px; }
+  /* Streets layer (illustrative) */
+  .map-screen::after {
+    content: ''; position: absolute; inset: 60px 16px 16px;
+    background-image:
+      linear-gradient(75deg, transparent 48%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 52%),
+      linear-gradient(155deg, transparent 48%, rgba(255,255,255,0.6) 48%, rgba(255,255,255,0.6) 52%, transparent 52%),
+      linear-gradient(15deg, transparent 48%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.4) 52%, transparent 52%);
+    background-size: 80px 80px, 120px 120px, 60px 60px;
+    border-radius: 8px;
+  }
+
+  /* ============ SLIDE 2 — CNH ============ */
+  .cnh-screen { width: 100%; height: 100%; padding: 60px 20px 16px; background: var(--white); display: flex; flex-direction: column; gap: 14px; }
+  .cnh-screen__head { display: flex; align-items: center; justify-content: space-between; }
+  .cnh-screen__logo { width: 36px; height: 36px; border-radius: 50%; background: var(--zip-green); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; }
+  .cnh-screen__step { font-weight: 600; font-size: 13px; color: var(--black); }
+  .cnh-screen__avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; }
+  .cnh-screen__avatar svg { width: 20px; height: 20px; }
+  .cnh-screen__title { text-align: center; font-weight: 700; font-size: 16px; padding: 14px 0; }
+  .cnh-card-area { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .cnh-card-frame {
+    width: 90%; aspect-ratio: 5/3; background: var(--zip-bg-blue); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .cnh-card-frame::before, .cnh-card-frame::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--zip-green); }
+  .cnh-card-frame::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+  .cnh-card-frame::after { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+  .cnh-card-frame__inner { width: 55%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .cnh-card-frame__inner svg { width: 32px; height: 32px; }
+
+  /* ============ SLIDE 3 — RESERVA APP ============ */
+  .res-screen { width: 100%; height: 100%; padding: 60px 14px 16px; background: var(--white); position: relative; }
+  .res-screen__map-thumb { background: linear-gradient(135deg, #fff8e1 0%, #f5e8b8 100%); height: 80px; border-radius: 10px 10px 0 0; position: relative; overflow: hidden; }
+  .res-screen__directions { position: absolute; top: 8px; right: 8px; background: var(--white); padding: 5px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; color: var(--zip-green); display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+  .res-screen__directions::before { content: '➤'; font-size: 8px; }
+  .res-screen__card { background: var(--white); border-radius: 0 0 10px 10px; padding: 12px; border: 1px solid var(--gray-100); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .res-screen__time { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--gray-100); }
+  .res-screen__time-text small { display: block; font-size: 9px; color: var(--gray-500); }
+  .res-screen__time-text strong { font-size: 12px; }
+  .res-screen__extend { background: var(--zip-green); color: var(--white); padding: 5px 11px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+  .res-screen__car { padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+  .res-screen__car-info strong { display: block; font-size: 11px; }
+  .res-screen__car-info small { display: block; font-size: 9px; color: var(--gray-500); }
+  .res-screen__car-info .conn { display: inline-block; background: var(--zip-green-pale); color: var(--zip-green-dark); padding: 1px 6px; border-radius: 4px; font-size: 8px; font-weight: 700; margin-top: 2px; }
+  .res-screen__car-icon { font-size: 26px; }
+  .res-screen__actions { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 10px 0; border-top: 1px solid var(--gray-100); margin-top: 6px; }
+  .res-act { text-align: center; }
+  .res-act__icon { width: 30px; height: 30px; margin: 0 auto 3px; background: var(--zip-green-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .res-act__icon svg { width: 14px; height: 14px; stroke: var(--zip-green); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .res-act__label { font-size: 8px; font-weight: 600; color: var(--gray-700); }
+  .res-screen__tabs { position: absolute; bottom: 16px; left: 14px; right: 14px; display: flex; justify-content: space-around; padding: 8px 0; background: var(--white); border-top: 1px solid var(--gray-100); }
+  .res-tab { text-align: center; flex: 1; }
+  .res-tab__icon { width: 24px; height: 24px; margin: 0 auto 2px; }
+  .res-tab__icon svg { width: 100%; height: 100%; stroke: var(--gray-500); stroke-width: 2; fill: none; }
+  .res-tab.on .res-tab__icon svg { stroke: var(--zip-green); fill: var(--zip-green); }
+  .res-tab__label { font-size: 7px; font-weight: 600; color: var(--gray-500); }
+  .res-tab.on .res-tab__label { color: var(--zip-green); }
+
+  /* ============ SLIDE 4 — DEVOLUÇÃO ============ */
+  .ret-screen { width: 100%; height: 100%; padding: 60px 24px 24px; background: var(--white); display: flex; flex-direction: column; }
+  .ret-screen__close { color: var(--zip-green); font-weight: 900; font-size: 22px; align-self: flex-start; }
+  .ret-screen__illust { flex: 1; display: flex; align-items: center; justify-content: center; padding: 14px 0; }
+  .ret-screen__illust svg { width: 100%; max-width: 200px; }
+  .ret-screen h4 { font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 10px; }
+  .ret-screen p { font-size: 11.5px; color: var(--gray-700); text-align: center; line-height: 1.45; padding: 0 8px; }
 
   /* CTA FINAL */
-  .ctaf { padding: 84px 0; background: var(--ink); color: #fff; text-align: center; }
-  .ctaf h2 { color: #fff; margin-bottom: 16px; }
-  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
+  .ctaf { padding: 56px 0; background: var(--black); color: var(--white); text-align: center; }
+  .ctaf h2 { color: var(--white); margin-bottom: 14px; }
+  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 560px; margin: 0 auto 24px; }
   .ctaf__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .ctaf .btn--ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.4); }
+  .ctaf .btn--ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
 
   /* FOOTER */
-  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 64px 0 28px; }
+  .foot { background: var(--black); color: rgba(255,255,255,0.7); padding: 56px 0 28px; border-top: 1px solid rgba(255,255,255,0.08); }
   .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
   @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
-  @media (min-width: 1000px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; } }
-  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
-  .foot__col a:hover { color: var(--amber); }
-  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
-  .foot__brand p { font-size: 13px; line-height: 1.55; margin-bottom: 16px; }
-  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.45); }
-  .foot__bottom a { color: rgba(255,255,255,0.45); margin: 0 6px; text-decoration: none; }
-  .foot__bottom a:hover { color: var(--amber); }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--zip-green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
+  .foot__brand p { font-size: 13.5px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.4); }
 
-  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
-  .preview-banner a { color: var(--ink); text-decoration: underline; }
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -128,7 +231,7 @@
       <a href="index.html#faq">Ajuda</a>
     </nav>
     <div class="nav__cta">
-      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="../login.html" class="btn btn--ghost-black btn--sm">Entrar</a>
       <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
     </div>
   </div>
@@ -136,145 +239,215 @@
 
 <section class="hero">
   <div class="wrap">
-    <h1>Como funciona o <em>Nomade Drive</em></h1>
-    <p>3 passos pra começar. Depois disso, é só reservar pelo app e dirigir. Aprovação em até 24h.</p>
+    <h1>Como o <em>Nomade</em> funciona</h1>
+    <p>Em 4 passos simples. Encontre um carro, aprove seu cadastro, reserve pelo app e devolva no mesmo lugar.</p>
   </div>
 </section>
 
-<!-- 3 STEPS -->
-<section class="steps">
-  <div class="wrap">
-    <div class="head">
-      <h2>Comece em 3 passos</h2>
-      <p>Tudo digital, sem fila, sem ir até balcão nenhum.</p>
-    </div>
-    <div class="steps__grid">
-      <div class="step">
-        <div class="step__num">1</div>
-        <div class="step__svg" aria-label="Ícone: lista de planos com plano selecionado">
-          <!-- ÍCONE LIMPO: 3 itens de lista empilhados, item do meio destacado (selecionado) -->
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" fill="none" stroke="#145f3e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Card opção 1 (não selecionada) -->
-            <rect x="14" y="14" width="72" height="20" rx="3"/>
-            <circle cx="22" cy="24" r="3" fill="#fff"/>
-            <line x1="34" y1="24" x2="76" y2="24"/>
-            <!-- Card opção 2 (SELECIONADA — preenchida verde) -->
-            <rect x="10" y="40" width="80" height="22" rx="3" fill="#145f3e" stroke="#145f3e"/>
-            <circle cx="20" cy="51" r="4" fill="#fff" stroke="#fff" stroke-width="0"/>
-            <path d="M17 51 l2 2 4-4" stroke="#145f3e" stroke-width="2"/>
-            <line x1="32" y1="51" x2="82" y2="51" stroke="#fff"/>
-            <!-- Card opção 3 (não selecionada) -->
-            <rect x="14" y="68" width="72" height="20" rx="3"/>
-            <circle cx="22" cy="78" r="3" fill="#fff"/>
-            <line x1="34" y1="78" x2="76" y2="78"/>
-          </svg>
-        </div>
-        <h3>Escolha um plano</h3>
-        <p>Selecione o plano de membership que faz mais sentido. <strong>Casual (gratuito)</strong> ou <strong>NomadeDrive Pass (R$ 99/ano)</strong> com tarifa 20% menor. Pode trocar a qualquer momento.</p>
-      </div>
-      <div class="step">
-        <div class="step__num">2</div>
-        <div class="step__svg" aria-label="Ícone: CNH validada com check">
-          <!-- ÍCONE LIMPO: cartão CNH grande + check verde grande flutuante -->
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" fill="none" stroke="#145f3e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <!-- CNH (cartão) -->
-            <rect x="10" y="22" width="78" height="50" rx="4"/>
-            <!-- Foto -->
-            <rect x="18" y="32" width="22" height="30" rx="2" fill="#145f3e" stroke="#145f3e"/>
-            <circle cx="29" cy="42" r="4" fill="#fff" stroke="#fff" stroke-width="0"/>
-            <path d="M22 56 q7 -6 14 0" stroke="#fff" stroke-width="2"/>
-            <!-- Linhas de texto -->
-            <line x1="48" y1="36" x2="80" y2="36" stroke-width="3"/>
-            <line x1="48" y1="46" x2="74" y2="46" stroke-width="2"/>
-            <line x1="48" y1="54" x2="76" y2="54" stroke-width="2"/>
-            <line x1="48" y1="62" x2="68" y2="62" stroke-width="2"/>
-            <!-- Check verde flutuante -->
-            <circle cx="78" cy="22" r="12" fill="#145f3e" stroke="#145f3e"/>
-            <path d="M73 22 l4 4 7 -8" stroke="#fff" stroke-width="2.5"/>
-          </svg>
-        </div>
-        <h3>Verificação</h3>
-        <p>A gente valida sua CNH e identidade. <strong>A maioria dos membros é aprovada e pode reservar carro em minutos</strong>, mas em alguns casos pode levar até 24h úteis.</p>
-      </div>
-      <div class="step">
-        <div class="step__num">3</div>
-        <div class="step__svg" aria-label="Ícone: celular com app + carro reservado">
-          <!-- ÍCONE LIMPO: celular grande + ícone de carro na tela + botão de reservar -->
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" fill="none" stroke="#145f3e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Celular outline -->
-            <rect x="32" y="10" width="36" height="80" rx="5"/>
-            <line x1="46" y1="84" x2="54" y2="84"/>
-            <!-- Tela: barra do app no topo -->
-            <line x1="37" y1="18" x2="63" y2="18" stroke-width="2"/>
-            <!-- Ícone de carro grande dentro da tela -->
-            <path d="M38 40 h24 l3 8 v8 a2 2 0 0 1 -2 2 h-2 v3 h-4 v-3 h-14 v3 h-4 v-3 h-2 a2 2 0 0 1 -2 -2 v-8 z" fill="#145f3e" stroke="#145f3e"/>
-            <circle cx="42" cy="56" r="2" fill="#fff" stroke="#fff" stroke-width="0"/>
-            <circle cx="58" cy="56" r="2" fill="#fff" stroke="#fff" stroke-width="0"/>
-            <line x1="40" y1="44" x2="60" y2="44" stroke="#fff" stroke-width="1.5"/>
-            <!-- Botão "Reservar" -->
-            <rect x="37" y="68" width="26" height="10" rx="2" fill="#fbbf24" stroke="#fbbf24"/>
-            <!-- Seta de "ir/reservar" -->
-            <path d="M44 73 h10 m-3 -3 l3 3 -3 3" stroke="#145f3e" stroke-width="2"/>
-          </svg>
-        </div>
-        <h3>Reserve no app</h3>
-        <p>Aprovado? Você reserva carros <strong>na hora pelo app Nomade Drive</strong>. Veja o que tem disponível no seu prédio, shopping ou hospital. Pegue a chave no <strong>cofre eletrônico</strong> da vaga.</p>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ============ CAROUSEL ZIPCAR-STYLE — 4 SLIDES ============ -->
+<section class="carousel">
+  <div class="wrap carousel__inner">
 
-<!-- BOOKING SECTION -->
-<section class="booking">
-  <div class="wrap">
-    <div class="booking__row">
-      <img class="booking__img" src="../images/car-tracker-2.jpg" alt="Chevrolet Tracker estacionado na vaga Nomade Drive" loading="lazy" />
-      <div class="booking__body">
-        <h2>Pegue a chave no cofre. <br>Devolva no mesmo lugar.</h2>
-        <p>Em cada vaga Nomade tem um <strong>cofre eletrônico</strong> com a chave. Ao reservar pelo app, você recebe um <strong>código de uso único</strong>. Digita no cofre, pega a chave, abre o carro. Devolve no fim do uso.</p>
-        <ul class="booking__feat">
-          <li>Reserva em segundos pelo app</li>
-          <li>Código único pra abrir o cofre eletrônico</li>
-          <li>Devolve a chave no mesmo cofre ao terminar</li>
-          <li>Cobrança automática no cartão (caução pré-autorizada)</li>
-          <li>Nota fiscal por e-mail em até 24h</li>
-        </ul>
-        <a href="index.html#cadastro" class="btn btn--primary">Criar conta grátis →</a>
+    <!-- SLIDE 1 — Mapa, "Ache um carro perto" -->
+    <article class="slide on" id="slide-1">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone__notch"></div>
+          <div class="phone__screen">
+            <span class="phone__time">9:41</span>
+            <span class="phone__status">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </span>
+            <div class="map-screen">
+              <div class="map-screen__bar">
+                <strong>9:00-10:00</strong>
+                <small>Uberlândia, MG</small>
+              </div>
+              <div class="map-pins">
+                <span class="map-pin" style="top:14%; left:18%;">N</span>
+                <span class="map-pin" style="top:26%; left:55%;">N</span>
+                <span class="map-pin" style="top:35%; left:32%;">N</span>
+                <span class="map-pin map-pin--center" style="top:45%; left:48%;">N</span>
+                <span class="map-pin" style="top:60%; left:22%;">N</span>
+                <span class="map-pin" style="top:68%; left:62%;">N</span>
+                <span class="map-pin" style="top:78%; left:40%;">N</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+      <div class="slide__body">
+        <div class="slide__title">Como o Nomade funciona</div>
+        <div class="slide__progress"><div class="slide__progress-bar" style="width:25%;"></div></div>
+        <div class="slide__counter">1/4</div>
+        <p class="slide__desc">Ache um carro perto de você — disponível 24/7.</p>
+        <div class="slide__nav">
+          <button class="slide__nav-btn" data-prev disabled aria-label="Anterior"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+          <button class="slide__nav-btn" data-next aria-label="Próximo"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+    </article>
 
-<!-- COMMUNITY RULES (estilo Zipcar) -->
-<section class="rules">
-  <div class="wrap">
-    <div class="head">
-      <h2>Regras da comunidade</h2>
-      <p>Pra todo mundo ter um carro limpo e em boas condições, a gente pede 3 coisas básicas.</p>
-    </div>
-    <div class="rules__grid">
-      <div class="rule">
-        <div class="rule__icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    <!-- SLIDE 2 — CNH, "Cadastre-se" -->
+    <article class="slide" id="slide-2">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone__notch"></div>
+          <div class="phone__screen">
+            <span class="phone__time">9:41</span>
+            <span class="phone__status">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </span>
+            <div class="cnh-screen">
+              <div class="cnh-screen__head">
+                <div class="cnh-screen__logo">N</div>
+                <div class="cnh-screen__step">Passo 1 de 3</div>
+                <div class="cnh-screen__avatar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+                </div>
+              </div>
+              <div class="cnh-screen__title">Frente da CNH</div>
+              <div class="cnh-card-area">
+                <div class="cnh-card-frame">
+                  <div class="cnh-card-frame__inner">
+                    <svg viewBox="0 0 32 32" fill="none" stroke="#4FA600" stroke-width="2"><rect x="2" y="6" width="28" height="20" rx="3"/><rect x="5" y="10" width="9" height="12" rx="1" fill="#4FA600"/><circle cx="9.5" cy="14" r="2" fill="#fff"/><path d="M6 21q3.5-3 7 0" fill="#fff"/><line x1="17" y1="11" x2="27" y2="11"/><line x1="17" y1="15" x2="25" y2="15"/><line x1="17" y1="19" x2="26" y2="19"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3>Não fume</h3>
-        <p>Carros Nomade são livres de cigarro, vape ou narguilé. Multa de R$ 500 se identificado cheiro ou queimadura.</p>
       </div>
-      <div class="rule">
-        <div class="rule__icon">
-          <svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/><path d="M17 9h2.5a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0V13"/></svg>
+      <div class="slide__body">
+        <div class="slide__title">Como o Nomade funciona</div>
+        <div class="slide__progress"><div class="slide__progress-bar" style="width:50%;"></div></div>
+        <div class="slide__counter">2/4</div>
+        <p class="slide__desc">Cadastre-se com CNH válida pra ser aprovado a dirigir.</p>
+        <div class="slide__nav">
+          <button class="slide__nav-btn" data-prev aria-label="Anterior"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+          <button class="slide__nav-btn" data-next aria-label="Próximo"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
-        <h3>Devolva abastecido</h3>
-        <p>50 km de combustível incluso por reserva. Acima disso, você abastece e paga R$ 0,80/km extra, cobrado automaticamente via caução.</p>
       </div>
-      <div class="rule">
-        <div class="rule__icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </article>
+
+    <!-- SLIDE 3 — Reserva e cofre, "Reserve por hora ou dia" -->
+    <article class="slide" id="slide-3">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone__notch"></div>
+          <div class="phone__screen">
+            <span class="phone__time">9:41</span>
+            <span class="phone__status">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </span>
+            <div class="res-screen">
+              <div class="res-screen__map-thumb">
+                <span class="res-screen__directions">VER ROTA</span>
+              </div>
+              <div class="res-screen__card">
+                <div class="res-screen__time">
+                  <div class="res-screen__time-text">
+                    <small>Horário</small>
+                    <strong>11:00–17:00</strong>
+                  </div>
+                  <div class="res-screen__extend">Estender</div>
+                </div>
+                <div class="res-screen__car">
+                  <div class="res-screen__car-info">
+                    <strong>Chevrolet Tracker</strong>
+                    <small>ABC-1234</small>
+                    <span class="conn">● COFRE OK</span>
+                  </div>
+                  <div class="res-screen__car-icon">🚙</div>
+                </div>
+                <div class="res-screen__actions">
+                  <div class="res-act"><div class="res-act__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg></div><div class="res-act__label">Abrir</div></div>
+                  <div class="res-act"><div class="res-act__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="res-act__label">Travar</div></div>
+                  <div class="res-act"><div class="res-act__icon"><svg viewBox="0 0 24 24"><path d="M3 10v4a4 4 0 0 0 4 4h2l5 4V4l-5 4H7a4 4 0 0 0-4 4z"/></svg></div><div class="res-act__label">Buzina</div></div>
+                  <div class="res-act"><div class="res-act__icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="res-act__label">Final</div></div>
+                  <div class="res-act"><div class="res-act__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="res-act__label">SOS</div></div>
+                </div>
+              </div>
+              <div class="res-screen__tabs">
+                <div class="res-tab"><div class="res-tab__icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="res-tab__label">Buscar</div></div>
+                <div class="res-tab on"><div class="res-tab__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/></svg></div><div class="res-tab__label">Dirigir</div></div>
+                <div class="res-tab"><div class="res-tab__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="res-tab__label">Viagens</div></div>
+                <div class="res-tab"><div class="res-tab__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg></div><div class="res-tab__label">Conta</div></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3>Devolva no horário</h3>
-        <p>Atraso impacta a próxima pessoa que reservou. Tolerância de 15 min. Depois disso, R$ 30/hora extra.</p>
       </div>
-    </div>
+      <div class="slide__body">
+        <div class="slide__title">Como o Nomade funciona</div>
+        <div class="slide__progress"><div class="slide__progress-bar" style="width:75%;"></div></div>
+        <div class="slide__counter">3/4</div>
+        <p class="slide__desc">Reserve por hora ou dia e pegue a chave no cofre eletrônico pelo app.</p>
+        <div class="slide__nav">
+          <button class="slide__nav-btn" data-prev aria-label="Anterior"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+          <button class="slide__nav-btn" data-next aria-label="Próximo"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 4 — Devolução, "Devolva no mesmo lugar" -->
+    <article class="slide" id="slide-4">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone__notch"></div>
+          <div class="phone__screen">
+            <span class="phone__time">9:41</span>
+            <span class="phone__status">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </span>
+            <div class="ret-screen">
+              <div class="ret-screen__close">✕</div>
+              <div class="ret-screen__illust">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Carro azul -->
+                  <path d="M30 110 h70 l8 15 v25 a2 2 0 0 1 -2 2 h-4 v6 h-8 v-6 h-50 v6 h-8 v-6 h-4 a2 2 0 0 1 -2 -2 v-25 z" fill="#3b82f6"/>
+                  <circle cx="44" cy="155" r="6" fill="#1a1a1a"/>
+                  <circle cx="86" cy="155" r="6" fill="#1a1a1a"/>
+                  <rect x="38" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
+                  <rect x="56" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
+                  <rect x="74" y="115" width="14" height="14" rx="1" fill="#bfdbfe"/>
+                  <!-- Pessoa -->
+                  <circle cx="130" cy="78" r="14" fill="#92400e"/>
+                  <path d="M118 130 q4 -8 12 -8 q8 0 12 8 v25 h-24 z" fill="#FFC72C"/>
+                  <rect x="124" y="155" width="6" height="18" fill="#1e3a8a"/>
+                  <rect x="132" y="155" width="6" height="18" fill="#1e3a8a"/>
+                  <rect x="120" y="172" width="14" height="5" rx="2" fill="#1a1a1a"/>
+                  <rect x="128" y="172" width="14" height="5" rx="2" fill="#1a1a1a"/>
+                  <!-- Celular nas mãos -->
+                  <rect x="138" y="98" width="14" height="22" rx="2" fill="#1a1a1a"/>
+                  <rect x="140" y="101" width="10" height="14" fill="#4FA600"/>
+                  <!-- Pin de localização verde acima -->
+                  <circle cx="58" cy="98" r="5" fill="#4FA600"/>
+                  <circle cx="58" cy="98" r="2" fill="#fff"/>
+                </svg>
+              </div>
+              <h4>Pronto pra devolver?</h4>
+              <p>Estacione o carro na vaga original com pelo menos ¼ de combustível e siga as instruções pra deixar pronto pra próxima pessoa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide__body">
+        <div class="slide__title">Como o Nomade funciona</div>
+        <div class="slide__progress"><div class="slide__progress-bar" style="width:100%;"></div></div>
+        <div class="slide__counter">4/4</div>
+        <p class="slide__desc">Devolva o carro no mesmo lugar e finalize sua viagem.</p>
+        <div class="slide__nav">
+          <button class="slide__nav-btn" data-prev aria-label="Anterior"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
+          <button class="slide__nav-btn" data-next disabled aria-label="Próximo"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -284,8 +457,8 @@
     <h2>Pronto pra começar?</h2>
     <p>Cadastro em 5 minutos. Primeiro mês grátis com código BEMVINDO.</p>
     <div class="ctaf__row">
-      <a href="index.html#cadastro" class="btn btn--amber btn--lg">Criar conta grátis</a>
-      <a href="precos.html" class="btn btn--ghost-light btn--lg">Ver preços</a>
+      <a href="index.html#cadastro" class="btn btn--primary">Criar conta grátis</a>
+      <a href="precos.html" class="btn btn--ghost">Ver preços</a>
     </div>
   </div>
 </section>
@@ -295,51 +468,60 @@
     <div class="foot__row">
       <div class="foot__col foot__brand">
         <strong>Nomade Drive</strong>
-        <p>Carsharing por hora ou dia. Carros estacionados em condomínios, shoppings e hospitais. Frota própria, suporte 24h.</p>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
       </div>
       <div class="foot__col">
         <h5>Produto</h5>
         <a href="como-funciona.html">Como funciona</a>
         <a href="precos.html">Preços</a>
-        <a href="index.html#locais">Onde tem carro</a>
-        <a href="#">Frota</a>
+        <a href="index.html#locais">Frota</a>
       </div>
       <div class="foot__col">
         <h5>Para empresas</h5>
         <a href="parceiros.html">Condomínio</a>
         <a href="parceiros.html">Shopping</a>
         <a href="parceiros.html">Hospital</a>
-        <a href="parceiros.html">Empresa</a>
-      </div>
-      <div class="foot__col">
-        <h5>Cidades</h5>
-        <a href="#">Uberlândia</a>
-        <a href="#">Em breve · Goiânia</a>
-        <a href="#">Em breve · BH</a>
-      </div>
-      <div class="foot__col">
-        <h5>Empresa</h5>
-        <a href="#">Sobre</a>
-        <a href="#">Carreiras</a>
-        <a href="#">Imprensa</a>
       </div>
       <div class="foot__col">
         <h5>Ajuda</h5>
-        <a href="#">Central de ajuda</a>
         <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
         <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
         <a href="../termos.html">Termos</a>
       </div>
     </div>
-    <div class="foot__bottom">
-      <div>&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
-      <div>
-        <a href="../termos.html">Privacidade</a> ·
-        <a href="../termos.html">Termos</a>
-      </div>
-    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
   </div>
 </footer>
+
+<script>
+// CAROUSEL — 4 slides com prev/next
+var current = 1;
+var TOTAL = 4;
+
+function showSlide(n) {
+  if (n < 1 || n > TOTAL) return;
+  current = n;
+  document.querySelectorAll('.slide').forEach(function(s) { s.classList.remove('on'); });
+  document.getElementById('slide-' + n).classList.add('on');
+  // Scroll suave pro topo do carousel em mobile
+  if (window.innerWidth < 880) {
+    document.querySelector('.carousel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+document.querySelectorAll('[data-prev]').forEach(function(btn) {
+  btn.addEventListener('click', function() { if (current > 1) showSlide(current - 1); });
+});
+document.querySelectorAll('[data-next]').forEach(function(btn) {
+  btn.addEventListener('click', function() { if (current < TOTAL) showSlide(current + 1); });
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft' && current > 1) showSlide(current - 1);
+  if (e.key === 'ArrowRight' && current < TOTAL) showSlide(current + 1);
+});
+</script>
 
 </body>
 </html>
