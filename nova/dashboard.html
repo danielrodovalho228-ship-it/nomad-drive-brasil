@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meu painel — Nomade Drive · Carsharing por hora</title>
+<meta name="description" content="Seu painel Nomade Drive: complete seu cadastro, faça reservas e veja seu histórico." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600; --zip-green-dark: #3F8500; --zip-green-darker: #2E6100; --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8; --zip-amber: #FFC72C;
+    --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-100: #f5f5f5; --gray-50: #fafafa; --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--gray-50); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 14.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .btn--ghost { background: transparent; color: var(--gray-900); border-color: var(--gray-300); }
+  .btn--ghost:hover { background: var(--gray-100); }
+  .btn--sm { padding: 8px 16px; font-size: 13px; }
+  .btn--block { width: 100%; }
+
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__menu { display: flex; gap: 6px; align-items: center; }
+  .nav__menu a, .nav__menu button { padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--gray-700); text-decoration: none; transition: all .15s; }
+  .nav__menu a:hover, .nav__menu button:hover { background: var(--gray-100); color: var(--black); }
+  .nav__menu a.on { background: var(--zip-green-pale); color: var(--zip-green-dark); }
+  .nav__avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--zip-green); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+  @media (max-width: 640px) { .nav__menu a:not(.nav__avatar):not(.nav__sair) { display: none; } }
+
+  /* Banner status */
+  .topbar { background: var(--zip-green-pale); color: var(--zip-green-darker); padding: 10px 0; font-size: 13px; font-weight: 600; text-align: center; border-bottom: 1px solid #cbe5b6; }
+  .topbar svg { width: 14px; height: 14px; vertical-align: middle; margin-right: 4px; stroke: currentColor; stroke-width: 2.5; fill: none; }
+  .topbar--warn { background: #fef9e7; color: #78350f; border-bottom-color: #fde68a; }
+  .topbar--info { background: #e0f2fe; color: #075985; border-bottom-color: #bae6fd; }
+
+  main { flex: 1; padding: 32px 0 64px; }
+
+  /* Hero */
+  .hero { margin-bottom: 28px; }
+  .hero h1 { font-size: clamp(24px, 4vw, 32px); margin-bottom: 6px; }
+  .hero h1 em { color: var(--zip-green); font-style: normal; }
+  .hero p { color: var(--gray-700); font-size: 15.5px; }
+
+  /* Grid 2 colunas */
+  .dash-grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 880px) { .dash-grid { grid-template-columns: 1.1fr 0.9fr; } }
+
+  /* Card base */
+  .card { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); padding: 24px 22px; margin-bottom: 20px; }
+  .card__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px; }
+  .card__head h3 { font-size: 17px; font-weight: 800; }
+  .card__head p { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .card__badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+  .card__badge--warn { background: #fef9e7; color: #78350f; }
+  .card__badge--ok { background: var(--zip-green-pale); color: var(--zip-green-darker); }
+  .card__badge--info { background: #e0f2fe; color: #075985; }
+
+  /* Progresso cadastro */
+  .progress { height: 6px; background: var(--gray-100); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+  .progress__bar { height: 100%; background: linear-gradient(90deg, var(--zip-green), var(--zip-green-dark)); border-radius: 999px; transition: width .35s ease; }
+
+  /* Lista de pendências */
+  .kyc-list { display: flex; flex-direction: column; gap: 10px; }
+  .kyc-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--gray-100); transition: all .15s; }
+  .kyc-item:hover { background: var(--gray-50); border-color: var(--gray-300); }
+  .kyc-item__icon { width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: var(--gray-100); color: var(--gray-500); display: flex; align-items: center; justify-content: center; }
+  .kyc-item__icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .kyc-item--done .kyc-item__icon { background: var(--zip-green); color: var(--white); }
+  .kyc-item--review .kyc-item__icon { background: #fef9e7; color: #78350f; }
+  .kyc-item__body { flex: 1; min-width: 0; }
+  .kyc-item__title { font-size: 14px; font-weight: 700; color: var(--black); display: block; }
+  .kyc-item__sub { font-size: 12px; color: var(--gray-500); display: block; margin-top: 1px; }
+  .kyc-item__cta { font-size: 12.5px; font-weight: 700; padding: 7px 14px; border-radius: 999px; flex-shrink: 0; }
+  .kyc-item--done .kyc-item__cta { background: var(--zip-green-pale); color: var(--zip-green-darker); }
+  .kyc-item--review .kyc-item__cta { background: #fef9e7; color: #78350f; }
+  .kyc-item--pending .kyc-item__cta { background: var(--zip-green); color: var(--white); cursor: pointer; transition: background .15s; }
+  .kyc-item--pending .kyc-item__cta:hover { background: var(--zip-green-dark); }
+  .kyc-item__file { display: none; }
+
+  /* CTA reservar */
+  .booking-card { background: linear-gradient(135deg, #0b2611 0%, #143b1d 100%); color: var(--white); border-radius: 14px; padding: 26px 24px; margin-bottom: 20px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+  .booking-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(79,166,0,0.35), transparent 70%); }
+  .booking-card h3 { color: var(--white); font-size: 18px; margin-bottom: 6px; position: relative; }
+  .booking-card p { color: rgba(255,255,255,0.78); font-size: 14px; margin-bottom: 18px; position: relative; }
+  .booking-card .btn { position: relative; }
+  .booking-card--locked { opacity: 0.85; }
+  .booking-card--locked p { color: rgba(255,255,255,0.65); }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 22px 16px; color: var(--gray-500); }
+  .empty svg { width: 42px; height: 42px; stroke: var(--gray-300); stroke-width: 1.5; fill: none; margin-bottom: 10px; }
+  .empty h4 { font-size: 14.5px; color: var(--gray-700); margin-bottom: 4px; }
+  .empty p { font-size: 12.5px; }
+
+  /* Toast */
+  .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 18px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .25s, top .25s; pointer-events: none; max-width: 90vw; display: inline-flex; align-items: center; gap: 9px; border-left: 4px solid #767676; }
+  .toast.show { opacity: 1; top: 40px; }
+  .toast--warn { border-left-color: #FFC72C; }
+  .toast--ok { border-left-color: #4FA600; }
+  .toast--err { border-left-color: #ef4444; }
+
+  /* Loading state */
+  .loading { text-align: center; padding: 80px 20px; color: var(--gray-500); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-100); border-top-color: var(--zip-green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .foot-mini { padding: 24px 0; text-align: center; font-size: 12.5px; color: var(--gray-500); border-top: 1px solid var(--gray-100); background: var(--white); }
+  .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+  .foot-mini a:hover { color: var(--zip-green-dark); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="dashboard.html" class="nav__brand" aria-label="Nomade Drive Brasil — meu painel">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__menu" aria-label="Navegação">
+      <a href="dashboard.html" class="on">Painel</a>
+      <a href="index.html#frota">Reservar</a>
+      <a href="dashboard.html#viagens">Viagens</a>
+      <a href="dashboard.html#conta">Conta</a>
+      <span class="nav__avatar" id="navAvatar" title="Seu perfil">—</span>
+      <button class="nav__sair btn btn--ghost btn--sm" id="btnSair" type="button">Sair</button>
+    </nav>
+  </div>
+</header>
+
+<!-- Topbar de status (mostra dinâmico baseado no perfil) -->
+<div class="topbar" id="topbar" style="display:none;"></div>
+
+<main>
+  <div class="wrap">
+
+    <!-- Loading inicial enquanto checa auth -->
+    <div class="loading" id="loadingState">
+      <div class="spinner"></div>
+      Carregando seu painel...
+    </div>
+
+    <!-- Conteúdo (mostrado após auth) -->
+    <div id="dashContent" style="display:none;">
+
+      <div class="hero">
+        <h1>Olá, <em id="userName">—</em>! 👋</h1>
+        <p id="userSubtitle">Vamos preparar tudo pra você reservar seu primeiro carro.</p>
+      </div>
+
+      <div class="dash-grid">
+
+        <!-- COLUNA ESQUERDA: pendências + viagens -->
+        <div>
+          <!-- Card: Pendências de cadastro -->
+          <div class="card" id="cardKyc">
+            <div class="card__head">
+              <div>
+                <h3>Complete seu cadastro</h3>
+                <p id="kycSubtitle">Envie seus documentos pra liberação do app.</p>
+              </div>
+              <span class="card__badge card__badge--warn" id="kycBadge">Pendente</span>
+            </div>
+            <div class="progress"><div class="progress__bar" id="kycProgressBar" style="width:0%;"></div></div>
+            <div class="kyc-list" id="kycList">
+              <!-- preenchido por JS -->
+            </div>
+            <p style="font-size:12px; color:var(--gray-500); margin-top:14px; line-height:1.5;">
+              Após enviar tudo, nossa equipe aprova em até <strong>24h úteis</strong>. Você recebe e-mail e notificação no app.
+            </p>
+          </div>
+
+          <!-- Card: Histórico de viagens -->
+          <div class="card" id="viagens">
+            <div class="card__head">
+              <div>
+                <h3>Minhas viagens</h3>
+                <p>Histórico das reservas que você fez.</p>
+              </div>
+            </div>
+            <div id="viagensList">
+              <div class="empty">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="2" x2="9" y2="6"/><line x1="15" y1="2" x2="15" y2="6"/></svg>
+                <h4>Nenhuma viagem ainda</h4>
+                <p>Sua primeira reserva aparece aqui.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUNA DIREITA: CTA reservar + perfil -->
+        <div>
+          <!-- Card: próxima reserva / CTA reservar -->
+          <div class="booking-card" id="bookingCard">
+            <h3>Pronto pra reservar?</h3>
+            <p id="bookingMessage">Aprovação rápida e você já pode dirigir. Veja os carros disponíveis em Uberlândia.</p>
+            <a href="index.html#frota" class="btn btn--primary" id="bookingCta">Ver carros disponíveis →</a>
+          </div>
+
+          <!-- Card: perfil / conta -->
+          <div class="card" id="conta">
+            <div class="card__head">
+              <div>
+                <h3>Minha conta</h3>
+                <p>Dados pessoais e preferências.</p>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:13.5px;">
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--gray-100);">
+                <span style="color:var(--gray-500);">Nome</span>
+                <strong id="profileName">—</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--gray-100);">
+                <span style="color:var(--gray-500);">E-mail</span>
+                <strong id="profileEmail" style="font-size:12.5px;">—</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--gray-100);">
+                <span style="color:var(--gray-500);">Telefone</span>
+                <strong id="profilePhone">—</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0;">
+                <span style="color:var(--gray-500);">Cidade</span>
+                <strong id="profileCity">—</strong>
+              </div>
+              <a href="recuperar-senha.html" style="font-size:13px; color:var(--zip-green-dark); font-weight:700; margin-top:8px; text-decoration:none;">🔒 Trocar minha senha →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot-mini">
+  <a href="index.html">Início</a> ·
+  <a href="como-funciona.html">Como funciona</a> ·
+  <a href="precos.html">Preços</a> ·
+  <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">Suporte WhatsApp</a>
+</footer>
+
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var BUCKET = 'kyc-docs';
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // Documentos requeridos (ordem importa)
+  var DOCS_REQUIRED = [
+    { type: 'cnh_frente',     title: 'Foto da CNH — frente',          sub: 'Toda a CNH visível, sem flash refletindo' },
+    { type: 'cnh_verso',      title: 'Foto da CNH — verso',           sub: 'Inclui assinatura e data de emissão' },
+    { type: 'selfie',         title: 'Selfie com a CNH na mão',       sub: 'Segure a CNH ao lado do rosto' },
+    { type: 'comprovante',    title: 'Comprovante de residência',     sub: 'Conta de luz/água/internet dos últimos 3 meses' }
+  ];
+
+  var currentUser = null;
+  var profile = null;
+  var documents = [];
+
+  function showToast(msg, level) {
+    var t = document.getElementById('toast');
+    t.className = 'toast' + (level ? ' toast--' + level : '') + ' show';
+    t.textContent = msg;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() { t.className = 'toast'; }, 3500);
+  }
+
+  function initials(name) {
+    if (!name) return '?';
+    var parts = name.trim().split(/\s+/);
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+
+  function firstName(name) {
+    return (name || 'cliente').split(' ')[0];
+  }
+
+  function setTopbar(type, html) {
+    var tb = document.getElementById('topbar');
+    tb.className = 'topbar topbar--' + type;
+    tb.innerHTML = html;
+    tb.style.display = 'block';
+  }
+
+  // ============ Auth gate ============
+  async function init() {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session || !session.user) {
+      window.location.replace('login.html?next=dashboard');
+      return;
+    }
+    currentUser = session.user;
+
+    // Busca profile
+    var { data: prof } = await sb.from('profiles').select('full_name, email, phone, city, verification_status').eq('id', currentUser.id).maybeSingle();
+    profile = prof || { email: currentUser.email };
+
+    // Busca documentos
+    var { data: docs } = await sb.from('user_documents').select('document_type, status, file_path, file_name, created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    documents = docs || [];
+
+    render();
+  }
+
+  function render() {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('dashContent').style.display = 'block';
+
+    // Hero
+    var name = profile.full_name || currentUser.user_metadata?.full_name || currentUser.email;
+    document.getElementById('userName').textContent = firstName(name);
+    document.getElementById('navAvatar').textContent = initials(name);
+
+    // Perfil
+    document.getElementById('profileName').textContent = profile.full_name || '—';
+    document.getElementById('profileEmail').textContent = profile.email || currentUser.email || '—';
+    document.getElementById('profilePhone').textContent = profile.phone || '—';
+    document.getElementById('profileCity').textContent = profile.city || '—';
+
+    // Determina estado por documento (1 por type, pega mais recente)
+    var docByType = {};
+    documents.forEach(function(d) {
+      if (!docByType[d.document_type]) docByType[d.document_type] = d;
+    });
+
+    // Render lista de pendências
+    var listEl = document.getElementById('kycList');
+    listEl.innerHTML = '';
+    var sentCount = 0;
+    var reviewCount = 0;
+    var approvedCount = 0;
+    DOCS_REQUIRED.forEach(function(req) {
+      var doc = docByType[req.type];
+      var status = doc ? doc.status : 'pending';
+      var item = document.createElement('div');
+      var ctaText, statusKey, iconSvg, subText;
+      if (status === 'aprovado') {
+        approvedCount++; sentCount++;
+        statusKey = 'done'; ctaText = '✓ Aprovado';
+        iconSvg = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+        subText = 'Aprovado em ' + new Date(doc.created_at).toLocaleDateString('pt-BR');
+      } else if (status === 'em_analise') {
+        reviewCount++; sentCount++;
+        statusKey = 'review'; ctaText = 'Em análise';
+        iconSvg = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+        subText = 'Enviado em ' + new Date(doc.created_at).toLocaleDateString('pt-BR');
+      } else if (status === 'documentos_pendentes') {
+        statusKey = 'pending'; ctaText = 'Reenviar';
+        iconSvg = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+        subText = req.sub + ' · ⚠️ Revise e reenvie';
+      } else {
+        statusKey = 'pending'; ctaText = 'Enviar';
+        iconSvg = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+        subText = req.sub;
+      }
+      item.className = 'kyc-item kyc-item--' + statusKey;
+      item.innerHTML =
+        '<div class="kyc-item__icon">' + iconSvg + '</div>' +
+        '<div class="kyc-item__body">' +
+          '<span class="kyc-item__title">' + req.title + '</span>' +
+          '<span class="kyc-item__sub">' + subText + '</span>' +
+        '</div>' +
+        '<span class="kyc-item__cta" data-doc="' + req.type + '">' + ctaText + '</span>' +
+        '<input type="file" class="kyc-item__file" accept="image/jpeg,image/png,image/webp,application/pdf" data-doc="' + req.type + '" />';
+      listEl.appendChild(item);
+
+      // Wire click
+      var cta = item.querySelector('.kyc-item__cta');
+      var fileInput = item.querySelector('.kyc-item__file');
+      if (statusKey === 'pending' || (statusKey === 'review' && false)) {
+        cta.addEventListener('click', function() { fileInput.click(); });
+        fileInput.addEventListener('change', function(e) { handleUpload(req.type, e.target.files[0], item, cta); });
+      }
+    });
+
+    // Progresso
+    var total = DOCS_REQUIRED.length;
+    var pct = Math.round((sentCount / total) * 100);
+    document.getElementById('kycProgressBar').style.width = pct + '%';
+
+    var badge = document.getElementById('kycBadge');
+    var subtitle = document.getElementById('kycSubtitle');
+    var bookingCard = document.getElementById('bookingCard');
+    var bookingMsg = document.getElementById('bookingMessage');
+    var bookingCta = document.getElementById('bookingCta');
+
+    if (approvedCount === total) {
+      badge.className = 'card__badge card__badge--ok';
+      badge.textContent = 'Aprovado';
+      subtitle.textContent = 'Tudo certo! Você já pode reservar carros.';
+      setTopbar('ok', '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Cadastro aprovado · Você está liberado pra reservar carros');
+      bookingCard.classList.remove('booking-card--locked');
+      bookingMsg.textContent = 'Veja os carros disponíveis em Uberlândia agora.';
+      bookingCta.textContent = 'Ver carros disponíveis →';
+      bookingCta.href = 'index.html#frota';
+    } else if (reviewCount > 0 && reviewCount + approvedCount === total) {
+      badge.className = 'card__badge card__badge--info';
+      badge.textContent = 'Em análise';
+      subtitle.textContent = 'Recebemos tudo. Equipe analisando — você é avisado por e-mail.';
+      setTopbar('info', '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Documentos em análise · Aprovação em até 24h úteis');
+      bookingCard.classList.add('booking-card--locked');
+      bookingMsg.textContent = 'Assim que aprovarmos seu cadastro, você poderá reservar. ⏳';
+      bookingCta.textContent = 'Aguardando aprovação';
+      bookingCta.style.pointerEvents = 'none';
+      bookingCta.style.opacity = '0.6';
+    } else {
+      badge.className = 'card__badge card__badge--warn';
+      badge.textContent = 'Pendente (' + sentCount + '/' + total + ')';
+      subtitle.textContent = 'Envie os documentos abaixo pra liberação do app.';
+      setTopbar('warn', '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg> Complete seu cadastro pra começar a reservar (' + sentCount + '/' + total + ')');
+      bookingCard.classList.add('booking-card--locked');
+      bookingMsg.textContent = 'Complete seu cadastro acima pra liberar reservas. Faltam ' + (total - sentCount) + ' documento(s).';
+      bookingCta.textContent = 'Completar cadastro';
+      bookingCta.href = '#cardKyc';
+      bookingCta.style.pointerEvents = '';
+      bookingCta.style.opacity = '';
+    }
+  }
+
+  // ============ Upload de documento ============
+  async function handleUpload(docType, file, itemEl, ctaEl) {
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) {
+      showToast('Arquivo muito grande (máx 8MB)', 'err');
+      return;
+    }
+    if (!/^(image\/(jpeg|png|webp)|application\/pdf)$/.test(file.type)) {
+      showToast('Aceitamos JPG, PNG, WebP ou PDF', 'err');
+      return;
+    }
+
+    ctaEl.textContent = 'Enviando...';
+    ctaEl.style.pointerEvents = 'none';
+
+    try {
+      // 1) Upload pra Storage
+      var ext = file.name.split('.').pop().toLowerCase();
+      var path = currentUser.id + '/' + docType + '-' + Date.now() + '.' + ext;
+      var { data: upRes, error: upErr } = await sb.storage.from(BUCKET).upload(path, file, { upsert: false, contentType: file.type });
+      if (upErr) throw upErr;
+
+      // 2) Insere metadata na tabela
+      var { error: dbErr } = await sb.from('user_documents').insert({
+        user_id: currentUser.id,
+        document_type: docType,
+        file_path: path,
+        file_name: file.name,
+        status: 'em_analise'
+      });
+      if (dbErr) throw dbErr;
+
+      showToast('Documento enviado com sucesso', 'ok');
+      // Recarrega documentos e re-renderiza
+      var { data: docs } = await sb.from('user_documents').select('document_type, status, file_path, file_name, created_at').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      documents = docs || [];
+      render();
+    } catch (err) {
+      console.error(err);
+      showToast('Erro no envio: ' + (err.message || 'desconhecido'), 'err');
+      ctaEl.textContent = 'Enviar';
+      ctaEl.style.pointerEvents = '';
+    }
+  }
+
+  // ============ Logout ============
+  document.getElementById('btnSair').addEventListener('click', async function() {
+    await sb.auth.signOut();
+    window.location.replace('login.html?signedout=true');
+  });
+
+  // Boot
+  init();
+})();
+</script>
+</body>
+</html>
