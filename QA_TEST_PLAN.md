@@ -1,9 +1,24 @@
 # 🧪 QA Test Plan — Nomade Drive Brasil (`/nova/`)
 
 > **Pra:** equipe de QA
-> **Versão:** 1.0 — Maio/2026
+> **Versão:** 1.1 — 30/Maio/2026
 > **Escopo:** fluxo end-to-end do carsharing por hora/dia (modo Stripe TEST)
 > **Tempo estimado:** 30-45 min pra rodar todos os fluxos
+
+---
+
+## 📌 Mudanças desde v1.0 (rodada anterior do QA)
+
+**Bugs corrigidos e em produção (`https://nomadedrive.com.br`):**
+- ✅ **F4-A** Slot ocupado agora dá feedback visual claro: shake animation no slot + ✕ vermelho + toast no topo da tela
+- ✅ **F4-B** Botão "Ver próximo disponível →" funciona (era silencioso por causa de `onclick` inline; agora usa `addEventListener`)
+- ✅ **F4 polish** Alerta de conflito tem link clicável real "Ver próximo disponível →" (antes só citava em texto)
+- ✅ **E8** Data de retirada no passado: bloqueado por 2 camadas — `.min` no input HTML5 (calendário nativo não deixa selecionar) + handler `change` (se forçar via DevTools, mostra toast e reseta pra hoje)
+- ✅ **Mini-bug** Console QA "Minhas reservas" agora lista via Edge Function `qa-listar-reservas` (antes RLS bloqueava a anon key)
+- ✅ **Admin painel de Leads** `escapeHtml` local no `renderLeadCard` corrigido — se você viu "lista vazia mas KPIs corretos" na rodada anterior, faz `Ctrl+Shift+R` e re-loga
+- ✅ **Atalho** Botão flutuante "🧪 QA Console" no canto inferior direito do `admin.html` linka direto pro `qa-test.html`
+
+**Em paralelo (não afeta seus testes mas saber é bom):** corrigimos um vazamento de RLS em 15 views internas do banco (segurança LGPD). Já está em produção, não muda nada visualmente.
 
 ---
 
@@ -201,17 +216,21 @@ Já temos **8 contas** criadas no Supabase Auth, cada uma com role específico. 
    - Slot **08:00** deve ficar **cinza escuro** (ocupado mockado)
    - Slot **09:00** também cinza
    - Slot **14:00** também cinza
-4. Clicar no slot **08:00** → alerta vermelho aparece
+4. Clicar no slot **08:00** → 3 reações simultâneas:
+   - Slot dá um **"shake"** (vibra horizontalmente por 0.5s)
+   - **Toast vermelho** no topo: *"🚫 08:00 — horário ocupado por outro usuário"*
+   - **Banner vermelho** com link clicável **"Ver próximo disponível →"** sublinhado
 5. Escolher horário **11:00** + duração **6 horas** (passa por 14:00)
 6. Banner vermelho aparece: *"Conflito de horário"*
 7. Botão **"Continuar →"** fica desabilitado
-8. Clicar link **"Ver próximo horário disponível"** → JS sugere 15:00
+8. Clicar link **"Ver próximo disponível →"** → JS sugere 15:00 automaticamente
 
 ### ✅ Critérios
-- [ ] Slots ocupados visualmente distinguíveis
+- [ ] Slots ocupados visualmente distinguíveis (cinza escuro + ✕)
+- [ ] Slot ocupado: shake + toast + banner com link
 - [ ] Banner de conflito aparece auto quando duração colide
 - [ ] Botão "Continuar" desabilitado durante conflito
-- [ ] Link "Ver próximo" funciona
+- [ ] Link "Ver próximo disponível →" no banner é clicável e funciona
 
 ---
 
@@ -297,7 +316,7 @@ Já temos **8 contas** criadas no Supabase Auth, cada uma com role específico. 
 | E5 | Booking ID inexistente | Cola UUID aleatório no console QA | Erro 404: *"Booking não encontrado"* |
 | E6 | Email vazio no form | Submete form de lead sem email | HTML5 validation impede submit |
 | E7 | Internet cai durante pagamento | Desconecta WiFi no Stripe Checkout | Booking fica `pending_payment` indefinido (cron deveria limpar) |
-| E8 | Reservar carro pra passado | Data retirada anterior a hoje | ⚠️ **Bug em aberto** — sistema deveria rejeitar |
+| E8 | Reservar carro pra passado | Em `/nova/reservar.html?carro=tracker`, abrir calendário do campo "Retirada" | ✅ **Corrigido 30/05**: calendário nativo não mostra datas passadas (`.min` no input). Se forçar via DevTools (`document.getElementById('date-start').value='2020-01-01'` + dispatch change), toast amarelo aparece e reseta pra hoje. |
 | E9 | Reservar 0 horas | Duração = 0 | ⚠️ **Bug em aberto** — sistema deveria rejeitar |
 
 ---
@@ -321,11 +340,14 @@ Já temos **8 contas** criadas no Supabase Auth, cada uma com role específico. 
 ### Erros (10 min)
 - [ ] **F2.1** Cartão `0002` é recusado pelo Stripe
 - [ ] **F3.1** Cartão `3184` abre modal 3DS
-- [ ] **F4.1** `/reservar.html?carro=tracker` data 31/05 mostra slots ocupados
-- [ ] **F4.2** Banner vermelho aparece em conflito
-- [ ] **F4.3** Sugestão "próximo disponível" funciona
+- [ ] **F4.1** `/reservar.html?carro=tracker` data 31/05 mostra slots ocupados (cinza + ✕)
+- [ ] **F4.2** Clicar slot ocupado: shake + toast + banner com link clicável
+- [ ] **F4.3** Banner vermelho aparece em conflito de range (duração que pega slot ocupado)
+- [ ] **F4.4** Link "Ver próximo disponível →" no banner funciona e muda hora
 - [ ] **E1.1** `unlock` antes de `confirm_payment` retorna 409
 - [ ] **E4.1** Rating 6 retorna erro 400
+- [ ] **E8.1** Calendário do campo "Retirada" não deixa selecionar data passada
+- [ ] **E8.2** Forçar data passada via DevTools mostra toast e reseta pra hoje
 
 ### Magic Link (5 min)
 - [ ] **F5.1** Cadastro com email novo cria conta em `auth.users`
