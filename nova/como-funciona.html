@@ -212,6 +212,86 @@
 
   .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
   .preview-banner a { color: var(--black); text-decoration: underline; }
+
+  /* ============ POLISH FASE 80a — logo carrinho dimensions ============ */
+  .map-pin svg { width: 16px; height: 16px; }
+  .map-pin--center svg { width: 22px; height: 22px; }
+  .cnh-screen__logo svg { width: 22px; height: 22px; }
+
+  /* ============ POLISH FASE 80a — STEPPER VISUAL ============ */
+  .slide__steps { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 28px; padding: 0 4px; position: relative; }
+  .slide__steps::before {
+    content: ''; position: absolute; top: 18px; left: 32px; right: 32px;
+    height: 2px; background: var(--gray-300); z-index: 0;
+  }
+  .slide__step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
+  .slide__step-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--gray-300);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-500); transition: all .25s ease;
+  }
+  .slide__step-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .slide__step-label { font-size: 10.5px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.2px; text-align: center; }
+  .slide__step.done .slide__step-icon { background: var(--zip-green); border-color: var(--zip-green); color: var(--white); }
+  .slide__step.done .slide__step-label { color: var(--zip-green-dark); }
+  .slide__step.on .slide__step-icon { background: var(--zip-green); border-color: var(--zip-green); color: var(--white); box-shadow: 0 0 0 4px rgba(79, 166, 0, 0.18); transform: scale(1.08); }
+  .slide__step.on .slide__step-label { color: var(--zip-green-dark); font-weight: 800; }
+
+  /* ============ POLISH FASE 80a — CNH REALISTA (slide 2) ============ */
+  .cnh-real {
+    width: 100%; height: 100%; border-radius: 6px;
+    background: linear-gradient(135deg, #2e5cb0 0%, #1d4a9b 50%, #143977 100%);
+    color: rgba(255,255,255,0.92);
+    padding: 10px 12px;
+    display: grid; grid-template-columns: 60px 1fr; gap: 10px;
+    font-family: 'Inter', sans-serif;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .cnh-real::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 80%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cnh-real__header { grid-column: 1 / -1; font-size: 6.5px; font-weight: 800; letter-spacing: 0.6px; text-align: center; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.25); }
+  .cnh-real__photo {
+    background: rgba(255,255,255,0.92); border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    color: #143977; aspect-ratio: 3/4;
+  }
+  .cnh-real__photo svg { width: 30px; height: 30px; }
+  .cnh-real__fields { display: flex; flex-direction: column; gap: 4px; font-size: 7px; line-height: 1.3; }
+  .cnh-real__row { display: flex; flex-direction: column; gap: 1px; }
+  .cnh-real__label { font-size: 5.5px; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.3px; }
+  .cnh-real__value { font-weight: 700; filter: blur(2.5px); letter-spacing: 0.5px; }
+
+  /* ============ POLISH FASE 80a — SLIDE 4: banner + checklist ============ */
+  .ret-banner {
+    background: linear-gradient(90deg, var(--zip-green), var(--zip-green-dark));
+    color: var(--white); padding: 7px 12px;
+    margin: 0 -20px 12px;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(79, 166, 0, 0.25);
+  }
+  .ret-banner svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .ret-checklist {
+    background: var(--gray-50); border-radius: 8px;
+    padding: 10px 12px; margin-top: 14px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .ret-check-item { display: flex; align-items: center; gap: 8px; }
+  .ret-check-item__icon {
+    width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+    background: var(--zip-green); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .ret-check-item__icon svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .ret-check-item__label { font-size: 10px; font-weight: 600; color: var(--gray-900); line-height: 1.3; flex: 1; }
+
 </style>
 </head>
 <body>
@@ -265,19 +345,38 @@
                 <small>Uberlândia, MG</small>
               </div>
               <div class="map-pins">
-                <span class="map-pin" style="top:14%; left:18%;">N</span>
-                <span class="map-pin" style="top:26%; left:55%;">N</span>
-                <span class="map-pin" style="top:35%; left:32%;">N</span>
-                <span class="map-pin map-pin--center" style="top:45%; left:48%;">N</span>
-                <span class="map-pin" style="top:60%; left:22%;">N</span>
-                <span class="map-pin" style="top:68%; left:62%;">N</span>
-                <span class="map-pin" style="top:78%; left:40%;">N</span>
+                <span class="map-pin" style="top:14%; left:18%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin" style="top:26%; left:55%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin" style="top:35%; left:32%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin map-pin--center" style="top:45%; left:48%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin" style="top:60%; left:22%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin" style="top:68%; left:62%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                <span class="map-pin" style="top:78%; left:40%;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="slide__body">
+        <!-- Stepper visual: 4 etapas com ícones (passo atual destacado) -->
+        <div class="slide__steps" aria-label="Etapas do fluxo">
+          <div class="slide__step on">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <span class="slide__step-label">Buscar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/></svg></div>
+            <span class="slide__step-label">Cadastrar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg></div>
+            <span class="slide__step-label">Reservar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></svg></div>
+            <span class="slide__step-label">Devolver</span>
+          </div>
+        </div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:25%;"></div></div>
         <div class="slide__counter">1/4</div>
         <p class="slide__desc">Ache um carro perto de você — disponível 24/7.</p>
@@ -301,7 +400,7 @@
             </span>
             <div class="cnh-screen">
               <div class="cnh-screen__head">
-                <div class="cnh-screen__logo">N</div>
+                <div class="cnh-screen__logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
                 <div class="cnh-screen__step">Passo 1 de 3</div>
                 <div class="cnh-screen__avatar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
@@ -310,8 +409,17 @@
               <div class="cnh-screen__title">Frente da CNH</div>
               <div class="cnh-card-area">
                 <div class="cnh-card-frame">
-                  <div class="cnh-card-frame__inner">
-                    <svg viewBox="0 0 32 32" fill="none" stroke="#4FA600" stroke-width="2"><rect x="2" y="6" width="28" height="20" rx="3"/><rect x="5" y="10" width="9" height="12" rx="1" fill="#4FA600"/><circle cx="9.5" cy="14" r="2" fill="#fff"/><path d="M6 21q3.5-3 7 0" fill="#fff"/><line x1="17" y1="11" x2="27" y2="11"/><line x1="17" y1="15" x2="25" y2="15"/><line x1="17" y1="19" x2="26" y2="19"/></svg>
+                  <!-- CNH brasileira realista (mockup estilizado) -->
+                  <div class="cnh-real">
+                    <div class="cnh-real__header">REPÚBLICA FEDERATIVA DO BRASIL · CARTEIRA NACIONAL DE HABILITAÇÃO</div>
+                    <div class="cnh-real__photo">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+                    </div>
+                    <div class="cnh-real__fields">
+                      <div class="cnh-real__row"><span class="cnh-real__label">Nome</span><span class="cnh-real__value">Daniel R. Rodovalho</span></div>
+                      <div class="cnh-real__row"><span class="cnh-real__label">CPF</span><span class="cnh-real__value">000.000.000-00</span></div>
+                      <div class="cnh-real__row"><span class="cnh-real__label">Validade · Categoria</span><span class="cnh-real__value">31/12/2030 · AB</span></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -320,6 +428,24 @@
         </div>
       </div>
       <div class="slide__body">
+        <div class="slide__steps" aria-label="Etapas do fluxo">
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <span class="slide__step-label">Buscar</span>
+          </div>
+          <div class="slide__step on">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/></svg></div>
+            <span class="slide__step-label">Cadastrar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg></div>
+            <span class="slide__step-label">Reservar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></svg></div>
+            <span class="slide__step-label">Devolver</span>
+          </div>
+        </div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:50%;"></div></div>
         <div class="slide__counter">2/4</div>
         <p class="slide__desc">Cadastre-se com CNH válida pra ser aprovado a dirigir.</p>
@@ -380,6 +506,24 @@
         </div>
       </div>
       <div class="slide__body">
+        <div class="slide__steps" aria-label="Etapas do fluxo">
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <span class="slide__step-label">Buscar</span>
+          </div>
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/></svg></div>
+            <span class="slide__step-label">Cadastrar</span>
+          </div>
+          <div class="slide__step on">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg></div>
+            <span class="slide__step-label">Reservar</span>
+          </div>
+          <div class="slide__step">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></svg></div>
+            <span class="slide__step-label">Devolver</span>
+          </div>
+        </div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:75%;"></div></div>
         <div class="slide__counter">3/4</div>
         <p class="slide__desc">Reserve por hora ou dia e pegue a chave no cofre eletrônico pelo app.</p>
@@ -402,23 +546,71 @@
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
             </span>
             <div class="ret-screen">
-              <div class="ret-screen__close">✕</div>
-              <!-- FOTO REAL do carro estacionado (substitui SVG ilustração ruim) -->
-              <div style="margin: 0 -20px 14px; height: 140px; overflow: hidden; position: relative;">
+              <!-- Banner verde no topo com micro CTA -->
+              <div class="ret-banner">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Últimos 4 passos · ~3 min
+              </div>
+              <!-- Foto realista do carro estacionado -->
+              <div style="margin: 0 -20px 12px; height: 110px; overflow: hidden; position: relative;">
                 <img src="../images/car-tracker-2.jpg" alt="Carro Nomade estacionado pronto pra devolver" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
-                <!-- Badge verde de "Devolvido" -->
-                <div style="position: absolute; top: 10px; right: 10px; background: var(--zip-green); color: #fff; padding: 5px 11px; border-radius: 999px; font-size: 9px; font-weight: 800; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-                  <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <div style="position: absolute; top: 8px; right: 8px; background: var(--zip-green); color: #fff; padding: 4px 9px; border-radius: 999px; font-size: 8.5px; font-weight: 800; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                  <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   DEVOLVIDO
                 </div>
               </div>
-              <h4>Pronto pra devolver?</h4>
-              <p>Estacione o carro na vaga original com pelo menos ¼ de combustível. Devolva a chave no cofre eletrônico e pronto.</p>
+              <h4 style="font-size: 16px; margin-bottom: 6px;">Pronto pra devolver?</h4>
+              <p style="font-size: 10px; padding: 0 4px;">Estacione na vaga original e siga o checklist:</p>
+              <!-- Checklist visual: 4 itens do que o cliente precisa fazer -->
+              <div class="ret-checklist">
+                <div class="ret-check-item">
+                  <div class="ret-check-item__icon">
+                    <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  </div>
+                  <span class="ret-check-item__label">4 fotos do carro (frente, lados, traseira)</span>
+                </div>
+                <div class="ret-check-item">
+                  <div class="ret-check-item__icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                  <span class="ret-check-item__label">Anote o KM final do hodômetro</span>
+                </div>
+                <div class="ret-check-item">
+                  <div class="ret-check-item__icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 22v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><path d="M3 22h10"/><path d="M3 14h10"/><path d="M3 14v-4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/><path d="M13 5h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2V8.5a2.5 2.5 0 0 0-2.5-2.5H17"/></svg>
+                  </div>
+                  <span class="ret-check-item__label">Combustível mínimo ¼ de tanque</span>
+                </div>
+                <div class="ret-check-item">
+                  <div class="ret-check-item__icon">
+                    <svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg>
+                  </div>
+                  <span class="ret-check-item__label">Devolva a chave no cofre eletrônico</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="slide__body">
+        <div class="slide__steps" aria-label="Etapas do fluxo">
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <span class="slide__step-label">Buscar</span>
+          </div>
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/></svg></div>
+            <span class="slide__step-label">Cadastrar</span>
+          </div>
+          <div class="slide__step done">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><line x1="10.85" y1="12.15" x2="19" y2="4"/><line x1="18" y1="5" x2="20" y2="7"/><line x1="15" y1="8" x2="17" y2="10"/></svg></div>
+            <span class="slide__step-label">Reservar</span>
+          </div>
+          <div class="slide__step on">
+            <div class="slide__step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 12 15 16 10"/></svg></div>
+            <span class="slide__step-label">Devolver</span>
+          </div>
+        </div>
         <div class="slide__progress"><div class="slide__progress-bar" style="width:100%;"></div></div>
         <div class="slide__counter">4/4</div>
         <p class="slide__desc">Devolva o carro no mesmo lugar e finalize sua viagem.</p>
