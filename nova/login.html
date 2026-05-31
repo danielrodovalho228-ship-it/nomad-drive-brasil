@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrar — Nomade Drive · Carsharing por hora</title>
+<meta name="description" content="Acesse sua conta Nomade Drive. Sem senha — receba um link de acesso no seu e-mail." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600;
+    --zip-green-dark: #3F8500;
+    --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8;
+    --zip-amber: #FFC72C;
+    --black: #1a1a1a;
+    --gray-900: #2a2a2a;
+    --gray-700: #4a4a4a;
+    --gray-500: #767676;
+    --gray-300: #cccccc;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--zip-bg-blue); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1,h2,h3 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .btn--block { width: 100%; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; align-items: center; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
+  .nav__links a:hover { color: var(--zip-green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  /* PREVIEW banner */
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+
+  /* LOGIN MAIN */
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 16px; }
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    width: 100%; max-width: 460px;
+    padding: 40px 32px 32px;
+  }
+  .card__icon {
+    width: 64px; height: 64px; margin: 0 auto 18px;
+    background: var(--zip-green-pale);
+    color: var(--zip-green-dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card__icon svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .card h1 { font-size: 26px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+  .card .lead { font-size: 14.5px; color: var(--gray-700); text-align: center; margin-bottom: 28px; line-height: 1.5; }
+
+  .form-row { margin-bottom: 18px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .form-row input[type="email"] {
+    width: 100%; padding: 14px 16px; font: inherit; font-size: 15.5px;
+    border: 2px solid var(--gray-300); border-radius: 10px;
+    transition: border-color .15s;
+    background: var(--white); color: var(--black);
+  }
+  .form-row input[type="email"]:focus { outline: none; border-color: var(--zip-green); }
+
+  .status { margin-top: 14px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
+  .status.show { display: block; }
+  .status.ok { background: var(--zip-green-pale); color: var(--zip-green-dark); border: 1px solid #a7d883; }
+  .status.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .status.info { background: #fef9e7; color: #92400e; border: 1px solid #fbbf24; }
+  .status strong { font-weight: 800; }
+  .status a { color: inherit; text-decoration: underline; font-weight: 700; }
+
+  .alt {
+    margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--gray-100);
+    font-size: 13.5px; color: var(--gray-700); text-align: center;
+  }
+  .alt a { color: var(--zip-green-dark); font-weight: 700; text-decoration: none; }
+  .alt a:hover { text-decoration: underline; }
+
+  .legal { font-size: 11.5px; color: var(--gray-500); text-align: center; margin-top: 18px; line-height: 1.5; }
+  .legal a { color: var(--gray-700); }
+
+  /* FOOTER mini */
+  .foot-mini { padding: 24px 0; text-align: center; font-size: 12.5px; color: var(--gray-500); }
+  .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+  .foot-mini a:hover { color: var(--zip-green-dark); }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html">Para empresas</a>
+      <a href="index.html#faq">Ajuda</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card__icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <h1>Entre na sua conta</h1>
+    <p class="lead">Sem senha. A gente envia um link de acesso pro seu e-mail — válido por 1 hora.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="form-row">
+        <label for="email">Seu e-mail cadastrado</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="voce@email.com" />
+      </div>
+      <button type="submit" id="submitBtn" class="btn btn--primary btn--block">
+        📧 Receber link de acesso
+      </button>
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="alt">
+      Ainda não tem conta? <a href="index.html#cadastro">Criar conta grátis →</a>
+    </div>
+
+    <p class="legal">
+      Ao entrar, você concorda com nossos
+      <a href="../termos.html">Termos</a> e
+      <a href="../termos.html#privacidade">Política de Privacidade</a>.
+    </p>
+  </div>
+</main>
+
+<footer class="foot-mini">
+  <a href="index.html">Início</a> ·
+  <a href="como-funciona.html">Como funciona</a> ·
+  <a href="precos.html">Preços</a> ·
+  <a href="../index.html">App principal (locação mensal)</a>
+</footer>
+
+<!-- Supabase Auth — magic link sem senha -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var REDIRECT_AFTER_LOGIN = 'https://nomadedrive.com.br/nova/index.html?logged=true';
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  var form = document.getElementById('loginForm');
+  var emailInput = document.getElementById('email');
+  var submitBtn = document.getElementById('submitBtn');
+  var statusEl = document.getElementById('status');
+
+  function showStatus(type, msg) {
+    statusEl.className = 'status show ' + type;
+    statusEl.innerHTML = msg;
+  }
+  function hideStatus() {
+    statusEl.className = 'status';
+    statusEl.innerHTML = '';
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideStatus();
+    var email = (emailInput.value || '').trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showStatus('err', '⚠️ Digite um e-mail válido.');
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Enviando...';
+
+    try {
+      var result = await sb.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: REDIRECT_AFTER_LOGIN,
+          shouldCreateUser: false  // não cria conta nova se email não existe
+        }
+      });
+      if (result.error) {
+        // Erro mais comum: "Signups not allowed for otp" (significa: email não cadastrado)
+        var msg = result.error.message || '';
+        if (/not allowed|user not found|signup/i.test(msg)) {
+          showStatus('info',
+            '🤔 Não achamos uma conta com esse e-mail.<br>' +
+            '<a href="index.html#cadastro">Criar conta grátis →</a>'
+          );
+        } else {
+          showStatus('err', '❌ ' + msg);
+        }
+      } else {
+        showStatus('ok',
+          '✅ <strong>Link enviado!</strong><br>' +
+          'Abra o e-mail em <strong>' + email + '</strong> e clique no botão "Entrar".<br>' +
+          '<small style="opacity:0.8;">O link vale por 1 hora. Não veio? Cheque o SPAM.</small>'
+        );
+        emailInput.value = '';
+      }
+    } catch (err) {
+      showStatus('err', '❌ Erro inesperado: ' + (err.message || err));
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '📧 Receber link de acesso';
+    }
+  });
+
+  // Se já tá logado (sessão ativa do Supabase), pula direto pra home
+  (async function() {
+    var { data: { session } } = await sb.auth.getSession();
+    if (session && session.user) {
+      // Sessão ativa — redireciona pra home com flag
+      window.location.replace(REDIRECT_AFTER_LOGIN);
+    }
+  })();
+})();
+</script>
+</body>
+</html>
