@@ -3,203 +3,195 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nomade Drive — Carro no seu condomínio, shopping ou hospital · Reserve por hora</title>
-<meta name="description" content="Carsharing por hora ou diária. Carros estacionados em condomínios, shoppings e hospitais. Combustível, seguro e manutenção inclusos. Reserve pelo app." />
-<meta name="theme-color" content="#0d3a26" />
+<title>Nomade Drive — Reserve em segundos. Dirija em minutos.</title>
+<meta name="description" content="Carsharing por hora ou dia. Carros estacionados em condomínios, shoppings e hospitais. Combustível, seguro e manutenção inclusos. Crie sua conta grátis." />
+<meta name="theme-color" content="#4FA600" />
 <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://images.unsplash.com" />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-  /* ============ RESET & TOKENS ============ */
+  /* ============ ZIPCAR-STYLE TOKENS ============ */
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --green: #145f3e;
-    --green-dark: #0a2d1d;
-    --green-bright: #6dc24b;
-    --green-pale: #e8f6ee;
-    --amber: #fbbf24;
-    --ink: #0b1813;
-    --ink-soft: #344b41;
-    --ink-mute: #6b7670;
-    --line: #e5e7eb;
-    --bg: #fff;
-    --bg-soft: #f7f8f7;
-    --radius: 12px;
-    --radius-lg: 22px;
-    --shadow: 0 8px 24px rgba(11,24,19,0.08);
-    --shadow-lg: 0 22px 60px rgba(11,24,19,0.14);
+    --zip-green: #4FA600;       /* Zipcar Limeade — verde oficial */
+    --zip-green-dark: #3F8500;
+    --zip-green-darker: #2E6100;
+    --zip-green-pale: #ecf6e0;
+    --zip-amber: #FFC72C;        /* accent secundário (preserva amarelo Nomade) */
+    --black: #1a1a1a;
+    --gray-900: #2a2a2a;
+    --gray-700: #4a4a4a;
+    --gray-500: #767676;
+    --gray-300: #cccccc;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+    --white: #ffffff;
+    --radius: 6px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
   }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Inter', -apple-system, sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; height: auto; display: block; }
-  a { color: inherit; }
-  button { font: inherit; cursor: pointer; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
-  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
-  h2 { font-size: clamp(28px, 4.4vw, 42px); }
-  h3 { font-size: clamp(20px, 2.4vw, 24px); }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.1; font-weight: 800; }
+  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 900; }
+  h2 { font-size: clamp(28px, 4vw, 42px); }
+  h3 { font-size: clamp(20px, 2.2vw, 24px); }
 
-  /* ============ BOTÕES ============ */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: transform .15s, box-shadow .2s, background .2s, border-color .2s, color .2s; white-space: nowrap; cursor: pointer; }
-  .btn--primary { background: var(--green); color: #fff; }
-  .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 12px 24px rgba(20,95,62,0.25); }
-  .btn--amber { background: var(--amber); color: var(--ink); }
-  .btn--amber:hover { background: #fbcb4a; transform: translateY(-1px); box-shadow: 0 12px 24px rgba(251,191,36,0.35); }
-  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
-  .btn--ghost:hover { background: var(--ink); color: #fff; }
-  .btn--ghost-light { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); }
-  .btn--ghost-light:hover { border-color: #fff; background: rgba(255,255,255,0.15); }
-  .btn--sm { padding: 10px 18px; font-size: 13.5px; }
-  .btn--lg { padding: 16px 32px; font-size: 16px; }
+  /* ============ BUTTONS — estilo Zipcar (pill grande, verde) ============ */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s ease; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.35); }
+  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  .btn--ghost-white { background: transparent; color: var(--white); border-color: var(--white); }
+  .btn--ghost-white:hover { background: var(--white); color: var(--black); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .btn--lg { padding: 17px 38px; font-size: 17px; }
+  .btn--block { width: 100%; padding: 16px; font-size: 16px; }
 
   /* ============ NAV ============ */
-  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
   .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
   .nav__brand { display: flex; align-items: center; text-decoration: none; }
-  .nav__logo { height: 44px; width: auto; display: block; }
+  .nav__logo { height: 42px; width: auto; display: block; }
   @media (min-width: 700px) { .nav__logo { height: 48px; } }
-  .nav__links { display: none; gap: 28px; }
-  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--ink-soft); transition: color .15s; }
-  .nav__links a:hover { color: var(--green); }
+  .nav__links { display: none; gap: 28px; align-items: center; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
+  .nav__links a:hover { color: var(--zip-green); }
   .nav__cta { display: flex; gap: 10px; align-items: center; }
-  @media (min-width: 900px) { .nav__links { display: flex; } }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
 
-  /* ============ HERO ============ */
-  .hero { position: relative; min-height: 600px; overflow: hidden; background: var(--green-dark); color: #fff; }
-  .hero__bg { position: absolute; inset: 0; z-index: 0; }
-  .hero__bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; }
-  .hero__bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, rgba(10,45,29,0.95) 0%, rgba(10,45,29,0.85) 45%, rgba(10,45,29,0.5) 100%); }
-  .hero__inner { position: relative; z-index: 1; display: grid; gap: 44px; align-items: center; padding: 64px 0 80px; }
-  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.1fr 1fr; } }
-  .hero__promo { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px; border-radius: 999px; background: var(--amber); color: var(--ink); font-size: 12.5px; font-weight: 800; margin-bottom: 24px; }
-  .hero__promo svg { width: 16px; height: 16px; }
-  .hero h1 { color: #fff; font-size: clamp(36px, 6.5vw, 64px); font-weight: 800; line-height: 1.02; margin-bottom: 20px; letter-spacing: -0.025em; }
-  .hero h1 em { color: var(--amber); font-style: normal; }
-  .hero__sub { font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.88); max-width: 540px; margin-bottom: 32px; line-height: 1.55; }
-  .hero__sub strong { color: #fff; }
-  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
-  .hero__finder { background: #fff; border-radius: var(--radius-lg); padding: 22px; color: var(--ink); max-width: 540px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
-  .hero__finder h4 { font-family: 'Sora', sans-serif; font-size: 15px; margin-bottom: 14px; }
+  /* ============ HERO — Zipcar style: branco, headline gigante preto, CTA verde, foto à direita ============ */
+  .hero { background: var(--white); padding: 56px 0 72px; position: relative; overflow: hidden; }
+  .hero__inner { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.05fr 1fr; gap: 64px; } }
+  .hero__promo { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--zip-green-pale); color: var(--zip-green-darker); font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
+  .hero__promo::before { content: '🎁'; }
+  .hero h1 { margin-bottom: 18px; }
+  .hero h1 em { color: var(--zip-green); font-style: normal; }
+  .hero__sub { font-size: clamp(16px, 1.7vw, 18px); color: var(--gray-700); max-width: 540px; margin-bottom: 28px; line-height: 1.55; }
+  .hero__sub strong { color: var(--black); }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .hero__finder { background: var(--white); border-radius: var(--radius-lg); padding: 18px; border: 2px solid var(--gray-100); max-width: 480px; }
+  .hero__finder h4 { font-size: 13px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 700; }
   .hero__finder-row { display: flex; gap: 8px; }
-  .hero__finder input { flex: 1; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 14px; }
-  .hero__finder input::placeholder { color: var(--ink-mute); }
+  .hero__finder input { flex: 1; padding: 14px 16px; border: 1px solid var(--gray-300); border-radius: var(--radius); font: inherit; font-size: 15px; }
+  .hero__finder input:focus { outline: 2px solid var(--zip-green); border-color: var(--zip-green); }
 
-  /* Hero visual: foto de carro */
-  .hero__visual { display: flex; align-items: center; justify-content: center; }
-  .hero__car-card { position: relative; width: 100%; max-width: 480px; }
-  .hero__car-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 22px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
-  .hero__car-info { position: absolute; bottom: 14px; left: 14px; right: 14px; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
-  .hero__car-info h5 { font-family: 'Sora', sans-serif; font-size: 15px; color: var(--ink); margin-bottom: 2px; }
-  .hero__car-info p { font-size: 12.5px; color: var(--ink-mute); }
-  .hero__car-info strong { font-family: 'Sora', sans-serif; font-size: 22px; color: var(--green); }
-  .hero__car-info strong small { font-size: 12px; color: var(--ink-mute); font-weight: 500; }
+  .hero__visual { display: flex; align-items: center; justify-content: center; position: relative; }
+  .hero__visual img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
+  .hero__badge { position: absolute; bottom: -18px; right: 20px; background: var(--zip-green); color: var(--white); padding: 14px 24px; border-radius: var(--radius-lg); font-weight: 800; font-size: 14px; box-shadow: var(--shadow-lg); }
+  .hero__badge strong { font-size: 22px; display: block; line-height: 1; margin-bottom: 2px; }
 
   /* ============ SECTION HEAD ============ */
-  .head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+  .head { text-align: center; max-width: 760px; margin: 0 auto 56px; }
   .head h2 { margin-bottom: 14px; }
-  .head p { color: var(--ink-mute); font-size: 17px; }
+  .head p { color: var(--gray-700); font-size: 17px; }
 
-  /* ============ 3 COLS BENEFITS ============ */
-  .b3 { padding: 84px 0; }
-  .b3__grid { display: grid; gap: 36px; grid-template-columns: 1fr; }
-  @media (min-width: 760px) { .b3__grid { grid-template-columns: repeat(3, 1fr); } }
-  .b3__item { text-align: center; }
-  .b3__img { width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); object-fit: cover; margin-bottom: 22px; box-shadow: var(--shadow); }
-  .b3__svg { width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); margin-bottom: 22px; box-shadow: var(--shadow); overflow: hidden; background: var(--green-pale); }
-  .b3__svg svg { width: 100%; height: 100%; display: block; }
+  /* ============ 3 COL BENEFITS — Zipcar exato (3 colunas com ícones grandes verdes) ============ */
+  .b3 { padding: 80px 0; background: var(--gray-50); }
+  .b3__grid { display: grid; gap: 40px; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .b3__grid { grid-template-columns: repeat(3, 1fr); gap: 32px; } }
+  .b3__item { text-align: center; padding: 0 12px; }
+  .b3__icon { width: 88px; height: 88px; margin: 0 auto 22px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .b3__icon svg { width: 44px; height: 44px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .b3__item h3 { margin-bottom: 10px; }
-  .b3__item p { color: var(--ink-mute); font-size: 15px; line-height: 1.6; padding: 0 8px; }
-  .b3__item p strong { color: var(--ink); }
+  .b3__item p { color: var(--gray-700); font-size: 15.5px; line-height: 1.6; }
+  .b3__item p strong { color: var(--black); }
 
-  /* ============ INCLUDED (4 SVG icons) ============ */
-  .incl { background: var(--bg-soft); padding: 84px 0; }
-  .incl__grid { display: grid; gap: 22px; grid-template-columns: repeat(2, 1fr); max-width: 960px; margin: 0 auto; }
-  @media (min-width: 700px) { .incl__grid { grid-template-columns: repeat(4, 1fr); } }
-  .incl__item { background: #fff; border-radius: var(--radius-lg); padding: 32px 22px; text-align: center; border: 1px solid var(--line); }
-  .incl__icon { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 22px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; color: var(--green); }
-  .incl__icon svg { width: 38px; height: 38px; stroke: currentColor; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .incl__item h4 { font-family: 'Sora', sans-serif; font-size: 16.5px; margin-bottom: 6px; }
-  .incl__item p { font-size: 13px; color: var(--ink-mute); line-height: 1.55; }
-
-  /* ============ LOCAIS ============ */
-  .locs { padding: 84px 0; }
-  .locs__filter { display: inline-flex; gap: 6px; background: var(--bg-soft); padding: 5px; border-radius: 999px; margin-bottom: 32px; }
-  .locs__filter button { padding: 10px 22px; border-radius: 999px; border: none; background: transparent; color: var(--ink-mute); font-weight: 600; font-size: 13.5px; cursor: pointer; transition: background .2s, color .2s; }
-  .locs__filter button.on { background: var(--green); color: #fff; }
-  .locs__grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-  .loc { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .2s, box-shadow .2s; }
-  .loc:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-  .loc__img { aspect-ratio: 16/10; overflow: hidden; position: relative; }
-  .loc__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
-  .loc:hover .loc__img img { transform: scale(1.05); }
-  .loc__img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,24,19,0.4) 0%, transparent 50%); }
-  .loc__body { padding: 18px; }
-  .loc__type { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-  .loc__name { font-family: 'Sora', sans-serif; font-size: 16.5px; color: var(--ink); margin-bottom: 6px; }
-  .loc__addr { font-size: 13px; color: var(--ink-mute); margin-bottom: 8px; }
-  .loc__cars { font-size: 12.5px; color: var(--green); font-weight: 700; display: flex; align-items: center; gap: 6px; }
-  .loc__cars::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); display: inline-block; }
+  /* ============ INCLUDED (4 ícones verdes em fundo branco — estilo Zipcar) ============ */
+  .incl { padding: 80px 0; background: var(--white); }
+  .incl__grid { display: grid; gap: 28px; grid-template-columns: 1fr; max-width: 1100px; margin: 0 auto; }
+  @media (min-width: 600px) { .incl__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .incl__grid { grid-template-columns: repeat(4, 1fr); } }
+  .incl__item { text-align: center; padding: 24px 16px; }
+  .incl__icon { width: 76px; height: 76px; margin: 0 auto 18px; border-radius: 18px; background: var(--zip-green-pale); color: var(--zip-green); display: flex; align-items: center; justify-content: center; }
+  .incl__icon svg { width: 40px; height: 40px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .incl__item h4 { font-weight: 800; font-size: 17px; margin-bottom: 6px; }
+  .incl__item p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
 
   /* ============ FROTA ============ */
-  .fleet { background: var(--bg-soft); padding: 84px 0; }
-  .fleet__grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .fleet__card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; cursor: pointer; }
-  .fleet__card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green); }
+  .fleet { padding: 80px 0; background: var(--gray-50); }
+  .fleet__grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .fleet__card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; }
+  .fleet__card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
   .fleet__card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
-  .fleet__body { padding: 18px; }
-  .fleet__cat { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-  .fleet__name { font-family: 'Sora', sans-serif; font-size: 17px; margin-bottom: 6px; }
-  .fleet__price { color: var(--ink); }
-  .fleet__price strong { font-family: 'Sora', sans-serif; font-size: 22px; color: var(--green); }
-  .fleet__price small { color: var(--ink-mute); font-size: 12px; }
+  .fleet__body { padding: 20px; }
+  .fleet__cat { font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .fleet__name { font-weight: 800; font-size: 18px; margin-bottom: 8px; color: var(--black); }
+  .fleet__price strong { font-size: 22px; color: var(--black); font-weight: 800; }
+  .fleet__price small { color: var(--gray-500); font-size: 13px; }
 
-  /* ============ BUSINESS CALLOUT ============ */
-  .biz { padding: 84px 0; }
-  .biz__row { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; }
-  @media (min-width: 800px) { .biz__row { grid-template-columns: 1fr 1fr; } }
-  .biz__row + .biz__row { margin-top: 56px; }
-  .biz__visual { aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
-  .biz__visual img { width: 100%; height: 100%; object-fit: cover; }
-  .biz__body span { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); }
-  .biz__body--amber span { color: #d97706; }
-  .biz__body h3 { font-size: clamp(24px, 3.5vw, 32px); margin: 10px 0 14px; }
-  .biz__body p { color: var(--ink-mute); font-size: 15.5px; line-height: 1.6; margin-bottom: 22px; }
+  /* ============ CALLOUT BIG (Zipcar style — 2-col com foto e texto) ============ */
+  .biz { padding: 80px 0; background: var(--white); }
+  .biz__row { display: grid; gap: 40px; grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 800px) { .biz__row { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .biz__row + .biz__row { margin-top: 64px; }
+  .biz__img { width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); object-fit: cover; box-shadow: var(--shadow-lg); }
+  .biz__body span.tag { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--zip-green); margin-bottom: 12px; }
+  .biz__body h3 { margin-bottom: 16px; font-size: clamp(24px, 3vw, 32px); }
+  .biz__body p { color: var(--gray-700); font-size: 16px; line-height: 1.6; margin-bottom: 24px; }
 
   /* ============ APP DOWNLOAD ============ */
-  .app { padding: 84px 0; background: var(--green-dark); color: #fff; text-align: center; }
-  .app h2 { color: #fff; margin-bottom: 14px; }
+  .app { padding: 80px 0; background: var(--black); color: var(--white); text-align: center; }
+  .app h2 { color: var(--white); margin-bottom: 14px; }
   .app p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
   .app__row { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .app__badge { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; background: #fff; color: var(--ink); border-radius: 14px; text-decoration: none; transition: transform .15s; }
-  .app__badge:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
-  .app__badge svg { width: 30px; height: 30px; }
-  .app__badge small { font-size: 10.5px; opacity: 0.7; display: block; line-height: 1.1; }
-  .app__badge strong { font-family: 'Sora', sans-serif; font-size: 15.5px; display: block; line-height: 1.1; }
+  .app__badge { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; background: var(--white); color: var(--black); border-radius: 12px; text-decoration: none; transition: transform .15s; }
+  .app__badge:hover { transform: translateY(-2px); }
+  .app__badge svg { width: 28px; height: 28px; }
+  .app__badge small { font-size: 11px; opacity: 0.7; display: block; line-height: 1; }
+  .app__badge strong { font-size: 15px; display: block; line-height: 1.2; }
 
-  /* ============ FOOTER ============ */
-  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 64px 0 28px; }
-  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  /* ============ CADASTRO (form funcional com Edge Function) ============ */
+  .cad { padding: 80px 0; background: var(--zip-green-pale); }
+  .cad__inner { max-width: 560px; margin: 0 auto; }
+  .cad__head { text-align: center; margin-bottom: 32px; }
+  .cad__head h2 { margin-bottom: 12px; }
+  .cad__head p { color: var(--gray-700); font-size: 16px; }
+  .cad form { background: var(--white); padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
+  .cad input { padding: 14px 16px; border: 1px solid var(--gray-300); border-radius: var(--radius); font: inherit; font-size: 15px; }
+  .cad input:focus { outline: 2px solid var(--zip-green); border-color: var(--zip-green); }
+
+  /* ============ FAQ ============ */
+  .faq { padding: 80px 0; background: var(--white); }
+  .faq__list { max-width: 800px; margin: 0 auto; }
+  .faq__item { border-bottom: 1px solid var(--gray-100); }
+  .faq__item summary { padding: 22px 0; cursor: pointer; font-weight: 700; font-size: 17px; display: flex; justify-content: space-between; align-items: center; gap: 14px; list-style: none; }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::after { content: '+'; font-size: 28px; color: var(--zip-green); font-weight: 400; transition: transform .2s; flex-shrink: 0; }
+  .faq__item[open] summary::after { transform: rotate(45deg); }
+  .faq__answer { padding: 0 0 22px; color: var(--gray-700); font-size: 15.5px; line-height: 1.65; }
+
+  /* ============ FOOTER (estilo Zipcar — escuro, 6 colunas) ============ */
+  .foot { background: var(--black); color: rgba(255,255,255,0.7); padding: 64px 0 32px; }
+  .foot__row { display: grid; gap: 36px; grid-template-columns: 1fr; margin-bottom: 36px; }
   @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
   @media (min-width: 1000px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; } }
-  .foot__col h5 { font-family: 'Sora', sans-serif; color: #fff; font-size: 13.5px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
-  .foot__col a:hover { color: var(--amber); }
-  .foot__brand strong { color: #fff; font-family: 'Sora', sans-serif; font-size: 19px; display: block; margin-bottom: 8px; }
-  .foot__brand p { font-size: 13px; line-height: 1.55; margin-bottom: 16px; }
-  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.45); }
-  .foot__bottom a { color: rgba(255,255,255,0.45); margin: 0 6px; text-decoration: none; }
-  .foot__bottom a:hover { color: var(--amber); }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; padding: 5px 0; transition: color .15s; }
+  .foot__col a:hover { color: var(--zip-green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
+  .foot__brand p { font-size: 13.5px; line-height: 1.55; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: rgba(255,255,255,0.4); }
+  .foot__bottom a { color: rgba(255,255,255,0.5); margin: 0 8px; text-decoration: none; }
+  .foot__bottom a:hover { color: var(--zip-green); }
 
   /* ============ PREVIEW BANNER ============ */
-  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
-  .preview-banner a { color: var(--ink); text-decoration: underline; }
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">🚧 Preview da nova landing (modelo Zipcar com fotos reais) · <a href="../index.html">Voltar pra versão atual</a></div>
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
 
 <!-- ============ NAV ============ -->
 <header class="nav">
@@ -216,253 +208,103 @@
       <a href="#faq">Ajuda</a>
     </nav>
     <div class="nav__cta">
-      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="../login.html" class="btn btn--ghost-black btn--sm">Entrar</a>
       <a href="#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
     </div>
   </div>
 </header>
 
-<!-- ============ HERO (foto cidade ao fundo + foto carro ao lado) ============ -->
+<!-- ============ HERO — estilo Zipcar: branco, headline gigante, foto à direita ============ -->
 <section class="hero">
-  <div class="hero__bg">
-    <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1920&q=80&auto=format&fit=crop" alt="Cidade ao entardecer com carros" loading="eager" />
-  </div>
   <div class="wrap hero__inner">
     <div>
-      <span class="hero__promo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12v10H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-        Primeiro mês grátis · código BEMVINDO
-      </span>
+      <span class="hero__promo">Primeiro mês grátis · código BEMVINDO</span>
       <h1>Reserve em segundos. <em>Dirija em minutos.</em></h1>
-      <p class="hero__sub">Carros no seu <strong>condomínio</strong>, <strong>shopping</strong> ou <strong>hospital</strong> — disponíveis 24h pelo app. Seguro e manutenção <strong>inclusos</strong>. Pague só pelo tempo que usar — com <strong>teto automático</strong>: você nunca paga mais que a diária.</p>
+      <p class="hero__sub">Carros no seu <strong>condomínio</strong>, <strong>shopping</strong> ou <strong>hospital</strong>, disponíveis 24h pelo app. Combustível, seguro e manutenção <strong>inclusos</strong>. Pague só pelo tempo que usar — com teto automático na diária.</p>
       <div class="hero__cta">
-        <a href="#cadastro" class="btn btn--amber btn--lg">Criar conta grátis</a>
-        <a href="como-funciona.html" class="btn btn--ghost-light btn--lg">Como funciona</a>
+        <a href="#cadastro" class="btn btn--primary btn--lg">Criar conta grátis</a>
+        <a href="como-funciona.html" class="btn btn--ghost-black btn--lg">Como funciona</a>
       </div>
       <div class="hero__finder">
         <h4>Tem carro no seu prédio?</h4>
         <div class="hero__finder-row">
-          <input type="text" placeholder="Digite endereço, CEP ou nome do prédio" aria-label="Buscar local" />
+          <input type="text" placeholder="Digite CEP, endereço ou nome do prédio" aria-label="Buscar local" />
           <a href="#locais" class="btn btn--primary">Buscar</a>
         </div>
       </div>
     </div>
-
-    <!-- HERO VISUAL: foto real de carro -->
     <div class="hero__visual">
-      <div class="hero__car-card">
-        <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker disponível agora" loading="eager" />
-        <div class="hero__car-info">
-          <div>
-            <h5>Chevrolet Tracker 2024</h5>
-            <p>SUV · Automático · vaga 12</p>
-          </div>
-          <strong>R$ 19<small>/h</small></strong>
-        </div>
-      </div>
+      <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker estacionado em vaga premium" loading="eager" />
+      <div class="hero__badge"><strong>R$ 12</strong>/hora</div>
     </div>
   </div>
 </section>
 
-<!-- ============ 3 COL BENEFITS (com fotos reais Unsplash) ============ -->
+<!-- ============ 3 COL BENEFITS (estilo Zipcar exato) ============ -->
 <section class="b3">
   <div class="wrap">
     <div class="head">
-      <h2>O jeito mais conveniente de ter carro</h2>
-      <p>Sem comprar, sem alugar pra sempre, sem dor de cabeça. Carro do seu prédio, na hora que você quiser.</p>
+      <h2>A maneira mais conveniente de ter carro</h2>
+      <p>Carros perto de você, economia real, e zero burocracia.</p>
     </div>
     <div class="b3__grid">
       <div class="b3__item">
-        <div class="b3__svg" aria-label="Ilustração: relógio com carro">
-          <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img">
-            <rect width="320" height="240" fill="#e8f6ee"/>
-            <circle cx="160" cy="110" r="68" fill="#fff" stroke="#145f3e" stroke-width="6"/>
-            <circle cx="160" cy="110" r="6" fill="#145f3e"/>
-            <line x1="160" y1="110" x2="160" y2="62" stroke="#145f3e" stroke-width="5" stroke-linecap="round"/>
-            <line x1="160" y1="110" x2="200" y2="110" stroke="#145f3e" stroke-width="4" stroke-linecap="round"/>
-            <text x="160" y="56" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="700" fill="#145f3e">12</text>
-            <text x="216" y="115" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="700" fill="#145f3e">3</text>
-            <text x="160" y="170" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="700" fill="#145f3e">6</text>
-            <text x="104" y="115" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="700" fill="#145f3e">9</text>
-            <rect x="120" y="200" width="80" height="28" rx="5" fill="#145f3e"/>
-            <rect x="128" y="208" width="64" height="12" rx="2" fill="#fbbf24"/>
-            <circle cx="135" cy="226" r="5" fill="#0a2d1d"/>
-            <circle cx="185" cy="226" r="5" fill="#0a2d1d"/>
-            <rect x="244" y="60" width="44" height="20" rx="10" fill="#fbbf24"/>
-            <text x="266" y="74" text-anchor="middle" font-family="Sora,sans-serif" font-size="10" font-weight="800" fill="#0b1813">24h</text>
-          </svg>
-        </div>
-        <h3>Economize tempo</h3>
-        <p>Reserve e destrave o carro com o app, <strong>24h por dia</strong>. Carros estacionados no seu próprio prédio, shopping ou hospital — você não precisa ir até uma locadora.</p>
+        <div class="b3__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Carros perto de você</h3>
+        <p>No seu próprio prédio, shopping ou hospital. Reserve pelo app, vá até a vaga, pegue a chave no <strong>cofre eletrônico</strong>. Pronto.</p>
       </div>
       <div class="b3__item">
-        <div class="b3__svg" aria-label="Ilustração: cofrinho com moedas">
-          <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img">
-            <rect width="320" height="240" fill="#e8f6ee"/>
-            <ellipse cx="160" cy="160" rx="100" ry="55" fill="#145f3e"/>
-            <ellipse cx="160" cy="148" rx="100" ry="55" fill="#1a7a4f"/>
-            <rect x="150" y="80" width="20" height="14" rx="3" fill="#0a2d1d"/>
-            <circle cx="220" cy="135" r="8" fill="#fbbf24"/>
-            <circle cx="220" cy="135" r="6" fill="none" stroke="#0a2d1d" stroke-width="1.5"/>
-            <text x="220" y="139" text-anchor="middle" font-family="Sora,sans-serif" font-size="8" font-weight="800" fill="#0a2d1d">$</text>
-            <ellipse cx="155" cy="120" rx="6" ry="3" fill="#0a2d1d" opacity="0.3"/>
-            <circle cx="100" cy="60" r="14" fill="#fbbf24"/>
-            <text x="100" y="65" text-anchor="middle" font-family="Sora,sans-serif" font-size="14" font-weight="800" fill="#0a2d1d">R$</text>
-            <circle cx="140" cy="40" r="11" fill="#fbbf24"/>
-            <text x="140" y="44" text-anchor="middle" font-family="Sora,sans-serif" font-size="10" font-weight="800" fill="#0a2d1d">R$</text>
-            <circle cx="180" cy="50" r="9" fill="#fbbf24"/>
-            <text x="180" y="54" text-anchor="middle" font-family="Sora,sans-serif" font-size="9" font-weight="800" fill="#0a2d1d">R$</text>
-            <path d="M70 200 L80 195 L85 205" stroke="#145f3e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <path d="M260 200 L250 195 L245 205" stroke="#145f3e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
-        </div>
+        <div class="b3__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h3>Economize dinheiro</h3>
-        <p>Membros economizam <strong>até R$ 1.500/mês</strong> comparado a quem tem carro próprio. Sem IPVA, sem seguro, sem mecânico, sem combustível.</p>
+        <p>Membros economizam <strong>até R$ 1.500/mês</strong> comparado a quem tem carro próprio. Sem IPVA, sem seguro, sem mecânico.</p>
       </div>
       <div class="b3__item">
-        <div class="b3__svg" aria-label="Ilustração: escudo com checkmark">
-          <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img">
-            <rect width="320" height="240" fill="#e8f6ee"/>
-            <path d="M160 40 L230 70 L230 130 Q230 175 160 200 Q90 175 90 130 L90 70 Z" fill="#145f3e"/>
-            <path d="M130 122 L150 142 L195 95" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="40" y="105" width="36" height="12" rx="3" fill="#0b1813" opacity="0.15"/>
-            <rect x="40" y="125" width="28" height="12" rx="3" fill="#0b1813" opacity="0.15"/>
-            <rect x="244" y="105" width="36" height="12" rx="3" fill="#0b1813" opacity="0.15"/>
-            <rect x="252" y="125" width="28" height="12" rx="3" fill="#0b1813" opacity="0.15"/>
-            <text x="160" y="225" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#145f3e">SEGURO + MANUTENÇÃO INCLUSO</text>
-          </svg>
-        </div>
-        <h3>Esqueça o stress</h3>
-        <p>Manutenção, vistoria, multas? <strong>Nosso problema</strong>. Você só dirige. Suporte 24h pelo WhatsApp se algo der errado.</p>
+        <div class="b3__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3>Self-service 24/7</h3>
+        <p>Reserve em segundos pelo app. Destrave o cofre, pegue a chave, dirija. Devolva no horário. <strong>Tudo automático.</strong></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ INCLUDED (SVG icons próprios, NÃO emojis) ============ -->
+<!-- ============ INCLUDED 4 ICONS (estilo Zipcar exato) ============ -->
 <section class="incl">
   <div class="wrap">
     <div class="head">
-      <h2>Tudo isso está incluído</h2>
-      <p>Sua diária ou hora já tem absolutamente tudo. Sem taxas escondidas, sem letras miúdas.</p>
+      <h2>O que está incluído</h2>
+      <p>Sua diária ou hora já tem tudo. Sem taxas escondidas.</p>
     </div>
     <div class="incl__grid">
       <div class="incl__item">
-        <div class="incl__icon">
-          <svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/><path d="M17 9h2.5a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0V13"/><path d="M17 7h2a2 2 0 0 1 2 2v1"/></svg>
-        </div>
+        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/><path d="M17 9h2.5a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0V13"/></svg></div>
         <h4>Combustível</h4>
-        <p>50 km inclusos por reserva. Acima disso, você abastece + R$ 0,80/km extra. Sem multa.</p>
+        <p>50 km inclusos por reserva</p>
       </div>
       <div class="incl__item">
-        <div class="incl__icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-        </div>
+        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
         <h4>Seguro</h4>
-        <p>Cobertura completa contra terceiros, roubo e furto. Franquia de R$ 1.500.</p>
+        <p>Cobertura completa Yelum/Sulamérica</p>
       </div>
       <div class="incl__item">
-        <div class="incl__icon">
-          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        </div>
+        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
         <h4>Manutenção</h4>
-        <p>Revisão em dia, óleo trocado, pneus calibrados. Você só dirige.</p>
+        <p>Revisão, óleo, pneus por nossa conta</p>
       </div>
       <div class="incl__item">
-        <div class="incl__icon">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        </div>
+        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
         <h4>Suporte 24/7</h4>
-        <p>WhatsApp humano. Assistência guincho, chaveiro, pane elétrica — tudo grátis.</p>
+        <p>WhatsApp humano + assistência guincho</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ LOCAIS (fotos reais de prédios/shoppings/hospitais) ============ -->
-<section class="locs" id="locais">
-  <div class="wrap">
-    <div class="head">
-      <h2>Onde tem carro Nomade</h2>
-      <p>Frota distribuída em condomínios, shoppings e hospitais parceiros — sempre estacionada num local seguro e coberto.</p>
-    </div>
-    <div style="text-align:center;">
-      <div class="locs__filter" role="tablist">
-        <button class="on" data-f="all">Todos</button>
-        <button data-f="cond">Condomínios</button>
-        <button data-f="shop">Shoppings</button>
-        <button data-f="hosp">Hospitais</button>
-      </div>
-    </div>
-    <div class="locs__grid">
-      <div class="loc" data-c="cond">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80&auto=format&fit=crop" alt="Edifício residencial" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Condomínio</div>
-          <div class="loc__name">Edifício Solar das Acácias</div>
-          <div class="loc__addr">Av. Rondon Pacheco, 1234 · Uberlândia</div>
-          <div class="loc__cars">3 carros disponíveis</div>
-        </div>
-      </div>
-      <div class="loc" data-c="cond">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1448630360428-65456885c650?w=800&q=80&auto=format&fit=crop" alt="Prédio residencial moderno" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Condomínio</div>
-          <div class="loc__name">Residencial Vila Bela</div>
-          <div class="loc__addr">R. Goiás, 567 · Uberlândia</div>
-          <div class="loc__cars">2 carros disponíveis</div>
-        </div>
-      </div>
-      <div class="loc" data-c="shop">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=800&q=80&auto=format&fit=crop" alt="Interior de shopping center" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Shopping</div>
-          <div class="loc__name">Center Shopping Uberlândia</div>
-          <div class="loc__addr">Av. João Naves de Ávila · vaga G2-15</div>
-          <div class="loc__cars">4 carros disponíveis</div>
-        </div>
-      </div>
-      <div class="loc" data-c="hosp">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800&q=80&auto=format&fit=crop" alt="Fachada de hospital" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Hospital</div>
-          <div class="loc__name">Hospital Santa Catarina</div>
-          <div class="loc__addr">Estacionamento visitante · setor B</div>
-          <div class="loc__cars">2 carros disponíveis</div>
-        </div>
-      </div>
-      <div class="loc" data-c="shop">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=800&q=80&auto=format&fit=crop" alt="Shopping moderno" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Shopping</div>
-          <div class="loc__name">Shopping Praia Clube</div>
-          <div class="loc__addr">Av. Anselmo Alves dos Santos</div>
-          <div class="loc__cars">3 carros disponíveis</div>
-        </div>
-      </div>
-      <div class="loc" data-c="cond">
-        <div class="loc__img"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80&auto=format&fit=crop" alt="Prédio residencial alto" loading="lazy" /></div>
-        <div class="loc__body">
-          <div class="loc__type">Condomínio</div>
-          <div class="loc__name">Edifício Lumière</div>
-          <div class="loc__addr">Av. Floriano Peixoto · Centro</div>
-          <div class="loc__cars">2 carros disponíveis</div>
-        </div>
-      </div>
-    </div>
-    <div style="text-align:center; margin-top:40px;">
-      <p style="color:var(--ink-mute); margin-bottom:14px;">Não tem carro Nomade no seu prédio ainda?</p>
-      <a href="parceiros.html" class="btn btn--primary">Trazer pro meu local →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FROTA (fotos reais dos carros existentes) ============ -->
-<section class="fleet">
+<!-- ============ FROTA ============ -->
+<section class="fleet" id="locais">
   <div class="wrap">
     <div class="head">
       <h2>Nossa frota</h2>
-      <p>Carros novos (2023-2024), revisados, com IPVA, seguro e manutenção em dia. Você escolhe no app.</p>
+      <p>Carros novos (2023-2024), revisados, com IPVA e seguro em dia. Clique pra ver detalhes e reservar.</p>
     </div>
     <div class="fleet__grid">
       <a href="carro.html?carro=tracker" class="fleet__card">
@@ -470,7 +312,7 @@
         <div class="fleet__body">
           <div class="fleet__cat">SUV Automático</div>
           <div class="fleet__name">Chevrolet Tracker 2024</div>
-          <div class="fleet__price"><strong>R$ 19</strong> <small>/hora</small> · <strong>R$ 149</strong> <small>/dia</small></div>
+          <div class="fleet__price"><strong>R$ 19</strong> <small>/hora · R$ 149/dia</small></div>
         </div>
       </a>
       <a href="carro.html?carro=cobalt" class="fleet__card">
@@ -478,7 +320,7 @@
         <div class="fleet__body">
           <div class="fleet__cat">Sedan Compacto</div>
           <div class="fleet__name">Chevrolet Cobalt</div>
-          <div class="fleet__price"><strong>R$ 15</strong> <small>/hora</small> · <strong>R$ 119</strong> <small>/dia</small></div>
+          <div class="fleet__price"><strong>R$ 15</strong> <small>/hora · R$ 119/dia</small></div>
         </div>
       </a>
       <a href="carro.html?carro=hb20" class="fleet__card">
@@ -486,7 +328,7 @@
         <div class="fleet__body">
           <div class="fleet__cat">Hatch Compacto</div>
           <div class="fleet__name">Hyundai HB20</div>
-          <div class="fleet__price"><strong>R$ 12</strong> <small>/hora</small> · <strong>R$ 99</strong> <small>/dia</small></div>
+          <div class="fleet__price"><strong>R$ 12</strong> <small>/hora · R$ 99/dia</small></div>
         </div>
       </a>
       <a href="carro.html?carro=renegade" class="fleet__card">
@@ -494,98 +336,37 @@
         <div class="fleet__body">
           <div class="fleet__cat">SUV Premium</div>
           <div class="fleet__name">Jeep Renegade</div>
-          <div class="fleet__price"><strong>R$ 23</strong> <small>/hora</small> · <strong>R$ 189</strong> <small>/dia</small></div>
+          <div class="fleet__price"><strong>R$ 23</strong> <small>/hora · R$ 189/dia</small></div>
         </div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ============ BUSINESS CALLOUT (foto real de prédios) ============ -->
+<!-- ============ CALLOUT 1 — Cars at your building (estilo Zipcar "Cars around campus") ============ -->
 <section class="biz">
   <div class="wrap">
 
     <div class="biz__row">
-      <div class="biz__visual">
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80&auto=format&fit=crop" alt="Síndico apertando mão" loading="lazy" />
-      </div>
+      <img class="biz__img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=80&auto=format&fit=crop" alt="Edifício residencial moderno" loading="lazy" />
       <div class="biz__body">
-        <span>Para síndicos · administradoras</span>
-        <h3>Carros no seu condomínio — sem custo nenhum</h3>
-        <p>Ofereça um benefício novo aos moradores e ainda gere receita extra pro condomínio. Nós cuidamos de tudo — você só cede 2-4 vagas e divide o faturamento.</p>
-        <a href="parceiros.html" class="btn btn--primary">Quero no meu prédio</a>
+        <span class="tag">Carros no seu prédio</span>
+        <h3>Mobilidade pra todo morador, gerida pela Nomade.</h3>
+        <p>2-4 carros disponíveis 24h na garagem do seu condomínio. Síndico oferece um benefício novo aos moradores e ainda recebe receita mensal fixa (R$ 800-1.200/mês). Sem custo nenhum pro condomínio.</p>
+        <a href="parceiros.html" class="btn btn--primary">Trazer pro meu prédio →</a>
       </div>
     </div>
 
     <div class="biz__row" style="direction:rtl;">
-      <div class="biz__body biz__body--amber" style="direction:ltr;">
-        <span>Para shoppings · hospitais · empresas</span>
-        <h3>Mobilidade pros seus visitantes e funcionários</h3>
-        <p>Aumente conveniência pra quem frequenta seu shopping, hospital ou empresa. Carros disponíveis no estacionamento, gerenciados pela Nomade Drive — você não precisa operar nada.</p>
-        <a href="parceiros.html" class="btn btn--amber">Falar com vendas</a>
+      <div class="biz__body" style="direction:ltr;">
+        <span class="tag">Para empresas e shoppings</span>
+        <h3>Mobilidade pros seus visitantes e funcionários.</h3>
+        <p>Aumente conveniência pra quem frequenta seu shopping, hospital ou empresa. Carros no estacionamento, gerenciados pela Nomade Drive. Você não opera nada — só cede o espaço e divide receita.</p>
+        <a href="parceiros.html" class="btn btn--primary">Falar com vendas →</a>
       </div>
-      <div class="biz__visual" style="direction:ltr;">
-        <img src="https://images.unsplash.com/photo-1519642918688-7e43b19245d8?w=900&q=80&auto=format&fit=crop" alt="Shopping moderno com estacionamento" loading="lazy" />
-      </div>
+      <img class="biz__img" style="direction:ltr;" src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=900&q=80&auto=format&fit=crop" alt="Shopping center moderno" loading="lazy" />
     </div>
 
-  </div>
-</section>
-
-<!-- ============ CADASTRO (form pra criar conta) ============ -->
-<section style="padding: 84px 0; background: var(--green-pale);" id="cadastro">
-  <div class="wrap" style="max-width: 720px;">
-    <div class="head" style="margin-bottom: 36px;">
-      <h2>Crie sua conta grátis</h2>
-      <p>Em 5 minutos você está pronto pra reservar. Sem cobrança, sem cartão exigido.</p>
-    </div>
-    <form id="formCadastro" style="background:#fff; padding:32px; border-radius: var(--radius-lg); box-shadow: var(--shadow); display:flex; flex-direction:column; gap:14px;">
-      <input type="text" id="cad-name" required placeholder="Seu nome completo" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Nome completo" />
-      <input type="email" id="cad-email" required placeholder="Seu melhor e-mail" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="E-mail" />
-      <input type="tel" id="cad-phone" required placeholder="WhatsApp (com DDD)" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="WhatsApp" />
-      <input type="text" id="cad-city" required placeholder="Cidade onde você mora" style="padding:14px 16px; border:1px solid var(--line); border-radius:10px; font:inherit; font-size:14.5px;" aria-label="Cidade" />
-      <button type="submit" id="cad-submit" class="btn btn--primary btn--lg" style="margin-top: 8px;">Criar conta grátis →</button>
-      <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:10px; font-size:14px; text-align:center; line-height:1.5;"></div>
-      <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--ink-mute); margin-top:4px;">A gente entra em contato em até 24h úteis.</p>
-    </form>
-  </div>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section style="padding: 84px 0;" id="faq">
-  <div class="wrap" style="max-width: 800px;">
-    <div class="head">
-      <h2>Perguntas frequentes</h2>
-      <p>As dúvidas que mais aparecem antes do primeiro uso.</p>
-    </div>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Preciso de fiador?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Não. Pré-autorização de R$ 200 no cartão como caução (liberada após o uso). Análise é por CNH + biometria, não por score agressivo.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Quanto tempo demora a aprovação?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Até 24h úteis. Maioria aprova no mesmo dia. Você acompanha o status pelo app.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Como funciona o pagamento?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Cobrança automática no cartão ao final da reserva, via caução pré-autorizada. <strong>Plano Casual:</strong> R$ 0/ano (paga só pelo uso). <strong>NomadeDrive Pass:</strong> R$ 99/ano + tarifa com 20% desconto. Em qualquer plano, <strong>teto automático</strong>: você sempre paga o menor entre tarifa por hora e diária.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Não tem carro no meu prédio. Como faço?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Pode usar carros de outros locais (shopping, hospital próximo). Pra trazer carro pro seu prédio: cadastre-se em "<a href="parceiros.html" style="color:var(--green); font-weight:600;">Para empresas</a>" e a gente avalia.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">E se o carro quebrar durante o uso?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">Aciona o WhatsApp 24h. Guincho + carro reserva sem custo. Você não paga peça nem mão de obra.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Como o Nomade protege os carros?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;"><strong>4 camadas de proteção:</strong> (1) vistoria por foto na retirada, (2) vistoria por foto na devolução, (3) programa de limpeza periódica com incentivo, (4) sistema de avaliação cliente ↔ veículo. Multas (sujeira, atraso, no-show, etc.) cobradas automaticamente via caução pré-autorizada — tabela clara no contrato.</div>
-    </details>
-    <details style="background:#fff; border:1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;">
-      <summary style="padding:18px 22px; cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;">Quem paga combustível e multas?</summary>
-      <div style="padding:0 22px 18px; color:var(--ink-mute); font-size:14px; line-height:1.65;">50 km grátis inclusos por reserva. Acima disso, você abastece e paga R$ 0,80/km extra (cobrança automática via caução). Multas durante o uso são do locatário — repassadas via Detran com tabela clara no contrato.</div>
-    </details>
   </div>
 </section>
 
@@ -593,7 +374,7 @@
 <section class="app">
   <div class="wrap">
     <h2>Tudo começa pelo app</h2>
-    <p>Baixe grátis, cadastre-se em 5 minutos, e tenha um carro à sua disposição.</p>
+    <p>Baixe grátis, cadastre-se em 5 minutos, e tenha um carro à sua disposição 24h.</p>
     <div class="app__row">
       <a href="#" class="app__badge">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
@@ -607,20 +388,78 @@
   </div>
 </section>
 
-<!-- ============ FOOTER ============ -->
+<!-- ============ CADASTRO (form FUNCIONAL com Edge Function) ============ -->
+<section class="cad" id="cadastro">
+  <div class="wrap cad__inner">
+    <div class="cad__head">
+      <h2>Crie sua conta grátis</h2>
+      <p>Em 5 minutos você está pronto pra reservar. Sem cobrança, sem cartão exigido.</p>
+    </div>
+    <form id="formCadastro">
+      <input type="text" id="cad-name" required placeholder="Seu nome completo" aria-label="Nome completo" />
+      <input type="email" id="cad-email" required placeholder="Seu melhor e-mail" aria-label="E-mail" />
+      <input type="tel" id="cad-phone" required placeholder="WhatsApp (com DDD)" aria-label="WhatsApp" />
+      <input type="text" id="cad-city" required placeholder="Cidade onde você mora" aria-label="Cidade" />
+      <button type="submit" id="cad-submit" class="btn btn--primary btn--block">Criar conta grátis →</button>
+      <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:8px; font-size:14px; text-align:center; line-height:1.5;"></div>
+      <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--gray-500); margin-top:4px;">A gente entra em contato em até 24h úteis.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="head">
+      <h2>Perguntas frequentes</h2>
+    </div>
+    <div class="faq__list">
+      <details class="faq__item">
+        <summary>Preciso de fiador?</summary>
+        <div class="faq__answer">Não. Pré-autorização de R$ 200 no cartão como caução (liberada após o uso). Análise é por CNH + biometria, não por score agressivo.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Quanto tempo demora a aprovação?</summary>
+        <div class="faq__answer">Até 24h úteis. Maioria aprova no mesmo dia. Você acompanha o status pelo app.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Como funciona o pagamento?</summary>
+        <div class="faq__answer">Cobrança automática no cartão ao final da reserva, via caução pré-autorizada. <strong>Plano Casual:</strong> R$ 0/ano (paga só pelo uso). <strong>NomadeDrive Pass:</strong> R$ 99/ano + tarifa com 20% desconto. Em qualquer plano, <strong>teto automático</strong>: você sempre paga o menor entre tarifa por hora e diária.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Como o Nomade protege os carros?</summary>
+        <div class="faq__answer"><strong>4 camadas de proteção:</strong> (1) vistoria por foto na retirada, (2) vistoria por foto na devolução, (3) programa de limpeza periódica, (4) sistema de avaliação cliente ↔ veículo. Multas (sujeira, atraso, no-show, etc.) cobradas automaticamente via caução pré-autorizada.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Não tem carro no meu prédio. Como faço?</summary>
+        <div class="faq__answer">Pode usar carros de outros locais (shopping, hospital próximo). Pra trazer carro pro seu prédio: cadastre-se em "<a href="parceiros.html" style="color:var(--zip-green); font-weight:600;">Para empresas</a>" e a gente avalia.</div>
+      </details>
+      <details class="faq__item">
+        <summary>E se o carro quebrar durante o uso?</summary>
+        <div class="faq__answer">Aciona o WhatsApp 24h. Guincho + carro reserva sem custo. Você não paga peça nem mão de obra.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Quem paga combustível e multas?</summary>
+        <div class="faq__answer">50 km grátis inclusos por reserva. Acima disso, você abastece e R$ 0,80/km extra. Multas durante o uso são do locatário — repassadas via Detran.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER (estilo Zipcar — 6 colunas em fundo preto) ============ -->
 <footer class="foot">
   <div class="wrap">
     <div class="foot__row">
       <div class="foot__col foot__brand">
         <strong>Nomade Drive</strong>
-        <p>Carsharing por hora ou dia. Carros estacionados em condomínios, shoppings e hospitais. Frota própria, suporte 24h.</p>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais. Frota própria, suporte 24h.</p>
       </div>
       <div class="foot__col">
         <h5>Produto</h5>
         <a href="como-funciona.html">Como funciona</a>
         <a href="precos.html">Preços</a>
-        <a href="#locais">Onde tem carro</a>
-        <a href="tecnologia.html">Tecnologia / Stack</a>
+        <a href="#locais">Frota</a>
+        <a href="tecnologia.html">Tecnologia</a>
         <a href="carro.html?carro=tracker">Ver um carro</a>
       </div>
       <div class="foot__col">
@@ -646,7 +485,7 @@
       </div>
       <div class="foot__col">
         <h5>Ajuda</h5>
-        <a href="#">Central de ajuda</a>
+        <a href="#faq">FAQ</a>
         <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
         <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
         <a href="../termos.html">Termos</a>
@@ -664,19 +503,6 @@
 </footer>
 
 <script>
-// Filtro de locais (Todos/Condominios/Shoppings/Hospitais)
-document.querySelectorAll('.locs__filter button').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.locs__filter button').forEach(function(b) { b.classList.remove('on'); });
-    btn.classList.add('on');
-    var f = btn.getAttribute('data-f');
-    document.querySelectorAll('.loc').forEach(function(loc) {
-      var c = loc.getAttribute('data-c');
-      loc.style.display = (f === 'all' || c === f) ? '' : 'none';
-    });
-  });
-});
-
 // Form de cadastro — envia pra Edge Function nova-lead (salva no banco + email)
 var EDGE_LEAD = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
 var WA_PHONE = '5534984064864';
@@ -684,9 +510,9 @@ var WA_PHONE = '5534984064864';
 function setFeedback(el, type, msg) {
   el.style.display = 'block';
   el.innerHTML = msg;
-  el.style.background = type === 'ok' ? '#e8f6ee' : type === 'err' ? '#fef2f2' : '#fef9e7';
-  el.style.color = type === 'ok' ? '#145f3e' : type === 'err' ? '#b91c1c' : '#92400e';
-  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d8b8' : type === 'err' ? '#fca5a5' : '#fbbf24');
+  el.style.background = type === 'ok' ? '#ecf6e0' : type === 'err' ? '#fef2f2' : '#fef9e7';
+  el.style.color = type === 'ok' ? '#2E6100' : type === 'err' ? '#b91c1c' : '#92400e';
+  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d883' : type === 'err' ? '#fca5a5' : '#fbbf24');
 }
 
 document.getElementById('formCadastro').addEventListener('submit', async function(e) {
@@ -717,7 +543,7 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
     });
     var data = await r.json();
     if (r.ok && data.ok) {
-      setFeedback(fb, 'ok', '✅ <strong>Cadastro recebido!</strong><br>A gente entra em contato em até 24h.<br><br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Acabei de me cadastrar no Nomade Drive (' + em + '). Pode adiantar?') + '" target="_blank" rel="noopener" style="color:#145f3e; font-weight:600; text-decoration:underline;">💬 Quero adiantar pelo WhatsApp →</a>');
+      setFeedback(fb, 'ok', '✅ <strong>Cadastro recebido!</strong><br>A gente entra em contato em até 24h.<br><br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Acabei de me cadastrar no Nomade Drive (' + em + '). Pode adiantar?') + '" target="_blank" rel="noopener" style="color:#4FA600; font-weight:600; text-decoration:underline;">💬 Quero adiantar pelo WhatsApp →</a>');
       btn.textContent = '✓ Enviado';
       document.getElementById('cad-hint').style.display = 'none';
     } else {
