@@ -154,6 +154,15 @@
       <h2>Escolha seu plano</h2>
       <p>Quanto mais você usa, mais barato fica. Pode trocar de plano a qualquer momento.</p>
     </div>
+
+    <!-- TOGGLE MENSAL/ANUAL — estilo Zipcar -->
+    <div style="text-align:center; margin-bottom:32px;">
+      <div id="cycleToggle" style="display:inline-flex; background:#f0f1f0; border-radius:999px; padding:5px; gap:2px;">
+        <button class="cycle-btn" data-cycle="month" style="padding:9px 22px; border-radius:999px; border:none; background:transparent; font-weight:700; font-size:14px; color:var(--ink-mute); cursor:pointer; transition:all .15s;">Mensal</button>
+        <button class="cycle-btn on" data-cycle="year" style="padding:9px 22px; border-radius:999px; border:none; background:#fff; font-weight:700; font-size:14px; color:var(--green); cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.1); transition:all .15s;">Anual <small style="font-size:10px; opacity:0.8;">(2 meses grátis)</small></button>
+      </div>
+    </div>
+
     <div class="planos__grid">
 
       <!-- CASUAL -->
@@ -180,11 +189,18 @@
         <div class="plan__tag">Mais econômico</div>
         <div class="plan__name">NomadeDrive Pass</div>
         <div class="plan__tagline">Pra quem usa toda semana</div>
-        <div class="plan__price">
+        <!-- ANUAL (default visivel) -->
+        <div class="plan__price" data-cycle="year">
           <span class="plan__price-val">R$ 99</span>
           <span class="plan__price-sub">/ano</span>
         </div>
-        <div class="plan__price-note">Pago 1× ao ano. Equivale a R$ 8,25/mês.</div>
+        <div class="plan__price-note" data-cycle="year">Pago 1× ao ano. Equivale a R$ 8,25/mês.</div>
+        <!-- MENSAL (oculto inicialmente) -->
+        <div class="plan__price" data-cycle="month" style="display:none;">
+          <span class="plan__price-val">R$ 12</span>
+          <span class="plan__price-sub">/mês</span>
+        </div>
+        <div class="plan__price-note" data-cycle="month" style="display:none;">Cancele quando quiser. <strong>Economize R$ 45/ano</strong> pagando anual.</div>
         <ul class="plan__feat">
           <li>Carros a partir de <strong>R$ 15/hora</strong> ou <strong>R$ 119/dia</strong> (−20%)</li>
           <li><strong>Teto automático</strong>: pague o menor entre hora e dia</li>
@@ -363,6 +379,35 @@
     </div>
   </div>
 </footer>
+
+<script>
+// TOGGLE MENSAL/ANUAL nos planos (estilo Zipcar)
+document.querySelectorAll('.cycle-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var cycle = btn.getAttribute('data-cycle');
+    // Atualiza visual do toggle
+    document.querySelectorAll('.cycle-btn').forEach(function(b) {
+      b.classList.remove('on');
+      b.style.background = 'transparent';
+      b.style.color = 'var(--ink-mute)';
+      b.style.boxShadow = 'none';
+    });
+    btn.classList.add('on');
+    btn.style.background = '#fff';
+    btn.style.color = 'var(--green)';
+    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+    // Mostra/oculta preços de cada ciclo
+    document.querySelectorAll('[data-cycle="month"]').forEach(function(el) {
+      if (el.classList.contains('cycle-btn')) return;
+      el.style.display = cycle === 'month' ? '' : 'none';
+    });
+    document.querySelectorAll('[data-cycle="year"]').forEach(function(el) {
+      if (el.classList.contains('cycle-btn')) return;
+      el.style.display = cycle === 'year' ? '' : 'none';
+    });
+  });
+});
+</script>
 
 </body>
 </html>
