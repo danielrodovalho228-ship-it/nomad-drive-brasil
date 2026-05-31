@@ -69,7 +69,13 @@
   .slot { padding: 12px 8px; border: 2px solid var(--line); border-radius: 8px; text-align: center; font-weight: 600; font-size: 13.5px; cursor: pointer; transition: all .15s; background: #fff; }
   .slot:hover { border-color: var(--green); }
   .slot.on { background: var(--green); color: #fff; border-color: var(--green); }
-  .slot.off { opacity: 0.35; cursor: not-allowed; background: var(--bg-soft); }
+  .slot.off { opacity: 0.45; cursor: not-allowed; background: var(--bg-soft); position: relative; }
+  .slot.off::after { content: '✕'; position: absolute; top: 2px; right: 4px; font-size: 10px; color: #b91c1c; font-weight: 800; }
+  @keyframes slotShake { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
+  .slot.shake { animation: slotShake .4s ease; background: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+  /* Toast feedback */
+  .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #b91c1c; color: #fff; padding: 14px 22px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .25s, top .25s; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { opacity: 1; top: 40px; }
 
   /* PAYMENT MOCK */
   .pay-method { display: flex; gap: 10px; margin-bottom: 18px; }
@@ -353,6 +359,9 @@
   </div>
 </main>
 
+<!-- Toast pra feedback de slot ocupado -->
+<div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
 <footer class="foot">
   <div class="wrap">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG · <a href="../termos.html" style="color:var(--amber);">Termos</a></div>
 </footer>
@@ -447,19 +456,33 @@ function renderSlots() {
       div.classList.add('on');
     }
     var hour = h;
-    div.addEventListener('click', function(hVal) {
+    div.addEventListener('click', function(hVal, divRef) {
       return function() {
         if (isSlotOccupied(state.startDate, hVal)) {
-          showConflict('Esse horário acabou de ser reservado por outro usuário. Escolha outro horário ou outro carro.');
+          // FIX F4-A: feedback visual no slot + toast destacado
+          divRef.classList.add('shake');
+          setTimeout(function() { divRef.classList.remove('shake'); }, 500);
+          showToast('🚫 ' + (hVal < 10 ? '0' + hVal : hVal) + ':00 — horário ocupado por outro usuário');
+          showConflict('Horário ' + (hVal < 10 ? '0' + hVal : hVal) + ':00 está reservado. Escolha outro horário ou clique em "Ver próximo disponível".');
           return;
         }
         state.startHour = hVal;
         renderSlots();
         recomputeAll();
       };
-    }(hour));
+    }(hour, div));
     slotsEl.appendChild(div);
   }
+}
+
+// FIX F4-A: toast helper (feedback visual top-screen)
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
 
 // ============ SYNC DATAS ↔ DURAÇÃO ↔ HORÁRIO ============
@@ -478,7 +501,12 @@ function recomputeAll() {
   var btn = document.getElementById('btnContinue1');
   if (conflict) {
     alertEl.style.display = 'block';
-    alertEl.innerHTML = '🚫 <strong>Conflito de horário</strong>: parte do período escolhido tem reserva de outro usuário. <a href="#" onclick="suggestNextAvailable();return false;" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo horário disponível →</a>';
+    alertEl.innerHTML = '🚫 <strong>Conflito de horário</strong>: parte do período escolhido tem reserva de outro usuário. <a href="#suggest" id="suggestLink" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo horário disponível →</a>';
+    // FIX F4-B: registrar listener apos atualizar HTML (em vez de onclick inline)
+    setTimeout(function() {
+      var lnk = document.getElementById('suggestLink');
+      if (lnk) lnk.addEventListener('click', function(ev) { ev.preventDefault(); suggestNextAvailable(); });
+    }, 0);
     btn.disabled = true;
     btn.style.opacity = '0.5';
     btn.style.cursor = 'not-allowed';
@@ -506,17 +534,31 @@ function recomputeAll() {
 }
 
 function suggestNextAvailable() {
-  // Sugere o próximo horário (mesmo dia) sem conflito pra duração escolhida
-  for (var h = state.startHour + 1; h <= 23 - state.durationHours; h++) {
+  // FIX F4-B: procurar de 7h até 23h-duration, atualizar slot E dar feedback
+  var maxH = Math.min(23 - Math.min(state.durationHours, 12), 22);
+  for (var h = state.startHour + 1; h <= maxH; h++) {
     if (!hasConflictInRange(state.startDate, h, state.durationHours)) {
+      var oldHour = state.startHour;
       state.startHour = h;
       renderSlots();
       recomputeAll();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      var hh = h < 10 ? '0' + h : '' + h;
+      showToast('✅ Horário ' + hh + ':00 selecionado (livre)');
+      // Destaca o novo slot selecionado por 1s
+      setTimeout(function() {
+        var slots = document.querySelectorAll('#slotsList .slot.on');
+        if (slots.length) {
+          slots[0].style.transform = 'scale(1.1)';
+          slots[0].style.transition = 'transform .25s';
+          setTimeout(function() { slots[0].style.transform = ''; }, 600);
+          slots[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 50);
       return;
     }
   }
-  showConflict('Não há horário disponível nessa data pra essa duração. Tente outra data ou outro carro.');
+  showToast('⚠️ Não há horário disponível nessa data');
+  showConflict('Não há horário disponível nessa data pra duração de ' + state.durationHours + 'h. Tente outra data ou diminua a duração.');
 }
 
 function showConflict(msg) {

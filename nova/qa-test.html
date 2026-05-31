@@ -307,15 +307,20 @@ document.getElementById('btn-list').onclick = async function() {
   this.disabled = true;
   log('log-list', '⏳ Buscando...', '');
   try {
-    var r = await fetch(SUPABASE_URL + '/rest/v1/qa_bookings?user_email=eq.' + encodeURIComponent(email) + '&order=created_at.desc&limit=10', {
-      headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON }
+    // FIX mini-bug: usa Edge Function qa-listar-reservas (service_role burla RLS)
+    var r = await fetch(SUPABASE_URL + '/functions/v1/qa-listar-reservas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+      body: JSON.stringify({ email: email })
     });
     var data = await r.json();
-    if (Array.isArray(data) && data.length === 0) {
+    if (!data.ok) {
+      log('log-list', '❌ ' + (data.error || 'erro desconhecido'), 'err');
+    } else if (data.count === 0) {
       log('log-list', '📭 Nenhuma reserva encontrada pra ' + email, '');
     } else {
-      var resumo = data.map(function(b) {
-        return '[' + b.status + '] ' + b.protocol + ' · ' + b.vehicle_id + ' · R$ ' + b.amount_brl + ' · cofre: ' + (b.pickup_code || '—') + ' · id: ' + b.id;
+      var resumo = '✓ ' + data.count + ' reserva(s) encontrada(s):\n\n' + data.bookings.map(function(b) {
+        return '[' + b.status.padEnd(17) + '] ' + b.protocol + ' · ' + b.vehicle_id.padEnd(9) + ' · R$ ' + String(b.amount_brl).padStart(4) + ' · cofre: ' + (b.pickup_code || '----') + ' · id: ' + b.id;
       }).join('\n');
       log('log-list', resumo, 'ok');
     }
