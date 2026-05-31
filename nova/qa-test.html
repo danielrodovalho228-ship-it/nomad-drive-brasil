@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🧪 QA Test Console — Nomade Drive (fluxo completo)</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; padding: 20px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+  h2 { font-size: 20px; font-weight: 800; margin: 24px 0 12px; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  code { font-family: 'JetBrains Mono', monospace; background: #ecf6e0; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .nav img { height: 44px; }
+  .badge { background: #FFC72C; color: #1a1a1a; padding: 6px 14px; border-radius: 999px; font-weight: 800; font-size: 12px; }
+
+  .card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 16px; }
+  .card--hot { border-left: 4px solid #4FA600; }
+  .card--warn { border-left: 4px solid #FFC72C; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 13.5px; text-decoration: none; border: none; cursor: pointer; transition: all .15s; }
+  .btn--primary { background: #4FA600; color: #fff; }
+  .btn--primary:hover:not(:disabled) { background: #3F8500; }
+  .btn--ghost { background: #f5f5f5; color: #1a1a1a; border: 1px solid #cccccc; }
+  .btn--danger { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .row { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .row { grid-template-columns: repeat(2, 1fr); } }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 11px; font-weight: 700; color: #767676; text-transform: uppercase; letter-spacing: 0.5px; }
+  .field input, .field select { padding: 10px 12px; border: 1px solid #cccccc; border-radius: 6px; font: inherit; font-size: 14px; background: #fff; }
+  .field input:focus, .field select:focus { outline: 2px solid #4FA600; border-color: #4FA600; }
+
+  pre { background: #1a1a1a; color: #6dc24b; padding: 14px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; overflow-x: auto; line-height: 1.5; margin: 8px 0; max-height: 280px; }
+  pre.ok { background: #ecf6e0; color: #2E6100; }
+  pre.err { background: #fef2f2; color: #b91c1c; }
+
+  .step { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid #f0f0f0; }
+  .step:first-child { border-top: 0; }
+  .step__num { width: 32px; height: 32px; background: #4FA600; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+  .step__num.done { background: #2E6100; }
+  .step__num.pending { background: #cccccc; color: #fff; }
+  .step__body strong { display: block; margin-bottom: 4px; font-size: 14.5px; }
+  .step__body p { font-size: 13px; color: #767676; line-height: 1.5; }
+  .step__body code { font-size: 12px; }
+
+  .check-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .check-pill--ok { background: #ecf6e0; color: #2E6100; }
+  .check-pill--pending { background: #fef9e7; color: #92400e; }
+  .check-pill--err { background: #fef2f2; color: #b91c1c; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; padding: 10px 8px; background: #f5f5f5; font-weight: 700; color: #4a4a4a; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 10px 8px; border-bottom: 1px solid #f0f0f0; }
+
+  .test-card { background: #fffbeb; border: 1px solid #FFC72C; border-radius: 8px; padding: 14px; margin: 10px 0; font-size: 13px; }
+  .test-card code { background: #fff; border: 1px dashed #FFC72C; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="nav">
+    <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive" />
+    <span class="badge">🧪 QA Console</span>
+  </div>
+
+  <h1>QA Test Console — Fluxo de Reserva</h1>
+  <p style="color: #4a4a4a; margin-bottom: 24px;">Console de testes end-to-end pra equipe de QA. Cria reserva real → paga via Stripe TEST → recebe código do cofre → desbloqueia → devolve → avalia.</p>
+
+  <!-- INSTRUCOES -->
+  <div class="card card--warn">
+    <h2 style="margin-top:0;">📋 Antes de começar (1 minuto)</h2>
+    <ol style="padding-left: 22px; font-size: 14px; line-height: 1.8;">
+      <li>Use seu e-mail real (ele recebe os e-mails do fluxo).</li>
+      <li>No checkout Stripe, use o <strong>cartão de teste</strong>: <code>4242 4242 4242 4242</code> · validade qualquer futura · CVC qualquer 3 dígitos · CEP qualquer.</li>
+      <li>O fluxo completo leva ~3 minutos. Você pode pular passos pra testar cenários isolados.</li>
+    </ol>
+    <div class="test-card">
+      <strong>📌 Cartões de teste Stripe:</strong><br>
+      ✅ Sucesso: <code>4242 4242 4242 4242</code><br>
+      ⚠️ Requer 3DS: <code>4000 0027 6000 3184</code><br>
+      ❌ Recusado: <code>4000 0000 0000 0002</code>
+    </div>
+  </div>
+
+  <!-- PASSO 1: CRIAR RESERVA -->
+  <div class="card card--hot">
+    <h2 style="margin-top:0;">1️⃣ Criar reserva + ir pro checkout</h2>
+    <div class="row">
+      <div class="field">
+        <label for="qa-email">Seu e-mail (recebe os e-mails)</label>
+        <input type="email" id="qa-email" value="danielrodovalho228@gmail.com" />
+      </div>
+      <div class="field">
+        <label for="qa-name">Seu nome</label>
+        <input type="text" id="qa-name" value="Daniel QA" />
+      </div>
+      <div class="field">
+        <label for="qa-vehicle">Carro</label>
+        <select id="qa-vehicle">
+          <option value="tracker">Chevrolet Tracker (R$ 19/h · R$ 149/dia)</option>
+          <option value="cobalt">Chevrolet Cobalt (R$ 15/h · R$ 119/dia)</option>
+          <option value="hb20">Hyundai HB20 (R$ 12/h · R$ 99/dia)</option>
+          <option value="renegade">Jeep Renegade (R$ 23/h · R$ 189/dia)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="qa-duration">Duração</label>
+        <select id="qa-duration">
+          <option value="2">2 horas</option>
+          <option value="4">4 horas</option>
+          <option value="6" selected>6 horas</option>
+          <option value="24">1 dia (24h)</option>
+          <option value="48">2 dias</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px;">
+      <label for="qa-start">Início (datetime)</label>
+      <input type="datetime-local" id="qa-start" />
+    </div>
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn--primary" id="btn-create">Criar reserva + Ir pro Stripe Checkout →</button>
+      <button class="btn btn--ghost" id="btn-clear" style="margin-left:auto;">Limpar log</button>
+    </div>
+    <pre id="log-create" style="display:none;"></pre>
+  </div>
+
+  <!-- PASSO 2: APÓS PAGAMENTO -->
+  <div class="card">
+    <h2 style="margin-top:0;">2️⃣ Após pagar — simular confirmação (se webhook não disparar)</h2>
+    <p style="font-size:13px; color:#767676; margin-bottom:12px;">No produção real, isso é automático via webhook Stripe. Pra QA, dá pra disparar manual aqui.</p>
+    <div class="field" style="max-width:380px;">
+      <label for="qa-booking-id">Booking ID (copiado do passo 1)</label>
+      <input type="text" id="qa-booking-id" placeholder="UUID do booking" />
+    </div>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn--primary" data-action="confirm_payment">🟢 Confirmar pagamento (gera código cofre)</button>
+      <button class="btn btn--primary" data-action="unlock">🔓 Desbloquear cofre (carro destrava)</button>
+      <button class="btn btn--primary" data-action="return">🏁 Devolver carro</button>
+    </div>
+    <pre id="log-action" style="display:none;"></pre>
+  </div>
+
+  <!-- PASSO 3: AVALIAR -->
+  <div class="card">
+    <h2 style="margin-top:0;">3️⃣ Avaliar a experiência (opcional)</h2>
+    <div class="row">
+      <div class="field">
+        <label for="qa-rating">Nota (1-5)</label>
+        <select id="qa-rating">
+          <option value="5">★★★★★ Excelente</option>
+          <option value="4">★★★★ Bom</option>
+          <option value="3">★★★ Ok</option>
+          <option value="2">★★ Ruim</option>
+          <option value="1">★ Muito ruim</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="qa-comment">Comentário (opcional)</label>
+        <input type="text" id="qa-comment" placeholder="Carro estava limpo, app rápido…" />
+      </div>
+    </div>
+    <button class="btn btn--primary" id="btn-rate" style="margin-top:12px;">⭐ Enviar avaliação</button>
+    <pre id="log-rate" style="display:none;"></pre>
+  </div>
+
+  <!-- CHECKLIST DE EMAILS -->
+  <div class="card">
+    <h2 style="margin-top:0;">📬 E-mails que você deve receber</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Quando</th><th>Assunto</th><th>Para</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Após criar reserva</td><td>—</td><td>Apenas redireciona pra Stripe</td></tr>
+        <tr><td>2</td><td>Após pagar (clicar confirm_payment)</td><td><code>✅ Reserva confirmada — senha XXXX</code></td><td>Seu e-mail + admin</td></tr>
+        <tr><td>3</td><td>Após desbloquear cofre</td><td><code>🚗 Cofre aberto — boa viagem!</code></td><td>Seu e-mail</td></tr>
+        <tr><td>4</td><td>Após devolver carro</td><td><code>🏁 Reserva finalizada</code></td><td>Seu e-mail</td></tr>
+        <tr><td>5</td><td>Após avaliar</td><td><code>[QA] Avaliação X★</code></td><td>Apenas admin</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DEBUG: VER RESERVAS DO USER -->
+  <div class="card">
+    <h2 style="margin-top:0;">🔍 Suas reservas (debug)</h2>
+    <p style="font-size:13px; color:#767676; margin-bottom:10px;">Lista as últimas 10 reservas do e-mail digitado acima.</p>
+    <button class="btn btn--ghost" id="btn-list">Listar minhas reservas</button>
+    <pre id="log-list" style="display:none;"></pre>
+  </div>
+
+</div>
+
+<script>
+var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+
+// Default datetime = agora + 1h
+(function() {
+  var d = new Date();
+  d.setHours(d.getHours() + 1, 0, 0, 0);
+  document.getElementById('qa-start').value = d.toISOString().slice(0, 16);
+})();
+
+function log(elId, data, type) {
+  var el = document.getElementById(elId);
+  el.style.display = 'block';
+  el.className = type || '';
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+}
+
+document.getElementById('btn-clear').onclick = function() {
+  ['log-create', 'log-action', 'log-rate', 'log-list'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.style.display = 'none';
+    el.textContent = '';
+  });
+};
+
+document.getElementById('btn-create').onclick = async function() {
+  this.disabled = true;
+  this.textContent = 'Criando...';
+  log('log-create', '⏳ Criando reserva...', '');
+  try {
+    var r = await fetch(SUPABASE_URL + '/functions/v1/qa-criar-reserva', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+      body: JSON.stringify({
+        vehicle_id: document.getElementById('qa-vehicle').value,
+        start_at: new Date(document.getElementById('qa-start').value).toISOString(),
+        duration_hours: parseInt(document.getElementById('qa-duration').value),
+        user_email: document.getElementById('qa-email').value,
+        user_name: document.getElementById('qa-name').value
+      })
+    });
+    var data = await r.json();
+    log('log-create', data, r.ok ? 'ok' : 'err');
+    if (data.ok && data.stripe_checkout_url) {
+      document.getElementById('qa-booking-id').value = data.booking_id;
+      this.textContent = '✓ Reserva criada · Abrindo Stripe...';
+      setTimeout(function() { window.open(data.stripe_checkout_url, '_blank'); }, 800);
+    } else {
+      this.textContent = 'Tentar de novo';
+      this.disabled = false;
+    }
+  } catch (e) {
+    log('log-create', '❌ ' + e.message, 'err');
+    this.textContent = 'Tentar de novo';
+    this.disabled = false;
+  }
+};
+
+document.querySelectorAll('[data-action]').forEach(function(btn) {
+  btn.onclick = async function() {
+    var action = btn.getAttribute('data-action');
+    var bookingId = document.getElementById('qa-booking-id').value.trim();
+    if (!bookingId) { log('log-action', '❌ Cole o Booking ID primeiro', 'err'); return; }
+    btn.disabled = true;
+    log('log-action', '⏳ Executando "' + action + '"...', '');
+    try {
+      var r = await fetch(SUPABASE_URL + '/functions/v1/qa-acao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+        body: JSON.stringify({ action: action, booking_id: bookingId })
+      });
+      var data = await r.json();
+      log('log-action', data, r.ok ? 'ok' : 'err');
+    } catch (e) { log('log-action', '❌ ' + e.message, 'err'); }
+    btn.disabled = false;
+  };
+});
+
+document.getElementById('btn-rate').onclick = async function() {
+  var bookingId = document.getElementById('qa-booking-id').value.trim();
+  if (!bookingId) { log('log-rate', '❌ Cole o Booking ID primeiro', 'err'); return; }
+  this.disabled = true;
+  log('log-rate', '⏳ Enviando avaliação...', '');
+  try {
+    var r = await fetch(SUPABASE_URL + '/functions/v1/qa-acao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+      body: JSON.stringify({
+        action: 'rate',
+        booking_id: bookingId,
+        rating: parseInt(document.getElementById('qa-rating').value),
+        comment: document.getElementById('qa-comment').value
+      })
+    });
+    var data = await r.json();
+    log('log-rate', data, r.ok ? 'ok' : 'err');
+  } catch (e) { log('log-rate', '❌ ' + e.message, 'err'); }
+  this.disabled = false;
+};
+
+document.getElementById('btn-list').onclick = async function() {
+  var email = document.getElementById('qa-email').value.trim();
+  if (!email) { log('log-list', '❌ Digite email', 'err'); return; }
+  this.disabled = true;
+  log('log-list', '⏳ Buscando...', '');
+  try {
+    var r = await fetch(SUPABASE_URL + '/rest/v1/qa_bookings?user_email=eq.' + encodeURIComponent(email) + '&order=created_at.desc&limit=10', {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON }
+    });
+    var data = await r.json();
+    if (Array.isArray(data) && data.length === 0) {
+      log('log-list', '📭 Nenhuma reserva encontrada pra ' + email, '');
+    } else {
+      var resumo = data.map(function(b) {
+        return '[' + b.status + '] ' + b.protocol + ' · ' + b.vehicle_id + ' · R$ ' + b.amount_brl + ' · cofre: ' + (b.pickup_code || '—') + ' · id: ' + b.id;
+      }).join('\n');
+      log('log-list', resumo, 'ok');
+    }
+  } catch (e) { log('log-list', '❌ ' + e.message, 'err'); }
+  this.disabled = false;
+};
+
+// Auto-detecta retorno do Stripe
+var params = new URLSearchParams(window.location.search);
+if (params.get('cancelled')) {
+  document.getElementById('qa-booking-id').value = params.get('cancelled');
+  log('log-create', '⚠️ Pagamento cancelado. Booking ID preservado: ' + params.get('cancelled'), 'err');
+}
+</script>
+
+</body>
+</html>
