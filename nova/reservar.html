@@ -74,8 +74,19 @@
   @keyframes slotShake { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
   .slot.shake { animation: slotShake .4s ease; background: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
   /* Toast feedback */
-  .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #b91c1c; color: #fff; padding: 14px 22px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .25s, top .25s; pointer-events: none; max-width: 90vw; text-align: center; }
+  /* Toast clean: fundo escuro neutro + borda lateral colorida indica tipo */
+  .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 18px; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity .25s, top .25s; pointer-events: none; max-width: 90vw; display: inline-flex; align-items: center; gap: 9px; border-left: 4px solid #767676; }
   .toast.show { opacity: 1; top: 40px; }
+  .toast--warn { border-left-color: #FFC72C; }
+  .toast--ok { border-left-color: #4FA600; }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Hint inline: tom didático (amber suave), não "alerta urgente" */
+  .hint { background: #fef9e7; border: 1px solid #fde68a; color: #78350f; padding: 12px 14px; border-radius: 10px; margin-bottom: 14px; font-size: 13.5px; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+  .hint--block { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+  .hint svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .hint a { color: inherit; font-weight: 700; text-decoration: underline; }
+  .hint__body { flex: 1; }
 
   /* PAYMENT MOCK */
   .pay-method { display: flex; gap: 10px; margin-bottom: 18px; }
@@ -189,10 +200,10 @@
           </div>
 
           <!-- ALERTA DE INCONSISTENCIA -->
-          <div id="dateAlert" style="display:none; background:#fef3c7; border:1px solid #f59e0b; color:#92400e; padding:14px 16px; border-radius:8px; margin-bottom:16px; font-size:14px; line-height:1.5;"></div>
+          <div id="dateAlert" class="hint" style="display:none;"></div>
 
           <!-- ALERTA DE CONFLITO -->
-          <div id="conflictAlert" style="display:none; background:#fef2f2; border:1px solid #ef4444; color:#b91c1c; padding:14px 16px; border-radius:8px; margin-bottom:16px; font-size:14px; line-height:1.5;"></div>
+          <div id="conflictAlert" class="hint" style="display:none;"></div>
 
           <div class="actions">
             <button class="btn btn--ghost" disabled style="opacity:0.5;">← Voltar</button>
@@ -389,10 +400,12 @@
 // ============ DADOS MOCKADOS DE CONFLITOS ============
 // No backend real, viria de SELECT na tabela bookings
 // Formato: { 'YYYY-MM-DD HH:00': true } = bloqueado
+// Mock APENAS pra demo do conflito visual (Fluxo F4 do QA).
+// Só hoje (31/05) tem 3 slots curtos ocupados — datas futuras ficam
+// totalmente livres pra reservas longas (1-7 dias) não dispararem falso
+// positivo. No backend real, isso vira SELECT em bookings com tstzrange &&.
 var CONFLITOS_MOCK = {
-  '2026-05-31': { 8: true, 9: true, 14: true },        // sábado: tarde manhã ocupada
-  '2026-06-01': { 7: true, 8: true, 9: true, 18: true, 19: true, 20: true }, // domingo: cheio
-  '2026-06-02': { 10: true, 11: true },                // segunda manhã ocupada
+  '2026-05-31': { 8: true, 9: true, 14: true },        // 3 slots curtos pra demo
 };
 
 // ============ STATE ============
@@ -463,12 +476,12 @@ function renderSlots() {
           divRef.classList.add('shake');
           setTimeout(function() { divRef.classList.remove('shake'); }, 500);
           var hh = (hVal < 10 ? '0' + hVal : hVal) + ':00';
-          showToast('🚫 ' + hh + ' — horário ocupado por outro usuário');
-          // FIX UX: alerta com link clicável real pro "Ver próximo disponível"
-          // (antes a mensagem referenciava o link mas ele só existia no banner de conflito de range)
+          showToast(hh + ' já está reservado nesse carro', 'warn');
+          // Hint inline com link clicável pro "Ver próximo disponível"
           var alertEl = document.getElementById('conflictAlert');
-          alertEl.style.display = 'block';
-          alertEl.innerHTML = '🚫 <strong>Horário ' + hh + ' está reservado.</strong> Escolha outro horário ou <a href="#suggest" id="suggestLink" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo disponível →</a>';
+          alertEl.style.display = 'flex';
+          alertEl.className = 'hint';
+          alertEl.innerHTML = ICON_WARN + '<div class="hint__body"><strong>' + hh + ' está reservado por outro usuário.</strong> Escolha outro horário ou <a href="#suggest" id="suggestLink">Ver próximo disponível →</a></div>';
           setTimeout(function() {
             var lnk = document.getElementById('suggestLink');
             if (lnk) lnk.addEventListener('click', function(ev) { ev.preventDefault(); suggestNextAvailable(); });
@@ -484,14 +497,19 @@ function renderSlots() {
   }
 }
 
-// FIX F4-A: toast helper (feedback visual top-screen)
-function showToast(msg) {
+// Toast helper (top-screen feedback). level: 'warn' (amber), 'ok' (verde), default (cinza)
+var ICON_INFO  = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+var ICON_OK    = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+var ICON_WARN  = '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+
+function showToast(msg, level) {
   var t = document.getElementById('toast');
   if (!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
+  var icon = level === 'ok' ? ICON_OK : level === 'warn' ? ICON_WARN : ICON_INFO;
+  t.className = 'toast' + (level ? ' toast--' + level : '') + ' show';
+  t.innerHTML = icon + '<span>' + msg + '</span>';
   clearTimeout(t._timer);
-  t._timer = setTimeout(function() { t.classList.remove('show'); }, 3000);
+  t._timer = setTimeout(function() { t.className = 'toast'; }, 3000);
 }
 
 // ============ SYNC DATAS ↔ DURAÇÃO ↔ HORÁRIO ============
@@ -509,8 +527,9 @@ function recomputeAll() {
   var alertEl = document.getElementById('conflictAlert');
   var btn = document.getElementById('btnContinue1');
   if (conflict) {
-    alertEl.style.display = 'block';
-    alertEl.innerHTML = '🚫 <strong>Conflito de horário</strong>: parte do período escolhido tem reserva de outro usuário. <a href="#suggest" id="suggestLink" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo horário disponível →</a>';
+    alertEl.style.display = 'flex';
+    alertEl.className = 'hint';
+    alertEl.innerHTML = ICON_WARN + '<div class="hint__body"><strong>Esse intervalo cruza com outra reserva</strong> nesse veículo. <a href="#suggest" id="suggestLink">Ver próximo horário disponível →</a></div>';
     // FIX F4-B: registrar listener apos atualizar HTML (em vez de onclick inline)
     setTimeout(function() {
       var lnk = document.getElementById('suggestLink');
@@ -566,14 +585,15 @@ function suggestNextAvailable() {
       return;
     }
   }
-  showToast('⚠️ Não há horário disponível nessa data');
-  showConflict('Não há horário disponível nessa data pra duração de ' + state.durationHours + 'h. Tente outra data ou diminua a duração.');
+  showToast('Esse intervalo está sem janela livre', 'warn');
+  showConflict('<strong>Sem janela livre nessa data</strong> pra duração de ' + state.durationHours + 'h. Tente outra data ou reduza a duração.', true);
 }
 
-function showConflict(msg) {
+function showConflict(msg, blocking) {
   var el = document.getElementById('conflictAlert');
-  el.style.display = 'block';
-  el.innerHTML = '🚫 ' + msg;
+  el.style.display = 'flex';
+  el.className = 'hint' + (blocking ? ' hint--block' : '');
+  el.innerHTML = ICON_WARN + '<div class="hint__body">' + msg + '</div>';
 }
 
 // ============ STEPS DO WIZARD ============
@@ -596,7 +616,7 @@ function goStep(n) {
 // Avança step verificando conflito (não deixa passar se tem conflito)
 function tryAdvance(n) {
   if (hasConflictInRange(state.startDate, state.startHour, state.durationHours)) {
-    showConflict('Resolva o conflito de horário antes de continuar.');
+    showConflict('Resolva o conflito de horário antes de continuar.', true);
     return;
   }
   // 🔧 BACKEND REAL: aqui faria um SELECT FOR UPDATE pra "hold" o carro
@@ -614,7 +634,7 @@ document.getElementById('date-start').addEventListener('change', function(e) {
   // FIX E8 (QA Test Plan): bloqueia data de retirada no passado
   var today = fmtDate(new Date());
   if (e.target.value < today) {
-    showToast('⚠️ Data de retirada deve ser hoje ou no futuro.');
+    showToast('Data de retirada deve ser hoje ou no futuro', 'warn');
     e.target.value = today;
     state.startDate = today;
   } else {
@@ -632,8 +652,8 @@ document.getElementById('date-end').addEventListener('change', function(e) {
   dEnd.setHours(state.startHour); // mantém mesma hora
   var diffHours = Math.round((dEnd - dStart) / (1000 * 60 * 60));
   if (diffHours <= 0) {
-    document.getElementById('dateAlert').style.display = 'block';
-    document.getElementById('dateAlert').innerHTML = '⚠️ Data de devolução deve ser depois da retirada. Ajustando automaticamente...';
+    document.getElementById('dateAlert').style.display = 'flex';
+    document.getElementById('dateAlert').innerHTML = ICON_INFO + '<div class="hint__body">Data de devolução precisa ser depois da retirada — ajustamos pra você.</div>';
     setTimeout(function() {
       state.durationHours = 6;
       document.getElementById('duration').value = '6';
