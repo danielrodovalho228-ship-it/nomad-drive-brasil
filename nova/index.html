@@ -163,14 +163,34 @@
   .app__badge strong { font-size: 15px; display: block; line-height: 1.2; }
 
   /* ============ CADASTRO (form funcional com Edge Function) ============ */
-  .cad { padding: 56px 0; background: var(--zip-green-pale); }
-  .cad__inner { max-width: 560px; margin: 0 auto; }
-  .cad__head { text-align: center; margin-bottom: 32px; }
+  .cad { padding: 64px 0; background: var(--zip-bg-blue); }
+  .cad__inner { max-width: 1080px; margin: 0 auto; }
+  .cad__head { text-align: center; margin-bottom: 36px; }
   .cad__head h2 { margin-bottom: 12px; }
-  .cad__head p { color: var(--gray-700); font-size: 16px; }
-  .cad form { background: var(--white); padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
-  .cad input { padding: 14px 16px; border: 1px solid var(--gray-300); border-radius: var(--radius); font: inherit; font-size: 15px; }
-  .cad input:focus { outline: 2px solid var(--zip-green); border-color: var(--zip-green); }
+  .cad__head p { color: var(--gray-700); font-size: 16px; max-width: 620px; margin: 0 auto; }
+  .cad__grid { display: grid; gap: 28px; grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 880px) { .cad__grid { grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; } }
+  .cad__hero-photo { border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 16 / 10; position: relative; background: linear-gradient(135deg, #d4e8d0 0%, #a8d895 100%); }
+  .cad__hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cad__hero-badge { position: absolute; top: 14px; left: 14px; background: rgba(26,26,26,0.88); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 6px; backdrop-filter: blur(8px); }
+  .cad__hero-badge::before { content: ''; width: 7px; height: 7px; background: var(--zip-green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(79,166,0,0.3); }
+  .cad__perks { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; list-style: none; padding: 0; }
+  .cad__perk { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: var(--gray-900); line-height: 1.4; }
+  .cad__perk-icon { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: var(--zip-green-pale); color: var(--zip-green-darker); display: flex; align-items: center; justify-content: center; }
+  .cad__perk-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .cad__perk strong { font-weight: 700; display: block; }
+  .cad__perk small { color: var(--gray-500); font-size: 12.5px; display: block; margin-top: 1px; }
+  .cad form { background: var(--white); padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: 14px; }
+  .cad__row { display: flex; flex-direction: column; gap: 6px; }
+  .cad__row label { font-size: 13px; font-weight: 700; color: var(--gray-900); }
+  .cad input[type="text"], .cad input[type="email"], .cad input[type="tel"], .cad input[type="password"] { padding: 13px 14px; border: 2px solid var(--gray-300); border-radius: 10px; font: inherit; font-size: 15px; transition: border-color .15s; background: var(--white); color: var(--black); width: 100%; }
+  .cad input:focus { outline: none; border-color: var(--zip-green); }
+  .cad__pwstrength { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; }
+  .cad__pwstrength.weak { color: #b91c1c; font-weight: 600; }
+  .cad__pwstrength.ok { color: var(--zip-green-dark); font-weight: 600; }
+  .cad__terms { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; color: var(--gray-700); line-height: 1.5; margin-top: 4px; }
+  .cad__terms input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--zip-green); cursor: pointer; flex-shrink: 0; }
+  .cad__terms a { color: var(--zip-green-dark); font-weight: 600; }
 
   /* ============ FAQ ============ */
   .faq { padding: 56px 0; background: var(--white); }
@@ -428,18 +448,70 @@
 <section class="cad" id="cadastro">
   <div class="wrap cad__inner">
     <div class="cad__head">
-      <h2>Crie sua conta grátis</h2>
-      <p>Em 5 minutos você está pronto pra reservar. Sem cobrança, sem cartão exigido.</p>
+      <h2>Crie sua conta grátis em 2 minutos</h2>
+      <p>Sem cobrança. Sem cartão exigido. Aprovação em até 24h úteis após enviar CNH no app.</p>
     </div>
-    <form id="formCadastro">
-      <input type="text" id="cad-name" required placeholder="Seu nome completo" aria-label="Nome completo" />
-      <input type="email" id="cad-email" required placeholder="Seu melhor e-mail" aria-label="E-mail" />
-      <input type="tel" id="cad-phone" required placeholder="WhatsApp (com DDD)" aria-label="WhatsApp" />
-      <input type="text" id="cad-city" required placeholder="Cidade onde você mora" aria-label="Cidade" />
-      <button type="submit" id="cad-submit" class="btn btn--primary btn--block">Criar conta grátis →</button>
-      <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:8px; font-size:14px; text-align:center; line-height:1.5;"></div>
-      <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--gray-500); margin-top:4px;">A gente entra em contato em até 24h úteis.</p>
-    </form>
+    <div class="cad__grid">
+
+      <!-- Hero esquerda: foto + perks -->
+      <aside>
+        <div class="cad__hero-photo">
+          <img src="images/car-tracker-1.jpg" alt="Chevrolet Tracker disponível pra reserva" loading="lazy" />
+          <span class="cad__hero-badge">Frota em Uberlândia · 24/7</span>
+        </div>
+        <ul class="cad__perks" role="list">
+          <li class="cad__perk">
+            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <span><strong>Pague só pelo uso</strong><small>R$ 12/hora · R$ 149/dia (teto automático)</small></span>
+          </li>
+          <li class="cad__perk">
+            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><path d="M3 22V10a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12"/><path d="M3 22h10"/><path d="M3 15h10"/><path d="M13 8h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-9.5a2.5 2.5 0 0 0-2.5-2.5H17"/></svg></span>
+            <span><strong>Combustível, seguro e manutenção inclusos</strong><small>Sem surpresa na conta final</small></span>
+          </li>
+          <li class="cad__perk">
+            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
+            <span><strong>App simples 24/7</strong><small>Reserve, abra com cofre eletrônico, dirija</small></span>
+          </li>
+          <li class="cad__perk">
+            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+            <span><strong>Suporte humano 24h</strong><small>WhatsApp + central pra emergência</small></span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Form direita -->
+      <form id="formCadastro" novalidate>
+        <div class="cad__row">
+          <label for="cad-name">Nome completo</label>
+          <input type="text" id="cad-name" required placeholder="Como aparece no seu CNH" autocomplete="name" />
+        </div>
+        <div class="cad__row">
+          <label for="cad-email">E-mail</label>
+          <input type="email" id="cad-email" required placeholder="voce@email.com" autocomplete="email" />
+        </div>
+        <div class="cad__row">
+          <label for="cad-phone">WhatsApp</label>
+          <input type="tel" id="cad-phone" required placeholder="(34) 9 9999-9999" autocomplete="tel" />
+        </div>
+        <div class="cad__row">
+          <label for="cad-city">Cidade</label>
+          <input type="text" id="cad-city" required placeholder="Uberlândia" autocomplete="address-level2" />
+        </div>
+        <div class="cad__row">
+          <label for="cad-pw">Senha</label>
+          <input type="password" id="cad-pw" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
+          <span id="cad-pw-hint" class="cad__pwstrength">Use pelo menos 8 caracteres.</span>
+        </div>
+        <label class="cad__terms">
+          <input type="checkbox" id="cad-terms" required />
+          <span>Aceito os <a href="../termos.html" target="_blank" rel="noopener">Termos de uso</a> e a <a href="../termos.html#privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+        </label>
+        <button type="submit" id="cad-submit" class="btn btn--primary btn--block">Criar conta grátis →</button>
+        <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:8px; font-size:14px; text-align:center; line-height:1.5;"></div>
+        <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--gray-500); margin-top:4px;">Sua aprovação leva até 24h úteis. Você acompanha pelo app.</p>
+      </form>
+
+    </div>
   </div>
 </section>
 
@@ -583,20 +655,50 @@ function setFeedback(el, type, msg) {
   el.style.border = '1px solid ' + (type === 'ok' ? '#a7d883' : type === 'err' ? '#fca5a5' : '#fbbf24');
 }
 
+// Live feedback de força da senha
+var pwInput = document.getElementById('cad-pw');
+var pwHint = document.getElementById('cad-pw-hint');
+if (pwInput) {
+  pwInput.addEventListener('input', function() {
+    var v = pwInput.value;
+    if (v.length === 0) {
+      pwHint.className = 'cad__pwstrength';
+      pwHint.textContent = 'Use pelo menos 8 caracteres.';
+    } else if (v.length < 8) {
+      pwHint.className = 'cad__pwstrength weak';
+      pwHint.textContent = 'Faltam ' + (8 - v.length) + ' caracteres pra senha ser aceita.';
+    } else {
+      pwHint.className = 'cad__pwstrength ok';
+      pwHint.textContent = '✓ Senha forte o suficiente.';
+    }
+  });
+}
+
 document.getElementById('formCadastro').addEventListener('submit', async function(e) {
   e.preventDefault();
   var n = document.getElementById('cad-name').value.trim();
-  var em = document.getElementById('cad-email').value.trim();
+  var em = document.getElementById('cad-email').value.trim().toLowerCase();
   var ph = document.getElementById('cad-phone').value.trim();
   var ci = document.getElementById('cad-city').value.trim();
+  var pw = document.getElementById('cad-pw').value;
+  var terms = document.getElementById('cad-terms').checked;
+  var fb = document.getElementById('cad-feedback');
+
   if (!n || !em || !ph || !ci) return;
+  if (!pw || pw.length < 8) {
+    setFeedback(fb, 'err', 'Sua senha precisa ter pelo menos 8 caracteres.');
+    return;
+  }
+  if (!terms) {
+    setFeedback(fb, 'err', 'Você precisa aceitar os Termos de uso e a Política de Privacidade.');
+    return;
+  }
 
   var btn = document.getElementById('cad-submit');
-  var fb = document.getElementById('cad-feedback');
   var origText = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Enviando...';
-  setFeedback(fb, 'info', '⏳ Enviando seu cadastro...');
+  setFeedback(fb, 'info', 'Criando sua conta...');
 
   try {
     var r = await fetch(EDGE_LEAD, {
@@ -604,22 +706,38 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         source: 'nova-landing-cadastro',
-        name: n, email: em, phone: ph, city: ci,
+        name: n, email: em, phone: ph, city: ci, password: pw,
         intent: 'carsharing-cliente',
         source_url: window.location.href
       })
     });
     var data = await r.json();
     if (r.ok && data.ok) {
-      setFeedback(fb, 'ok', '✅ <strong>Cadastro recebido!</strong><br>A gente entra em contato em até 24h.<br><br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Acabei de me cadastrar no Nomade Drive (' + em + '). Pode adiantar?') + '" target="_blank" rel="noopener" style="color:#4FA600; font-weight:600; text-decoration:underline;">💬 Quero adiantar pelo WhatsApp →</a>');
-      btn.textContent = '✓ Enviado';
+      setFeedback(fb, 'ok',
+        '<strong>Conta criada com sucesso!</strong><br>' +
+        'Já pode entrar em <a href="login.html" style="color:#4FA600; font-weight:700; text-decoration:underline;">' +
+        '/nova/login.html</a> usando esse e-mail e senha.<br>' +
+        '<small style="opacity:0.8; display:block; margin-top:8px;">Próximo passo: enviar CNH no app pra aprovação (até 24h úteis).</small>'
+      );
+      btn.textContent = '✓ Conta criada';
       document.getElementById('cad-hint').style.display = 'none';
+      // Após 1.5s redireciona pro login
+      setTimeout(function() { window.location.href = 'login.html?welcome=' + encodeURIComponent(em); }, 1800);
     } else {
       throw new Error(data.error || 'Resposta inválida');
     }
   } catch (err) {
-    var wamsg = '🚗 *Quero criar conta no Nomade Drive*\n\nNome: ' + n + '\nE-mail: ' + em + '\nWhatsApp: ' + ph + '\nCidade: ' + ci;
-    setFeedback(fb, 'err', '⚠️ Não foi possível enviar agora.<br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" rel="noopener" style="color:#b91c1c; font-weight:600; text-decoration:underline;">💬 Fala com a gente direto pelo WhatsApp →</a>');
+    var msg = String(err.message || err).toLowerCase();
+    if (/already|registered|exists/i.test(msg)) {
+      setFeedback(fb, 'err',
+        'Já existe uma conta com esse e-mail. ' +
+        '<a href="login.html" style="color:#b91c1c; font-weight:700; text-decoration:underline;">Entrar agora</a> ou ' +
+        '<a href="recuperar-senha.html" style="color:#b91c1c; font-weight:700; text-decoration:underline;">esqueci minha senha</a>.'
+      );
+    } else {
+      var wamsg = 'Quero criar conta no Nomade Drive\n\nNome: ' + n + '\nE-mail: ' + em + '\nWhatsApp: ' + ph + '\nCidade: ' + ci;
+      setFeedback(fb, 'err', 'Não foi possível criar agora. <a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" rel="noopener" style="color:#b91c1c; font-weight:600; text-decoration:underline;">Fala com a gente direto pelo WhatsApp →</a>');
+    }
     btn.disabled = false;
     btn.textContent = origText;
   }

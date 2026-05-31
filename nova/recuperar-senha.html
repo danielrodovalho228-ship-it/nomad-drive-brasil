@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Esqueci minha senha — Nomade Drive · Carsharing por hora</title>
+<meta name="description" content="Recupere o acesso à sua conta Nomade Drive. Receba um link no e-mail para definir uma nova senha." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600; --zip-green-dark: #3F8500; --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8; --zip-amber: #FFC72C;
+    --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-100: #f5f5f5; --white: #ffffff;
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--zip-bg-blue); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .btn--block { width: 100%; }
+
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 16px; }
+  .card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg); width: 100%; max-width: 460px; padding: 40px 32px 32px; }
+  .card__icon { width: 64px; height: 64px; margin: 0 auto 18px; background: var(--zip-green-pale); color: var(--zip-green-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .card__icon svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .card h1 { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+  .card .lead { font-size: 14.5px; color: var(--gray-700); text-align: center; margin-bottom: 26px; line-height: 1.5; }
+
+  .form-row { margin-bottom: 18px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .form-row input[type="email"] { width: 100%; padding: 14px 16px; font: inherit; font-size: 15.5px; border: 2px solid var(--gray-300); border-radius: 10px; background: var(--white); color: var(--black); transition: border-color .15s; }
+  .form-row input:focus { outline: none; border-color: var(--zip-green); }
+
+  .status { margin-top: 14px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
+  .status.show { display: block; }
+  .status.ok { background: var(--zip-green-pale); color: #2E6100; border: 1px solid #a7d883; }
+  .status.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .status.info { background: #fef9e7; color: #78350f; border: 1px solid #fde68a; }
+
+  .alt { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--gray-100); font-size: 13.5px; color: var(--gray-700); text-align: center; }
+  .alt a { color: var(--zip-green-dark); font-weight: 700; text-decoration: none; }
+  .alt a:hover { text-decoration: underline; }
+
+  .foot-mini { padding: 24px 0; text-align: center; font-size: 12.5px; color: var(--gray-500); }
+  .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+  .foot-mini a:hover { color: var(--zip-green-dark); }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <div class="nav__cta">
+      <a href="login.html" class="btn btn--primary btn--sm">Entrar</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card__icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1>Esqueceu sua senha?</h1>
+    <p class="lead">Sem problema. Digite seu e-mail cadastrado e a gente envia um link pra você criar uma nova.</p>
+
+    <form id="forgotForm" novalidate>
+      <div class="form-row">
+        <label for="email">Seu e-mail cadastrado</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="voce@email.com" />
+      </div>
+      <button type="submit" id="submitBtn" class="btn btn--primary btn--block">Enviar link de recuperação</button>
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="alt">
+      Lembrou da senha? <a href="login.html">Voltar pro login →</a><br>
+      <span style="font-size:12.5px; color:var(--gray-500);">Não tem conta? <a href="index.html#cadastro">Criar conta grátis</a></span>
+    </div>
+  </div>
+</main>
+
+<footer class="foot-mini">
+  <a href="index.html">Início</a> ·
+  <a href="login.html">Entrar</a> ·
+  <a href="como-funciona.html">Como funciona</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var RESET_REDIRECT = 'https://nomadedrive.com.br/nova/nova-senha.html';
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  var form = document.getElementById('forgotForm');
+  var emailInput = document.getElementById('email');
+  var submitBtn = document.getElementById('submitBtn');
+  var statusEl = document.getElementById('status');
+
+  function showStatus(type, msg) {
+    statusEl.className = 'status show ' + type;
+    statusEl.innerHTML = msg;
+  }
+  function hideStatus() {
+    statusEl.className = 'status';
+    statusEl.innerHTML = '';
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideStatus();
+    var email = (emailInput.value || '').trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showStatus('err', 'Digite um e-mail válido.');
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    try {
+      var result = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: RESET_REDIRECT
+      });
+      if (result.error) {
+        showStatus('err', result.error.message || 'Erro inesperado');
+      } else {
+        // Por segurança, mostra sucesso mesmo se email não existe (evita enumeração)
+        showStatus('ok',
+          '<strong>Pronto!</strong> Se essa conta existe, você vai receber um e-mail em segundos com o link pra criar uma nova senha.<br>' +
+          '<small style="opacity:0.85; display:block; margin-top:8px;">O link vale por 1 hora. Não veio? Cheque o SPAM.</small>'
+        );
+        emailInput.value = '';
+      }
+    } catch (err) {
+      showStatus('err', 'Erro inesperado: ' + (err.message || err));
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Enviar link de recuperação';
+    }
+  });
+})();
+</script>
+</body>
+</html>

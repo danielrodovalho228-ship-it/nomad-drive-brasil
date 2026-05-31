@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nova senha — Nomade Drive · Carsharing por hora</title>
+<meta name="description" content="Defina uma nova senha para sua conta Nomade Drive." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600; --zip-green-dark: #3F8500; --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8; --zip-amber: #FFC72C;
+    --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-100: #f5f5f5; --white: #ffffff;
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--zip-bg-blue); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn--block { width: 100%; }
+
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 16px; }
+  .card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg); width: 100%; max-width: 460px; padding: 40px 32px 32px; }
+  .card__icon { width: 64px; height: 64px; margin: 0 auto 18px; background: var(--zip-green-pale); color: var(--zip-green-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .card__icon svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .card h1 { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+  .card .lead { font-size: 14.5px; color: var(--gray-700); text-align: center; margin-bottom: 26px; line-height: 1.5; }
+
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .form-row input[type="password"], .form-row input[type="text"] { width: 100%; padding: 14px 16px; font: inherit; font-size: 15.5px; border: 2px solid var(--gray-300); border-radius: 10px; background: var(--white); color: var(--black); transition: border-color .15s; }
+  .form-row input:focus { outline: none; border-color: var(--zip-green); }
+  .pwhint { font-size: 11.5px; color: var(--gray-500); margin-top: 4px; }
+  .pwhint.weak { color: #b91c1c; font-weight: 600; }
+  .pwhint.ok { color: var(--zip-green-dark); font-weight: 600; }
+
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 48px !important; }
+  .pw-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: 0; padding: 8px; cursor: pointer; color: var(--gray-500); border-radius: 6px; }
+  .pw-toggle:hover { color: var(--gray-900); background: var(--gray-100); }
+  .pw-toggle svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .pw-toggle .eye-off { display: none; }
+  .pw-toggle.show .eye-on { display: none; }
+  .pw-toggle.show .eye-off { display: block; }
+
+  .status { margin-top: 14px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
+  .status.show { display: block; }
+  .status.ok { background: var(--zip-green-pale); color: #2E6100; border: 1px solid #a7d883; }
+  .status.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .status.info { background: #fef9e7; color: #78350f; border: 1px solid #fde68a; }
+
+  .foot-mini { padding: 24px 0; text-align: center; font-size: 12.5px; color: var(--gray-500); }
+  .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card__icon">
+      <svg viewBox="0 0 24 24"><path d="M9 11V7a5 5 0 0 1 10 0v4"/><rect x="3" y="11" width="18" height="11" rx="2"/><circle cx="12" cy="16" r="1"/></svg>
+    </div>
+    <h1>Defina sua nova senha</h1>
+    <p class="lead">Quase lá. Crie uma senha forte (mínimo 8 caracteres) pra acessar sua conta.</p>
+
+    <!-- Estado: validando token -->
+    <div id="loading" style="text-align:center; padding:20px 0;">
+      <p style="color:var(--gray-500); font-size:14px;">Verificando link...</p>
+    </div>
+
+    <!-- Estado: token inválido -->
+    <div class="status info" id="invalidToken" style="display:none;">
+      <strong>Link expirado ou inválido.</strong><br>
+      <a href="recuperar-senha.html" style="color:#78350f; font-weight:700; text-decoration:underline;">Pedir um novo link →</a>
+    </div>
+
+    <!-- Estado: form de nova senha -->
+    <form id="resetForm" novalidate style="display:none;">
+      <div class="form-row">
+        <label for="newpw">Nova senha</label>
+        <div class="pw-wrap">
+          <input type="password" id="newpw" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
+          <button type="button" class="pw-toggle" id="pwToggle1" aria-label="Mostrar/ocultar senha">
+            <svg class="eye-on" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <span id="pwHint" class="pwhint">Use pelo menos 8 caracteres.</span>
+      </div>
+      <div class="form-row">
+        <label for="confirmpw">Confirme a nova senha</label>
+        <input type="password" id="confirmpw" required minlength="8" placeholder="Repita a senha" autocomplete="new-password" />
+      </div>
+      <button type="submit" id="submitBtn" class="btn btn--primary btn--block">Salvar nova senha</button>
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </div>
+</main>
+
+<footer class="foot-mini">
+  <a href="index.html">Início</a> · <a href="login.html">Entrar</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  var loadingEl = document.getElementById('loading');
+  var invalidEl = document.getElementById('invalidToken');
+  var formEl = document.getElementById('resetForm');
+  var statusEl = document.getElementById('status');
+  var submitBtn = document.getElementById('submitBtn');
+  var newpw = document.getElementById('newpw');
+  var confirmpw = document.getElementById('confirmpw');
+  var pwHint = document.getElementById('pwHint');
+  var pwToggle1 = document.getElementById('pwToggle1');
+
+  function showStatus(type, msg) {
+    statusEl.className = 'status show ' + type;
+    statusEl.innerHTML = msg;
+  }
+  function hideStatus() { statusEl.className = 'status'; statusEl.innerHTML = ''; }
+
+  pwToggle1.addEventListener('click', function() {
+    var isShown = pwToggle1.classList.toggle('show');
+    newpw.type = isShown ? 'text' : 'password';
+  });
+
+  newpw.addEventListener('input', function() {
+    var v = newpw.value;
+    if (v.length === 0) {
+      pwHint.className = 'pwhint';
+      pwHint.textContent = 'Use pelo menos 8 caracteres.';
+    } else if (v.length < 8) {
+      pwHint.className = 'pwhint weak';
+      pwHint.textContent = 'Faltam ' + (8 - v.length) + ' caracteres.';
+    } else {
+      pwHint.className = 'pwhint ok';
+      pwHint.textContent = '✓ Senha forte o suficiente.';
+    }
+  });
+
+  // Supabase recovery: o link do email vem com #access_token=...&type=recovery
+  // O cliente SDK detecta automaticamente via onAuthStateChange
+  sb.auth.onAuthStateChange(function(event, session) {
+    if (event === 'PASSWORD_RECOVERY' || (session && session.user)) {
+      loadingEl.style.display = 'none';
+      formEl.style.display = 'block';
+    }
+  });
+
+  // Fallback: se em 2s nada aconteceu E não tem hash de recovery, mostra erro
+  setTimeout(async function() {
+    var { data: { session } } = await sb.auth.getSession();
+    if (!session || !session.user) {
+      // Sem sessão ativa e sem token no hash = link inválido
+      if (!window.location.hash || window.location.hash.indexOf('access_token') < 0) {
+        loadingEl.style.display = 'none';
+        invalidEl.style.display = 'block';
+      }
+    } else {
+      // Tem sessão (recovery validou) — mostra form
+      loadingEl.style.display = 'none';
+      formEl.style.display = 'block';
+    }
+  }, 2000);
+
+  formEl.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideStatus();
+    var pw1 = newpw.value;
+    var pw2 = confirmpw.value;
+
+    if (!pw1 || pw1.length < 8) { showStatus('err', 'Senha precisa ter pelo menos 8 caracteres.'); return; }
+    if (pw1 !== pw2) { showStatus('err', 'As senhas não coincidem.'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Salvando...';
+
+    try {
+      var result = await sb.auth.updateUser({ password: pw1 });
+      if (result.error) {
+        showStatus('err', result.error.message || 'Erro ao salvar');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Salvar nova senha';
+      } else {
+        showStatus('ok', '<strong>Senha atualizada!</strong> Redirecionando pro login...');
+        formEl.style.display = 'none';
+        setTimeout(function() {
+          // Faz logout pra forçar novo login com senha
+          sb.auth.signOut().then(function() {
+            window.location.replace('login.html?reset=ok');
+          });
+        }, 1500);
+      }
+    } catch (err) {
+      showStatus('err', 'Erro inesperado: ' + (err.message || err));
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Salvar nova senha';
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -133,15 +133,34 @@
   .card h1 { font-size: 26px; font-weight: 900; text-align: center; margin-bottom: 8px; }
   .card .lead { font-size: 14.5px; color: var(--gray-700); text-align: center; margin-bottom: 28px; line-height: 1.5; }
 
-  .form-row { margin-bottom: 18px; }
-  .form-row label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
-  .form-row input[type="email"] {
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .form-row label a { font-size: 12.5px; font-weight: 600; color: var(--zip-green-dark); text-decoration: none; }
+  .form-row label a:hover { text-decoration: underline; }
+  .form-row input[type="email"],
+  .form-row input[type="password"],
+  .form-row input[type="text"] {
     width: 100%; padding: 14px 16px; font: inherit; font-size: 15.5px;
     border: 2px solid var(--gray-300); border-radius: 10px;
     transition: border-color .15s;
     background: var(--white); color: var(--black);
   }
-  .form-row input[type="email"]:focus { outline: none; border-color: var(--zip-green); }
+  .form-row input:focus { outline: none; border-color: var(--zip-green); }
+
+  /* Password field com toggle visibility */
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 48px !important; }
+  .pw-toggle {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: 0; padding: 8px; cursor: pointer;
+    color: var(--gray-500); display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; transition: color .15s, background .15s;
+  }
+  .pw-toggle:hover { color: var(--gray-900); background: var(--gray-100); }
+  .pw-toggle svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .pw-toggle .eye-off { display: none; }
+  .pw-toggle.show .eye-on { display: none; }
+  .pw-toggle.show .eye-off { display: block; }
 
   .status { margin-top: 14px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
   .status.show { display: block; }
@@ -224,15 +243,28 @@
       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </div>
     <h1>Entre na sua conta</h1>
-    <p class="lead">Sem senha. A gente envia um link de acesso pro seu e-mail — válido por 1 hora.</p>
+    <p class="lead">Acesse o app pra reservar carros, ver suas viagens e gerenciar seu perfil.</p>
 
     <form id="loginForm" novalidate>
       <div class="form-row">
-        <label for="email">Seu e-mail cadastrado</label>
+        <label for="email">E-mail</label>
         <input type="email" id="email" name="email" required autocomplete="email" placeholder="voce@email.com" />
       </div>
+      <div class="form-row">
+        <label for="password">
+          Senha
+          <a href="recuperar-senha.html">Esqueci minha senha</a>
+        </label>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Sua senha" minlength="8" />
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar/ocultar senha">
+            <svg class="eye-on" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
       <button type="submit" id="submitBtn" class="btn btn--primary btn--block">
-        📧 Receber link de acesso
+        Entrar
       </button>
     </form>
 
@@ -241,6 +273,12 @@
     <div class="alt">
       Ainda não tem conta? <a href="index.html#cadastro">Criar conta grátis →</a>
     </div>
+
+    <p style="font-size:12px; color:var(--gray-500); text-align:center; margin-top:10px; line-height:1.5;">
+      Cadastrou antes <strong>sem senha?</strong> Use
+      <a href="recuperar-senha.html" style="color:var(--zip-green-dark); font-weight:700;">Esqueci minha senha</a>
+      pra definir.
+    </p>
 
     <p class="legal">
       Ao entrar, você concorda com nossos
@@ -271,8 +309,10 @@
 
   var form = document.getElementById('loginForm');
   var emailInput = document.getElementById('email');
+  var passwordInput = document.getElementById('password');
   var submitBtn = document.getElementById('submitBtn');
   var statusEl = document.getElementById('status');
+  var pwToggle = document.getElementById('pwToggle');
 
   function showStatus(type, msg) {
     statusEl.className = 'status show ' + type;
@@ -283,49 +323,62 @@
     statusEl.innerHTML = '';
   }
 
+  // Toggle visibility da senha
+  pwToggle.addEventListener('click', function() {
+    var isShown = pwToggle.classList.toggle('show');
+    passwordInput.type = isShown ? 'text' : 'password';
+  });
+
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     hideStatus();
     var email = (emailInput.value || '').trim().toLowerCase();
+    var password = passwordInput.value || '';
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showStatus('err', '⚠️ Digite um e-mail válido.');
+      showStatus('err', 'Digite um e-mail válido.');
+      return;
+    }
+    if (!password || password.length < 8) {
+      showStatus('err', 'Senha deve ter pelo menos 8 caracteres.');
       return;
     }
     submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ Enviando...';
+    submitBtn.textContent = 'Entrando...';
 
     try {
-      var result = await sb.auth.signInWithOtp({
-        email: email,
-        options: {
-          emailRedirectTo: REDIRECT_AFTER_LOGIN,
-          shouldCreateUser: false  // não cria conta nova se email não existe
-        }
-      });
+      var result = await sb.auth.signInWithPassword({ email: email, password: password });
       if (result.error) {
-        // Erro mais comum: "Signups not allowed for otp" (significa: email não cadastrado)
-        var msg = result.error.message || '';
-        if (/not allowed|user not found|signup/i.test(msg)) {
+        var msg = (result.error.message || '').toLowerCase();
+        if (/invalid login|invalid credentials|wrong password/i.test(msg)) {
+          showStatus('err',
+            'E-mail ou senha incorretos. ' +
+            '<a href="recuperar-senha.html">Esqueceu sua senha?</a>'
+          );
+        } else if (/email not confirmed|not confirmed/i.test(msg)) {
           showStatus('info',
-            '🤔 Não achamos uma conta com esse e-mail.<br>' +
+            '<strong>Confirme seu e-mail primeiro.</strong> ' +
+            'Olha sua caixa de entrada pra ativar a conta.'
+          );
+        } else if (/not found|user.*does not exist/i.test(msg)) {
+          showStatus('info',
+            'Não achamos uma conta com esse e-mail. ' +
             '<a href="index.html#cadastro">Criar conta grátis →</a>'
           );
         } else {
-          showStatus('err', '❌ ' + msg);
+          showStatus('err', result.error.message);
         }
       } else {
-        showStatus('ok',
-          '✅ <strong>Link enviado!</strong><br>' +
-          'Abra o e-mail em <strong>' + email + '</strong> e clique no botão "Entrar".<br>' +
-          '<small style="opacity:0.8;">O link vale por 1 hora. Não veio? Cheque o SPAM.</small>'
-        );
-        emailInput.value = '';
+        // Sucesso — sessão setada, redirect pra home
+        showStatus('ok', '<strong>Bem-vindo de volta!</strong> Redirecionando...');
+        setTimeout(function() {
+          window.location.replace(REDIRECT_AFTER_LOGIN);
+        }, 600);
       }
     } catch (err) {
-      showStatus('err', '❌ Erro inesperado: ' + (err.message || err));
+      showStatus('err', 'Erro inesperado: ' + (err.message || err));
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '📧 Receber link de acesso';
+      submitBtn.innerHTML = 'Entrar';
     }
   });
 
