@@ -159,24 +159,16 @@
           </div>
 
           <div class="field">
-            <label>Horário de retirada</label>
-            <div class="slots">
-              <div class="slot off">08:00</div>
-              <div class="slot off">09:00</div>
-              <div class="slot">10:00</div>
-              <div class="slot on" id="slotStart">11:00</div>
-              <div class="slot">12:00</div>
-              <div class="slot">13:00</div>
-              <div class="slot off">14:00</div>
-              <div class="slot">15:00</div>
-              <div class="slot">16:00</div>
+            <label>Horário de retirada <small style="font-weight:400; color:var(--ink-mute);">(slots em tempo real)</small></label>
+            <div class="slots" id="slotsList">
+              <!-- slots populados via JS com base em data + conflitos -->
             </div>
-            <p style="font-size:12px; color:var(--ink-mute);">⚪ disponível · 🟢 selecionado · ⚫ ocupado</p>
+            <p style="font-size:12px; color:var(--ink-mute);">⚪ disponível · 🟢 selecionado · ⚫ ocupado por outro usuário</p>
           </div>
 
           <div class="field">
             <label>Duração da reserva</label>
-            <select id="duration" onchange="updateSummary()" aria-label="Duração da reserva em horas">
+            <select id="duration" aria-label="Duração da reserva em horas">
               <option value="2">2 horas — R$ 38</option>
               <option value="4">4 horas — R$ 76</option>
               <option value="6" selected>6 horas — R$ 114</option>
@@ -184,13 +176,21 @@
               <option value="12">12 horas — R$ 149 (teto diária)</option>
               <option value="24">1 dia (24h) — R$ 149</option>
               <option value="48">2 dias — R$ 298</option>
+              <option value="72">3 dias — R$ 447</option>
+              <option value="168">1 semana — R$ 1.043</option>
             </select>
-            <p style="font-size:12px; color:var(--ink-mute); margin-top:6px;">💡 Teto automático: você nunca paga mais que a diária (R$ 149) num período de 24h.</p>
+            <p style="font-size:12px; color:var(--ink-mute); margin-top:6px;">💡 Teto automático: você nunca paga mais que a diária (R$ 149) num período de 24h. A data de devolução ajusta automaticamente conforme você escolhe a duração.</p>
           </div>
+
+          <!-- ALERTA DE INCONSISTENCIA -->
+          <div id="dateAlert" style="display:none; background:#fef3c7; border:1px solid #f59e0b; color:#92400e; padding:14px 16px; border-radius:8px; margin-bottom:16px; font-size:14px; line-height:1.5;"></div>
+
+          <!-- ALERTA DE CONFLITO -->
+          <div id="conflictAlert" style="display:none; background:#fef2f2; border:1px solid #ef4444; color:#b91c1c; padding:14px 16px; border-radius:8px; margin-bottom:16px; font-size:14px; line-height:1.5;"></div>
 
           <div class="actions">
             <button class="btn btn--ghost" disabled style="opacity:0.5;">← Voltar</button>
-            <button class="btn btn--primary" onclick="goStep(2)">Continuar →</button>
+            <button class="btn btn--primary" id="btnContinue1" onclick="tryAdvance(2)">Continuar →</button>
           </div>
         </div>
 
@@ -358,6 +358,174 @@
 </footer>
 
 <script>
+/* ============================================================
+   WIZARD DE RESERVA — Lógica completa com:
+   - Sincronização datas ↔ duração ↔ horário
+   - Detecção de conflito (mockada, mas pronta pra backend)
+   - Modal "carro indisponível"
+   - Validação ao avançar steps
+
+   📌 BACKEND REAL (Supabase):
+   - Tabela `bookings` com vehicle_id, start_at, end_at, status
+   - Query disponibilidade:
+       SELECT * FROM bookings
+       WHERE vehicle_id = ?
+         AND status IN ('confirmed','active','pending_payment')
+         AND tstzrange(start_at, end_at) && tstzrange(?, ?)
+   - Se retornar > 0 → carro indisponível
+   - Constraint UNIQUE no banco previne race condition
+   - "Hold" de 10 min ao iniciar checkout (status='pending_payment')
+   ============================================================ */
+
+// ============ DADOS MOCKADOS DE CONFLITOS ============
+// No backend real, viria de SELECT na tabela bookings
+// Formato: { 'YYYY-MM-DD HH:00': true } = bloqueado
+var CONFLITOS_MOCK = {
+  '2026-05-31': { 8: true, 9: true, 14: true },        // sábado: tarde manhã ocupada
+  '2026-06-01': { 7: true, 8: true, 9: true, 18: true, 19: true, 20: true }, // domingo: cheio
+  '2026-06-02': { 10: true, 11: true },                // segunda manhã ocupada
+};
+
+// ============ STATE ============
+var state = {
+  carro: 'tracker',
+  hourly: 19,
+  daily: 149,
+  startDate: '2026-05-31',
+  startHour: 11,
+  durationHours: 6
+};
+
+// ============ HELPERS ============
+function addHours(date, hours) {
+  var d = new Date(date + 'T00:00:00');
+  d.setHours(d.getHours() + hours);
+  return d;
+}
+
+function fmtDate(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function fmtDateBR(d) {
+  return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+}
+
+function calcPrice(hours) {
+  return Math.min(hours * state.hourly, Math.ceil(hours / 24) * state.daily);
+}
+
+function isSlotOccupied(date, hour) {
+  return CONFLITOS_MOCK[date] && CONFLITOS_MOCK[date][hour] === true;
+}
+
+// Verifica se o intervalo da reserva colide com algum slot ocupado
+function hasConflictInRange(startDate, startHour, durationHours) {
+  var start = new Date(startDate + 'T00:00:00');
+  start.setHours(start.getHours() + startHour);
+  for (var i = 0; i < durationHours; i++) {
+    var t = new Date(start);
+    t.setHours(t.getHours() + i);
+    if (isSlotOccupied(fmtDate(t), t.getHours())) return true;
+  }
+  return false;
+}
+
+// ============ RENDER SLOTS (data atual) ============
+function renderSlots() {
+  var date = state.startDate;
+  var slotsEl = document.getElementById('slotsList');
+  slotsEl.innerHTML = '';
+  for (var h = 7; h <= 20; h++) {
+    var div = document.createElement('div');
+    div.className = 'slot';
+    div.textContent = (h < 10 ? '0' + h : h) + ':00';
+    if (isSlotOccupied(date, h)) {
+      div.classList.add('off');
+      div.title = 'Já reservado por outro usuário';
+    } else if (h === state.startHour) {
+      div.classList.add('on');
+    }
+    var hour = h;
+    div.addEventListener('click', function(hVal) {
+      return function() {
+        if (isSlotOccupied(state.startDate, hVal)) {
+          showConflict('Esse horário acabou de ser reservado por outro usuário. Escolha outro horário ou outro carro.');
+          return;
+        }
+        state.startHour = hVal;
+        renderSlots();
+        recomputeAll();
+      };
+    }(hour));
+    slotsEl.appendChild(div);
+  }
+}
+
+// ============ SYNC DATAS ↔ DURAÇÃO ↔ HORÁRIO ============
+function recomputeAll() {
+  var dStart = new Date(state.startDate + 'T00:00:00');
+  dStart.setHours(state.startHour);
+  var dEnd = new Date(dStart);
+  dEnd.setHours(dEnd.getHours() + state.durationHours);
+
+  // Atualiza data devolução automaticamente
+  document.getElementById('date-end').value = fmtDate(dEnd);
+
+  // Verifica conflitos no intervalo todo
+  var conflict = hasConflictInRange(state.startDate, state.startHour, state.durationHours);
+  var alertEl = document.getElementById('conflictAlert');
+  var btn = document.getElementById('btnContinue1');
+  if (conflict) {
+    alertEl.style.display = 'block';
+    alertEl.innerHTML = '🚫 <strong>Conflito de horário</strong>: parte do período escolhido tem reserva de outro usuário. <a href="#" onclick="suggestNextAvailable();return false;" style="color:#b91c1c;font-weight:700;text-decoration:underline;">Ver próximo horário disponível →</a>';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+  } else {
+    alertEl.style.display = 'none';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  }
+
+  // Alerta se data devolução foi alterada manualmente e ficou incoerente
+  var dateAlert = document.getElementById('dateAlert');
+  dateAlert.style.display = 'none';
+
+  // Atualiza summary
+  var totalPrice = calcPrice(state.durationHours);
+  var durLabel = state.durationHours < 24 ? state.durationHours + ' horas' : (state.durationHours / 24) + ' dia(s)';
+  var rateLabel = state.durationHours >= 8 ? 'R$ ' + state.daily + '/dia (teto)' : 'R$ ' + state.hourly + '/hora';
+
+  document.getElementById('sumDate').textContent = fmtDateBR(dStart);
+  document.getElementById('sumDuration').textContent = durLabel;
+  document.getElementById('sumTotal').textContent = 'R$ ' + totalPrice;
+  document.getElementById('sumRate').textContent = rateLabel;
+  document.getElementById('confirmHour').textContent = fmtDateBR(dStart) + ' ' + (state.startHour < 10 ? '0' + state.startHour : state.startHour) + ':00 → ' + fmtDateBR(dEnd) + ' ' + (dEnd.getHours() < 10 ? '0' + dEnd.getHours() : dEnd.getHours()) + ':00 (' + durLabel + ')';
+}
+
+function suggestNextAvailable() {
+  // Sugere o próximo horário (mesmo dia) sem conflito pra duração escolhida
+  for (var h = state.startHour + 1; h <= 23 - state.durationHours; h++) {
+    if (!hasConflictInRange(state.startDate, h, state.durationHours)) {
+      state.startHour = h;
+      renderSlots();
+      recomputeAll();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+  }
+  showConflict('Não há horário disponível nessa data pra essa duração. Tente outra data ou outro carro.');
+}
+
+function showConflict(msg) {
+  var el = document.getElementById('conflictAlert');
+  el.style.display = 'block';
+  el.innerHTML = '🚫 ' + msg;
+}
+
+// ============ STEPS DO WIZARD ============
 function goStep(n) {
   document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById('step' + n).classList.add('active');
@@ -374,30 +542,63 @@ function goStep(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Avança step verificando conflito (não deixa passar se tem conflito)
+function tryAdvance(n) {
+  if (hasConflictInRange(state.startDate, state.startHour, state.durationHours)) {
+    showConflict('Resolva o conflito de horário antes de continuar.');
+    return;
+  }
+  // 🔧 BACKEND REAL: aqui faria um SELECT FOR UPDATE pra "hold" o carro
+  // por 10 min enquanto o user completa o pagamento.
+  goStep(n);
+}
+
 function selectPay(el) {
   document.querySelectorAll('.pay-opt').forEach(function(o) { o.classList.remove('on'); });
   el.classList.add('on');
 }
 
-function updateSummary() {
-  var d = parseInt(document.getElementById('duration').value);
-  var hourly = 19;
-  var daily = 149;
-  var total = Math.min(d * hourly, Math.ceil(d / 24) * daily);
-  var dur = d < 24 ? d + ' horas' : (d / 24) + ' dia(s)';
-  document.getElementById('sumDuration').textContent = dur;
-  document.getElementById('sumTotal').textContent = 'R$ ' + total;
-  document.getElementById('sumRate').textContent = (d >= 8 ? 'R$ ' + daily + '/dia (teto)' : 'R$ ' + hourly + '/hora');
-  var endHour = (11 + d) % 24;
-  document.getElementById('confirmHour').textContent = '31/05/2026 11:00 → ' + (endHour < 10 ? '0' + endHour : endHour) + ':00 (' + dur + ')';
-}
-
-document.querySelectorAll('.slot:not(.off)').forEach(function(s) {
-  s.addEventListener('click', function() {
-    document.querySelectorAll('.slot').forEach(function(x) { x.classList.remove('on'); });
-    s.classList.add('on');
-  });
+// ============ EVENT LISTENERS ============
+document.getElementById('date-start').addEventListener('change', function(e) {
+  state.startDate = e.target.value;
+  renderSlots();
+  recomputeAll();
 });
+
+document.getElementById('date-end').addEventListener('change', function(e) {
+  // Se user mudar data devolução manualmente, recalcula duração
+  var dStart = new Date(state.startDate + 'T00:00:00');
+  dStart.setHours(state.startHour);
+  var dEnd = new Date(e.target.value + 'T00:00:00');
+  dEnd.setHours(state.startHour); // mantém mesma hora
+  var diffHours = Math.round((dEnd - dStart) / (1000 * 60 * 60));
+  if (diffHours <= 0) {
+    document.getElementById('dateAlert').style.display = 'block';
+    document.getElementById('dateAlert').innerHTML = '⚠️ Data de devolução deve ser depois da retirada. Ajustando automaticamente...';
+    setTimeout(function() {
+      state.durationHours = 6;
+      document.getElementById('duration').value = '6';
+      recomputeAll();
+    }, 800);
+    return;
+  }
+  // Atualiza duration pro valor mais próximo no select
+  var nearest = [2, 4, 6, 8, 12, 24, 48, 72, 168].reduce(function(p, c) {
+    return Math.abs(c - diffHours) < Math.abs(p - diffHours) ? c : p;
+  });
+  state.durationHours = nearest;
+  document.getElementById('duration').value = String(nearest);
+  recomputeAll();
+});
+
+document.getElementById('duration').addEventListener('change', function(e) {
+  state.durationHours = parseInt(e.target.value);
+  recomputeAll();
+});
+
+// Init
+renderSlots();
+recomputeAll();
 </script>
 
 </body>
