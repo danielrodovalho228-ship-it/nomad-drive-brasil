@@ -147,7 +147,7 @@
 
 <nav class="crumb">
   <div class="wrap">
-    <a href="index.html">Início</a> <span>›</span> <a href="index.html#locais">Carros</a> <span>›</span> <strong style="color:var(--ink);">Chevrolet Tracker 2024</strong>
+    <a href="index.html">Início</a> <span>›</span> <a href="index.html#locais">Carros</a> <span>›</span> <strong style="color:var(--ink);" id="crumbName">Chevrolet Tracker 2024</strong>
   </div>
 </nav>
 
@@ -160,12 +160,10 @@
         <!-- GALERIA -->
         <div class="gallery">
           <div class="gallery__main">
-            <img id="mainImg" src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker 2024" />
+            <img id="mainImg" src="../images/car-tracker-1.jpg" alt="" />
           </div>
-          <div class="gallery__thumbs">
-            <div class="gallery__thumb on" onclick="setMain('../images/car-tracker-1.jpg', this)"><img src="../images/car-tracker-1.jpg" alt="Foto 1" /></div>
-            <div class="gallery__thumb" onclick="setMain('../images/car-tracker-2.jpg', this)"><img src="../images/car-tracker-2.jpg" alt="Foto 2" /></div>
-            <div class="gallery__thumb" onclick="setMain('../images/car-tracker-3.jpg', this)"><img src="../images/car-tracker-3.jpg" alt="Foto 3" /></div>
+          <div class="gallery__thumbs" id="thumbsList">
+            <!-- Populado via JS -->
           </div>
         </div>
 
@@ -173,14 +171,14 @@
         <div class="section-card" style="margin-top:24px;">
           <h2>Especificações</h2>
           <div class="specs">
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><div class="spec__label">Câmbio</div><div class="spec__val">Automático</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/></svg></div><div><div class="spec__label">Combustível</div><div class="spec__val">Flex</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg></div><div><div class="spec__label">Ano</div><div class="spec__val">2024</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.39 0 4.68.94 6.36 2.64L21 8"/><polyline points="21 3 21 8 16 8"/></svg></div><div><div class="spec__label">Motor</div><div class="spec__val">1.2 Turbo</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div><div class="spec__label">Ar condicionado</div><div class="spec__val">Digital</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div><div><div class="spec__label">Multimídia</div><div class="spec__val">8" táctil</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></div><div><div class="spec__label">Bagageiro</div><div class="spec__val">393 L</div></div></div>
-            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="spec__label">Lugares</div><div class="spec__val">5</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><div class="spec__label">Câmbio</div><div class="spec__val" id="spec-cambio">Automático</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/></svg></div><div><div class="spec__label">Combustível</div><div class="spec__val" id="spec-combustivel">Flex</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg></div><div><div class="spec__label">Ano</div><div class="spec__val" id="spec-ano">2024</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.39 0 4.68.94 6.36 2.64L21 8"/><polyline points="21 3 21 8 16 8"/></svg></div><div><div class="spec__label">Motor</div><div class="spec__val" id="spec-motor">1.2 Turbo</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div><div class="spec__label">Ar condicionado</div><div class="spec__val" id="spec-ar">Digital</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div><div><div class="spec__label">Multimídia</div><div class="spec__val" id="spec-multimidia">8" táctil</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></div><div><div class="spec__label">Bagageiro</div><div class="spec__val" id="spec-bagageiro">393 L</div></div></div>
+            <div class="spec"><div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="spec__label">Lugares</div><div class="spec__val" id="spec-lugares">5</div></div></div>
           </div>
         </div>
 
@@ -236,34 +234,34 @@
       <!-- COLUNA DIREITA: card de reserva sticky -->
       <aside>
         <div class="res">
-          <div class="res__cat">SUV Automático</div>
-          <h1 class="res__title">Chevrolet Tracker 2024</h1>
+          <div class="res__cat" id="resCat">SUV Automático</div>
+          <h1 class="res__title" id="resTitle">Chevrolet Tracker 2024</h1>
           <div class="res__rating">
             <div class="res__stars">★★★★★</div>
-            <span>4,8 · 47 reservas</span>
+            <span id="resRating">4,8 · 47 reservas</span>
           </div>
 
           <div class="res__pricing">
             <div class="res__price-block">
-              <strong>R$ 19</strong>
+              <strong id="resHourly">R$ 19</strong>
               <small>/hora</small>
             </div>
             <div class="res__price-block">
-              <strong>R$ 149</strong>
+              <strong id="resDaily">R$ 149</strong>
               <small>/dia</small>
             </div>
           </div>
 
           <div class="res__teto"><strong>Teto automático:</strong> em reservas longas, você paga o menor entre tarifa por hora e diária.</div>
 
-          <div class="res__status">3 horários disponíveis nas próximas 24h</div>
+          <div class="res__status" id="resStatus">3 horários disponíveis nas próximas 24h</div>
 
           <div class="res__incluso">
             <strong>Já incluso:</strong>
             ✓ 50 km de combustível · ✓ Seguro completo · ✓ Manutenção · ✓ Assistência 24h
           </div>
 
-          <a href="reservar.html?carro=tracker" class="btn btn--primary btn--block">Reservar agora →</a>
+          <a href="reservar.html?carro=tracker" id="resBtn" class="btn btn--primary btn--block">Reservar agora →</a>
 
           <p style="text-align:center; font-size:12px; color:var(--ink-mute); margin-top:14px;">
             Caução R$ 200 (pré-autorização) · Cancelamento grátis até 1h antes
@@ -304,6 +302,94 @@
 </footer>
 
 <script>
+// ============ CATALOGO DE CARROS ============
+// Cada carro tem: id, nome, categoria, slug das imagens (sufixo -1, -2, -3),
+// especs, preço, rating. Adicionar novo carro = adicionar entrada aqui.
+var CARROS = {
+  tracker: {
+    nome: 'Chevrolet Tracker 2024',
+    categoria: 'SUV Automático',
+    imgSlug: 'car-tracker',
+    rating: '4,8 · 47 reservas',
+    hourly: 19, daily: 149,
+    status: '3 horários disponíveis nas próximas 24h',
+    specs: { cambio: 'Automático', combustivel: 'Flex', ano: '2024', motor: '1.2 Turbo', ar: 'Digital', multimidia: '8" táctil', bagageiro: '393 L', lugares: '5' }
+  },
+  cobalt: {
+    nome: 'Chevrolet Cobalt',
+    categoria: 'Sedan Compacto',
+    imgSlug: 'car-cobalt',
+    rating: '4,7 · 38 reservas',
+    hourly: 15, daily: 119,
+    status: '5 horários disponíveis nas próximas 24h',
+    specs: { cambio: 'Automático', combustivel: 'Flex', ano: '2023', motor: '1.8', ar: 'Digital', multimidia: '7" táctil', bagageiro: '563 L', lugares: '5' }
+  },
+  hb20: {
+    nome: 'Hyundai HB20',
+    categoria: 'Hatch Compacto',
+    imgSlug: 'car-hb20',
+    rating: '4,9 · 62 reservas',
+    hourly: 12, daily: 99,
+    status: '2 horários disponíveis nas próximas 24h',
+    specs: { cambio: 'Manual', combustivel: 'Flex', ano: '2023', motor: '1.0', ar: 'Digital', multimidia: '8" táctil', bagageiro: '300 L', lugares: '5' }
+  },
+  renegade: {
+    nome: 'Jeep Renegade',
+    categoria: 'SUV Premium',
+    imgSlug: 'car-renegade',
+    rating: '4,8 · 29 reservas',
+    hourly: 23, daily: 189,
+    status: '4 horários disponíveis nas próximas 24h',
+    specs: { cambio: 'Automático', combustivel: 'Flex', ano: '2024', motor: '1.3 Turbo', ar: 'Digital', multimidia: '10" táctil', bagageiro: '320 L', lugares: '5' }
+  }
+};
+
+// ============ LE QUERY PARAM ?carro=XXX ============
+var params = new URLSearchParams(window.location.search);
+var carroId = (params.get('carro') || 'tracker').toLowerCase();
+if (!CARROS[carroId]) carroId = 'tracker'; // fallback
+var carro = CARROS[carroId];
+
+// ============ POPULA OS DADOS NA TELA ============
+document.title = carro.nome + ' — Nomade Drive · R$ ' + carro.hourly + '/h ou R$ ' + carro.daily + '/dia';
+document.getElementById('crumbName').textContent = carro.nome;
+document.getElementById('mainImg').src = '../images/' + carro.imgSlug + '-1.jpg';
+document.getElementById('mainImg').alt = carro.nome;
+
+// Galeria — popula 3 thumbs
+var thumbs = document.getElementById('thumbsList');
+thumbs.innerHTML = '';
+for (var i = 1; i <= 3; i++) {
+  var src = '../images/' + carro.imgSlug + '-' + i + '.jpg';
+  var div = document.createElement('div');
+  div.className = 'gallery__thumb' + (i === 1 ? ' on' : '');
+  div.innerHTML = '<img src="' + src + '" alt="' + carro.nome + ' - foto ' + i + '" />';
+  div.addEventListener('click', (function(s, el) {
+    return function() { setMain(s, el); };
+  })(src, div));
+  thumbs.appendChild(div);
+}
+
+// Specs
+document.getElementById('spec-cambio').textContent = carro.specs.cambio;
+document.getElementById('spec-combustivel').textContent = carro.specs.combustivel;
+document.getElementById('spec-ano').textContent = carro.specs.ano;
+document.getElementById('spec-motor').textContent = carro.specs.motor;
+document.getElementById('spec-ar').textContent = carro.specs.ar;
+document.getElementById('spec-multimidia').textContent = carro.specs.multimidia;
+document.getElementById('spec-bagageiro').textContent = carro.specs.bagageiro;
+document.getElementById('spec-lugares').textContent = carro.specs.lugares;
+
+// Card de reserva
+document.getElementById('resCat').textContent = carro.categoria;
+document.getElementById('resTitle').textContent = carro.nome;
+document.getElementById('resRating').textContent = carro.rating;
+document.getElementById('resHourly').textContent = 'R$ ' + carro.hourly;
+document.getElementById('resDaily').textContent = 'R$ ' + carro.daily;
+document.getElementById('resStatus').textContent = carro.status;
+document.getElementById('resBtn').href = 'reservar.html?carro=' + carroId;
+
+// ============ TROCA FOTO PRINCIPAL ============
 function setMain(src, thumb) {
   document.getElementById('mainImg').src = src;
   document.querySelectorAll('.gallery__thumb').forEach(function(t) { t.classList.remove('on'); });
