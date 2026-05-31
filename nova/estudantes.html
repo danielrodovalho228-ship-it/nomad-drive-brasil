@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nomade Drive para Estudantes — Carro perto do campus, sem comprar</title>
+<meta name="description" content="Carros disponíveis perto da UFU, UNITRI e UNIUBE em Uberlândia. Pra estudante que precisa de mobilidade mas não pode comprar carro. Desconto especial." />
+<meta name="theme-color" content="#4FA600" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --zip-green:#4FA600; --zip-green-dark:#3F8500; --zip-green-pale:#ecf6e0; --zip-amber:#FFC72C; --black:#1a1a1a; --gray-700:#4a4a4a; --gray-500:#767676; --gray-300:#cccccc; --gray-100:#f5f5f5; --gray-50:#fafafa; --white:#ffffff; --radius:6px; --radius-lg:14px; --shadow:0 4px 12px rgba(0,0,0,0.08); --shadow-lg:0 18px 40px rgba(0,0,0,0.12); }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; line-height: 1.1; font-weight: 800; }
+  h1 { font-size: clamp(34px, 5.5vw, 56px); font-weight: 900; }
+  h2 { font-size: clamp(28px, 4vw, 40px); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--ghost { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; } @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 26px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-700); }
+  .nav__links a:hover, .nav__links a.on { color: var(--zip-green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  /* HERO com tom JOVEM */
+  .hero { background: linear-gradient(135deg, var(--zip-green-pale) 0%, #fff 60%); padding: 56px 0 48px; }
+  .hero__inner { display: grid; gap: 36px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .hero__tag { display: inline-block; padding: 6px 14px; background: var(--zip-amber); color: var(--black); border-radius: 999px; font-size: 12.5px; font-weight: 800; margin-bottom: 18px; }
+  .hero h1 { margin-bottom: 18px; }
+  .hero h1 em { color: var(--zip-green); font-style: normal; }
+  .hero__sub { font-size: clamp(16px, 2vw, 19px); color: var(--gray-700); margin-bottom: 28px; max-width: 540px; }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .hero__promo { display: inline-block; background: var(--zip-amber); color: var(--black); padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 700; }
+  .hero__visual img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
+
+  /* HEAD */
+  .head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+  .head h2 { margin-bottom: 12px; }
+  .head p { color: var(--gray-700); font-size: 17px; }
+
+  .section { padding: 56px 0; }
+  .section--alt { background: var(--gray-50); }
+
+  /* 3 STEPS */
+  .steps { display: grid; gap: 28px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .step { text-align: center; }
+  .step__num { width: 56px; height: 56px; margin: 0 auto 16px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; box-shadow: 0 6px 16px rgba(79,166,0,0.3); }
+  .step h3 { margin-bottom: 10px; font-size: 19px; }
+  .step p { color: var(--gray-700); font-size: 14.5px; line-height: 1.55; padding: 0 12px; }
+
+  /* WHY STUDENTS — 4 CARDS */
+  .why-stu { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .why-stu { grid-template-columns: repeat(2, 1fr); } }
+  .why-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-lg); padding: 24px; display: flex; gap: 16px; }
+  .why-card__icon { width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px; background: var(--zip-green-pale); color: var(--zip-green); display: flex; align-items: center; justify-content: center; }
+  .why-card__icon svg { width: 26px; height: 26px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .why-card h4 { font-size: 17px; margin-bottom: 6px; }
+  .why-card p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
+
+  /* UNIVERSIDADES PARCEIRAS */
+  .unis { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-width: 900px; margin: 0 auto; }
+  .uni { background: var(--white); border: 2px dashed var(--gray-300); border-radius: var(--radius-lg); padding: 20px; text-align: center; transition: border-color .2s, transform .2s; }
+  .uni:hover { border-color: var(--zip-green); border-style: solid; transform: translateY(-3px); }
+  .uni__icon { font-size: 36px; margin-bottom: 8px; }
+  .uni h4 { font-size: 14.5px; margin-bottom: 4px; }
+  .uni p { font-size: 12.5px; color: var(--gray-500); }
+  .uni--soon { opacity: 0.55; }
+  .uni--soon::after { content: 'EM BREVE'; display: block; margin-top: 6px; font-size: 10px; color: var(--zip-amber); font-weight: 800; letter-spacing: 1px; }
+
+  /* PRICING HIGHLIGHT */
+  .price-hi { max-width: 600px; margin: 0 auto; background: var(--white); border: 3px solid var(--zip-green); border-radius: var(--radius-lg); padding: 32px; text-align: center; position: relative; }
+  .price-hi__tag { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: var(--zip-green); color: var(--white); padding: 6px 18px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+  .price-hi h3 { font-size: 22px; margin-bottom: 8px; }
+  .price-hi__price { font-size: 48px; font-weight: 900; color: var(--zip-green); margin: 8px 0; }
+  .price-hi__price small { font-size: 16px; color: var(--gray-500); font-weight: 500; }
+  .price-hi p { color: var(--gray-700); font-size: 15px; margin-bottom: 20px; }
+  .price-hi ul { list-style: none; text-align: left; max-width: 380px; margin: 0 auto 24px; }
+  .price-hi li { padding: 7px 0 7px 26px; position: relative; font-size: 14.5px; color: var(--gray-700); }
+  .price-hi li::before { content: '✓'; position: absolute; left: 0; top: 7px; width: 18px; height: 18px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+
+  /* CTA FINAL */
+  .ctaf { padding: 56px 0; background: var(--black); color: var(--white); text-align: center; }
+  .ctaf h2 { color: var(--white); margin-bottom: 14px; }
+  .ctaf p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 24px; }
+  .ctaf .btn--ghost { color: var(--white); border-color: rgba(255,255,255,0.4); }
+
+  /* FOOTER */
+  .foot { background: #050c09; color: rgba(255,255,255,0.7); padding: 56px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--zip-green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.4); }
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand"><img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" /></a>
+    <nav class="nav__links">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="estudantes.html" class="on">Estudantes</a>
+      <a href="empresas.html">Empresas</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Cadastrar</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div>
+      <span class="hero__tag">🎓 Nomade Drive para Estudantes</span>
+      <h1>Carro perto do campus, <em>sem ter que comprar.</em></h1>
+      <p class="hero__sub">Pra você que mora longe de casa, faz estágio em outra cidade, ou só precisa de carro pra final de semana. Sem fiador, sem fila, sem dor de cabeça.</p>
+      <div class="hero__cta">
+        <a href="index.html#cadastro" class="btn btn--primary">Cadastrar com e-mail @ufu.br</a>
+        <a href="#como" class="btn btn--ghost">Como funciona</a>
+      </div>
+      <div class="hero__promo">🎁 30% OFF na primeira reserva pra estudante</div>
+    </div>
+    <div class="hero__visual">
+      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80&auto=format&fit=crop" alt="Estudantes universitários" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<!-- 3 STEPS -->
+<section class="section" id="como">
+  <div class="wrap">
+    <div class="head">
+      <h2>Em 3 passos você tá dirigindo</h2>
+      <p>Aprovação instantânea pra quem tem e-mail institucional.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step__num">1</div>
+        <h3>Cadastra em 5 min</h3>
+        <p>CNH + carteirinha de estudante (ou e-mail @ufu.br / @unitri.edu.br). Aprovação instantânea pros verificados.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">2</div>
+        <h3>Reserva pelo app</h3>
+        <p>Por hora pra rolê ou diária pra final de semana. Carros perto do campus ou no centro.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">3</div>
+        <h3>Pega no cofre, devolve</h3>
+        <p>Código único pelo app, pega a chave, vai. Devolve no mesmo lugar quando terminar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY STUDENTS — 4 BENEFITS -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="head">
+      <h2>Por que estudante adora</h2>
+      <p>4 motivos pra esquecer de comprar um carro durante a faculdade.</p>
+    </div>
+    <div class="why-stu">
+      <div class="why-card">
+        <div class="why-card__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div>
+          <h4>Economia de verdade</h4>
+          <p>Carro próprio custa R$ 1.000+/mês (IPVA + seguro + gasolina + manutenção). Você só paga quando usa.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div>
+          <h4>Pega quando quer</h4>
+          <p>Final de semana visitando a família, rolê na cidade, ou pra fazer estágio em outro bairro. 24h pelo app.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card__icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div>
+          <h4>Sem fiador, sem score</h4>
+          <p>CNH + comprovante de matrícula. Analisamos por comportamento, não por score do banco.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <h4>Perto do campus</h4>
+          <p>Carros estacionados perto da UFU, UNITRI e UNIUBE. Você anda pouco até pegar a chave.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING HIGHLIGHT — DESCONTO ESTUDANTE -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <h2>Desconto especial pra estudante</h2>
+      <p>Apresente comprovante de matrícula e ganhe condição diferenciada.</p>
+    </div>
+    <div class="price-hi">
+      <div class="price-hi__tag">Universitário</div>
+      <h3>NomadeDrive Pass Estudante</h3>
+      <div class="price-hi__price">R$ 49<small>/ano</small></div>
+      <p>Equivale a R$ 4/mês · Anual pago 1×</p>
+      <ul>
+        <li>50% de desconto vs Pass normal (R$ 99/ano)</li>
+        <li>15% de desconto em todas as reservas</li>
+        <li>50 km de combustível inclusos por reserva</li>
+        <li>Caução R$ 100 (vs R$ 200 do plano normal)</li>
+        <li>Renovação automática anual</li>
+      </ul>
+      <a href="index.html#cadastro" class="btn btn--primary">Cadastrar como estudante</a>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSIDADES PARCEIRAS -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="head">
+      <h2>Universidades parceiras</h2>
+      <p>Carros perto dos principais campus de Uberlândia.</p>
+    </div>
+    <div class="unis">
+      <div class="uni">
+        <div class="uni__icon">🏛️</div>
+        <h4>UFU</h4>
+        <p>Universidade Federal · Campus Santa Mônica</p>
+      </div>
+      <div class="uni">
+        <div class="uni__icon">📚</div>
+        <h4>UNITRI</h4>
+        <p>Centro Universitário · Campus principal</p>
+      </div>
+      <div class="uni">
+        <div class="uni__icon">🎓</div>
+        <h4>UNIUBE</h4>
+        <p>Universidade de Uberaba · Polo Uberlândia</p>
+      </div>
+      <div class="uni uni--soon">
+        <div class="uni__icon">📖</div>
+        <h4>Estácio</h4>
+        <p>Campus Centro</p>
+      </div>
+      <div class="uni uni--soon">
+        <div class="uni__icon">🎓</div>
+        <h4>Pitágoras</h4>
+        <p>Campus Tibery</p>
+      </div>
+      <div class="uni uni--soon">
+        <div class="uni__icon">📚</div>
+        <h4>UNIESSA</h4>
+        <p>Polo Uberlândia</p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:24px; color:var(--gray-500); font-size:14px;">Sua universidade não tá aí? <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--zip-green); font-weight:600;">Chama no WhatsApp</a> que a gente avalia.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="ctaf">
+  <div class="wrap">
+    <h2>Bora começar?</h2>
+    <p>Cadastro em 5 min com e-mail institucional. Primeira reserva com 30% off.</p>
+    <a href="index.html#cadastro" class="btn btn--primary">Cadastrar grátis</a>
+    <a href="como-funciona.html" class="btn btn--ghost" style="margin-left:10px;">Ver como funciona</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="index.html#locais">Frota</a>
+      </div>
+      <div class="foot__col">
+        <h5>Soluções</h5>
+        <a href="empresas.html">Para empresas</a>
+        <a href="estudantes.html">Para estudantes</a>
+        <a href="motoristas-app.html">Para motoristas de app</a>
+        <a href="parceiros.html">Para prédios</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+  </div>
+</footer>
+
+</body>
+</html>

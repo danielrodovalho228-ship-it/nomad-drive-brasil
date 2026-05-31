@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nomade Drive para Empresas — Mobilidade pra equipe sem ter frota</title>
+<meta name="description" content="Carros pra equipe da sua empresa em Uberlândia. Sem comprar frota, sem motorista, sem custos fixos. Uma conta com pagamento mensal único." />
+<meta name="theme-color" content="#4FA600" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --zip-green:#4FA600; --zip-green-dark:#3F8500; --zip-green-pale:#ecf6e0; --zip-amber:#FFC72C; --black:#1a1a1a; --gray-700:#4a4a4a; --gray-500:#767676; --gray-300:#cccccc; --gray-100:#f5f5f5; --gray-50:#fafafa; --white:#ffffff; --radius:6px; --radius-lg:14px; --shadow:0 4px 12px rgba(0,0,0,0.08); --shadow-lg:0 18px 40px rgba(0,0,0,0.12); }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; line-height: 1.1; font-weight: 800; }
+  h1 { font-size: clamp(34px, 5.5vw, 56px); font-weight: 900; }
+  h2 { font-size: clamp(28px, 4vw, 40px); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--ghost { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; } @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 26px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-700); }
+  .nav__links a:hover, .nav__links a.on { color: var(--zip-green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  /* HERO */
+  .hero { background: var(--white); padding: 56px 0 48px; }
+  .hero__inner { display: grid; gap: 36px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .hero__tag { display: inline-block; padding: 6px 14px; background: var(--zip-green-pale); color: var(--zip-green-dark); border-radius: 999px; font-size: 12.5px; font-weight: 700; margin-bottom: 18px; }
+  .hero h1 { margin-bottom: 18px; }
+  .hero h1 em { color: var(--zip-green); font-style: normal; }
+  .hero__sub { font-size: clamp(16px, 2vw, 19px); color: var(--gray-700); margin-bottom: 28px; max-width: 540px; }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero__visual img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
+
+  /* HEAD */
+  .head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+  .head h2 { margin-bottom: 12px; }
+  .head p { color: var(--gray-700); font-size: 17px; }
+
+  /* SECTIONS */
+  .section { padding: 56px 0; }
+  .section--alt { background: var(--gray-50); }
+
+  /* 4 BENEFITS */
+  .benefits { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .benefits { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .benefits { grid-template-columns: repeat(4, 1fr); } }
+  .benefit { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-lg); padding: 28px 22px; text-align: center; transition: transform .2s, box-shadow .2s; }
+  .benefit:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .benefit__icon { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: var(--zip-green-pale); color: var(--zip-green); display: flex; align-items: center; justify-content: center; }
+  .benefit__icon svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .benefit h4 { font-size: 17px; margin-bottom: 8px; }
+  .benefit p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
+
+  /* TIERS */
+  .tiers { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .tiers { grid-template-columns: repeat(4, 1fr); } }
+  .tier { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-lg); padding: 28px 22px; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+  .tier:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .tier__icon { font-size: 36px; margin-bottom: 12px; }
+  .tier h3 { font-size: 19px; margin-bottom: 8px; }
+  .tier p { font-size: 14px; color: var(--gray-700); line-height: 1.55; margin-bottom: 18px; flex-grow: 1; }
+  .tier__cta { color: var(--zip-green); font-weight: 700; font-size: 14px; text-decoration: none; }
+  .tier__cta:hover { color: var(--zip-green-dark); text-decoration: underline; }
+  .tier__cta::after { content: ' →'; }
+
+  /* WHAT'S INCLUDED */
+  .incl-row { display: grid; gap: 14px; grid-template-columns: 1fr; max-width: 880px; margin: 0 auto; }
+  @media (min-width: 600px) { .incl-row { grid-template-columns: repeat(2, 1fr); } }
+  .incl-it { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-100); }
+  .incl-it__check { width: 24px; height: 24px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 900; font-size: 14px; }
+  .incl-it__txt strong { font-size: 14.5px; display: block; margin-bottom: 2px; }
+  .incl-it__txt p { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  /* CONTACT FORM */
+  .contact { padding: 56px 0; background: var(--zip-green-pale); }
+  .contact__inner { display: grid; gap: 36px; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 800px) { .contact__inner { grid-template-columns: 1fr 1fr; } }
+  .contact__copy h2 { margin-bottom: 14px; }
+  .contact__copy p { color: var(--gray-700); margin-bottom: 18px; }
+  .contact__copy ul { list-style: none; padding-left: 0; }
+  .contact__copy li { padding: 7px 0 7px 26px; position: relative; font-size: 14.5px; color: var(--gray-700); }
+  .contact__copy li::before { content: '✓'; position: absolute; left: 0; top: 7px; width: 18px; height: 18px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+  .contact__form { background: var(--white); padding: 28px; border-radius: var(--radius-lg); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+  .contact__form input, .contact__form select, .contact__form textarea { padding: 13px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius); font: inherit; font-size: 14.5px; background: var(--white); }
+  .contact__form input:focus, .contact__form select:focus, .contact__form textarea:focus { outline: 2px solid var(--zip-green); border-color: var(--zip-green); }
+  .contact__form button { padding: 14px; background: var(--zip-green); color: var(--white); border-radius: var(--radius); font-weight: 700; font-size: 15px; cursor: pointer; }
+  .contact__form button:hover { background: var(--zip-green-dark); }
+  .contact__form #emp-feedback { font-size: 14px; text-align: center; padding: 12px; border-radius: var(--radius); display: none; }
+
+  /* FOOTER */
+  .foot { background: var(--black); color: rgba(255,255,255,0.7); padding: 56px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--zip-green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.4); }
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand"><img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" /></a>
+    <nav class="nav__links">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="empresas.html" class="on">Empresas</a>
+      <a href="parceiros.html">Para prédios</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="#contato" class="btn btn--primary btn--sm">Falar com vendas</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div>
+      <span class="hero__tag">Nomade Drive para Empresas</span>
+      <h1>Mobilidade pra <em>equipe</em> sem ter frota.</h1>
+      <p class="hero__sub">Carros disponíveis 24h pra reuniões externas, visitas a cliente, viagens curtas. Uma conta corporativa, faturamento mensal único, sem custo fixo de frota.</p>
+      <div class="hero__cta">
+        <a href="#contato" class="btn btn--primary">Falar com vendas</a>
+        <a href="#beneficios" class="btn btn--ghost">Ver benefícios</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80&auto=format&fit=crop" alt="Reunião corporativa fechando parceria" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<!-- 4 BENEFITS -->
+<section class="section" id="beneficios">
+  <div class="wrap">
+    <div class="head">
+      <h2>Operação mais inteligente, sem dor de frota</h2>
+      <p>Pare de gastar com IPVA, seguro e manutenção de carros que ficam parados.</p>
+    </div>
+    <div class="benefits">
+      <div class="benefit">
+        <div class="benefit__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h4>Disponível 24/7</h4>
+        <p>Funcionário chega no escritório, abre o app, reserva e dirige. Sem precisar de motorista ou agendamento prévio.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h4>Economia real</h4>
+        <p>Você paga só pelo uso. Sem IPVA, sem seguro, sem mecânico, sem motorista dedicado. Pode reduzir o custo de mobilidade em até <strong>60%</strong>.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg></div>
+        <h4>Controle total</h4>
+        <p>Painel admin com relatório de uso por funcionário, centro de custo, projeto. Faturamento mensal único via CNPJ.</p>
+      </div>
+      <div class="benefit">
+        <div class="benefit__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h4>ESG na prática</h4>
+        <p>Cada carro compartilhado substitui ~13 carros particulares. Reduza pegada de carbono da empresa e cumpra metas ESG sem investir em frota elétrica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="head">
+      <h2>Uma conta com tudo incluído</h2>
+      <p>Sem taxas extras, sem surpresas no fim do mês.</p>
+    </div>
+    <div class="incl-row">
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Combustível</strong><p>50 km inclusos por reserva, acima R$ 0,80/km</p></div></div>
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Seguro completo</strong><p>Cobertura ampla Yelum/Sulamérica, franquia R$ 1.500</p></div></div>
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Manutenção</strong><p>Revisão, óleo, pneus por nossa conta</p></div></div>
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Limpeza periódica</strong><p>Carro sempre apresentável pra reunião externa</p></div></div>
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Suporte 24/7</strong><p>WhatsApp humano, guincho, chaveiro</p></div></div>
+      <div class="incl-it"><div class="incl-it__check">✓</div><div class="incl-it__txt"><strong>Nota fiscal</strong><p>Emissão automática via CNPJ a cada reserva</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <h2>Solução pra cada porte de empresa</h2>
+      <p>Da startup ao governo, temos um plano que cabe na sua operação.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier__icon">🏠</div>
+        <h3>Residencial</h3>
+        <p>Pro seu condomínio (síndico ou administradora). Carros na garagem pra moradores.</p>
+        <a href="parceiros.html" class="tier__cta">Saiba mais</a>
+      </div>
+      <div class="tier">
+        <div class="tier__icon">💼</div>
+        <h3>PME</h3>
+        <p>Pequena e média empresa. Conta corporativa com até 30 funcionários cadastrados.</p>
+        <a href="#contato" class="tier__cta">Falar com vendas</a>
+      </div>
+      <div class="tier">
+        <div class="tier__icon">🏢</div>
+        <h3>Enterprise</h3>
+        <p>Grande empresa. Acesso 24/7 customizado, integração com sistemas internos, centro de custo.</p>
+        <a href="#contato" class="tier__cta">Falar com vendas</a>
+      </div>
+      <div class="tier">
+        <div class="tier__icon">🏛️</div>
+        <h3>Governo</h3>
+        <p>Órgão público. Conformidade com lei de licitações, faturamento via empenho.</p>
+        <a href="#contato" class="tier__cta">Falar com vendas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="contact" id="contato">
+  <div class="wrap contact__inner">
+    <div class="contact__copy">
+      <h2>Vamos transformar a mobilidade da sua empresa</h2>
+      <p>Conte um pouco sobre sua operação. Nosso time comercial retorna em até 48h úteis.</p>
+      <ul>
+        <li>Reunião de 30 min sem compromisso</li>
+        <li>Cálculo de economia personalizado pra sua frota atual</li>
+        <li>Contrato sem fidelidade — cancele com 30 dias</li>
+        <li>Onboarding completo dos seus funcionários</li>
+      </ul>
+    </div>
+    <form id="formEmpresa" class="contact__form">
+      <input type="text" id="emp-name" required placeholder="Seu nome" aria-label="Nome" />
+      <input type="email" id="emp-email" required placeholder="E-mail corporativo" aria-label="E-mail" />
+      <input type="tel" id="emp-phone" required placeholder="WhatsApp (com DDD)" aria-label="WhatsApp" />
+      <input type="text" id="emp-company" required placeholder="Nome da empresa" aria-label="Empresa" />
+      <select id="emp-size" required aria-label="Tamanho da empresa">
+        <option value="">Tamanho da empresa...</option>
+        <option>Até 10 funcionários</option>
+        <option>11 a 50 funcionários</option>
+        <option>51 a 200 funcionários</option>
+        <option>Mais de 200 funcionários</option>
+        <option>Órgão público / governo</option>
+      </select>
+      <textarea id="emp-notes" rows="3" placeholder="Conte um pouco sobre sua operação (opcional)" aria-label="Observações"></textarea>
+      <button type="submit" id="emp-submit">Falar com vendas →</button>
+      <div id="emp-feedback"></div>
+    </form>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="index.html#locais">Frota</a>
+      </div>
+      <div class="foot__col">
+        <h5>Soluções</h5>
+        <a href="empresas.html">Para empresas</a>
+        <a href="estudantes.html">Para estudantes</a>
+        <a href="motoristas-app.html">Para motoristas de app</a>
+        <a href="parceiros.html">Para prédios</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+  </div>
+</footer>
+
+<script>
+var EDGE_LEAD = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
+var WA_PHONE = '5534984064864';
+function setFb(el, type, msg) {
+  el.style.display = 'block'; el.innerHTML = msg;
+  el.style.background = type === 'ok' ? '#ecf6e0' : type === 'err' ? '#fef2f2' : '#fef9e7';
+  el.style.color = type === 'ok' ? '#2E6100' : type === 'err' ? '#b91c1c' : '#92400e';
+  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d883' : type === 'err' ? '#fca5a5' : '#fbbf24');
+}
+document.getElementById('formEmpresa').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var n = document.getElementById('emp-name').value.trim();
+  var em = document.getElementById('emp-email').value.trim();
+  var ph = document.getElementById('emp-phone').value.trim();
+  var co = document.getElementById('emp-company').value.trim();
+  var sz = document.getElementById('emp-size').value;
+  var nt = document.getElementById('emp-notes').value.trim();
+  if (!n || !em || !ph || !co || !sz) return;
+  var btn = document.getElementById('emp-submit');
+  var fb = document.getElementById('emp-feedback');
+  var orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  setFb(fb, 'info', '⏳ Enviando seu contato...');
+  try {
+    var r = await fetch(EDGE_LEAD, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'nova-landing-empresas',
+        name: n, email: em, phone: ph, city: co,
+        intent: 'corporate-fleet',
+        extra: { empresa: co, tamanho: sz, observacoes: nt },
+        source_url: window.location.href
+      })
+    });
+    var data = await r.json();
+    if (r.ok && data.ok) {
+      setFb(fb, 'ok', '✅ <strong>Recebido!</strong> Time comercial retorna em até 48h. <br><a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent('Sou de ' + co + ' (' + sz + ') e quero falar sobre mobilidade corporativa') + '" target="_blank" style="color:#4FA600;font-weight:600;text-decoration:underline;">💬 Adiantar pelo WhatsApp →</a>');
+      btn.textContent = '✓ Enviado';
+    } else throw new Error(data.error || 'Erro');
+  } catch (err) {
+    var wamsg = '💼 *Interesse Nomade Drive Empresas*\n\nNome: ' + n + '\nEmpresa: ' + co + '\nTamanho: ' + sz + '\nE-mail: ' + em + '\nWhatsApp: ' + ph;
+    setFb(fb, 'err', '⚠️ Erro. <a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" style="color:#b91c1c;font-weight:600;text-decoration:underline;">Fala pelo WhatsApp →</a>');
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
+</script>
+
+</body>
+</html>

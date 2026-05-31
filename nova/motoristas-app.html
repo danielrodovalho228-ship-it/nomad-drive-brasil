@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nomade Drive para Motoristas de App — Ganhe dirigindo sem ter carro</title>
+<meta name="description" content="Alugue carro por dia pra dirigir Uber, 99, iFood. Combustível, seguro, manutenção inclusos. Comece a ganhar hoje mesmo." />
+<meta name="theme-color" content="#4FA600" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --zip-green:#4FA600; --zip-green-dark:#3F8500; --zip-green-pale:#ecf6e0; --zip-amber:#FFC72C; --black:#1a1a1a; --gray-700:#4a4a4a; --gray-500:#767676; --gray-300:#cccccc; --gray-100:#f5f5f5; --gray-50:#fafafa; --white:#ffffff; --radius:6px; --radius-lg:14px; --shadow:0 4px 12px rgba(0,0,0,0.08); --shadow-lg:0 18px 40px rgba(0,0,0,0.12); }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; line-height: 1.1; font-weight: 800; }
+  h1 { font-size: clamp(34px, 5.5vw, 56px); font-weight: 900; }
+  h2 { font-size: clamp(28px, 4vw, 40px); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 30px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--amber { background: var(--zip-amber); color: var(--black); }
+  .btn--amber:hover { background: #fbcb4a; transform: translateY(-1px); }
+  .btn--ghost { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; } @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 26px; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-700); }
+  .nav__links a:hover, .nav__links a.on { color: var(--zip-green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  /* HERO com foco PRÁTICO ($$$) */
+  .hero { background: var(--black); color: var(--white); padding: 56px 0 48px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 60% at 80% 30%, rgba(79,166,0,0.2), transparent 60%), radial-gradient(50% 50% at 10% 90%, rgba(255,199,44,0.15), transparent 70%); pointer-events: none; }
+  .hero__inner { position: relative; display: grid; gap: 36px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .hero__tag { display: inline-block; padding: 6px 14px; background: var(--zip-amber); color: var(--black); border-radius: 999px; font-size: 12.5px; font-weight: 800; margin-bottom: 18px; }
+  .hero h1 { color: var(--white); margin-bottom: 18px; }
+  .hero h1 em { color: var(--zip-amber); font-style: normal; }
+  .hero__sub { font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.85); margin-bottom: 28px; max-width: 540px; }
+  .hero__sub strong { color: var(--white); }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .hero__apps { display: flex; gap: 10px; align-items: center; }
+  .hero__apps span { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .hero__apps strong { background: rgba(255,255,255,0.08); padding: 5px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .hero__visual img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
+
+  /* EARNINGS CARD — DESTAQUE */
+  .earnings { padding: 48px 0; background: var(--zip-green-pale); }
+  .earnings__card { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-lg); max-width: 920px; margin: 0 auto; display: grid; gap: 24px; grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 700px) { .earnings__card { grid-template-columns: 1.2fr 1fr; } }
+  .earnings__label { font-size: 12px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 8px; }
+  .earnings h3 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 8px; }
+  .earnings p { color: var(--gray-700); font-size: 14.5px; line-height: 1.55; }
+  .earnings__num { text-align: center; padding: 24px; background: linear-gradient(135deg, var(--zip-green-pale) 0%, #d6e9b4 100%); border-radius: var(--radius-lg); }
+  .earnings__num strong { display: block; font-size: 48px; font-weight: 900; color: var(--zip-green-dark); line-height: 1; }
+  .earnings__num span { display: block; font-size: 14px; color: var(--gray-700); margin-top: 8px; }
+
+  /* HEAD */
+  .head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+  .head h2 { margin-bottom: 12px; }
+  .head p { color: var(--gray-700); font-size: 17px; }
+
+  .section { padding: 56px 0; }
+  .section--alt { background: var(--gray-50); }
+
+  /* 3 WHY */
+  .why3 { display: grid; gap: 28px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 760px) { .why3 { grid-template-columns: repeat(3, 1fr); } }
+  .why-it { text-align: center; }
+  .why-it__icon { width: 72px; height: 72px; margin: 0 auto 16px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .why-it__icon svg { width: 36px; height: 36px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .why-it h3 { margin-bottom: 8px; font-size: 19px; }
+  .why-it p { color: var(--gray-700); font-size: 14.5px; line-height: 1.55; padding: 0 12px; }
+
+  /* INCLUDED */
+  .incl-app { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-width: 1000px; margin: 0 auto; }
+  .incl-app__item { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 22px; }
+  .incl-app__item h4 { font-size: 16px; margin-bottom: 6px; color: var(--zip-green-dark); display: flex; align-items: center; gap: 8px; }
+  .incl-app__item h4::before { content: '✓'; width: 22px; height: 22px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; flex-shrink: 0; }
+  .incl-app__item p { font-size: 13.5px; color: var(--gray-700); line-height: 1.55; padding-left: 30px; }
+
+  /* 5 STEPS */
+  .steps5 { display: grid; gap: 20px; grid-template-columns: 1fr; max-width: 920px; margin: 0 auto; }
+  .step5 { display: flex; gap: 16px; padding: 18px 22px; background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-lg); align-items: center; }
+  .step5__num { width: 44px; height: 44px; flex-shrink: 0; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 17px; }
+  .step5__body strong { display: block; font-size: 15.5px; margin-bottom: 4px; }
+  .step5__body p { font-size: 13.5px; color: var(--gray-700); line-height: 1.5; }
+
+  /* CTA FINAL */
+  .ctaf { padding: 56px 0; background: var(--zip-green-dark); color: var(--white); text-align: center; }
+  .ctaf h2 { color: var(--white); margin-bottom: 14px; }
+  .ctaf p { color: rgba(255,255,255,0.85); font-size: 17px; max-width: 600px; margin: 0 auto 24px; }
+  .ctaf__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  /* FOOTER */
+  .foot { background: var(--black); color: rgba(255,255,255,0.7); padding: 56px 0 28px; }
+  .foot__row { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 4px 0; }
+  .foot__col a:hover { color: var(--zip-green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.4); }
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand"><img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" /></a>
+    <nav class="nav__links">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="motoristas-app.html" class="on">Motoristas de App</a>
+      <a href="empresas.html">Empresas</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost btn--sm">Entrar</a>
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Cadastrar</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO PRÁTICO -->
+<section class="hero">
+  <div class="wrap hero__inner">
+    <div>
+      <span class="hero__tag">🚗 Pra Uber · 99 · iFood · Rappi</span>
+      <h1>Ganhe dirigindo, <em>sem precisar ter carro próprio.</em></h1>
+      <p class="hero__sub">Alugue um carro Nomade <strong>por dia</strong> pra rodar nos apps. Combustível, seguro e manutenção <strong>inclusos</strong>. Pague no fim do dia, fique com o lucro.</p>
+      <div class="hero__cta">
+        <a href="index.html#cadastro" class="btn btn--amber">Quero começar a ganhar</a>
+        <a href="#calculo" class="btn btn--ghost" style="color:#fff;border-color:rgba(255,255,255,0.4);">Ver quanto rende</a>
+      </div>
+      <div class="hero__apps">
+        <span>Funciona com:</span>
+        <strong>Uber</strong>
+        <strong>99</strong>
+        <strong>iFood</strong>
+        <strong>Rappi</strong>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=900&q=80&auto=format&fit=crop" alt="Motorista de app na cidade" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<!-- EARNINGS CALCULATOR — DESTAQUE -->
+<section class="earnings" id="calculo">
+  <div class="wrap">
+    <div class="earnings__card">
+      <div>
+        <div class="earnings__label">Quanto rende</div>
+        <h3>Exemplo: 8h de Uber num sábado</h3>
+        <p style="margin-top:14px;">Bruto Uber (média): <strong>R$ 320</strong><br>
+        − Aluguel Nomade (1 dia HB20): <strong>R$ 99</strong><br>
+        − Combustível extra (~80km): <strong>R$ 64</strong><br>
+        <strong style="font-size:18px; color:var(--zip-green-dark);">= R$ 157 líquido no dia</strong></p>
+      </div>
+      <div class="earnings__num">
+        <strong>R$ 3.140</strong>
+        <span>de lucro líquido se rodar 20 dias/mês</span>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:12.5px; color:var(--gray-500); margin-top:18px;">* Simulação educativa. Resultado real varia por demanda, horário e cidade.</p>
+  </div>
+</section>
+
+<!-- 3 WHY -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <h2>Por que motorista de app escolhe Nomade</h2>
+      <p>Sem entrada, sem dívida com banco, sem letra miúda.</p>
+    </div>
+    <div class="why3">
+      <div class="why-it">
+        <div class="why-it__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Carros perto de você</h3>
+        <p>Reserve e ande até a vaga em minutos. Carros distribuídos em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="why-it">
+        <div class="why-it__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Disponível 24/7</h3>
+        <p>Reserve qualquer dia, qualquer hora. Pegue pra rodar de manhã, no fim de semana ou madrugada inteira.</p>
+      </div>
+      <div class="why-it">
+        <div class="why-it__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+        <h3>100% pelo app</h3>
+        <p>Reserve, destrave o cofre, dirija. Sem balcão, sem fila, sem burocracia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="head">
+      <h2>Tudo isso está incluído</h2>
+      <p>Você só paga a diária e o combustível. Sem mais nada.</p>
+    </div>
+    <div class="incl-app">
+      <div class="incl-app__item">
+        <h4>Seguro completo</h4>
+        <p>Cobertura ampla pra você rodar tranquilo. Acionamento via WhatsApp 24h em caso de sinistro.</p>
+      </div>
+      <div class="incl-app__item">
+        <h4>Manutenção</h4>
+        <p>Revisão preventiva, troca de óleo, pneus. Você só dirige — a gente cuida do resto.</p>
+      </div>
+      <div class="incl-app__item">
+        <h4>Assistência 24/7</h4>
+        <p>Guincho, chaveiro, pane elétrica. Suporte humano por WhatsApp em qualquer horário.</p>
+      </div>
+      <div class="incl-app__item">
+        <h4>IPVA + Licenciamento</h4>
+        <p>Tudo pago. Você não precisa lembrar de nenhuma taxa anual.</p>
+      </div>
+      <div class="incl-app__item">
+        <h4>Vistoria digital</h4>
+        <p>Faça check-in com fotos pelo app na retirada e devolução. Protege contra cobrança injusta.</p>
+      </div>
+      <div class="incl-app__item">
+        <h4>Sem fidelidade</h4>
+        <p>Alugue por dia, por semana, por mês. Devolva quando quiser, sem multa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 STEPS -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <h2>Como começar (5 passos)</h2>
+      <p>Você pode estar rodando hoje mesmo.</p>
+    </div>
+    <div class="steps5">
+      <div class="step5">
+        <div class="step5__num">1</div>
+        <div class="step5__body"><strong>Cadastre-se no Nomade</strong><p>Envie CNH, comprovante de residência e selfie. Aprovação em até 24h úteis.</p></div>
+      </div>
+      <div class="step5">
+        <div class="step5__num">2</div>
+        <div class="step5__body"><strong>Cadastre o carro alugado no Uber/99</strong><p>Use o documento do carro Nomade pra cadastrar no app de motorista. A gente fornece autorização por escrito.</p></div>
+      </div>
+      <div class="step5">
+        <div class="step5__num">3</div>
+        <div class="step5__body"><strong>Reserve por dia</strong><p>Pelo app Nomade, escolha o carro e período. Dá pra estender ou devolver antes.</p></div>
+      </div>
+      <div class="step5">
+        <div class="step5__num">4</div>
+        <div class="step5__body"><strong>Pegue a chave no cofre eletrônico</strong><p>Código único pelo app, pega a chave, abre o carro, roda nos apps.</p></div>
+      </div>
+      <div class="step5">
+        <div class="step5__num">5</div>
+        <div class="step5__body"><strong>Devolva no fim do dia, pague o uso</strong><p>Cobrança automática no cartão. Lucro do dia é todo seu.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="ctaf">
+  <div class="wrap">
+    <h2>Comece a ganhar amanhã.</h2>
+    <p>Cadastro 100% online. Aprovação em até 24h. Primeira diária com 20% off.</p>
+    <div class="ctaf__row">
+      <a href="index.html#cadastro" class="btn btn--amber">Cadastrar agora</a>
+      <a href="https://wa.me/5534984064864?text=Quero%20rodar%20Uber%20com%20carro%20Nomade" target="_blank" rel="noopener" class="btn btn--ghost" style="color:#fff;border-color:rgba(255,255,255,0.4);">💬 Tirar dúvida no WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__row">
+      <div class="foot__col foot__brand">
+        <strong>Nomade Drive</strong>
+        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais.</p>
+      </div>
+      <div class="foot__col">
+        <h5>Produto</h5>
+        <a href="como-funciona.html">Como funciona</a>
+        <a href="precos.html">Preços</a>
+        <a href="index.html#locais">Frota</a>
+      </div>
+      <div class="foot__col">
+        <h5>Soluções</h5>
+        <a href="empresas.html">Para empresas</a>
+        <a href="estudantes.html">Para estudantes</a>
+        <a href="motoristas-app.html">Para motoristas de app</a>
+        <a href="parceiros.html">Para prédios</a>
+      </div>
+      <div class="foot__col">
+        <h5>Ajuda</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
+        <a href="../termos.html">Termos</a>
+      </div>
+    </div>
+    <div class="foot__bottom">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
+  </div>
+</footer>
+
+</body>
+</html>
