@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reserva confirmada — Nomade Drive</title>
+<meta name="description" content="Sua reserva está confirmada. Código do cofre e instruções de retirada." />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green:#145f3e; --green-dark:#0a2d1d; --green-bright:#6dc24b; --green-pale:#e8f6ee; --amber:#fbbf24; --ink:#0b1813; --ink-soft:#344b41; --ink-mute:#6b7670; --line:#e5e7eb; --bg:#fff; --bg-soft:#f7f8f7; --radius:12px; --radius-lg:22px; --shadow:0 8px 24px rgba(11,24,19,0.08); --shadow-lg:0 22px 60px rgba(11,24,19,0.14); }
+  body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--bg-soft); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 2px solid transparent; transition: all .2s; cursor: pointer; }
+  .btn--primary { background: var(--green); color: #fff; }
+  .btn--primary:hover { background: var(--green-dark); }
+  .btn--amber { background: var(--amber); color: var(--ink); }
+  .btn--amber:hover { background: #fbcb4a; }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn--ghost:hover { background: var(--bg-soft); border-color: var(--ink); }
+  .btn--sm { padding: 10px 18px; font-size: 13.5px; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 44px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+
+  /* HERO SUCCESS */
+  .hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); color: #fff; padding: 56px 0 80px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E"); pointer-events: none; }
+  .hero__icon { width: 96px; height: 96px; margin: 0 auto 22px; background: var(--amber); color: var(--ink); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(251,191,36,0.4); animation: pop .5s ease-out; }
+  @keyframes pop { 0% { transform: scale(0); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  .hero__icon svg { width: 48px; height: 48px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .hero h1 { color: #fff; font-size: clamp(28px, 5vw, 42px); margin-bottom: 12px; }
+  .hero p { color: rgba(255,255,255,0.85); font-size: clamp(15px, 2vw, 17px); }
+  .hero .pid { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--amber); font-size: 15px; margin-top: 14px; letter-spacing: 1px; }
+
+  main { padding: 0 0 64px; margin-top: -40px; position: relative; z-index: 1; }
+
+  /* CODE COFRE — DESTAQUE */
+  .code-card { background: #fff; border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-lg); text-align: center; margin-bottom: 24px; border: 3px solid var(--amber); }
+  .code-card__label { font-size: 12px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 14px; }
+  .code-card__code { font-family: 'Sora', sans-serif; font-size: clamp(56px, 12vw, 88px); font-weight: 900; color: var(--green); letter-spacing: 14px; line-height: 1; margin-bottom: 14px; padding-left: 14px; }
+  .code-card__sub { font-size: 14px; color: var(--ink-mute); margin-bottom: 22px; }
+  .code-card__cta { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+  /* DETAILS GRID */
+  .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .grid { grid-template-columns: 1.1fr 1fr; } }
+
+  .panel { background: #fff; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); }
+  .panel h2 { font-size: 20px; margin-bottom: 18px; }
+
+  /* DETAILS ROWS */
+  .detail-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row__icon { width: 36px; height: 36px; background: var(--green-pale); color: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .detail-row__icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .detail-row__label { font-size: 11.5px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.5px; }
+  .detail-row__val { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14.5px; color: var(--ink); }
+  .detail-row__val small { display: block; font-size: 12px; color: var(--ink-mute); font-weight: 500; margin-top: 2px; font-family: 'Inter', sans-serif; }
+
+  /* MAP */
+  .map { aspect-ratio: 16/10; background: linear-gradient(135deg, var(--green-pale) 0%, #c8e3cf 100%); border-radius: var(--radius); position: relative; overflow: hidden; margin-bottom: 16px; }
+  .map::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(20,95,62,0.08) 1px, transparent 1px), linear-gradient(rgba(20,95,62,0.08) 1px, transparent 1px); background-size: 36px 36px; }
+  .map__pin { position: absolute; top: 42%; left: 50%; transform: translate(-50%, -100%); }
+  .map__pin svg { width: 50px; height: 50px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25)); animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .map__label { position: absolute; top: 58%; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 6px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; color: var(--ink); box-shadow: var(--shadow); white-space: nowrap; }
+
+  /* STEPS COMO USAR */
+  .step-row { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .step-row:last-child { border-bottom: none; }
+  .step-row__num { width: 36px; height: 36px; background: var(--green); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-weight: 800; flex-shrink: 0; font-size: 14px; }
+  .step-row__body strong { font-family: 'Sora', sans-serif; font-size: 14.5px; display: block; margin-bottom: 4px; }
+  .step-row__body p { font-size: 13px; color: var(--ink-mute); line-height: 1.5; }
+
+  /* CTA FINAL */
+  .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 32px; }
+
+  .preview-banner { background: var(--amber); color: var(--ink); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--ink); text-decoration: underline; }
+
+  .foot { background: #050c09; color: rgba(255,255,255,0.6); padding: 28px 0; text-align: center; font-size: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    </a>
+    <div>
+      <a href="index.html" class="btn btn--ghost btn--sm">Ir pra Home</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO SUCCESS -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero__icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1>Reserva confirmada!</h1>
+    <p>Te enviamos os detalhes por e-mail e WhatsApp.</p>
+    <div class="pid">PROTOCOLO #ND-2026-05-31-4827</div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap">
+
+    <!-- CÓDIGO DO COFRE (DESTAQUE) -->
+    <div class="code-card">
+      <div class="code-card__label">🔐 Código do cofre eletrônico</div>
+      <div class="code-card__code">4827</div>
+      <p class="code-card__sub">Digite esse código no teclado do cofre da vaga <strong>G2-12</strong> pra pegar a chave. Válido das 11:00 às 17:00 de hoje.</p>
+      <div class="code-card__cta">
+        <button class="btn btn--primary" onclick="navigator.clipboard && navigator.clipboard.writeText('4827') && alert('Código copiado!')">📋 Copiar código</button>
+        <a href="https://wa.me/5534984064864?text=Quero%20instruções%20de%20uso%20da%20minha%20reserva%20%23ND-2026-05-31-4827" target="_blank" rel="noopener" class="btn btn--ghost">💬 Suporte WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- COLUNA ESQUERDA: detalhes -->
+      <div class="panel">
+        <h2>Detalhes da sua reserva</h2>
+
+        <div class="detail-row">
+          <div class="detail-row__icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+          <div>
+            <div class="detail-row__label">Carro</div>
+            <div class="detail-row__val">Chevrolet Tracker 2024<small>SUV Automático · Flex · 1.2 Turbo · placa ABC-1234</small></div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-row__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="detail-row__label">Horário</div>
+            <div class="detail-row__val">Sáb, 31/05/2026 · 11:00 → 17:00<small>Duração: 6 horas</small></div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-row__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div>
+            <div class="detail-row__label">Local</div>
+            <div class="detail-row__val">Ed. Solar das Acácias · Vaga G2-12<small>Av. Rondon Pacheco, 1234 · Uberlândia</small></div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-row__icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div>
+            <div class="detail-row__label">Pagamento</div>
+            <div class="detail-row__val">R$ 114 — Visa •••• 4242<small>Caução R$ 200 pré-autorizada (não desconta) · Cobrança final ao terminar</small></div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-row__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/></svg></div>
+          <div>
+            <div class="detail-row__label">Combustível incluso</div>
+            <div class="detail-row__val">50 km<small>Acima disso: R$ 0,80/km (você abastece)</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA: mapa + ações -->
+      <aside>
+        <div class="panel" style="margin-bottom:24px;">
+          <h2>Como chegar</h2>
+          <div class="map">
+            <div class="map__pin"><svg viewBox="0 0 24 24"><path d="M12 0C7.6 0 4 3.6 4 8c0 5.4 8 16 8 16s8-10.6 8-16c0-4.4-3.6-8-8-8z" fill="#145f3e"/><circle cx="12" cy="8" r="3" fill="#fff"/></svg></div>
+            <div class="map__label">Ed. Solar das Acácias</div>
+          </div>
+          <a href="#" onclick="alert('Em produção: abre Google Maps com rota até o local'); return false;" class="btn btn--primary" style="width:100%; padding:13px; font-size:14px;">🗺️ Abrir rota no Maps</a>
+        </div>
+
+        <div class="panel">
+          <h2>Como usar</h2>
+          <div class="step-row">
+            <div class="step-row__num">1</div>
+            <div class="step-row__body"><strong>Chegue ao endereço</strong><p>Av. Rondon Pacheco, 1234 — vá pra Vaga G2-12</p></div>
+          </div>
+          <div class="step-row">
+            <div class="step-row__num">2</div>
+            <div class="step-row__body"><strong>Digite o código no cofre</strong><p>Use o código <strong>4827</strong> no teclado numérico do cofre eletrônico</p></div>
+          </div>
+          <div class="step-row">
+            <div class="step-row__num">3</div>
+            <div class="step-row__body"><strong>Pegue a chave + faça vistoria</strong><p>Tire fotos pelo app antes de sair — checagem de avarias</p></div>
+          </div>
+          <div class="step-row">
+            <div class="step-row__num">4</div>
+            <div class="step-row__body"><strong>Devolva no horário</strong><p>Até 17:00, no mesmo local. Coloque a chave de volta no cofre.</p></div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- CTAs FINAIS -->
+    <div class="cta-actions">
+      <a href="index.html" class="btn btn--primary">Voltar pra Home</a>
+      <a href="#" onclick="alert('Em produção: cancela a reserva'); return false;" class="btn btn--ghost">Cancelar reserva</a>
+      <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="btn btn--amber">💬 Suporte 24/7</a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">&copy; 2026 Nomade Drive Brasil · Uberlândia, MG · <a href="../termos.html" style="color:var(--amber);">Termos</a></div>
+</footer>
+
+</body>
+</html>

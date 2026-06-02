@@ -3,534 +3,496 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nomade Drive — Reserve em segundos. Dirija em minutos.</title>
-<meta name="description" content="Carsharing por hora ou dia. Carros estacionados em condomínios, shoppings e hospitais. Combustível, seguro e manutenção inclusos. Crie sua conta grátis." />
+<title>NomadeDrive — Aluguel mensal de carros em Uberlândia | Entrega onde você estiver</title>
+<meta name="description" content="Locação mensal de carros de 30 a 180 dias em Uberlândia/MG. Entrega no aeroporto, hotel ou condomínio. Contrato 100% digital, preço travado, devolução flexível. Para profissionais em transição." />
+<meta name="keywords" content="aluguel mensal de carros Uberlândia, locação mensal Uberlândia, carro mensal Uberlândia, alugar carro 30 dias, alugar carro 60 dias, locadora Uberlândia" />
 <meta name="theme-color" content="#4FA600" />
 <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="NomadeDrive — Aluguel mensal de carros em Uberlândia" />
+<meta property="og:description" content="Locação 30 a 180 dias. Entregamos onde você estiver. Contrato digital." />
+<meta property="og:image" content="../images/car-hb20-1.jpg" />
+<meta property="og:url" content="https://nomadedrive.com.br/nova/" />
+<meta property="og:type" content="website" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://images.unsplash.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-  /* ============ ZIPCAR-STYLE TOKENS ============ */
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --zip-green: #4FA600;       /* Zipcar Limeade — verde oficial */
-    --zip-green-dark: #3F8500;
-    --zip-green-darker: #2E6100;
-    --zip-green-pale: #ecf6e0;
-    --zip-amber: #FFC72C;        /* accent secundário (preserva amarelo Nomade) */
+    --green: #4FA600;
+    --green-dark: #3F8500;
+    --green-darker: #2E6100;
+    --green-pale: #ecf6e0;
+    --amber: #FFC72C;
     --black: #1a1a1a;
     --gray-900: #2a2a2a;
     --gray-700: #4a4a4a;
     --gray-500: #767676;
     --gray-300: #cccccc;
+    --gray-200: #e5e7eb;
     --gray-100: #f5f5f5;
     --gray-50: #fafafa;
     --white: #ffffff;
-    --radius: 6px;
-    --radius-lg: 14px;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     --shadow: 0 4px 12px rgba(0,0,0,0.08);
     --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
   }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', -apple-system, sans-serif; color: var(--black); background: var(--white); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; height: auto; display: block; }
   a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.1; font-weight: 800; }
-  h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 900; }
-  h2 { font-size: clamp(28px, 4vw, 42px); }
-  h3 { font-size: clamp(20px, 2.2vw, 24px); }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+  h1 { font-size: clamp(34px, 5.5vw, 58px); font-weight: 900; }
+  h2 { font-size: clamp(26px, 3.8vw, 38px); }
+  h3 { font-size: clamp(18px, 2vw, 22px); }
+  em { color: var(--green); font-style: normal; }
 
-  /* ============ BUTTONS — estilo Zipcar (pill grande, verde) ============ */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s ease; cursor: pointer; }
-  .btn--primary { background: var(--zip-green); color: var(--white); }
-  .btn--primary:hover { background: var(--zip-green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.35); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--green); color: var(--white); }
+  .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.3); }
   .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
   .btn--ghost-black:hover { background: var(--black); color: var(--white); }
   .btn--ghost-white { background: transparent; color: var(--white); border-color: var(--white); }
   .btn--ghost-white:hover { background: var(--white); color: var(--black); }
-  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .btn--sm { padding: 9px 18px; font-size: 13.5px; }
   .btn--lg { padding: 17px 38px; font-size: 17px; }
-  .btn--block { width: 100%; padding: 16px; font-size: 16px; }
+  .btn--block { width: 100%; }
 
-  /* ============ NAV ============ */
+  /* NAV */
   .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
   .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
   .nav__brand { display: flex; align-items: center; text-decoration: none; }
-  .nav__logo { height: 42px; width: auto; display: block; }
+  .nav__logo { height: 42px; }
   @media (min-width: 700px) { .nav__logo { height: 48px; } }
-  .nav__links { display: none; gap: 28px; align-items: center; }
+  .nav__links { display: none; gap: 26px; align-items: center; }
   .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
-  .nav__links a:hover { color: var(--zip-green); }
+  .nav__links a:hover { color: var(--green); }
   .nav__cta { display: flex; gap: 10px; align-items: center; }
   @media (min-width: 960px) { .nav__links { display: flex; } }
 
-  /* ============ HERO — Zipcar style: branco, headline gigante preto, CTA verde, foto à direita ============ */
-  .hero { background: var(--white); padding: 40px 0 24px; position: relative; overflow: hidden; }
-  .hero__inner { display: grid; gap: 32px; align-items: center; }
-  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.05fr 1fr; gap: 48px; } }
-  .hero__promo { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--zip-green-pale); color: var(--zip-green-darker); font-size: 12.5px; font-weight: 700; margin-bottom: 16px; }
-  .hero__promo::before { content: '🎁'; }
-  .hero h1 { margin-bottom: 14px; }
-  .hero h1 em { color: var(--zip-green); font-style: normal; }
-  .hero__sub { font-size: clamp(16px, 1.7vw, 18px); color: var(--gray-700); max-width: 540px; margin-bottom: 22px; line-height: 1.55; }
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #f5f9f3 0%, #e8f4f8 50%, #ecf6e0 100%); padding: 56px 0 80px; position: relative; overflow: hidden; }
+  .hero__inner { display: grid; gap: 36px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.1fr 1fr; gap: 56px; } }
+  .hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--white); color: var(--green-darker); font-size: 12.5px; font-weight: 700; border: 1px solid #cbe5b6; margin-bottom: 18px; }
+  .hero__badge::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(79,166,0,0.2); }
+  .hero h1 { margin-bottom: 18px; }
+  .hero__sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--gray-700); margin-bottom: 26px; max-width: 540px; line-height: 1.55; }
   .hero__sub strong { color: var(--black); }
-  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 0; }
-
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; }
   .hero__visual { display: flex; align-items: center; justify-content: center; position: relative; }
-  .hero__visual img { width: 100%; max-width: 540px; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
-  .hero__badge { position: absolute; bottom: -18px; right: 20px; background: var(--zip-green); color: var(--white); padding: 14px 24px; border-radius: var(--radius-lg); font-weight: 800; font-size: 14px; box-shadow: var(--shadow-lg); }
-  .hero__badge strong { font-size: 22px; display: block; line-height: 1; margin-bottom: 2px; }
+  .hero__visual img { width: 100%; max-width: 560px; border-radius: 18px; aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
+  .hero__floating-badge { position: absolute; bottom: -16px; right: 16px; background: var(--green); color: var(--white); padding: 12px 22px; border-radius: 14px; font-weight: 800; font-size: 13.5px; box-shadow: var(--shadow-lg); }
+  .hero__floating-badge strong { font-size: 22px; display: block; line-height: 1.1; margin-bottom: 2px; }
 
-  /* ============ BOOKING WIDGET — Zipcar style: card flutuante grande embaixo do hero ============ */
-  .booking { background: var(--white); padding: 0 0 56px; margin-top: -20px; position: relative; z-index: 10; }
-  .booking__card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); border: 1px solid var(--gray-100); }
-  .booking__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
-  .booking__head h3 { font-size: 17px; font-weight: 800; color: var(--black); }
-  .booking__tabs { display: inline-flex; background: var(--gray-100); border-radius: 999px; padding: 4px; gap: 2px; }
-  .booking__tab { padding: 8px 18px; border-radius: 999px; border: none; background: transparent; font-weight: 700; font-size: 13px; color: var(--gray-700); cursor: pointer; transition: all .15s; }
-  .booking__tab.on { background: var(--white); color: var(--zip-green); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-  .booking__grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
-  @media (min-width: 700px) { .booking__grid { grid-template-columns: 1.5fr 1fr 1fr auto; } }
-  .booking__field { display: flex; flex-direction: column; gap: 6px; }
-  .booking__field label { font-size: 11px; font-weight: 800; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
-  .booking__field input, .booking__field select { padding: 12px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius); font: inherit; font-size: 14.5px; background: var(--white); }
-  .booking__field input:focus, .booking__field select:focus { outline: 2px solid var(--zip-green); border-color: var(--zip-green); }
-  .booking__submit { display: flex; align-items: flex-end; }
-  .booking__submit .btn { width: 100%; padding: 13px 24px; height: auto; }
+  /* PROPOSTA VALOR (3 cards após hero) */
+  .props { padding: 64px 0 16px; }
+  .props__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .props__grid { grid-template-columns: repeat(3, 1fr); } }
+  .prop { background: var(--white); border: 1px solid var(--gray-100); border-radius: 16px; padding: 28px 26px; transition: all .2s; }
+  .prop:hover { border-color: var(--green-pale); box-shadow: var(--shadow); transform: translateY(-2px); }
+  .prop__icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .prop__icon svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .prop h3 { font-size: 18px; margin-bottom: 8px; font-weight: 800; }
+  .prop p { font-size: 14.5px; color: var(--gray-700); line-height: 1.55; }
 
-  /* ============ SECTION HEAD ============ */
-  .head { text-align: center; max-width: 760px; margin: 0 auto 36px; }
-  .head h2 { margin-bottom: 12px; }
-  .head p { color: var(--gray-700); font-size: 17px; }
+  /* CATÁLOGO (2 carros + fantasma) */
+  .fleet { padding: 64px 0; background: var(--gray-50); }
+  .head { text-align: center; max-width: 700px; margin: 0 auto 44px; }
+  .head h2 { margin-bottom: 10px; }
+  .head p { color: var(--gray-700); font-size: 16.5px; }
+  .fleet__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .fleet__grid { grid-template-columns: repeat(3, 1fr); } }
+  .car { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); transition: all .2s; display: flex; flex-direction: column; }
+  .car:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--green-pale); }
+  .car__photo { aspect-ratio: 16/10; overflow: hidden; background: var(--gray-100); position: relative; }
+  .car__photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .car:hover .car__photo img { transform: scale(1.05); }
+  .car__photo-badge { position: absolute; top: 12px; left: 12px; background: rgba(26,26,26,0.85); color: var(--white); padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); }
+  .car__photo-badge--available { background: var(--green); color: var(--white); }
+  .car__photo-badge--soon { background: var(--amber); color: var(--black); }
+  .car__body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+  .car__name { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+  .car__cat { font-size: 13px; color: var(--gray-500); margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+  .car__specs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 12.5px; color: var(--gray-700); }
+  .car__spec { display: inline-flex; align-items: center; gap: 5px; }
+  .car__spec svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .car__price { padding: 14px 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 18px; }
+  .car__price-from { font-size: 12px; color: var(--gray-500); display: block; }
+  .car__price-val { font-size: 28px; font-weight: 900; color: var(--black); }
+  .car__price-val small { font-size: 14px; color: var(--gray-500); font-weight: 600; }
+  .car__cta { margin-top: auto; }
+  .car--soon { background: linear-gradient(135deg, #fef9e7 0%, #fef3c7 100%); }
+  .car--soon .car__photo { background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%); display: flex; align-items: center; justify-content: center; color: var(--gray-700); font-size: 60px; }
 
-  /* ============ 3 COL BENEFITS — Zipcar exato (3 colunas com ícones grandes verdes) ============ */
-  .b3 { padding: 56px 0; background: var(--gray-50); }
-  .b3__grid { display: grid; gap: 40px; grid-template-columns: 1fr; }
-  @media (min-width: 760px) { .b3__grid { grid-template-columns: repeat(3, 1fr); gap: 32px; } }
-  .b3__item { text-align: center; padding: 0 12px; }
-  .b3__icon { width: 88px; height: 88px; margin: 0 auto 22px; background: var(--zip-green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-  .b3__icon svg { width: 44px; height: 44px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .b3__item h3 { margin-bottom: 10px; }
-  .b3__item p { color: var(--gray-700); font-size: 15.5px; line-height: 1.6; }
-  .b3__item p strong { color: var(--black); }
+  /* COMO FUNCIONA */
+  .how { padding: 64px 0; }
+  .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
+  .step { text-align: center; padding: 8px; }
+  .step__num { width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; margin: 0 auto 14px; }
+  .step h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; }
+  .step p { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
 
-  /* ============ INCLUDED (4 ícones verdes em fundo branco — estilo Zipcar) ============ */
-  .incl { padding: 56px 0; background: var(--white); }
-  .incl__grid { display: grid; gap: 28px; grid-template-columns: 1fr; max-width: 1100px; margin: 0 auto; }
-  @media (min-width: 600px) { .incl__grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 960px) { .incl__grid { grid-template-columns: repeat(4, 1fr); } }
-  .incl__item { text-align: center; padding: 24px 16px; }
-  .incl__icon { width: 76px; height: 76px; margin: 0 auto 18px; border-radius: 18px; background: var(--zip-green-pale); color: var(--zip-green); display: flex; align-items: center; justify-content: center; }
-  .incl__icon svg { width: 40px; height: 40px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .incl__item h4 { font-weight: 800; font-size: 17px; margin-bottom: 6px; }
-  .incl__item p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
+  /* DIFERENCIAIS (4 cards 2x2) */
+  .differs { padding: 64px 0; background: var(--gray-50); }
+  .differs__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .differs__grid { grid-template-columns: repeat(2, 1fr); } }
+  .differ { background: var(--white); border-radius: 14px; padding: 26px 24px; display: flex; gap: 16px; border: 1px solid var(--gray-100); }
+  .differ__icon { width: 46px; height: 46px; min-width: 46px; border-radius: 12px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; }
+  .differ__icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .differ h4 { font-size: 16.5px; font-weight: 800; margin-bottom: 6px; }
+  .differ p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
 
-  /* ============ FROTA ============ */
-  .fleet { padding: 56px 0; background: var(--gray-50); }
-  .fleet__grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .fleet__card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; }
-  .fleet__card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-  .fleet__card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
-  .fleet__body { padding: 20px; }
-  .fleet__cat { font-size: 11px; font-weight: 800; color: var(--zip-green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-  .fleet__name { font-weight: 800; font-size: 18px; margin-bottom: 8px; color: var(--black); }
-  .fleet__price strong { font-size: 22px; color: var(--black); font-weight: 800; }
-  .fleet__price small { color: var(--gray-500); font-size: 13px; }
+  /* COMPARAÇÃO LOCALIZA */
+  .compare { padding: 64px 0; }
+  .compare__table { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: collapse; background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  .compare__table th, .compare__table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+  .compare__table thead th { background: var(--gray-50); font-weight: 800; color: var(--gray-900); font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .compare__table thead th:nth-child(3) { background: var(--green-pale); color: var(--green-darker); }
+  .compare__table tbody td:nth-child(3) { background: rgba(79,166,0,0.05); font-weight: 700; color: var(--green-darker); }
+  .compare__table tbody td:nth-child(2) { color: var(--gray-500); }
+  .compare__note { text-align: center; font-size: 12.5px; color: var(--gray-500); margin-top: 16px; }
 
-  /* ============ CALLOUT BIG (Zipcar style — 2-col com foto e texto) ============ */
-  .biz { padding: 56px 0; background: var(--white); }
-  .biz__row { display: grid; gap: 40px; grid-template-columns: 1fr; align-items: center; }
-  @media (min-width: 800px) { .biz__row { grid-template-columns: 1fr 1fr; gap: 64px; } }
-  .biz__row + .biz__row { margin-top: 64px; }
-  .biz__img { width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); object-fit: cover; box-shadow: var(--shadow-lg); }
-  .biz__body span.tag { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--zip-green); margin-bottom: 12px; }
-  .biz__body h3 { margin-bottom: 16px; font-size: clamp(24px, 3vw, 32px); }
-  .biz__body p { color: var(--gray-700); font-size: 16px; line-height: 1.6; margin-bottom: 24px; }
+  /* SOBRE */
+  .about { padding: 64px 0; background: var(--gray-50); }
+  .about__grid { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 720px) { .about__grid { grid-template-columns: 0.9fr 1.1fr; } }
+  .about__photo { aspect-ratio: 4/3; background: linear-gradient(135deg, var(--green-pale) 0%, #d4eaf3 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--green-darker); font-size: 14px; text-align: center; padding: 20px; }
+  .about__photo svg { width: 80px; height: 80px; stroke: currentColor; stroke-width: 1.5; fill: none; margin-bottom: 14px; }
+  .about p { font-size: 15.5px; color: var(--gray-700); line-height: 1.7; margin-bottom: 14px; }
+  .about__socio { padding: 14px 0; border-bottom: 1px solid var(--gray-200); }
+  .about__socio:last-child { border-bottom: none; }
+  .about__socio strong { display: block; font-size: 15px; color: var(--black); margin-bottom: 4px; font-weight: 800; }
+  .about__socio span { font-size: 13.5px; color: var(--gray-700); }
+  .about__socio a { color: var(--green-dark); font-weight: 700; text-decoration: none; }
 
-  /* ============ APP DOWNLOAD ============ */
-  .app { padding: 56px 0; background: var(--black); color: var(--white); text-align: center; }
-  .app h2 { color: var(--white); margin-bottom: 14px; }
-  .app p { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 600px; margin: 0 auto 28px; }
-  .app__row { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .app__badge { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; background: var(--white); color: var(--black); border-radius: 12px; text-decoration: none; transition: transform .15s; }
-  .app__badge:hover { transform: translateY(-2px); }
-  .app__badge svg { width: 28px; height: 28px; }
-  .app__badge small { font-size: 11px; opacity: 0.7; display: block; line-height: 1; }
-  .app__badge strong { font-size: 15px; display: block; line-height: 1.2; }
+  /* DEPOIMENTOS (placeholder honesto) */
+  .testimonials { padding: 64px 0; }
+  .testimonials__empty { max-width: 700px; margin: 0 auto; text-align: center; background: var(--gray-50); border-radius: 14px; padding: 40px 28px; border: 1px dashed var(--gray-300); }
+  .testimonials__empty svg { width: 48px; height: 48px; stroke: var(--gray-500); stroke-width: 1.5; fill: none; margin: 0 auto 14px; }
+  .testimonials__empty h3 { font-size: 18px; margin-bottom: 10px; color: var(--gray-900); }
+  .testimonials__empty p { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; }
 
-  /* ============ CADASTRO (form funcional com Edge Function) ============ */
-  .cad { padding: 64px 0; background: var(--zip-bg-blue); }
-  .cad__inner { max-width: 1080px; margin: 0 auto; }
-  .cad__head { text-align: center; margin-bottom: 36px; }
-  .cad__head h2 { margin-bottom: 12px; }
-  .cad__head p { color: var(--gray-700); font-size: 16px; max-width: 620px; margin: 0 auto; }
-  .cad__grid { display: grid; gap: 28px; grid-template-columns: 1fr; align-items: start; }
-  @media (min-width: 880px) { .cad__grid { grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; } }
-  .cad__hero-photo { border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 16 / 10; position: relative; background: linear-gradient(135deg, #d4e8d0 0%, #a8d895 100%); }
-  .cad__hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .cad__hero-badge { position: absolute; top: 14px; left: 14px; background: rgba(26,26,26,0.88); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 6px; backdrop-filter: blur(8px); }
-  .cad__hero-badge::before { content: ''; width: 7px; height: 7px; background: var(--zip-green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(79,166,0,0.3); }
-  .cad__perks { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; list-style: none; padding: 0; }
-  .cad__perk { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: var(--gray-900); line-height: 1.4; }
-  .cad__perk-icon { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: var(--zip-green-pale); color: var(--zip-green-darker); display: flex; align-items: center; justify-content: center; }
-  .cad__perk-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .cad__perk strong { font-weight: 700; display: block; }
-  .cad__perk small { color: var(--gray-500); font-size: 12.5px; display: block; margin-top: 1px; }
-  .cad form { background: var(--white); padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; gap: 14px; }
-  .cad__row { display: flex; flex-direction: column; gap: 6px; }
-  .cad__row label { font-size: 13px; font-weight: 700; color: var(--gray-900); }
-  .cad input[type="text"], .cad input[type="email"], .cad input[type="tel"], .cad input[type="password"] { padding: 13px 14px; border: 2px solid var(--gray-300); border-radius: 10px; font: inherit; font-size: 15px; transition: border-color .15s; background: var(--white); color: var(--black); width: 100%; }
-  .cad input:focus { outline: none; border-color: var(--zip-green); }
-  .cad__pwstrength { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; }
-  .cad__pwstrength.weak { color: #b91c1c; font-weight: 600; }
-  .cad__pwstrength.ok { color: var(--zip-green-dark); font-weight: 600; }
-  .cad__terms { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; color: var(--gray-700); line-height: 1.5; margin-top: 4px; }
-  .cad__terms input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--zip-green); cursor: pointer; flex-shrink: 0; }
-  .cad__terms a { color: var(--zip-green-dark); font-weight: 600; }
-
-  /* ============ FAQ ============ */
-  .faq { padding: 56px 0; background: var(--white); }
-  .faq__list { max-width: 800px; margin: 0 auto; }
-  .faq__item { border-bottom: 1px solid var(--gray-100); }
-  .faq__item summary { padding: 22px 0; cursor: pointer; font-weight: 700; font-size: 17px; display: flex; justify-content: space-between; align-items: center; gap: 14px; list-style: none; }
+  /* FAQ */
+  .faq { padding: 64px 0; background: var(--gray-50); }
+  .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .faq__item { background: var(--white); border-radius: 12px; border: 1px solid var(--gray-100); overflow: hidden; transition: border-color .15s; }
+  .faq__item[open] { border-color: var(--green); }
+  .faq__item summary { padding: 18px 22px; cursor: pointer; font-weight: 700; font-size: 15px; color: var(--black); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary::after { content: '+'; font-size: 28px; color: var(--zip-green); font-weight: 400; transition: transform .2s; flex-shrink: 0; }
+  .faq__item summary::after { content: '+'; color: var(--green); font-size: 22px; font-weight: 900; transition: transform .2s; }
   .faq__item[open] summary::after { transform: rotate(45deg); }
-  .faq__answer { padding: 0 0 22px; color: var(--gray-700); font-size: 15.5px; line-height: 1.65; }
+  .faq__answer { padding: 0 22px 18px; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; }
+  .faq__answer strong { color: var(--black); }
 
-  /* ============ FOOTER (estilo Zipcar — escuro, 6 colunas) ============ */
-  .foot { background: var(--black); color: rgba(255,255,255,0.7); padding: 64px 0 32px; }
-  .foot__row { display: grid; gap: 36px; grid-template-columns: 1fr; margin-bottom: 36px; }
-  @media (min-width: 700px) { .foot__row { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
-  @media (min-width: 1000px) { .foot__row { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; } }
-  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; padding: 5px 0; transition: color .15s; }
-  .foot__col a:hover { color: var(--zip-green); }
-  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 10px; font-weight: 800; }
-  .foot__brand p { font-size: 13.5px; line-height: 1.55; }
-  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: rgba(255,255,255,0.4); }
-  .foot__bottom a { color: rgba(255,255,255,0.5); margin: 0 8px; text-decoration: none; }
-  .foot__bottom a:hover { color: var(--zip-green); }
+  /* CTA final */
+  .cta-final { padding: 80px 0; background: linear-gradient(135deg, #0b2611 0%, #143b1d 100%); color: var(--white); text-align: center; }
+  .cta-final h2 { color: var(--white); margin-bottom: 14px; }
+  .cta-final p { color: rgba(255,255,255,0.78); font-size: 17px; max-width: 600px; margin: 0 auto 28px; line-height: 1.6; }
+  .cta-final__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
-  /* ============ PREVIEW BANNER ============ */
-  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  /* FOOTER */
+  .foot { background: var(--black); color: rgba(255,255,255,0.65); padding: 48px 0 28px; }
+  .foot__row { display: grid; gap: 28px; grid-template-columns: 1fr; margin-bottom: 30px; }
+  @media (min-width: 720px) { .foot__row { grid-template-columns: 2fr 1fr 1fr 1.4fr; } }
+  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
+  .foot__col a:hover { color: var(--green); }
+  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 8px; font-weight: 800; }
+  .foot__brand p { font-size: 13.5px; line-height: 1.6; margin-bottom: 12px; }
+  .foot__seal { background: rgba(255,255,255,0.05); border: 1px solid rgba(79,166,0,0.3); border-radius: 12px; padding: 14px; margin-top: 14px; }
+  .foot__seal strong { display: block; color: var(--green); font-size: 13px; margin-bottom: 6px; font-weight: 800; }
+  .foot__seal p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.4); }
+  .foot__bottom strong { color: rgba(255,255,255,0.65); }
+
+  /* Banner preview (temporário) */
+  .preview-banner { background: var(--amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
   .preview-banner a { color: var(--black); text-decoration: underline; }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">🚧 Preview da nova landing · <a href="../index.html">Voltar pra versão atual</a></div>
+<div class="preview-banner">🚧 Site em pré-lançamento · <a href="../index.html">Voltar para versão antiga</a></div>
 
-<!-- ============ NAV ============ -->
+<!-- NAV -->
 <header class="nav">
   <div class="wrap nav__row">
-    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
-      <img src="../images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
+    <a href="index.html" class="nav__brand" aria-label="NomadeDrive — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="NomadeDrive" class="nav__logo" />
     </a>
-    <nav class="nav__links" aria-label="Navegação">
-      <a href="como-funciona.html">Como funciona</a>
-      <a href="precos.html">Preços</a>
-      <a href="#locais">Onde tem carro</a>
-      <a href="parceiros.html">Para empresas</a>
-      <a href="#faq">Ajuda</a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="#carros">Nossa frota</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#diferenciais">Por que escolher</a>
+      <a href="sobre.html">Sobre nós</a>
+      <a href="#faq">Dúvidas</a>
     </nav>
     <div class="nav__cta">
       <a href="login.html" class="btn btn--ghost-black btn--sm">Entrar</a>
-      <a href="#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+      <a href="#carros" class="btn btn--primary btn--sm">Ver carros</a>
     </div>
   </div>
 </header>
 
-<!-- ============ HERO — estilo Zipcar: branco, headline gigante, foto à direita ============ -->
+<!-- HERO -->
 <section class="hero">
   <div class="wrap hero__inner">
     <div>
-      <span class="hero__promo">Primeiro mês grátis · código BEMVINDO</span>
-      <h1>Reserve em segundos. <em>Dirija em minutos.</em></h1>
-      <p class="hero__sub">Carros no seu <strong>condomínio</strong>, <strong>shopping</strong> ou <strong>hospital</strong>, disponíveis 24h pelo app. Combustível, seguro e manutenção <strong>inclusos</strong>. Pague só pelo tempo que usar — com teto automático na diária.</p>
+      <span class="hero__badge">Operação 100% digital em Uberlândia/MG</span>
+      <h1>Carros para quem está <em>chegando</em> em Uberlândia.</h1>
+      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com entrega onde você estiver — aeroporto, hotel, condomínio. <strong>Sem fila, sem loja, sem letra miúda.</strong></p>
       <div class="hero__cta">
-        <a href="#cadastro" class="btn btn--primary btn--lg">Criar conta grátis</a>
-        <a href="como-funciona.html" class="btn btn--ghost-black btn--lg">Como funciona</a>
+        <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20NomadeDrive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-black">Falar pelo WhatsApp</a>
       </div>
     </div>
     <div class="hero__visual">
-      <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker estacionado em vaga premium" loading="eager" />
-      <div class="hero__badge"><strong>R$ 12</strong>/hora</div>
+      <img src="../images/car-hb20-1.jpg" alt="Carro NomadeDrive estacionado pronto pra entrega" loading="eager" />
+      <div class="hero__floating-badge">
+        <strong>A partir de R$ 2.900</strong>
+        /mês · tudo incluso
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ BOOKING WIDGET — estilo Zipcar (card flutuante embaixo do hero) ============ -->
-<section class="booking">
+<!-- 3 CARDS PROPOSTA DE VALOR -->
+<section class="props">
   <div class="wrap">
-    <div class="booking__card">
-      <div class="booking__head">
-        <h3>🚗 Reserve um carro agora</h3>
-        <div class="booking__tabs" role="tablist">
-          <button class="booking__tab on" data-tab="hourly">Por hora</button>
-          <button class="booking__tab" data-tab="daily">Por dia</button>
+    <div class="props__grid">
+      <div class="prop">
+        <div class="prop__icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
+        <h3>Entrega onde você estiver</h3>
+        <p>No aeroporto, no hotel, no condomínio ou em ponto neutro. Você escolhe o local pelo nosso mapa interativo. <strong>Sem ir até loja.</strong></p>
       </div>
-      <form id="formBooking" class="booking__grid">
-        <div class="booking__field">
-          <label for="bk-where">Onde</label>
-          <input type="text" id="bk-where" placeholder="CEP, endereço ou nome do prédio" value="Av. Rondon Pacheco, Uberlândia" aria-label="Localização" />
+      <div class="prop">
+        <div class="prop__icon">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         </div>
-        <div class="booking__field">
-          <label for="bk-from">Retirada</label>
-          <input type="datetime-local" id="bk-from" value="2026-05-31T11:00" aria-label="Data e hora de retirada" />
-        </div>
-        <div class="booking__field">
-          <label for="bk-to">Devolução</label>
-          <input type="datetime-local" id="bk-to" value="2026-05-31T17:00" aria-label="Data e hora de devolução" />
-        </div>
-        <div class="booking__submit">
-          <button type="submit" class="btn btn--primary">Buscar carros →</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 3 COL BENEFITS (estilo Zipcar exato) ============ -->
-<section class="b3">
-  <div class="wrap">
-    <div class="head">
-      <h2>A maneira mais conveniente de ter carro</h2>
-      <p>Carros perto de você, economia real, e zero burocracia.</p>
-    </div>
-    <div class="b3__grid">
-      <div class="b3__item">
-        <div class="b3__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <h3>Carros perto de você</h3>
-        <p>No seu próprio prédio, shopping ou hospital. Reserve pelo app, vá até a vaga, pegue a chave no <strong>cofre eletrônico</strong>. Pronto.</p>
+        <h3>Contrato 100% digital</h3>
+        <p>Reserve pelo site, contrato assinado pelo celular, pague via PIX ou cartão. <strong>Carro chega em até 24 horas em Uberlândia.</strong></p>
       </div>
-      <div class="b3__item">
-        <div class="b3__icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <h3>Economize dinheiro</h3>
-        <p>Membros economizam <strong>até R$ 1.500/mês</strong> comparado a quem tem carro próprio. Sem IPVA, sem seguro, sem mecânico.</p>
-      </div>
-      <div class="b3__item">
-        <div class="b3__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        <h3>Self-service 24/7</h3>
-        <p>Reserve em segundos pelo app. Destrave o cofre, pegue a chave, dirija. Devolva no horário. <strong>Tudo automático.</strong></p>
+      <div class="prop">
+        <div class="prop__icon">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Preço travado, sem multa</h3>
+        <p>Preço único do início ao fim, sem letra miúda. <strong>Devolva antes do prazo sem multa.</strong> Profissional em transição não fica preso.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ INCLUDED 4 ICONS (estilo Zipcar exato) ============ -->
-<section class="incl">
-  <div class="wrap">
-    <div class="head">
-      <h2>O que está incluído</h2>
-      <p>Sua diária ou hora já tem tudo. Sem taxas escondidas.</p>
-    </div>
-    <div class="incl__grid">
-      <div class="incl__item">
-        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M3 22V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v18"/><path d="M3 14h14"/><path d="M17 9h2.5a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0V13"/></svg></div>
-        <h4>Combustível</h4>
-        <p>50 km inclusos por reserva</p>
-      </div>
-      <div class="incl__item">
-        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
-        <h4>Seguro</h4>
-        <p>Cobertura completa Yelum/Sulamérica</p>
-      </div>
-      <div class="incl__item">
-        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-        <h4>Manutenção</h4>
-        <p>Revisão, óleo, pneus por nossa conta</p>
-      </div>
-      <div class="incl__item">
-        <div class="incl__icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-        <h4>Suporte 24/7</h4>
-        <p>WhatsApp humano + assistência guincho</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FROTA ============ -->
-<section class="fleet" id="locais">
+<!-- CATÁLOGO 2 CARROS + FANTASMA -->
+<section class="fleet" id="carros">
   <div class="wrap">
     <div class="head">
       <h2>Nossa frota</h2>
-      <p>Carros novos (2023-2024), revisados, com IPVA e seguro em dia. Clique pra ver detalhes e reservar.</p>
+      <p>2 carros disponíveis agora em Uberlândia. Frota própria com manutenção e seguro completos por nossa conta.</p>
     </div>
     <div class="fleet__grid">
-      <a href="carro.html?carro=tracker" class="fleet__card">
-        <img src="../images/car-tracker-1.jpg" alt="Chevrolet Tracker 2024" loading="lazy" />
-        <div class="fleet__body">
-          <div class="fleet__cat">SUV Automático</div>
-          <div class="fleet__name">Chevrolet Tracker 2024</div>
-          <div class="fleet__price"><strong>R$ 19</strong> <small>/hora · R$ 149/dia</small></div>
+
+      <!-- Carro 1: Popular Econômico (HB20) -->
+      <article class="car">
+        <div class="car__photo">
+          <img src="../images/car-hb20-1.jpg" alt="Hyundai HB20 — popular econômico NomadeDrive" loading="lazy" />
+          <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
         </div>
-      </a>
-      <a href="carro.html?carro=cobalt" class="fleet__card">
-        <img src="../images/car-cobalt-1.jpg" alt="Chevrolet Cobalt" loading="lazy" />
-        <div class="fleet__body">
-          <div class="fleet__cat">Sedan Compacto</div>
-          <div class="fleet__name">Chevrolet Cobalt</div>
-          <div class="fleet__price"><strong>R$ 15</strong> <small>/hora · R$ 119/dia</small></div>
+        <div class="car__body">
+          <div class="car__cat">Popular Econômico</div>
+          <h3 class="car__name">Hyundai HB20</h3>
+          <div class="car__specs">
+            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M5 17h14v-3l-1-4H7l-1 4v3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg> 1.0 Flex</span>
+            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16"/></svg> Manual</span>
+            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
+          </div>
+          <div class="car__price">
+            <small class="car__price-from">A partir de</small>
+            <span class="car__price-val">R$ 2.900<small> /mês</small></span>
+          </div>
+          <a href="carros/popular.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
         </div>
-      </a>
-      <a href="carro.html?carro=hb20" class="fleet__card">
-        <img src="../images/car-hb20-1.jpg" alt="Hyundai HB20" loading="lazy" />
-        <div class="fleet__body">
-          <div class="fleet__cat">Hatch Compacto</div>
-          <div class="fleet__name">Hyundai HB20</div>
-          <div class="fleet__price"><strong>R$ 12</strong> <small>/hora · R$ 99/dia</small></div>
+      </article>
+
+      <!-- Carro 2: Sedan Médio (Cronos) -->
+      <article class="car">
+        <div class="car__photo">
+          <img src="../images/car-cronos-1.jpg" alt="Fiat Cronos — sedan médio automático NomadeDrive" loading="lazy" />
+          <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
         </div>
-      </a>
-      <a href="carro.html?carro=renegade" class="fleet__card">
-        <img src="../images/car-renegade-1.jpg" alt="Jeep Renegade" loading="lazy" />
-        <div class="fleet__body">
-          <div class="fleet__cat">SUV Premium</div>
-          <div class="fleet__name">Jeep Renegade</div>
-          <div class="fleet__price"><strong>R$ 23</strong> <small>/hora · R$ 189/dia</small></div>
+        <div class="car__body">
+          <div class="car__cat">Sedan Médio Automático</div>
+          <h3 class="car__name">Fiat Cronos</h3>
+          <div class="car__specs">
+            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M5 17h14v-3l-1-4H7l-1 4v3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg> 1.3 Flex</span>
+            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg> Automático</span>
+            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
+          </div>
+          <div class="car__price">
+            <small class="car__price-from">A partir de</small>
+            <span class="car__price-val">R$ 3.700<small> /mês</small></span>
+          </div>
+          <a href="carros/sedan.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
         </div>
-      </a>
+      </article>
+
+      <!-- Carro 3: Fantasma (próximo modelo) -->
+      <article class="car car--soon">
+        <div class="car__photo">
+          <svg viewBox="0 0 24 24" width="56" height="56" stroke="currentColor" stroke-width="1.5" fill="none"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <span class="car__photo-badge car__photo-badge--soon" style="top:auto; bottom:12px; left:50%; transform:translateX(-50%);">Em breve</span>
+        </div>
+        <div class="car__body">
+          <div class="car__cat">Próximo modelo</div>
+          <h3 class="car__name">SUV Compacto</h3>
+          <div class="car__specs">
+            <span class="car__spec">Chegando em Set/2026</span>
+          </div>
+          <div class="car__price">
+            <small class="car__price-from">Preview</small>
+            <span class="car__price-val">A definir</span>
+          </div>
+          <a href="fila-prioritaria.html" class="btn btn--ghost-black btn--block car__cta">Avise-me quando chegar</a>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
 
-<!-- ============ CALLOUT 1 — Cars at your building (estilo Zipcar "Cars around campus") ============ -->
-<section class="biz">
+<!-- COMO FUNCIONA (5 STEPS) -->
+<section class="how" id="como-funciona">
   <div class="wrap">
+    <div class="head">
+      <h2>Como funciona</h2>
+      <p>Do click ao volante em até 24 horas. Sem burocracia, sem visita à sede.</p>
+    </div>
+    <div class="how__grid">
+      <div class="step"><div class="step__num">1</div><h4>Escolha o carro</h4><p>Veja fotos, vídeo e preços. Selecione o modelo que combina com você.</p></div>
+      <div class="step"><div class="step__num">2</div><h4>Solicite</h4><p>Clique em "Solicitar" e nosso time responde em até 2 horas úteis.</p></div>
+      <div class="step"><div class="step__num">3</div><h4>Assine digital</h4><p>Mandamos contrato pra você assinar pelo celular. Paga via PIX ou cartão.</p></div>
+      <div class="step"><div class="step__num">4</div><h4>Receba onde estiver</h4><p>Entregamos no aeroporto, hotel ou condomínio em até 24h.</p></div>
+      <div class="step"><div class="step__num">5</div><h4>Use sem stress</h4><p>Devolução flexível, sem multa. Suporte 24h pelo WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
 
-    <div class="biz__row">
-      <img class="biz__img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&q=80&auto=format&fit=crop" alt="Edifício residencial moderno" loading="lazy" />
-      <div class="biz__body">
-        <span class="tag">Carros no seu prédio</span>
-        <h3>Mobilidade pra todo morador, gerida pela Nomade.</h3>
-        <p>2-4 carros disponíveis 24h na garagem do seu condomínio. Síndico oferece um benefício novo aos moradores e ainda recebe receita mensal fixa (R$ 800-1.200/mês). Sem custo nenhum pro condomínio.</p>
-        <a href="parceiros.html" class="btn btn--primary">Trazer pro meu prédio →</a>
+<!-- DIFERENCIAIS (4 cards 2x2) -->
+<section class="differs" id="diferenciais">
+  <div class="wrap">
+    <div class="head">
+      <h2>Por que escolher NomadeDrive</h2>
+      <p>O que a Localiza não faz, a gente faz por você.</p>
+    </div>
+    <div class="differs__grid">
+      <div class="differ">
+        <div class="differ__icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div>
+          <h4>Preço travado em contrato</h4>
+          <p>Cliente paga exatamente o combinado. Sem reajuste, sem multa surpresa, sem letra miúda.</p>
+        </div>
+      </div>
+      <div class="differ">
+        <div class="differ__icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div>
+          <h4>Devolução flexível sem multa</h4>
+          <p>Cliente pode devolver antes do prazo sem penalidade. Profissional em transição não fica preso.</p>
+        </div>
+      </div>
+      <div class="differ">
+        <div class="differ__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div>
+          <h4>Contrato 100% digital remoto</h4>
+          <p>Cliente contrata pelo WhatsApp de qualquer lugar do Brasil. Carro entregue onde estiver. Sem visita à sede.</p>
+        </div>
+      </div>
+      <div class="differ">
+        <div class="differ__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div>
+          <h4>Tudo incluído no preço único</h4>
+          <p>Seguro, manutenção, assistência 24h, IPVA, licenciamento, telemetria. Sem custos surpresa no checkout.</p>
+        </div>
       </div>
     </div>
-
-    <div class="biz__row" style="direction:rtl;">
-      <div class="biz__body" style="direction:ltr;">
-        <span class="tag">Para empresas e shoppings</span>
-        <h3>Mobilidade pros seus visitantes e funcionários.</h3>
-        <p>Aumente conveniência pra quem frequenta seu shopping, hospital ou empresa. Carros no estacionamento, gerenciados pela Nomade Drive. Você não opera nada — só cede o espaço e divide receita.</p>
-        <a href="parceiros.html" class="btn btn--primary">Falar com vendas →</a>
-      </div>
-      <img class="biz__img" style="direction:ltr;" src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=900&q=80&auto=format&fit=crop" alt="Shopping center moderno" loading="lazy" />
-    </div>
-
   </div>
 </section>
 
-<!-- ============ APP DOWNLOAD ============ -->
-<section class="app">
+<!-- COMPARAÇÃO LOCALIZA vs NOMADE -->
+<section class="compare">
   <div class="wrap">
-    <h2>Tudo começa pelo app</h2>
-    <p>Baixe grátis, cadastre-se em 5 minutos, e tenha um carro à sua disposição 24h.</p>
-    <div class="app__row">
-      <a href="#" class="app__badge">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-        <span><small>Baixe na</small><strong>App Store</strong></span>
-      </a>
-      <a href="#" class="app__badge">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.5 12l2.198-2.491zM5.864 2.658l10.937 6.332-2.302 2.302-8.635-8.634z"/></svg>
-        <span><small>Disponível no</small><strong>Google Play</strong></span>
-      </a>
+    <div class="head">
+      <h2>NomadeDrive vs Localiza</h2>
+      <p>Comparativo direto pra quem está pesquisando alternativas.</p>
+    </div>
+    <table class="compare__table">
+      <thead>
+        <tr><th>Item</th><th>Localiza</th><th>NomadeDrive</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Preço base anunciado</td><td>R$ 89/diária</td><td>R$ 96/diária (R$ 2.900/mês)</td></tr>
+        <tr><td>Seguro / Proteção adicional</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
+        <tr><td>Quilometragem</td><td>200 km/dia</td><td>Ilimitada (30+ dias)</td></tr>
+        <tr><td>Final mensal real</td><td>R$ 3.700-5.000</td><td>R$ 2.900</td></tr>
+        <tr><td>Letra miúda</td><td>Múltipla</td><td>Zero</td></tr>
+        <tr><td>Onde retirar o carro</td><td>Apenas loja</td><td>Onde você estiver</td></tr>
+      </tbody>
+    </table>
+    <p class="compare__note">* Valores aproximados conforme cotação pública em 05/2026. Localiza pode variar conforme promoções.</p>
+  </div>
+</section>
+
+<!-- SOBRE NÓS -->
+<section class="about">
+  <div class="wrap">
+    <div class="head">
+      <h2>Quem somos</h2>
+      <p>Dois irmãos, uma operação enxuta, foco total no cliente.</p>
+    </div>
+    <div class="about__grid">
+      <div class="about__photo">
+        <div>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="3"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M14 13a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2"/></svg>
+          <div>Foto profissional dos sócios em breve</div>
+        </div>
+      </div>
+      <div>
+        <p>A <strong>NomadeDrive</strong> nasceu de uma dor pessoal: <strong>se mudar de cidade é caro e burocrático</strong>, especialmente quando você precisa de um carro. Decidimos criar a locadora que gostaríamos de encontrar.</p>
+        <div class="about__socio">
+          <strong>Daniel Rodovalho — CEO</strong>
+          <span>Engenheiro Elétrico com 14 anos de experiência em gestão corporativa. Vivendo nos EUA, conhece a dor de se mudar de cidade. · <a href="#">LinkedIn</a></span>
+        </div>
+        <div class="about__socio">
+          <strong>[Nome do irmão] — Operações</strong>
+          <span>Responsável pela operação local em Uberlândia. Disponível 24/7 via WhatsApp para qualquer urgência do cliente. · <a href="#">LinkedIn</a></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ CADASTRO (form FUNCIONAL com Edge Function) ============ -->
-<section class="cad" id="cadastro">
-  <div class="wrap cad__inner">
-    <div class="cad__head">
-      <h2>Crie sua conta grátis em 2 minutos</h2>
-      <p>Sem cobrança. Sem cartão exigido. Aprovação em até 24h úteis após enviar CNH no app.</p>
+<!-- DEPOIMENTOS (placeholder honesto) -->
+<section class="testimonials">
+  <div class="wrap">
+    <div class="head">
+      <h2>Depoimentos</h2>
     </div>
-    <div class="cad__grid">
-
-      <!-- Hero esquerda: foto + perks -->
-      <aside>
-        <div class="cad__hero-photo">
-          <img src="images/car-tracker-1.jpg" alt="Chevrolet Tracker disponível pra reserva" loading="lazy" />
-          <span class="cad__hero-badge">Frota em Uberlândia · 24/7</span>
-        </div>
-        <ul class="cad__perks" role="list">
-          <li class="cad__perk">
-            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-            <span><strong>Pague só pelo uso</strong><small>A partir de R$ 12/hora (teto R$ 99/dia no HB20)</small></span>
-          </li>
-          <li class="cad__perk">
-            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><path d="M3 22V10a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12"/><path d="M3 22h10"/><path d="M3 15h10"/><path d="M13 8h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-9.5a2.5 2.5 0 0 0-2.5-2.5H17"/></svg></span>
-            <span><strong>Combustível, seguro e manutenção inclusos</strong><small>Sem surpresa na conta final</small></span>
-          </li>
-          <li class="cad__perk">
-            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
-            <span><strong>App simples 24/7</strong><small>Reserve, abra com cofre eletrônico, dirija</small></span>
-          </li>
-          <li class="cad__perk">
-            <span class="cad__perk-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-            <span><strong>Suporte humano 24h</strong><small>WhatsApp + central pra emergência</small></span>
-          </li>
-        </ul>
-      </aside>
-
-      <!-- Form direita -->
-      <form id="formCadastro" novalidate>
-        <div class="cad__row">
-          <label for="cad-name">Nome completo</label>
-          <input type="text" id="cad-name" required placeholder="Como aparece no seu CNH" autocomplete="name" />
-        </div>
-        <div class="cad__row">
-          <label for="cad-email">E-mail</label>
-          <input type="email" id="cad-email" required placeholder="voce@email.com" autocomplete="email" />
-        </div>
-        <div class="cad__row">
-          <label for="cad-phone">WhatsApp</label>
-          <input type="tel" id="cad-phone" required placeholder="(34) 9 9999-9999" autocomplete="tel" />
-        </div>
-        <div class="cad__row">
-          <label for="cad-city">Cidade</label>
-          <input type="text" id="cad-city" required placeholder="Uberlândia" autocomplete="address-level2" />
-        </div>
-        <div class="cad__row">
-          <label for="cad-employment">Tipo de vínculo <span style="font-weight:500; color:var(--gray-500); font-size:12px;">· opcional</span></label>
-          <select id="cad-employment" style="padding:13px 14px; border:2px solid var(--gray-300); border-radius:10px; font:inherit; font-size:15px; background:var(--white); color:var(--black); width:100%;">
-            <option value="">Selecione (opcional)...</option>
-            <option value="clt">CLT</option>
-            <option value="autonomo">Autônomo</option>
-            <option value="pj">PJ / Freelancer</option>
-            <option value="empresario">Empresário</option>
-            <option value="estudante">Estudante</option>
-            <option value="servidor">Servidor público</option>
-            <option value="aposentado">Aposentado</option>
-            <option value="outro">Outro</option>
-          </select>
-          <span style="font-size:11.5px; color:var(--gray-500);">Cliente que preenche dados profissionais ganha selo verificado + 10% off no Pass.</span>
-        </div>
-        <div class="cad__row">
-          <label for="cad-pw">Senha</label>
-          <input type="password" id="cad-pw" required minlength="8" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
-          <span id="cad-pw-hint" class="cad__pwstrength">Use pelo menos 8 caracteres.</span>
-        </div>
-        <label class="cad__terms">
-          <input type="checkbox" id="cad-terms" required />
-          <span>Aceito os <a href="../termos.html" target="_blank" rel="noopener">Termos de uso</a> e a <a href="politica-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
-        </label>
-        <button type="submit" id="cad-submit" class="btn btn--primary btn--block">Criar conta grátis →</button>
-        <div id="cad-feedback" style="display:none; padding:14px 18px; border-radius:8px; font-size:14px; text-align:center; line-height:1.5;"></div>
-        <p id="cad-hint" style="text-align:center; font-size:12.5px; color:var(--gray-500); margin-top:4px;">Sua aprovação leva até 24h úteis. Você acompanha pelo app.</p>
-      </form>
-
+    <div class="testimonials__empty">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <h3>Estamos em operação inicial</h3>
+      <p>As histórias dos primeiros clientes aparecerão aqui em breve. <strong>Preferimos não inventar depoimentos</strong> — só publicamos o que for real. Em poucas semanas você vai poder ver vídeos curtos de quem usou o serviço.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ FAQ ============ -->
+<!-- FAQ (10 perguntas) -->
 <section class="faq" id="faq">
   <div class="wrap">
     <div class="head">
@@ -538,228 +500,98 @@
     </div>
     <div class="faq__list">
       <details class="faq__item">
-        <summary>Preciso de fiador?</summary>
-        <div class="faq__answer">Não. Pré-autorização de R$ 200 no cartão como caução (liberada após o uso). Análise é por CNH + biometria, não por score agressivo.</div>
+        <summary>Preciso de cartão de crédito pra alugar?</summary>
+        <div class="faq__answer">Sim, pra caução pré-autorizada de <strong>R$ 1.500 a R$ 2.500</strong> (varia por modelo). Não há cobrança se não houver dano ao final.</div>
       </details>
       <details class="faq__item">
-        <summary>Quanto tempo demora a aprovação?</summary>
-        <div class="faq__answer">Até 24h úteis. Maioria aprova no mesmo dia. Você acompanha o status pelo app.</div>
+        <summary>Onde fica a loja física de vocês?</summary>
+        <div class="faq__answer">A NomadeDrive <strong>opera 100% digital</strong>. Atendemos por WhatsApp e entregamos o carro onde você estiver em Uberlândia.</div>
       </details>
       <details class="faq__item">
-        <summary>Como funciona o pagamento?</summary>
-        <div class="faq__answer">Cobrança automática no cartão ao final da reserva, via caução pré-autorizada. <strong>Plano Casual:</strong> R$ 0/ano (paga só pelo uso). <strong>NomadeDrive Pass:</strong> R$ 99/ano + tarifa com 20% desconto. Em qualquer plano, <strong>teto automático</strong>: você sempre paga o menor entre tarifa por hora e diária.</div>
+        <summary>Posso ver o carro antes de fechar?</summary>
+        <div class="faq__answer">Posso fazer algo melhor: agendo visita de 30 minutos em ponto público de Uberlândia. <strong>Levo o carro até lá pra você inspecionar antes de assinar.</strong></div>
       </details>
       <details class="faq__item">
-        <summary>Como o Nomade protege os carros?</summary>
-        <div class="faq__answer"><strong>4 camadas de proteção:</strong> (1) vistoria por foto na retirada, (2) vistoria por foto na devolução, (3) programa de limpeza periódica, (4) sistema de avaliação cliente ↔ veículo. Multas (sujeira, atraso, no-show, etc.) cobradas automaticamente via caução pré-autorizada.</div>
+        <summary>Quais formas de pagamento aceitam?</summary>
+        <div class="faq__answer">PIX, cartão de crédito Visa/Master/Elo/Amex e <strong>boleto bancário pra CNPJ</strong>.</div>
       </details>
       <details class="faq__item">
-        <summary>Não tem carro no meu prédio. Como faço?</summary>
-        <div class="faq__answer">Pode usar carros de outros locais (shopping, hospital próximo). Pra trazer carro pro seu prédio: cadastre-se em "<a href="parceiros.html" style="color:var(--zip-green); font-weight:600;">Para empresas</a>" e a gente avalia.</div>
+        <summary>O que está incluído no preço?</summary>
+        <div class="faq__answer"><strong>Seguro completo, manutenção, assistência 24h, IPVA, licenciamento, telemetria.</strong> Sem custos extras.</div>
       </details>
       <details class="faq__item">
-        <summary>E se o carro quebrar durante o uso?</summary>
-        <div class="faq__answer">Aciona o WhatsApp 24h. Guincho + carro reserva sem custo. Você não paga peça nem mão de obra.</div>
+        <summary>Posso usar o carro pra viajar pra outras cidades?</summary>
+        <div class="faq__answer">Sim, <strong>quilometragem ilimitada</strong> em locações de 30+ dias. Apenas avise a rota pra a gente acompanhar.</div>
       </details>
       <details class="faq__item">
-        <summary>Quem paga combustível e multas?</summary>
-        <div class="faq__answer">50 km grátis inclusos por reserva. Acima disso, você abastece e R$ 0,80/km extra. Multas durante o uso são do locatário — repassadas via Detran.</div>
+        <summary>E se eu quiser devolver antes do prazo?</summary>
+        <div class="faq__answer"><strong>Devolução flexível sem multa.</strong> Reembolso proporcional dos dias não usados.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Posso renovar o contrato no final do período?</summary>
+        <div class="faq__answer">Sim, renovação automática se quiser, ou flexibilidade pra encerrar quando precisar. Sem fidelidade obrigatória.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Como funciona a entrega do carro?</summary>
+        <div class="faq__answer">Você escolhe pelo mapa onde quer pegar o carro: <strong>aeroporto, hotel, condomínio ou ponto neutro</strong>. Em até 24 horas em Uberlândia.</div>
+      </details>
+      <details class="faq__item">
+        <summary>Quem é responsável pela empresa?</summary>
+        <div class="faq__answer">Daniel Rodovalho e [nome do irmão], sócios fundadores. <strong>CNPJ em processo de registro</strong>, com toda documentação pública na Junta Comercial de MG.</div>
       </details>
     </div>
   </div>
 </section>
 
-<!-- ============ FOOTER (estilo Zipcar — 6 colunas em fundo preto) ============ -->
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Pronto pra começar?</h2>
+    <p>Veja nossos 2 carros disponíveis em Uberlândia agora. Resposta em até 2 horas úteis.</p>
+    <div class="cta-final__row">
+      <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
+      <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20NomadeDrive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-white">Falar pelo WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer class="foot">
   <div class="wrap">
     <div class="foot__row">
       <div class="foot__col foot__brand">
-        <strong>Nomade Drive</strong>
-        <p>Carsharing por hora ou dia. Carros em condomínios, shoppings e hospitais. Frota própria, suporte 24h.</p>
+        <strong>NomadeDrive</strong>
+        <p>Locação mensal de carros em Uberlândia/MG. Frota própria, contrato digital, entrega onde você estiver.</p>
+        <div class="foot__seal">
+          <strong>NomadeDrive Verificada</strong>
+          <p>CNPJ em processo, frota com seguro completo, contratos com assinatura digital, atendimento humanizado.</p>
+        </div>
       </div>
       <div class="foot__col">
-        <h5>Produto</h5>
-        <a href="como-funciona.html">Como funciona</a>
-        <a href="precos.html">Preços</a>
-        <a href="#locais">Frota</a>
-        <a href="carro.html?carro=tracker">Ver um carro</a>
-      </div>
-      <div class="foot__col">
-        <h5>Soluções</h5>
-        <a href="empresas.html">Para empresas</a>
-        <a href="estudantes.html">Para estudantes</a>
-        <a href="motoristas-app.html">Motoristas Uber/99</a>
-        <a href="parceiros.html">Pra condomínio/shopping</a>
-      </div>
-      <div class="foot__col">
-        <h5>Cidades</h5>
-        <a href="#">Uberlândia</a>
-        <a href="#">Em breve · Goiânia</a>
-        <a href="#">Em breve · BH</a>
-        <a href="#">Em breve · Brasília</a>
+        <h5>Carros</h5>
+        <a href="carros/popular.html">HB20 Popular</a>
+        <a href="carros/sedan.html">Cronos Sedan</a>
+        <a href="fila-prioritaria.html">Fila prioritária</a>
       </div>
       <div class="foot__col">
         <h5>Empresa</h5>
-        <a href="#">Sobre</a>
-        <a href="#">Carreiras</a>
-        <a href="#">Imprensa</a>
-        <a href="#">Sustentabilidade</a>
+        <a href="sobre.html">Sobre nós</a>
+        <a href="#faq">Dúvidas</a>
+        <a href="politica-privacidade.html">Política de Privacidade</a>
+        <a href="../termos.html">Termos de uso</a>
       </div>
       <div class="foot__col">
-        <h5>Ajuda</h5>
-        <a href="#faq">FAQ</a>
-        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="mailto:contato@nomadedrive.com.br">E-mail</a>
-        <a href="../termos.html">Termos</a>
+        <h5>Contato</h5>
+        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp: (34) 98406-4864</a>
+        <a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a>
+        <a href="https://www.instagram.com/nomadedrive" target="_blank" rel="noopener">Instagram @nomadedrive</a>
       </div>
     </div>
     <div class="foot__bottom">
-      <div>&copy; 2026 Nomade Drive Brasil · Uberlândia, MG</div>
-      <div>
-        <a href="../termos.html">Privacidade</a> ·
-        <a href="../termos.html">Termos</a> ·
-        <a href="../termos.html">Cookies</a>
-      </div>
+      <p><strong>NomadeDrive Locação de Veículos</strong> · CNPJ em processo · Uberlândia/MG · © 2026 — Todos os direitos reservados</p>
     </div>
   </div>
 </footer>
-
-<script>
-// ============ BOOKING WIDGET — toggle tabs + submit ============
-document.querySelectorAll('.booking__tab').forEach(function(t) {
-  t.addEventListener('click', function() {
-    document.querySelectorAll('.booking__tab').forEach(function(x) { x.classList.remove('on'); });
-    t.classList.add('on');
-    // Se tab "daily" selecionado, ajusta hora de devolução pra +24h
-    if (t.getAttribute('data-tab') === 'daily') {
-      var from = document.getElementById('bk-from').value;
-      if (from) {
-        var d = new Date(from);
-        d.setDate(d.getDate() + 1);
-        var iso = d.toISOString().slice(0, 16);
-        document.getElementById('bk-to').value = iso;
-      }
-    }
-  });
-});
-
-document.getElementById('formBooking').addEventListener('submit', function(e) {
-  e.preventDefault();
-  var where = document.getElementById('bk-where').value.trim();
-  var from = document.getElementById('bk-from').value;
-  var to = document.getElementById('bk-to').value;
-  // Redireciona pra frota (#locais) preservando a busca via URL params
-  var q = new URLSearchParams({ where: where, from: from, to: to }).toString();
-  window.location.href = '#locais?' + q;
-  // Scroll suave pra frota
-  setTimeout(function() {
-    var el = document.getElementById('locais');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }, 100);
-});
-
-// Form de cadastro — envia pra Edge Function nova-lead (salva no banco + email)
-var EDGE_LEAD = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
-var WA_PHONE = '5534984064864';
-
-function setFeedback(el, type, msg) {
-  el.style.display = 'block';
-  el.innerHTML = msg;
-  el.style.background = type === 'ok' ? '#ecf6e0' : type === 'err' ? '#fef2f2' : '#fef9e7';
-  el.style.color = type === 'ok' ? '#2E6100' : type === 'err' ? '#b91c1c' : '#92400e';
-  el.style.border = '1px solid ' + (type === 'ok' ? '#a7d883' : type === 'err' ? '#fca5a5' : '#fbbf24');
-}
-
-// Live feedback de força da senha
-var pwInput = document.getElementById('cad-pw');
-var pwHint = document.getElementById('cad-pw-hint');
-if (pwInput) {
-  pwInput.addEventListener('input', function() {
-    var v = pwInput.value;
-    if (v.length === 0) {
-      pwHint.className = 'cad__pwstrength';
-      pwHint.textContent = 'Use pelo menos 8 caracteres.';
-    } else if (v.length < 8) {
-      pwHint.className = 'cad__pwstrength weak';
-      pwHint.textContent = 'Faltam ' + (8 - v.length) + ' caracteres pra senha ser aceita.';
-    } else {
-      pwHint.className = 'cad__pwstrength ok';
-      pwHint.textContent = '✓ Senha forte o suficiente.';
-    }
-  });
-}
-
-document.getElementById('formCadastro').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  var n = document.getElementById('cad-name').value.trim();
-  var em = document.getElementById('cad-email').value.trim().toLowerCase();
-  var ph = document.getElementById('cad-phone').value.trim();
-  var ci = document.getElementById('cad-city').value.trim();
-  var employmentType = document.getElementById('cad-employment').value || null;
-  var pw = document.getElementById('cad-pw').value;
-  var terms = document.getElementById('cad-terms').checked;
-  var fb = document.getElementById('cad-feedback');
-
-  if (!n || !em || !ph || !ci) return;
-  if (!pw || pw.length < 8) {
-    setFeedback(fb, 'err', 'Sua senha precisa ter pelo menos 8 caracteres.');
-    return;
-  }
-  if (!terms) {
-    setFeedback(fb, 'err', 'Você precisa aceitar os Termos de uso e a Política de Privacidade.');
-    return;
-  }
-
-  var btn = document.getElementById('cad-submit');
-  var origText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'Enviando...';
-  setFeedback(fb, 'info', 'Criando sua conta...');
-
-  try {
-    var r = await fetch(EDGE_LEAD, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        source: 'nova-landing-cadastro',
-        name: n, email: em, phone: ph, city: ci, password: pw,
-        intent: 'carsharing-cliente',
-        employment_type: employmentType,
-        source_url: window.location.href
-      })
-    });
-    var data = await r.json();
-    if (r.ok && data.ok) {
-      setFeedback(fb, 'ok',
-        '<strong>Conta criada com sucesso!</strong><br>' +
-        'Já pode entrar em <a href="login.html" style="color:#4FA600; font-weight:700; text-decoration:underline;">' +
-        '/nova/login.html</a> usando esse e-mail e senha.<br>' +
-        '<small style="opacity:0.8; display:block; margin-top:8px;">Próximo passo: enviar CNH no app pra aprovação (até 24h úteis).</small>'
-      );
-      btn.textContent = '✓ Conta criada';
-      document.getElementById('cad-hint').style.display = 'none';
-      // Após 1.5s redireciona pro login
-      setTimeout(function() { window.location.href = 'login.html?welcome=' + encodeURIComponent(em); }, 1800);
-    } else {
-      throw new Error(data.error || 'Resposta inválida');
-    }
-  } catch (err) {
-    var msg = String(err.message || err).toLowerCase();
-    if (/already|registered|exists/i.test(msg)) {
-      setFeedback(fb, 'err',
-        'Já existe uma conta com esse e-mail. ' +
-        '<a href="login.html" style="color:#b91c1c; font-weight:700; text-decoration:underline;">Entrar agora</a> ou ' +
-        '<a href="recuperar-senha.html" style="color:#b91c1c; font-weight:700; text-decoration:underline;">esqueci minha senha</a>.'
-      );
-    } else {
-      var wamsg = 'Quero criar conta no Nomade Drive\n\nNome: ' + n + '\nE-mail: ' + em + '\nWhatsApp: ' + ph + '\nCidade: ' + ci;
-      setFeedback(fb, 'err', 'Não foi possível criar agora. <a href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(wamsg) + '" target="_blank" rel="noopener" style="color:#b91c1c; font-weight:600; text-decoration:underline;">Fala com a gente direto pelo WhatsApp →</a>');
-    }
-    btn.disabled = false;
-    btn.textContent = origText;
-  }
-});
-</script>
 
 </body>
 </html>
