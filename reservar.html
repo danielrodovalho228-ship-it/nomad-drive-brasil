@@ -3,169 +3,192 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Solicitar carro — NomadeDrive</title>
-<meta name="description" content="Solicite seu carro NomadeDrive em 3 passos rápidos. Escolha datas, ponto de entrega e seus dados. Resposta em até 2 horas úteis." />
-<meta name="theme-color" content="#4FA600" />
+<title>Solicitar carro — Nomade Drive</title>
+<meta name="description" content="Solicite seu carro Nomade Drive em 3 passos rápidos. Escolha datas, ponto de entrega e seus dados. Resposta em até 2 horas úteis." />
+<meta name="theme-color" content="#0F1F3D" />
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<!-- Leaflet (mapa OSM, sem API key) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 <style>
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --green: #4FA600; --green-dark: #3F8500; --green-darker: #2E6100; --green-pale: #ecf6e0;
-    --amber: #FFC72C; --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-200: #e5e7eb; --gray-100: #f5f5f5; --gray-50: #fafafa; --white: #ffffff;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 4px 12px rgba(0,0,0,0.08); --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+    --navy: #0F1F3D;
+    --navy-dark: #0a162c;
+    --navy-light: #1a3055;
+    --navy-pale: #f0f3f9;
+    --gold: #F5B82E;
+    --gold-dark: #d99e1c;
+    --gold-pale: #fdf5e0;
+    --teal: #2A9D8F;
+    --teal-dark: #218074;
+    --teal-pale: #e6f4f2;
+    --red: #E63946;
+    --white: #ffffff;
+    --cream: #F0F4F8;
+    --gray-900: #1f2937;
+    --gray-700: #4a5568;
+    --gray-500: #6b7280;
+    --gray-300: #d1d5db;
+    --gray-200: #e5e7eb;
+    --gray-100: #f3f4f6;
+    --gray-50: #fafbfc;
+    --shadow-sm: 0 1px 3px rgba(15,31,61,0.06);
+    --shadow: 0 4px 12px rgba(15,31,61,0.08);
+    --shadow-lg: 0 18px 40px rgba(15,31,61,0.14);
   }
-  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--gray-50); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--cream); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
   img { max-width: 100%; height: auto; display: block; }
-  a { color: var(--green-dark); } button { font: inherit; cursor: pointer; border: none; background: none; }
+  a { color: var(--navy); } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; width: 100%; }
-  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.2; font-weight: 800; }
+  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
-  .btn--primary { background: var(--green); color: var(--white); }
-  .btn--primary:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.3); }
-  .btn--primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
-  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--gray-300); }
-  .btn--ghost-black:hover { background: var(--gray-100); border-color: var(--black); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover:not(:disabled) { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,184,46,0.35); }
+  .btn--primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn--ghost-navy { background: transparent; color: var(--navy); border-color: var(--gray-300); }
+  .btn--ghost-navy:hover { background: var(--gray-100); border-color: var(--navy); }
   .btn--sm { padding: 9px 18px; font-size: 13.5px; }
 
   /* NAV */
-  .nav { background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav { background: var(--white); border-bottom: 1px solid var(--gray-200); }
   .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
   .nav__brand { display: flex; align-items: center; text-decoration: none; }
   .nav__logo { height: 42px; }
   @media (min-width: 700px) { .nav__logo { height: 48px; } }
-  .nav__exit { font-size: 13.5px; font-weight: 600; color: var(--gray-700); text-decoration: none; padding: 8px 14px; border-radius: 8px; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
-  .nav__exit:hover { background: var(--gray-100); color: var(--black); }
-  .nav__exit svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .nav__exit { font-size: 13.5px; font-weight: 600; color: var(--gray-700); text-decoration: none; padding: 8px 14px; border-radius: 6px; transition: all .15s; }
+  .nav__exit:hover { background: var(--gray-100); color: var(--navy); }
 
   /* Wizard header (stepper) */
-  .wizard-header { background: var(--white); border-bottom: 1px solid var(--gray-100); padding: 24px 0; }
+  .wizard-header { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 26px 0; }
   .stepper { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 600px; margin: 0 auto; }
   .step-node { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
-  .step-node__circle { width: 36px; height: 36px; border-radius: 50%; background: var(--gray-100); color: var(--gray-500); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; transition: all .25s; border: 2px solid transparent; }
-  .step-node__circle svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 3; fill: none; }
-  .step-node__label { font-size: 11.5px; font-weight: 700; color: var(--gray-500); transition: color .25s; letter-spacing: 0.2px; text-transform: uppercase; }
-  .step-node.on .step-node__circle { background: var(--green); color: var(--white); transform: scale(1.08); box-shadow: 0 0 0 4px rgba(79,166,0,0.15); }
-  .step-node.on .step-node__label { color: var(--green-dark); }
-  .step-node.done .step-node__circle { background: var(--green); color: var(--white); }
-  .step-node.done .step-node__label { color: var(--green-dark); }
+  .step-node__circle { width: 38px; height: 38px; border-radius: 50%; background: var(--gray-100); color: var(--gray-500); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 15px; transition: all .25s; border: 2px solid transparent; }
+  .step-node__label { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 700; color: var(--gray-500); transition: color .25s; letter-spacing: 0.3px; text-transform: uppercase; }
+  .step-node.on .step-node__circle { background: var(--navy); color: var(--gold); transform: scale(1.08); box-shadow: 0 0 0 4px rgba(15,31,61,0.12); }
+  .step-node.on .step-node__label { color: var(--navy); }
+  .step-node.done .step-node__circle { background: var(--teal); color: var(--white); }
+  .step-node.done .step-node__label { color: var(--teal-dark); }
   .step-line { flex: 1; height: 2px; background: var(--gray-200); margin: 0 8px; max-width: 80px; transition: background .25s; }
-  .step-line.done { background: var(--green); }
+  .step-line.done { background: var(--teal); }
 
   main { flex: 1; padding: 36px 0 64px; }
 
   /* Wizard panel */
-  .panel { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); padding: 32px 28px; max-width: 760px; margin: 0 auto; }
-  .panel__head { margin-bottom: 24px; }
-  .panel__head h2 { font-size: clamp(20px, 3vw, 26px); margin-bottom: 6px; }
-  .panel__head p { color: var(--gray-700); font-size: 14.5px; }
+  .panel { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); padding: 36px 32px; max-width: 760px; margin: 0 auto; }
+  .panel__head { margin-bottom: 26px; }
+  .panel__head h2 { font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; }
+  .panel__head p { color: var(--gray-700); font-size: 15px; font-family: 'Inter', sans-serif; }
 
   .step { display: none; }
   .step.on { display: block; }
 
   /* Form fields */
-  .field { margin-bottom: 18px; }
-  .field--row { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 18px; }
+  .field { margin-bottom: 20px; }
+  .field--row { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 20px; }
   @media (min-width: 600px) { .field--row { grid-template-columns: 1fr 1fr; } }
-  .field label { display: block; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; letter-spacing: 0.2px; }
+  .field label { display: block; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; letter-spacing: 0.3px; }
   .field label small { color: var(--gray-500); font-weight: 500; margin-left: 4px; }
   .field input, .field select, .field textarea {
-    width: 100%; padding: 13px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px;
-    font: inherit; font-size: 14.5px; color: var(--black); background: var(--white);
+    width: 100%; padding: 13px 14px; border: 1.5px solid var(--gray-200); border-radius: 8px;
+    font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--navy); background: var(--white);
     transition: border-color .15s, box-shadow .15s;
   }
-  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(79,166,0,0.12); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,31,61,0.1); }
   .field input::placeholder { color: var(--gray-300); }
-  .field-hint { font-size: 12px; color: var(--gray-500); margin-top: 5px; line-height: 1.5; }
+  .field-hint { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--gray-500); margin-top: 6px; line-height: 1.5; }
 
   /* Cards de seleção (carro/ponto) */
   .picks { display: grid; gap: 12px; grid-template-columns: 1fr; }
   @media (min-width: 600px) { .picks--2col { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 720px) { .picks--3col { grid-template-columns: repeat(3, 1fr); } }
-  .pick { background: var(--white); border: 2px solid var(--gray-200); border-radius: 12px; padding: 14px; cursor: pointer; transition: all .15s; position: relative; }
-  .pick:hover { border-color: var(--green); background: var(--green-pale); }
-  .pick.selected { border-color: var(--green); background: var(--green-pale); box-shadow: 0 0 0 3px rgba(79,166,0,0.12); }
-  .pick.selected::after { content: '✓'; position: absolute; top: 8px; right: 10px; background: var(--green); color: var(--white); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
-  .pick__icon { width: 36px; height: 36px; border-radius: 10px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-  .pick__icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .pick__title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
-  .pick__sub { font-size: 12.5px; color: var(--gray-500); line-height: 1.4; }
-  .pick__extra { font-size: 11.5px; color: var(--green-dark); font-weight: 700; margin-top: 6px; }
+  .pick { background: var(--white); border: 2px solid var(--gray-200); border-radius: 10px; padding: 14px; cursor: pointer; transition: all .15s; position: relative; }
+  .pick:hover { border-color: var(--navy); background: var(--navy-pale); }
+  .pick.selected { border-color: var(--navy); background: var(--navy-pale); box-shadow: 0 0 0 3px rgba(15,31,61,0.1); }
+  .pick.selected::after { content: '✓'; position: absolute; top: 8px; right: 10px; background: var(--teal); color: var(--white); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
+
+  /* Avatar redondo nos cards de ponto (substitui ícones) */
+  .pick__avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--white); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; }
+  .pick__avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pick__avatar--gold { background: var(--gold); color: var(--navy); }
+  .pick__avatar--teal { background: var(--teal); color: var(--white); }
+  .pick__avatar--light { background: var(--navy-light); color: var(--white); }
+
+  .pick__title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .pick__sub { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--gray-500); line-height: 1.4; }
+  .pick__extra { font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--teal-dark); font-weight: 700; margin-top: 6px; }
 
   /* Carro picks com thumb */
   .pick--car { display: flex; gap: 12px; align-items: center; padding: 12px; }
-  .pick--car img { width: 90px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .pick--car img { width: 92px; height: 64px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
   .pick--car__body { flex: 1; min-width: 0; }
-  .pick--car__name { font-size: 14.5px; font-weight: 800; color: var(--black); }
-  .pick--car__cat { font-size: 11.5px; color: var(--gray-500); text-transform: uppercase; font-weight: 600; margin-bottom: 3px; letter-spacing: 0.3px; }
-  .pick--car__price { font-size: 13px; color: var(--green-dark); font-weight: 700; margin-top: 3px; }
+  .pick--car__name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--navy); }
+  .pick--car__cat { font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--gray-500); text-transform: uppercase; font-weight: 700; margin-bottom: 3px; letter-spacing: 0.4px; }
+  .pick--car__price { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--navy); font-weight: 700; margin-top: 3px; }
+  .pick--car__price strong { color: var(--gold-dark); }
 
-  /* Mapa placeholder */
-  .map { background: linear-gradient(135deg, #f5f9f3 0%, #e8f4f8 50%, #d4eaf3 100%); border-radius: 14px; aspect-ratio: 16/9; position: relative; overflow: hidden; border: 1px solid var(--gray-200); margin-bottom: 18px; }
-  .map__note { position: absolute; bottom: 12px; right: 12px; background: rgba(26,26,26,0.85); color: var(--white); padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); }
-  .map__pin { position: absolute; width: 28px; height: 28px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(0,0,0,0.25); transform: translate(-50%, -100%); cursor: pointer; transition: all .15s; font-weight: 900; font-size: 13px; border: 2px solid var(--white); }
-  .map__pin:hover { transform: translate(-50%, -100%) scale(1.15); }
-  .map__pin.selected { background: var(--amber); color: var(--black); transform: translate(-50%, -100%) scale(1.2); box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
-  .map__bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(74,74,74,0.25); font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; }
+  /* MAPA REAL (Leaflet OSM) */
+  .map { height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gray-200); margin-bottom: 18px; }
+  .map .leaflet-container { background: var(--cream); font-family: 'Inter', sans-serif; }
+  .leaflet-marker-icon.nd-pin { background: var(--navy); color: var(--gold); border: 3px solid var(--white); box-shadow: 0 3px 10px rgba(0,0,0,0.3); border-radius: 50%; display: flex !important; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; line-height: 1; }
+  .leaflet-marker-icon.nd-pin.selected { background: var(--gold); color: var(--navy); transform: scale(1.2); }
+  .leaflet-popup-content { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--navy); }
+  .leaflet-popup-content strong { display: block; font-size: 14px; margin-bottom: 2px; }
 
   /* Resumo */
-  .summary { background: var(--gray-50); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
-  .summary__row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px; }
+  .summary { background: var(--cream); border-radius: 10px; padding: 18px 20px; margin-bottom: 18px; }
+  .summary__row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--gray-200); font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-700); }
   .summary__row:last-child { border-bottom: none; padding-top: 12px; }
-  .summary__row strong { color: var(--black); font-weight: 700; }
+  .summary__row strong { color: var(--navy); font-weight: 700; }
   .summary__row.total { font-size: 17px; }
-  .summary__row.total strong { color: var(--green-dark); font-size: 22px; font-weight: 900; }
+  .summary__row.total strong { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 24px; font-weight: 900; }
 
   /* Actions */
-  .actions { display: flex; gap: 12px; justify-content: space-between; margin-top: 24px; }
+  .actions { display: flex; gap: 12px; justify-content: space-between; margin-top: 28px; }
   .actions--end { justify-content: flex-end; }
-
-  /* Banner pre-launch */
-  .preview-banner { background: var(--amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
-  .preview-banner a { color: var(--black); text-decoration: underline; }
 
   /* Success state */
   .success { text-align: center; padding: 24px 8px; }
-  .success__icon { width: 80px; height: 80px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
-  .success__icon svg { width: 40px; height: 40px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .success h2 { color: var(--green-darker); font-size: 26px; margin-bottom: 10px; }
-  .success p { color: var(--gray-700); font-size: 15px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .success__icon { width: 80px; height: 80px; border-radius: 50%; background: var(--teal); color: var(--white); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; }
+  .success h2 { color: var(--navy); font-size: 28px; margin-bottom: 12px; }
+  .success p { font-family: 'Inter', sans-serif; color: var(--gray-700); font-size: 15px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .success p strong { color: var(--navy); }
   .success__actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-  /* Hint inline */
-  .info-callout { display: flex; gap: 10px; padding: 12px 14px; background: var(--green-pale); border-radius: 10px; font-size: 13px; color: var(--green-darker); line-height: 1.5; margin-bottom: 18px; }
-  .info-callout svg { width: 16px; height: 16px; min-width: 16px; margin-top: 2px; stroke: currentColor; stroke-width: 2; fill: none; }
-
-  .err-callout { gap: 10px; padding: 12px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; font-size: 13px; color: #991b1b; line-height: 1.5; margin-bottom: 18px; display: none; }
-  .err-callout.show { display: flex; }
-  .err-callout svg { width: 16px; height: 16px; min-width: 16px; margin-top: 2px; stroke: currentColor; stroke-width: 2; fill: none; }
+  /* Callouts */
+  .info-callout { padding: 14px 16px; background: var(--navy-pale); border-left: 3px solid var(--navy); border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--navy); line-height: 1.55; margin-bottom: 18px; }
+  .info-callout strong { font-weight: 700; }
+  .err-callout { padding: 14px 16px; background: #fef2f2; border-left: 3px solid var(--red); border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13.5px; color: #991b1b; line-height: 1.55; margin-bottom: 18px; display: none; }
+  .err-callout.show { display: block; }
 
   /* Custom CEP wrap */
   .cep-wrap { display: grid; gap: 10px; grid-template-columns: 140px 1fr; align-items: end; margin-bottom: 8px; }
   @media (max-width: 480px) { .cep-wrap { grid-template-columns: 1fr; } }
 
   /* FOOTER */
-  .foot-mini { padding: 24px 0; text-align: center; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-100); }
+  .foot-mini { padding: 26px 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-200); }
   .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+  .foot-mini a:hover { color: var(--navy); }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">🚧 Site em pré-lançamento — feedback bem-vindo</div>
-
 <header class="nav">
   <div class="wrap nav__row">
-    <a href="index.html" class="nav__brand" aria-label="NomadeDrive — início">
-      <img src="images/logo-nomade-drive.jpg" alt="NomadeDrive" class="nav__logo" />
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive — início">
+      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" />
     </a>
-    <a href="index.html" class="nav__exit">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      Sair
-    </a>
+    <a href="index.html" class="nav__exit">Sair</a>
   </div>
 </header>
 
@@ -211,7 +234,7 @@
         </div>
       </div>
 
-      <p class="field-hint" style="margin-top:-6px; margin-bottom:18px;">Devolução flexível antes do prazo sem multa.</p>
+      <p class="field-hint" style="margin-top:-10px; margin-bottom:20px;">Devolução flexível antes do prazo sem multa.</p>
 
       <div class="field">
         <label>Qual carro você quer?</label>
@@ -221,7 +244,7 @@
             <div class="pick--car__body">
               <div class="pick--car__cat">Popular Econômico</div>
               <div class="pick--car__name">Hyundai HB20</div>
-              <div class="pick--car__price">A partir de R$ 3.500/mês · 3.000 km</div>
+              <div class="pick--car__price">A partir de <strong>R$ 3.500/mês</strong> · 3.000 km</div>
             </div>
           </div>
           <div class="pick pick--car" data-car="cronos">
@@ -229,7 +252,7 @@
             <div class="pick--car__body">
               <div class="pick--car__cat">Sedan Médio Automático</div>
               <div class="pick--car__name">Fiat Cronos</div>
-              <div class="pick--car__price">A partir de R$ 4.500/mês · 3.000 km</div>
+              <div class="pick--car__price">A partir de <strong>R$ 4.500/mês</strong> · 3.000 km</div>
             </div>
           </div>
         </div>
@@ -242,13 +265,10 @@
         <div class="summary__row total"><span>Total estimado</span><strong id="sumTotal">R$ 0</strong></div>
       </div>
 
-      <div class="err-callout" id="err1">
-        <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="err1Msg"></span>
-      </div>
+      <div class="err-callout" id="err1"><span id="err1Msg"></span></div>
 
       <div class="actions actions--end">
-        <button type="button" class="btn btn--primary" id="btnStep2" disabled>Continuar →</button>
+        <button type="button" class="btn btn--primary" id="btnStep2" disabled>Continuar</button>
       </div>
     </section>
 
@@ -259,56 +279,57 @@
         <p>Escolha um ponto comum ou informe seu CEP em Uberlândia. Entrega em até 24h.</p>
       </div>
 
-      <div class="map" id="map">
-        <div class="map__bg-text">Uberlândia / MG</div>
-        <div class="map__pin" style="top: 22%; left: 30%;" data-point="aeroporto" title="Aeroporto Bombonato">1</div>
-        <div class="map__pin" style="top: 50%; left: 50%;" data-point="center-shopping" title="Center Shopping">2</div>
-        <div class="map__pin" style="top: 65%; left: 38%;" data-point="hc-ufu" title="Hospital de Clínicas UFU">3</div>
-        <div class="map__pin" style="top: 55%; left: 62%;" data-point="tubal-vilela" title="Praça Tubal Vilela (Centro)">4</div>
-        <div class="map__pin" style="top: 40%; left: 70%;" data-point="posto-br" title="Posto BR Rondon Pacheco">5</div>
-        <span class="map__note">Mapa Google em breve</span>
-      </div>
+      <div class="map" id="map"></div>
 
       <div class="info-callout">
-        <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span><strong>Entrega gratuita</strong> em qualquer ponto de Uberlândia pra reservas de 30+ dias. Fora da cidade, calculamos a taxa pela distância (R$ 50-150).</span>
+        <strong>Entrega gratuita</strong> em qualquer ponto de Uberlândia pra reservas de 30+ dias. Fora da cidade, calculamos a taxa pela distância (R$ 50-150).
       </div>
 
       <div class="field">
         <label>Pontos comuns em Uberlândia</label>
         <div class="picks picks--3col" style="margin-top:8px;">
           <div class="pick" data-point="aeroporto">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
+            <div class="pick__avatar">
+              <img src="images/pontos/aeroporto.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Ae';" />
+            </div>
             <div class="pick__title">Aeroporto Bombonato</div>
             <div class="pick__sub">Terminal de Desembarque</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="center-shopping">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+            <div class="pick__avatar pick__avatar--teal">
+              <img src="images/pontos/center-shopping.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Ce';" />
+            </div>
             <div class="pick__title">Center Shopping</div>
             <div class="pick__sub">Av. João Naves de Ávila</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="hc-ufu">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+            <div class="pick__avatar pick__avatar--light">
+              <img src="images/pontos/hc-ufu.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Hc';" />
+            </div>
             <div class="pick__title">Hospital Clínicas UFU</div>
             <div class="pick__sub">Av. Pará, Umuarama</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="tubal-vilela">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div class="pick__avatar pick__avatar--gold">
+              <img src="images/pontos/tubal-vilela.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Tv';" />
+            </div>
             <div class="pick__title">Praça Tubal Vilela</div>
             <div class="pick__sub">Centro</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="posto-br">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M3 22V10a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12"/><path d="M3 22h10"/><path d="M3 14h10"/><path d="M13 8h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-9.5a2.5 2.5 0 0 0-2.5-2.5H17"/></svg></div>
+            <div class="pick__avatar pick__avatar--teal">
+              <img src="images/pontos/posto-br.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Br';" />
+            </div>
             <div class="pick__title">Posto BR</div>
             <div class="pick__sub">Av. Rondon Pacheco</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="custom">
-            <div class="pick__icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div class="pick__avatar pick__avatar--light">Ou</div>
             <div class="pick__title">Outro endereço</div>
             <div class="pick__sub">Hotel, condomínio, casa</div>
             <div class="pick__extra">Digite o CEP abaixo</div>
@@ -325,14 +346,11 @@
         <p class="field-hint" id="cepStatus">Digite o CEP e a gente busca o endereço automaticamente.</p>
       </div>
 
-      <div class="err-callout" id="err2">
-        <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="err2Msg"></span>
-      </div>
+      <div class="err-callout" id="err2"><span id="err2Msg"></span></div>
 
       <div class="actions">
-        <button type="button" class="btn btn--ghost-black" id="btnBack2">← Voltar</button>
-        <button type="button" class="btn btn--primary" id="btnStep3" disabled>Continuar →</button>
+        <button type="button" class="btn btn--ghost-navy" id="btnBack2">Voltar</button>
+        <button type="button" class="btn btn--primary" id="btnStep3" disabled>Continuar</button>
       </div>
     </section>
 
@@ -345,7 +363,7 @@
 
       <div class="field">
         <label for="userName">Nome completo</label>
-        <input type="text" id="userName" required placeholder="Como aparece no seu CNH" />
+        <input type="text" id="userName" required placeholder="Como aparece na sua CNH" />
       </div>
 
       <div class="field--row">
@@ -377,31 +395,26 @@
         <input type="text" id="userReasonOther" placeholder="Ex: Em obras no apartamento, etc" />
       </div>
 
-      <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; background:var(--gray-50); border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer; margin-bottom:8px;">
-        <input type="checkbox" id="userTerms" required style="width:18px; height:18px; margin-top:2px; accent-color:var(--green); cursor:pointer; flex-shrink:0;" />
-        <span style="font-size:13px; color:var(--gray-900); line-height:1.5;">
-          Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de uso</a> e a <a href="politica-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.
+      <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; background:var(--cream); border:1.5px solid var(--gray-200); border-radius:8px; cursor:pointer; margin-bottom:8px;">
+        <input type="checkbox" id="userTerms" required style="width:18px; height:18px; margin-top:2px; accent-color:var(--navy); cursor:pointer; flex-shrink:0;" />
+        <span style="font-family:'Inter',sans-serif; font-size:13px; color:var(--navy); line-height:1.5;">
+          Li e aceito os <a href="termos.html" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">Termos de uso</a> e a <a href="politica-privacidade.html" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">Política de Privacidade</a>.
         </span>
       </label>
 
-      <div class="err-callout" id="err3">
-        <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="err3Msg"></span>
-      </div>
+      <div class="err-callout" id="err3"><span id="err3Msg"></span></div>
 
       <div class="actions">
-        <button type="button" class="btn btn--ghost-black" id="btnBack3">← Voltar</button>
-        <button type="button" class="btn btn--primary" id="btnSubmit">Enviar solicitação →</button>
+        <button type="button" class="btn btn--ghost-navy" id="btnBack3">Voltar</button>
+        <button type="button" class="btn btn--primary" id="btnSubmit">Enviar solicitação</button>
       </div>
     </section>
 
     <!-- SUCCESS -->
     <section class="panel step" id="stepSuccess">
       <div class="success">
-        <div class="success__icon">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <h2>Solicitação recebida!</h2>
+        <div class="success__icon">✓</div>
+        <h2>Solicitação recebida</h2>
         <p><strong>Daniel</strong> vai responder em até <strong>2 horas úteis</strong> pelo WhatsApp e e-mail com confirmação e contrato. Pra urgência, fale direto pelo WhatsApp.</p>
 
         <div class="summary" style="text-align:left; max-width:480px; margin:0 auto 24px;">
@@ -412,8 +425,8 @@
         </div>
 
         <div class="success__actions">
-          <a href="#" id="succWhatsapp" target="_blank" rel="noopener" class="btn btn--primary">💬 Adiantar pelo WhatsApp</a>
-          <a href="index.html" class="btn btn--ghost-black">Voltar pro início</a>
+          <a href="#" id="succWhatsapp" target="_blank" rel="noopener" class="btn btn--primary">Adiantar pelo WhatsApp</a>
+          <a href="index.html" class="btn btn--ghost-navy">Voltar pro início</a>
         </div>
       </div>
     </section>
@@ -439,7 +452,14 @@
     popular: { name: 'Hyundai HB20', cat: 'Popular Econômico', base: 3500 },
     cronos: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 4500 }
   };
-  var POINTS = {
+  var POINTS_GEO = {
+    'aeroporto':      { lat: -18.8835, lng: -48.2256, label: 'Aeroporto Bombonato',     sub: 'Terminal de Desembarque' },
+    'center-shopping':{ lat: -18.9131, lng: -48.2755, label: 'Center Shopping',          sub: 'Av. João Naves de Ávila' },
+    'hc-ufu':         { lat: -18.8784, lng: -48.2549, label: 'Hospital de Clínicas UFU', sub: 'Av. Pará, Umuarama' },
+    'tubal-vilela':   { lat: -18.9189, lng: -48.2773, label: 'Praça Tubal Vilela',       sub: 'Centro' },
+    'posto-br':       { lat: -18.9165, lng: -48.2832, label: 'Posto BR Rondon Pacheco',  sub: 'Av. Rondon Pacheco' }
+  };
+  var POINT_NAMES = {
     'aeroporto': 'Aeroporto Bombonato',
     'center-shopping': 'Center Shopping',
     'hc-ufu': 'Hospital de Clínicas UFU',
@@ -464,8 +484,7 @@
   }
   function calcMonthlyRate() {
     if (!state.car) return 0;
-    var pct = discountPct(state.days);
-    return Math.round(CARS[state.car].base * (1 - pct/100));
+    return Math.round(CARS[state.car].base * (1 - discountPct(state.days)/100));
   }
   function calcTotal() {
     if (!state.car || state.days < 30) return 0;
@@ -475,12 +494,8 @@
   function showStatus(elId, msg) {
     var el = $(elId);
     if (!el) return;
-    if (msg) {
-      el.classList.add('show');
-      $(elId + 'Msg').textContent = msg;
-    } else {
-      el.classList.remove('show');
-    }
+    if (msg) { el.classList.add('show'); $(elId + 'Msg').textContent = msg; }
+    else { el.classList.remove('show'); }
   }
   function setStep(n) {
     document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('on'); });
@@ -491,47 +506,63 @@
         var node = document.querySelector('.step-node[data-step="' + i + '"]');
         var line = $('line' + i);
         node.classList.remove('on', 'done');
-        if (i < n) {
-          node.classList.add('done');
-          $('circle' + i).innerHTML = '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-        } else if (i === n) {
-          node.classList.add('on');
-          $('circle' + i).textContent = i;
-        } else {
-          $('circle' + i).textContent = i;
-        }
+        if (i < n) { node.classList.add('done'); $('circle' + i).textContent = '✓'; }
+        else if (i === n) { node.classList.add('on'); $('circle' + i).textContent = i; }
+        else { $('circle' + i).textContent = i; }
         if (line) line.classList.toggle('done', i < n);
       }
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (n === 2 && window._ndMap) { setTimeout(function() { window._ndMap.invalidateSize(); }, 100); }
+  }
+
+  // ===== MAPA LEAFLET (OSM) =====
+  function initMap() {
+    if (!window.L) { console.warn('Leaflet not loaded'); return; }
+    var map = L.map('map', { scrollWheelZoom: false, zoomControl: true }).setView([-18.9128, -48.2755], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+
+    var markers = {};
+    var keys = Object.keys(POINTS_GEO);
+    keys.forEach(function(key, idx) {
+      var p = POINTS_GEO[key];
+      var icon = L.divIcon({
+        className: 'nd-pin',
+        html: String(idx + 1),
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      });
+      var marker = L.marker([p.lat, p.lng], { icon: icon, title: p.label }).addTo(map)
+        .bindPopup('<strong>' + p.label + '</strong>' + p.sub);
+      marker.on('click', function() { selectPoint(key); });
+      markers[key] = marker;
+    });
+    window._ndMap = map;
+    window._ndMarkers = markers;
+  }
+  // tenta carregar mapa quando DOM pronto E leaflet carregado
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { if (window.L) initMap(); else window.addEventListener('load', initMap); });
+  } else {
+    if (window.L) initMap(); else window.addEventListener('load', initMap);
   }
 
   // STEP 1
   function updateStep1() {
     state.days = calcDays();
-    if (state.car) {
-      $('sumCar').textContent = CARS[state.car].name + ' (' + CARS[state.car].cat + ')';
-    } else {
-      $('sumCar').textContent = '—';
-    }
+    $('sumCar').textContent = state.car ? CARS[state.car].name + ' (' + CARS[state.car].cat + ')' : '—';
     if (state.dateStart && state.dateEnd && state.days > 0) {
       $('sumPeriod').textContent = fmtDateBR(state.dateStart) + ' → ' + fmtDateBR(state.dateEnd) + ' (' + state.days + ' dias)';
-    } else {
-      $('sumPeriod').textContent = '—';
-    }
-    var rate = calcMonthlyRate();
-    var pct = discountPct(state.days);
-    if (rate) {
-      $('sumRate').textContent = 'R$ ' + rate.toLocaleString('pt-BR') + '/mês' + (pct ? ' (-' + pct + '%)' : '');
-    } else {
-      $('sumRate').textContent = '—';
-    }
-    var total = calcTotal();
-    $('sumTotal').textContent = 'R$ ' + total.toLocaleString('pt-BR');
+    } else { $('sumPeriod').textContent = '—'; }
+    var rate = calcMonthlyRate(), pct = discountPct(state.days);
+    $('sumRate').textContent = rate ? 'R$ ' + rate.toLocaleString('pt-BR') + '/mês' + (pct ? ' (-' + pct + '%)' : '') : '—';
+    $('sumTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
     var btn = $('btnStep2');
     if (state.car && state.dateStart && state.dateEnd && state.days >= 30) {
-      btn.disabled = false;
-      showStatus('err1', null);
+      btn.disabled = false; showStatus('err1', null);
     } else {
       btn.disabled = true;
       if (state.car && state.dateStart && state.dateEnd && state.days < 30) {
@@ -544,16 +575,10 @@
   $('dateStart').addEventListener('change', function(e) {
     state.dateStart = e.target.value;
     $('dateEnd').min = state.dateStart || todayISO();
-    if (state.dateEnd && state.dateEnd < state.dateStart) {
-      $('dateEnd').value = '';
-      state.dateEnd = null;
-    }
+    if (state.dateEnd && state.dateEnd < state.dateStart) { $('dateEnd').value = ''; state.dateEnd = null; }
     updateStep1();
   });
-  $('dateEnd').addEventListener('change', function(e) {
-    state.dateEnd = e.target.value;
-    updateStep1();
-  });
+  $('dateEnd').addEventListener('change', function(e) { state.dateEnd = e.target.value; updateStep1(); });
 
   document.querySelectorAll('.pick--car').forEach(function(card) {
     card.addEventListener('click', function() {
@@ -571,6 +596,12 @@
     var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
     if (card) { card.classList.add('selected'); state.car = preCar; }
   }
+  // perfil pre-seleciona motivo no step 3
+  var preProfile = urlParams.get('perfil');
+  var profileMap = { 'executivo': 'executivo-transferido', 'medico': 'medico-visitante', 'familia': 'familia-mudanca', 'nomade': 'estudante' };
+  if (preProfile && profileMap[preProfile]) {
+    window._preReason = profileMap[preProfile];
+  }
   var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
   var plus30 = new Date(); plus30.setDate(plus30.getDate() + 31);
   $('dateStart').value = tomorrow.toISOString().split('T')[0];
@@ -581,11 +612,24 @@
   updateStep1();
   $('btnStep2').addEventListener('click', function() { setStep(2); });
 
-  // STEP 2
+  // STEP 2 - seleção de ponto (sincronizada com mapa)
   function selectPoint(pointKey) {
     state.point = pointKey;
-    document.querySelectorAll('.pick[data-point]').forEach(function(p) { p.classList.toggle('selected', p.dataset.point === pointKey); });
-    document.querySelectorAll('.map__pin').forEach(function(p) { p.classList.toggle('selected', p.dataset.point === pointKey); });
+    document.querySelectorAll('.pick[data-point]').forEach(function(p) {
+      p.classList.toggle('selected', p.dataset.point === pointKey);
+    });
+    // destacar marker selecionado
+    if (window._ndMarkers) {
+      Object.keys(window._ndMarkers).forEach(function(k) {
+        var icon = window._ndMarkers[k].getElement();
+        if (icon) icon.classList.toggle('selected', k === pointKey);
+      });
+      if (window._ndMarkers[pointKey]) {
+        var m = window._ndMarkers[pointKey];
+        window._ndMap.setView(m.getLatLng(), 14, { animate: true });
+        m.openPopup();
+      }
+    }
     $('cepFields').style.display = (pointKey === 'custom') ? 'block' : 'none';
     if (pointKey === 'custom') {
       state.deliveryFee = 0;
@@ -599,9 +643,6 @@
   document.querySelectorAll('.pick[data-point]').forEach(function(p) {
     p.addEventListener('click', function() { selectPoint(p.dataset.point); });
   });
-  document.querySelectorAll('.map__pin').forEach(function(p) {
-    p.addEventListener('click', function() { selectPoint(p.dataset.point); });
-  });
 
   $('cepInput').addEventListener('input', function(e) {
     var v = e.target.value.replace(/\D/g, '').slice(0, 8);
@@ -610,7 +651,7 @@
       $('cepStatus').textContent = 'Buscando endereço...';
       fetch('https://viacep.com.br/ws/' + v + '/json/').then(function(r) { return r.json(); }).then(function(data) {
         if (data.erro) {
-          $('cepStatus').textContent = '❌ CEP não encontrado.';
+          $('cepStatus').textContent = 'CEP não encontrado.';
           state.address = null;
           $('addressInput').value = '';
           $('btnStep3').disabled = true;
@@ -619,29 +660,30 @@
           $('addressInput').value = fullAddr;
           state.address = fullAddr;
           state.cep = v;
-          if ((data.localidade || '').toLowerCase().indexOf('uberlândia') >= 0 || (data.localidade || '').toLowerCase().indexOf('uberlandia') >= 0) {
+          var inUdi = (data.localidade || '').toLowerCase().indexOf('uberl') >= 0;
+          if (inUdi) {
             state.deliveryFee = 0;
-            $('cepStatus').innerHTML = '✓ Endereço em Uberlândia — <strong>entrega gratuita</strong> em 24h.';
+            $('cepStatus').innerHTML = 'Endereço em Uberlândia — <strong>entrega gratuita</strong> em 24h.';
           } else {
             state.deliveryFee = 100;
-            $('cepStatus').innerHTML = '✓ Endereço fora de Uberlândia — <strong>taxa de entrega R$ 100</strong> (confirmamos pelo WhatsApp).';
+            $('cepStatus').innerHTML = 'Endereço fora de Uberlândia — <strong>taxa de entrega R$ 100</strong> (confirmamos pelo WhatsApp).';
           }
           $('btnStep3').disabled = false;
           showStatus('err2', null);
         }
       }).catch(function() {
-        $('cepStatus').textContent = '❌ Não foi possível buscar o CEP. Tenta de novo ou prossiga.';
+        $('cepStatus').textContent = 'Não foi possível buscar o CEP. Tente de novo ou prossiga.';
       });
     }
   });
 
   $('btnBack2').addEventListener('click', function() { setStep(1); });
   $('btnStep3').addEventListener('click', function() {
-    if (!state.point) {
-      showStatus('err2', 'Escolha um ponto de entrega ou informe o CEP.');
-      return;
-    }
+    if (!state.point) { showStatus('err2', 'Escolha um ponto de entrega ou informe o CEP.'); return; }
     setStep(3);
+    if (window._preReason && $('userReason').value === '') {
+      $('userReason').value = window._preReason;
+    }
   });
 
   // STEP 3
@@ -686,7 +728,7 @@
             period: state.dateStart + ' → ' + state.dateEnd + ' (' + state.days + ' dias)',
             monthly_rate: 'R$ ' + calcMonthlyRate(),
             total: 'R$ ' + calcTotal(),
-            delivery: POINTS[state.point] + (state.address ? ' (' + state.address + ')' : ''),
+            delivery: POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : ''),
             delivery_fee: 'R$ ' + state.deliveryFee,
             reason: state.user.reason + (state.user.reasonOther ? ' — ' + state.user.reasonOther : '')
           }
@@ -698,13 +740,13 @@
 
     $('succCar').textContent = CARS[state.car].name;
     $('succPeriod').textContent = state.days + ' dias (' + fmtDateBR(state.dateStart) + ' → ' + fmtDateBR(state.dateEnd) + ')';
-    $('succPoint').textContent = POINTS[state.point] + (state.address ? ' (' + state.address + ')' : '');
+    $('succPoint').textContent = POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : '');
     $('succTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
 
     var waText = 'Olá! Acabei de solicitar um carro pelo site.\n\n' +
       'Carro: ' + CARS[state.car].name + '\n' +
       'Periodo: ' + fmtDateBR(state.dateStart) + ' a ' + fmtDateBR(state.dateEnd) + ' (' + state.days + ' dias)\n' +
-      'Entrega: ' + POINTS[state.point] + '\n' +
+      'Entrega: ' + POINT_NAMES[state.point] + '\n' +
       'Total estimado: R$ ' + calcTotal().toLocaleString('pt-BR') + '\n\n' +
       'Nome: ' + state.user.name;
     $('succWhatsapp').href = 'https://wa.me/5534984064864?text=' + encodeURIComponent(waText);
