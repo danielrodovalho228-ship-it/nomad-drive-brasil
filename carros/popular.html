@@ -72,10 +72,28 @@
   .gallery__nav--next { right: 14px; }
   .gallery__nav svg { width: 20px; height: 20px; stroke: var(--black); stroke-width: 2.5; fill: none; }
   .gallery__thumbs { display: flex; gap: 10px; margin-top: 12px; }
-  .gallery__thumb { flex: 1; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; cursor: pointer; opacity: 0.55; transition: opacity .15s; border: 2px solid transparent; }
+  .gallery__thumb { flex: 1; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; cursor: pointer; opacity: 0.55; transition: opacity .15s; border: 2px solid transparent; position: relative; }
   .gallery__thumb.active { opacity: 1; border-color: var(--green); }
   .gallery__thumb:hover { opacity: 0.85; }
   .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Thumb de vídeo */
+  .gallery__thumb--video { background: #1a1a1a; opacity: 1; }
+  .gallery__thumb--video::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: 1; }
+  .gallery__thumb--video::after { content: 'VÍDEO'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; z-index: 2; }
+  .gallery__thumb--video img { opacity: 0.7; }
+
+  /* Modal de vídeo */
+  .video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .video-modal.show { display: flex; }
+  .video-modal__container { width: 100%; max-width: 960px; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+  .video-modal__container iframe, .video-modal__container video { width: 100%; height: 100%; border: 0; display: block; }
+  .video-modal__placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 32px; text-align: center; color: rgba(255,255,255,0.85); background: #1a1a1a; }
+  .video-modal__placeholder strong { font-size: 22px; font-weight: 700; color: #fff; }
+  .video-modal__placeholder p { font-size: 14px; line-height: 1.55; max-width: 420px; }
+  .video-modal__close { position: absolute; top: -42px; right: 0; background: transparent; color: #fff; border: 0; font-size: 28px; cursor: pointer; font-weight: 300; line-height: 1; padding: 4px 12px; }
+  .video-modal__close:hover { color: var(--green); }
+  @media (max-width: 768px) { .video-modal__close { top: -36px; font-size: 24px; } }
 
   /* Painel direito */
   .car-info { background: var(--white); border-radius: 16px; padding: 28px; border: 1px solid var(--gray-100); position: sticky; top: 88px; }
@@ -238,6 +256,11 @@
         <div class="gallery__thumb active" data-img="../images/car-hb20-1.jpg"><img src="../images/car-hb20-1.jpg" alt="thumb 1" loading="lazy" /></div>
         <div class="gallery__thumb" data-img="../images/car-hb20-2.jpg"><img src="../images/car-hb20-2.jpg" alt="thumb 2" loading="lazy" /></div>
         <div class="gallery__thumb" data-img="../images/car-hb20-3.jpg"><img src="../images/car-hb20-3.jpg" alt="thumb 3" loading="lazy" /></div>
+        <div class="gallery__thumb gallery__thumb--video" id="videoTrigger"
+             data-video-yt=""
+             data-video-src="../images/videos/popular-test-drive.mp4">
+          <img src="../images/car-hb20-1.jpg" alt="Vídeo do HB20" loading="lazy" />
+        </div>
       </div>
     </div>
 
@@ -468,10 +491,10 @@
 <script>
 (function() {
   // ============ Galeria ============
-  var imgs = ['../../images/car-hb20-1.jpg', '../../images/car-hb20-2.jpg', '../../images/car-hb20-3.jpg'];
+  var imgs = ['../images/car-hb20-1.jpg', '../images/car-hb20-2.jpg', '../images/car-hb20-3.jpg'];
   var current = 0;
   var main = document.getElementById('galleryMain');
-  var thumbs = document.querySelectorAll('.gallery__thumb');
+  var thumbs = document.querySelectorAll('.gallery__thumb:not(.gallery__thumb--video)');
   function show(i) {
     current = (i + imgs.length) % imgs.length;
     main.src = imgs[current];
@@ -480,6 +503,38 @@
   document.getElementById('galleryPrev').addEventListener('click', function() { show(current - 1); });
   document.getElementById('galleryNext').addEventListener('click', function() { show(current + 1); });
   thumbs.forEach(function(t, idx) { t.addEventListener('click', function() { show(idx); }); });
+
+  // ============ Modal de vídeo ============
+  var videoTrigger = document.getElementById('videoTrigger');
+  var videoModal = document.getElementById('videoModal');
+  var videoContainer = document.getElementById('videoModalContainer');
+  function openVideo() {
+    var ytId = videoTrigger.dataset.videoYt;
+    var src = videoTrigger.dataset.videoSrc;
+    if (ytId) {
+      videoContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    } else if (src) {
+      // Tenta vídeo local; se falhar (404), JS abaixo troca pelo placeholder honesto
+      videoContainer.innerHTML = '<video id="videoEl" controls autoplay playsinline preload="metadata" src="' + src + '"></video>';
+      var vEl = document.getElementById('videoEl');
+      vEl.addEventListener('error', function() {
+        videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo do test drive em breve</strong><p>Estamos gravando o vídeo do HB20 mostrando exterior, interior e dirigibilidade. Enquanto isso, agende uma visita ao vivo pelo WhatsApp.</p><a href="https://wa.me/5534984064864?text=Quero%20ver%20o%20HB20%20ao%20vivo" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:8px;">Agendar visita ao vivo</a></div>';
+      });
+    } else {
+      videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo em breve</strong><p>Estamos preparando o vídeo do test drive. Agende uma visita ao vivo pelo WhatsApp.</p></div>';
+    }
+    videoModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeVideo() {
+    videoModal.classList.remove('show');
+    videoContainer.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  videoTrigger.addEventListener('click', openVideo);
+  document.getElementById('videoModalClose').addEventListener('click', closeVideo);
+  videoModal.addEventListener('click', function(e) { if (e.target === videoModal) closeVideo(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && videoModal.classList.contains('show')) closeVideo(); });
 
   // ============ Calendário ============
   var calDate = new Date();
@@ -537,11 +592,20 @@
     var status = document.getElementById('notifyStatus');
     status.className = 'notify__status show';
     status.style.color = 'rgba(255,255,255,0.95)';
-    status.innerHTML = '✓ Pronto! Avisaremos você assim que liberar. Pra acompanhar tudo: <a href="../fila-prioritaria.html" style="color:#FFC72C; text-decoration:underline; font-weight:700;">entre na Fila Prioritária →</a>';
+    status.innerHTML = 'Pronto! Avisaremos você assim que liberar. Pra urgência: <a href="https://wa.me/5534984064864?text=Quero%20alugar%20o%20HB20%20da%20Nomade%20Drive" target="_blank" rel="noopener" style="color:#FFC72C; text-decoration:underline; font-weight:700;">fale pelo WhatsApp →</a>';
     // TODO: Sprint 5 - mandar pra Edge Function nova-lead com source='nova-carro-popular-avise-me'
     document.getElementById('notifyEmail').value = '';
   });
 })();
 </script>
+
+<!-- Modal de vídeo -->
+<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Vídeo do carro">
+  <div style="position:relative; width:100%; max-width:960px;">
+    <button class="video-modal__close" id="videoModalClose" aria-label="Fechar vídeo">×</button>
+    <div class="video-modal__container" id="videoModalContainer"></div>
+  </div>
+</div>
+
 </body>
 </html>
