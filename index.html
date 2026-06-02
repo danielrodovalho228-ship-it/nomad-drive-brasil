@@ -121,6 +121,7 @@
   .car__specs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 12.5px; color: var(--gray-700); }
   .car__spec { display: inline-flex; align-items: center; gap: 5px; }
   .car__spec svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
+  .car__included { font-size: 12px; color: var(--green-darker); font-weight: 700; background: var(--green-pale); padding: 7px 10px; border-radius: 6px; margin-bottom: 10px; display: inline-block; letter-spacing: 0.2px; }
   .car__price { padding: 14px 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 18px; }
   .car__price-from { font-size: 12px; color: var(--gray-500); display: block; }
   .car__price-val { font-size: 28px; font-weight: 900; color: var(--black); }
@@ -246,7 +247,7 @@
     <div>
       <span class="hero__badge">Operação 100% digital em Uberlândia/MG</span>
       <h1>Carros para quem está <em>chegando</em> em Uberlândia.</h1>
-      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com entrega onde você estiver — aeroporto, hotel, condomínio. <strong>Sem fila, sem loja, sem letra miúda.</strong></p>
+      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com <strong>3.000 km/mês inclusos</strong>. Entrega no aeroporto, hotel ou condomínio. Sem letra miúda.</p>
       <div class="hero__cta">
         <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
         <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20NomadeDrive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-black">Falar pelo WhatsApp</a>
@@ -255,8 +256,8 @@
     <div class="hero__visual">
       <img src="images/car-hb20-1.jpg" alt="Carro NomadeDrive estacionado pronto pra entrega" loading="eager" />
       <div class="hero__floating-badge">
-        <strong>A partir de R$ 2.900</strong>
-        /mês · tudo incluso
+        <strong>A partir de R$ 3.500</strong>
+        /mês · 3.000 km/mês inclusos
       </div>
     </div>
   </div>
@@ -314,9 +315,10 @@
             <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16"/></svg> Manual</span>
             <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
           </div>
+          <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 2.900<small> /mês</small></span>
+            <span class="car__price-val">R$ 3.500<small> /mês</small></span>
           </div>
           <a href="carros/popular.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
         </div>
@@ -336,9 +338,10 @@
             <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg> Automático</span>
             <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
           </div>
+          <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 3.700<small> /mês</small></span>
+            <span class="car__price-val">R$ 4.500<small> /mês</small></span>
           </div>
           <a href="carros/sedan.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
         </div>
@@ -434,18 +437,24 @@
     </div>
     <table class="compare__table">
       <thead>
-        <tr><th>Item</th><th>Localiza</th><th>NomadeDrive</th></tr>
+        <tr><th>Item</th><th>Localiza Mensal Flex</th><th>NomadeDrive</th></tr>
       </thead>
       <tbody>
-        <tr><td>Preço base anunciado</td><td>R$ 89/diária</td><td>R$ 96/diária (R$ 2.900/mês)</td></tr>
-        <tr><td>Seguro / Proteção adicional</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
-        <tr><td>Quilometragem</td><td>200 km/dia</td><td>Ilimitada (30+ dias)</td></tr>
-        <tr><td>Final mensal real</td><td>R$ 3.700-5.000</td><td>R$ 2.900</td></tr>
-        <tr><td>Letra miúda</td><td>Múltipla</td><td>Zero</td></tr>
-        <tr><td>Onde retirar o carro</td><td>Apenas loja</td><td>Onde você estiver</td></tr>
+        <tr><td>Preço base anunciado</td><td>R$ 3.500-4.500/mês</td><td>R$ 3.500/mês</td></tr>
+        <tr><td>Proteção adicional (LDW, RRW, vidros)</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
+        <tr><td>Quilometragem mensal</td><td>2.000-3.000 km</td><td>3.000 km</td></tr>
+        <tr><td>Entrega</td><td>Apenas na loja</td><td>Onde você estiver</td></tr>
+        <tr><td>Devolução flexível</td><td>Multa por antecipação</td><td>Sem multa</td></tr>
+        <tr><td><strong>Final mensal real</strong></td><td><strong>R$ 4.500-6.500</strong></td><td><strong>R$ 3.500</strong></td></tr>
       </tbody>
     </table>
-    <p class="compare__note">* Valores aproximados conforme cotação pública em 05/2026. Localiza pode variar conforme promoções.</p>
+    <p class="compare__note">* Valores aproximados conforme cotação pública em 06/2026. Localiza pode variar conforme promoções e opcionais.</p>
+
+    <!-- Caixa explicativa: Por que mais acessíveis -->
+    <div style="max-width: 880px; margin: 28px auto 0; padding: 22px 24px; background: var(--green-pale); border-left: 4px solid var(--green); border-radius: 10px;">
+      <h3 style="font-size: 17px; font-weight: 800; color: var(--green-darker); margin-bottom: 10px;">Por que nossos preços são mais acessíveis que a Localiza?</h3>
+      <p style="font-size: 14.5px; color: var(--gray-900); line-height: 1.6; margin: 0;">Operação 100% digital, sem custos de loja física, sem letra miúda no checkout, sem opcionais empurrados. Repassamos a economia ao cliente em forma de <strong>preço travado em contrato com tudo incluído</strong>. Foco em quem realmente precisa: profissionais em transição, não turismo eventual.</p>
+    </div>
   </div>
 </section>
 
@@ -563,8 +572,8 @@
         <strong>NomadeDrive</strong>
         <p>Locação mensal de carros em Uberlândia/MG. Frota própria, contrato digital, entrega onde você estiver.</p>
         <div class="foot__seal">
-          <strong>NomadeDrive Verificada</strong>
-          <p>CNPJ em processo, frota com seguro completo, contratos com assinatura digital, atendimento humanizado.</p>
+          <strong>Locadora ativa em Uberlândia/MG</strong>
+          <p>CNPJ em processo, frota com seguro completo, contratos com assinatura digital, atendimento humano direto.</p>
         </div>
       </div>
       <div class="foot__col">
