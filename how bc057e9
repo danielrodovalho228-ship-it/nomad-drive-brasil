@@ -1,0 +1,915 @@
+[33mcommit bc057e95ffd405deb28fb888c4248bc452781580[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Mon Jun 1 20:48:30 2026 -0500
+
+    PIVOT MENSAL Sprint 1: refazer /nova/index.html + arquivar P2P
+    
+    Mudanca estrategica fundamental: descartado modelo carsharing P2P por
+    hora/dia em favor de locacao mensal 30-180 dias com frota propria.
+    
+    Mudancas:
+    
+    1) Arquivado em nova/_arquivo_carsharing/:
+       - qa-test.html (console QA carsharing)
+       - qa-pago.html (confirmacao Stripe carsharing)
+       - reserva-ok.html (success carsharing)
+    
+       Mantidos pra referencia historica, NAO acessiveis pelo site.
+    
+    2) /nova/index.html REFEITO completo (~600 linhas, era ~700+):
+       Estrutura segue prompt estrategico do Daniel:
+    
+       Hero:
+       - Headline: 'Carros para quem esta chegando em Uberlandia'
+       - Sub: 'Locacao mensal 30-180 dias com entrega onde voce estiver'
+       - CTA primario: 'Ver carros disponiveis'
+       - CTA secundario: WhatsApp direto
+       - Foto real HB20 + badge flutuante 'R$ 2.900/mes tudo incluso'
+    
+       3 Cards Proposta de Valor:
+       - Entrega onde voce estiver
+       - Contrato 100% digital
+       - Preco travado sem multa
+    
+       Catalogo de Frota (2 carros + fantasma):
+       - HB20 Popular Economico (R$ 2.900/mes)
+       - Cronos Sedan Medio Automatico (R$ 3.700/mes)
+       - SUV Compacto (em breve, captura email via fila-prioritaria.html)
+    
+       Como Funciona (5 steps):
+       - Escolha carro / Solicite / Assine digital / Receba / Use
+    
+       Diferenciais (4 cards 2x2):
+       - Preco travado em contrato
+       - Devolucao flexivel sem multa
+       - Contrato 100% digital remoto
+       - Tudo incluido no preco unico
+    
+       Comparativo Localiza vs NomadeDrive:
+       - Tabela 6 linhas: preco base, seguro, KM, final mensal, letra miuda, retirada
+    
+       Sobre nos:
+       - Placeholder com SVG generico
+       - Texto sobre Daniel + irmao (placeholder LinkedIn)
+    
+       Depoimentos:
+       - Placeholder HONESTO ('estamos em operacao inicial')
+       - NAO inventa depoimentos
+    
+       FAQ (10 perguntas) cobrindo:
+       - Cartao credito caucao R$1.500-2.500
+       - Sem loja fisica (100% digital)
+       - Visita 30min ponto publico antes de fechar
+       - Formas pagamento: PIX, cartao, boleto CNPJ
+       - Incluso no preco: seguro+manutencao+24h+IPVA+licenciamento+telemetria
+       - Quilometragem ilimitada 30+ dias
+       - Devolucao flexivel sem multa
+       - Renovacao automatica opcional
+       - Entrega aeroporto/hotel/condominio em 24h
+       - Responsaveis Daniel + irmao, CNPJ em processo
+    
+       CTA Final (verde escuro):
+       - 'Ver carros disponiveis' + WhatsApp
+    
+       Footer:
+       - Selo 'NomadeDrive Verificada' destacado
+       - CNPJ em processo claramente sinalizado
+       - 4 colunas: brand, carros, empresa, contato
+    
+       Removido completamente:
+       - Toda referencia a carros de proprietarios / P2P
+       - Categorias premium / luxo (so 2 categorias agora)
+       - 'Cadastre seu carro'
+       - Programa Gold com Silver gratuito
+       - Indique e ganhe credito
+       - Booking widget de hora/dia
+    
+    Pendencias para proximas sprints:
+    - Sprint 2: criar /nova/carros/popular.html + sedan.html
+    - Sprint 3: refazer reservar.html com mapa interativo 5 pontos UDI
+    - Sprint 4: criar fila-prioritaria.html + sobre.html
+    - Sprint 5: schema backend + Edge Function
+    - Sprint 6: polish SEO + captcha + performance
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/_arquivo_carsharing/qa-pago.html    |  102 [32m+++[m
+ nova/_arquivo_carsharing/qa-test.html    |  340 [32m++++++++++[m
+ nova/_arquivo_carsharing/reserva-ok.html |  231 [32m+++++++[m
+ nova/index.html                          | 1028 [32m+++++++++++++[m[31m-----------------[m
+ 4 files changed, 1103 insertions(+), 598 deletions(-)
+
+[33mcommit fd7fdd16f0833ae8511a4ad3c29346b2b81e199a[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 08:43:02 2026 -0500
+
+    docs: CUSTOS v2.1 + PESQUISA_COFRES_ELETRONICOS.md (inventario API completo)
+    
+    Daniel reportou que estava esperando custos completos. v2.0 cobria
+    operacao mas faltava Inventario completo de APIs e pesquisa real
+    de cofres eletronicos (chave do carro).
+    
+    CUSTOS_OPERACIONAIS.md v2.1 adiciona:
+    - Secao 0 NOVA: Inventario completo de TODAS as APIs (50+ servicos)
+      organizadas em 14 subcategorias:
+      0.1 Infra tecnica (Supabase, GitHub Pages, dominio, Resend, etc)
+      0.2 Pagamentos (Stripe, NotaZZ, Asaas)
+      0.3 KYC (Caf, BrasilAPI, Serasa)
+      0.4 Comunicacao (WhatsApp Meta, Z-API, Zenvia SMS, Crisp, Tawk)
+      0.5 Mapas (Google Maps, Mapbox)
+      0.6 Telemetria (SmartGPS, Cobli, Seu Rastreio)
+      0.7 Cofre eletronico (igloohome, iLockey, Master Lock, KeyTracker)
+      0.8 Pedagio (Veloe Go, ConectCar)
+      0.9 Assinatura eletronica (Autentique, D4Sign, DocuSign)
+      0.10 Consultas governamentais (Infosimples, Detran, BrasilAPI CNPJ)
+      0.11 Anti-fraude (Cloudflare Turnstile, Stripe Radar, Sentry)
+      0.12 IA/automacao (ChatGPT API, OpenAI Vision, Embeddings)
+      0.13 Analytics/marketing (GA4, Clarity, Pixel Meta)
+    
+    Cada API tem:
+    - Provedor real
+    - Custo F1 (2 carros) e F4 (20 carros)
+    - Where to contratar (URL direta)
+    - Status (Pago / Configurado / Aguardando / Alternativa)
+    
+    PESQUISA_COFRES_ELETRONICOS.md (novo, 9 secoes):
+    - Comparativo 7 solucoes
+    - Detalhamento igloohome KeyBox 3 (recomendado)
+      * R$ 1.700-2.200/unidade
+      * algoPIN offline (cofre nao precisa estar online)
+      * API REST + integracao via Edge Function
+      * Usado em carsharing global (Sixt, ShareNow, Turo)
+    - iLockey KS101 (plano B nacional)
+    - Master Lock Vault Enterprise (premium)
+    - KeyTracker KT-Pro (enterprise overkill MVP)
+    - DIY Arduino (nao recomendado - reinventar roda)
+    - Plano de aquisicao fase a fase
+    - Riscos & mitigacoes
+    
+    Total APIs F1: R$ 327/mes (incluindo Supabase R$ 125, Resend R$ 0,
+    Infosimples R$ 100, Stripe R$ 60, GPS R$ 7, cofre R$ 0 algoPIN)
+    Total APIs F4: R$ 2.841/mes (escala uso + multi-cofre cloud)
+    
+    Custos totais ajustados (vs v2.0):
+    - F1: R$ 13.256/mes (-R$ 70 ajuste)
+    - F4: R$ 103.736/mes (-R$ 914 ajuste, principalmente cofre offline)
+    
+    Aporte total realista mantido: R$ 600k-1,4M dependendo otimizacoes.
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ CUSTOS_OPERACIONAIS.md         | 1036 [32m+++++++++++++++++[m[31m-----------------------[m
+ PESQUISA_COFRES_ELETRONICOS.md |  272 [32m+++++++++++[m
+ 2 files changed, 718 insertions(+), 590 deletions(-)
+
+[33mcommit e1338c75d8093d2dd7903af9d85bace153f0f2d7[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 08:28:18 2026 -0500
+
+    feat(nova): /nova/politica-privacidade.html LGPD-compliant + atualiza links
+    
+    Pagina dedicada de Politica de Privacidade no padrao visual /nova/
+    (Inter + paleta verde Nomade + cards modernos, sem emojis no UI).
+    
+    13 secoes LGPD-compliant:
+     1. Quem somos (controlador + DPO + contatos)
+     2. Dados coletados (3 origens: voce, automaticos, terceiros)
+        - Tabela detalhada por categoria com finalidade
+     3. Finalidade do tratamento (10 finalidades especificas)
+     4. Base legal (5 hipoteses art. 7o LGPD)
+     5. Compartilhamento (10 terceiros mapeados com dado/finalidade/local)
+        - Stripe, Resend, Caf, Infosimples, Supabase, SmartGPS,
+          NotaZZ, Z-API, Yelum, autoridades publicas
+     6. Retencao (7 tipos de dado x prazo legal)
+     7. Cookies (4 tipos: essenciais, funcionais, analiticos, marketing)
+     8. Direitos do titular (10 direitos art. 18 LGPD)
+     9. Como exercer (e-mail DPO, WhatsApp, prazo 15 dias uteis)
+    10. Seguranca (TLS, RLS, tokenizacao, backups, resposta incidentes)
+    11. Menores (18+ obrigatorio, exclusao automatica se detectado)
+    12. Mudancas (aviso 30 dias se relevante)
+    13. Contato DPO + canal ANPD
+    
+    Tambem:
+    - Sumario navegavel no topo (13 links ancora)
+    - Cross-link Termos de uso (../termos.html mantido)
+    - Footer institucional com 5 links principais
+    - Tabelas estilizadas pra dados estruturados
+    - 2 callouts visuais (info verde + warn amber)
+    
+    Atualiza 3 paginas que apontavam pra ../termos.html#privacidade
+    (link antigo do app principal) -> politica-privacidade.html:
+    - nova/index.html (#cadastro)
+    - nova/login.html (rodape)
+    - nova/perfil.html (vida profissional + footer)
+    
+    Documento conformado com:
+    - Lei 13.709/2018 (LGPD) art. 7, 9, 18, 19, 46-48
+    - Lei 12.965/14 (Marco Civil) art. 13-15
+    - Codigo de Defesa do Consumidor
+    
+    Pendencia operacional Daniel:
+    - Configurar e-mail dpo@nomadedrive.com.br no Google Workspace
+    - Quando ME estiver registrada, atualizar CNPJ na secao 1
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/index.html                |   2 [32m+[m[31m-[m
+ nova/login.html                |   2 [32m+[m[31m-[m
+ nova/perfil.html               |   2 [32m+[m[31m-[m
+ nova/politica-privacidade.html | 353 [32m+++++++++++++++++++++++++++++++++++++++++[m
+ 4 files changed, 356 insertions(+), 3 deletions(-)
+
+[33mcommit 6098bac0d32f926b96eb055661caa39e68b342fc[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 08:01:10 2026 -0500
+
+    docs: CUSTOS_OPERACIONAIS.md v2.0 - cenarios 2-5-10-20 + todos custos
+    
+    Refeito completo conforme pedido Daniel:
+    - Cenarios escalando: 2 (Mes 1-3) -> 5 (Mes 4-6) -> 10 (Mes 7-12) -> 20 (Mes 13-18)
+    - Adicionados TODOS os custos que faltavam na v1.0:
+      * Infraestrutura escritorio (home office + coworking)
+      * Software/ferramentas (Workspace, Figma, ChatGPT, antivirus)
+      * Servicos profissionais recorrentes (contador, advogado, designer)
+      * Bancario/financeiro (PJ, taxas, antecipacao Stripe, conciliacao)
+      * Seguros nao-veicular (RC profissional, patrimonial, vida socios)
+      * Beneficios CLT (VR, VT, plano saude)
+      * Comunicacao (WhatsApp dedicado, telefone, SMS)
+      * Compliance/auditoria (DPO LGPD, auditoria fiscal, INPI)
+      * Contingencias (sinistro, juridico, imprevistos)
+      * Treinamento/eventos (cursos, feiras, coaching)
+      * Stripe fees calculado por cenario
+    
+    Total custos por fase (vs v1.0 que tava subestimado):
+    - F1 (2 carros): R$ 13.326/mes (vs R$ 4.700 v1.0)
+    - F2 (5 carros): R$ 28.605/mes
+    - F3 (10 carros): R$ 52.314/mes (vs R$ 17.250 v1.0)
+    - F4 (20 carros): R$ 104.650/mes
+    
+    Receita por cenario (mantendo pricing atual + extras):
+    - F1: R$ 1.706/mes | F2: R$ 4.050 | F3: R$ 8.807 | F4: R$ 19.839
+    
+    EBITDA mensal (deficit em todas as fases sem ajustes):
+    - F1: -R$ 11.620 | F2: -R$ 24.555 | F3: -R$ 43.507 | F4: -R$ 84.811
+    
+    Insight critico v2.0:
+    Pricing atual + custos completos = DEFICITARIO ate 30-50 carros.
+    Aporte total necessario (CAPEX + Burn 18 meses): R$ 1,4M cenario
+    pessimista, R$ 700-900k cenario otimizado.
+    
+    3 caminhos estrategicos propostos:
+    1. Bootstrap conservador (R$ 200-300k socios, 12-24m pra 10 carros)
+    2. Aporte medio com anjo (R$ 700-900k, 6-9m pra 10 carros)
+    3. Postergar e validar com pesquisa primaria
+    
+    Recomendacao: Caminho 2 enxuto - R$ 500k socios + sem anjo +
+    pricing +30% + IA atendimento + foco Pass/B2B.
+    
+    Documento agora cobre:
+    - 18 categorias de custo detalhadas
+    - 4 fases temporais com previsao
+    - CAPEX por fase (R$ 91k + R$ 67k + R$ 156k + R$ 216k = R$ 531k)
+    - Burn acumulado e runway
+    - 10 riscos quantificados
+    - Comparativo competitivo UDI
+    - Glossario tecnico
+    - 13 proximos passos pre-launch
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ CUSTOS_OPERACIONAIS.md | 1031 [32m+++++++++++++++++++++++++++++[m[31m-------------------[m
+ 1 file changed, 626 insertions(+), 405 deletions(-)
+
+[33mcommit 00afa6e233c5d87206af1fbaa404666c704b5c75[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:55:11 2026 -0500
+
+    docs: CUSTOS_OPERACIONAIS.md — estudo viabilidade pra reuniao com socios
+    
+    Documento completo cobrindo todos os custos do app a 100% — pra estudo
+    de viabilidade financeira com socios.
+    
+    12 secoes + 2 anexos:
+    
+    1. Sumario executivo (4 cenarios timepoints: Mes 0, 6, 12, 24)
+    2. Tecnologia + integracoes (10 itens em producao + 12 a contratar)
+    3. Operacao da frota com 2 modelos:
+       - A) 100% propria (DEFICITARIA: -R$ 300k/mes na maturidade)
+       - B) Hibrida P2P+propria-leve (RECOMENDADA)
+       - Custo por carro detalhado: HB20/Cobalt/Tracker/Renegade
+       - P2P vs Proprio: margem unit comparativa
+    4. Pessoal (Mes 0 a Mes 24: equipe 2 -> 12)
+    5. Marketing (CAC R$60-120, LTV/CAC 20-40x)
+    6. Fiscal (MEI atual -> ME Simples Anexo III)
+    7. Custos one-time CAPEX (R$ 293k aporte inicial)
+    8. Modelagem consolidada (4 cenarios)
+    9. Analise de sensibilidade (best/realista/worst case)
+    10. Cronograma de aportes (R$ 603k total 24 meses)
+    11. Riscos nao quantificados (7 riscos + mitigacoes)
+    12. Comparativo competitivo BR (Movida, Turbi, Localiza, Unidas)
+    
+    Insight critico do estudo:
+    - Frota 100% propria com pricing atual (R$ 12-23/hora) NAO cobre custos
+    - Margem propria: -R$ 1.052/mes/carro (HB20 usado) ate -R$ 1.635/mes (0km)
+    - Margem P2P (Nomade fica 25%): +R$ 151/mes/carro (SUSTENTAVEL)
+    - Recomendacao: lancar 70% P2P + 30% propria-leve + ajustar pricing Mes 6
+    
+    Conclusao pra socios: breakeven realista Mes 20-24, EBITDA Mes 24
+    +R$ 14k/mes (margem 8%) no cenario realista, +R$ 95k/mes (38%) em
+    best case.
+    
+    Anexo A: Fonte das estimativas (FIPE, Glassdoor, Bain Mobility 2024)
+    Anexo B: 7 proximos passos pra solidificar (cotacoes reais)
+    
+    Pendente operacional Daniel:
+    - Cotar leasing HB20 usado em UDI
+    - Cotar Yelum carsharing
+    - LOI 5 condominios pra vagas
+    - Validacao tributaria com contador
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ CUSTOS_OPERACIONAIS.md | 531 [32m+++++++++++++++++++++++++++++++++++++++++++++++++[m
+ 1 file changed, 531 insertions(+)
+
+[33mcommit 8e6b9b23d7740b11448c0ae1d5803407472d5041[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:47:22 2026 -0500
+
+    feat(nova): perfil profissional completo + pet + tarifa limpeza + employment_type cadastro
+    
+    Pacote completo solicitado pelo Daniel:
+    
+    1) Schema SQL aplicado (migration fase_80g_profile_pet_extras)
+       - profiles: +profession, employment_type, company_name, job_title,
+         linkedin_url, instagram_handle, has_pet
+       - Nova tabela user_pets (1 user N pets, RLS por user_id)
+       - Nova tabela booking_extras (tarifas extras desacopladas)
+       - Seed: pet_cleaning R$30/booking + extra_km R$0,80/km
+    
+    2) /nova/perfil.html (novo, ~600 linhas)
+       - Auth gate + nav igual dashboard
+       - 3 cards: Dados pessoais / Vida profissional / Meu pet
+       - Form profissional: tipo vínculo (8 opções), profissão, empresa,
+         cargo, LinkedIn, Instagram
+       - Toggle pet com upload foto + cartão vacina (bucket kyc-docs)
+       - Auto-aprovação pet (conforme decisão)
+       - Tarifa pet R$30/reserva claramente comunicada
+       - Save bar sticky bottom com status (saved/unsaved/saving)
+       - Barra de progresso "% completo" no hero
+       - Layout profissional: Inter, cards com shadow suave, sem emojis
+         no UI principal, paleta verde Nomade
+    
+    3) /nova/dashboard.html
+       - Link nav "Conta" agora aponta perfil.html
+       - Card "Minha conta" adiciona link "Completar meu perfil →"
+    
+    4) /nova/index.html #cadastro
+       - Novo campo opcional "Tipo de vínculo" (dropdown 8 opções)
+       - Hint: "ganha selo verificado + 10% off Pass"
+       - Envia employment_type pro nova-lead Edge Function
+    
+    5) Edge Function nova-lead v7 deployada
+       - Aceita employment_type no payload
+       - Valida contra enum válido (clt, autonomo, pj, etc)
+       - Persiste em profiles.employment_type
+       - Resto inalterado de v6
+    
+    6) /nova/reservar.html step 1
+       - Checkbox "Vou levar meu pet (+R$30 limpeza)"
+       - Recalcula total dinamicamente (basePrice + 30 se marcado)
+       - Link pro perfil pra cadastrar pet primeiro
+       - Resumo mostra "+ R$30 limpeza pet" no rateLabel
+    
+    Decisões aplicadas (do AskUserQuestion):
+    - Profissão: opcional com benefício (selo + 10% off)
+    - Pet: auto-aprovação no upload (sem revisão manual)
+    - Layout: profissional, sem visual de AI, fotos reais
+    
+    Próximos passos sugeridos (não pendentes):
+    - Painel admin pra ver/aprovar pets se decidir mudar pra revisão manual
+    - Implementar selo "Verificado" visual no perfil quando LinkedIn preenchido
+    - Aplicar 10% off automático no Pass pra perfis verificados
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/dashboard.html |   5 [32m+[m[31m-[m
+ nova/index.html     |  17 [32m++[m
+ nova/perfil.html    | 672 [32m++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ nova/reservar.html  |  24 [32m+[m[31m-[m
+ 4 files changed, 715 insertions(+), 3 deletions(-)
+
+[33mcommit 7411c849686b194939b09757d5a6d054e7906317[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:32:04 2026 -0500
+
+    feat(nova): dashboard cliente com KYC + fix preço + redirect login
+    
+    Daniel pediu: cadastro auto cria conta + dashboard completo com
+    pendências de cadastro, igual sites profissionais.
+    
+    Mudanças:
+    
+    1) nova/dashboard.html (novo, ~470 linhas)
+       - Auth gate: redireciona pra login se sem sessão
+       - Hero personalizado com primeiro nome + emoji 👋
+       - Topbar dinâmico: warn (faltam docs) / info (em análise) / ok
+       - Card "Complete seu cadastro" com 4 docs:
+         • Foto CNH frente / verso
+         • Selfie com CNH na mão
+         • Comprovante de residência
+       - Upload real pro Supabase Storage bucket 'kyc-docs'
+         (path: {user_id}/{type}-{ts}.{ext}, max 8MB, jpg/png/webp/pdf)
+       - Insert em user_documents com status 'em_analise'
+       - Progress bar visual (% docs enviados)
+       - Estados por item: pending / review / done com SVG icons
+       - Card "Pronto pra reservar?" verde escuro
+         • Bloqueado se cadastro incompleto (CTA cinza)
+         • Liberado quando aprovado (CTA verde + link frota)
+       - Card "Minhas viagens" com empty state SVG
+       - Card "Minha conta" mostrando profile + link trocar senha
+       - Menu nav: Painel / Reservar / Viagens / Conta + Avatar + Sair
+       - Logout: signOut + redirect login.html?signedout=true
+    
+    2) nova/index.html — fix inconsistência preço perks cadastro
+       "R$ 12/hora · R$ 149/dia" → "A partir de R$ 12/hora
+       (teto R$ 99/dia no HB20)" — antes misturava HB20 com Tracker
+    
+    3) nova/login.html — redirect após login agora aponta
+       /nova/dashboard.html (era /nova/index.html?logged=true)
+    
+    Fluxo completo agora:
+    - Cadastra (#cadastro) → conta criada com senha → login → dashboard
+    - No dashboard: vê pendências, sobe docs, vê status real
+    - Quando admin aprova (via user_documents.status='aprovado'),
+      topbar fica verde e CTA reservar libera
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/dashboard.html | 498 [32m++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ nova/index.html     |   2 [32m+[m[31m-[m
+ nova/login.html     |   2 [32m+[m[31m-[m
+ 3 files changed, 500 insertions(+), 2 deletions(-)
+
+[33mcommit b75188c5cbeb1449ff4e6514a2e4cebeca8519db[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:25:33 2026 -0500
+
+    qa-plan: bump v1.2 — novo fluxo F5 (cadastro+login+recuperação)
+    
+    - F5 reescrito completo: F5.1 cadastro com senha, F5.2 login,
+      F5.3 senha errada, F5.4 recuperar senha
+    - Adicionado warning sobre Supabase Auth Allowed URLs
+      (precisa incluir nova-senha.html)
+    - Documentado fluxo híbrido pra contas antigas sem senha
+    - Seção "Mudanças desde v1.0" atualizada com 2 itens novos
+      (falso positivo conflito + redesign alertas + novo auth)
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ QA_TEST_PLAN.md | 70 [32m++++++++++++++++++++++++++++++++++++++++[m[31m-----------------[m
+ 1 file changed, 49 insertions(+), 21 deletions(-)
+
+[33mcommit dac948832dfef439cae833eedc4b62b35f6fa9df[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:24:35 2026 -0500
+
+    feat(nova auth): login profissional email+senha + cadastro com senha + recuperação
+    
+    Bug reportado: "Error sending magic link email" no /nova/login.html.
+    Causa raiz: SMTP nativo do Supabase Auth com rate-limit. Daniel pediu
+    fluxo padrão de sites profissionais (email + senha + esqueci senha)
+    em vez de magic link.
+    
+    Refatoração completa:
+    
+    1) nova/login.html
+       - Trocado signInWithOtp por signInWithPassword
+       - Campo senha com show/hide toggle (eye icon)
+       - Link "Esqueci minha senha" no label
+       - Mensagens de erro específicas (credenciais inválidas, não confirmado, não existe)
+       - Nota pra contas antigas sem senha: usar "esqueci minha senha" pra definir
+    
+    2) nova/index.html #cadastro
+       - Redesign completo: grid hero (foto + 4 perks) + form
+       - Novo campo senha com live feedback de força (8+ chars)
+       - Checkbox obrigatório de aceite de termos
+       - Validação client-side (senha 8 chars, termos checked, email válido)
+       - Detecta 409 "email já existe" + sugere login ou recuperar senha
+       - Redirect pra /nova/login.html?welcome=email após sucesso
+    
+    3) nova-lead Edge Function v6 deployada
+       - Aceita 'password' no payload (validado mín 8 chars)
+       - admin.createUser com email_confirm:true e password
+       - Email pro user reescrito: CTA pra login.html (sem magic link)
+       - Backward compat: pedidos sem password ainda criam só lead
+       - Retorna 409 se email já existe (com mensagem clara)
+    
+    4) nova/recuperar-senha.html (novo)
+       - Input email → supabase.auth.resetPasswordForEmail
+       - Redirect: nova-senha.html
+       - Resposta de sucesso genérica (não vaza se email existe — anti-enum)
+    
+    5) nova/nova-senha.html (novo)
+       - Detecta hash #access_token=...&type=recovery via onAuthStateChange
+       - Form senha + confirmação com show/hide
+       - updateUser({ password }) → logout → redirect login.html?reset=ok
+       - Estado loading + estado token inválido com CTA pra pedir novo
+    
+    Fluxo híbrido: contas antigas (sem senha) usam "esqueci minha senha"
+    pra definir uma. Zero ruptura.
+    
+    Pendência operacional (Daniel):
+    - Supabase Auth Allowed Redirect URLs: incluir
+      https://nomadedrive.com.br/nova/nova-senha.html
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/index.html           | 170 [32m++++++++++++++++++++++++++++[m[31m-----[m
+ nova/login.html           | 111 [32m+++++++++++++++[m[31m------[m
+ nova/nova-senha.html      | 238 [32m++++++++++++++++++++++++++++++++++++++++++++++[m
+ nova/recuperar-senha.html | 175 [32m++++++++++++++++++++++++++++++++++[m
+ 4 files changed, 639 insertions(+), 55 deletions(-)
+
+[33mcommit fb687a568b3637dd310ed2b5cfa8a0f7866dda82[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:14:06 2026 -0500
+
+    nova/login: add carro hero + pitch curto sobre o app
+    
+    Daniel pediu pra preencher o espaço em branco do login com algo
+    visual e contextual. Antes era só card centralizado no meio de
+    fundo azul vazio = parecia placeholder.
+    
+    Adicionado painel esquerdo com:
+    - Foto realista do Chevrolet Tracker (car-tracker-2.jpg) em aspect 16:10
+    - Badge flutuante "Disponível 24/7 · Uberlândia" (verde piscante)
+    - H2: "Pegue um carro em minutos — não em horas"
+    - Pitch curto sobre o que é carsharing
+    - 3 perks com SVG icons: combustível incluso, reserve em segundos,
+      proteção 24h
+    
+    Layout responsivo:
+    - Desktop ≥880px: grid 1.05fr | 0.95fr lado a lado
+    - Mobile: stacked, hero panel em cima do card de login
+    
+    O card de login (input email + magic link) está intacto.
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/login.html | 89 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++[m[31m--[m
+ 1 file changed, 86 insertions(+), 3 deletions(-)
+
+[33mcommit 4f77beeb3b84e20da388b4b8a4aac4a175906fcd[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:07:06 2026 -0500
+
+    fix(reservar): false positive + redesign alertas sem visual de AI
+    
+    Bug reportado: reserva de 48h a partir de 31/05 15:00 (range vai até
+    02/06 15:00) era rejeitada como conflito. Mas o CONFLITOS_MOCK tinha
+    slots fake em 01/06 e 02/06 — Daniel nem sabia. Reservas longas (1-7
+    dias) viravam impossíveis sem motivo.
+    
+    UX reportado: alertas vermelhos saturados (#fef2f2 + #b91c1c) com
+    emojis 🚫 / ⚠️ em 8 lugares = visual de "alerta de IA / hacker", não
+    combina com o tom carsharing Zipcar-style.
+    
+    Fixes:
+    1) CONFLITOS_MOCK reduzido: só hoje (31/05) com 3 slots curtos
+       (mantém demo F4 funcionando, libera datas futuras).
+    2) Toast redesenhado: fundo escuro neutro + borda lateral colorida
+       indica tipo (warn=amber, ok=verde). SVG icons em vez de emojis.
+    3) Novo componente .hint (amber suave didático) substitui banner
+       vermelho. Variante .hint--block pra bloqueios fortes.
+    4) showToast(msg, level) e showConflict(msg, blocking) aceitam tipo.
+    5) 8 mensagens reescritas em tom didático:
+       - "🚫 X — horário ocupado" → "X já está reservado nesse carro"
+       - "🚫 Conflito de horário" → "Esse intervalo cruza com outra reserva"
+       - "⚠️ Não há horário disponível" → "Sem janela livre nessa data"
+       - "⚠️ Data de devolução..." → "ajustamos pra você"
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/reservar.html | 74 [32m++++++++++++++++++++++++++++++++++[m[31m--------------------[m
+ 1 file changed, 47 insertions(+), 27 deletions(-)
+
+[33mcommit 3491cd743b427d3d379f15fe4000fc0e7bb3822e[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 07:03:03 2026 -0500
+
+    feat(nova): create dedicated /nova/login.html (magic link) + fix Entrar links
+    
+    Bug reportado: botão "Entrar" do /nova/ apontava pra ../login.html
+    (app antigo de locação mensal), quebrando o branding do carsharing.
+    
+    Fix:
+    - Nova página nova/login.html: input email + Supabase signInWithOtp
+      (magic link sem senha, mesmo padrão de UX zipcar-style)
+      - shouldCreateUser=false: se email não existe, mostra CTA pra cadastro
+      - Redirect: https://nomadedrive.com.br/nova/index.html?logged=true
+      - Branded: paleta verde Nomade, header com logo carrinho
+      - Auto-redirect se sessão Supabase já está ativa
+      - Status messages: ok / err / info
+      - Link "Criar conta grátis" no rodapé do form
+    - 8 arquivos HTML atualizados: href="../login.html" → href="login.html"
+      (carro, como-funciona, empresas, estudantes, index, motoristas-app,
+       parceiros, precos)
+    
+    Pendência operacional (Daniel):
+    - Verificar Supabase Auth Allowed URLs inclui o redirect
+      https://nomadedrive.com.br/nova/* (provavelmente já está OK pelos
+      redirects de cadastro pré-existentes).
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/carro.html          |   2 [32m+[m[31m-[m
+ nova/como-funciona.html  |   2 [32m+[m[31m-[m
+ nova/empresas.html       |   2 [32m+[m[31m-[m
+ nova/estudantes.html     |   2 [32m+[m[31m-[m
+ nova/index.html          |   2 [32m+[m[31m-[m
+ nova/login.html          | 260 [32m+++++++++++++++++++++++++++++++++++++++++++++++[m
+ nova/motoristas-app.html |   2 [32m+[m[31m-[m
+ nova/parceiros.html      |   2 [32m+[m[31m-[m
+ nova/precos.html         |   2 [32m+[m[31m-[m
+ 9 files changed, 268 insertions(+), 8 deletions(-)
+
+[33mcommit a308a30565f3dfd456903e58193521abbd3e437d[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sun May 31 06:55:28 2026 -0500
+
+    nova/como-funciona: 5 polishes solicitados pelo Daniel
+    
+    1) Logo carrinho substitui letra 'N' nos 7 pins do mapa + logo do
+       header CNH (SVG inline reutilizado, dimensionado via CSS).
+    2) Stepper visual com 4 ícones (Buscar/Cadastrar/Reservar/Devolver)
+       adicionado em todos os 4 slides — preenche o espaço em branco
+       entre o iPhone e a barra de progresso. Estado por slide:
+       • Slide 1: passo 1 'on'
+       • Slide 2: 1 'done', 2 'on'
+       • Slide 3: 1-2 'done', 3 'on'
+       • Slide 4: 1-3 'done', 4 'on'
+    3) CNH realista (slide 2): SVG genérico trocado por mockup BR
+       (gradient azul + header 'REPÚBLICA FEDERATIVA DO BRASIL' +
+       foto silhueta + 3 campos com dados borrados via filter:blur).
+    4) Slide 4 'Pronto pra devolver' redesenhado:
+       • Banner verde no topo 'Últimos 4 passos · ~3 min'
+       • Foto realista do carro (já tinha, mantida)
+       • Checklist com 4 itens (📸 fotos do carro, 🛣️ KM final,
+         ⛽ combustível ≥¼, 🔑 chave no cofre)
+    5) Foto realista do carro (car-tracker-2.jpg) validada — sem mudança.
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/como-funciona.html | 228 [32m++++++++++++++++++++++++++++++++++++++++++++[m[31m----[m
+ 1 file changed, 210 insertions(+), 18 deletions(-)
+
+[33mcommit 021708a0df31b0ed03e6da800c0e71252f338adf[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 22:29:53 2026 -0500
+
+    docs: ANALISE_INTEGRACOES.md — mapa completo das 28 integrações
+    
+    Consolida em um único doc:
+    - 9 integrações JÁ em produção (Stripe Connect, Resend, Supabase,
+      Web Push VAPID, Infosimples, PIX, calendário, pricing, dashboard)
+    - 13 gaps P0 (KYC Caf/Idwall, WhatsApp API, telemetria SmartGPS,
+      cofre eletrônico, assinatura eletrônica, Google Maps, LGPD)
+    - 10 gaps P1 (NF-e NotaZZ, chat suporte, SMS backup, etc)
+    - 6 gaps P2/P3 (push nativo, score crédito, pedágio Veloe/ConectCar)
+    
+    Inclui:
+    - Custo total mensal estimado (R$ 1.150 – R$ 1.450/mês MVP)
+    - One-time inicial (R$ 10.000 – R$ 13.500 hardware + cofres)
+    - 7 decisões de negócio pendentes que destravam várias integrações
+    - Roadmap por sprint (4 sprints × 2 semanas = MVP completo)
+    - Cross-references pros 9 docs relacionados
+    - Resumo pra colar em outras IAs (ChatGPT, Cursor, Claude Code)
+    
+    Cross-ref com ESTADO_ATUAL.md (26/05) e PESQUISA_INTEGRACAO_OPERACIONAL.md (23/05).
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ ANALISE_INTEGRACOES.md | 476 [32m+++++++++++++++++++++++++++++++++++++++++++++++++[m
+ 1 file changed, 476 insertions(+)
+
+[33mcommit bb46fdede24045d4bd4ad7b9ffcd89a09fa417c6[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 22:22:28 2026 -0500
+
+    security: remove pickup_code from qa-listar-reservas (Edge Fn + frontend)
+    
+    Edge Function qa-listar-reservas era pública (sem verify_jwt) e retornava
+    pickup_code (senha física do cofre) junto com a listagem por email. Risco
+    de enumeração: atacante chama com emails comuns, pega senhas de cofres
+    reservados.
+    
+    Fix:
+    - Edge Fn v2 deployada: pickup_code removido do .select() (auditoria APIs)
+    - qa-test.html: removida coluna 'cofre' da listagem, com nota apontando
+      fontes alternativas (qa-pago.html, e-mail confirmação, SQL Studio)
+    
+    Verificado via curl real com anon key: pickup_code não vaza mais.
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/qa-test.html | 4 [32m++[m[31m--[m
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+[33mcommit 308b2f8f68ca36832070b83b0e3ae4246a3747b6[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 22:15:48 2026 -0500
+
+    qa-plan: bump to v1.1 — refletir fixes deployados em 30/05
+    
+    - Adiciona seção "Mudanças desde v1.0" no topo
+    - F4: passos atualizados com shake + toast + ✕ + link clicável
+    - E8 (data passada): marcado como ✅ corrigido (2 camadas: .min HTML5 + handler change)
+    - Checklist erros: 4 novos itens (F4.2, F4.4, E8.1, E8.2)
+    - Mini-bug listar reservas: documentado como corrigido
+    - Admin painel Leads: instrução pra Ctrl+Shift+R + re-login
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ QA_TEST_PLAN.md | 40 [32m+++++++++++++++++++++++++++++++[m[31m---------[m
+ 1 file changed, 31 insertions(+), 9 deletions(-)
+
+[33mcommit 37a78a76b4cf0e2ebb9e9b82a630e92510703c34[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 22:09:00 2026 -0500
+
+    qa: add QA Console FAB to admin + slot conflict UX fixes
+    
+    admin.html: floating action button (bottom-right) linking to
+    nova/qa-test.html for internal QA team. Discreet, only visible
+    inside admin (which is super_admin-gated).
+    
+    nova/reservar.html: F4-A and F4-B fixes from earlier QA round —
+    shake animation + toast + red ✕ on occupied slots, and
+    "Ver próximo disponível" button registered via addEventListener
+    instead of inline onclick (was silently failing).
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ admin.html         | 16 [32m++++++++++++++++[m
+ nova/reservar.html | 25 [32m++++++++++++++++++++++[m[31m---[m
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
+[33mcommit 1deb4282f7dfcc74b52975a97221eee4a408f00f[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 22:08:52 2026 -0500
+
+    security: fix LGPD leak in 15 views via security_invoker
+    
+    15 views in public schema were owned by postgres and lacked
+    security_invoker=on, bypassing RLS on base tables when called with
+    anon key. Anon could read 12 leads (PII), owner earnings, damages,
+    protection cases, growth metrics, etc.
+    
+    Fix: ALTER VIEW SET (security_invoker = on) on all 15 (applied to
+    production as migration fase_82_security_invoker_views). Verified
+    via REST with anon key: all 8 sensitive views return 0 rows.
+    Admin/owner/client legitimate access unaffected.
+    
+    Includes incident report (LGPD assessment, exposure window,
+    mitigation log) for legal review.
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ FASE_82_SECURITY_INVOKER_VIEWS.sql |  82 [32m++++++++++++++++++++++++++++[m
+ INCIDENTE_LGPD_2026_05_30.md       | 106 [32m+++++++++++++++++++++++++++++++++++++[m
+ 2 files changed, 188 insertions(+)
+
+[33mcommit 44ce966a13e2905ca1d515a50d640ab3f73be3a9[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 21:37:15 2026 -0500
+
+    Fix 3 bugs do QA full pass: F4-A, F4-B + mini-bug listar reservas
+    
+    QA reportou 3 bugs reais. Todos corrigidos:
+    
+    FIX F4-A — slot ocupado sem feedback:
+    - Clicar slot .off agora dispara shake animation (.4s) + cor vermelha
+    - Toast top-screen "🚫 HH:MM — horario ocupado" (3s, auto-hide)
+    - conflictAlert atualizado com mensagem ESPECIFICA do horario clicado
+    - CSS: slot.off ganha ✕ vermelho no canto + shake keyframe
+    
+    FIX F4-B — "Ver proximo disponivel" nao mudava slot:
+    - Removido onclick inline (estava falhando silenciosamente)
+    - Agora usa addEventListener registrado via setTimeout(0)
+    - suggestNextAvailable() melhorada:
+      * Bug do loop (maxH=23-durHours zerava se durHours>23) corrigido
+      * Após selecionar novo horario: toast verde "✅ HH:MM selecionado"
+      * Scale 1.1 + scrollIntoView pro slot novo (feedback visual claro)
+      * Se nao tem horario: toast + mensagem com duração no banner
+    
+    FIX mini-bug — "Listar minhas reservas" retornava [] (RLS bloqueava anon):
+    - Nova Edge Function qa-listar-reservas (publica, sem JWT)
+    - Usa SUPABASE_SERVICE_ROLE_KEY pra burlar RLS
+    - qa-test.html agora chama essa function em vez de REST direto
+    - Output formatado: '✓ N reserva(s) encontrada(s):' + lista padded
+    
+    PENDENCIAS reportadas (nao mexidas):
+    - F2/F3 cartoes Stripe — testar manual (UI Stripe externa)
+    - F1 emails — verificar inbox Gmail visual
+    - F5 magic link click — abrir manual
+    - admin.html escapeHtml fix — pendencia da rodada anterior
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/qa-test.html  | 15 [32m+++++++++[m[31m-----[m
+ nova/reservar.html | 60 [32m++++++++++++++++++++++++++++++++++++++++++++++[m[31m--------[m
+ 2 files changed, 61 insertions(+), 14 deletions(-)
+
+[33mcommit e86829e38b46ec551f615923d9697b3ab422609c[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 21:10:42 2026 -0500
+
+    QA Test Plan completo: 7 fluxos + 8 contas + checklist + debug
+    
+    Documento completo de testes pra equipe de QA com:
+    
+    1. CONTAS DE TESTE (8 emails cadastrados):
+       - 5 corporativos @nomadedrive.com.br (cliente, owner, parceiro,
+         protecao, oficina) — todos ja no Supabase Auth
+       - 3 pessoais Daniel (super_admin + 2 clients)
+       - 1 caixa institucional (admin notify)
+    
+    2. URLs PRINCIPAIS:
+       - 8 paginas publicas /nova/
+       - Console QA: /nova/qa-test.html
+       - 5 dashboards autenticados
+    
+    3. 5 CARTOES STRIPE TEST:
+       - 4242... (sucesso)
+       - 3184 (3DS)
+       - 0002 (recusado)
+       - 9995 (sem saldo)
+       - 0341 (expirado)
+    
+    4. 7 FLUXOS DETALHADOS passo-a-passo:
+       F1: Happy path (15 passos com criterios)
+       F2: Pagamento recusado
+       F3: 3D Secure
+       F4: Conflito de horario
+       F5: Magic link cadastro
+       F6: Lead via form publico
+       F7: Lead B2B parceiros
+    
+    5. 9 CENARIOS DE ERRO (E1-E9) com expected behavior
+    6. CHECKLIST VISUAL com 30+ checkpoints organizados
+    7. COMO DEBUGAR (SQL queries, Resend/Stripe/Supabase logs)
+    8. TEMPLATE de bug report
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ QA_TEST_PLAN.md | 425 [32m++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ 1 file changed, 425 insertions(+)
+
+[33mcommit fcd7e2753e5de56e6647829dfda021c39ae49f4a[m
+Author: Daniel <hello@nomaddrive.com.br>
+Date:   Sat May 30 20:56:43 2026 -0500
+
+    QA Console: fluxo completo reserva → Stripe → cofre → devolução
+    
+    Pra equipe de QA testar fluxo carsharing end-to-end com Stripe TEST.
+    
+    SCHEMA NOVO (Supabase):
+    - qa_vehicles: catalogo de 4 carros com hourly_rate, daily_rate, location
+    - qa_bookings: reservas hourly (start_at/end_at timestamp, pickup_code 4 digitos,
+      stripe_session_id, status pending_payment → confirmed → active → completed)
+    - RLS: user so ve proprias reservas
+    
+    EDGE FUNCTIONS NOVAS:
+    - qa-criar-reserva: cria booking pending + Stripe Checkout Session com metadata
+      (success_url leva pra qa-pago.html que auto-confirma)
+    - qa-acao: 4 acoes — confirm_payment / unlock / return / rate
+      Cada acao atualiza status + envia email customizado:
+      • confirm_payment → gera codigo 4 digitos + envia email com senha do cofre amarelo
+      • unlock → status=active + email "Cofre aberto, boa viagem"
+      • return → calcula duracao real + email "Reserva finalizada"
+      • rate → salva 1-5 estrelas + email pro admin
+    
+    PAGINAS NOVAS:
+    - /nova/qa-test.html: console interativo
+      • Form criar reserva (4 carros, duracao 2h-2dias, datetime)
+      • Cartoes Stripe TEST destacados (4242 4242 4242 4242)
+      • Botoes manuais pra cada acao (confirm/unlock/return/rate)
+      • Tabela com os 5 emails que devem chegar
+      • Lista reservas do email pra debug
+    - /nova/qa-pago.html: tela success do Stripe
+      • Auto-dispara confirm_payment via fetch
+      • Mostra codigo do cofre GIGANTE em amarelo
+      • Link pro proximo passo
+    
+    EMAILS COM TEMPLATE BONITO:
+    - Header com logo Nomade Drive real
+    - Codigo do cofre destacado em amarelo grande
+    - Tabela detalhes (carro, placa, local, periodo, total)
+    - Footer escuro com WhatsApp
+    - Reply-to volta pro admin
+    
+    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+ nova/qa-pago.html | 102 [32m+++++++++++++++++[m
+ nova/qa-test.html | 335 [32m+++++++++++++++++++++++++++++++++++++++

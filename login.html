@@ -3,505 +3,394 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Entrar — Nomade Drive Brasil</title>
-<meta name="description" content="Acesse sua conta Nomade Drive Brasil: uma conta única para alugar veículos, cadastrar seu carro, indicar ou operar como parceiro verificado." />
-<meta name="robots" content="noindex" />
+<title>Entrar — Nomade Drive · Carsharing por hora</title>
+<meta name="description" content="Acesse sua conta Nomade Drive. Sem senha — receba um link de acesso no seu e-mail." />
+<meta name="theme-color" content="#4FA600" />
+<meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="design-tokens.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
-<link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-/* ============================================================
- * Fase 54 — Recuperação de senha (UX melhorada)
- * ============================================================ */
-.pwd-field-wrap { position: relative; }
-.pwd-toggle {
-  position: absolute; right: 10px; top: 50%;
-  transform: translateY(-50%);
-  background: transparent; border: none;
-  cursor: pointer; padding: 6px; line-height: 1;
-  color: #6b7670; font-size: 14px;
-  border-radius: 6px;
-  transition: color .15s, background .15s;
-}
-.pwd-toggle:hover { color: #198754; background: #f0f7f1; }
-.pwd-toggle:focus-visible { outline: 2px solid #198754; outline-offset: 1px; }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --zip-green: #4FA600;
+    --zip-green-dark: #3F8500;
+    --zip-green-pale: #ecf6e0;
+    --zip-bg-blue: #e8f4f8;
+    --zip-amber: #FFC72C;
+    --black: #1a1a1a;
+    --gray-900: #2a2a2a;
+    --gray-700: #4a4a4a;
+    --gray-500: #767676;
+    --gray-300: #cccccc;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--zip-bg-blue); line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  h1,h2,h3 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
 
-.pwd-checklist {
-  margin-top: 8px;
-  padding: 10px 12px;
-  background: #f8fafb;
-  border-radius: 8px;
-  font-size: 12.5px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 14px;
-}
-.pwd-check {
-  display: flex; align-items: center; gap: 6px;
-  color: #98a09b;
-  transition: color .2s;
-}
-.pwd-check::before {
-  content: "○";
-  font-size: 11px;
-  font-weight: 700;
-  display: inline-block;
-  width: 14px; text-align: center;
-}
-.pwd-check--ok { color: #198754; }
-.pwd-check--ok::before { content: "✓"; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--zip-green); color: var(--white); }
+  .btn--primary:hover:not(:disabled) { background: var(--zip-green-dark); transform: translateY(-1px); }
+  .btn--primary:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 10px 20px; font-size: 14px; }
+  .btn--block { width: 100%; }
 
-.recovery-modal-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(20,40,30,0.5);
-  display: none;
-  align-items: center; justify-content: center;
-  z-index: 9999;
-  padding: 16px;
-  animation: rmb-fade-in .2s ease both;
-}
-.recovery-modal-backdrop[data-open="1"] { display: flex; }
-@keyframes rmb-fade-in { from { opacity: 0; } to { opacity: 1; } }
-.recovery-modal {
-  background: #fff;
-  border-radius: 14px;
-  max-width: 440px; width: 100%;
-  padding: 24px 24px 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  animation: rmb-slide-up .25s cubic-bezier(0.22,1,0.36,1) both;
-}
-@keyframes rmb-slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-.recovery-modal h2 {
-  margin: 0 0 6px;
-  font-size: 20px;
-  font-family: 'Sora', sans-serif;
-}
-.recovery-modal p { margin: 0 0 16px; color: #5b6b63; font-size: 14px; }
-.recovery-modal input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #d4ddd8;
-  border-radius: 10px;
-  font-size: 15px;
-  font-family: inherit;
-}
-.recovery-modal input:focus {
-  outline: none; border-color: #198754;
-  box-shadow: 0 0 0 3px rgba(25,135,84,0.15);
-}
-.recovery-modal__feedback {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  display: none;
-  animation: rmb-fade-in .25s ease both;
-}
-.recovery-modal__feedback[data-shown="1"] { display: block; }
-.recovery-modal__feedback--ok { background: #d1e7dd; color: #0a3622; border-left: 3px solid #198754; }
-.recovery-modal__feedback--bad { background: #f8d7da; color: #58151c; border-left: 3px solid #dc3545; }
-.recovery-modal__feedback--warn { background: #fff3cd; color: #664d03; border-left: 3px solid #ffc107; }
-.recovery-modal__actions {
-  display: flex; gap: 8px; margin-top: 16px;
-  justify-content: flex-end;
-}
-.recovery-modal__hint {
-  margin-top: 14px;
-  padding: 10px 12px;
-  background: #e7f1ff;
-  border-radius: 8px;
-  font-size: 12.5px;
-  color: #084298;
-  display: flex; gap: 8px;
-  border-left: 3px solid #0d6efd;
-}
+  /* NAV */
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 28px; align-items: center; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
+  .nav__links a:hover { color: var(--zip-green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  /* PREVIEW banner */
+  .preview-banner { background: var(--zip-amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+
+  /* LOGIN MAIN — split layout */
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 16px; }
+  .login-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    width: 100%;
+    max-width: 1080px;
+    align-items: center;
+  }
+  @media (min-width: 880px) {
+    .login-grid { grid-template-columns: 1.05fr 0.95fr; gap: 56px; }
+    main { padding: 56px 24px; }
+  }
+
+  /* Hero panel (esquerda no desktop) */
+  .hero-panel { display: flex; flex-direction: column; gap: 22px; }
+  .hero-panel__photo {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #d4e8d0 0%, #a8d895 100%);
+    position: relative;
+  }
+  .hero-panel__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-panel__badge {
+    position: absolute; top: 14px; left: 14px;
+    background: rgba(26, 26, 26, 0.88); color: var(--white);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px;
+    display: inline-flex; align-items: center; gap: 6px;
+    backdrop-filter: blur(8px);
+  }
+  .hero-panel__badge::before { content: ''; width: 7px; height: 7px; background: var(--zip-green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(79, 166, 0, 0.3); }
+  .hero-panel__pitch h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 900; margin-bottom: 8px; line-height: 1.15; }
+  .hero-panel__pitch h2 em { color: var(--zip-green); font-style: normal; }
+  .hero-panel__pitch p { font-size: 14.5px; color: var(--gray-700); line-height: 1.55; margin-bottom: 16px; }
+
+  .hero-panel__perks { display: flex; flex-direction: column; gap: 10px; }
+  .perk { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--gray-900); }
+  .perk__icon {
+    width: 36px; height: 36px; min-width: 36px;
+    border-radius: 50%;
+    background: var(--zip-green-pale);
+    color: var(--zip-green-dark);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .perk__icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .perk strong { font-weight: 700; }
+  .perk small { color: var(--gray-500); font-size: 12.5px; display: block; margin-top: 1px; }
+
+  /* Card login (direita no desktop) */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    width: 100%; max-width: 460px;
+    padding: 40px 32px 32px;
+    margin: 0 auto;
+  }
+  .card__icon {
+    width: 64px; height: 64px; margin: 0 auto 18px;
+    background: var(--zip-green-pale);
+    color: var(--zip-green-dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card__icon svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .card h1 { font-size: 26px; font-weight: 900; text-align: center; margin-bottom: 8px; }
+  .card .lead { font-size: 14.5px; color: var(--gray-700); text-align: center; margin-bottom: 28px; line-height: 1.5; }
+
+  .form-row { margin-bottom: 16px; }
+  .form-row label { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+  .form-row label a { font-size: 12.5px; font-weight: 600; color: var(--zip-green-dark); text-decoration: none; }
+  .form-row label a:hover { text-decoration: underline; }
+  .form-row input[type="email"],
+  .form-row input[type="password"],
+  .form-row input[type="text"] {
+    width: 100%; padding: 14px 16px; font: inherit; font-size: 15.5px;
+    border: 2px solid var(--gray-300); border-radius: 10px;
+    transition: border-color .15s;
+    background: var(--white); color: var(--black);
+  }
+  .form-row input:focus { outline: none; border-color: var(--zip-green); }
+
+  /* Password field com toggle visibility */
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 48px !important; }
+  .pw-toggle {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: 0; padding: 8px; cursor: pointer;
+    color: var(--gray-500); display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; transition: color .15s, background .15s;
+  }
+  .pw-toggle:hover { color: var(--gray-900); background: var(--gray-100); }
+  .pw-toggle svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .pw-toggle .eye-off { display: none; }
+  .pw-toggle.show .eye-on { display: none; }
+  .pw-toggle.show .eye-off { display: block; }
+
+  .status { margin-top: 14px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
+  .status.show { display: block; }
+  .status.ok { background: var(--zip-green-pale); color: var(--zip-green-dark); border: 1px solid #a7d883; }
+  .status.err { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .status.info { background: #fef9e7; color: #92400e; border: 1px solid #fbbf24; }
+  .status strong { font-weight: 800; }
+  .status a { color: inherit; text-decoration: underline; font-weight: 700; }
+
+  .alt {
+    margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--gray-100);
+    font-size: 13.5px; color: var(--gray-700); text-align: center;
+  }
+  .alt a { color: var(--zip-green-dark); font-weight: 700; text-decoration: none; }
+  .alt a:hover { text-decoration: underline; }
+
+  .legal { font-size: 11.5px; color: var(--gray-500); text-align: center; margin-top: 18px; line-height: 1.5; }
+  .legal a { color: var(--gray-700); }
+
+  /* FOOTER mini */
+  .foot-mini { padding: 24px 0; text-align: center; font-size: 12.5px; color: var(--gray-500); }
+  .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
+  .foot-mini a:hover { color: var(--zip-green-dark); }
 </style>
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
-<header class="nav nav--solid" id="nav">
-  <div class="container nav__inner">
-    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
-      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="brand__img" />
+<div class="preview-banner">🚧 Preview da nova landing · <a href="index.html">Voltar pra versão atual</a></div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive Brasil — início">
+      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" class="nav__logo" />
     </a>
-    <a href="index.html" class="nav__back">&larr; Voltar ao site</a>
+    <nav class="nav__links" aria-label="Navegação">
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="precos.html">Preços</a>
+      <a href="index.html#locais">Onde tem carro</a>
+      <a href="parceiros.html">Para empresas</a>
+      <a href="index.html#faq">Ajuda</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="index.html#cadastro" class="btn btn--primary btn--sm">Criar conta</a>
+    </div>
   </div>
 </header>
 
 <main>
-<section class="auth">
-  <div class="container">
-    <div class="auth-grid">
+  <div class="login-grid">
 
-      <!-- VISUAL -->
-      <aside class="auth-visual">
-        <img src="images/login-visual.png" alt="Nomade Drive Brasil — mobilidade para novos caminhos: clientes verificados, proteção, controle e renda com confiança." />
-      </aside>
-
-      <!-- CARD -->
-      <div class="auth-card">
-        <span class="eyebrow">Acesso seguro</span>
-        <h1 class="auth-card__title">Entrar na sua conta</h1>
-        <p class="auth-card__sub">Use a mesma conta para qualquer perfil: cliente, proprietário, parceiro de indicação, oficina ou administração.</p>
-
-        <div class="auth-msg" id="authMsg" hidden></div>
-
-        <form class="auth-form" id="loginForm" novalidate>
-          <div class="auth-field">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" autocomplete="email" required placeholder="voce@email.com" />
-          </div>
-          <div class="auth-field">
-            <label for="password">Senha</label>
-            <div class="pwd-field-wrap">
-              <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="Sua senha" />
-              <button type="button" class="pwd-toggle" id="loginPwdToggle" aria-label="Mostrar/esconder senha">👁</button>
-            </div>
-          </div>
-          <div class="auth-row">
-            <a href="#" id="forgotLink" class="auth-link">Esqueci minha senha</a>
-          </div>
-          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="loginBtn">Entrar com segurança</button>
-        </form>
-
-        <!-- redefinição de senha (aparece ao voltar do e-mail de recuperação) -->
-        <form class="auth-form" id="recoveryForm" hidden>
-          <div class="auth-field">
-            <label for="newPassword">Nova senha</label>
-            <div class="pwd-field-wrap">
-              <input type="password" id="newPassword" autocomplete="new-password" minlength="8" placeholder="Crie uma senha forte" />
-              <button type="button" class="pwd-toggle" id="newPwdToggle" aria-label="Mostrar/esconder senha">👁</button>
-            </div>
-            <div class="pwd-checklist" id="pwdChecklist">
-              <span class="pwd-check" data-rule="len">Mínimo 8 caracteres</span>
-              <span class="pwd-check" data-rule="upper">1 letra maiúscula</span>
-              <span class="pwd-check" data-rule="num">1 número</span>
-              <span class="pwd-check" data-rule="lower">1 letra minúscula</span>
-            </div>
-          </div>
-          <div class="auth-field">
-            <label for="newPassword2">Confirmar nova senha</label>
-            <div class="pwd-field-wrap">
-              <input type="password" id="newPassword2" autocomplete="new-password" placeholder="Repita a senha" />
-              <button type="button" class="pwd-toggle" id="newPwd2Toggle" aria-label="Mostrar/esconder senha">👁</button>
-            </div>
-          </div>
-          <button type="submit" class="btn btn--solid btn--lg auth-submit" id="recoveryBtn">Salvar nova senha</button>
-        </form>
-
-        <button type="button" class="btn btn--outline btn--lg auth-google" id="googleBtn" hidden>Continuar com Google</button>
-
-        <div class="auth-divider"><span>ou</span></div>
-
-        <a href="cadastro.html" class="btn btn--ghost btn--lg auth-secondary">Criar conta e escolher meu perfil</a>
-
-        <p class="auth-note">Verificação de e-mail obrigatória. Oficinas, parceiros de proteção e administração passam por aprovação manual da plataforma.</p>
+    <!-- Painel esquerdo: foto do carro + pitch curto -->
+    <aside class="hero-panel">
+      <div class="hero-panel__photo">
+        <img src="images/car-tracker-2.jpg" alt="Chevrolet Tracker estacionado pronto pra usar" loading="lazy" />
+        <span class="hero-panel__badge">Disponível 24/7 · Uberlândia</span>
       </div>
+      <div class="hero-panel__pitch">
+        <h2>Pegue um carro em <em>minutos</em> — não em horas.</h2>
+        <p>Carsharing por hora ou dia. Reserve pelo app, abra com sua senha do cofre eletrônico, dirija e devolva no mesmo lugar.</p>
+      </div>
+      <ul class="hero-panel__perks" role="list">
+        <li class="perk">
+          <span class="perk__icon"><svg viewBox="0 0 24 24"><path d="M3 22V10a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12"/><path d="M3 22h10"/><path d="M3 15h10"/><path d="M13 8h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-9.5a2.5 2.5 0 0 0-2.5-2.5H17"/></svg></span>
+          <span><strong>Combustível e seguro inclusos</strong><small>Sem surpresa no fim da viagem</small></span>
+        </li>
+        <li class="perk">
+          <span class="perk__icon"><svg viewBox="0 0 24 24"><polyline points="13 2 13 9 20 9"/><path d="M11 22L3 14h7v-8h4v8h7z"/></svg></span>
+          <span><strong>Reserve em segundos</strong><small>Sem cadastro de carro, sem fila</small></span>
+        </li>
+        <li class="perk">
+          <span class="perk__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <span><strong>Proteção 24h em caso de problema</strong><small>Equipe Nomade resolve pra você</small></span>
+        </li>
+      </ul>
+    </aside>
 
+    <!-- Card de login -->
+    <div class="card">
+    <div class="card__icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </div>
+    <h1>Entre na sua conta</h1>
+    <p class="lead">Acesse o app pra reservar carros, ver suas viagens e gerenciar seu perfil.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="form-row">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="voce@email.com" />
+      </div>
+      <div class="form-row">
+        <label for="password">
+          Senha
+          <a href="recuperar-senha.html">Esqueci minha senha</a>
+        </label>
+        <div class="pw-wrap">
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Sua senha" minlength="8" />
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar/ocultar senha">
+            <svg class="eye-on" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" id="submitBtn" class="btn btn--primary btn--block">
+        Entrar
+      </button>
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="alt">
+      Ainda não tem conta? <a href="index.html#cadastro">Criar conta grátis →</a>
+    </div>
+
+    <p style="font-size:12px; color:var(--gray-500); text-align:center; margin-top:10px; line-height:1.5;">
+      Cadastrou antes <strong>sem senha?</strong> Use
+      <a href="recuperar-senha.html" style="color:var(--zip-green-dark); font-weight:700;">Esqueci minha senha</a>
+      pra definir.
+    </p>
+
+    <p class="legal">
+      Ao entrar, você concorda com nossos
+      <a href="termos.html">Termos</a> e
+      <a href="politica-privacidade.html">Política de Privacidade</a>.
+    </p>
+    </div>
+
   </div>
-</section>
 </main>
 
-<footer class="footer footer--slim">
-  <div class="container">
-    <p>&copy; 2026 Nomade Drive Brasil. Site informativo — disponibilidade, proteção, caução e preço final são confirmados individualmente por contrato.</p>
-  </div>
+<footer class="foot-mini">
+  <a href="index.html">Início</a> ·
+  <a href="como-funciona.html">Como funciona</a> ·
+  <a href="precos.html">Preços</a> ·
+  <a href="index.html">App principal (locação mensal)</a>
 </footer>
 
-<!-- ============================================================
-     Fase 54 — Modal "Esqueci minha senha"
-     ============================================================ -->
-<div class="recovery-modal-backdrop" id="recoveryBackdrop" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
-  <div class="recovery-modal">
-    <h2 id="recoveryTitle">🔑 Recuperar senha</h2>
-    <p>Digite o e-mail da sua conta. Vamos enviar um link seguro pra você criar uma nova senha.</p>
-    <form id="recoveryRequestForm" novalidate>
-      <input type="email" id="recoveryEmail" aria-label="E-mail para recuperação" placeholder="seu@email.com" autocomplete="email" required />
-      <div class="recovery-modal__feedback" id="recoveryFeedback"></div>
-      <div class="recovery-modal__hint" id="recoveryHint" style="display:none;">
-        💡 <span>Não recebeu? Verifique a pasta de <strong>spam/lixo eletrônico</strong>. O link expira em 1 hora.</span>
-      </div>
-      <div class="recovery-modal__actions">
-        <button type="button" class="btn btn--ghost btn--sm" id="recoveryCancel">Cancelar</button>
-        <button type="submit" class="btn btn--solid btn--sm" id="recoverySend">Enviar link</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js?v=20260523c"></script>
-<script src="auth.js?v=20260523c"></script>
-<script src="script.js?v=20260523c"></script>
+<!-- Supabase Auth — magic link sem senha -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-(function () {
-  var msg = document.getElementById("authMsg");
-  function showMsg(text, kind) {
-    msg.textContent = text;
-    msg.className = "auth-msg auth-msg--" + (kind || "error");
-    msg.hidden = false;
+(function() {
+  var SUPABASE_URL = 'https://zeexmbgacvsaciojcrwr.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZXhtYmdhY3ZzYWNpb2pjcndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjg3ODQsImV4cCI6MjA5NDk0NDc4NH0.wJVJtIxW69_c9uHUTmGeksHAIbBJWKkTWOwZm3ZiqT8';
+  var REDIRECT_AFTER_LOGIN = 'https://nomadedrive.com.br/dashboard.html';
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  var form = document.getElementById('loginForm');
+  var emailInput = document.getElementById('email');
+  var passwordInput = document.getElementById('password');
+  var submitBtn = document.getElementById('submitBtn');
+  var statusEl = document.getElementById('status');
+  var pwToggle = document.getElementById('pwToggle');
+
+  function showStatus(type, msg) {
+    statusEl.className = 'status show ' + type;
+    statusEl.innerHTML = msg;
   }
-  var a = window.ndAuth;
-  if (!a || !a.configured) {
-    showMsg(a ? a.notConfiguredMessage() : "Autenticação indisponível nesta página.", "warn");
+  function hideStatus() {
+    statusEl.className = 'status';
+    statusEl.innerHTML = '';
   }
 
-  // D1 (Fase 23.5): se chegou aqui depois de uma sessão expirada
-  // num painel, mostra a mensagem que o redirectToLogin gravou.
-  try {
-    var savedMsg = sessionStorage.getItem("ndb-auth-msg");
-    if (savedMsg) {
-      sessionStorage.removeItem("ndb-auth-msg");
-      showMsg(savedMsg, "warn");
-    }
-  } catch (e) {}
+  // Toggle visibility da senha
+  pwToggle.addEventListener('click', function() {
+    var isShown = pwToggle.classList.toggle('show');
+    passwordInput.type = isShown ? 'text' : 'password';
+  });
 
-  /* já conectado: oferece redirecionamento */
-  if (a && a.ready) {
-    a.getSession().then(function (s) {
-      if (s) {
-        showMsg("Você já está conectado. Redirecionando...", "ok");
-        a.destinationAfterLogin().then(function (dest) {
-          setTimeout(function () { window.location.href = dest; }, 1200);
-        });
-      }
-    });
-
-    /* fluxo de recuperação de senha (link do e-mail) */
-    var client = a.client();
-    client.auth.onAuthStateChange(function (event) {
-      if (event === "PASSWORD_RECOVERY") {
-        document.getElementById("loginForm").hidden = true;
-        document.getElementById("recoveryForm").hidden = false;
-        showMsg("Defina uma nova senha para concluir a recuperação da conta.", "ok");
-      }
-    });
-  }
-
-  /* botão Google (somente se OAuth estiver configurado) */
-  if (a && a.googleEnabled) {
-    var gb = document.getElementById("googleBtn");
-    gb.hidden = false;
-    gb.addEventListener("click", function () {
-      a.signInWithGoogle().then(function (r) { if (!r.ok) showMsg(r.error, "error"); });
-    });
-  }
-
-  /* ---------- Fase 54: Modal "Esqueci minha senha" ---------- */
-  var backdrop = document.getElementById("recoveryBackdrop");
-  var recoveryEmailInput = document.getElementById("recoveryEmail");
-  var recoveryFeedback = document.getElementById("recoveryFeedback");
-  var recoveryHint = document.getElementById("recoveryHint");
-  var recoverySendBtn = document.getElementById("recoverySend");
-
-  function openRecoveryModal() {
-    // Pré-preenche se já digitou no campo de login
-    var prefill = document.getElementById("email").value.trim();
-    if (prefill) recoveryEmailInput.value = prefill;
-    recoveryFeedback.removeAttribute("data-shown");
-    recoveryFeedback.textContent = "";
-    recoveryHint.style.display = "none";
-    recoverySendBtn.disabled = false;
-    recoverySendBtn.textContent = "Enviar link";
-    backdrop.setAttribute("data-open", "1");
-    setTimeout(function () { recoveryEmailInput.focus(); }, 100);
-  }
-  function closeRecoveryModal() {
-    backdrop.removeAttribute("data-open");
-  }
-  function setRecoveryFeedback(text, kind) {
-    if (!text) {
-      recoveryFeedback.removeAttribute("data-shown");
-      recoveryFeedback.textContent = "";
-      return;
-    }
-    recoveryFeedback.className = "recovery-modal__feedback recovery-modal__feedback--" + (kind || "bad");
-    recoveryFeedback.textContent = text;
-    recoveryFeedback.setAttribute("data-shown", "1");
-  }
-  function isValidEmail(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
-
-  document.getElementById("forgotLink").addEventListener("click", function (e) {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    openRecoveryModal();
-  });
-  document.getElementById("recoveryCancel").addEventListener("click", closeRecoveryModal);
-  backdrop.addEventListener("click", function (e) {
-    if (e.target === backdrop) closeRecoveryModal();
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && backdrop.hasAttribute("data-open")) closeRecoveryModal();
-  });
-
-  document.getElementById("recoveryRequestForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    // Fix code-review #6: normaliza email (lowercase + trim) antes de enviar
-    var email = recoveryEmailInput.value.trim().toLowerCase();
-    if (!email) {
-      setRecoveryFeedback("Digite seu e-mail.", "warn");
-      recoveryEmailInput.focus();
+    hideStatus();
+    var email = (emailInput.value || '').trim().toLowerCase();
+    var password = passwordInput.value || '';
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showStatus('err', 'Digite um e-mail válido.');
       return;
     }
-    if (!isValidEmail(email)) {
-      setRecoveryFeedback("E-mail inválido — confira se digitou certo.", "warn");
-      recoveryEmailInput.focus();
+    if (!password || password.length < 8) {
+      showStatus('err', 'Senha deve ter pelo menos 8 caracteres.');
       return;
     }
-    if (!a || !a.ready) {
-      setRecoveryFeedback(a ? a.notConfiguredMessage() : "Recuperação indisponível.", "warn");
-      return;
-    }
-    setRecoveryFeedback("", null);
-    recoverySendBtn.disabled = true;
-    recoverySendBtn.textContent = "Enviando...";
-    a.resetPassword(email).then(function (r) {
-      if (r.ok) {
-        setRecoveryFeedback("✓ E-mail enviado pra " + email + " (se a conta existir).", "ok");
-        recoveryHint.style.display = "flex";
-        recoverySendBtn.textContent = "Reenviar";
-        recoverySendBtn.disabled = false;
-      } else {
-        recoverySendBtn.disabled = false;
-        recoverySendBtn.textContent = "Tentar novamente";
-        setRecoveryFeedback(r.error || "Não foi possível enviar agora.", "bad");
-      }
-    }).catch(function (err) {
-      recoverySendBtn.disabled = false;
-      recoverySendBtn.textContent = "Tentar novamente";
-      setRecoveryFeedback("Erro de rede. Tente novamente.", "bad");
-    });
-  });
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Entrando...';
 
-  /* ---------- Fase 54: Toggle mostrar/esconder senha ---------- */
-  function wirePwdToggle(toggleId, inputId) {
-    var t = document.getElementById(toggleId);
-    var i = document.getElementById(inputId);
-    if (!t || !i) return;
-    t.addEventListener("click", function () {
-      var showing = i.type === "text";
-      i.type = showing ? "password" : "text";
-      t.textContent = showing ? "👁" : "🙈";
-      t.setAttribute("aria-label", showing ? "Mostrar senha" : "Esconder senha");
-    });
-  }
-  wirePwdToggle("loginPwdToggle", "password");
-  wirePwdToggle("newPwdToggle", "newPassword");
-  wirePwdToggle("newPwd2Toggle", "newPassword2");
-
-  /* ---------- Fase 54: Checklist requisitos de senha (live) ---------- */
-  var newPwdInput = document.getElementById("newPassword");
-  if (newPwdInput) {
-    newPwdInput.addEventListener("input", function () {
-      var v = newPwdInput.value;
-      var rules = {
-        len: v.length >= 8,
-        upper: /[A-Z]/.test(v),
-        lower: /[a-z]/.test(v),
-        num: /[0-9]/.test(v)
-      };
-      Object.keys(rules).forEach(function (k) {
-        var el = document.querySelector('.pwd-check[data-rule="' + k + '"]');
-        if (!el) return;
-        if (rules[k]) el.classList.add("pwd-check--ok");
-        else el.classList.remove("pwd-check--ok");
-      });
-    });
-  }
-
-  /* login */
-  document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var email = document.getElementById("email").value.trim();
-    var pass = document.getElementById("password").value;
-    if (!email || !pass) { showMsg("Preencha e-mail e senha.", "warn"); return; }
-    if (!a || !a.ready) { showMsg(a ? a.notConfiguredMessage() : "Indisponível.", "warn"); return; }
-    var btn = document.getElementById("loginBtn");
-    btn.disabled = true; btn.textContent = "Entrando...";
-    a.signIn(email, pass).then(function (r) {
-      btn.disabled = false; btn.textContent = "Entrar com segurança";
-      if (!r.ok) { showMsg(r.error, "error"); return; }
-      showMsg("Login confirmado. Redirecionando...", "ok");
-      a.destinationAfterLogin().then(function (dest) {
-        setTimeout(function () { window.location.href = dest; }, 900);
-      });
-    });
-  });
-
-  /* salvar nova senha (recuperação) */
-  document.getElementById("recoveryForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var np  = document.getElementById("newPassword").value;
-    var np2 = document.getElementById("newPassword2").value;
-
-    // Validação: requisitos mínimos
-    var rules = {
-      len: np.length >= 8,
-      upper: /[A-Z]/.test(np),
-      lower: /[a-z]/.test(np),
-      num: /[0-9]/.test(np)
-    };
-    var failed = Object.keys(rules).filter(function (k) { return !rules[k]; });
-    if (failed.length) {
-      showMsg("A senha não atende todos os requisitos abaixo.", "warn");
-      document.getElementById("newPassword").focus();
-      return;
-    }
-    if (np !== np2) {
-      showMsg("As duas senhas não conferem.", "warn");
-      document.getElementById("newPassword2").focus();
-      return;
-    }
-    if (!a || !a.ready) { showMsg("Indisponível.", "warn"); return; }
-
-    var btn = document.getElementById("recoveryBtn");
-    btn.disabled = true; btn.textContent = "Salvando...";
-    a.client().auth.updateUser({ password: np }).then(function (r) {
-      if (r.error) {
-        btn.disabled = false; btn.textContent = "Salvar nova senha";
-        // Fix code-review #9: detectar sessão expirada e mostrar msg correta
-        var errMsg = String(r.error.message || "").toLowerCase();
-        if (errMsg.indexOf("session") >= 0 || errMsg.indexOf("auth") >= 0 || errMsg.indexOf("jwt") >= 0) {
-          showMsg("Sua sessão de recuperação expirou. Peça um novo link de redefinição.", "warn");
+    try {
+      var result = await sb.auth.signInWithPassword({ email: email, password: password });
+      if (result.error) {
+        var msg = (result.error.message || '').toLowerCase();
+        if (/invalid login|invalid credentials|wrong password/i.test(msg)) {
+          showStatus('err',
+            'E-mail ou senha incorretos. ' +
+            '<a href="recuperar-senha.html">Esqueceu sua senha?</a>'
+          );
+        } else if (/email not confirmed|not confirmed/i.test(msg)) {
+          showStatus('info',
+            '<strong>Confirme seu e-mail primeiro.</strong> ' +
+            'Olha sua caixa de entrada pra ativar a conta.'
+          );
+        } else if (/not found|user.*does not exist/i.test(msg)) {
+          showStatus('info',
+            'Não achamos uma conta com esse e-mail. ' +
+            '<a href="index.html#cadastro">Criar conta grátis →</a>'
+          );
         } else {
-          showMsg(r.error.message || "Não foi possível salvar.", "error");
+          showStatus('err', result.error.message);
         }
-        return;
-      }
-      btn.textContent = "✓ Senha salva";
-      showMsg("Senha atualizada com sucesso! Redirecionando pro seu painel...", "ok");
-      // Redireciona pro dashboard correto baseado no role do usuário
-      a.destinationAfterLogin().then(function (dest) {
-        setTimeout(function () { window.location.href = dest || "index.html"; }, 1100);
-      }).catch(function () {
-        setTimeout(function () { window.location.href = "index.html"; }, 1100);
-      });
-    }).catch(function (err) {
-      btn.disabled = false; btn.textContent = "Salvar nova senha";
-      // Fix code-review (bonus): logar erro real pra debug
-      try { console.error("recovery updateUser failed:", err); } catch (e) {}
-      var errMsg = String((err && err.message) || "").toLowerCase();
-      if (errMsg.indexOf("session") >= 0 || errMsg.indexOf("auth") >= 0) {
-        showMsg("Sua sessão de recuperação expirou. Peça um novo link de redefinição.", "warn");
       } else {
-        showMsg("Erro de rede ao salvar a senha. Tente novamente.", "error");
+        // Sucesso — sessão setada, redirect pra home
+        showStatus('ok', '<strong>Bem-vindo de volta!</strong> Redirecionando...');
+        setTimeout(function() {
+          window.location.replace(REDIRECT_AFTER_LOGIN);
+        }, 600);
       }
-    });
+    } catch (err) {
+      showStatus('err', 'Erro inesperado: ' + (err.message || err));
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Entrar';
+    }
   });
+
+  // Se já tá logado (sessão ativa do Supabase), pula direto pra home
+  (async function() {
+    var { data: { session } } = await sb.auth.getSession();
+    if (session && session.user) {
+      // Sessão ativa — redireciona pra home com flag
+      window.location.replace(REDIRECT_AFTER_LOGIN);
+    }
+  })();
 })();
 </script>
-<script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
 </body>
 </html>

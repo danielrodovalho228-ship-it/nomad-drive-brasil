@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fiat Cronos — Aluguel mensal Uberlândia | NomadeDrive</title>
+<meta name="description" content="Fiat Cronos 1.3 Flex Automático disponível pra locação mensal em Uberlândia. A partir de R$ 3.700/mês com seguro, manutenção e IPVA inclusos. Entrega no aeroporto." />
+<meta name="keywords" content="Cronos aluguel Uberlândia, sedan mensal Uberlândia, alugar sedan automático" />
+<meta name="theme-color" content="#4FA600" />
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+<meta property="og:title" content="Fiat Cronos — NomadeDrive" />
+<meta property="og:description" content="R$ 3.700/mês com tudo incluso. Sedan automático com porta-malas grande." />
+<meta property="og:image" content="../images/car-cronos-1.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #4FA600; --green-dark: #3F8500; --green-darker: #2E6100; --green-pale: #ecf6e0;
+    --amber: #FFC72C; --black: #1a1a1a; --gray-900: #2a2a2a; --gray-700: #4a4a4a; --gray-500: #767676; --gray-300: #cccccc; --gray-200: #e5e7eb; --gray-100: #f5f5f5; --gray-50: #fafafa; --white: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 4px 12px rgba(0,0,0,0.08); --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
+  .btn--primary { background: var(--green); color: var(--white); }
+  .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.3); }
+  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
+  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  .btn--sm { padding: 9px 18px; font-size: 13.5px; }
+  .btn--lg { padding: 17px 38px; font-size: 17px; }
+  .btn--block { width: 100%; }
+
+  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
+  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .nav__brand { display: flex; align-items: center; text-decoration: none; }
+  .nav__logo { height: 42px; }
+  @media (min-width: 700px) { .nav__logo { height: 48px; } }
+  .nav__links { display: none; gap: 26px; align-items: center; }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); }
+  .nav__links a:hover { color: var(--green); }
+  .nav__cta { display: flex; gap: 10px; align-items: center; }
+  @media (min-width: 960px) { .nav__links { display: flex; } }
+
+  .crumbs { padding: 16px 0; font-size: 13.5px; color: var(--gray-500); }
+  .crumbs a { color: var(--gray-700); text-decoration: none; font-weight: 600; }
+  .crumbs a:hover { color: var(--green); }
+  .crumbs span { margin: 0 8px; color: var(--gray-300); }
+
+  .car-hero { padding: 16px 0 56px; }
+  .car-hero__grid { display: grid; gap: 32px; grid-template-columns: 1fr; }
+  @media (min-width: 880px) { .car-hero__grid { grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: start; } }
+
+  .gallery { position: relative; }
+  .gallery__main { aspect-ratio: 16/10; border-radius: 16px; overflow: hidden; background: var(--gray-100); box-shadow: var(--shadow-lg); position: relative; }
+  .gallery__main img { width: 100%; height: 100%; object-fit: cover; transition: opacity .3s; }
+  .gallery__badge { position: absolute; top: 14px; left: 14px; background: var(--green); color: var(--white); padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  .gallery__nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; transition: all .15s; }
+  .gallery__nav:hover { background: var(--white); transform: translateY(-50%) scale(1.08); }
+  .gallery__nav--prev { left: 14px; }
+  .gallery__nav--next { right: 14px; }
+  .gallery__nav svg { width: 20px; height: 20px; stroke: var(--black); stroke-width: 2.5; fill: none; }
+  .gallery__thumbs { display: flex; gap: 10px; margin-top: 12px; }
+  .gallery__thumb { flex: 1; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; cursor: pointer; opacity: 0.55; transition: opacity .15s; border: 2px solid transparent; }
+  .gallery__thumb.active { opacity: 1; border-color: var(--green); }
+  .gallery__thumb:hover { opacity: 0.85; }
+  .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .car-info { background: var(--white); border-radius: 16px; padding: 28px; border: 1px solid var(--gray-100); position: sticky; top: 88px; }
+  .car-info__cat { font-size: 12px; font-weight: 700; color: var(--green-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .car-info__name { font-size: 28px; font-weight: 900; margin-bottom: 6px; }
+  .car-info__sub { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; }
+  .car-info__status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--green-pale); color: var(--green-darker); font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
+  .car-info__status::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+  .car-info__price-box { padding: 18px; background: var(--gray-50); border-radius: 12px; margin-bottom: 22px; }
+  .car-info__price-from { font-size: 12px; color: var(--gray-500); display: block; }
+  .car-info__price-val { font-size: 36px; font-weight: 900; color: var(--black); line-height: 1; }
+  .car-info__price-period { font-size: 13.5px; color: var(--gray-700); margin-left: 6px; font-weight: 600; }
+  .car-info__price-detail { font-size: 12.5px; color: var(--gray-700); margin-top: 8px; line-height: 1.5; }
+  .car-info__cta { display: flex; flex-direction: column; gap: 10px; }
+
+  .specs { padding: 56px 0; background: var(--gray-50); }
+  .specs__head { text-align: center; max-width: 600px; margin: 0 auto 36px; }
+  .specs__head h2 { margin-bottom: 8px; }
+  .specs__head p { color: var(--gray-700); }
+  .specs__grid { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 980px; margin: 0 auto; }
+  @media (min-width: 600px) { .specs__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 900px) { .specs__grid { grid-template-columns: repeat(3, 1fr); } }
+  .spec { background: var(--white); border-radius: 12px; padding: 18px 20px; border: 1px solid var(--gray-100); display: flex; gap: 14px; align-items: center; }
+  .spec__icon { width: 40px; height: 40px; min-width: 40px; border-radius: 10px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; }
+  .spec__icon svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .spec__label { font-size: 12px; color: var(--gray-500); display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+  .spec__value { font-size: 14.5px; font-weight: 700; color: var(--black); display: block; margin-top: 2px; }
+
+  .pricing { padding: 56px 0; }
+  .pricing__head { text-align: center; max-width: 620px; margin: 0 auto 36px; }
+  .pricing__head h2 { margin-bottom: 10px; }
+  .pricing__head p { color: var(--gray-700); font-size: 16px; }
+  .pricing__grid { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 640px) { .pricing__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 920px) { .pricing__grid { grid-template-columns: repeat(4, 1fr); } }
+  .price-card { background: var(--white); border: 2px solid var(--gray-200); border-radius: 14px; padding: 22px; text-align: center; transition: all .15s; position: relative; overflow: hidden; }
+  .price-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .price-card--featured { border-color: var(--green); background: linear-gradient(180deg, var(--white) 0%, var(--green-pale) 100%); }
+  .price-card--featured::before { content: 'MAIS ECONÔMICO'; position: absolute; top: 10px; right: 10px; background: var(--green); color: var(--white); padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
+  .price-card__period { font-size: 15px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
+  .price-card__val { font-size: 30px; font-weight: 900; color: var(--black); line-height: 1; margin-bottom: 4px; }
+  .price-card__val small { font-size: 14px; color: var(--gray-500); font-weight: 600; }
+  .price-card__discount { font-size: 11.5px; color: var(--green-dark); font-weight: 700; margin-bottom: 12px; height: 16px; }
+  .price-card__total { font-size: 12.5px; color: var(--gray-700); padding-top: 12px; border-top: 1px solid var(--gray-100); }
+  .price-card__total strong { color: var(--black); font-weight: 700; }
+  .pricing__note { text-align: center; max-width: 620px; margin: 24px auto 0; font-size: 13px; color: var(--gray-500); }
+
+  .availability { padding: 56px 0; background: var(--gray-50); }
+  .availability__inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .availability__head { text-align: center; margin-bottom: 28px; }
+  .availability__head h2 { margin-bottom: 8px; }
+  .availability__head p { color: var(--gray-700); }
+  .calendar { background: var(--white); border-radius: 14px; padding: 24px; border: 1px solid var(--gray-100); }
+  .calendar__nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .calendar__title { font-size: 16px; font-weight: 800; }
+  .calendar__btn { width: 36px; height: 36px; border-radius: 8px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; }
+  .calendar__btn:hover:not(:disabled) { background: var(--gray-200); }
+  .calendar__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .calendar__btn svg { width: 16px; height: 16px; stroke: var(--gray-900); stroke-width: 2.5; fill: none; }
+  .calendar__weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+  .calendar__weekday { text-align: center; font-size: 11px; font-weight: 700; color: var(--gray-500); padding: 6px 0; }
+  .calendar__days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .calendar__day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 6px; }
+  .calendar__day--empty { visibility: hidden; }
+  .calendar__day--available { background: var(--green-pale); color: var(--green-darker); }
+  .calendar__day--reserved { background: var(--gray-100); color: var(--gray-500); text-decoration: line-through; }
+  .calendar__day--past { color: var(--gray-300); }
+  .calendar__day--today { border: 2px solid var(--green); font-weight: 800; }
+  .calendar__legend { display: flex; justify-content: center; gap: 18px; margin-top: 18px; flex-wrap: wrap; font-size: 12px; color: var(--gray-700); }
+  .calendar__legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .calendar__legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  .notify { padding: 56px 0; }
+  .notify__card { max-width: 620px; margin: 0 auto; background: linear-gradient(135deg, #0b2611 0%, #143b1d 100%); color: var(--white); border-radius: 16px; padding: 32px; text-align: center; }
+  .notify__card h3 { color: var(--white); font-size: 22px; margin-bottom: 10px; }
+  .notify__card p { color: rgba(255,255,255,0.78); font-size: 14.5px; margin-bottom: 22px; line-height: 1.6; }
+  .notify__form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .notify__form input { flex: 1; min-width: 200px; padding: 13px 16px; border: 0; border-radius: 999px; font: inherit; font-size: 14.5px; color: var(--black); }
+  .notify__form input:focus { outline: 2px solid var(--green); }
+  .notify__status { margin-top: 14px; font-size: 13.5px; color: rgba(255,255,255,0.85); display: none; }
+  .notify__status.show { display: block; }
+
+  .faq-car { padding: 56px 0; background: var(--gray-50); }
+  .faq-car__list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .faq-car__item { background: var(--white); border-radius: 12px; border: 1px solid var(--gray-100); overflow: hidden; }
+  .faq-car__item[open] { border-color: var(--green); }
+  .faq-car__item summary { padding: 16px 20px; cursor: pointer; font-weight: 700; font-size: 14.5px; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .faq-car__item summary::-webkit-details-marker { display: none; }
+  .faq-car__item summary::after { content: '+'; color: var(--green); font-size: 22px; font-weight: 900; transition: transform .2s; }
+  .faq-car__item[open] summary::after { transform: rotate(45deg); }
+  .faq-car__answer { padding: 0 20px 16px; font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
+
+  .cta-final { padding: 64px 0; background: var(--white); text-align: center; }
+  .cta-final h2 { margin-bottom: 14px; }
+  .cta-final p { color: var(--gray-700); font-size: 16.5px; max-width: 540px; margin: 0 auto 24px; }
+  .cta-final__row { display: inline-flex; gap: 12px; flex-wrap: wrap; }
+
+  .foot { background: var(--black); color: rgba(255,255,255,0.65); padding: 36px 0 22px; }
+  .foot__inner { max-width: 1240px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .foot__inner a { color: rgba(255,255,255,0.8); text-decoration: none; margin: 0 10px; font-size: 13.5px; }
+  .foot__inner a:hover { color: var(--green); }
+  .foot__copy { margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  .preview-banner { background: var(--amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+  .preview-banner a { color: var(--black); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-banner">🚧 Site em pré-lançamento — feedback bem-vindo</div>
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a href="../index.html" class="nav__brand" aria-label="NomadeDrive — início">
+      <img src="../images/logo-nomade-drive.jpg" alt="NomadeDrive" class="nav__logo" />
+    </a>
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="../index.html#carros">Nossa frota</a>
+      <a href="../index.html#como-funciona">Como funciona</a>
+      <a href="../index.html#diferenciais">Por que escolher</a>
+      <a href="../sobre.html">Sobre nós</a>
+      <a href="../index.html#faq">Dúvidas</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="../login.html" class="btn btn--ghost-black btn--sm">Entrar</a>
+      <a href="../index.html#carros" class="btn btn--primary btn--sm">Ver carros</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="crumbs" aria-label="Trilha">
+    <a href="../index.html">Início</a><span>›</span><a href="../index.html#carros">Frota</a><span>›</span>Cronos Sedan
+  </nav>
+</div>
+
+<section class="car-hero">
+  <div class="wrap car-hero__grid">
+
+    <div class="gallery" id="gallery">
+      <div class="gallery__main">
+        <img id="galleryMain" src="../images/car-cronos-1.jpg" alt="Fiat Cronos — vista lateral" />
+        <span class="gallery__badge">Disponível agora</span>
+        <button class="gallery__nav gallery__nav--prev" id="galleryPrev" aria-label="Foto anterior">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="gallery__nav gallery__nav--next" id="galleryNext" aria-label="Próxima foto">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="gallery__thumbs">
+        <div class="gallery__thumb active" data-img="../images/car-cronos-1.jpg"><img src="../images/car-cronos-1.jpg" alt="thumb 1" loading="lazy" /></div>
+        <div class="gallery__thumb" data-img="../images/car-cronos-2.jpg"><img src="../images/car-cronos-2.jpg" alt="thumb 2" loading="lazy" /></div>
+        <div class="gallery__thumb" data-img="../images/car-cronos-3.jpg"><img src="../images/car-cronos-3.jpg" alt="thumb 3" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <div class="car-info">
+      <div class="car-info__cat">Sedan Médio Automático</div>
+      <h1 class="car-info__name">Fiat Cronos</h1>
+      <p class="car-info__sub">Drive 1.3 Flex CVT · 2024 · Prata</p>
+      <span class="car-info__status">Disponível agora</span>
+
+      <div class="car-info__price-box">
+        <small class="car-info__price-from">A partir de</small>
+        <div>
+          <span class="car-info__price-val">R$ 3.700</span>
+          <span class="car-info__price-period">/mês</span>
+        </div>
+        <p class="car-info__price-detail">Tudo incluso: seguro, manutenção, IPVA, licenciamento, assistência 24h, telemetria. <strong>Câmbio automático CVT pra trânsito de cidade sem stress.</strong></p>
+      </div>
+
+      <div class="car-info__cta">
+        <a href="../reservar.html?carro=cronos" class="btn btn--primary btn--block">Solicite seu carro</a>
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20alugar%20o%20Cronos%20da%20NomadeDrive" target="_blank" rel="noopener" class="btn btn--ghost-black btn--block">Falar pelo WhatsApp</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="specs">
+  <div class="wrap">
+    <div class="specs__head">
+      <h2>Especificações</h2>
+      <p>Sedan automático ideal pra família ou viagens de trabalho.</p>
+    </div>
+    <div class="specs__grid">
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg></div>
+        <div><small class="spec__label">Motor</small><span class="spec__value">1.3 4 cilindros Flex</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg></div>
+        <div><small class="spec__label">Transmissão</small><span class="spec__value">Automático CVT</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+        <div><small class="spec__label">Lugares</small><span class="spec__value">5 pessoas com conforto</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M3 22v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/><path d="M3 14h10"/></svg></div>
+        <div><small class="spec__label">Porta-malas</small><span class="spec__value">525 litros (família)</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div><small class="spec__label">Ano</small><span class="spec__value">2024</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+        <div><small class="spec__label">Km atual</small><span class="spec__value">18.000 km</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><small class="spec__label">Conforto</small><span class="spec__value">Ar digital, banco couro sintético, central multimídia</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div><small class="spec__label">Segurança</small><span class="spec__value">ABS, 4 airbags, alerta de ponto cego</span></div>
+      </div>
+      <div class="spec">
+        <div class="spec__icon"><svg viewBox="0 0 24 24"><path d="M8 5h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg></div>
+        <div><small class="spec__label">Mídia</small><span class="spec__value">Tela 7", Apple CarPlay, Android Auto, sensor ré</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="precos">
+  <div class="wrap">
+    <div class="pricing__head">
+      <h2>Quanto mais tempo, melhor o preço</h2>
+      <p>Desconto progressivo conforme você reserva mais dias. Sem letra miúda, sem reajuste.</p>
+    </div>
+    <div class="pricing__grid">
+      <div class="price-card">
+        <div class="price-card__period">30 dias</div>
+        <div class="price-card__val">R$ 3.700<small>/mês</small></div>
+        <div class="price-card__discount">&nbsp;</div>
+        <div class="price-card__total">Total: <strong>R$ 3.700</strong></div>
+      </div>
+      <div class="price-card">
+        <div class="price-card__period">60 dias</div>
+        <div class="price-card__val">R$ 3.515<small>/mês</small></div>
+        <div class="price-card__discount">5% desconto</div>
+        <div class="price-card__total">Total: <strong>R$ 7.030</strong></div>
+      </div>
+      <div class="price-card price-card--featured">
+        <div class="price-card__period">90 dias</div>
+        <div class="price-card__val">R$ 3.330<small>/mês</small></div>
+        <div class="price-card__discount">10% desconto</div>
+        <div class="price-card__total">Total: <strong>R$ 9.990</strong></div>
+      </div>
+      <div class="price-card">
+        <div class="price-card__period">180 dias</div>
+        <div class="price-card__val">R$ 3.145<small>/mês</small></div>
+        <div class="price-card__discount">15% desconto</div>
+        <div class="price-card__total">Total: <strong>R$ 18.870</strong></div>
+      </div>
+    </div>
+    <p class="pricing__note">Caução pré-autorizada de R$ 2.000 no cartão (sem cobrança se não houver dano). Pagamento em PIX, cartão ou boleto CNPJ.</p>
+  </div>
+</section>
+
+<section class="availability" id="disponibilidade">
+  <div class="availability__inner">
+    <div class="availability__head">
+      <h2>Disponibilidade nos próximos 60 dias</h2>
+      <p>Reserve com antecedência pra garantir o seu Cronos.</p>
+    </div>
+    <div class="calendar" id="calendar">
+      <div class="calendar__nav">
+        <button class="calendar__btn" id="calPrev" aria-label="Mês anterior"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="calendar__title" id="calTitle">Maio 2026</div>
+        <button class="calendar__btn" id="calNext" aria-label="Próximo mês"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="calendar__weekdays">
+        <div class="calendar__weekday">D</div><div class="calendar__weekday">S</div><div class="calendar__weekday">T</div><div class="calendar__weekday">Q</div><div class="calendar__weekday">Q</div><div class="calendar__weekday">S</div><div class="calendar__weekday">S</div>
+      </div>
+      <div class="calendar__days" id="calDays"></div>
+      <div class="calendar__legend">
+        <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background:var(--green-pale);"></span>Disponível</span>
+        <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background:var(--gray-100);"></span>Reservado</span>
+        <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background:var(--white); border:2px solid var(--green);"></span>Hoje</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="notify">
+  <div class="wrap">
+    <div class="notify__card">
+      <h3>Cronos indisponível na data que precisa?</h3>
+      <p>Cadastre-se na <strong>Fila Prioritária NomadeDrive</strong>. Avisamos por WhatsApp e email assim que uma vaga abrir, com 24h de exclusividade pra você.</p>
+      <form class="notify__form" id="notifyForm">
+        <input type="email" id="notifyEmail" required placeholder="seu@email.com" />
+        <button type="submit" class="btn btn--primary">Avise-me</button>
+      </form>
+      <div class="notify__status" id="notifyStatus"></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-car">
+  <div class="wrap">
+    <div class="pricing__head">
+      <h2>Sobre este carro</h2>
+    </div>
+    <div class="faq-car__list">
+      <details class="faq-car__item">
+        <summary>O Cronos é bom pra trânsito de cidade?</summary>
+        <div class="faq-car__answer">Excelente. Câmbio automático CVT torna direção em UDI muito mais leve (trânsito Av. Rondon Pacheco, av. João Naves, centro). Direção elétrica leve, manobra fácil. <strong>Recomendado pra quem dirige bastante na cidade.</strong></div>
+      </details>
+      <details class="faq-car__item">
+        <summary>Família com 4 pessoas + bagagem cabe?</summary>
+        <div class="faq-car__answer">Sim. Porta-malas de <strong>525 litros</strong> comporta 2 malas grandes + 1 média + bolsas. Banco traseiro acomoda 3 adultos com conforto. Ideal pra família indo a viagem.</div>
+      </details>
+      <details class="faq-car__item">
+        <summary>Consumo de combustível?</summary>
+        <div class="faq-car__answer">Com gasolina: 13-15 km/L cidade, 18 km/L estrada. Tanque de 48L = autonomia ~700 km com gasolina. <strong>Eficiente pra sedan automático.</strong></div>
+      </details>
+      <details class="faq-car__item">
+        <summary>Tem central multimídia / Bluetooth?</summary>
+        <div class="faq-car__answer">Sim. Tela de 7" com <strong>Apple CarPlay</strong> e <strong>Android Auto</strong> sem fio. Conecta seu Waze, Spotify, WhatsApp por voz, etc.</div>
+      </details>
+      <details class="faq-car__item">
+        <summary>Se quebrar, quem paga?</summary>
+        <div class="faq-car__answer"><strong>Manutenção preventiva e corretiva está inclusa no preço.</strong> Se quebrar na estrada, acionamos guincho 24h sem custo. Carro reserva fornecido se levar mais de 24h pra consertar.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Pronto pra dirigir o Cronos?</h2>
+    <p>Resposta em até 2 horas úteis. Carro entregue em até 24h em Uberlândia.</p>
+    <div class="cta-final__row">
+      <a href="../reservar.html?carro=cronos" class="btn btn--primary btn--lg">Solicite seu carro</a>
+      <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20alugar%20o%20Cronos%20da%20NomadeDrive" target="_blank" rel="noopener" class="btn btn--ghost-black">Falar pelo WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <a href="../index.html">Início</a>
+      <a href="../index.html#carros">Frota</a>
+      <a href="../sobre.html">Sobre</a>
+      <a href="../politica-privacidade.html">Privacidade</a>
+      <a href="../termos.html">Termos</a>
+      <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <p class="foot__copy"><strong>NomadeDrive Locação de Veículos</strong> · CNPJ em processo · Uberlândia/MG · © 2026</p>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var imgs = ['../../images/car-cronos-1.jpg', '../../images/car-cronos-2.jpg', '../../images/car-cronos-3.jpg'];
+  var current = 0;
+  var main = document.getElementById('galleryMain');
+  var thumbs = document.querySelectorAll('.gallery__thumb');
+  function show(i) {
+    current = (i + imgs.length) % imgs.length;
+    main.src = imgs[current];
+    thumbs.forEach(function(t, idx) { t.classList.toggle('active', idx === current); });
+  }
+  document.getElementById('galleryPrev').addEventListener('click', function() { show(current - 1); });
+  document.getElementById('galleryNext').addEventListener('click', function() { show(current + 1); });
+  thumbs.forEach(function(t, idx) { t.addEventListener('click', function() { show(idx); }); });
+
+  var calDate = new Date();
+  var monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  var today = new Date(); today.setHours(0,0,0,0);
+  // Datas mockadas diferentes pro Cronos (mais reservas — sedan é mais procurado)
+  var RESERVED = ['2026-06-08','2026-06-09','2026-06-10','2026-06-11','2026-06-20','2026-06-21','2026-07-01','2026-07-02','2026-07-03','2026-07-15','2026-07-16','2026-07-17'];
+
+  function renderCalendar() {
+    var year = calDate.getFullYear();
+    var month = calDate.getMonth();
+    var firstDay = new Date(year, month, 1).getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    document.getElementById('calTitle').textContent = monthNames[month] + ' ' + year;
+    var html = '';
+    for (var i = 0; i < firstDay; i++) html += '<div class="calendar__day calendar__day--empty"></div>';
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dt = new Date(year, month, d);
+      var dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+      var classes = ['calendar__day'];
+      var isPast = dt < today;
+      var isToday = dt.getTime() === today.getTime();
+      var isReserved = RESERVED.indexOf(dateStr) >= 0;
+      if (isPast) classes.push('calendar__day--past');
+      else if (isReserved) classes.push('calendar__day--reserved');
+      else classes.push('calendar__day--available');
+      if (isToday) classes.push('calendar__day--today');
+      html += '<div class="' + classes.join(' ') + '" title="' + dateStr + '">' + d + '</div>';
+    }
+    document.getElementById('calDays').innerHTML = html;
+    var minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    var displayMonth = new Date(year, month, 1);
+    document.getElementById('calPrev').disabled = displayMonth <= minMonth;
+  }
+  document.getElementById('calPrev').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); });
+  document.getElementById('calNext').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); });
+  renderCalendar();
+
+  document.getElementById('notifyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('notifyEmail').value.trim();
+    if (!email) return;
+    var status = document.getElementById('notifyStatus');
+    status.className = 'notify__status show';
+    status.style.color = 'rgba(255,255,255,0.95)';
+    status.innerHTML = '✓ Pronto! Avisaremos você assim que liberar. Pra acompanhar tudo: <a href="../fila-prioritaria.html" style="color:#FFC72C; text-decoration:underline; font-weight:700;">entre na Fila Prioritária →</a>';
+    document.getElementById('notifyEmail').value = '';
+  });
+})();
+</script>
+</body>
+</html>
