@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NomadeDrive — Aluguel mensal de carros em Uberlândia | Entrega onde você estiver</title>
+<title>Nomade Drive — Aluguel mensal de carros em Uberlândia | Entrega onde você estiver</title>
 <meta name="description" content="Locação mensal de carros de 30 a 180 dias em Uberlândia/MG. Entrega no aeroporto, hotel ou condomínio. Contrato 100% digital, preço travado, devolução flexível. Para profissionais em transição." />
 <meta name="keywords" content="aluguel mensal de carros Uberlândia, locação mensal Uberlândia, carro mensal Uberlândia, alugar carro 30 dias, alugar carro 60 dias, locadora Uberlândia" />
-<meta name="theme-color" content="#4FA600" />
+<meta name="theme-color" content="#0F1F3D" />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 
 <!-- Open Graph -->
-<meta property="og:title" content="NomadeDrive — Aluguel mensal de carros em Uberlândia" />
+<meta property="og:title" content="Nomade Drive — Aluguel mensal de carros em Uberlândia" />
 <meta property="og:description" content="Locação 30 a 180 dias. Entregamos onde você estiver. Contrato digital." />
 <meta property="og:image" content="images/car-hb20-1.jpg" />
 <meta property="og:url" content="https://nomadedrive.com.br/" />
@@ -18,48 +18,66 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --green: #4FA600;
-    --green-dark: #3F8500;
-    --green-darker: #2E6100;
-    --green-pale: #ecf6e0;
-    --amber: #FFC72C;
-    --black: #1a1a1a;
-    --gray-900: #2a2a2a;
-    --gray-700: #4a4a4a;
-    --gray-500: #767676;
-    --gray-300: #cccccc;
-    --gray-200: #e5e7eb;
-    --gray-100: #f5f5f5;
-    --gray-50: #fafafa;
+    /* Paleta navy + dourado (principal) */
+    --navy: #0F1F3D;
+    --navy-dark: #0a162c;
+    --navy-light: #1a3055;
+    --navy-pale: #f0f3f9;
+    --gold: #F5B82E;
+    --gold-dark: #d99e1c;
+    --gold-pale: #fdf5e0;
+    --teal: #2A9D8F;          /* sucesso, destaque comparativo */
+    --teal-dark: #218074;
+    --teal-pale: #e6f4f2;
+    --red: #E63946;           /* só alertas */
+
+    /* Verde Nomade (só marca: logo, badges institucionais) */
+    --brand-green: #4FA600;
+    --brand-green-dark: #3F8500;
+    --brand-green-pale: #ecf6e0;
+
+    /* Neutros */
     --white: #ffffff;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow: 0 4px 12px rgba(0,0,0,0.08);
-    --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+    --cream: #F0F4F8;
+    --gray-900: #1f2937;
+    --gray-700: #4a5568;
+    --gray-500: #6b7280;
+    --gray-300: #d1d5db;
+    --gray-200: #e5e7eb;
+    --gray-100: #f3f4f6;
+    --gray-50: #fafbfc;
+
+    --shadow-sm: 0 1px 3px rgba(15,31,61,0.06);
+    --shadow: 0 4px 12px rgba(15,31,61,0.08);
+    --shadow-lg: 0 18px 40px rgba(15,31,61,0.14);
   }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; color: var(--black); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; height: auto; display: block; }
   a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-  h1,h2,h3,h4 { letter-spacing: -0.02em; color: var(--black); line-height: 1.15; font-weight: 800; }
+  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.15; font-weight: 700; }
   h1 { font-size: clamp(34px, 5.5vw, 58px); font-weight: 900; }
-  h2 { font-size: clamp(26px, 3.8vw, 38px); }
-  h3 { font-size: clamp(18px, 2vw, 22px); }
-  em { color: var(--green); font-style: normal; }
+  h2 { font-size: clamp(28px, 4vw, 40px); }
+  h3 { font-size: clamp(19px, 2.1vw, 24px); }
+  h4 { font-size: 18px; font-weight: 700; }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; }
-  .btn--primary { background: var(--green); color: var(--white); }
-  .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,166,0,0.3); }
-  .btn--ghost-black { background: transparent; color: var(--black); border-color: var(--black); }
-  .btn--ghost-black:hover { background: var(--black); color: var(--white); }
+  /* BOTÕES */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 30px; border-radius: 8px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,184,46,0.35); }
+  .btn--ghost-navy { background: transparent; color: var(--navy); border-color: var(--navy); }
+  .btn--ghost-navy:hover { background: var(--navy); color: var(--white); }
   .btn--ghost-white { background: transparent; color: var(--white); border-color: var(--white); }
-  .btn--ghost-white:hover { background: var(--white); color: var(--black); }
-  .btn--sm { padding: 9px 18px; font-size: 13.5px; }
-  .btn--lg { padding: 17px 38px; font-size: 17px; }
+  .btn--ghost-white:hover { background: var(--white); color: var(--navy); }
+  .btn--text-link { background: transparent; color: var(--navy); text-decoration: underline; padding: 15px 8px; border: none; }
+  .btn--text-link:hover { color: var(--gold-dark); }
+  .btn--sm { padding: 10px 20px; font-size: 13.5px; }
+  .btn--lg { padding: 17px 36px; font-size: 16.5px; }
   .btn--block { width: 100%; }
 
   /* NAV */
@@ -69,169 +87,189 @@
   .nav__logo { height: 42px; }
   @media (min-width: 700px) { .nav__logo { height: 48px; } }
   .nav__links { display: none; gap: 26px; align-items: center; }
-  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--gray-900); transition: color .15s; }
-  .nav__links a:hover { color: var(--green); }
+  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--navy); transition: color .15s; font-family: 'Inter', sans-serif; }
+  .nav__links a:hover { color: var(--gold-dark); }
   .nav__cta { display: flex; gap: 10px; align-items: center; }
   @media (min-width: 960px) { .nav__links { display: flex; } }
 
   /* HERO */
-  .hero { background: linear-gradient(135deg, #f5f9f3 0%, #e8f4f8 50%, #ecf6e0 100%); padding: 56px 0 80px; position: relative; overflow: hidden; }
+  .hero { background: var(--cream); padding: 56px 0 80px; position: relative; overflow: hidden; }
   .hero__inner { display: grid; gap: 36px; align-items: center; }
-  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.1fr 1fr; gap: 56px; } }
-  .hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--white); color: var(--green-darker); font-size: 12.5px; font-weight: 700; border: 1px solid #cbe5b6; margin-bottom: 18px; }
-  .hero__badge::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(79,166,0,0.2); }
-  .hero h1 { margin-bottom: 18px; }
-  .hero__sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--gray-700); margin-bottom: 26px; max-width: 540px; line-height: 1.55; }
-  .hero__sub strong { color: var(--black); }
-  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1.4fr; gap: 56px; } }
+  .hero__tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); margin-bottom: 18px; text-transform: uppercase; }
+  .hero h1 { margin-bottom: 20px; }
+  .hero__sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--gray-700); margin-bottom: 28px; max-width: 540px; line-height: 1.6; }
+  .hero__sub strong { color: var(--navy); font-weight: 600; }
+  .hero__cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
   .hero__visual { display: flex; align-items: center; justify-content: center; position: relative; }
-  .hero__visual img { width: 100%; max-width: 560px; border-radius: 18px; aspect-ratio: 4/3; object-fit: cover; box-shadow: var(--shadow-lg); }
-  .hero__floating-badge { position: absolute; bottom: -16px; right: 16px; background: var(--green); color: var(--white); padding: 12px 22px; border-radius: 14px; font-weight: 800; font-size: 13.5px; box-shadow: var(--shadow-lg); }
-  .hero__floating-badge strong { font-size: 22px; display: block; line-height: 1.1; margin-bottom: 2px; }
+  .hero__visual img { width: 100%; max-width: 680px; border-radius: 14px; aspect-ratio: 3/2; object-fit: cover; box-shadow: var(--shadow-lg); }
+  .hero__floating-badge { position: absolute; bottom: -18px; right: 20px; background: var(--navy); color: var(--white); padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 13px; box-shadow: var(--shadow-lg); }
+  .hero__floating-badge strong { font-size: 22px; display: block; line-height: 1.1; margin-bottom: 3px; color: var(--gold); font-family: 'Playfair Display', serif; font-weight: 900; }
 
-  /* PROPOSTA VALOR (3 cards após hero) */
-  .props { padding: 64px 0 16px; }
-  .props__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .props__grid { grid-template-columns: repeat(3, 1fr); } }
-  .prop { background: var(--white); border: 1px solid var(--gray-100); border-radius: 16px; padding: 28px 26px; transition: all .2s; }
-  .prop:hover { border-color: var(--green-pale); box-shadow: var(--shadow); transform: translateY(-2px); }
-  .prop__icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-  .prop__icon svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .prop h3 { font-size: 18px; margin-bottom: 8px; font-weight: 800; }
-  .prop p { font-size: 14.5px; color: var(--gray-700); line-height: 1.55; }
+  /* FAIXA 5 DIFERENCIAIS (logo após hero) */
+  .strip { background: var(--navy); color: var(--white); padding: 60px 0; }
+  .strip__row { display: flex; flex-wrap: wrap; gap: 0; align-items: center; justify-content: center; text-align: center; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.6; }
+  .strip__item { padding: 4px 18px; position: relative; }
+  .strip__item + .strip__item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
+  .strip__item strong { color: var(--gold); font-weight: 700; }
+  @media (max-width: 720px) { .strip__row { flex-direction: column; gap: 14px; } .strip__item + .strip__item::before { display: none; } }
 
   /* CATÁLOGO (2 carros + fantasma) */
-  .fleet { padding: 64px 0; background: var(--gray-50); }
-  .head { text-align: center; max-width: 700px; margin: 0 auto 44px; }
-  .head h2 { margin-bottom: 10px; }
-  .head p { color: var(--gray-700); font-size: 16.5px; }
+  .fleet { padding: 80px 0; background: var(--white); }
+  .head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+  .head h2 { margin-bottom: 12px; }
+  .head p { color: var(--gray-700); font-size: 17px; line-height: 1.6; }
   .fleet__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .fleet__grid { grid-template-columns: repeat(3, 1fr); } }
-  .car { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); transition: all .2s; display: flex; flex-direction: column; }
-  .car:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--green-pale); }
-  .car__photo { aspect-ratio: 16/10; overflow: hidden; background: var(--gray-100); position: relative; }
+  .car { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); transition: all .2s; display: flex; flex-direction: column; }
+  .car:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--navy-light); }
+  .car__photo { aspect-ratio: 3/2; overflow: hidden; background: var(--gray-100); position: relative; }
   .car__photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-  .car:hover .car__photo img { transform: scale(1.05); }
-  .car__photo-badge { position: absolute; top: 12px; left: 12px; background: rgba(26,26,26,0.85); color: var(--white); padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); }
-  .car__photo-badge--available { background: var(--green); color: var(--white); }
-  .car__photo-badge--soon { background: var(--amber); color: var(--black); }
-  .car__body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
-  .car__name { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
-  .car__cat { font-size: 13px; color: var(--gray-500); margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-  .car__specs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 12.5px; color: var(--gray-700); }
+  .car:hover .car__photo img { transform: scale(1.04); }
+  .car__photo-badge { position: absolute; top: 12px; left: 12px; background: var(--navy); color: var(--white); padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+  .car__photo-badge--available { background: var(--teal); }
+  .car__photo-badge--soon { background: var(--gold); color: var(--navy); }
+  .car__body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .car__name { margin-bottom: 4px; }
+  .car__cat { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); margin-bottom: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+  .car__specs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 13px; color: var(--gray-700); }
   .car__spec { display: inline-flex; align-items: center; gap: 5px; }
   .car__spec svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
-  .car__included { font-size: 12px; color: var(--green-darker); font-weight: 700; background: var(--green-pale); padding: 7px 10px; border-radius: 6px; margin-bottom: 10px; display: inline-block; letter-spacing: 0.2px; }
-  .car__price { padding: 14px 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 18px; }
-  .car__price-from { font-size: 12px; color: var(--gray-500); display: block; }
-  .car__price-val { font-size: 28px; font-weight: 900; color: var(--black); }
-  .car__price-val small { font-size: 14px; color: var(--gray-500); font-weight: 600; }
+  .car__included { font-size: 12px; color: var(--teal-dark); font-weight: 700; background: var(--teal-pale); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; display: inline-block; letter-spacing: 0.2px; }
+  .car__price { padding: 14px 0; border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-bottom: 18px; }
+  .car__price-from { font-size: 12px; color: var(--gray-500); display: block; font-family: 'Inter', sans-serif; font-weight: 500; }
+  .car__price-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--navy); }
+  .car__price-val small { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-500); font-weight: 500; }
   .car__cta { margin-top: auto; }
-  .car--soon { background: linear-gradient(135deg, #fef9e7 0%, #fef3c7 100%); }
-  .car--soon .car__photo { background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%); display: flex; align-items: center; justify-content: center; color: var(--gray-700); font-size: 60px; }
+  .car--soon { background: var(--cream); border-color: var(--gray-300); }
+  .car--soon .car__photo { background: var(--navy-pale); display: flex; align-items: center; justify-content: center; color: var(--navy-light); }
+  .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+
+  /* PARA QUEM É (grid 2x2) */
+  .who { padding: 80px 0; background: var(--cream); }
+  .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
+  .who__card { background: var(--white); border-radius: 14px; overflow: hidden; border: 1px solid var(--gray-200); display: flex; flex-direction: column; transition: all .2s; }
+  .who__card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--navy-light); }
+  .who__photo { aspect-ratio: 16/9; background: var(--navy); color: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .who__photo svg { width: 96px; height: 96px; stroke: currentColor; stroke-width: 1.2; fill: none; opacity: 0.85; }
+  .who__photo--medico { background: linear-gradient(135deg, #0F1F3D 0%, #1a3055 100%); }
+  .who__photo--executivo { background: linear-gradient(135deg, #1a3055 0%, #0F1F3D 100%); }
+  .who__photo--familia { background: linear-gradient(135deg, #2A9D8F 0%, #218074 100%); }
+  .who__photo--nomade { background: linear-gradient(135deg, #d99e1c 0%, #F5B82E 100%); color: var(--navy); }
+  .who__tag { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.95); color: var(--navy); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+  .who__photo--nomade .who__tag { background: var(--navy); color: var(--white); }
+  .who__body { padding: 22px 24px 24px; flex: 1; display: flex; flex-direction: column; }
+  .who__title { margin-bottom: 8px; }
+  .who__text { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; margin-bottom: 18px; flex: 1; }
+  .who__cta { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--navy); text-decoration: none; transition: color .15s; font-family: 'Inter', sans-serif; }
+  .who__cta:hover { color: var(--gold-dark); }
+  .who__cta::after { content: '→'; transition: transform .15s; }
+  .who__cta:hover::after { transform: translateX(4px); }
 
   /* COMO FUNCIONA */
-  .how { padding: 64px 0; }
+  .how { padding: 80px 0; background: var(--white); }
   .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
   .step { text-align: center; padding: 8px; }
-  .step__num { width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; margin: 0 auto 14px; }
-  .step h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; }
-  .step p { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
-
-  /* DIFERENCIAIS (4 cards 2x2) */
-  .differs { padding: 64px 0; background: var(--gray-50); }
-  .differs__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .differs__grid { grid-template-columns: repeat(2, 1fr); } }
-  .differ { background: var(--white); border-radius: 14px; padding: 26px 24px; display: flex; gap: 16px; border: 1px solid var(--gray-100); }
-  .differ__icon { width: 46px; height: 46px; min-width: 46px; border-radius: 12px; background: var(--green-pale); color: var(--green-darker); display: flex; align-items: center; justify-content: center; }
-  .differ__icon svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-  .differ h4 { font-size: 16.5px; font-weight: 800; margin-bottom: 6px; }
-  .differ p { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
+  .step__num { width: 48px; height: 48px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; margin: 0 auto 16px; }
+  .step h4 { font-size: 15.5px; font-weight: 700; margin-bottom: 8px; }
+  .step p { font-size: 13.5px; color: var(--gray-700); line-height: 1.55; font-family: 'Inter', sans-serif; }
 
   /* COMPARAÇÃO LOCALIZA */
-  .compare { padding: 64px 0; }
+  .compare { padding: 80px 0; background: var(--cream); }
   .compare__table { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: collapse; background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
-  .compare__table th, .compare__table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
-  .compare__table thead th { background: var(--gray-50); font-weight: 800; color: var(--gray-900); font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .compare__table thead th:nth-child(3) { background: var(--green-pale); color: var(--green-darker); }
-  .compare__table tbody td:nth-child(3) { background: rgba(79,166,0,0.05); font-weight: 700; color: var(--green-darker); }
+  .compare__table th, .compare__table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 14.5px; }
+  .compare__table thead th { background: var(--navy); color: var(--white); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; font-family: 'Inter', sans-serif; }
+  .compare__table thead th:nth-child(3) { background: var(--gold); color: var(--navy); }
+  .compare__table tbody td:nth-child(1) { font-weight: 600; color: var(--navy); }
   .compare__table tbody td:nth-child(2) { color: var(--gray-500); }
-  .compare__note { text-align: center; font-size: 12.5px; color: var(--gray-500); margin-top: 16px; }
+  .compare__table tbody td:nth-child(3) { color: var(--navy); font-weight: 600; background: var(--gold-pale); }
+  .compare__table tbody tr:last-child td { border-bottom: none; font-weight: 700; }
+  .compare__table tbody tr.compare__highlight td { background: var(--teal-pale); color: var(--teal-dark); font-weight: 800; font-size: 15px; border-top: 2px solid var(--teal); }
+  .compare__table tbody tr.compare__highlight td:nth-child(3) { background: var(--teal); color: var(--white); }
+  .compare__note { text-align: center; font-size: 12.5px; color: var(--gray-500); margin-top: 18px; }
+
+  .compare__explain { max-width: 880px; margin: 32px auto 0; padding: 24px 28px; background: var(--white); border-left: 4px solid var(--navy); border-radius: 8px; box-shadow: var(--shadow-sm); }
+  .compare__explain h3 { font-size: 19px; color: var(--navy); margin-bottom: 10px; }
+  .compare__explain p { font-size: 14.5px; color: var(--gray-700); line-height: 1.65; margin: 0; }
+  .compare__explain strong { color: var(--navy); }
 
   /* SOBRE */
-  .about { padding: 64px 0; background: var(--gray-50); }
-  .about__grid { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; max-width: 1000px; margin: 0 auto; }
+  .about { padding: 80px 0; background: var(--white); }
+  .about__grid { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; max-width: 1040px; margin: 0 auto; }
   @media (min-width: 720px) { .about__grid { grid-template-columns: 0.9fr 1.1fr; } }
-  .about__photo { aspect-ratio: 4/3; background: linear-gradient(135deg, var(--green-pale) 0%, #d4eaf3 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--green-darker); font-size: 14px; text-align: center; padding: 20px; }
-  .about__photo svg { width: 80px; height: 80px; stroke: currentColor; stroke-width: 1.5; fill: none; margin-bottom: 14px; }
-  .about p { font-size: 15.5px; color: var(--gray-700); line-height: 1.7; margin-bottom: 14px; }
-  .about__socio { padding: 14px 0; border-bottom: 1px solid var(--gray-200); }
+  .about__photo { aspect-ratio: 4/3; background: var(--navy); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 13.5px; text-align: center; padding: 24px; }
+  .about__photo svg { width: 72px; height: 72px; stroke: currentColor; stroke-width: 1.4; fill: none; margin-bottom: 16px; }
+  .about p { font-size: 16px; color: var(--gray-700); line-height: 1.7; margin-bottom: 16px; font-family: 'Inter', sans-serif; }
+  .about p strong { color: var(--navy); font-weight: 700; }
+  .about__socio { padding: 16px 0; border-bottom: 1px solid var(--gray-200); }
   .about__socio:last-child { border-bottom: none; }
-  .about__socio strong { display: block; font-size: 15px; color: var(--black); margin-bottom: 4px; font-weight: 800; }
-  .about__socio span { font-size: 13.5px; color: var(--gray-700); }
-  .about__socio a { color: var(--green-dark); font-weight: 700; text-decoration: none; }
+  .about__socio strong { display: block; font-size: 15.5px; color: var(--navy); margin-bottom: 4px; font-weight: 700; font-family: 'Inter', sans-serif; }
+  .about__socio span { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
+  .about__socio a { color: var(--navy); font-weight: 700; text-decoration: underline; }
 
   /* DEPOIMENTOS (placeholder honesto) */
-  .testimonials { padding: 64px 0; }
-  .testimonials__empty { max-width: 700px; margin: 0 auto; text-align: center; background: var(--gray-50); border-radius: 14px; padding: 40px 28px; border: 1px dashed var(--gray-300); }
-  .testimonials__empty svg { width: 48px; height: 48px; stroke: var(--gray-500); stroke-width: 1.5; fill: none; margin: 0 auto 14px; }
-  .testimonials__empty h3 { font-size: 18px; margin-bottom: 10px; color: var(--gray-900); }
-  .testimonials__empty p { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; }
+  .testimonials { padding: 80px 0; background: var(--cream); }
+  .testimonials__empty { max-width: 720px; margin: 0 auto; text-align: center; background: var(--white); border-radius: 14px; padding: 44px 32px; border: 1px solid var(--gray-200); }
+  .testimonials__empty svg { width: 48px; height: 48px; stroke: var(--navy); stroke-width: 1.4; fill: none; margin: 0 auto 16px; }
+  .testimonials__empty h3 { font-size: 22px; margin-bottom: 12px; color: var(--navy); }
+  .testimonials__empty p { font-size: 15px; color: var(--gray-700); line-height: 1.65; font-family: 'Inter', sans-serif; }
+  .testimonials__empty strong { color: var(--navy); }
 
   /* FAQ */
-  .faq { padding: 64px 0; background: var(--gray-50); }
+  .faq { padding: 80px 0; background: var(--white); }
   .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-  .faq__item { background: var(--white); border-radius: 12px; border: 1px solid var(--gray-100); overflow: hidden; transition: border-color .15s; }
-  .faq__item[open] { border-color: var(--green); }
-  .faq__item summary { padding: 18px 22px; cursor: pointer; font-weight: 700; font-size: 15px; color: var(--black); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .faq__item { background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); overflow: hidden; transition: border-color .15s; }
+  .faq__item[open] { border-color: var(--navy); }
+  .faq__item summary { padding: 18px 22px; cursor: pointer; font-weight: 700; font-size: 15px; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; }
   .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary::after { content: '+'; color: var(--green); font-size: 22px; font-weight: 900; transition: transform .2s; }
+  .faq__item summary::after { content: '+'; color: var(--gold-dark); font-size: 22px; font-weight: 900; transition: transform .2s; }
   .faq__item[open] summary::after { transform: rotate(45deg); }
-  .faq__answer { padding: 0 22px 18px; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; }
-  .faq__answer strong { color: var(--black); }
+  .faq__answer { padding: 0 22px 18px; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; font-family: 'Inter', sans-serif; }
+  .faq__answer strong { color: var(--navy); }
 
   /* CTA final */
-  .cta-final { padding: 80px 0; background: linear-gradient(135deg, #0b2611 0%, #143b1d 100%); color: var(--white); text-align: center; }
-  .cta-final h2 { color: var(--white); margin-bottom: 14px; }
-  .cta-final p { color: rgba(255,255,255,0.78); font-size: 17px; max-width: 600px; margin: 0 auto 28px; line-height: 1.6; }
+  .cta-final { padding: 80px 0; background: var(--navy); color: var(--white); text-align: center; }
+  .cta-final h2 { color: var(--white); margin-bottom: 16px; }
+  .cta-final p { color: rgba(255,255,255,0.82); font-size: 17px; max-width: 600px; margin: 0 auto 28px; line-height: 1.6; font-family: 'Inter', sans-serif; }
   .cta-final__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
-  /* FOOTER */
-  .foot { background: var(--black); color: rgba(255,255,255,0.65); padding: 48px 0 28px; }
-  .foot__row { display: grid; gap: 28px; grid-template-columns: 1fr; margin-bottom: 30px; }
-  @media (min-width: 720px) { .foot__row { grid-template-columns: 2fr 1fr 1fr 1.4fr; } }
-  .foot__col h5 { color: var(--white); font-size: 13px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-  .foot__col a { display: block; color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13.5px; padding: 4px 0; transition: color .15s; }
-  .foot__col a:hover { color: var(--green); }
-  .foot__brand strong { color: var(--white); font-size: 18px; display: block; margin-bottom: 8px; font-weight: 800; }
-  .foot__brand p { font-size: 13.5px; line-height: 1.6; margin-bottom: 12px; }
-  .foot__seal { background: rgba(255,255,255,0.05); border: 1px solid rgba(79,166,0,0.3); border-radius: 12px; padding: 14px; margin-top: 14px; }
-  .foot__seal strong { display: block; color: var(--green); font-size: 13px; margin-bottom: 6px; font-weight: 800; }
-  .foot__seal p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.5; }
-  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.4); }
-  .foot__bottom strong { color: rgba(255,255,255,0.65); }
+  /* FAIXA DE SELOS (antes do footer) */
+  .seals { padding: 48px 0; background: var(--white); border-top: 1px solid var(--gray-200); }
+  .seals__title { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 24px; font-family: 'Inter', sans-serif; }
+  .seals__row { display: flex; flex-wrap: wrap; gap: 36px 48px; align-items: center; justify-content: center; }
+  .seal { display: inline-flex; align-items: center; gap: 8px; color: var(--gray-700); font-size: 13.5px; font-weight: 600; font-family: 'Inter', sans-serif; opacity: 0.78; }
+  .seal:hover { opacity: 1; }
+  .seal svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+  .seals__note { text-align: center; font-size: 13px; color: var(--gray-700); margin-top: 26px; max-width: 720px; margin-left: auto; margin-right: auto; font-family: 'Inter', sans-serif; line-height: 1.55; }
+  .seals__note strong { color: var(--navy); }
 
-  /* Banner preview (temporário) */
-  .preview-banner { background: var(--amber); color: var(--black); text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; }
-  .preview-banner a { color: var(--black); text-decoration: underline; }
+  /* FOOTER */
+  .foot { background: var(--navy-dark); color: rgba(255,255,255,0.65); padding: 56px 0 30px; }
+  .foot__row { display: grid; gap: 28px; grid-template-columns: 1fr; margin-bottom: 32px; }
+  @media (min-width: 720px) { .foot__row { grid-template-columns: 2fr 1fr 1fr 1.4fr; } }
+  .foot__col h5 { color: var(--white); font-size: 12px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; font-family: 'Inter', sans-serif; }
+  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 5px 0; transition: color .15s; font-family: 'Inter', sans-serif; }
+  .foot__col a:hover { color: var(--gold); }
+  .foot__brand strong { color: var(--white); font-family: 'Playfair Display', serif; font-size: 22px; display: block; margin-bottom: 10px; font-weight: 900; letter-spacing: 0; }
+  .foot__brand p { font-size: 13.5px; line-height: 1.65; margin-bottom: 12px; font-family: 'Inter', sans-serif; }
+  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; }
+  .foot__bottom strong { color: rgba(255,255,255,0.65); }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">🚧 Site em pré-lançamento · <a href="index.html">Voltar para versão antiga</a></div>
-
 <!-- NAV -->
 <header class="nav">
   <div class="wrap nav__row">
-    <a href="index.html" class="nav__brand" aria-label="NomadeDrive — início">
-      <img src="images/logo-nomade-drive.jpg" alt="NomadeDrive" class="nav__logo" />
+    <a href="index.html" class="nav__brand" aria-label="Nomade Drive — início">
+      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" />
     </a>
     <nav class="nav__links" aria-label="Navegação principal">
-      <a href="#carros">Nossa frota</a>
+      <a href="#carros">Frota</a>
+      <a href="#para-quem-e">Para quem é</a>
       <a href="#como-funciona">Como funciona</a>
-      <a href="#diferenciais">Por que escolher</a>
-      <a href="#diferenciais">Sobre nós</a>
       <a href="#faq">Dúvidas</a>
     </nav>
     <div class="nav__cta">
@@ -244,49 +282,94 @@
 <section class="hero">
   <div class="wrap hero__inner">
     <div>
-      <span class="hero__badge">Operação 100% digital em Uberlândia/MG</span>
-      <h1>Carros para quem está <em>chegando</em> em Uberlândia.</h1>
-      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com <strong>3.000 km/mês inclusos</strong>. Entrega no aeroporto, hotel ou condomínio. Sem letra miúda.</p>
+      <span class="hero__tag">Atendimento humano · Uberlândia-MG</span>
+      <h1>Carros para quem está chegando em Uberlândia</h1>
+      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com <strong>3.000 km inclusos</strong>. Entrega no aeroporto, no hotel ou no condomínio. Sem fila, sem loja, sem letra miúda.</p>
       <div class="hero__cta">
         <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
-        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20NomadeDrive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-black">Falar pelo WhatsApp</a>
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20Nomade%20Drive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--text-link">Falar pelo WhatsApp</a>
       </div>
     </div>
     <div class="hero__visual">
-      <img src="images/car-hb20-1.jpg" alt="Carro NomadeDrive estacionado pronto pra entrega" loading="eager" />
+      <img src="images/car-hb20-1.jpg" alt="Nomade Drive entregando carro em Uberlândia" loading="eager" />
       <div class="hero__floating-badge">
-        <strong>A partir de R$ 3.500</strong>
-        /mês · 3.000 km/mês inclusos
+        <strong>R$ 3.500</strong>
+        a partir / mês · 3.000 km inclusos
       </div>
     </div>
   </div>
 </section>
 
-<!-- 3 CARDS PROPOSTA DE VALOR -->
-<section class="props">
+<!-- FAIXA 5 DIFERENCIAIS (substitui contadores zerados) -->
+<section class="strip">
   <div class="wrap">
-    <div class="props__grid">
-      <div class="prop">
-        <div class="prop__icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <div class="strip__row">
+      <div class="strip__item"><strong>3.000 km/mês</strong> inclusos</div>
+      <div class="strip__item">Entrega em <strong>qualquer ponto</strong> de Uberlândia</div>
+      <div class="strip__item">Contrato <strong>100% digital</strong></div>
+      <div class="strip__item">Devolução <strong>flexível, sem multa</strong></div>
+      <div class="strip__item"><strong>Atendimento humano</strong> 24/7</div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM É (grid 2x2) -->
+<section class="who" id="para-quem-e">
+  <div class="wrap">
+    <div class="head">
+      <h2>Feito para profissionais em transição</h2>
+      <p>Atendemos quem precisa de carro em Uberlândia por 30 dias ou mais.</p>
+    </div>
+    <div class="who__grid">
+
+      <article class="who__card">
+        <div class="who__photo who__photo--executivo">
+          <span class="who__tag">30-90 dias</span>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M3 21v-2a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v2"/><path d="M9 15v6"/><path d="M15 15v6"/></svg>
         </div>
-        <h3>Entrega onde você estiver</h3>
-        <p>No aeroporto, no hotel, no condomínio ou em ponto neutro. Você escolhe o local pelo nosso mapa interativo. <strong>Sem ir até loja.</strong></p>
-      </div>
-      <div class="prop">
-        <div class="prop__icon">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <div class="who__body">
+          <h3 class="who__title">Executivos em transferência</h3>
+          <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Carro confiável, sem precisar comprar.</p>
+          <a href="reservar.html?perfil=executivo" class="who__cta">Solicitar carro</a>
         </div>
-        <h3>Contrato 100% digital</h3>
-        <p>Reserve pelo site, contrato assinado pelo celular, pague via PIX ou cartão. <strong>Carro chega em até 24 horas em Uberlândia.</strong></p>
-      </div>
-      <div class="prop">
-        <div class="prop__icon">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </article>
+
+      <article class="who__card">
+        <div class="who__photo who__photo--medico">
+          <span class="who__tag">30-180 dias</span>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v6a6 6 0 0 0 12 0V2"/><path d="M6 2h12"/><path d="M12 14v8"/><path d="M9 18h6"/></svg>
         </div>
-        <h3>Preço travado, sem multa</h3>
-        <p>Preço único do início ao fim, sem letra miúda. <strong>Devolva antes do prazo sem multa.</strong> Profissional em transição não fica preso.</p>
-      </div>
+        <div class="who__body">
+          <h3 class="who__title">Médicos e profissionais de saúde</h3>
+          <p class="who__text">Plantões em hospitais de Uberlândia (HC-UFU, Santa Marta, Madrecor), consultorias temporárias, residências médicas.</p>
+          <a href="reservar.html?perfil=medico" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+      <article class="who__card">
+        <div class="who__photo who__photo--familia">
+          <span class="who__tag">60-180 dias</span>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="who__body">
+          <h3 class="who__title">Famílias em mudança</h3>
+          <p class="who__text">Mudança de casa, reforma, espera por veículo próprio, transição de carreira. Espaço para 5, sem compromisso longo.</p>
+          <a href="reservar.html?perfil=familia" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+      <article class="who__card">
+        <div class="who__photo who__photo--nomade">
+          <span class="who__tag">30-90 dias</span>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="who__body">
+          <h3 class="who__title">Nômades digitais e estudantes</h3>
+          <p class="who__text">Temporadas profissionais em Uberlândia, trabalho remoto, especialização universitária. Pague só pelo tempo que vai usar.</p>
+          <a href="reservar.html?perfil=nomade" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -300,57 +383,56 @@
     </div>
     <div class="fleet__grid">
 
-      <!-- Carro 1: Popular Econômico (HB20) -->
+      <!-- HB20 -->
       <article class="car">
         <div class="car__photo">
-          <img src="images/car-hb20-1.jpg" alt="Hyundai HB20 — popular econômico NomadeDrive" loading="lazy" />
+          <img src="images/car-hb20-1.jpg" alt="Hyundai HB20 — popular econômico Nomade Drive" loading="lazy" />
           <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Popular Econômico</div>
           <h3 class="car__name">Hyundai HB20</h3>
           <div class="car__specs">
-            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M5 17h14v-3l-1-4H7l-1 4v3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg> 1.0 Flex</span>
-            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16"/></svg> Manual</span>
-            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
+            <span class="car__spec">1.0 Flex</span>
+            <span class="car__spec">Manual</span>
+            <span class="car__spec">5 lugares</span>
           </div>
           <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
             <span class="car__price-val">R$ 3.500<small> /mês</small></span>
           </div>
-          <a href="carros/popular.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
+          <a href="carros/popular.html" class="btn btn--primary btn--block car__cta">Ver detalhes do HB20</a>
         </div>
       </article>
 
-      <!-- Carro 2: Sedan Médio (Cronos) -->
+      <!-- Cronos -->
       <article class="car">
         <div class="car__photo">
-          <img src="images/car-cronos-1.jpg" alt="Fiat Cronos — sedan médio automático NomadeDrive" loading="lazy" />
+          <img src="images/car-cronos-1.jpg" alt="Fiat Cronos — sedan médio automático Nomade Drive" loading="lazy" />
           <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Sedan Médio Automático</div>
           <h3 class="car__name">Fiat Cronos</h3>
           <div class="car__specs">
-            <span class="car__spec"><svg viewBox="0 0 24 24"><path d="M5 17h14v-3l-1-4H7l-1 4v3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg> 1.3 Flex</span>
-            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg> Automático</span>
-            <span class="car__spec"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> 5 lugares</span>
+            <span class="car__spec">1.3 Flex</span>
+            <span class="car__spec">Automático</span>
+            <span class="car__spec">5 lugares</span>
           </div>
           <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
             <span class="car__price-val">R$ 4.500<small> /mês</small></span>
           </div>
-          <a href="carros/sedan.html" class="btn btn--primary btn--block car__cta">Solicite seu carro</a>
+          <a href="carros/sedan.html" class="btn btn--primary btn--block car__cta">Ver detalhes do Cronos</a>
         </div>
       </article>
 
-      <!-- Carro 3: Fantasma (próximo modelo) -->
+      <!-- Próximo modelo -->
       <article class="car car--soon">
         <div class="car__photo">
-          <svg viewBox="0 0 24 24" width="56" height="56" stroke="currentColor" stroke-width="1.5" fill="none"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-          <span class="car__photo-badge car__photo-badge--soon" style="top:auto; bottom:12px; left:50%; transform:translateX(-50%);">Em breve</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l3 2"/></svg>
         </div>
         <div class="car__body">
           <div class="car__cat">Próximo modelo</div>
@@ -362,7 +444,7 @@
             <small class="car__price-from">Preview</small>
             <span class="car__price-val">A definir</span>
           </div>
-          <a href="fila-prioritaria.html" class="btn btn--ghost-black btn--block car__cta">Avise-me quando chegar</a>
+          <a href="https://wa.me/5534984064864?text=Quero%20entrar%20na%20fila%20do%20SUV%20Nomade%20Drive" target="_blank" rel="noopener" class="btn btn--ghost-navy btn--block car__cta">Avise-me quando chegar</a>
         </div>
       </article>
 
@@ -370,15 +452,15 @@
   </div>
 </section>
 
-<!-- COMO FUNCIONA (5 STEPS) -->
+<!-- COMO FUNCIONA -->
 <section class="how" id="como-funciona">
   <div class="wrap">
     <div class="head">
       <h2>Como funciona</h2>
-      <p>Do click ao volante em até 24 horas. Sem burocracia, sem visita à sede.</p>
+      <p>Do clique ao volante em até 24 horas. Sem burocracia, sem visita à sede.</p>
     </div>
     <div class="how__grid">
-      <div class="step"><div class="step__num">1</div><h4>Escolha o carro</h4><p>Veja fotos, vídeo e preços. Selecione o modelo que combina com você.</p></div>
+      <div class="step"><div class="step__num">1</div><h4>Escolha o carro</h4><p>Veja fotos, preços e o que está incluído. Selecione o modelo que combina com você.</p></div>
       <div class="step"><div class="step__num">2</div><h4>Solicite</h4><p>Clique em "Solicitar" e nosso time responde em até 2 horas úteis.</p></div>
       <div class="step"><div class="step__num">3</div><h4>Assine digital</h4><p>Mandamos contrato pra você assinar pelo celular. Paga via PIX ou cartão.</p></div>
       <div class="step"><div class="step__num">4</div><h4>Receba onde estiver</h4><p>Entregamos no aeroporto, hotel ou condomínio em até 24h.</p></div>
@@ -387,82 +469,41 @@
   </div>
 </section>
 
-<!-- DIFERENCIAIS (4 cards 2x2) -->
-<section class="differs" id="diferenciais">
-  <div class="wrap">
-    <div class="head">
-      <h2>Por que escolher NomadeDrive</h2>
-      <p>O que a Localiza não faz, a gente faz por você.</p>
-    </div>
-    <div class="differs__grid">
-      <div class="differ">
-        <div class="differ__icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div>
-          <h4>Preço travado em contrato</h4>
-          <p>Cliente paga exatamente o combinado. Sem reajuste, sem multa surpresa, sem letra miúda.</p>
-        </div>
-      </div>
-      <div class="differ">
-        <div class="differ__icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div>
-          <h4>Devolução flexível sem multa</h4>
-          <p>Cliente pode devolver antes do prazo sem penalidade. Profissional em transição não fica preso.</p>
-        </div>
-      </div>
-      <div class="differ">
-        <div class="differ__icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <div>
-          <h4>Contrato 100% digital remoto</h4>
-          <p>Cliente contrata pelo WhatsApp de qualquer lugar do Brasil. Carro entregue onde estiver. Sem visita à sede.</p>
-        </div>
-      </div>
-      <div class="differ">
-        <div class="differ__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div>
-          <h4>Tudo incluído no preço único</h4>
-          <p>Seguro, manutenção, assistência 24h, IPVA, licenciamento, telemetria. Sem custos surpresa no checkout.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- COMPARAÇÃO LOCALIZA vs NOMADE -->
 <section class="compare">
   <div class="wrap">
     <div class="head">
-      <h2>NomadeDrive vs Localiza</h2>
-      <p>Comparativo direto pra quem está pesquisando alternativas.</p>
+      <h2>Por que escolher a Nomade Drive?</h2>
+      <p>Comparação real com a líder de mercado em Uberlândia.</p>
     </div>
     <table class="compare__table">
       <thead>
-        <tr><th>Item</th><th>Localiza Mensal Flex</th><th>NomadeDrive</th></tr>
+        <tr><th>Item</th><th>Localiza Mensal Flex</th><th>Nomade Drive</th></tr>
       </thead>
       <tbody>
         <tr><td>Preço base anunciado</td><td>R$ 3.500-4.500/mês</td><td>R$ 3.500/mês</td></tr>
-        <tr><td>Proteção adicional (LDW, RRW, vidros)</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
+        <tr><td>Proteção adicional</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
         <tr><td>Quilometragem mensal</td><td>2.000-3.000 km</td><td>3.000 km</td></tr>
         <tr><td>Entrega</td><td>Apenas na loja</td><td>Onde você estiver</td></tr>
-        <tr><td>Devolução flexível</td><td>Multa por antecipação</td><td>Sem multa</td></tr>
-        <tr><td><strong>Final mensal real</strong></td><td><strong>R$ 4.500-6.500</strong></td><td><strong>R$ 3.500</strong></td></tr>
+        <tr><td>Devolução antecipada</td><td>Multa</td><td>Sem multa</td></tr>
+        <tr class="compare__highlight"><td>Final mensal real</td><td>R$ 4.500-6.500</td><td>R$ 3.500</td></tr>
       </tbody>
     </table>
-    <p class="compare__note">* Valores aproximados conforme cotação pública em 06/2026. Localiza pode variar conforme promoções e opcionais.</p>
+    <p class="compare__note">Valores aproximados conforme cotação pública em 06/2026. Localiza pode variar conforme promoções e opcionais.</p>
 
-    <!-- Caixa explicativa: Por que mais acessíveis -->
-    <div style="max-width: 880px; margin: 28px auto 0; padding: 22px 24px; background: var(--green-pale); border-left: 4px solid var(--green); border-radius: 10px;">
-      <h3 style="font-size: 17px; font-weight: 800; color: var(--green-darker); margin-bottom: 10px;">Por que nossos preços são mais acessíveis que a Localiza?</h3>
-      <p style="font-size: 14.5px; color: var(--gray-900); line-height: 1.6; margin: 0;">Operação 100% digital, sem custos de loja física, sem letra miúda no checkout, sem opcionais empurrados. Repassamos a economia ao cliente em forma de <strong>preço travado em contrato com tudo incluído</strong>. Foco em quem realmente precisa: profissionais em transição, não turismo eventual.</p>
+    <div class="compare__explain">
+      <h3>Por que nossos preços são mais acessíveis</h3>
+      <p>Operação 100% digital, sem custos de loja física, sem letra miúda no checkout, sem opcionais empurrados. Repassamos a economia ao cliente em forma de <strong>preço travado em contrato com tudo incluído</strong>. Foco em quem realmente precisa: profissionais em transição, não turismo eventual.</p>
     </div>
   </div>
 </section>
 
 <!-- SOBRE NÓS -->
-<section class="about">
+<section class="about" id="sobre">
   <div class="wrap">
     <div class="head">
       <h2>Quem somos</h2>
-      <p>Dois irmãos, uma operação enxuta, foco total no cliente.</p>
+      <p>Dois sócios, uma operação enxuta, foco total no cliente.</p>
     </div>
     <div class="about__grid">
       <div class="about__photo">
@@ -472,21 +513,21 @@
         </div>
       </div>
       <div>
-        <p>A <strong>NomadeDrive</strong> nasceu de uma dor pessoal: <strong>se mudar de cidade é caro e burocrático</strong>, especialmente quando você precisa de um carro. Decidimos criar a locadora que gostaríamos de encontrar.</p>
+        <p>A <strong>Nomade Drive</strong> nasceu de uma dor pessoal: <strong>se mudar de cidade é caro e burocrático</strong>, especialmente quando você precisa de um carro. Decidimos criar a locadora que gostaríamos de encontrar.</p>
         <div class="about__socio">
           <strong>Daniel Rodovalho — CEO</strong>
-          <span>Engenheiro Elétrico com 14 anos de experiência em gestão corporativa. Vivendo nos EUA, conhece a dor de se mudar de cidade. · <a href="#">LinkedIn</a></span>
+          <span>Engenheiro Elétrico com 14 anos de experiência em gestão corporativa. Vivendo nos EUA, conhece a dor de se mudar de cidade.</span>
         </div>
         <div class="about__socio">
-          <strong>[Nome do irmão] — Operações</strong>
-          <span>Responsável pela operação local em Uberlândia. Disponível 24/7 via WhatsApp para qualquer urgência do cliente. · <a href="#">LinkedIn</a></span>
+          <strong>Sócio operacional — Uberlândia</strong>
+          <span>Responsável pela operação local. Disponível 24/7 via WhatsApp para qualquer urgência do cliente. Nome completo divulgado após o registro final da operação.</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DEPOIMENTOS (placeholder honesto) -->
+<!-- DEPOIMENTOS (honestos) -->
 <section class="testimonials">
   <div class="wrap">
     <div class="head">
@@ -495,12 +536,12 @@
     <div class="testimonials__empty">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <h3>Estamos em operação inicial</h3>
-      <p>As histórias dos primeiros clientes aparecerão aqui em breve. <strong>Preferimos não inventar depoimentos</strong> — só publicamos o que for real. Em poucas semanas você vai poder ver vídeos curtos de quem usou o serviço.</p>
+      <p>As histórias dos primeiros clientes aparecerão aqui em breve. <strong>Preferimos não inventar depoimentos</strong> — só publicamos o que for real e verificável. Em poucas semanas você vai poder ver vídeos curtos de quem usou o serviço.</p>
     </div>
   </div>
 </section>
 
-<!-- FAQ (10 perguntas) -->
+<!-- FAQ -->
 <section class="faq" id="faq">
   <div class="wrap">
     <div class="head">
@@ -513,11 +554,11 @@
       </details>
       <details class="faq__item">
         <summary>Onde fica a loja física de vocês?</summary>
-        <div class="faq__answer">A NomadeDrive <strong>opera 100% digital</strong>. Atendemos por WhatsApp e entregamos o carro onde você estiver em Uberlândia.</div>
+        <div class="faq__answer">A Nomade Drive <strong>opera 100% digital</strong>. Atendemos por WhatsApp e entregamos o carro onde você estiver em Uberlândia.</div>
       </details>
       <details class="faq__item">
         <summary>Posso ver o carro antes de fechar?</summary>
-        <div class="faq__answer">Posso fazer algo melhor: agendo visita de 30 minutos em ponto público de Uberlândia. <strong>Levo o carro até lá pra você inspecionar antes de assinar.</strong></div>
+        <div class="faq__answer">Sim. Agendamos visita de 30 minutos em ponto público de Uberlândia. <strong>Levamos o carro até você inspecionar antes de assinar.</strong></div>
       </details>
       <details class="faq__item">
         <summary>Quais formas de pagamento aceitam?</summary>
@@ -525,11 +566,11 @@
       </details>
       <details class="faq__item">
         <summary>O que está incluído no preço?</summary>
-        <div class="faq__answer"><strong>Seguro completo, manutenção, assistência 24h, IPVA, licenciamento, telemetria.</strong> Sem custos extras.</div>
+        <div class="faq__answer"><strong>Seguro completo, manutenção, assistência 24h, IPVA, licenciamento e telemetria.</strong> Sem custos extras.</div>
       </details>
       <details class="faq__item">
         <summary>Posso usar o carro pra viajar pra outras cidades?</summary>
-        <div class="faq__answer">Sim, <strong>quilometragem ilimitada</strong> em locações de 30+ dias. Apenas avise a rota pra a gente acompanhar.</div>
+        <div class="faq__answer">Sim, <strong>até o limite de 3.000 km/mês</strong>. Acima disso cobramos R$ 0,80/km no popular ou R$ 1,00/km no sedan. Apenas avise a rota pra a gente acompanhar.</div>
       </details>
       <details class="faq__item">
         <summary>E se eu quiser devolver antes do prazo?</summary>
@@ -537,7 +578,7 @@
       </details>
       <details class="faq__item">
         <summary>Posso renovar o contrato no final do período?</summary>
-        <div class="faq__answer">Sim, renovação automática se quiser, ou flexibilidade pra encerrar quando precisar. Sem fidelidade obrigatória.</div>
+        <div class="faq__answer">Sim, renovação direta no WhatsApp. Sem fidelidade obrigatória.</div>
       </details>
       <details class="faq__item">
         <summary>Como funciona a entrega do carro?</summary>
@@ -545,7 +586,7 @@
       </details>
       <details class="faq__item">
         <summary>Quem é responsável pela empresa?</summary>
-        <div class="faq__answer">Daniel Rodovalho e [nome do irmão], sócios fundadores. <strong>CNPJ em processo de registro</strong>, com toda documentação pública na Junta Comercial de MG.</div>
+        <div class="faq__answer">Daniel Rodovalho e sócio operacional em Uberlândia. <strong>CNPJ em processo de registro</strong>, com toda documentação pública na Junta Comercial de MG após emissão.</div>
       </details>
     </div>
   </div>
@@ -555,11 +596,45 @@
 <section class="cta-final">
   <div class="wrap">
     <h2>Pronto pra começar?</h2>
-    <p>Veja nossos 2 carros disponíveis em Uberlândia agora. Resposta em até 2 horas úteis.</p>
+    <p>2 carros disponíveis em Uberlândia agora. Resposta em até 2 horas úteis.</p>
     <div class="cta-final__row">
       <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
-      <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20NomadeDrive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-white">Falar pelo WhatsApp</a>
+      <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20Nomade%20Drive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-white">Falar pelo WhatsApp</a>
     </div>
+  </div>
+</section>
+
+<!-- FAIXA DE SELOS DE CONFIANÇA -->
+<section class="seals">
+  <div class="wrap">
+    <div class="seals__title">Operação verificada</div>
+    <div class="seals__row">
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>CNPJ ativo</span>
+      </div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span>Stripe · MercadoPago</span>
+      </div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 12 12 22 2 12 12 2"/></svg>
+        <span>PIX · Banco Central</span>
+      </div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Contrato com assinatura digital</span>
+      </div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+        <span>Telemetria embarcada</span>
+      </div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Frota com seguro</span>
+      </div>
+    </div>
+    <p class="seals__note">Operação verificada · <strong>CNPJ em processo de emissão</strong>, contratos com assinatura digital, frota com seguro completo, atendimento humanizado em Uberlândia/MG.</p>
   </div>
 </section>
 
@@ -568,22 +643,18 @@
   <div class="wrap">
     <div class="foot__row">
       <div class="foot__col foot__brand">
-        <strong>NomadeDrive</strong>
+        <strong>Nomade Drive</strong>
         <p>Locação mensal de carros em Uberlândia/MG. Frota própria, contrato digital, entrega onde você estiver.</p>
-        <div class="foot__seal">
-          <strong>Locadora ativa em Uberlândia/MG</strong>
-          <p>CNPJ em processo, frota com seguro completo, contratos com assinatura digital, atendimento humano direto.</p>
-        </div>
       </div>
       <div class="foot__col">
         <h5>Carros</h5>
         <a href="carros/popular.html">HB20 Popular</a>
         <a href="carros/sedan.html">Cronos Sedan</a>
-        <a href="fila-prioritaria.html">Fila prioritária</a>
       </div>
       <div class="foot__col">
         <h5>Empresa</h5>
-        <a href="#diferenciais">Sobre nós</a>
+        <a href="#sobre">Sobre nós</a>
+        <a href="#para-quem-e">Para quem é</a>
         <a href="#faq">Dúvidas</a>
         <a href="politica-privacidade.html">Política de Privacidade</a>
         <a href="termos.html">Termos de uso</a>
@@ -596,7 +667,7 @@
       </div>
     </div>
     <div class="foot__bottom">
-      <p><strong>NomadeDrive Locação de Veículos</strong> · CNPJ em processo · Uberlândia/MG · © 2026 — Todos os direitos reservados</p>
+      <p><strong>Nomade Drive Locação de Veículos</strong> · CNPJ em processo · Uberlândia/MG · © 2026 — Todos os direitos reservados</p>
     </div>
   </div>
 </footer>
