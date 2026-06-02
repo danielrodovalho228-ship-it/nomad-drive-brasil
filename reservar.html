@@ -175,6 +175,33 @@
   .cep-wrap { display: grid; gap: 10px; grid-template-columns: 140px 1fr; align-items: end; margin-bottom: 8px; }
   @media (max-width: 480px) { .cep-wrap { grid-template-columns: 1fr; } }
 
+  /* Chips de motivo (estilo FurnishedFinder) */
+  .reasons { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); margin-top: 8px; }
+  @media (min-width: 720px) { .reasons { grid-template-columns: repeat(4, 1fr); } }
+  .reason-chip { background: var(--white); border: 2px solid var(--gray-200); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all .15s; text-align: left; }
+  .reason-chip:hover { border-color: var(--navy); background: var(--navy-pale); transform: translateY(-1px); }
+  .reason-chip.selected { border-color: var(--navy); background: var(--navy); color: var(--white); }
+  .reason-chip.selected .reason-chip__sub { color: rgba(255,255,255,0.75); }
+  .reason-chip strong { display: block; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; line-height: 1.25; margin-bottom: 3px; }
+  .reason-chip__sub { display: block; font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--gray-500); line-height: 1.4; }
+
+  /* Banner de sugestão (aparece após selecionar motivo) */
+  .suggest { display: none; margin-top: 14px; padding: 16px 18px; background: var(--gold-pale); border-left: 3px solid var(--gold); border-radius: 6px; }
+  .suggest.show { display: block; }
+  .suggest__title { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 6px; }
+  .suggest__text { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--navy); line-height: 1.55; margin-bottom: 12px; }
+  .suggest__text strong { font-weight: 700; }
+  .suggest__btn { background: var(--navy); color: var(--white); padding: 8px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; transition: background .15s; }
+  .suggest__btn:hover { background: var(--navy-dark); }
+
+  /* Telefone internacional */
+  .phone-wrap { display: grid; gap: 8px; grid-template-columns: 160px 1fr; }
+  @media (max-width: 480px) { .phone-wrap { grid-template-columns: 1fr; } }
+  .phone-wrap select, .phone-wrap input { font-family: 'Inter', sans-serif; }
+
+  /* Badge "Sugerido pra você" nos cards de carro e ponto */
+  .pick__suggested-badge { position: absolute; top: -10px; left: 10px; background: var(--gold); color: var(--navy); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.4px; text-transform: uppercase; }
+
   /* FOOTER */
   .foot-mini { padding: 26px 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-200); }
   .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
@@ -235,6 +262,49 @@
       </div>
 
       <p class="field-hint" style="margin-top:-10px; margin-bottom:20px;">Devolução flexível antes do prazo sem multa.</p>
+
+      <div class="field">
+        <label>Por que está vindo para Uberlândia? <small>(personalizamos a sugestão)</small></label>
+        <div class="reasons" id="reasonsList">
+          <button type="button" class="reason-chip" data-reason="trabalho-remoto">
+            <strong>Trabalho remoto</strong>
+            <span class="reason-chip__sub">Home office com base temporária</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="tratamento-medico">
+            <strong>Tratamento médico</strong>
+            <span class="reason-chip__sub">Consulta, cirurgia, acompanhante</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="relocacao-corporativa">
+            <strong>Relocação corporativa</strong>
+            <span class="reason-chip__sub">Transferência, projeto, treinamento</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="intercambio-pos">
+            <strong>Intercâmbio / Pós</strong>
+            <span class="reason-chip__sub">UFU, residência, especialização</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="reforma-transicao">
+            <strong>Reforma / Transição</strong>
+            <span class="reason-chip__sub">Obras, espera por carro próprio</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="mudanca-familiar">
+            <strong>Mudança familiar</strong>
+            <span class="reason-chip__sub">Família vindo se estabelecer</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="aposentadoria">
+            <strong>Aposentadoria / Lifestyle</strong>
+            <span class="reason-chip__sub">Sabático, temporada longa</span>
+          </button>
+          <button type="button" class="reason-chip" data-reason="viagem-longa">
+            <strong>Viagem longa</strong>
+            <span class="reason-chip__sub">Turismo prolongado, road trip</span>
+          </button>
+        </div>
+        <div class="suggest" id="suggestBox">
+          <div class="suggest__title">Sugestão para você</div>
+          <div class="suggest__text" id="suggestText"></div>
+          <button type="button" class="suggest__btn" id="suggestApplyBtn">Pré-aplicar essa sugestão</button>
+        </div>
+      </div>
 
       <div class="field">
         <label>Qual carro você quer?</label>
@@ -366,33 +436,48 @@
         <input type="text" id="userName" required placeholder="Como aparece na sua CNH" />
       </div>
 
-      <div class="field--row">
-        <div class="field">
-          <label for="userEmail">E-mail</label>
-          <input type="email" id="userEmail" required placeholder="voce@email.com" />
-        </div>
-        <div class="field">
-          <label for="userPhone">WhatsApp</label>
-          <input type="tel" id="userPhone" required placeholder="(34) 9 9999-9999" />
-        </div>
+      <div class="field">
+        <label for="userEmail">E-mail</label>
+        <input type="email" id="userEmail" required placeholder="voce@email.com" />
       </div>
 
       <div class="field">
-        <label for="userReason">Motivo da estadia em Uberlândia <small>(ajuda nossa equipe)</small></label>
-        <select id="userReason" required>
-          <option value="">Selecione...</option>
-          <option value="executivo-transferido">Executivo transferido</option>
-          <option value="medico-visitante">Médico visitante</option>
-          <option value="acompanhante-paciente">Acompanhante de paciente</option>
-          <option value="estudante">Estudante</option>
-          <option value="familia-mudanca">Família em mudança</option>
-          <option value="outro">Outro motivo</option>
-        </select>
-      </div>
-
-      <div class="field" id="otherReasonField" style="display:none;">
-        <label for="userReasonOther">Conte mais sobre o motivo</label>
-        <input type="text" id="userReasonOther" placeholder="Ex: Em obras no apartamento, etc" />
+        <label for="userPhoneNumber">WhatsApp ou telefone <small>(escolha o país)</small></label>
+        <div class="phone-wrap">
+          <select id="userPhoneCountry">
+            <option value="+55" selected>Brasil (+55)</option>
+            <option value="+1">Estados Unidos / Canadá (+1)</option>
+            <option value="+351">Portugal (+351)</option>
+            <option value="+34">Espanha (+34)</option>
+            <option value="+44">Reino Unido (+44)</option>
+            <option value="+33">França (+33)</option>
+            <option value="+49">Alemanha (+49)</option>
+            <option value="+39">Itália (+39)</option>
+            <option value="+31">Holanda (+31)</option>
+            <option value="+41">Suíça (+41)</option>
+            <option value="+46">Suécia (+46)</option>
+            <option value="+54">Argentina (+54)</option>
+            <option value="+56">Chile (+56)</option>
+            <option value="+57">Colômbia (+57)</option>
+            <option value="+52">México (+52)</option>
+            <option value="+58">Venezuela (+58)</option>
+            <option value="+591">Bolívia (+591)</option>
+            <option value="+595">Paraguai (+595)</option>
+            <option value="+598">Uruguai (+598)</option>
+            <option value="+972">Israel (+972)</option>
+            <option value="+27">África do Sul (+27)</option>
+            <option value="+61">Austrália (+61)</option>
+            <option value="+64">Nova Zelândia (+64)</option>
+            <option value="+86">China (+86)</option>
+            <option value="+81">Japão (+81)</option>
+            <option value="+82">Coreia do Sul (+82)</option>
+            <option value="+91">Índia (+91)</option>
+            <option value="+971">Emirados Árabes (+971)</option>
+            <option value="+other">Outro país</option>
+          </select>
+          <input type="tel" id="userPhoneNumber" required placeholder="34 9 9999-9999" />
+        </div>
+        <p class="field-hint" id="phoneHint">Brasil: DDD + 9 + número. Use WhatsApp sempre que possível.</p>
       </div>
 
       <label style="display:flex; align-items:flex-start; gap:10px; padding:14px 16px; background:var(--cream); border:1.5px solid var(--gray-200); border-radius:8px; cursor:pointer; margin-bottom:8px;">
@@ -445,8 +530,21 @@
 (function() {
   var state = {
     car: null, dateStart: null, dateEnd: null, days: 0,
+    reason: null,
     point: null, cep: null, address: null, deliveryFee: 0,
-    user: { name: '', email: '', phone: '', reason: '', reasonOther: '', terms: false }
+    user: { name: '', email: '', phoneCountry: '+55', phoneNumber: '', terms: false }
+  };
+
+  // Sugestões inteligentes por categoria (baseado FurnishedFinder)
+  var REASON_SUGGESTIONS = {
+    'trabalho-remoto':       { car: 'popular', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. <strong>HB20</strong> econômico, ideal pra deslocamentos curtos do dia-a-dia.' },
+    'tratamento-medico':     { car: 'cronos',  point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Cronos automático</strong> é mais confortável pra paciente e acompanhante.' },
+    'relocacao-corporativa': { car: 'cronos',  point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Cronos automático</strong> passa imagem profissional pra reuniões.' },
+    'intercambio-pos':       { car: 'popular', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>HB20 econômico</strong> ideal pra orçamento de estudante/residente.' },
+    'reforma-transicao':     { car: 'popular', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>HB20</strong> é econômico pra você não pesar no bolso enquanto não tem o carro próprio.' },
+    'mudanca-familiar':      { car: 'cronos',  point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Cronos</strong> comporta família de 5 pessoas com porta-malas pra bagagem.' },
+    'aposentadoria':         { car: 'cronos',  point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Cronos automático</strong> mais confortável pra viagens longas e dirigir sem cansaço.' },
+    'viagem-longa':          { car: 'cronos',  point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. Cronos tem mais espaço pra bagagem e estradas.' }
   };
   var CARS = {
     popular: { name: 'Hyundai HB20', cat: 'Popular Econômico', base: 3500 },
@@ -589,6 +687,51 @@
     });
   });
 
+  // CHIPS DE MOTIVO + SUGESTÃO INTELIGENTE
+  document.querySelectorAll('.reason-chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.reason-chip').forEach(function(c) { c.classList.remove('selected'); });
+      chip.classList.add('selected');
+      state.reason = chip.dataset.reason;
+      var sug = REASON_SUGGESTIONS[state.reason];
+      if (sug) {
+        $('suggestText').innerHTML = sug.text;
+        $('suggestBox').classList.add('show');
+        // marcar carro sugerido visualmente (badge dourado)
+        document.querySelectorAll('.pick--car').forEach(function(c) {
+          var existing = c.querySelector('.pick__suggested-badge');
+          if (existing) existing.remove();
+        });
+        var suggestedCarCard = document.querySelector('.pick--car[data-car="' + sug.car + '"]');
+        if (suggestedCarCard) {
+          var badge = document.createElement('span');
+          badge.className = 'pick__suggested-badge';
+          badge.textContent = 'Sugerido pra você';
+          suggestedCarCard.appendChild(badge);
+        }
+      }
+    });
+  });
+
+  // Botão "Pré-aplicar sugestão"
+  $('suggestApplyBtn').addEventListener('click', function() {
+    var sug = REASON_SUGGESTIONS[state.reason];
+    if (!sug) return;
+    // aplicar carro
+    var carCard = document.querySelector('.pick--car[data-car="' + sug.car + '"]');
+    if (carCard) {
+      document.querySelectorAll('.pick--car').forEach(function(c) { c.classList.remove('selected'); });
+      carCard.classList.add('selected');
+      state.car = sug.car;
+      updateStep1();
+    }
+    // armazenar ponto sugerido pra aplicar no step 2
+    window._suggestedPoint = sug.point;
+    $('suggestApplyBtn').textContent = 'Sugestão aplicada — continue';
+    $('suggestApplyBtn').disabled = true;
+    $('suggestApplyBtn').style.opacity = '0.6';
+  });
+
   var urlParams = new URLSearchParams(window.location.search);
   var preCar = urlParams.get('carro');
   if (preCar === 'popular' || preCar === 'cronos' || preCar === 'hb20') {
@@ -681,29 +824,55 @@
   $('btnStep3').addEventListener('click', function() {
     if (!state.point) { showStatus('err2', 'Escolha um ponto de entrega ou informe o CEP.'); return; }
     setStep(3);
-    if (window._preReason && $('userReason').value === '') {
-      $('userReason').value = window._preReason;
-    }
   });
 
-  // STEP 3
-  $('userReason').addEventListener('change', function(e) {
-    $('otherReasonField').style.display = e.target.value === 'outro' ? 'block' : 'none';
+  // Quando entra no step 2 a primeira vez, pré-aplica ponto sugerido se houver
+  var _step2EnteredOnce = false;
+  var _origSetStep = setStep;
+  setStep = function(n) {
+    _origSetStep(n);
+    if (n === 2 && !_step2EnteredOnce && window._suggestedPoint) {
+      _step2EnteredOnce = true;
+      setTimeout(function() {
+        if (window._suggestedPoint === 'custom') {
+          // só destaca card "outro endereço", não pré-aplica (precisa CEP)
+          var c = document.querySelector('.pick[data-point="custom"]');
+          if (c) c.style.boxShadow = '0 0 0 3px rgba(245,184,46,0.4)';
+        } else {
+          selectPoint(window._suggestedPoint);
+        }
+      }, 300);
+    }
+  };
+
+  // STEP 3 — Telefone internacional: hint dinâmico
+  $('userPhoneCountry').addEventListener('change', function(e) {
+    var hints = {
+      '+55': 'Brasil: DDD + 9 + número. Use WhatsApp sempre que possível.',
+      '+1':  'EUA/Canadá: area code + 7 dígitos (sem +1).',
+      '+351': 'Portugal: 9 dígitos começando com 9.',
+      '+34':  'Espanha: 9 dígitos.',
+      '+44':  'Reino Unido: número sem o 0 inicial.',
+      '+other': 'Outro país — digite seu número com DDD local.'
+    };
+    $('phoneHint').textContent = hints[e.target.value] || 'Digite seu número internacional sem o código de país.';
   });
+
   $('btnBack3').addEventListener('click', function() { setStep(2); });
 
   $('btnSubmit').addEventListener('click', async function() {
     state.user.name = $('userName').value.trim();
     state.user.email = $('userEmail').value.trim().toLowerCase();
-    state.user.phone = $('userPhone').value.trim();
-    state.user.reason = $('userReason').value;
-    state.user.reasonOther = $('userReasonOther').value.trim();
+    state.user.phoneCountry = $('userPhoneCountry').value;
+    state.user.phoneNumber = $('userPhoneNumber').value.trim();
     state.user.terms = $('userTerms').checked;
 
-    if (!state.user.name || !state.user.email || !state.user.phone) { showStatus('err3', 'Preencha nome, e-mail e WhatsApp.'); return; }
+    if (!state.user.name || !state.user.email || !state.user.phoneNumber) { showStatus('err3', 'Preencha nome, e-mail e telefone.'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.user.email)) { showStatus('err3', 'Digite um e-mail válido.'); return; }
-    if (!state.user.reason) { showStatus('err3', 'Selecione o motivo da estadia.'); return; }
+    if (!state.reason) { showStatus('err3', 'Volte ao passo 1 e selecione o motivo da estadia.'); return; }
     if (!state.user.terms) { showStatus('err3', 'Você precisa aceitar os Termos e Política de Privacidade.'); return; }
+
+    var fullPhone = (state.user.phoneCountry === '+other' ? '' : state.user.phoneCountry + ' ') + state.user.phoneNumber;
 
     var btn = $('btnSubmit');
     btn.disabled = true;
@@ -720,7 +889,7 @@
           source_url: window.location.href,
           name: state.user.name,
           email: state.user.email,
-          phone: state.user.phone,
+          phone: fullPhone,
           city: 'Uberlândia',
           intent: 'locacao-mensal',
           extra: {
@@ -730,7 +899,9 @@
             total: 'R$ ' + calcTotal(),
             delivery: POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : ''),
             delivery_fee: 'R$ ' + state.deliveryFee,
-            reason: state.user.reason + (state.user.reasonOther ? ' — ' + state.user.reasonOther : '')
+            reason: state.reason,
+            phone_country: state.user.phoneCountry,
+            phone_local: state.user.phoneNumber
           }
         })
       });
