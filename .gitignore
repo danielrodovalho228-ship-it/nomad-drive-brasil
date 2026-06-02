@@ -50,3 +50,6 @@ Testes QA/
 Car Sharing/
 Conclusao do Negocio/
 *.pptx
+
+# --- Residuo de filter-branch (limpeza de .pptx em 05/2026) - NUNCA commitar ---
+.git-rewrite/
