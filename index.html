@@ -332,7 +332,7 @@
       <article class="who__card">
         <div class="who__head">
           <div class="who__avatar" style="background:var(--navy);">
-            <img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='EX';" />
+            <img src="images/perfis/executivo.jpg" alt="Executivo profissional" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=68';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -346,7 +346,7 @@
       <article class="who__card">
         <div class="who__head">
           <div class="who__avatar" style="background:var(--sage);">
-            <img src="images/perfis/medico.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='MD';" />
+            <img src="images/perfis/medico.jpg" alt="Profissional de saúde" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=47';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-180 dias</span>
@@ -360,7 +360,7 @@
       <article class="who__card">
         <div class="who__head">
           <div class="who__avatar" style="background:var(--navy-light);">
-            <img src="images/perfis/familia.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='FM';" />
+            <img src="images/perfis/familia.jpg" alt="Família" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=33';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">60-180 dias</span>
@@ -374,7 +374,7 @@
       <article class="who__card">
         <div class="who__head">
           <div class="who__avatar" style="background:var(--gold); color:var(--navy);">
-            <img src="images/perfis/nomade.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='ND';" />
+            <img src="images/perfis/nomade.jpg" alt="Jovem profissional" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=24';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -444,16 +444,16 @@
         </div>
       </article>
 
-      <!-- Próximo modelo: SUV — sem foto (intencional: ainda não compramos o modelo).
-           NÃO adicionar foto stock genérica aqui — pode confundir o cliente.
-           Quando Daniel comprar o SUV real, substituir por:
-           <div class="car__photo"><img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /></div> -->
+      <!-- Próximo modelo: SUV. Foto ilustrativa via Pravatar (avatar circular)
+           ainda não é o carro real. Quando Daniel comprar o SUV, trocar por:
+           <img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /> -->
       <article class="car car--soon">
-        <div class="car__photo" style="position:relative; background:linear-gradient(135deg, #0F1F3D 0%, #1a3055 100%); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; padding:24px; text-align:center; overflow:hidden;">
-          <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:2px; color:rgba(245,184,46,0.95); text-transform:uppercase;">Próximo lançamento</span>
-          <span style="font-family:'Playfair Display',serif; font-size:34px; font-weight:900; color:#fff; line-height:1; letter-spacing:-0.02em;">SUV</span>
-          <span style="font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--gold); line-height:1; letter-spacing:0;">Compacto · 2026</span>
-          <span style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(255,255,255,0.55); margin-top:8px; max-width:200px; line-height:1.4;">Foto e modelo serão divulgados em Set/2026</span>
+        <div class="car__photo" style="position:relative; background:var(--cream); overflow:hidden;">
+          <img src="images/car-suv-preview.jpg" alt="SUV Compacto — modelo ilustrativo"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/nomadesuv2026/600/400';"
+               style="width:100%; height:100%; object-fit:cover; filter:saturate(0.85);" />
+          <span style="position:absolute; top:10px; left:10px; background:rgba(15,61,46,0.92); color:#fff; padding:5px 10px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.6px;">PRÓXIMO LANÇAMENTO</span>
+          <span style="position:absolute; bottom:10px; left:10px; background:var(--gold); color:var(--navy-dark); padding:4px 9px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.4px;">FOTO ILUSTRATIVA · MODELO EM DEFINIÇÃO</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Próximo modelo</div>

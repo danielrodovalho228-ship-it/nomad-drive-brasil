@@ -627,39 +627,42 @@
   document.getElementById('galleryNext').addEventListener('click', function() { show(current + 1); });
   thumbs.forEach(function(t, idx) { t.addEventListener('click', function() { show(idx); }); });
 
-  // ============ Modal de vídeo ============
+  // ============ Modal de vídeo (com null-checks pra não quebrar resto do JS) ============
   var videoTrigger = document.getElementById('videoTrigger');
   var videoModal = document.getElementById('videoModal');
   var videoContainer = document.getElementById('videoModalContainer');
-  function openVideo() {
-    var ytId = videoTrigger.dataset.videoYt;
-    var src = videoTrigger.dataset.videoSrc;
-    if (ytId) {
-      videoContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
-    } else if (src) {
-      // Tenta vídeo local; se falhar (404), JS abaixo troca pelo placeholder honesto
-      videoContainer.innerHTML = '<video id="videoEl" controls autoplay playsinline preload="metadata" src="' + src + '"></video>';
-      var vEl = document.getElementById('videoEl');
-      vEl.addEventListener('error', function() {
-        videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo do test drive em breve</strong><p>Estamos gravando o vídeo do HB20 mostrando exterior, interior e dirigibilidade. Enquanto isso, agende uma visita ao vivo pelo WhatsApp.</p><a href="https://wa.me/5534984064864?text=Quero%20ver%20o%20HB20%20ao%20vivo" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:8px;">Agendar visita ao vivo</a></div>';
-      });
-    } else {
-      videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo em breve</strong><p>Estamos preparando o vídeo do test drive. Agende uma visita ao vivo pelo WhatsApp.</p></div>';
+  var videoModalClose = document.getElementById('videoModalClose');
+  if (videoTrigger && videoModal && videoContainer && videoModalClose) {
+    function openVideo() {
+      var ytId = videoTrigger.dataset.videoYt;
+      var src = videoTrigger.dataset.videoSrc;
+      if (ytId) {
+        videoContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+      } else if (src) {
+        videoContainer.innerHTML = '<video id="videoEl" controls autoplay playsinline preload="metadata" src="' + src + '"></video>';
+        var vEl = document.getElementById('videoEl');
+        vEl.addEventListener('error', function() {
+          videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo do test drive em breve</strong><p>Estamos gravando o vídeo do HB20 mostrando exterior, interior e dirigibilidade. Enquanto isso, agende uma visita ao vivo pelo WhatsApp.</p><a href="https://wa.me/5534984064864?text=Quero%20ver%20o%20HB20%20ao%20vivo" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:8px;">Agendar visita ao vivo</a></div>';
+        });
+      } else {
+        videoContainer.innerHTML = '<div class="video-modal__placeholder"><strong>Vídeo em breve</strong><p>Estamos preparando o vídeo do test drive. Agende uma visita ao vivo pelo WhatsApp.</p></div>';
+      }
+      videoModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
     }
-    videoModal.classList.add('show');
-    document.body.style.overflow = 'hidden';
+    function closeVideo() {
+      videoModal.classList.remove('show');
+      videoContainer.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+    videoTrigger.addEventListener('click', openVideo);
+    videoModalClose.addEventListener('click', closeVideo);
+    videoModal.addEventListener('click', function(e) { if (e.target === videoModal) closeVideo(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && videoModal.classList.contains('show')) closeVideo(); });
   }
-  function closeVideo() {
-    videoModal.classList.remove('show');
-    videoContainer.innerHTML = '';
-    document.body.style.overflow = '';
-  }
-  videoTrigger.addEventListener('click', openVideo);
-  document.getElementById('videoModalClose').addEventListener('click', closeVideo);
-  videoModal.addEventListener('click', function(e) { if (e.target === videoModal) closeVideo(); });
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && videoModal.classList.contains('show')) closeVideo(); });
 
-  // ============ Calendário ============
+  // ============ Calendário (com try/catch defensivo) ============
+  try {
   var calDate = new Date();
   var monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   var today = new Date(); today.setHours(0,0,0,0);
@@ -706,6 +709,7 @@
     renderCalendar();
   });
   renderCalendar();
+  } catch (calErr) { console.error('Calendar render failed:', calErr); }
 
   // ============ Notify form (avise-me) ============
   document.getElementById('notifyForm').addEventListener('submit', function(e) {
