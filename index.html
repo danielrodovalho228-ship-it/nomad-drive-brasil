@@ -107,7 +107,7 @@
   .hero__floating-badge strong { font-size: 22px; display: block; line-height: 1.1; margin-bottom: 3px; color: var(--gold); font-family: 'Playfair Display', serif; font-weight: 900; }
 
   /* FAIXA 5 DIFERENCIAIS (logo após hero) */
-  .strip { background: var(--navy); color: var(--white); padding: 60px 0; }
+  .strip { background: var(--navy); color: var(--white); padding: 42px 0; }
   .strip__row { display: flex; flex-wrap: wrap; gap: 0; align-items: center; justify-content: center; text-align: center; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.6; }
   .strip__item { padding: 4px 18px; position: relative; }
   .strip__item + .strip__item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
@@ -115,10 +115,10 @@
   @media (max-width: 720px) { .strip__row { flex-direction: column; gap: 14px; } .strip__item + .strip__item::before { display: none; } }
 
   /* CATÁLOGO (2 carros + fantasma) */
-  .fleet { padding: 80px 0; background: var(--white); }
-  .head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
-  .head h2 { margin-bottom: 12px; }
-  .head p { color: var(--gray-700); font-size: 17px; line-height: 1.6; }
+  .fleet { padding: 56px 0; background: var(--white); }
+  .head { text-align: center; max-width: 720px; margin: 0 auto 36px; }
+  .head h2 { margin-bottom: 10px; }
+  .head p { color: var(--gray-700); font-size: 16px; line-height: 1.55; }
   .fleet__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .fleet__grid { grid-template-columns: repeat(3, 1fr); } }
   .car { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); transition: all .2s; display: flex; flex-direction: column; }
@@ -146,7 +146,7 @@
   .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
 
   /* PARA QUEM É (grid 2x2 com avatar redondo + foto real) */
-  .who { padding: 80px 0; background: var(--cream); }
+  .who { padding: 56px 0; background: var(--cream); }
   .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
   .who__card { background: var(--white); border-radius: 14px; padding: 28px 26px; border: 1px solid var(--gray-200); display: flex; flex-direction: column; transition: all .2s; }
@@ -164,7 +164,7 @@
   .who__cta:hover::after { transform: translateX(4px); }
 
   /* COMO FUNCIONA */
-  .how { padding: 80px 0; background: var(--white); }
+  .how { padding: 56px 0; background: var(--white); }
   .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
   .step { text-align: center; padding: 8px; }
@@ -173,7 +173,7 @@
   .step p { font-size: 13.5px; color: var(--gray-700); line-height: 1.55; font-family: 'Inter', sans-serif; }
 
   /* COMPARAÇÃO LOCALIZA */
-  .compare { padding: 80px 0; background: var(--cream); }
+  .compare { padding: 56px 0; background: var(--cream); }
   .compare__table { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: collapse; background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
   .compare__table th, .compare__table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 14.5px; }
   .compare__table thead th { background: var(--navy); color: var(--white); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; font-family: 'Inter', sans-serif; }
@@ -192,7 +192,7 @@
   .compare__explain strong { color: var(--navy); }
 
   /* SOBRE */
-  .about { padding: 80px 0; background: var(--white); }
+  .about { padding: 56px 0; background: var(--white); }
   .about__grid { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; max-width: 1040px; margin: 0 auto; }
   @media (min-width: 720px) { .about__grid { grid-template-columns: 0.9fr 1.1fr; } }
   .about__photo { aspect-ratio: 4/3; background: var(--navy); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 13.5px; text-align: center; padding: 24px; overflow: hidden; flex-direction: column; }
@@ -206,14 +206,14 @@
   .about__socio a { color: var(--navy); font-weight: 700; text-decoration: underline; }
 
   /* DEPOIMENTOS (placeholder honesto) */
-  .testimonials { padding: 80px 0; background: var(--cream); }
+  .testimonials { padding: 56px 0; background: var(--cream); }
   .testimonials__empty { max-width: 720px; margin: 0 auto; text-align: center; background: var(--white); border-radius: 14px; padding: 44px 32px; border: 1px solid var(--gray-200); }
   .testimonials__empty h3 { font-size: 22px; margin-bottom: 12px; color: var(--navy); }
   .testimonials__empty p { font-size: 15px; color: var(--gray-700); line-height: 1.65; font-family: 'Inter', sans-serif; }
   .testimonials__empty strong { color: var(--navy); }
 
   /* FAQ */
-  .faq { padding: 80px 0; background: var(--white); }
+  .faq { padding: 56px 0; background: var(--white); }
   .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
   .faq__item { background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); overflow: hidden; transition: border-color .15s; }
   .faq__item[open] { border-color: var(--navy); }
@@ -225,13 +225,20 @@
   .faq__answer strong { color: var(--navy); }
 
   /* CTA final */
-  .cta-final { padding: 80px 0; background: var(--navy); color: var(--white); text-align: center; }
+  .cta-final { padding: 56px 0; background: var(--navy); color: var(--white); text-align: center; }
   .cta-final h2 { color: var(--white); margin-bottom: 16px; }
   .cta-final p { color: rgba(255,255,255,0.82); font-size: 17px; max-width: 600px; margin: 0 auto 28px; line-height: 1.6; font-family: 'Inter', sans-serif; }
   .cta-final__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
   /* FAIXA DE SELOS (antes do footer) — sem ícones, círculos com sigla ou logo real */
-  .seals { padding: 48px 0; background: var(--white); border-top: 1px solid var(--gray-200); }
+  .seals { padding: 36px 0; background: var(--white); border-top: 1px solid var(--gray-200); }
+  /* Compactar espaços em branco no mobile */
+  @media (max-width: 720px) {
+    .strip { padding: 32px 0; }
+    .fleet, .who, .how, .compare, .about, .testimonials, .faq, .cta-final { padding: 40px 0 !important; }
+    .seals { padding: 28px 0; }
+    .head { margin-bottom: 28px; }
+  }
   .seals__title { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 28px; font-family: 'Inter', sans-serif; }
   .seals__row { display: flex; flex-wrap: wrap; gap: 28px 36px; align-items: center; justify-content: center; }
   .seal { display: inline-flex; align-items: center; gap: 10px; color: var(--gray-700); font-size: 13.5px; font-weight: 600; font-family: 'Inter', sans-serif; }
