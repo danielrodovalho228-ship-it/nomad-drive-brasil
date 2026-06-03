@@ -341,25 +341,9 @@
       </div>
 
       <div class="field">
-        <label>Qual carro você quer?</label>
-        <div class="picks picks--2col" style="margin-top:8px;">
-          <div class="pick pick--car" data-car="popular">
-            <img src="images/car-hb20-1.jpg" alt="HB20" />
-            <div class="pick--car__body">
-              <div class="pick--car__cat">Popular Econômico</div>
-              <div class="pick--car__name">Hyundai HB20</div>
-              <div class="pick--car__price">A partir de <strong>R$ 3.500/mês</strong> · 3.000 km</div>
-            </div>
-          </div>
-          <div class="pick pick--car" data-car="cronos">
-            <img src="images/car-cronos-1.jpg" alt="Cronos" />
-            <div class="pick--car__body">
-              <div class="pick--car__cat">Sedan Médio Automático</div>
-              <div class="pick--car__name">Fiat Cronos</div>
-              <div class="pick--car__price">A partir de <strong>R$ 4.500/mês</strong> · 3.000 km</div>
-            </div>
-          </div>
-        </div>
+        <label>Qual carro você quer? <small>(carregando frota...)</small></label>
+        <!-- Cards gerados dinamicamente via prices.js — adicione carro novo lá e aparece aqui -->
+        <div class="picks picks--2col" id="carPicksList" style="margin-top:8px;"></div>
       </div>
 
       <div class="summary" id="summary1">
@@ -550,8 +534,41 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
+<script src="prices.js"></script>
 <script>
 (function() {
+  // ===== Renderiza cards de carro dinamicamente do prices.js =====
+  // Adicione um novo carro em prices.js -> aparece automaticamente aqui
+  function renderCarPicks() {
+    if (!window.NOMADE_PRICES || !window.NOMADE_PRICES.cars) return;
+    var list = document.getElementById('carPicksList');
+    var label = list && list.previousElementSibling;
+    if (!list) return;
+    var cars = window.NOMADE_PRICES.cars;
+    var html = Object.keys(cars).map(function(carId) {
+      var car = cars[carId];
+      var basePrice = window.NOMADE_PRICES.planTotal(carId, 'essencial', 30);
+      var baseKm = window.NOMADE_PRICES.planKm(carId, 'essencial', 30);
+      return '<div class="pick pick--car" data-car="' + carId + '">' +
+        '<img src="' + car.photo + '" alt="' + car.name + '" loading="lazy" onerror="this.style.opacity=0.3;" />' +
+        '<div class="pick--car__body">' +
+          '<div class="pick--car__cat">' + car.category + '</div>' +
+          '<div class="pick--car__name">' + car.name + '</div>' +
+          '<div class="pick--car__price">A partir de <strong>R$ ' + basePrice.toLocaleString('pt-BR') + '</strong> · ' + baseKm.toLocaleString('pt-BR') + ' km / 30 dias</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    list.innerHTML = html;
+    if (label) label.innerHTML = 'Qual carro você quer? <small>(' + Object.keys(cars).length + ' modelos disponíveis)</small>';
+    // Aplicar pré-seleção via URL ?carro=X
+    var preCar = new URLSearchParams(window.location.search).get('carro');
+    if (preCar && preCar !== 'hb20') {
+      var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
+      if (card) card.classList.add('selected');
+    }
+  }
+  renderCarPicks();
+
   var state = {
     car: null, dateStart: null, dateEnd: null, days: 0,
     reason: null,
@@ -702,14 +719,20 @@
   });
   $('dateEnd').addEventListener('change', function(e) { state.dateEnd = e.target.value; updateStep1(); });
 
-  document.querySelectorAll('.pick--car').forEach(function(card) {
-    card.addEventListener('click', function() {
-      document.querySelectorAll('.pick--car').forEach(function(c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
-      state.car = card.dataset.car;
-      updateStep1();
+  // Handler de seleção de carro (delegado, funciona com cards dinâmicos)
+  function bindCarPickHandlers() {
+    document.querySelectorAll('.pick--car').forEach(function(card) {
+      if (card.dataset.bound) return;
+      card.dataset.bound = '1';
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.pick--car').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        state.car = card.dataset.car;
+        updateStep1();
+      });
     });
-  });
+  }
+  bindCarPickHandlers();
 
   // DROPDOWN DE MOTIVO + SUGESTÃO INTELIGENTE
   var reasonBtn = $('reasonBtn');

@@ -148,28 +148,23 @@
   .car--soon .car__photo { background: var(--navy-pale); display: flex; align-items: center; justify-content: center; color: var(--navy-light); }
   .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
 
-  /* PARA QUEM É (grid 2x2 com avatar redondo + foto real) */
+  /* PARA QUEM É — estilo Linear/Stripe (border-left + tipografia, sem avatar) */
   .who { padding: 56px 0; background: var(--cream); }
-  .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+  .who__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
-  .who__card { background: var(--white); border-radius: 14px; padding: 28px 26px; border: 1px solid var(--gray-200); display: flex; flex-direction: column; transition: all .2s; }
-  .who__card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--navy-light); }
-  .who__head { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
-  .who__avatar { width: 88px; height: 88px; border-radius: 50%; color: var(--white); font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; letter-spacing: 0; border: 3px solid var(--white); box-shadow: 0 4px 14px rgba(15,61,46,0.15); position: relative; }
-  .who__avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-  .who__avatar--executivo { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); }
-  .who__avatar--medico { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
-  .who__avatar--familia { background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%); }
-  .who__avatar--nomade { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); color: var(--navy-dark); }
-  .who__photo-note { display: inline-block; font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 6px; padding: 2px 8px; background: var(--gray-100); border-radius: 4px; }
-  .who__tag-line { display: flex; flex-direction: column; gap: 4px; }
-  .who__tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: var(--gray-500); text-transform: uppercase; font-family: 'Inter', sans-serif; }
-  .who__title { margin: 0; font-size: 19px; }
-  .who__text { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; margin-bottom: 18px; flex: 1; font-family: 'Inter', sans-serif; }
-  .who__cta { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--navy); text-decoration: none; transition: color .15s; font-family: 'Inter', sans-serif; align-self: flex-start; }
-  .who__cta:hover { color: var(--gold-dark); }
-  .who__cta::after { content: '→'; transition: transform .15s; }
-  .who__cta:hover::after { transform: translateX(4px); }
+  .who__card { background: var(--white); border-radius: 12px; padding: 32px 32px 28px; border: 1px solid rgba(15,61,46,0.06); border-left: 4px solid var(--navy); display: flex; flex-direction: column; transition: all .25s cubic-bezier(0.4, 0, 0.2, 1); }
+  .who__card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(15,61,46,0.08); }
+  .who__card--executivo { border-left-color: var(--navy); }
+  .who__card--medico { border-left-color: var(--sage); }
+  .who__card--familia { border-left-color: var(--navy-light); }
+  .who__card--nomade { border-left-color: var(--gold); }
+  .who__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 14px; }
+  .who__title { font-family: 'Playfair Display', serif; font-size: 23px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
+  .who__text { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--gray-700); line-height: 1.65; margin: 0 0 20px; flex: 1; }
+  .who__cta { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); text-decoration: none; transition: gap .2s, color .2s; align-self: flex-start; }
+  .who__cta:hover { gap: 12px; color: var(--gold-dark); }
+  .who__cta::after { content: '→'; transition: transform .2s; }
+  .who__cta:hover::after { transform: translateX(2px); }
 
   /* COMO FUNCIONA */
   .how { padding: 56px 0; background: var(--white); }
@@ -334,80 +329,54 @@
     </div>
     <div class="who__grid">
 
-      <article class="who__card">
-        <div class="who__head">
-          <div class="who__avatar who__avatar--executivo">
-            <img src="images/perfis/executivo.jpg" alt="Foto do perfil executivo em breve" onerror="this.style.display='none';this.parentNode.textContent='EX';" />
-          </div>
-          <div class="who__tag-line">
-            <span class="who__tag">30-90 dias</span>
-            <h3 class="who__title">Executivos em transferência</h3>
-          </div>
-        </div>
+      <article class="who__card who__card--executivo">
+        <span class="who__tag">30-90 dias · Executivo</span>
+        <h3 class="who__title">Executivos em transferência</h3>
         <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Carro confiável, sem precisar comprar.</p>
         <a href="reservar.html?perfil=executivo" class="who__cta">Solicitar carro</a>
       </article>
 
-      <article class="who__card">
-        <div class="who__head">
-          <div class="who__avatar who__avatar--medico">
-            <img src="images/perfis/medico.jpg" alt="Foto do perfil médico em breve" onerror="this.style.display='none';this.parentNode.textContent='MD';" />
-          </div>
-          <div class="who__tag-line">
-            <span class="who__tag">30-180 dias</span>
-            <h3 class="who__title">Médicos e profissionais de saúde</h3>
-          </div>
-        </div>
+      <article class="who__card who__card--medico">
+        <span class="who__tag">30-180 dias · Saúde</span>
+        <h3 class="who__title">Médicos e profissionais de saúde</h3>
         <p class="who__text">Plantões em hospitais de Uberlândia (HC-UFU, Santa Marta, Madrecor), consultorias temporárias, residências médicas.</p>
         <a href="reservar.html?perfil=medico" class="who__cta">Solicitar carro</a>
       </article>
 
-      <article class="who__card">
-        <div class="who__head">
-          <div class="who__avatar who__avatar--familia">
-            <img src="images/perfis/familia.jpg" alt="Foto do perfil família em breve" onerror="this.style.display='none';this.parentNode.textContent='FM';" />
-          </div>
-          <div class="who__tag-line">
-            <span class="who__tag">60-180 dias</span>
-            <h3 class="who__title">Famílias em mudança</h3>
-          </div>
-        </div>
+      <article class="who__card who__card--familia">
+        <span class="who__tag">60-180 dias · Família</span>
+        <h3 class="who__title">Famílias em mudança</h3>
         <p class="who__text">Mudança de casa, reforma, espera por veículo próprio, transição de carreira. Espaço para 5, sem compromisso longo.</p>
         <a href="reservar.html?perfil=familia" class="who__cta">Solicitar carro</a>
       </article>
 
-      <article class="who__card">
-        <div class="who__head">
-          <div class="who__avatar who__avatar--nomade">
-            <img src="images/perfis/nomade.jpg" alt="Foto do perfil nômade em breve" onerror="this.style.display='none';this.parentNode.textContent='ND';" />
-          </div>
-          <div class="who__tag-line">
-            <span class="who__tag">30-90 dias</span>
-            <h3 class="who__title">Nômades digitais e estudantes</h3>
-          </div>
-        </div>
+      <article class="who__card who__card--nomade">
+        <span class="who__tag">30-90 dias · Nômade</span>
+        <h3 class="who__title">Nômades digitais e estudantes</h3>
         <p class="who__text">Temporadas profissionais em Uberlândia, trabalho remoto, especialização universitária. Pague só pelo tempo que vai usar.</p>
         <a href="reservar.html?perfil=nomade" class="who__cta">Solicitar carro</a>
       </article>
 
     </div>
 
-    <!-- Bloco: Para Quem NÃO É (filtro de cliente inadequado) -->
-    <div style="max-width: 880px; margin: 36px auto 0; background: var(--white); border: 1.5px solid #C77D2B; border-left: 4px solid #C77D2B; border-radius: 10px; padding: 22px 26px;">
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #C77D2B;"></span>
-        <h3 style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.8px; color: #C77D2B; text-transform: uppercase; margin: 0;">Quem NÃO atendemos</h3>
+    <!-- Bloco: Para Quem NÃO É (estilo Linear sutil) -->
+    <details style="max-width: 880px; margin: 36px auto 0; background: var(--white); border: 1px solid rgba(15,61,46,0.06); border-left: 3px solid var(--gray-500); border-radius: 10px; padding: 0;">
+      <summary style="padding: 18px 26px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+        <span><span style="font-size: 11px; color: var(--gray-500); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; margin-right: 8px;">Importante</span>Quem não atendemos</span>
+        <span style="font-size: 20px; color: var(--gray-500); font-weight: 300;">+</span>
+      </summary>
+      <div style="padding: 0 26px 22px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-700); line-height: 1.65;">
+        <p style="margin: 0 0 10px;">A Nomade Drive opera no nicho de profissionais em transição com uso particular. <strong style="color: var(--navy);">Não atendemos:</strong></p>
+        <ul style="margin: 0 0 14px 18px; padding: 0;">
+          <li>Transporte por aplicativo (Uber, 99, Cabify, InDriver, BlaBlaCar)</li>
+          <li>Entrega por aplicativo (iFood, Rappi, Loggi, James, Uber Eats, Lalamove)</li>
+          <li>Transporte escolar, fretamento ou mototáxi</li>
+          <li>Sublocação a terceiros não-cadastrados no contrato</li>
+          <li>Atividades comerciais não declaradas formalmente</li>
+        </ul>
+        <p style="margin: 0; font-size: 13px; color: var(--gray-500);">Para motoristas de aplicativo, plataformas como <strong>Kovi</strong> e <strong>Yallo</strong> são especializadas no perfil de uso intenso.</p>
       </div>
-      <p style="font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--gray-900); line-height: 1.6; margin: 0 0 12px;">A Nomade Drive opera no nicho de profissionais em transição com uso particular do veículo. <strong>Não atendemos:</strong></p>
-      <ul style="font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-700); line-height: 1.7; margin: 0 0 14px 18px; padding: 0;">
-        <li><strong>Transporte por aplicativo</strong>: Uber, 99, Cabify, InDriver, BlaBlaCar</li>
-        <li><strong>Entrega por aplicativo</strong>: iFood, Rappi, Loggi, James, Uber Eats, Lalamove</li>
-        <li>Transporte escolar, fretamento ou mototáxi (qualquer modalidade remunerada)</li>
-        <li>Sublocação a terceiros não-cadastrados no contrato</li>
-        <li>Atividades comerciais não declaradas formalmente à Nomade Drive</li>
-      </ul>
-      <p style="font-family: 'Inter', sans-serif; font-size: 13px; color: var(--gray-700); line-height: 1.55; margin: 0; font-style: italic;">Restrição contratual com rescisão imediata e multa em caso de descumprimento. Para motoristas de aplicativo, plataformas como <strong>Kovi</strong> e <strong>Yallo</strong> são especializadas e mais adequadas ao perfil de uso intenso.</p>
-    </div>
+    </details>
   </div>
 </section>
 
