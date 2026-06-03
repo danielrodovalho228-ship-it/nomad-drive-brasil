@@ -440,8 +440,11 @@
 
       <!-- Próximo modelo -->
       <article class="car car--soon">
-        <div class="car__photo">
-          <div style="font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:var(--navy-light); letter-spacing:-0.02em;">Set/2026</div>
+        <div class="car__photo" style="position:relative;">
+          <img src="images/car-suv-preview.jpg" alt="SUV Compacto — modelo similar (ilustrativo)" loading="lazy"
+               onerror="this.style.display='none';this.parentNode.querySelector('.car__photo-fallback').style.display='flex';" />
+          <div class="car__photo-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:var(--navy-light); letter-spacing:-0.02em;">Set/2026</div>
+          <span style="position:absolute; top:10px; left:10px; background:rgba(15,31,61,0.85); color:#fff; padding:4px 9px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.5px;">ILUSTRATIVO · MODELO EM DEFINIÇÃO</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Próximo modelo</div>
@@ -450,8 +453,8 @@
             <span class="car__spec">Chegando em Set/2026</span>
           </div>
           <div class="car__price">
-            <small class="car__price-from">Preview</small>
-            <span class="car__price-val">A definir</span>
+            <small class="car__price-from">Preview · preço estimado</small>
+            <span class="car__price-val">R$ 5.500<small> /mês</small></span>
           </div>
           <a href="https://wa.me/5534984064864?text=Quero%20entrar%20na%20fila%20do%20SUV%20Nomade%20Drive" target="_blank" rel="noopener" class="btn btn--ghost-navy btn--block car__cta">Avise-me quando chegar</a>
         </div>
