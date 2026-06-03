@@ -155,8 +155,13 @@
   .who__card { background: var(--white); border-radius: 14px; padding: 28px 26px; border: 1px solid var(--gray-200); display: flex; flex-direction: column; transition: all .2s; }
   .who__card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--navy-light); }
   .who__head { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
-  .who__avatar { width: 88px; height: 88px; border-radius: 50%; background: var(--navy-pale); color: var(--navy); font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; letter-spacing: 0; border: 3px solid var(--white); box-shadow: 0 4px 14px rgba(15,31,61,0.15); }
+  .who__avatar { width: 88px; height: 88px; border-radius: 50%; color: var(--white); font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; letter-spacing: 0; border: 3px solid var(--white); box-shadow: 0 4px 14px rgba(15,61,46,0.15); position: relative; }
   .who__avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .who__avatar--executivo { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); }
+  .who__avatar--medico { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
+  .who__avatar--familia { background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%); }
+  .who__avatar--nomade { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); color: var(--navy-dark); }
+  .who__photo-note { display: inline-block; font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 700; color: var(--gray-500); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 6px; padding: 2px 8px; background: var(--gray-100); border-radius: 4px; }
   .who__tag-line { display: flex; flex-direction: column; gap: 4px; }
   .who__tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: var(--gray-500); text-transform: uppercase; font-family: 'Inter', sans-serif; }
   .who__title { margin: 0; font-size: 19px; }
@@ -331,8 +336,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar" style="background:var(--navy);">
-            <img src="images/perfis/executivo.jpg" alt="Executivo profissional" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=68';" />
+          <div class="who__avatar who__avatar--executivo">
+            <img src="images/perfis/executivo.jpg" alt="Foto do perfil executivo em breve" onerror="this.style.display='none';this.parentNode.textContent='EX';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -345,8 +350,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar" style="background:var(--sage);">
-            <img src="images/perfis/medico.jpg" alt="Profissional de saúde" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=47';" />
+          <div class="who__avatar who__avatar--medico">
+            <img src="images/perfis/medico.jpg" alt="Foto do perfil médico em breve" onerror="this.style.display='none';this.parentNode.textContent='MD';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-180 dias</span>
@@ -359,8 +364,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar" style="background:var(--navy-light);">
-            <img src="images/perfis/familia.jpg" alt="Família" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=33';" />
+          <div class="who__avatar who__avatar--familia">
+            <img src="images/perfis/familia.jpg" alt="Foto do perfil família em breve" onerror="this.style.display='none';this.parentNode.textContent='FM';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">60-180 dias</span>
@@ -373,8 +378,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar" style="background:var(--gold); color:var(--navy);">
-            <img src="images/perfis/nomade.jpg" alt="Jovem profissional" onerror="this.onerror=null;this.src='https://i.pravatar.cc/200?img=24';" />
+          <div class="who__avatar who__avatar--nomade">
+            <img src="images/perfis/nomade.jpg" alt="Foto do perfil nômade em breve" onerror="this.style.display='none';this.parentNode.textContent='ND';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -444,16 +449,16 @@
         </div>
       </article>
 
-      <!-- Próximo modelo: SUV. Foto ilustrativa via Pravatar (avatar circular)
-           ainda não é o carro real. Quando Daniel comprar o SUV, trocar por:
-           <img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /> -->
+      <!-- Próximo modelo: SUV — placeholder honesto até comprar o veículo real.
+           NÃO usar foto stock random — pode mostrar mesa/laptop/qualquer coisa.
+           Quando Daniel comprar SUV, basta substituir o <div> abaixo por:
+           <div class="car__photo"><img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /></div> -->
       <article class="car car--soon">
-        <div class="car__photo" style="position:relative; background:var(--cream); overflow:hidden;">
-          <img src="images/car-suv-preview.jpg" alt="SUV Compacto — modelo ilustrativo"
-               onerror="this.onerror=null;this.src='https://picsum.photos/seed/nomadesuv2026/600/400';"
-               style="width:100%; height:100%; object-fit:cover; filter:saturate(0.85);" />
-          <span style="position:absolute; top:10px; left:10px; background:rgba(15,61,46,0.92); color:#fff; padding:5px 10px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.6px;">PRÓXIMO LANÇAMENTO</span>
-          <span style="position:absolute; bottom:10px; left:10px; background:var(--gold); color:var(--navy-dark); padding:4px 9px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.4px;">FOTO ILUSTRATIVA · MODELO EM DEFINIÇÃO</span>
+        <div class="car__photo" style="position:relative; background:linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; padding:24px; text-align:center; overflow:hidden;">
+          <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:2px; color:var(--gold); text-transform:uppercase;">Próximo lançamento</span>
+          <span style="font-family:'Playfair Display',serif; font-size:42px; font-weight:900; color:#fff; line-height:1; letter-spacing:-0.02em;">SUV</span>
+          <span style="font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--gold); line-height:1;">Compacto · 2026</span>
+          <span style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(255,255,255,0.6); margin-top:8px; max-width:200px; line-height:1.4;">Foto e modelo serão divulgados em Set/2026</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Próximo modelo</div>
