@@ -126,25 +126,52 @@
   .spec__label { font-size: 12px; color: var(--gray-500); display: block; text-transform: uppercase; letter-spacing: 0.3px; }
   .spec__value { font-size: 14.5px; font-weight: 700; color: var(--black); display: block; margin-top: 2px; }
 
-  /* Tabela de preços */
-  .pricing { padding: 56px 0; }
-  .pricing__head { text-align: center; max-width: 620px; margin: 0 auto 36px; }
+  /* Tabela de preços — 3 planos com seletor período */
+  .pricing { padding: 56px 0; background: var(--gray-50); }
+  .pricing__head { text-align: center; max-width: 680px; margin: 0 auto 28px; }
   .pricing__head h2 { margin-bottom: 10px; }
   .pricing__head p { color: var(--gray-700); font-size: 16px; }
-  .pricing__grid { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
-  @media (min-width: 640px) { .pricing__grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 920px) { .pricing__grid { grid-template-columns: repeat(4, 1fr); } }
-  .price-card { background: var(--white); border: 2px solid var(--gray-200); border-radius: 14px; padding: 22px; text-align: center; transition: all .15s; position: relative; overflow: hidden; }
-  .price-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: var(--shadow); }
-  .price-card--featured { border-color: var(--green); background: linear-gradient(180deg, var(--white) 0%, var(--green-pale) 100%); }
-  .price-card--featured::before { content: 'MAIS ECONÔMICO'; position: absolute; top: 10px; right: 10px; background: var(--green); color: var(--white); padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
-  .price-card__period { font-size: 15px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
-  .price-card__val { font-size: 30px; font-weight: 900; color: var(--black); line-height: 1; margin-bottom: 4px; }
-  .price-card__val small { font-size: 14px; color: var(--gray-500); font-weight: 600; }
-  .price-card__discount { font-size: 11.5px; color: var(--green-dark); font-weight: 700; margin-bottom: 12px; height: 16px; }
-  .price-card__total { font-size: 12.5px; color: var(--gray-700); padding-top: 12px; border-top: 1px solid var(--gray-100); }
-  .price-card__total strong { color: var(--black); font-weight: 700; }
-  .pricing__note { text-align: center; max-width: 620px; margin: 24px auto 0; font-size: 13px; color: var(--gray-500); }
+
+  /* Banner Liberdade Total de Km */
+  .total-km-banner { max-width: 880px; margin: 0 auto 36px; background: var(--sage-pale); border: 2px solid var(--gold); border-radius: 14px; padding: 24px 28px; position: relative; }
+  .total-km-banner__tag { display: inline-block; background: var(--gold); color: var(--green-darker); font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; text-transform: uppercase; }
+  .total-km-banner h3 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: var(--green-darker); margin-bottom: 10px; }
+  .total-km-banner p { font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--gray-900); line-height: 1.65; margin: 0; }
+  .total-km-banner p strong { color: var(--green-darker); font-weight: 700; }
+
+  /* Seletor de período */
+  .period-selector { display: flex; gap: 6px; max-width: 520px; margin: 0 auto 28px; background: var(--white); padding: 5px; border-radius: 999px; border: 1.5px solid var(--gray-200); }
+  .period-selector__btn { flex: 1; padding: 12px 8px; border: 0; background: transparent; border-radius: 999px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; color: var(--gray-700); transition: all .15s; }
+  .period-selector__btn:hover { background: var(--gray-100); color: var(--green); }
+  .period-selector__btn.active { background: var(--green); color: var(--white); }
+  .period-selector__btn small { display: block; font-size: 11px; font-weight: 600; opacity: 0.85; margin-top: 1px; }
+
+  /* Grid de 3 planos */
+  .plan-grid { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 720px) { .plan-grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+  .plan-card { background: var(--white); border: 2px solid var(--gray-200); border-radius: 14px; padding: 28px 22px 24px; position: relative; display: flex; flex-direction: column; transition: all .15s; }
+  .plan-card:hover { border-color: var(--green); box-shadow: var(--shadow); transform: translateY(-2px); }
+  .plan-card--featured { border-color: var(--gold); box-shadow: 0 8px 24px rgba(212,168,83,0.18); transform: scale(1.03); }
+  @media (max-width: 720px) { .plan-card--featured { transform: scale(1); } }
+  .plan-card--featured::before { content: 'MAIS ESCOLHIDO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--green-darker); padding: 5px 14px; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.8px; white-space: nowrap; }
+  .plan-card__name { font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 800; letter-spacing: 1.5px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; }
+  .plan-card__km { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--gray-700); margin-bottom: 18px; }
+  .plan-card__km strong { font-family: 'Inter', sans-serif; color: var(--green-darker); font-weight: 800; font-size: 14px; }
+  .plan-card__price { padding: 14px 0 16px; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 16px; }
+  .plan-card__total { font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--gray-500); display: block; margin-bottom: 4px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+  .plan-card__total-val { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 900; color: var(--green-darker); line-height: 1; }
+  .plan-card__total-val small { font-size: 14px; color: var(--gray-500); font-weight: 600; }
+  .plan-card__equiv { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--gray-700); margin-top: 6px; }
+  .plan-card__equiv strong { color: var(--gray-900); font-weight: 700; }
+  .plan-card__features { list-style: none; padding: 0; margin: 0 0 18px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--gray-700); flex: 1; }
+  .plan-card__features li { padding: 4px 0 4px 18px; position: relative; line-height: 1.5; }
+  .plan-card__features li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+  .plan-card__cta { width: 100%; padding: 12px 18px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; text-decoration: none; text-align: center; border: 1.5px solid var(--green); color: var(--green); background: var(--white); transition: all .15s; display: inline-block; cursor: pointer; }
+  .plan-card__cta:hover { background: var(--green); color: var(--white); }
+  .plan-card--featured .plan-card__cta { background: var(--gold); border-color: var(--gold); color: var(--green-darker); }
+  .plan-card--featured .plan-card__cta:hover { background: var(--gold-dark); border-color: var(--gold-dark); color: var(--white); }
+
+  .pricing__note { text-align: center; max-width: 780px; margin: 24px auto 0; font-size: 13px; color: var(--gray-500); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
   /* Calendário disponibilidade */
   .availability { padding: 56px 0; background: var(--gray-50); }
@@ -219,7 +246,7 @@
 </head>
 <body>
 
-<div class="preview-banner">🚧 Site em pré-lançamento — feedback bem-vindo</div>
+<!-- banner pré-lançamento removido -->
 
 <header class="nav">
   <div class="wrap nav__row">
@@ -284,14 +311,14 @@
         <small class="car-info__price-from">A partir de</small>
         <div>
           <span class="car-info__price-val">R$ 3.500</span>
-          <span class="car-info__price-period">/mês</span>
+          <span class="car-info__price-period">/30 dias</span>
         </div>
-        <p class="car-info__price-detail"><strong>3.000 km/mês inclusos</strong> · seguro, manutenção, IPVA, licenciamento, assistência 24h. Sem letra miúda.</p>
+        <p class="car-info__price-detail"><strong>3 planos disponíveis</strong> · Limite Total do Período · seguro, manutenção, IPVA, licenciamento, assistência 24h inclusos.</p>
       </div>
 
       <div class="car-info__cta">
-        <a href="../reservar.html?carro=hb20" class="btn btn--primary btn--block">Solicite seu carro</a>
-        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20alugar%20o%20HB20%20da%20NomadeDrive" target="_blank" rel="noopener" class="btn btn--ghost-black btn--block">Falar pelo WhatsApp</a>
+        <a href="#precos" class="btn btn--primary btn--block">Ver os 3 planos</a>
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20alugar%20o%20HB20%20da%20Nomade%20Drive" target="_blank" rel="noopener" class="btn btn--ghost-black btn--block">Falar pelo WhatsApp</a>
       </div>
     </div>
 
@@ -346,53 +373,101 @@
   </div>
 </section>
 
-<!-- TABELA DE PREÇOS POR PERÍODO -->
+<!-- PREÇOS — 3 PLANOS COM LIMITE TOTAL DO PERÍODO -->
 <section class="pricing" id="precos">
   <div class="wrap">
     <div class="pricing__head">
-      <h2>Quanto mais tempo, melhor o preço</h2>
-      <p>Desconto progressivo conforme você reserva mais dias. Sem letra miúda, sem reajuste.</p>
+      <h2>3 planos. Limite Total do Período. Você escolhe.</h2>
+      <p>Sem cobrança mensal isolada — o limite de km vale pro contrato inteiro. Distribua como quiser.</p>
     </div>
-    <div class="pricing__grid">
-      <div class="price-card">
-        <div class="price-card__period">30 dias</div>
-        <div class="price-card__val">R$ 3.500<small>/mês</small></div>
-        <div class="price-card__discount">&nbsp;</div>
-        <div class="price-card__total">Total: <strong>R$ 3.500</strong></div>
+
+    <!-- Banner Liberdade Total Km (Inovação central) -->
+    <div class="total-km-banner">
+      <span class="total-km-banner__tag">Inovação Nomade Drive</span>
+      <h3>Liberdade Total de Quilometragem</h3>
+      <p>Diferente das locadoras tradicionais, você <strong>não tem limite mensal estrito</strong>. Contratou 12.000 km para 3 meses? Use 6.000 no primeiro mês, 1.000 no segundo e 5.000 no terceiro. <strong>Sem multa, sem excedente, sem letra miúda.</strong> O que importa é o total no período.</p>
+    </div>
+
+    <!-- Seletor de período -->
+    <div class="period-selector" role="tablist" aria-label="Período do plano">
+      <button type="button" class="period-selector__btn" data-days="30" role="tab">30 dias</button>
+      <button type="button" class="period-selector__btn" data-days="60" role="tab">60 dias <small>−5%</small></button>
+      <button type="button" class="period-selector__btn active" data-days="90" role="tab">90 dias <small>−10%</small></button>
+      <button type="button" class="period-selector__btn" data-days="180" role="tab">180 dias <small>−15%</small></button>
+    </div>
+
+    <!-- 3 cards de plano -->
+    <div class="plan-grid">
+      <div class="plan-card" data-plan="essencial">
+        <div class="plan-card__name">Essencial</div>
+        <div class="plan-card__km">Limite: <strong data-km="essencial">9.000 km</strong> no período</div>
+        <div class="plan-card__price">
+          <span class="plan-card__total">Total do período</span>
+          <span class="plan-card__total-val" data-price="essencial">R$ 9.450</span>
+          <div class="plan-card__equiv">Equivalente a <strong data-monthly="essencial">R$ 3.150/mês</strong></div>
+        </div>
+        <ul class="plan-card__features">
+          <li>Seguro completo</li>
+          <li>Manutenção programada (buscamos e devolvemos)</li>
+          <li>IPVA + licenciamento</li>
+          <li>Assistência 24h</li>
+          <li>Telemetria embarcada</li>
+          <li>Devolução flexível sem multa</li>
+        </ul>
+        <a href="../reservar.html?carro=popular&plano=essencial&dias=90" class="plan-card__cta">Solicitar Essencial</a>
       </div>
-      <div class="price-card">
-        <div class="price-card__period">60 dias</div>
-        <div class="price-card__val">R$ 3.325<small>/mês</small></div>
-        <div class="price-card__discount">5% desconto</div>
-        <div class="price-card__total">Total: <strong>R$ 6.650</strong></div>
+
+      <div class="plan-card plan-card--featured" data-plan="estendido">
+        <div class="plan-card__name">Estendido</div>
+        <div class="plan-card__km">Limite: <strong data-km="estendido">12.000 km</strong> no período</div>
+        <div class="plan-card__price">
+          <span class="plan-card__total">Total do período</span>
+          <span class="plan-card__total-val" data-price="estendido">R$ 9.990</span>
+          <div class="plan-card__equiv">Equivalente a <strong data-monthly="estendido">R$ 3.330/mês</strong></div>
+        </div>
+        <ul class="plan-card__features">
+          <li>Tudo do Essencial</li>
+          <li><strong>+3.000 km</strong> extras no período</li>
+          <li>Folga real pra viagens longas</li>
+          <li>Sem stress de excedente</li>
+        </ul>
+        <a href="../reservar.html?carro=popular&plano=estendido&dias=90" class="plan-card__cta">Solicitar Estendido</a>
       </div>
-      <div class="price-card price-card--featured">
-        <div class="price-card__period">90 dias</div>
-        <div class="price-card__val">R$ 3.150<small>/mês</small></div>
-        <div class="price-card__discount">10% desconto</div>
-        <div class="price-card__total">Total: <strong>R$ 9.450</strong></div>
-      </div>
-      <div class="price-card">
-        <div class="price-card__period">180 dias</div>
-        <div class="price-card__val">R$ 2.975<small>/mês</small></div>
-        <div class="price-card__discount">15% desconto</div>
-        <div class="price-card__total">Total: <strong>R$ 17.850</strong></div>
+
+      <div class="plan-card" data-plan="semLimite">
+        <div class="plan-card__name">Sem Limite</div>
+        <div class="plan-card__km">Limite: <strong data-km="semLimite">15.000 km</strong> no período</div>
+        <div class="plan-card__price">
+          <span class="plan-card__total">Total do período</span>
+          <span class="plan-card__total-val" data-price="semLimite">R$ 10.530</span>
+          <div class="plan-card__equiv">Equivalente a <strong data-monthly="semLimite">R$ 3.510/mês</strong></div>
+        </div>
+        <ul class="plan-card__features">
+          <li>Tudo do Estendido</li>
+          <li><strong>+3.000 km</strong> extras (total 15.000 km)</li>
+          <li>Pra quem roda Uberlândia → BH semanal</li>
+          <li>Cobertura sem preocupação</li>
+        </ul>
+        <a href="../reservar.html?carro=popular&plano=semLimite&dias=90" class="plan-card__cta">Solicitar Sem Limite</a>
       </div>
     </div>
-    <p class="pricing__note">Todos os preços incluem 3.000 km/mês. Excedente: R$ 0,80/km. Pagamento em PIX, cartão ou boleto CNPJ. Sem cobrança surpresa no checkout.</p>
+
+    <p class="pricing__note">
+      Km excedente do plano contratado: <strong>R$ 0,80/km</strong>. Em caso de devolução antecipada, o limite é recalculado proporcionalmente. Pagamento em PIX, cartão de crédito ou boleto CNPJ.
+    </p>
 
     <!-- Upsell Zero Caução -->
-    <div style="max-width: 780px; margin: 28px auto 0; background: var(--white); border: 2px dashed var(--green); border-radius: 14px; padding: 22px 24px;">
+    <div style="max-width: 880px; margin: 28px auto 0; background: var(--white); border: 1.5px dashed var(--gold); border-radius: 14px; padding: 22px 26px;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; flex-wrap: wrap;">
         <div style="flex: 1; min-width: 260px;">
-          <h3 style="font-size: 17px; font-weight: 800; color: var(--black); margin-bottom: 8px;">Upgrade opcional: Zero Caução</h3>
-          <p style="font-size: 14px; color: var(--gray-700); line-height: 1.6; margin: 0;">Por padrão, bloqueamos <strong>R$ 1.500</strong> no seu cartão como caução (sem cobrança, só pré-autorização). Quer eliminar essa caução?</p>
-          <p style="font-size: 14px; color: var(--gray-700); line-height: 1.6; margin-top: 10px;">Adicione Zero Caução por <strong>+R$ 290/mês</strong>. Cobertura completa sem franquia em qualquer sinistro até R$ 5.000. Único opcional do nosso modelo, sem adicionais escondidos.</p>
+          <div style="font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 6px;">Upgrade opcional</div>
+          <h3 style="font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 800; color: var(--green-darker); margin-bottom: 8px;">Zero Caução · sem bloquear seu cartão</h3>
+          <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-700); line-height: 1.6; margin: 0;">Por padrão bloqueamos <strong>R$ 1.500</strong> no seu cartão como caução (pré-autorização, não vira cobrança). Quer eliminar? Adicione Zero Caução: cobertura completa sem franquia até R$ 5.000.</p>
         </div>
-        <div style="text-align: right; min-width: 100px;">
-          <div style="font-size: 11.5px; color: var(--gray-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">Adicione</div>
-          <div style="font-size: 26px; font-weight: 900; color: var(--green-dark); line-height: 1;">+R$ 290</div>
-          <div style="font-size: 12px; color: var(--gray-500); font-weight: 600;">/mês</div>
+        <div style="text-align: right; min-width: 110px;">
+          <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: var(--gray-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Adicione</div>
+          <div style="font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 900; color: var(--gold-dark); line-height: 1;">+R$ 290</div>
+          <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); font-weight: 600;">/mês</div>
         </div>
       </div>
     </div>
@@ -497,8 +572,47 @@
   </div>
 </footer>
 
+<script src="../prices.js"></script>
 <script>
 (function() {
+  // ============ Seletor de plano + período ============
+  var CAR_ID = 'popular';
+  var currentDays = 90; // default destacado
+
+  function updatePlanPrices(days) {
+    if (!window.NOMADE_PRICES) return;
+    currentDays = days;
+    ['essencial', 'estendido', 'semLimite'].forEach(function(planId) {
+      var price = window.NOMADE_PRICES.planTotal(CAR_ID, planId, days);
+      var km = window.NOMADE_PRICES.planKm(CAR_ID, planId, days);
+      var monthly = window.NOMADE_PRICES.planMonthly(CAR_ID, planId, days);
+
+      var priceEl = document.querySelector('[data-price="' + planId + '"]');
+      var kmEl = document.querySelector('[data-km="' + planId + '"]');
+      var monthlyEl = document.querySelector('[data-monthly="' + planId + '"]');
+
+      if (priceEl) priceEl.textContent = window.NOMADE_PRICES.formatBRL(price);
+      if (kmEl) kmEl.textContent = window.NOMADE_PRICES.formatKm(km);
+      if (monthlyEl) monthlyEl.textContent = window.NOMADE_PRICES.formatBRL(monthly) + '/mês';
+
+      // Atualizar links CTA com dias
+      var ctaEl = document.querySelector('.plan-card[data-plan="' + planId + '"] .plan-card__cta');
+      if (ctaEl) ctaEl.href = '../reservar.html?carro=' + CAR_ID + '&plano=' + planId + '&dias=' + days;
+    });
+  }
+
+  document.querySelectorAll('.period-selector__btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.period-selector__btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var days = parseInt(btn.dataset.days, 10);
+      updatePlanPrices(days);
+    });
+  });
+
+  // Inicializa com período padrão (90 dias = destacado)
+  updatePlanPrices(90);
+
   // ============ Galeria ============
   var imgs = ['../images/car-hb20-1.jpg', '../images/car-hb20-2.jpg', '../images/car-hb20-3.jpg'];
   var current = 0;
