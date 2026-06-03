@@ -175,15 +175,29 @@
   .cep-wrap { display: grid; gap: 10px; grid-template-columns: 140px 1fr; align-items: end; margin-bottom: 8px; }
   @media (max-width: 480px) { .cep-wrap { grid-template-columns: 1fr; } }
 
-  /* Chips de motivo (estilo FurnishedFinder) */
-  .reasons { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); margin-top: 8px; }
-  @media (min-width: 720px) { .reasons { grid-template-columns: repeat(4, 1fr); } }
-  .reason-chip { background: var(--white); border: 2px solid var(--gray-200); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all .15s; text-align: left; }
-  .reason-chip:hover { border-color: var(--navy); background: var(--navy-pale); transform: translateY(-1px); }
-  .reason-chip.selected { border-color: var(--navy); background: var(--navy); color: var(--white); }
-  .reason-chip.selected .reason-chip__sub { color: rgba(255,255,255,0.75); }
-  .reason-chip strong { display: block; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; line-height: 1.25; margin-bottom: 3px; }
-  .reason-chip__sub { display: block; font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--gray-500); line-height: 1.4; }
+  /* Dropdown de motivo (compacto, colapsável) */
+  .reason-select { position: relative; margin-top: 8px; }
+  .reason-select__btn { width: 100%; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 13px 16px; cursor: pointer; transition: all .15s; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--navy); font-weight: 500; }
+  .reason-select__btn:hover { border-color: var(--navy); }
+  .reason-select__btn.selected { border-color: var(--navy); font-weight: 700; }
+  .reason-select__btn[aria-expanded="true"] { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,31,61,0.1); }
+  .reason-select__caret { color: var(--gray-500); font-size: 18px; line-height: 1; transition: transform .2s; flex-shrink: 0; }
+  .reason-select__btn[aria-expanded="true"] .reason-select__caret { transform: rotate(180deg); }
+  .reason-select__placeholder { color: var(--gray-500); font-weight: 500; }
+  .reason-select__list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 8px; box-shadow: var(--shadow-lg); z-index: 30; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .2s, opacity .15s; }
+  .reason-select__list.open { max-height: 420px; opacity: 1; overflow-y: auto; padding: 6px 0; }
+  .reason-select__option { padding: 10px 16px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--navy); transition: background .12s; border-left: 3px solid transparent; }
+  .reason-select__option:hover { background: var(--navy-pale); border-left-color: var(--gold); }
+  .reason-select__option.selected { background: var(--navy-pale); border-left-color: var(--navy); font-weight: 600; }
+  .reason-select__option-title { display: block; font-weight: 600; line-height: 1.3; }
+  .reason-select__option-sub { display: block; font-size: 12px; color: var(--gray-500); margin-top: 2px; line-height: 1.35; }
+  .reason-select__option:hover .reason-select__option-sub { color: var(--gray-700); }
+
+  /* Campo "outro motivo" (mostra se selecionar Outro) */
+  .reason-other { display: none; margin-top: 12px; }
+  .reason-other.show { display: block; }
+  .reason-other textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--navy); resize: vertical; min-height: 64px; transition: border-color .15s, box-shadow .15s; }
+  .reason-other textarea:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(15,31,61,0.1); }
 
   /* Banner de sugestão (aparece após selecionar motivo) */
   .suggest { display: none; margin-top: 14px; padding: 16px 18px; background: var(--gold-pale); border-left: 3px solid var(--gold); border-radius: 6px; }
@@ -265,40 +279,55 @@
 
       <div class="field">
         <label>Por que está vindo para Uberlândia? <small>(personalizamos a sugestão)</small></label>
-        <div class="reasons" id="reasonsList">
-          <button type="button" class="reason-chip" data-reason="trabalho-remoto">
-            <strong>Trabalho remoto</strong>
-            <span class="reason-chip__sub">Home office com base temporária</span>
+        <div class="reason-select">
+          <button type="button" class="reason-select__btn" id="reasonBtn" aria-expanded="false" aria-haspopup="listbox">
+            <span id="reasonBtnLabel" class="reason-select__placeholder">Selecione o motivo da estadia...</span>
+            <span class="reason-select__caret">⌄</span>
           </button>
-          <button type="button" class="reason-chip" data-reason="tratamento-medico">
-            <strong>Tratamento médico</strong>
-            <span class="reason-chip__sub">Consulta, cirurgia, acompanhante</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="relocacao-corporativa">
-            <strong>Relocação corporativa</strong>
-            <span class="reason-chip__sub">Transferência, projeto, treinamento</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="intercambio-pos">
-            <strong>Intercâmbio / Pós</strong>
-            <span class="reason-chip__sub">UFU, residência, especialização</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="reforma-transicao">
-            <strong>Reforma / Transição</strong>
-            <span class="reason-chip__sub">Obras, espera por carro próprio</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="mudanca-familiar">
-            <strong>Mudança familiar</strong>
-            <span class="reason-chip__sub">Família vindo se estabelecer</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="aposentadoria">
-            <strong>Aposentadoria / Lifestyle</strong>
-            <span class="reason-chip__sub">Sabático, temporada longa</span>
-          </button>
-          <button type="button" class="reason-chip" data-reason="viagem-longa">
-            <strong>Viagem longa</strong>
-            <span class="reason-chip__sub">Turismo prolongado, road trip</span>
-          </button>
+          <div class="reason-select__list" id="reasonList" role="listbox">
+            <div class="reason-select__option" data-reason="trabalho-remoto" data-label="Trabalho remoto">
+              <span class="reason-select__option-title">Trabalho remoto</span>
+              <span class="reason-select__option-sub">Home office com base temporária</span>
+            </div>
+            <div class="reason-select__option" data-reason="tratamento-medico" data-label="Tratamento médico">
+              <span class="reason-select__option-title">Tratamento médico</span>
+              <span class="reason-select__option-sub">Consulta, cirurgia, acompanhante</span>
+            </div>
+            <div class="reason-select__option" data-reason="relocacao-corporativa" data-label="Relocação corporativa">
+              <span class="reason-select__option-title">Relocação corporativa</span>
+              <span class="reason-select__option-sub">Transferência, projeto, treinamento</span>
+            </div>
+            <div class="reason-select__option" data-reason="intercambio-pos" data-label="Intercâmbio / Pós">
+              <span class="reason-select__option-title">Intercâmbio / Pós</span>
+              <span class="reason-select__option-sub">UFU, residência, especialização</span>
+            </div>
+            <div class="reason-select__option" data-reason="reforma-transicao" data-label="Reforma / Transição">
+              <span class="reason-select__option-title">Reforma / Transição</span>
+              <span class="reason-select__option-sub">Obras, espera por carro próprio</span>
+            </div>
+            <div class="reason-select__option" data-reason="mudanca-familiar" data-label="Mudança familiar">
+              <span class="reason-select__option-title">Mudança familiar</span>
+              <span class="reason-select__option-sub">Família vindo se estabelecer</span>
+            </div>
+            <div class="reason-select__option" data-reason="aposentadoria" data-label="Aposentadoria / Lifestyle">
+              <span class="reason-select__option-title">Aposentadoria / Lifestyle</span>
+              <span class="reason-select__option-sub">Sabático, temporada longa</span>
+            </div>
+            <div class="reason-select__option" data-reason="viagem-longa" data-label="Viagem longa">
+              <span class="reason-select__option-title">Viagem longa</span>
+              <span class="reason-select__option-sub">Turismo prolongado, road trip</span>
+            </div>
+            <div class="reason-select__option" data-reason="outro" data-label="Outro motivo">
+              <span class="reason-select__option-title">Outro motivo</span>
+              <span class="reason-select__option-sub">Descreva no campo que aparecerá abaixo</span>
+            </div>
+          </div>
         </div>
+
+        <div class="reason-other" id="reasonOtherWrap">
+          <textarea id="reasonOtherText" placeholder="Conte em poucas palavras o motivo da sua estadia em Uberlândia (ex: cuidador de paciente em tratamento prolongado, evento esportivo, etc)" maxlength="280"></textarea>
+        </div>
+
         <div class="suggest" id="suggestBox">
           <div class="suggest__title">Sugestão para você</div>
           <div class="suggest__text" id="suggestText"></div>
@@ -695,17 +724,57 @@
     });
   });
 
-  // CHIPS DE MOTIVO + SUGESTÃO INTELIGENTE
-  document.querySelectorAll('.reason-chip').forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      document.querySelectorAll('.reason-chip').forEach(function(c) { c.classList.remove('selected'); });
-      chip.classList.add('selected');
-      state.reason = chip.dataset.reason;
+  // DROPDOWN DE MOTIVO + SUGESTÃO INTELIGENTE
+  var reasonBtn = $('reasonBtn');
+  var reasonList = $('reasonList');
+  var reasonBtnLabel = $('reasonBtnLabel');
+  var reasonOtherWrap = $('reasonOtherWrap');
+  var reasonOtherText = $('reasonOtherText');
+
+  function toggleReasonList(forceOpen) {
+    var willOpen = (typeof forceOpen === 'boolean') ? forceOpen : !reasonList.classList.contains('open');
+    reasonList.classList.toggle('open', willOpen);
+    reasonBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  }
+  reasonBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleReasonList();
+  });
+  document.addEventListener('click', function(e) {
+    if (!reasonBtn.contains(e.target) && !reasonList.contains(e.target)) toggleReasonList(false);
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && reasonList.classList.contains('open')) toggleReasonList(false);
+  });
+
+  document.querySelectorAll('.reason-select__option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.reason-select__option').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      state.reason = opt.dataset.reason;
+      reasonBtnLabel.textContent = opt.dataset.label;
+      reasonBtnLabel.classList.remove('reason-select__placeholder');
+      reasonBtn.classList.add('selected');
+      toggleReasonList(false);
+
+      // Mostra textarea "outro motivo" se necessário
+      if (state.reason === 'outro') {
+        reasonOtherWrap.classList.add('show');
+        reasonOtherText.focus();
+        $('suggestBox').classList.remove('show');
+        // remover badge sugerido dos carros (sem sugestão pra "outro")
+        document.querySelectorAll('.pick__suggested-badge').forEach(function(b) { b.remove(); });
+        return;
+      } else {
+        reasonOtherWrap.classList.remove('show');
+        reasonOtherText.value = '';
+      }
+
+      // Sugestão inteligente
       var sug = REASON_SUGGESTIONS[state.reason];
       if (sug) {
         $('suggestText').innerHTML = sug.text;
         $('suggestBox').classList.add('show');
-        // marcar carro sugerido visualmente (badge dourado)
         document.querySelectorAll('.pick--car').forEach(function(c) {
           var existing = c.querySelector('.pick__suggested-badge');
           if (existing) existing.remove();
@@ -878,7 +947,9 @@
     if (!state.user.name || !state.user.email || !state.user.phoneNumber) { showStatus('err3', 'Preencha nome, e-mail e telefone.'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.user.email)) { showStatus('err3', 'Digite um e-mail válido.'); return; }
     if (!state.reason) { showStatus('err3', 'Volte ao passo 1 e selecione o motivo da estadia.'); return; }
+    if (state.reason === 'outro' && !reasonOtherText.value.trim()) { showStatus('err3', 'Volte ao passo 1 e descreva o motivo da estadia no campo "Outro motivo".'); return; }
     if (!state.user.terms) { showStatus('err3', 'Você precisa aceitar os Termos e Política de Privacidade.'); return; }
+    state.reasonOther = reasonOtherText.value.trim();
 
     var fullPhone = (state.user.phoneCountry === '+other' ? '' : state.user.phoneCountry + ' ') + state.user.phoneNumber;
 
@@ -908,6 +979,7 @@
             delivery: POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : ''),
             delivery_fee: 'R$ ' + state.deliveryFee,
             reason: state.reason,
+            reason_other: state.reasonOther || null,
             phone_country: state.user.phoneCountry,
             phone_local: state.user.phoneNumber
           }
