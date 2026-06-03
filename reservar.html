@@ -118,8 +118,10 @@
   .pick.selected::after { content: '✓'; position: absolute; top: 8px; right: 10px; background: var(--teal); color: var(--white); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
 
   /* Avatar redondo nos cards de ponto (substitui ícones) */
-  .pick__avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--white); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; }
+  .pick__avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--white); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 900; flex-shrink: 0; }
   .pick__avatar img { width: 100%; height: 100%; object-fit: cover; }
+  /* Foto local real só será usada quando sócio operacional fotografar cada ponto.
+     Por enquanto: avatar com sigla (honesto, não tenta enganar com stock photo do lugar errado) */
   .pick__avatar--gold { background: var(--gold); color: var(--navy); }
   .pick__avatar--teal { background: var(--teal); color: var(--white); }
   .pick__avatar--light { background: var(--navy-light); color: var(--white); }
@@ -388,55 +390,37 @@
         <label>Pontos comuns em Uberlândia</label>
         <div class="picks picks--3col" style="margin-top:8px;">
           <div class="pick" data-point="aeroporto">
-            <div class="pick__avatar">
-              <img src="images/pontos/aeroporto.jpg" alt="Aeroporto"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar"><img src="images/pontos/aeroporto.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='AB';" /></div>
             <div class="pick__title">Aeroporto Bombonato</div>
             <div class="pick__sub">Terminal de Desembarque</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="center-shopping">
-            <div class="pick__avatar">
-              <img src="images/pontos/center-shopping.jpg" alt="Shopping"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/3964406/pexels-photo-3964406.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar" style="background:var(--teal);"><img src="images/pontos/center-shopping.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='CS';" /></div>
             <div class="pick__title">Center Shopping</div>
             <div class="pick__sub">Av. João Naves de Ávila</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="hc-ufu">
-            <div class="pick__avatar">
-              <img src="images/pontos/hc-ufu.jpg" alt="Hospital"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar" style="background:var(--navy-light);"><img src="images/pontos/hc-ufu.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='HC';" /></div>
             <div class="pick__title">Hospital Clínicas UFU</div>
             <div class="pick__sub">Av. Pará, Umuarama</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="tubal-vilela">
-            <div class="pick__avatar">
-              <img src="images/pontos/tubal-vilela.jpg" alt="Centro"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2510438/pexels-photo-2510438.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar" style="background:var(--gold);color:var(--navy);"><img src="images/pontos/tubal-vilela.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='TV';" /></div>
             <div class="pick__title">Praça Tubal Vilela</div>
             <div class="pick__sub">Centro</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="posto-br">
-            <div class="pick__avatar">
-              <img src="images/pontos/posto-br.jpg" alt="Posto de combustível"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/9800027/pexels-photo-9800027.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar" style="background:var(--teal);"><img src="images/pontos/posto-br.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='BR';" /></div>
             <div class="pick__title">Posto BR</div>
             <div class="pick__sub">Av. Rondon Pacheco</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="custom">
-            <div class="pick__avatar">
-              <img src="images/pontos/outro.jpg" alt="Endereço personalizado"
-                   onerror="this.onerror=null;this.src='https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=120&amp;h=120&amp;dpr=2&amp;fit=crop';" />
-            </div>
+            <div class="pick__avatar" style="background:var(--navy-light);">+</div>
             <div class="pick__title">Outro endereço</div>
             <div class="pick__sub">Hotel, condomínio, casa</div>
             <div class="pick__extra">Digite o CEP abaixo</div>

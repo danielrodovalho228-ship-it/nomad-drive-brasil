@@ -321,9 +321,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar">
-            <img src="images/perfis/executivo.jpg" alt="Executivo profissional"
-                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
+          <div class="who__avatar" style="background:var(--navy);">
+            <img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='EX';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -336,9 +335,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar">
-            <img src="images/perfis/medico.jpg" alt="Médica profissional"
-                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
+          <div class="who__avatar" style="background:var(--teal);">
+            <img src="images/perfis/medico.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='MD';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-180 dias</span>
@@ -351,9 +349,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar">
-            <img src="images/perfis/familia.jpg" alt="Família feliz"
-                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/1648387/pexels-photo-1648387.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
+          <div class="who__avatar" style="background:var(--navy-light);">
+            <img src="images/perfis/familia.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='FM';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">60-180 dias</span>
@@ -366,9 +363,8 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar">
-            <img src="images/perfis/nomade.jpg" alt="Jovem profissional com notebook"
-                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
+          <div class="who__avatar" style="background:var(--gold); color:var(--navy);">
+            <img src="images/perfis/nomade.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='ND';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -438,12 +434,16 @@
         </div>
       </article>
 
-      <!-- Próximo modelo -->
+      <!-- Próximo modelo: SUV — sem foto (intencional: ainda não compramos o modelo).
+           NÃO adicionar foto stock genérica aqui — pode confundir o cliente.
+           Quando Daniel comprar o SUV real, substituir por:
+           <div class="car__photo"><img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /></div> -->
       <article class="car car--soon">
-        <div class="car__photo" style="position:relative;">
-          <img src="images/car-suv-preview.jpg" alt="SUV Compacto — modelo similar (ilustrativo)" loading="lazy"
-               onerror="this.onerror=null;this.src='https://images.pexels.com/photos/5006465/pexels-photo-5006465.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=400&amp;dpr=2&amp;fit=crop';" />
-          <span style="position:absolute; top:10px; left:10px; background:rgba(15,31,61,0.9); color:#fff; padding:5px 10px; border-radius:4px; font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.6px;">ILUSTRATIVO · MODELO EM DEFINIÇÃO</span>
+        <div class="car__photo" style="position:relative; background:linear-gradient(135deg, #0F1F3D 0%, #1a3055 100%); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; padding:24px; text-align:center; overflow:hidden;">
+          <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:2px; color:rgba(245,184,46,0.95); text-transform:uppercase;">Próximo lançamento</span>
+          <span style="font-family:'Playfair Display',serif; font-size:34px; font-weight:900; color:#fff; line-height:1; letter-spacing:-0.02em;">SUV</span>
+          <span style="font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--gold); line-height:1; letter-spacing:0;">Compacto · 2026</span>
+          <span style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(255,255,255,0.55); margin-top:8px; max-width:200px; line-height:1.4;">Foto e modelo serão divulgados em Set/2026</span>
         </div>
         <div class="car__body">
           <div class="car__cat">Próximo modelo</div>
@@ -455,7 +455,14 @@
             <small class="car__price-from">Preview · preço estimado</small>
             <span class="car__price-val">R$ 5.500<small> /mês</small></span>
           </div>
-          <a href="https://wa.me/5534984064864?text=Quero%20entrar%20na%20fila%20do%20SUV%20Nomade%20Drive" target="_blank" rel="noopener" class="btn btn--ghost-navy btn--block car__cta">Avise-me quando chegar</a>
+          <form id="suvWaitForm" style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
+            <input type="text" id="suvWaitName" placeholder="Seu nome" required
+                   style="width:100%; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:6px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--navy); background:var(--white);" />
+            <input type="email" id="suvWaitEmail" placeholder="seu@email.com" required
+                   style="width:100%; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:6px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--navy); background:var(--white);" />
+            <button type="submit" class="btn btn--primary btn--block" style="margin-top:4px;">Avise-me quando chegar</button>
+            <p id="suvWaitStatus" style="display:none; font-family:'Inter',sans-serif; font-size:12.5px; color:var(--teal-dark); margin-top:4px; line-height:1.5;"></p>
+          </form>
         </div>
       </article>
 
@@ -748,5 +755,50 @@
   </div>
 </footer>
 
+<script>
+(function() {
+  var form = document.getElementById('suvWaitForm');
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var nameEl = document.getElementById('suvWaitName');
+    var emailEl = document.getElementById('suvWaitEmail');
+    var statusEl = document.getElementById('suvWaitStatus');
+    var btn = form.querySelector('button[type="submit"]');
+    var name = nameEl.value.trim();
+    var email = emailEl.value.trim().toLowerCase();
+    if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#991b1b';
+      statusEl.textContent = 'Preencha nome e e-mail válido.';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    try {
+      await fetch('https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'waitlist-suv',
+          source_url: window.location.href,
+          name: name,
+          email: email,
+          city: 'Uberlândia',
+          intent: 'waitlist-suv-compacto',
+          extra: { vehicle_interest: 'SUV Compacto', expected_arrival: 'Set/2026' }
+        })
+      });
+    } catch (err) { console.warn('Edge function falhou (UX não bloqueia):', err); }
+    statusEl.style.display = 'block';
+    statusEl.style.color = 'var(--teal-dark)';
+    statusEl.innerHTML = 'Pronto! Avisaremos você assim que o SUV chegar (Set/2026). Pra urgência, <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">fale pelo WhatsApp</a>.';
+    nameEl.value = '';
+    emailEl.value = '';
+    btn.textContent = 'Inscrito ✓';
+    setTimeout(function() { btn.disabled = false; btn.textContent = 'Avise-me quando chegar'; }, 4000);
+  });
+})();
+</script>
 </body>
 </html>
