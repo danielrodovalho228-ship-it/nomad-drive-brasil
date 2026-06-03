@@ -145,19 +145,15 @@
   .car--soon .car__photo { background: var(--navy-pale); display: flex; align-items: center; justify-content: center; color: var(--navy-light); }
   .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
 
-  /* PARA QUEM É (grid 2x2 com avatar redondo) */
+  /* PARA QUEM É (grid 2x2 com avatar redondo + foto real) */
   .who { padding: 80px 0; background: var(--cream); }
   .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
   .who__card { background: var(--white); border-radius: 14px; padding: 28px 26px; border: 1px solid var(--gray-200); display: flex; flex-direction: column; transition: all .2s; }
   .who__card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--navy-light); }
-  .who__head { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-  .who__avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--navy); color: var(--white); font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; letter-spacing: 0; }
+  .who__head { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+  .who__avatar { width: 88px; height: 88px; border-radius: 50%; background: var(--navy-pale); color: var(--navy); font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; letter-spacing: 0; border: 3px solid var(--white); box-shadow: 0 4px 14px rgba(15,31,61,0.15); }
   .who__avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-  .who__avatar--executivo { background: var(--navy); }
-  .who__avatar--medico { background: var(--teal); }
-  .who__avatar--familia { background: var(--navy-light); }
-  .who__avatar--nomade { background: var(--gold); color: var(--navy); }
   .who__tag-line { display: flex; flex-direction: column; gap: 4px; }
   .who__tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: var(--gray-500); text-transform: uppercase; font-family: 'Inter', sans-serif; }
   .who__title { margin: 0; font-size: 19px; }
@@ -325,8 +321,9 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar who__avatar--executivo">
-            <img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Ex';" />
+          <div class="who__avatar">
+            <img src="images/perfis/executivo.jpg" alt="Executivo profissional"
+                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -339,8 +336,9 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar who__avatar--medico">
-            <img src="images/perfis/medico.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Md';" />
+          <div class="who__avatar">
+            <img src="images/perfis/medico.jpg" alt="Médica profissional"
+                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-180 dias</span>
@@ -353,8 +351,9 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar who__avatar--familia">
-            <img src="images/perfis/familia.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Fm';" />
+          <div class="who__avatar">
+            <img src="images/perfis/familia.jpg" alt="Família feliz"
+                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/1648387/pexels-photo-1648387.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">60-180 dias</span>
@@ -367,8 +366,9 @@
 
       <article class="who__card">
         <div class="who__head">
-          <div class="who__avatar who__avatar--nomade">
-            <img src="images/perfis/nomade.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='Nd';" />
+          <div class="who__avatar">
+            <img src="images/perfis/nomade.jpg" alt="Jovem profissional com notebook"
+                 onerror="this.onerror=null;this.src='https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=200&amp;h=200&amp;dpr=2&amp;fit=crop';" />
           </div>
           <div class="who__tag-line">
             <span class="who__tag">30-90 dias</span>
@@ -687,27 +687,27 @@
     <div class="seals__title">Operação verificada</div>
     <div class="seals__row">
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/cnpj.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='CN';" /></span>
-        <span><span class="seal__name">CNPJ</span><span class="seal__sub">Operação registrada</span></span>
+        <span class="seal__logo" style="background:#0F1F3D; color:#fff; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.5px;">CNPJ</span>
+        <span><span class="seal__name">Operação registrada</span><span class="seal__sub">Junta Comercial MG</span></span>
       </div>
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/stripe.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='S';" /></span>
+        <span class="seal__logo" style="background:#fff; border:1px solid var(--gray-200);"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/stripe.svg" alt="Stripe" style="width:60%; height:60%; padding:0; filter: invert(20%) sepia(91%) saturate(2058%) hue-rotate(228deg) brightness(96%) contrast(101%);" /></span>
         <span><span class="seal__name">Stripe</span><span class="seal__sub">Pagamento internacional</span></span>
       </div>
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/pix.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='Pi';" /></span>
+        <span class="seal__logo" style="background:#32BCAD; color:#fff; font-family:'Inter',sans-serif; font-size:13px; font-weight:900;">PIX</span>
         <span><span class="seal__name">PIX</span><span class="seal__sub">Banco Central</span></span>
       </div>
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/autentique.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='Au';" /></span>
+        <span class="seal__logo" style="background:#0F1F3D; color:#fff; font-family:'Inter',sans-serif; font-size:13px; font-weight:900;">A</span>
         <span><span class="seal__name">Autentique</span><span class="seal__sub">Assinatura digital</span></span>
       </div>
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/cobli.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='Cb';" /></span>
+        <span class="seal__logo" style="background:#0066FF; color:#fff; font-family:'Inter',sans-serif; font-size:11px; font-weight:900; letter-spacing:0.3px;">Cobli</span>
         <span><span class="seal__name">Cobli</span><span class="seal__sub">Telemetria embarcada</span></span>
       </div>
       <div class="seal">
-        <span class="seal__logo"><img src="images/selos/seguro.png" alt="" onerror="this.style.display='none';this.parentNode.textContent='Sg';" /></span>
+        <span class="seal__logo" style="background:#2A9D8F; color:#fff; font-family:'Playfair Display',serif; font-size:18px; font-weight:900;">S</span>
         <span><span class="seal__name">Seguro Frota</span><span class="seal__sub">Cobertura completa</span></span>
       </div>
     </div>
