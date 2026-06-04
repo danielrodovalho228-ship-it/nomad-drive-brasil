@@ -143,6 +143,10 @@
       showMsg('Preencha nome, e-mail e uma mensagem com pelo menos 10 caracteres.', false);
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showMsg('Digite um e-mail válido (ex.: voce@exemplo.com).', false);
+      return;
+    }
     // Fallback: abre mailto com o conteúdo preenchido
     var body = encodeURIComponent('Nome: ' + name + '\nWhatsApp: ' + (phone || '-') + '\n\n' + message);
     var subject = encodeURIComponent('Contato pelo site — ' + name);

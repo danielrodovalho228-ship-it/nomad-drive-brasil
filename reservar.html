@@ -243,11 +243,11 @@
   .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
   .foot-mini a:hover { color: var(--navy); }
 </style>
-</head>
-<body>
-
 <link rel="stylesheet" href="assets/site-shell.css?v=1" />
 <script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="reservar">
+
 <div id="site-header"></div>
 
 <div class="wizard-header" id="wizardHeader">
@@ -412,31 +412,31 @@
         <label>Pontos comuns em Uberlândia</label>
         <div class="picks picks--3col" style="margin-top:8px;">
           <div class="pick" data-point="aeroporto">
-            <div class="pick__avatar"><img src="images/pontos/aeroporto.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='AB';" /></div>
+            <div class="pick__avatar">AB</div>
             <div class="pick__title">Aeroporto Bombonato</div>
             <div class="pick__sub">Terminal de Desembarque</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="center-shopping">
-            <div class="pick__avatar" style="background:var(--teal);"><img src="images/pontos/center-shopping.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='CS';" /></div>
+            <div class="pick__avatar" style="background:var(--teal);">CS</div>
             <div class="pick__title">Center Shopping</div>
             <div class="pick__sub">Av. João Naves de Ávila</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="hc-ufu">
-            <div class="pick__avatar" style="background:var(--navy-light);"><img src="images/pontos/hc-ufu.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='HC';" /></div>
+            <div class="pick__avatar" style="background:var(--navy-light);">HC</div>
             <div class="pick__title">Hospital Clínicas UFU</div>
             <div class="pick__sub">Av. Pará, Umuarama</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
           </div>
           <div class="pick" data-point="tubal-vilela">
-            <div class="pick__avatar" style="background:var(--gold);color:var(--navy);"><img src="images/pontos/tubal-vilela.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='TV';" /></div>
+            <div class="pick__avatar" style="background:var(--gold);color:var(--navy);">TV</div>
             <div class="pick__title">Praça Tubal Vilela</div>
             <div class="pick__sub">Centro</div>
             <div class="pick__extra">Grátis · entrega em 1h</div>
           </div>
           <div class="pick" data-point="posto-br">
-            <div class="pick__avatar" style="background:var(--teal);"><img src="images/pontos/posto-br.jpg" alt="" onerror="this.style.display='none';this.parentNode.textContent='BR';" /></div>
+            <div class="pick__avatar" style="background:var(--teal);">BR</div>
             <div class="pick__title">Posto BR</div>
             <div class="pick__sub">Av. Rondon Pacheco</div>
             <div class="pick__extra">Grátis · entrega em 2h</div>
@@ -621,17 +621,17 @@
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
   var REASON_SUGGESTIONS = {
     'trabalho-remoto':       { car: 'popular', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. <strong>HB20</strong> econômico, ideal pra deslocamentos curtos do dia-a-dia.' },
-    'tratamento-medico':     { car: 'cronos',  point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Cronos automático</strong> é mais confortável pra paciente e acompanhante.' },
-    'relocacao-corporativa': { car: 'cronos',  point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Cronos automático</strong> passa imagem profissional pra reuniões.' },
+    'tratamento-medico':     { car: 'sedan', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Cronos automático</strong> é mais confortável pra paciente e acompanhante.' },
+    'relocacao-corporativa': { car: 'sedan', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Cronos automático</strong> passa imagem profissional pra reuniões.' },
     'intercambio-pos':       { car: 'popular', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>HB20 econômico</strong> ideal pra orçamento de estudante/residente.' },
     'reforma-transicao':     { car: 'popular', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>HB20</strong> é econômico pra você não pesar no bolso enquanto não tem o carro próprio.' },
-    'mudanca-familiar':      { car: 'cronos',  point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Cronos</strong> comporta família de 5 pessoas com porta-malas pra bagagem.' },
-    'aposentadoria':         { car: 'cronos',  point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Cronos automático</strong> mais confortável pra viagens longas e dirigir sem cansaço.' },
-    'viagem-longa':          { car: 'cronos',  point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. Cronos tem mais espaço pra bagagem e estradas.' }
+    'mudanca-familiar':      { car: 'sedan', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Cronos</strong> comporta família de 5 pessoas com porta-malas pra bagagem.' },
+    'aposentadoria':         { car: 'sedan', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Cronos automático</strong> mais confortável pra viagens longas e dirigir sem cansaço.' },
+    'viagem-longa':          { car: 'sedan', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. Cronos tem mais espaço pra bagagem e estradas.' }
   };
   var CARS = {
     popular: { name: 'Hyundai HB20', cat: 'Popular Econômico', base: 3500 },
-    cronos: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 4500 }
+    sedan: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 4500 }
   };
   var POINTS_GEO = {
     'aeroporto':      { lat: -18.8835, lng: -48.2256, label: 'Aeroporto Bombonato',     sub: 'Terminal de Desembarque' },
@@ -913,8 +913,10 @@
 
   var urlParams = new URLSearchParams(window.location.search);
   var preCar = urlParams.get('carro');
-  if (preCar === 'popular' || preCar === 'cronos' || preCar === 'hb20') {
-    if (preCar === 'hb20') preCar = 'popular';
+  // aceita 'popular', 'sedan' (canônico) e aliases 'hb20'/'cronos' (legados)
+  if (preCar === 'hb20') preCar = 'popular';
+  if (preCar === 'cronos') preCar = 'sedan';
+  if (preCar === 'popular' || preCar === 'sedan') {
     var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
     if (card) { card.classList.add('selected'); state.car = preCar; }
   }
@@ -924,10 +926,13 @@
   if (preProfile && profileMap[preProfile]) {
     window._preReason = profileMap[preProfile];
   }
+  // ?dias=N pré-define o período (vindo de precos.html ou carros/*)
+  var preDias = parseInt(urlParams.get('dias'), 10);
+  var diasIniciais = (preDias === 30 || preDias === 60 || preDias === 90 || preDias === 180) ? preDias : 30;
   var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-  var plus30 = new Date(); plus30.setDate(plus30.getDate() + 31);
+  var plusN = new Date(); plusN.setDate(plusN.getDate() + 1 + diasIniciais);
   $('dateStart').value = tomorrow.toISOString().split('T')[0];
-  $('dateEnd').value = plus30.toISOString().split('T')[0];
+  $('dateEnd').value = plusN.toISOString().split('T')[0];
   state.dateStart = $('dateStart').value;
   state.dateEnd = $('dateEnd').value;
   $('dateEnd').min = state.dateStart;
