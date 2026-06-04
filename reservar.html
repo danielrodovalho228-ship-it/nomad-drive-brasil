@@ -582,14 +582,12 @@
     var cars = window.NOMADE_PRICES.cars;
     var html = Object.keys(cars).map(function(carId) {
       var car = cars[carId];
-      var basePrice = window.NOMADE_PRICES.planTotal(carId, 'essencial', 30);
-      var baseKm = window.NOMADE_PRICES.planKm(carId, 'essencial', 30);
       return '<div class="pick pick--car" data-car="' + carId + '">' +
         '<img src="' + car.photo + '" alt="' + car.name + '" loading="lazy" onerror="this.style.opacity=0.3;" />' +
         '<div class="pick--car__body">' +
           '<div class="pick--car__cat">' + car.category + '</div>' +
           '<div class="pick--car__name">' + car.name + '</div>' +
-          '<div class="pick--car__price">A partir de <strong>R$ ' + basePrice.toLocaleString('pt-BR') + '</strong> · ' + baseKm.toLocaleString('pt-BR') + ' km / 30 dias</div>' +
+          '<div class="pick--car__price" style="color:var(--gray-500);font-weight:500;">' + (car.subtitle || '') + '</div>' +
         '</div>' +
       '</div>';
     }).join('');
