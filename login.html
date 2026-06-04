@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="description" content="Acesso interno da Nomade Drive Brasil — área restrita à equipe." />
+<title>Acesso interno · Nomade Drive Brasil</title>
+<link rel="icon" href="images/logo-nomade-drive.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #0F3D2E;
+    --navy-light: #1a5a44;
+    --sage: #5A8A6B;
+    --gold: #D4A853;
+    --cream: #FAFAF7;
+    --white: #ffffff;
+    --gray-50: #F8F9F9;
+    --gray-200: #E5E9E7;
+    --gray-500: #6B7572;
+    --gray-700: #3a4945;
+    --gray-900: #14201b;
+    --red: #B91C1C;
+    --red-bg: #FEF2F2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    color: var(--gray-900);
+  }
+  .card {
+    width: 100%; max-width: 440px;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 38px 36px;
+    box-shadow: 0 24px 64px -20px rgba(0,0,0,0.4);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .brand img {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  .brand-text strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .brand-text span {
+    display: block;
+    font-size: 11px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0 0 26px;
+    line-height: 1.5;
+  }
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 12.5px; font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  input[type="email"], input[type="password"], input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    transition: border-color .15s, background .15s;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--sage);
+    background: var(--white);
+  }
+  .otp-input {
+    text-align: center;
+    font-size: 24px !important;
+    letter-spacing: 8px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 13px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s, transform .05s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--navy-light); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    width: 100%;
+    padding: 11px 20px;
+    font-size: 13.5px;
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+    font-family: inherit;
+  }
+  .btn-ghost:hover { color: var(--gray-900); }
+  .error {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--red-bg);
+    color: var(--red);
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    border-left: 3px solid var(--red);
+  }
+  .info {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #EFF6F1;
+    color: var(--navy);
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    border-left: 3px solid var(--sage);
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(212, 168, 83, 0.12);
+    color: var(--gold);
+    border: 1px solid rgba(212, 168, 83, 0.3);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .links {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-200);
+    font-size: 12.5px;
+  }
+  .links a {
+    color: var(--gray-500);
+    text-decoration: none;
+  }
+  .links a:hover { color: var(--navy); text-decoration: underline; }
+  .hidden { display: none !important; }
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .security {
+    margin-top: 18px;
+    font-size: 11.5px;
+    color: var(--gray-500);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .security strong { color: var(--gray-700); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="brand">
+    <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" />
+    <div class="brand-text">
+      <strong>Nomade Drive Brasil</strong>
+      <span>Acesso interno</span>
+    </div>
+  </div>
+
+  <!-- STEP 1: senha -->
+  <div id="stepPassword">
+    <h1>Entrar na operação</h1>
+    <p class="sub">Acesso restrito à equipe Nomade Drive. Use o e-mail cadastrado pelo super admin.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="email" required placeholder="seu@nomadedrive.com.br" />
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required minlength="8" />
+      </div>
+      <button type="submit" class="btn-primary" id="btnSignIn">Entrar</button>
+    </form>
+
+    <div id="loginError" class="error hidden"></div>
+  </div>
+
+  <!-- STEP 2: MFA TOTP (aparece se a conta tiver 2FA habilitado) -->
+  <div id="stepMfa" class="hidden">
+    <h1>Verificação em 2 passos <span class="badge">2FA</span></h1>
+    <p class="sub">Sua conta exige código de autenticação. Abra o <strong>app autenticador</strong> (Google Authenticator, 1Password, Authy) e digite o código de 6 dígitos.</p>
+
+    <form id="mfaForm" novalidate>
+      <div class="field">
+        <label for="otpCode">Código de 6 dígitos</label>
+        <input type="text" id="otpCode" name="otpCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required class="otp-input" placeholder="000000" />
+      </div>
+      <button type="submit" class="btn-primary" id="btnVerifyOtp">Verificar e entrar</button>
+      <button type="button" class="btn-ghost" id="btnCancelMfa">← Usar outra conta</button>
+    </form>
+
+    <div id="mfaError" class="error hidden"></div>
+  </div>
+
+  <!-- STEP 3: pós-login (verificação de role admin) -->
+  <div id="stepChecking" class="hidden">
+    <h1>Verificando permissão…</h1>
+    <p class="sub">Conferindo se sua conta tem acesso à área administrativa.</p>
+    <div class="info" id="checkingMsg">Aguarde alguns segundos.</div>
+  </div>
+
+  <div class="links">
+    <a href="index.html">← Voltar ao site</a>
+    <a href="mailto:suporte@nomadedrive.com.br">Suporte interno</a>
+  </div>
+
+  <p class="security">
+    🔒 <strong>Não compartilhe</strong> sua senha ou códigos 2FA com ninguém.<br>
+    Acesso fora do horário de trabalho gera alerta de auditoria.
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // Elementos
+  var stepPassword = document.getElementById("stepPassword");
+  var stepMfa = document.getElementById("stepMfa");
+  var stepChecking = document.getElementById("stepChecking");
+
+  var loginForm = document.getElementById("loginForm");
+  var mfaForm = document.getElementById("mfaForm");
+  var btnSignIn = document.getElementById("btnSignIn");
+  var btnVerifyOtp = document.getElementById("btnVerifyOtp");
+  var btnCancelMfa = document.getElementById("btnCancelMfa");
+  var emailInput = document.getElementById("email");
+  var passwordInput = document.getElementById("password");
+  var otpInput = document.getElementById("otpCode");
+  var loginError = document.getElementById("loginError");
+  var mfaError = document.getElementById("mfaError");
+  var checkingMsg = document.getElementById("checkingMsg");
+
+  // Redirect destino (default = admin.html)
+  function getRedirect() {
+    var qs = new URLSearchParams(window.location.search);
+    var r = qs.get("redirect") || "admin.html";
+    // sanitiza: só permite caminhos relativos dentro do site
+    if (r.startsWith("http") || r.startsWith("//") || r.startsWith("javascript:")) {
+      return "admin.html";
+    }
+    return r;
+  }
+
+  function showError(el, msg) {
+    el.textContent = msg;
+    el.classList.remove("hidden");
+  }
+  function clearError(el) {
+    el.textContent = "";
+    el.classList.add("hidden");
+  }
+  function showStep(name) {
+    stepPassword.classList.toggle("hidden", name !== "password");
+    stepMfa.classList.toggle("hidden", name !== "mfa");
+    stepChecking.classList.toggle("hidden", name !== "checking");
+  }
+  function setBusy(btn, busy, label) {
+    btn.disabled = busy;
+    if (busy) {
+      btn.dataset.original = btn.textContent;
+      btn.innerHTML = '<span class="spinner"></span>' + (label || "Aguarde…");
+    } else if (btn.dataset.original) {
+      btn.textContent = btn.dataset.original;
+    }
+  }
+
+  // Se já estiver logado e for admin, pula direto
+  function checkExistingSession() {
+    if (!window.ndAuth || !window.ndAuth.configured) return;
+    window.ndAuth.getSession().then(function (s) {
+      if (!s) return;
+      showStep("checking");
+      verifyAdminAndRedirect();
+    });
+  }
+
+  function verifyAdminAndRedirect() {
+    window.ndAuth.isAdmin().then(function (ok) {
+      if (ok) {
+        checkingMsg.textContent = "Acesso confirmado. Redirecionando…";
+        setTimeout(function () {
+          window.location.href = getRedirect();
+        }, 600);
+      } else {
+        // Logado mas não é admin — desloga e mostra erro
+        window.ndAuth.client().auth.signOut().then(function () {
+          showStep("password");
+          showError(loginError, "Esta conta não tem permissão de administrador. Use uma conta autorizada ou fale com o super admin.");
+        });
+      }
+    }).catch(function (e) {
+      showStep("password");
+      showError(loginError, "Não foi possível verificar a permissão: " + (e && e.message ? e.message : "erro desconhecido"));
+    });
+  }
+
+  // === STEP 1: senha ===
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    clearError(loginError);
+
+    if (!window.ndAuth || !window.ndAuth.configured) {
+      showError(loginError, "Sistema indisponível: Supabase não está configurado.");
+      return;
+    }
+
+    var email = emailInput.value.trim();
+    var password = passwordInput.value;
+
+    if (!email || !password) {
+      showError(loginError, "Preencha e-mail e senha.");
+      return;
+    }
+
+    setBusy(btnSignIn, true, "Verificando…");
+
+    window.ndAuth.signIn(email, password).then(function (r) {
+      setBusy(btnSignIn, false);
+      if (!r.ok) {
+        showError(loginError, r.error || "Não foi possível entrar.");
+        return;
+      }
+      // Login OK — checa se a conta tem MFA habilitado
+      checkMfaRequired();
+    });
+  });
+
+  // Detecta se a conta tem fatores MFA verificados
+  function checkMfaRequired() {
+    var client = window.ndAuth.client();
+    if (!client || !client.auth || !client.auth.mfa) {
+      // SDK sem MFA — segue direto
+      showStep("checking");
+      verifyAdminAndRedirect();
+      return;
+    }
+
+    client.auth.mfa.getAuthenticatorAssuranceLevel().then(function (r) {
+      var current = r && r.data && r.data.currentLevel;
+      var next = r && r.data && r.data.nextLevel;
+      // Se MFA é exigido (nextLevel === 'aal2') mas ainda estamos em aal1, desafia
+      if (next === "aal2" && current === "aal1") {
+        return loadMfaChallenge();
+      }
+      // Sem MFA ou já no nível necessário — segue
+      showStep("checking");
+      verifyAdminAndRedirect();
+    }).catch(function () {
+      // Em caso de erro do MFA API, segue sem 2FA (graceful degradation)
+      showStep("checking");
+      verifyAdminAndRedirect();
+    });
+  }
+
+  var currentChallenge = null;
+  var currentFactorId = null;
+
+  function loadMfaChallenge() {
+    var client = window.ndAuth.client();
+    client.auth.mfa.listFactors().then(function (r) {
+      var factor = r && r.data && r.data.totp && r.data.totp[0];
+      if (!factor) {
+        // Não tem fator TOTP cadastrado — não dá pra exigir
+        showStep("checking");
+        verifyAdminAndRedirect();
+        return;
+      }
+      currentFactorId = factor.id;
+      return client.auth.mfa.challenge({ factorId: factor.id });
+    }).then(function (r) {
+      if (!r) return;
+      if (r.error) {
+        showStep("password");
+        showError(loginError, "Falha ao iniciar 2FA: " + r.error.message);
+        return;
+      }
+      currentChallenge = r.data.id;
+      showStep("mfa");
+      setTimeout(function () { otpInput.focus(); }, 100);
+    }).catch(function (e) {
+      showStep("password");
+      showError(loginError, "Erro 2FA: " + (e && e.message ? e.message : "desconhecido"));
+    });
+  }
+
+  // === STEP 2: MFA TOTP ===
+  mfaForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    clearError(mfaError);
+
+    var code = otpInput.value.replace(/\s/g, "");
+    if (!/^\d{6}$/.test(code)) {
+      showError(mfaError, "Digite os 6 dígitos do código.");
+      return;
+    }
+
+    setBusy(btnVerifyOtp, true, "Verificando…");
+
+    var client = window.ndAuth.client();
+    client.auth.mfa.verify({
+      factorId: currentFactorId,
+      challengeId: currentChallenge,
+      code: code
+    }).then(function (r) {
+      setBusy(btnVerifyOtp, false);
+      if (r.error) {
+        showError(mfaError, "Código inválido ou expirado. Gere um novo no app autenticador.");
+        otpInput.value = "";
+        otpInput.focus();
+        return;
+      }
+      // 2FA OK — verifica admin e redireciona
+      showStep("checking");
+      verifyAdminAndRedirect();
+    }).catch(function (e) {
+      setBusy(btnVerifyOtp, false);
+      showError(mfaError, "Erro de rede. Tente de novo.");
+    });
+  });
+
+  btnCancelMfa.addEventListener("click", function () {
+    var client = window.ndAuth.client();
+    if (client && client.auth) {
+      client.auth.signOut().finally(function () {
+        currentChallenge = null;
+        currentFactorId = null;
+        passwordInput.value = "";
+        otpInput.value = "";
+        clearError(loginError);
+        clearError(mfaError);
+        showStep("password");
+        emailInput.focus();
+      });
+    } else {
+      showStep("password");
+    }
+  });
+
+  // Auto-formato do OTP (só dígitos)
+  otpInput.addEventListener("input", function (e) {
+    e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
+    if (e.target.value.length === 6) {
+      // Auto-submit quando completar 6 dígitos
+      mfaForm.dispatchEvent(new Event("submit"));
+    }
+  });
+
+  // Inicialização
+  checkExistingSession();
+  emailInput.focus();
+})();
+</script>
+
+</body>
+</html>
