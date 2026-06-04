@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Como funciona — Nomade Drive Brasil</title>
+<meta name="description" content="Do clique ao volante em até 24 horas: 5 etapas simples, 100% online. Veja o passo a passo da locação mensal Nomade Drive." />
+<meta name="theme-color" content="#0F3D2E" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #0F3D2E; --navy-light: #1a5440; --gold: #D4A853; --gold-dark: #b88f3f; --white: #fff; --cream: #FAFAF7; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; --gray-100: #eef1ef; --sage: #5A8A6B; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14.5px; text-decoration: none; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover { background: var(--gold-dark); }
+
+  .steps { padding: 36px 0; background: var(--white); }
+  .steps__grid { max-width: 1080px; margin: 0 auto; display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .steps__grid { grid-template-columns: repeat(5, 1fr); gap: 12px; } }
+  .step { background: var(--cream); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: all .2s; border: 1px solid rgba(15,61,46,0.06); }
+  .step:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(15,61,46,0.08); }
+  .step__thumb { aspect-ratio: 16/10; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+  .step__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .step__num { position: absolute; top: 8px; left: 10px; background: var(--gold); color: var(--navy); font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 900; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 2; }
+  .step__body { padding: 14px 16px 16px; flex: 1; }
+  .step__title { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 800; color: var(--navy); margin-bottom: 6px; line-height: 1.25; }
+  .step__desc { font-size: 12.5px; color: var(--gray-700); line-height: 1.5; }
+
+  .timing { background: var(--cream); padding: 32px 0; border-top: 1px solid var(--gray-200); }
+  .timing__grid { max-width: 880px; margin: 0 auto; display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 720px) { .timing__grid { grid-template-columns: repeat(4, 1fr); } }
+  .timing__card { background: var(--white); border-radius: 10px; padding: 18px 20px; border: 1px solid var(--gray-200); text-align: center; }
+  .timing__num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 4px; }
+  .timing__label { font-size: 12.5px; color: var(--gray-700); font-weight: 600; }
+
+  .cta-block { background: var(--navy); padding: 40px 0; text-align: center; color: var(--white); }
+  .cta-block h2 { color: var(--white); font-size: 24px; margin-bottom: 10px; }
+  .cta-block p { color: rgba(255,255,255,0.8); margin-bottom: 22px; font-size: 14.5px; }
+</style>
+<link rel="stylesheet" href="assets/site-shell.css?v=1" />
+<script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="como-funciona">
+<div id="site-header"></div>
+
+<section class="page-intro">
+  <div class="page-intro__inner">
+    <p class="page-intro__crumbs"><a href="index.html">Início</a> · Como funciona</p>
+    <h1>Como funciona</h1>
+    <p>Do clique ao volante em até 24 horas. 5 etapas, 100% online, sem visita à sede.</p>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <div class="steps__grid">
+      <div class="step">
+        <div class="step__thumb"><span class="step__num">1</span><img src="images/como-funciona/1-escolha.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="step__body"><div class="step__title">Escolha pelo site</div><p class="step__desc">Veja os carros, escolha o plano e o período. ~3 minutos.</p></div>
+      </div>
+      <div class="step">
+        <div class="step__thumb"><span class="step__num">2</span><img src="images/como-funciona/2-whatsapp.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="step__body"><div class="step__title">Solicite pelo WhatsApp</div><p class="step__desc">Daniel ou Danilo respondem em até 2h úteis com a proposta.</p></div>
+      </div>
+      <div class="step">
+        <div class="step__thumb"><span class="step__num">3</span><img src="images/como-funciona/3-contrato.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="step__body"><div class="step__title">Contrato + pagamento</div><p class="step__desc">Assinatura digital (Autentique). PIX ou cartão 3x.</p></div>
+      </div>
+      <div class="step">
+        <div class="step__thumb"><span class="step__num">4</span><img src="images/como-funciona/4-entrega.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="step__body"><div class="step__title">Entrega onde estiver</div><p class="step__desc">Aeroporto, hotel ou condomínio. Em até 24h após pagamento.</p></div>
+      </div>
+      <div class="step">
+        <div class="step__thumb"><span class="step__num">5</span><img src="images/como-funciona/5-uso.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="step__body"><div class="step__title">Use sem stress</div><p class="step__desc">Suporte 24/7 no WhatsApp. Renovação 1 clique.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timing">
+  <div class="wrap">
+    <div class="timing__grid">
+      <div class="timing__card"><div class="timing__num">2h</div><div class="timing__label">Resposta humana</div></div>
+      <div class="timing__card"><div class="timing__num">24h</div><div class="timing__label">Carro entregue</div></div>
+      <div class="timing__card"><div class="timing__num">3min</div><div class="timing__label">Solicitação</div></div>
+      <div class="timing__card"><div class="timing__num">100%</div><div class="timing__label">Digital</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-block">
+  <div class="wrap">
+    <h2>Pronto pra começar?</h2>
+    <p>Escolha seu carro agora e a gente cuida do resto.</p>
+    <a href="reservar.html" class="btn btn--primary">Reservar agora</a>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+</body>
+</html>

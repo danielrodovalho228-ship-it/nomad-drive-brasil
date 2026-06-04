@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Perguntas frequentes — Nomade Drive Brasil</title>
+<meta name="description" content="Tire suas dúvidas sobre locação mensal de carros: caução, manutenção, devolução, formas de pagamento, uso para aplicativos e mais." />
+<meta name="theme-color" content="#0F3D2E" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #0F3D2E; --navy-light: #1a5440; --gold: #D4A853; --gold-dark: #b88f3f; --gold-pale: #f7eed7; --white: #fff; --cream: #FAFAF7; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; --warning: #C77D2B; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1,h2 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
+
+  .faq__cats { padding: 28px 0 0; }
+  .faq__cats-row { display: flex; gap: 8px; max-width: 820px; margin: 0 auto; overflow-x: auto; padding-bottom: 6px; }
+  .faq__cats button { padding: 8px 14px; background: var(--cream); border: 1.5px solid transparent; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--navy); cursor: pointer; white-space: nowrap; font-family: 'Inter', sans-serif; transition: all .15s; }
+  .faq__cats button.is-active { background: var(--navy); color: var(--white); }
+  .faq__cats button:hover:not(.is-active) { border-color: var(--navy); }
+
+  .faq { padding: 28px 0 36px; }
+  .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .faq__item { background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+  .faq__item[open] { border-color: var(--navy); box-shadow: 0 6px 16px rgba(15,61,46,0.06); }
+  .faq__item--warn { border-left: 3px solid var(--warning); }
+  .faq__item summary { padding: 16px 22px; cursor: pointer; font-weight: 700; font-size: 14.5px; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::after { content: '+'; color: var(--gold-dark); font-size: 22px; font-weight: 900; transition: transform .2s; }
+  .faq__item[open] summary::after { transform: rotate(45deg); }
+  .faq__answer { padding: 0 22px 16px; font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+  .faq__answer strong { color: var(--navy); }
+  .faq__answer ul { margin: 8px 0 0 18px; padding: 0; }
+  .faq__answer li { margin: 4px 0; }
+  .faq__answer a { color: var(--navy); font-weight: 700; }
+
+  .faq__cta { background: var(--cream); padding: 32px 0; text-align: center; }
+  .faq__cta h2 { font-size: 20px; margin-bottom: 8px; }
+  .faq__cta p { font-size: 14px; color: var(--gray-700); margin-bottom: 18px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; transition: all .15s; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover { background: var(--gold-dark); }
+  .btn--ghost { background: transparent; color: var(--navy); border: 2px solid var(--navy); margin-left: 8px; }
+  .btn--ghost:hover { background: var(--navy); color: var(--white); }
+</style>
+<link rel="stylesheet" href="assets/site-shell.css?v=1" />
+<script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="faq">
+<div id="site-header"></div>
+
+<section class="page-intro">
+  <div class="page-intro__inner">
+    <p class="page-intro__crumbs"><a href="index.html">Início</a> · Perguntas frequentes</p>
+    <h1>Perguntas frequentes</h1>
+    <p>18 respostas pras dúvidas mais comuns sobre nossa operação. Não achou? <a href="contato.html" style="color:var(--navy);font-weight:700;">Pergunta direto pra gente</a>.</p>
+  </div>
+</section>
+
+<section class="faq__cats">
+  <div class="wrap">
+    <div class="faq__cats-row">
+      <button type="button" data-cat="all" class="is-active">Todas</button>
+      <button type="button" data-cat="precos">Preços e planos</button>
+      <button type="button" data-cat="manutencao">Manutenção</button>
+      <button type="button" data-cat="entrega">Entrega e contrato</button>
+      <button type="button" data-cat="regras">Regras de uso</button>
+      <button type="button" data-cat="empresa">Sobre a empresa</button>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <div class="faq__list">
+
+      <details class="faq__item faq__item--warn" data-cat="regras">
+        <summary>Posso usar o carro para Uber, 99, iFood ou outros aplicativos?</summary>
+        <div class="faq__answer"><strong>Não.</strong> A Nomade Drive <strong>não atende motoristas de aplicativo</strong>. Veículos destinados <strong>exclusivamente ao uso particular ou profissional não-remunerado</strong>. Proibição expressa para: Uber, 99, Cabify, InDriver, iFood, Rappi, Loggi, Uber Eats, mototáxi, fretamento, transporte escolar e Transporte Remunerado de Passageiros (TRPIP — Lei 13.640/2018). Rescisão imediata e multa de 50% do valor total do contrato em caso de descumprimento. Para motoristas de aplicativo, recomendamos Kovi ou Yallo.</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>Como funciona a caução? Preciso de cartão de crédito?</summary>
+        <div class="faq__answer">Sim, pra <strong>caução pré-autorizada</strong> no cartão de crédito — R$ 1.500 no HB20 ou R$ 2.000 no Cronos. É só uma reserva no limite do cartão, <strong>não vira cobrança</strong> se você devolver sem dano. Aceitamos Visa, Master, Elo e Amex (nacional e internacional).</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>Não quero deixar caução alta no cartão. Tem como zerar?</summary>
+        <div class="faq__answer">Sim, oferecemos o <strong>Zero Caução</strong> como opcional mensal: +R$ 290/mês no HB20 (em vez de R$ 1.500 travado) ou +R$ 370/mês no Cronos (em vez de R$ 2.000). Ideal pra quem usa o cartão pra outras despesas durante a estadia.</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>Tem desconto pra contratos mais longos?</summary>
+        <div class="faq__answer">Sim, <strong>desconto progressivo</strong>: 30 dias preço cheio · 60 dias -5% · 90 dias -10% · 180 dias -15%. Aparece automático na <a href="reservar.html">simulação</a>.</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>E se eu rodar mais km do que o plano permite?</summary>
+        <div class="faq__answer">Você escolhe entre 3 planos (Essencial / Estendido / Sem Limite). Acima do <strong>Limite Total do Período</strong>, cobramos por km excedente só na devolução: R$ 0,80/km no HB20 ou R$ 1,00/km no Cronos. Para 3.000 km/mês dá pra rodar Uberlândia → BH ida e volta toda semana. Se sua rotina é maior, fale com a gente — fazemos pacote customizado.</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>O que está incluído no preço?</summary>
+        <div class="faq__answer">Tudo, sem letra miúda: Limite Total de km, seguro completo (colisão/roubo/terceiros), manutenção programada, IPVA, licenciamento, assistência 24h, telemetria. Você só paga combustível e pedágio. Multas são repassadas ao condutor.</div>
+      </details>
+
+      <details class="faq__item" data-cat="manutencao">
+        <summary>Quem paga a manutenção do carro durante o contrato?</summary>
+        <div class="faq__answer"><strong>A Nomade Drive é responsável por toda manutenção programada</strong>: óleo, filtros, revisões, freios e pneus por desgaste natural. <strong>Zero custo pra você.</strong></div>
+      </details>
+
+      <details class="faq__item" data-cat="manutencao">
+        <summary>Como funciona a troca de óleo durante o contrato?</summary>
+        <div class="faq__answer">Quando o painel sinaliza próximo do limite (geralmente 1.000 km de antecedência), Danilo entra em contato com <strong>3 opções</strong>: (A) busca e devolução no mesmo dia, (B) você leva à oficina parceira em horário agendado, (C) carro reserva temporário. Você escolhe. Sem cobrança extra em nenhuma das 3.</div>
+      </details>
+
+      <details class="faq__item" data-cat="manutencao">
+        <summary>E se acontecer um problema mecânico imprevisto?</summary>
+        <div class="faq__answer">Aciona Danilo via WhatsApp 24/7. <strong>Avaliação em até 30 minutos.</strong> Se for problema sério, levamos pra oficina parceira e providenciamos solução (incluindo carro reserva se necessário). Sem cobrança por falha do veículo.</div>
+      </details>
+
+      <details class="faq__item" data-cat="manutencao">
+        <summary>O que NÃO é coberto pela manutenção?</summary>
+        <div class="faq__answer">Pra ser transparente, o que é responsabilidade do cliente: combustível e lavagem, pneu furado por descuido (prego, buraco evidente), bateria danificada por uso incorreto, multas, pedágios e danos por colisão com culpa do condutor (cobertos pelo seguro com franquia).</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>Sou estrangeiro ou moro fora do Brasil. Posso alugar?</summary>
+        <div class="faq__answer">Sim. Precisamos de: CNH internacional (IDP) ou CNH brasileira válida, passaporte, comprovante de endereço (do país de origem serve) e cartão de crédito internacional. Pagamento aceita Wise/Remitly além de PIX e cartão. Contrato em português ou inglês. Fale com Daniel: <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">+55 (34) 98406-4864</a>.</div>
+      </details>
+
+      <details class="faq__item" data-cat="precos">
+        <summary>Quais formas de pagamento aceitam?</summary>
+        <div class="faq__answer">PIX (recomendado, sem taxa), cartão Visa/Master/Elo/Amex (nacional e internacional), boleto pra CNPJ (corporativo) ou transferência internacional Wise/Remitly. Cobrança mensal recorrente sem reajuste durante o contrato.</div>
+      </details>
+
+      <details class="faq__item" data-cat="entrega">
+        <summary>E se eu quiser devolver o carro antes do prazo?</summary>
+        <div class="faq__answer"><strong>Devolução flexível sem multa.</strong> Comunica com 48h de antecedência pelo WhatsApp e fazemos reembolso proporcional dos dias não usados (descontando o ajuste do desconto progressivo se cair pra faixa menor). Sem fidelidade.</div>
+      </details>
+
+      <details class="faq__item" data-cat="entrega">
+        <summary>Como funciona a entrega do carro?</summary>
+        <div class="faq__answer">Você escolhe no mapa: Aeroporto Bombonato, Center Shopping, Hospital de Clínicas UFU, Praça Tubal Vilela, Posto BR ou outro endereço (informa o CEP). <strong>Entrega em até 24h</strong> em qualquer ponto de Uberlândia, gratuita pra contratos de 30+ dias. Fora da cidade, taxa de R$ 50-150 conforme distância.</div>
+      </details>
+
+      <details class="faq__item" data-cat="entrega">
+        <summary>Posso ver o carro antes de fechar contrato?</summary>
+        <div class="faq__answer">Sim. Agendamos <strong>visita de 30 minutos</strong> em ponto público de Uberlândia. Levamos o carro até você pra inspecionar antes de assinar. Sem compromisso.</div>
+      </details>
+
+      <details class="faq__item" data-cat="entrega">
+        <summary>Posso renovar o contrato no fim do período?</summary>
+        <div class="faq__answer">Sim, <strong>renovação direta no WhatsApp</strong>. Sem fidelidade, sem multa, sem nova caução. Se renovar pra período maior, o desconto progressivo entra (ex: 30d + 30d = 60d → ganha 5% retroativo).</div>
+      </details>
+
+      <details class="faq__item" data-cat="empresa">
+        <summary>Onde fica a loja física? Posso ir pessoalmente?</summary>
+        <div class="faq__answer">A Nomade Drive <strong>opera 100% digital</strong> — sem loja física pra reduzir custo e repassar em preço melhor. Atendimento humano pelo WhatsApp 24/7. Pra visita presencial, agendamos em ponto público (shopping, aeroporto, café) com o carro junto.</div>
+      </details>
+
+      <details class="faq__item" data-cat="empresa">
+        <summary>Quem é responsável pela empresa? É confiável?</summary>
+        <div class="faq__answer">Daniel Rodovalho (CEO, engenheiro com 14 anos de gestão corporativa) e sócio operacional em Uberlândia. <strong>CNPJ em processo de registro na Junta Comercial de MG</strong> — documentação pública após emissão. Frota com seguro completo, contratos com assinatura digital (Autentique), pagamentos Stripe + PIX (Banco Central). Dúvidas: <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a> ou <a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a>.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<section class="faq__cta">
+  <div class="wrap">
+    <h2>Não achou sua dúvida?</h2>
+    <p>Fala direto com a gente — resposta em até 2h úteis.</p>
+    <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="btn btn--primary">WhatsApp</a>
+    <a href="contato.html" class="btn btn--ghost">Formulário</a>
+  </div>
+</section>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('[data-cat]');
+  var items = document.querySelectorAll('.faq__item');
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      buttons.forEach(function (x) { x.classList.remove('is-active'); });
+      b.classList.add('is-active');
+      var cat = b.dataset.cat;
+      items.forEach(function (it) {
+        it.style.display = (cat === 'all' || it.dataset.cat === cat) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+
+<div id="site-footer"></div>
+</body>
+</html>

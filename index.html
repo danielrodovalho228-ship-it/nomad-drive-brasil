@@ -4,12 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Nomade Drive — Aluguel mensal de carros em Uberlândia | Entrega onde você estiver</title>
-<meta name="description" content="Locação mensal de carros de 30 a 180 dias em Uberlândia/MG. Entrega no aeroporto, hotel ou condomínio. Contrato 100% digital, preço travado, devolução flexível. Para profissionais em transição." />
-<meta name="keywords" content="aluguel mensal de carros Uberlândia, locação mensal Uberlândia, carro mensal Uberlândia, alugar carro 30 dias, alugar carro 60 dias, locadora Uberlândia" />
+<meta name="description" content="Locação mensal de carros de 30 a 180 dias em Uberlândia/MG. Entrega no aeroporto, hotel ou condomínio. Contrato 100% digital, sem fidelidade, sem caução." />
+<meta name="keywords" content="aluguel mensal de carros Uberlândia, locação mensal Uberlândia, carro mensal Uberlândia, alugar carro 30 dias" />
 <meta name="theme-color" content="#0F3D2E" />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
-
-<!-- Open Graph -->
 <meta property="og:title" content="Nomade Drive — Aluguel mensal de carros em Uberlândia" />
 <meta property="og:description" content="Locação 30 a 180 dias. Entregamos onde você estiver. Contrato digital." />
 <meta property="og:image" content="images/car-hb20-1.jpg" />
@@ -22,38 +20,11 @@
 <style>
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    /* Paleta Verde Executivo (v3): Verde Floresta + Dourado Champagne + Verde Sálvia */
-    --navy: #0F3D2E;            /* Verde Floresta Escuro — primária 60-70% */
-    --navy-dark: #0a2a20;
-    --navy-light: #1a5440;
-    --navy-pale: #e8f0eb;
-    --sage: #5A8A6B;            /* Verde Sálvia — secundária 20-25% */
-    --sage-dark: #436b51;
-    --sage-pale: #e6efe9;
-    --gold: #D4A853;            /* Dourado Champagne — acento 5-10% */
-    --gold-dark: #b88f3f;
-    --gold-pale: #f7eed7;
-    --success: #2D7A4F;
-    --warning: #C77D2B;
-    --red: #9B2D2D;             /* erro */
-
-    /* Verde Nomade legacy (só marca: logo institucional) */
-    --brand-green: #4FA600;
-    --brand-green-dark: #3F8500;
-    --brand-green-pale: #ecf6e0;
-
-    /* Neutros v3 */
-    --white: #ffffff;
-    --cream: #FAFAF7;           /* off-white v3 */
-    --stone: #E8E5DD;           /* cinza pedra v3 */
-    --gray-900: #1A2A23;        /* texto escuro v3 */
-    --gray-700: #5C6B62;        /* texto secundário v3 */
-    --gray-500: #8a9890;
-    --gray-300: #c5cec8;
-    --gray-200: #e2e6e3;
-    --gray-100: #eef1ef;
-    --gray-50: #f6f7f6;
-
+    --navy: #0F3D2E; --navy-dark: #0a2a20; --navy-light: #1a5440; --navy-pale: #e8f0eb;
+    --sage: #5A8A6B; --sage-dark: #436b51; --sage-pale: #e6efe9;
+    --gold: #D4A853; --gold-dark: #b88f3f; --gold-pale: #f7eed7;
+    --white: #fff; --cream: #FAFAF7; --stone: #E8E5DD;
+    --gray-900: #1A2A23; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; --gray-100: #eef1ef; --gray-50: #f6f7f6;
     --shadow-sm: 0 1px 3px rgba(15,61,46,0.06);
     --shadow: 0 4px 12px rgba(15,61,46,0.08);
     --shadow-lg: 0 18px 40px rgba(15,61,46,0.14);
@@ -63,268 +34,83 @@
   img { max-width: 100%; height: auto; display: block; }
   a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.15; font-weight: 700; }
-  h1 { font-size: clamp(34px, 5.5vw, 58px); font-weight: 900; }
-  h2 { font-size: clamp(28px, 4vw, 40px); }
-  h3 { font-size: clamp(19px, 2.1vw, 24px); }
-  h4 { font-size: 18px; font-weight: 700; }
+  h1,h2,h3 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.15; font-weight: 700; }
+  h1 { font-size: clamp(30px, 5vw, 50px); font-weight: 900; }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); }
+  h3 { font-size: clamp(17px, 2vw, 22px); }
 
-  /* BOTÕES */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 30px; border-radius: 8px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 26px; border-radius: 8px; font-weight: 700; font-size: 14.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
   .btn--primary { background: var(--gold); color: var(--navy); }
   .btn--primary:hover { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,184,46,0.35); }
   .btn--ghost-navy { background: transparent; color: var(--navy); border-color: var(--navy); }
   .btn--ghost-navy:hover { background: var(--navy); color: var(--white); }
-  .btn--ghost-white { background: transparent; color: var(--white); border-color: var(--white); }
-  .btn--ghost-white:hover { background: var(--white); color: var(--navy); }
-  .btn--text-link { background: transparent; color: var(--navy); text-decoration: underline; padding: 15px 8px; border: none; }
-  .btn--text-link:hover { color: var(--gold-dark); }
-  .btn--sm { padding: 10px 20px; font-size: 13.5px; }
-  .btn--lg { padding: 17px 36px; font-size: 16.5px; }
-  .btn--block { width: 100%; }
-
-  /* NAV */
-  .nav { position: sticky; top: 0; z-index: 60; background: var(--white); border-bottom: 1px solid var(--gray-100); }
-  .nav__row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
-  .nav__brand { display: flex; align-items: center; text-decoration: none; }
-  .nav__logo { height: 42px; }
-  @media (min-width: 700px) { .nav__logo { height: 48px; } }
-  .nav__links { display: none; gap: 26px; align-items: center; }
-  .nav__links a { text-decoration: none; font-size: 14.5px; font-weight: 600; color: var(--navy); transition: color .15s; font-family: 'Inter', sans-serif; }
-  .nav__links a:hover { color: var(--gold-dark); }
-  .nav__cta { display: flex; gap: 10px; align-items: center; }
-  @media (min-width: 960px) { .nav__links { display: flex; } }
+  .btn--text { background: transparent; color: var(--navy); text-decoration: underline; padding: 13px 8px; border: none; }
+  .btn--text:hover { color: var(--gold-dark); }
 
   /* HERO */
-  .hero { background: var(--cream); padding: 56px 0 80px; position: relative; overflow: hidden; }
-  .hero__inner { display: grid; gap: 36px; align-items: center; }
-  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1.4fr; gap: 56px; } }
-  .hero__tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); margin-bottom: 18px; text-transform: uppercase; }
-  .hero h1 { margin-bottom: 20px; }
-  .hero__sub { font-size: clamp(16px, 1.8vw, 19px); color: var(--gray-700); margin-bottom: 28px; max-width: 540px; line-height: 1.6; }
+  .hero { background: var(--cream); padding: 40px 0 52px; position: relative; overflow: hidden; }
+  .hero__inner { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1.4fr; gap: 48px; } }
+  .hero__tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); margin-bottom: 14px; text-transform: uppercase; }
+  .hero h1 { margin-bottom: 14px; }
+  .hero__sub { font-size: clamp(15px, 1.7vw, 18px); color: var(--gray-700); margin-bottom: 22px; max-width: 540px; line-height: 1.55; }
   .hero__sub strong { color: var(--navy); font-weight: 600; }
-  .hero__cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .hero__visual { display: flex; align-items: center; justify-content: center; position: relative; }
   .hero__visual img { width: 100%; max-width: 680px; border-radius: 14px; aspect-ratio: 3/2; object-fit: cover; box-shadow: var(--shadow-lg); }
-  .hero__floating-badge { position: absolute; bottom: -18px; right: 20px; background: var(--navy); color: var(--white); padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 13px; box-shadow: var(--shadow-lg); }
-  .hero__floating-badge strong { font-size: 22px; display: block; line-height: 1.1; margin-bottom: 3px; color: var(--gold); font-family: 'Playfair Display', serif; font-weight: 900; }
+  .hero__badge { position: absolute; bottom: -14px; right: 20px; background: var(--navy); color: var(--white); padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 12.5px; box-shadow: var(--shadow-lg); }
+  .hero__badge strong { font-size: 20px; display: block; line-height: 1.1; margin-bottom: 3px; color: var(--gold); font-family: 'Playfair Display', serif; font-weight: 900; }
 
-  /* FAIXA 5 DIFERENCIAIS (logo após hero) */
-  .strip { background: var(--navy); color: var(--white); padding: 42px 0; }
-  .strip__row { display: flex; flex-wrap: wrap; gap: 0; align-items: center; justify-content: center; text-align: center; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.6; }
+  /* STRIP DIFERENCIAIS */
+  .strip { background: var(--navy); color: var(--white); padding: 28px 0; }
+  .strip__row { display: flex; flex-wrap: wrap; gap: 0; align-items: center; justify-content: center; text-align: center; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.6; }
   .strip__item { padding: 4px 18px; position: relative; }
   .strip__item + .strip__item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
   .strip__item strong { color: var(--gold); font-weight: 700; }
-  @media (max-width: 720px) { .strip__row { flex-direction: column; gap: 14px; } .strip__item + .strip__item::before { display: none; } }
+  @media (max-width: 720px) { .strip__row { flex-direction: column; gap: 10px; } .strip__item + .strip__item::before { display: none; } }
 
-  /* CATÁLOGO (2 carros + fantasma) */
-  .fleet { padding: 56px 0; background: var(--white); }
-  .head { text-align: center; max-width: 720px; margin: 0 auto 36px; }
-  .head h2 { margin-bottom: 10px; }
-  .head p { color: var(--gray-700); font-size: 16px; line-height: 1.55; }
-  .fleet__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .fleet__grid { grid-template-columns: repeat(3, 1fr); } }
-  .car { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); transition: all .2s; display: flex; flex-direction: column; }
-  .car:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--navy-light); }
-  .car__photo { aspect-ratio: 3/2; overflow: hidden; background: var(--gray-100); position: relative; }
-  .car__photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-  .car:hover .car__photo img { transform: scale(1.04); }
-  .car__photo-badge { position: absolute; top: 12px; left: 12px; background: var(--navy); color: var(--white); padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
-  .car__photo-badge--available { background: var(--sage); }
-  .car__photo-badge--soon { background: var(--gold); color: var(--navy); }
-  .car__body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-  .car__name { margin-bottom: 4px; }
-  .car__cat { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); margin-bottom: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
-  .car__specs { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; font-size: 13px; color: var(--gray-700); }
-  .car__spec { display: inline-flex; align-items: center; gap: 5px; }
-  .car__spec svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; }
-  .car__included { font-size: 12px; color: var(--sage-dark); font-weight: 700; background: var(--sage-pale); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; display: inline-block; letter-spacing: 0.2px; }
-  .car__price { padding: 14px 0; border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-bottom: 18px; }
-  .car__price-from { font-size: 12px; color: var(--gray-500); display: block; font-family: 'Inter', sans-serif; font-weight: 500; }
-  .car__price-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--navy); }
-  .car__price-val small { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-500); font-weight: 500; }
-  .car__cta { margin-top: auto; }
-  .car--soon { background: var(--cream); border-color: var(--gray-300); }
-  .car--soon .car__photo { background: var(--navy-pale); display: flex; align-items: center; justify-content: center; color: var(--navy-light); }
-  .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+  /* HOME CARDS — grid de links pras páginas internas */
+  .nav-cards { padding: 36px 0; background: var(--white); }
+  .head { text-align: center; max-width: 680px; margin: 0 auto 22px; }
+  .head h2 { margin-bottom: 6px; }
+  .head p { color: var(--gray-700); font-size: 14.5px; line-height: 1.55; }
+  .nav-cards__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1080px; margin: 0 auto; }
+  @media (min-width: 720px) { .nav-cards__grid { grid-template-columns: repeat(3, 1fr); } }
+  .nc { display: flex; flex-direction: column; text-decoration: none; background: var(--white); border: 1px solid rgba(15,61,46,0.08); border-radius: 12px; overflow: hidden; transition: all .2s cubic-bezier(0.4,0,0.2,1); }
+  .nc:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(15,61,46,0.1); border-color: var(--navy-light); }
+  .nc__thumb { aspect-ratio: 4/3; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); overflow: hidden; position: relative; }
+  .nc__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nc__body { padding: 14px 18px 16px; flex: 1; display: flex; flex-direction: column; }
+  .nc__title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin: 0 0 4px; line-height: 1.25; }
+  .nc__desc { font-size: 12.5px; color: var(--gray-700); line-height: 1.5; margin: 0; flex: 1; }
+  .nc__cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11.5px; font-weight: 700; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+  .nc__cta::after { content: '→'; transition: transform .15s; }
+  .nc:hover .nc__cta::after { transform: translateX(3px); }
 
-  /* PARA QUEM É — Card com banner foto topo + tipografia (estilo Airbnb/Linear) */
-  .who { padding: 56px 0; background: var(--cream); }
-  .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
-  .who__card { background: var(--white); border-radius: 14px; border: 1px solid rgba(15,61,46,0.06); display: flex; flex-direction: column; overflow: hidden; transition: all .25s cubic-bezier(0.4, 0, 0.2, 1); }
-  .who__card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15,61,46,0.1); }
-  /* Banner foto topo do card (compacto, 5:2 widescreen) */
-  .who__banner { aspect-ratio: 5/2; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
-  @media (max-width: 720px) { .who__banner { aspect-ratio: 16/7; } }
-  .who__banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
-  .who__card:hover .who__banner img { transform: scale(1.04); }
-  .who__banner-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(15,61,46,0.4) 100%); pointer-events: none; }
-  .who__banner-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 20px; text-align: center; color: rgba(255,255,255,0.85); }
-  .who__banner-fallback strong { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.01em; }
-  .who__banner-fallback span { font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 1.4px; color: var(--gold); text-transform: uppercase; }
-  .who__banner-fallback em { font-family: 'Inter', sans-serif; font-size: 10.5px; color: rgba(255,255,255,0.6); font-style: normal; margin-top: 4px; }
-  /* Banner gradient por perfil quando img falha */
-  .who__card--executivo .who__banner { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); }
-  .who__card--medico .who__banner { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
-  .who__card--familia .who__banner { background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%); }
-  .who__card--nomade .who__banner { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); }
-  .who__card--nomade .who__banner-fallback span { color: var(--navy); }
-  .who__card--nomade .who__banner-fallback em { color: rgba(15,31,46,0.6); }
-  /* Conteúdo abaixo do banner */
-  .who__body { padding: 26px 28px 24px; display: flex; flex-direction: column; flex: 1; }
-  .who__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px; }
-  .who__title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
-  .who__text { font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; margin: 0 0 18px; flex: 1; }
-  .who__cta { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); text-decoration: none; transition: gap .2s, color .2s; align-self: flex-start; }
-  .who__cta:hover { gap: 12px; color: var(--gold-dark); }
-  .who__cta::after { content: '→'; transition: transform .2s; }
-  .who__cta:hover::after { transform: translateX(2px); }
-
-  /* COMPROMISSOS — 6 cards */
-  .pledges { padding: 56px 0; background: var(--white); }
-  .pledges__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1080px; margin: 0 auto; }
-  @media (min-width: 720px) { .pledges__grid { grid-template-columns: repeat(3, 1fr); } }
-  .pledge { background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 22px 24px; transition: all .2s; position: relative; overflow: hidden; }
-  .pledge:hover { border-color: var(--navy-light); transform: translateY(-2px); }
-  .pledge--highlight { background: var(--gold-pale); border-color: var(--gold); }
-  .pledge__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-  .pledge__num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; }
-  .pledge__thumb { width: 64px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; opacity: 0.92; }
-  @media (max-width: 540px) { .pledge__thumb { width: 52px; height: 36px; } }
-  .pledge__title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.005em; }
-  .pledge__text { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--gray-700); line-height: 1.55; margin: 0; }
-
-  /* COMO FUNCIONA — Grid compacto 5 cards (Linear/Stripe-style) */
-  .how { padding: 56px 0; background: var(--white); }
-  .how__steps { max-width: 1140px; margin: 0 auto; display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
-  @media (min-width: 720px) { .how__steps { grid-template-columns: repeat(5, 1fr); gap: 12px; } }
-  .how__step { background: var(--cream); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: all .2s; border: 1px solid rgba(15,61,46,0.06); }
-  .how__step:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,61,46,0.08); border-color: var(--navy-light); }
-  .how__thumb { aspect-ratio: 16/10; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
-  .how__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .how__thumb-num { position: absolute; top: 10px; left: 12px; background: var(--gold); color: var(--navy); font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 2; }
-  .how__thumb-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; gap: 4px; }
-  .how__thumb-fallback small { font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
-  .how__body { padding: 14px 16px 16px; flex: 1; }
-  .how__title { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 800; color: var(--navy); margin: 0 0 6px; letter-spacing: -0.005em; line-height: 1.25; }
-  .how__desc { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-700); line-height: 1.5; margin: 0; }
-  .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
-  .step { text-align: center; padding: 8px; }
-  .step__num { width: 48px; height: 48px; border-radius: 50%; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; margin: 0 auto 16px; }
-  .step h4 { font-size: 15.5px; font-weight: 700; margin-bottom: 8px; }
-  .step p { font-size: 13.5px; color: var(--gray-700); line-height: 1.55; font-family: 'Inter', sans-serif; }
-
-  /* COMPARAÇÃO LOCALIZA */
-  .compare { padding: 56px 0; background: var(--cream); }
-  .compare__table { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: collapse; background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
-  .compare__table th, .compare__table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 14.5px; }
-  .compare__table thead th { background: var(--navy); color: var(--white); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; font-family: 'Inter', sans-serif; }
+  /* COMPARATIVO compacto */
+  .compare { padding: 36px 0; background: var(--cream); }
+  .compare__table { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  .compare__table th, .compare__table td { padding: 12px 18px; text-align: left; border-bottom: 1px solid var(--gray-200); font-size: 13.5px; }
+  .compare__table thead th { background: var(--navy); color: var(--white); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
   .compare__table thead th:nth-child(3) { background: var(--gold); color: var(--navy); }
   .compare__table tbody td:nth-child(1) { font-weight: 600; color: var(--navy); }
   .compare__table tbody td:nth-child(2) { color: var(--gray-500); }
   .compare__table tbody td:nth-child(3) { color: var(--navy); font-weight: 600; background: var(--gold-pale); }
-  .compare__table tbody tr:last-child td { border-bottom: none; font-weight: 700; }
-  .compare__table tbody tr.compare__highlight td { background: var(--sage-pale); color: var(--sage-dark); font-weight: 800; font-size: 15px; border-top: 2px solid var(--sage); }
-  .compare__table tbody tr.compare__highlight td:nth-child(3) { background: var(--sage); color: var(--white); }
-  .compare__note { text-align: center; font-size: 12.5px; color: var(--gray-500); margin-top: 18px; }
+  .compare__table tbody tr:last-child td { border-bottom: none; }
 
-  .compare__explain { max-width: 880px; margin: 32px auto 0; padding: 24px 28px; background: var(--white); border-left: 4px solid var(--navy); border-radius: 8px; box-shadow: var(--shadow-sm); }
-  .compare__explain h3 { font-size: 19px; color: var(--navy); margin-bottom: 10px; }
-  .compare__explain p { font-size: 14.5px; color: var(--gray-700); line-height: 1.65; margin: 0; }
-  .compare__explain strong { color: var(--navy); }
-
-  /* SOBRE */
-  .about { padding: 56px 0; background: var(--white); }
-  .about__grid { display: grid; gap: 36px; grid-template-columns: 1fr; align-items: center; max-width: 1040px; margin: 0 auto; }
-  @media (min-width: 720px) { .about__grid { grid-template-columns: 0.9fr 1.1fr; } }
-  .about__photo { aspect-ratio: 4/3; background: var(--navy); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 13.5px; text-align: center; padding: 24px; overflow: hidden; flex-direction: column; }
-  .about__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-  .about p { font-size: 16px; color: var(--gray-700); line-height: 1.7; margin-bottom: 16px; font-family: 'Inter', sans-serif; }
-  .about p strong { color: var(--navy); font-weight: 700; }
-  .about__socio { padding: 16px 0; border-bottom: 1px solid var(--gray-200); }
-  .about__socio:last-child { border-bottom: none; }
-  .about__socio strong { display: block; font-size: 15.5px; color: var(--navy); margin-bottom: 4px; font-weight: 700; font-family: 'Inter', sans-serif; }
-  .about__socio span { font-size: 14px; color: var(--gray-700); line-height: 1.55; }
-  .about__socio a { color: var(--navy); font-weight: 700; text-decoration: underline; }
-
-  /* DEPOIMENTOS (placeholder honesto) */
-  .testimonials { padding: 56px 0; background: var(--cream); }
-  .testimonials__empty { max-width: 720px; margin: 0 auto; text-align: center; background: var(--white); border-radius: 14px; padding: 44px 32px; border: 1px solid var(--gray-200); }
-  .testimonials__empty h3 { font-size: 22px; margin-bottom: 12px; color: var(--navy); }
-  .testimonials__empty p { font-size: 15px; color: var(--gray-700); line-height: 1.65; font-family: 'Inter', sans-serif; }
-  .testimonials__empty strong { color: var(--navy); }
-
-  /* FAQ */
-  .faq { padding: 56px 0; background: var(--white); }
-  .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-  .faq__item { background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); overflow: hidden; transition: border-color .15s; }
-  .faq__item[open] { border-color: var(--navy); }
-  .faq__item summary { padding: 18px 22px; cursor: pointer; font-weight: 700; font-size: 15px; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; }
-  .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary::after { content: '+'; color: var(--gold-dark); font-size: 22px; font-weight: 900; transition: transform .2s; }
-  .faq__item[open] summary::after { transform: rotate(45deg); }
-  .faq__answer { padding: 0 22px 18px; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; font-family: 'Inter', sans-serif; }
-  .faq__answer strong { color: var(--navy); }
-
-  /* CTA final */
-  .cta-final { padding: 56px 0; background: var(--navy); color: var(--white); text-align: center; }
-  .cta-final h2 { color: var(--white); margin-bottom: 16px; }
-  .cta-final p { color: rgba(255,255,255,0.82); font-size: 17px; max-width: 600px; margin: 0 auto 28px; line-height: 1.6; font-family: 'Inter', sans-serif; }
-  .cta-final__row { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-
-  /* FAIXA DE SELOS (antes do footer) — sem ícones, círculos com sigla ou logo real */
-  .seals { padding: 36px 0; background: var(--white); border-top: 1px solid var(--gray-200); }
-  /* Compactar espaços em branco no mobile */
-  @media (max-width: 720px) {
-    .strip { padding: 32px 0; }
-    .fleet, .who, .how, .compare, .about, .testimonials, .faq, .cta-final { padding: 40px 0 !important; }
-    .seals { padding: 28px 0; }
-    .head { margin-bottom: 28px; }
-  }
-  .seals__title { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 28px; font-family: 'Inter', sans-serif; }
-  .seals__row { display: flex; flex-wrap: wrap; gap: 28px 36px; align-items: center; justify-content: center; }
-  .seal { display: inline-flex; align-items: center; gap: 10px; color: var(--gray-700); font-size: 13.5px; font-weight: 600; font-family: 'Inter', sans-serif; }
-  .seal__logo { width: 38px; height: 38px; border-radius: 50%; background: var(--navy-pale); color: var(--navy); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 900; overflow: hidden; flex-shrink: 0; }
-  .seal__logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-  .seal__name { color: var(--navy); font-weight: 700; }
-  .seal__sub { color: var(--gray-500); font-size: 12px; display: block; font-weight: 500; }
-  .seals__note { text-align: center; font-size: 13px; color: var(--gray-700); margin-top: 30px; max-width: 720px; margin-left: auto; margin-right: auto; font-family: 'Inter', sans-serif; line-height: 1.6; }
-  .seals__note strong { color: var(--navy); }
-
-  /* FOOTER */
-  .foot { background: var(--navy-dark); color: rgba(255,255,255,0.65); padding: 56px 0 30px; }
-  .foot__row { display: grid; gap: 28px; grid-template-columns: 1fr; margin-bottom: 32px; }
-  @media (min-width: 720px) { .foot__row { grid-template-columns: 2fr 1fr 1fr 1.4fr; } }
-  .foot__col h5 { color: var(--white); font-size: 12px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; font-family: 'Inter', sans-serif; }
-  .foot__col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13.5px; padding: 5px 0; transition: color .15s; font-family: 'Inter', sans-serif; }
-  .foot__col a:hover { color: var(--gold); }
-  .foot__brand strong { color: var(--white); font-family: 'Playfair Display', serif; font-size: 22px; display: block; margin-bottom: 10px; font-weight: 900; letter-spacing: 0; }
-  .foot__brand p { font-size: 13.5px; line-height: 1.65; margin-bottom: 12px; font-family: 'Inter', sans-serif; }
-  .foot__bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 22px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; }
-  .foot__bottom strong { color: rgba(255,255,255,0.65); }
+  /* CTA FINAL */
+  .cta-final { padding: 40px 0; background: var(--navy); color: var(--white); text-align: center; }
+  .cta-final h2 { color: var(--white); margin-bottom: 12px; }
+  .cta-final p { color: rgba(255,255,255,0.82); font-size: 15px; max-width: 580px; margin: 0 auto 22px; line-height: 1.55; }
+  .cta-final__row { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .cta-final .btn--ghost-navy { color: var(--white); border-color: var(--white); }
+  .cta-final .btn--ghost-navy:hover { background: var(--white); color: var(--navy); }
 </style>
+<link rel="stylesheet" href="assets/site-shell.css?v=1" />
+<script defer src="assets/site-shell.js?v=1"></script>
 </head>
-<body>
-
-<!-- NAV -->
-<header class="nav">
-  <div class="wrap nav__row">
-    <a href="index.html" class="nav__brand" aria-label="Nomade Drive — início">
-      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nav__logo" />
-    </a>
-    <nav class="nav__links" aria-label="Navegação principal">
-      <a href="#carros">Frota</a>
-      <a href="#para-quem-e">Para quem é</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#faq">Dúvidas</a>
-    </nav>
-    <div class="nav__cta">
-      <a href="#carros" class="btn btn--primary btn--sm">Ver carros</a>
-    </div>
-  </div>
-</header>
+<body data-nd-page="home">
+<div id="site-header"></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -332,607 +118,117 @@
     <div>
       <span class="hero__tag">Atendimento humano · Uberlândia-MG</span>
       <h1>Carros para quem está chegando em Uberlândia</h1>
-      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com <strong>3.000 km inclusos</strong>. Entrega no aeroporto, no hotel ou no condomínio. Sem fila, sem loja, sem letra miúda.</p>
+      <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com 3 planos de quilometragem. Entrega no aeroporto, no hotel ou no condomínio. <strong>Sem fila, sem loja, sem letra miúda.</strong></p>
       <div class="hero__cta">
-        <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
-        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20Nomade%20Drive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--text-link">Falar pelo WhatsApp</a>
+        <a href="reservar.html" class="btn btn--primary">Reservar agora</a>
+        <a href="frota.html" class="btn btn--ghost-navy">Ver frota</a>
       </div>
     </div>
     <div class="hero__visual">
-      <img src="images/car-hb20-1.jpg" alt="Nomade Drive entregando carro em Uberlândia" loading="eager" />
-      <div class="hero__floating-badge">
-        <strong>R$ 3.500</strong>
-        a partir / mês · 3.000 km inclusos
-      </div>
+      <img src="images/car-hb20-1.jpg" alt="Hyundai HB20 — locação mensal Nomade Drive Uberlândia" />
+      <div class="hero__badge">A partir de<strong>R$ 3.500</strong>30 dias · tudo incluso</div>
     </div>
   </div>
 </section>
 
-<!-- FAIXA 5 DIFERENCIAIS (substitui contadores zerados) -->
+<!-- STRIP -->
 <section class="strip">
   <div class="wrap">
     <div class="strip__row">
-      <div class="strip__item"><strong>3.000 km/mês</strong> inclusos</div>
-      <div class="strip__item">Entrega em <strong>qualquer ponto</strong> de Uberlândia</div>
-      <div class="strip__item">Contrato <strong>100% digital</strong></div>
-      <div class="strip__item">Devolução <strong>flexível, sem multa</strong></div>
-      <div class="strip__item"><strong>Atendimento humano</strong> 24/7</div>
+      <div class="strip__item"><strong>100%</strong> digital</div>
+      <div class="strip__item"><strong>24h</strong> pra entregar</div>
+      <div class="strip__item"><strong>0</strong> fidelidade</div>
+      <div class="strip__item"><strong>2h</strong> de resposta</div>
+      <div class="strip__item"><strong>Uberlândia/MG</strong></div>
     </div>
   </div>
 </section>
 
-<!-- PARA QUEM É (grid 2x2) -->
-<section class="who" id="para-quem-e">
+<!-- CARDS DE NAVEGAÇÃO PRAS PÁGINAS -->
+<section class="nav-cards">
   <div class="wrap">
     <div class="head">
-      <h2>Feito para profissionais em transição</h2>
-      <p>Atendemos quem precisa de carro em Uberlândia por 30 dias ou mais.</p>
+      <h2>O que você quer fazer?</h2>
+      <p>Cada página com a informação na profundidade certa.</p>
     </div>
-    <div class="who__grid">
+    <div class="nav-cards__grid">
 
-      <article class="who__card who__card--executivo">
-        <div class="who__banner">
-          <img src="images/perfis/executivo.jpg" alt="Executivo profissional em Uberlândia"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="who__banner-fallback" style="display:none;">
-            <span>Para executivos</span>
-            <strong>Em transferência</strong>
-            <em>Adicione foto em images/perfis/executivo.jpg</em>
-          </div>
-          <div class="who__banner-overlay"></div>
+      <a href="frota.html" class="nc">
+        <div class="nc__thumb"><img src="images/car-hb20-1.jpg" alt="" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Ver a frota</h3>
+          <p class="nc__desc">2 carros disponíveis (HB20 popular e Cronos sedan automático), com fotos reais e specs.</p>
+          <span class="nc__cta">Ver carros</span>
         </div>
-        <div class="who__body">
-          <span class="who__tag">30-90 dias · Executivo</span>
-          <h3 class="who__title">Executivos em transferência</h3>
-          <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Carro confiável, sem precisar comprar.</p>
-          <a href="reservar.html?perfil=executivo" class="who__cta">Solicitar carro</a>
-        </div>
-      </article>
+      </a>
 
-      <article class="who__card who__card--medico">
-        <div class="who__banner">
-          <img src="images/perfis/medico.jpg" alt="Profissional de saúde em hospital"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="who__banner-fallback" style="display:none;">
-            <span>Para médicos</span>
-            <strong>Profissionais de saúde</strong>
-            <em>Adicione foto em images/perfis/medico.jpg</em>
-          </div>
-          <div class="who__banner-overlay"></div>
+      <a href="precos.html" class="nc">
+        <div class="nc__thumb"><img src="images/compromissos/3-liberdade-km.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Preços e planos</h3>
+          <p class="nc__desc">3 planos de quilometragem por carro, com Limite Total do Período. Sem caução, sem fidelidade.</p>
+          <span class="nc__cta">Ver preços</span>
         </div>
-        <div class="who__body">
-          <span class="who__tag">30-180 dias · Saúde</span>
-          <h3 class="who__title">Médicos e profissionais de saúde</h3>
-          <p class="who__text">Plantões em hospitais de Uberlândia (HC-UFU, Santa Marta, Madrecor), consultorias temporárias, residências médicas.</p>
-          <a href="reservar.html?perfil=medico" class="who__cta">Solicitar carro</a>
-        </div>
-      </article>
+      </a>
 
-      <article class="who__card who__card--familia">
-        <div class="who__banner">
-          <img src="images/perfis/familia.jpg" alt="Família em mudança"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="who__banner-fallback" style="display:none;">
-            <span>Para famílias</span>
-            <strong>Em mudança</strong>
-            <em>Adicione foto em images/perfis/familia.jpg</em>
-          </div>
-          <div class="who__banner-overlay"></div>
+      <a href="como-funciona.html" class="nc">
+        <div class="nc__thumb"><img src="images/como-funciona/1-escolha.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Como funciona</h3>
+          <p class="nc__desc">5 etapas, 100% online. Do clique ao volante em até 24 horas após assinar.</p>
+          <span class="nc__cta">Ver passo a passo</span>
         </div>
-        <div class="who__body">
-          <span class="who__tag">60-180 dias · Família</span>
-          <h3 class="who__title">Famílias em mudança</h3>
-          <p class="who__text">Mudança de casa, reforma, espera por veículo próprio, transição de carreira. Espaço para 5, sem compromisso longo.</p>
-          <a href="reservar.html?perfil=familia" class="who__cta">Solicitar carro</a>
-        </div>
-      </article>
+      </a>
 
-      <article class="who__card who__card--nomade">
-        <div class="who__banner">
-          <img src="images/perfis/nomade.jpg" alt="Jovem profissional remoto em café"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="who__banner-fallback" style="display:none;">
-            <span>Para nômades</span>
-            <strong>Digitais e estudantes</strong>
-            <em>Adicione foto em images/perfis/nomade.jpg</em>
-          </div>
-          <div class="who__banner-overlay"></div>
+      <a href="publico.html" class="nc">
+        <div class="nc__thumb"><img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Para quem é</h3>
+          <p class="nc__desc">Executivos em transferência, médicos visitantes, famílias em mudança e nômades digitais.</p>
+          <span class="nc__cta">Ver perfis</span>
         </div>
-        <div class="who__body">
-          <span class="who__tag">30-90 dias · Nômade</span>
-          <h3 class="who__title">Nômades digitais e estudantes</h3>
-          <p class="who__text">Temporadas profissionais em Uberlândia, trabalho remoto, especialização universitária. Pague só pelo tempo que vai usar.</p>
-          <a href="reservar.html?perfil=nomade" class="who__cta">Solicitar carro</a>
-        </div>
-      </article>
+      </a>
 
-    </div>
+      <a href="sobre.html" class="nc">
+        <div class="nc__thumb"><img src="images/compromissos/6-suporte-247.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Sobre nós</h3>
+          <p class="nc__desc">Equipe enxuta de 2 sócios em Uberlândia. Compromissos com o cliente, sem terceirização.</p>
+          <span class="nc__cta">Conhecer</span>
+        </div>
+      </a>
 
-    <!-- Bloco: Para Quem NÃO É (estilo Linear sutil) -->
-    <details style="max-width: 880px; margin: 36px auto 0; background: var(--white); border: 1px solid rgba(15,61,46,0.06); border-left: 3px solid var(--gray-500); border-radius: 10px; padding: 0;">
-      <summary style="padding: 18px 26px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
-        <span><span style="font-size: 11px; color: var(--gray-500); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; margin-right: 8px;">Importante</span>Quem não atendemos</span>
-        <span style="font-size: 20px; color: var(--gray-500); font-weight: 300;">+</span>
-      </summary>
-      <div style="padding: 0 26px 22px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray-700); line-height: 1.65;">
-        <p style="margin: 0 0 10px;">A Nomade Drive opera no nicho de profissionais em transição com uso particular. <strong style="color: var(--navy);">Não atendemos:</strong></p>
-        <ul style="margin: 0 0 14px 18px; padding: 0;">
-          <li>Transporte por aplicativo (Uber, 99, Cabify, InDriver, BlaBlaCar)</li>
-          <li>Entrega por aplicativo (iFood, Rappi, Loggi, James, Uber Eats, Lalamove)</li>
-          <li>Transporte escolar, fretamento ou mototáxi</li>
-          <li>Sublocação a terceiros não-cadastrados no contrato</li>
-          <li>Atividades comerciais não declaradas formalmente</li>
-        </ul>
-        <p style="margin: 0; font-size: 13px; color: var(--gray-500);">Para motoristas de aplicativo, plataformas como <strong>Kovi</strong> e <strong>Yallo</strong> são especializadas no perfil de uso intenso.</p>
-      </div>
-    </details>
-  </div>
-</section>
-
-<!-- CATÁLOGO 2 CARROS + FANTASMA -->
-<section class="fleet" id="carros">
-  <div class="wrap">
-    <div class="head">
-      <h2>Nossa frota</h2>
-      <p>2 carros disponíveis agora em Uberlândia. Frota própria com manutenção e seguro completos por nossa conta.</p>
-    </div>
-    <div class="fleet__grid">
-
-      <!-- HB20 -->
-      <article class="car">
-        <div class="car__photo">
-          <img src="images/car-hb20-1.jpg" alt="Hyundai HB20 — popular econômico Nomade Drive" loading="lazy" />
-          <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
+      <a href="faq.html" class="nc">
+        <div class="nc__thumb"><img src="images/compromissos/2-entrega-24h.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="nc__body">
+          <h3 class="nc__title">Perguntas frequentes</h3>
+          <p class="nc__desc">18 respostas pras dúvidas mais comuns: caução, manutenção, devolução, formas de pagamento.</p>
+          <span class="nc__cta">Ler FAQ</span>
         </div>
-        <div class="car__body">
-          <div class="car__cat">Popular Econômico</div>
-          <h3 class="car__name">Hyundai HB20</h3>
-          <div class="car__specs">
-            <span class="car__spec">1.0 Flex</span>
-            <span class="car__spec">Manual</span>
-            <span class="car__spec">5 lugares</span>
-          </div>
-          <div class="car__included">Limite Total do Período · seguro · manutenção</div>
-          <div class="car__price">
-            <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 3.500<small> /30 dias</small></span>
-            <small class="car__price-from" style="margin-top:4px;">3 planos: Essencial · Estendido · Sem Limite</small>
-          </div>
-          <a href="carros/popular.html#precos" class="btn btn--primary btn--block car__cta">Ver os 3 planos</a>
-        </div>
-      </article>
-
-      <!-- Cronos -->
-      <article class="car">
-        <div class="car__photo">
-          <img src="images/car-cronos-1.jpg" alt="Fiat Cronos — sedan médio automático Nomade Drive" loading="lazy" />
-          <span class="car__photo-badge car__photo-badge--available">Disponível agora</span>
-        </div>
-        <div class="car__body">
-          <div class="car__cat">Sedan Médio Automático</div>
-          <h3 class="car__name">Fiat Cronos</h3>
-          <div class="car__specs">
-            <span class="car__spec">1.3 Flex</span>
-            <span class="car__spec">Automático</span>
-            <span class="car__spec">5 lugares</span>
-          </div>
-          <div class="car__included">Limite Total do Período · seguro · manutenção</div>
-          <div class="car__price">
-            <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 4.500<small> /30 dias</small></span>
-            <small class="car__price-from" style="margin-top:4px;">3 planos: Essencial · Estendido · Sem Limite</small>
-          </div>
-          <a href="carros/sedan.html#precos" class="btn btn--primary btn--block car__cta">Ver os 3 planos</a>
-        </div>
-      </article>
-
-      <!-- Próximo modelo: SUV — placeholder honesto até comprar o veículo real.
-           NÃO usar foto stock random — pode mostrar mesa/laptop/qualquer coisa.
-           Quando Daniel comprar SUV, basta substituir o <div> abaixo por:
-           <div class="car__photo"><img src="images/car-suv-1.jpg" alt="SUV Nomade Drive" /></div> -->
-      <article class="car car--soon">
-        <div class="car__photo" style="position:relative; background:linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; padding:24px; text-align:center; overflow:hidden;">
-          <span style="font-family:'Inter',sans-serif; font-size:10px; font-weight:800; letter-spacing:2px; color:var(--gold); text-transform:uppercase;">Próximo lançamento</span>
-          <span style="font-family:'Playfair Display',serif; font-size:42px; font-weight:900; color:#fff; line-height:1; letter-spacing:-0.02em;">SUV</span>
-          <span style="font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--gold); line-height:1;">Compacto · 2026</span>
-          <span style="font-family:'Inter',sans-serif; font-size:11px; color:rgba(255,255,255,0.6); margin-top:8px; max-width:200px; line-height:1.4;">Foto e modelo serão divulgados em Set/2026</span>
-        </div>
-        <div class="car__body">
-          <div class="car__cat">Próximo modelo</div>
-          <h3 class="car__name">SUV Compacto</h3>
-          <div class="car__specs">
-            <span class="car__spec">Chegando em Set/2026</span>
-          </div>
-          <div class="car__price">
-            <small class="car__price-from">Preview · preço estimado</small>
-            <span class="car__price-val">R$ 5.500<small> /mês</small></span>
-          </div>
-          <form id="suvWaitForm" style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
-            <input type="text" id="suvWaitName" placeholder="Seu nome" required
-                   style="width:100%; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:6px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--navy); background:var(--white);" />
-            <input type="email" id="suvWaitEmail" placeholder="seu@email.com" required
-                   style="width:100%; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:6px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--navy); background:var(--white);" />
-            <button type="submit" class="btn btn--primary btn--block" style="margin-top:4px;">Avise-me quando chegar</button>
-            <p id="suvWaitStatus" style="display:none; font-family:'Inter',sans-serif; font-size:12.5px; color:var(--sage-dark); margin-top:4px; line-height:1.5;"></p>
-          </form>
-        </div>
-      </article>
+      </a>
 
     </div>
   </div>
 </section>
 
-<!-- COMPROMISSOS NOMADE DRIVE — 6 cards (v3) -->
-<section class="pledges">
-  <div class="wrap">
-    <div class="head">
-      <h2>Nossos compromissos</h2>
-      <p>O que você pode esperar de nós, sempre.</p>
-    </div>
-    <div class="pledges__grid">
-      <div class="pledge">
-        <div class="pledge__head">
-          <div class="pledge__num">2h</div>
-          <img class="pledge__thumb" src="images/compromissos/1-resposta-2h.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Resposta em até 2 horas</div>
-        <p class="pledge__text">Atendimento humano via WhatsApp em horário comercial. Sem chatbot.</p>
-      </div>
-      <div class="pledge">
-        <div class="pledge__head">
-          <div class="pledge__num">24h</div>
-          <img class="pledge__thumb" src="images/compromissos/2-entrega-24h.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Carro entregue em 24 horas</div>
-        <p class="pledge__text">Dentro de Uberlândia, sem custo. Após assinatura e pagamento.</p>
-      </div>
-      <div class="pledge pledge--highlight">
-        <div class="pledge__head">
-          <div class="pledge__num">∞</div>
-          <img class="pledge__thumb" src="images/compromissos/3-liberdade-km.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Liberdade Total de Km</div>
-        <p class="pledge__text">Limite Total do período — distribua os km como quiser entre os meses, sem multa mensal.</p>
-      </div>
-      <div class="pledge pledge--highlight">
-        <div class="pledge__head">
-          <div class="pledge__num">0%</div>
-          <img class="pledge__thumb" src="images/compromissos/4-manutencao.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Manutenção sem dor de cabeça</div>
-        <p class="pledge__text">Buscamos, fazemos e devolvemos. Sem custo extra. Carro reserva se preciso.</p>
-      </div>
-      <div class="pledge">
-        <div class="pledge__head">
-          <div class="pledge__num">0R$</div>
-          <img class="pledge__thumb" src="images/compromissos/5-devolucao-flex.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Devolução flexível, sem multa</div>
-        <p class="pledge__text">Devolva antes do prazo sem penalidade. Reembolso proporcional dos dias não usados.</p>
-      </div>
-      <div class="pledge">
-        <div class="pledge__head">
-          <div class="pledge__num">24/7</div>
-          <img class="pledge__thumb" src="images/compromissos/6-suporte-247.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
-        </div>
-        <div class="pledge__title">Suporte 24/7 pelo WhatsApp</div>
-        <p class="pledge__text">Qualquer urgência, qualquer hora. Daniel ou Danilo direto, sem intermediário.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COMO FUNCIONA — Zigue-zague (v3) -->
-<section class="how" id="como-funciona">
-  <div class="wrap">
-    <div class="head">
-      <h2>Como funciona</h2>
-      <p>Do clique ao volante em até 24 horas. Sem burocracia, sem visita à sede.</p>
-    </div>
-    <div class="how__steps">
-
-      <div class="how__step">
-        <div class="how__thumb">
-          <span class="how__thumb-num">1</span>
-          <img src="images/como-funciona/1-escolha.jpg" alt="Escolha pelo site"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="how__thumb-fallback" style="display:none;"><span>1</span><small>foto em breve</small></div>
-        </div>
-        <div class="how__body">
-          <h3 class="how__title">Escolha pelo site</h3>
-          <p class="how__desc">Veja fotos reais, preços transparentes e 3 planos de km. ~3 min.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__thumb">
-          <span class="how__thumb-num">2</span>
-          <img src="images/como-funciona/2-whatsapp.jpg" alt="Solicite pelo WhatsApp"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="how__thumb-fallback" style="display:none;"><span>2</span><small>foto em breve</small></div>
-        </div>
-        <div class="how__body">
-          <h3 class="how__title">Solicite pelo WhatsApp</h3>
-          <p class="how__desc">Daniel ou Danilo respondem em 2h úteis. Atendimento humano.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__thumb">
-          <span class="how__thumb-num">3</span>
-          <img src="images/como-funciona/3-contrato.jpg" alt="Contrato digital"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="how__thumb-fallback" style="display:none;"><span>3</span><small>foto em breve</small></div>
-        </div>
-        <div class="how__body">
-          <h3 class="how__title">Contrato + pagamento</h3>
-          <p class="how__desc">Autentique no celular + Caf valida + PIX/cartão. 100% digital.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__thumb">
-          <span class="how__thumb-num">4</span>
-          <img src="images/como-funciona/4-entrega.jpg" alt="Entrega do carro"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="how__thumb-fallback" style="display:none;"><span>4</span><small>foto em breve</small></div>
-        </div>
-        <div class="how__body">
-          <h3 class="how__title">Entrega onde estiver</h3>
-          <p class="how__desc">Aeroporto, hotel ou condomínio. Em até 24h após assinatura.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__thumb">
-          <span class="how__thumb-num">5</span>
-          <img src="images/como-funciona/5-uso.jpg" alt="Use sem stress"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="how__thumb-fallback" style="display:none;"><span>5</span><small>foto em breve</small></div>
-        </div>
-        <div class="how__body">
-          <h3 class="how__title">Use sem stress</h3>
-          <p class="how__desc">Suporte 24/7 WhatsApp. Manutenção proativa. Devolução flexível.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- COMPARAÇÃO LOCALIZA vs NOMADE -->
+<!-- COMPARATIVO -->
 <section class="compare">
   <div class="wrap">
     <div class="head">
-      <h2>Por que escolher a Nomade Drive?</h2>
-      <p>Comparação real com as locadoras tradicionais que atendem Uberlândia.</p>
+      <h2>Por que mensal Nomade vs locadora tradicional?</h2>
+      <p>O que muda quando você precisa de carro por meses, não dias.</p>
     </div>
     <table class="compare__table">
-      <thead>
-        <tr><th>Item</th><th>Locadoras tradicionais</th><th>Nomade Drive</th></tr>
-      </thead>
+      <thead><tr><th>Item</th><th>Locadora tradicional</th><th>Nomade Drive</th></tr></thead>
       <tbody>
-        <tr><td>Preço base anunciado</td><td>R$ 3.500-4.500/mês</td><td>R$ 3.500/mês</td></tr>
-        <tr><td>Proteção adicional</td><td>R$ 35-90/dia extra</td><td>Incluído</td></tr>
-        <tr><td>Quilometragem mensal</td><td>2.000-3.000 km</td><td>3.000 km</td></tr>
-        <tr><td>Entrega</td><td>Apenas na loja</td><td>Onde você estiver</td></tr>
-        <tr><td>Devolução antecipada</td><td>Multa</td><td>Sem multa</td></tr>
-        <tr class="compare__highlight"><td>Final mensal real</td><td>R$ 4.500-6.500</td><td>R$ 3.500</td></tr>
+        <tr><td>Tempo de loja</td><td>1-2h fila</td><td>3 min no site</td></tr>
+        <tr><td>Caução no cartão</td><td>R$ 3.000-8.000</td><td>R$ 1.500 (ou Zero opcional)</td></tr>
+        <tr><td>Fidelidade</td><td>30 dias mínimo + multa</td><td>0 (devolução flexível)</td></tr>
+        <tr><td>Manutenção</td><td>Cliente leva</td><td>Buscamos + devolvemos</td></tr>
+        <tr><td>Entrega</td><td>Loja apenas</td><td>Onde você estiver</td></tr>
+        <tr><td>Atendimento</td><td>Chatbot + URA</td><td>Daniel/Danilo direto WhatsApp</td></tr>
       </tbody>
     </table>
-    <p class="compare__note">Valores aproximados conforme cotação pública em 06/2026. As locadoras tradicionais podem variar conforme promoções e opcionais.</p>
-
-    <div class="compare__explain">
-      <h3>Por que nossos preços são mais acessíveis</h3>
-      <p>Operação 100% digital, sem custos de loja física, sem letra miúda no checkout, sem opcionais empurrados. Repassamos a economia ao cliente em forma de <strong>preço travado em contrato com tudo incluído</strong>. Foco em quem realmente precisa: profissionais em transição, não turismo eventual.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SOBRE NÓS -->
-<section class="about" id="sobre">
-  <div class="wrap">
-    <div class="head">
-      <h2>Quem somos</h2>
-      <p>Dois sócios, uma operação enxuta, foco total no cliente.</p>
-    </div>
-    <div class="about__grid">
-      <div class="about__photo">
-        <img src="images/sobre/socios.jpg" alt="Daniel Rodovalho e sócio operacional"
-             onerror="this.style.display='none';this.parentNode.innerHTML='<div style=\'font-family:Playfair Display,serif;font-size:36px;font-weight:900;color:rgba(255,255,255,0.9);line-height:1.1;margin-bottom:12px;\'>D &amp; S</div><div style=\'font-family:Inter,sans-serif;font-size:13px;color:rgba(255,255,255,0.6);text-align:center;\'>Foto profissional dos sócios em breve</div>';"
-             style="width:100%;height:100%;object-fit:cover;border-radius:14px;" />
-      </div>
-      <div>
-        <p>A <strong>Nomade Drive</strong> nasceu de uma dor pessoal: <strong>se mudar de cidade é caro e burocrático</strong>, especialmente quando você precisa de um carro. Decidimos criar a locadora que gostaríamos de encontrar.</p>
-        <div class="about__socio">
-          <strong>Daniel Rodovalho — CEO</strong>
-          <span>Engenheiro Elétrico com 14 anos de experiência em gestão corporativa. Vivendo nos EUA, conhece a dor de se mudar de cidade.</span>
-        </div>
-        <div class="about__socio">
-          <strong>Sócio operacional — Uberlândia</strong>
-          <span>Responsável pela operação local. Disponível 24/7 via WhatsApp para qualquer urgência do cliente. Nome completo divulgado após o registro final da operação.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DEPOIMENTOS (honestos) -->
-<section class="testimonials">
-  <div class="wrap">
-    <div class="head">
-      <h2>Depoimentos</h2>
-    </div>
-    <div class="testimonials__empty">
-      <div style="font-family:'Playfair Display',serif; font-size:64px; line-height:0.4; color:var(--navy); opacity:0.4; margin-bottom:12px;">&ldquo;</div>
-      <h3>Estamos em operação inicial</h3>
-      <p>As histórias dos primeiros clientes aparecerão aqui em breve. <strong>Preferimos não inventar depoimentos</strong> — só publicamos o que for real e verificável. Em poucas semanas você vai poder ver vídeos curtos de quem usou o serviço.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="faq">
-  <div class="wrap">
-    <div class="head">
-      <h2>Perguntas frequentes</h2>
-    </div>
-    <div class="faq__list">
-
-      <details class="faq__item" style="border-left: 3px solid var(--warning, #C77D2B);">
-        <summary>Posso usar o carro para Uber, 99, iFood ou outros aplicativos?</summary>
-        <div class="faq__answer"><strong>Não.</strong> A Nomade Drive <strong>não atende motoristas de aplicativo</strong>. Nossos veículos são destinados <strong>exclusivamente ao uso particular ou profissional não-remunerado</strong>. Proibição expressa para:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>Transporte por aplicativo</strong>: Uber, 99, Cabify, InDriver, BlaBlaCar</li>
-          <li><strong>Entrega por aplicativo</strong>: iFood, Rappi, Loggi, James, Uber Eats, Lalamove</li>
-          <li><strong>Transporte Remunerado de Passageiros</strong> (TRPIP — Lei 13.640/2018) em qualquer modalidade</li>
-          <li>Fretamento, transporte escolar, mototáxi</li>
-          <li>Sublocação a terceiros não cadastrados no contrato</li>
-        </ul>
-        Restrição contratual com <strong>rescisão imediata e multa de 50%</strong> do valor total do contrato em caso de descumprimento. Para motoristas de aplicativo, recomendamos plataformas especializadas como <strong>Kovi</strong> ou <strong>Yallo</strong>.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Como funciona a caução? Preciso de cartão de crédito?</summary>
-        <div class="faq__answer">Sim, pra <strong>caução pré-autorizada</strong> no cartão de crédito — <strong>R$ 1.500 no HB20</strong> ou <strong>R$ 2.000 no Cronos</strong>. É só uma reserva no limite do cartão, <strong>não vira cobrança</strong> se você devolver o carro sem dano. Aceitamos Visa, Master, Elo e Amex (nacional e internacional).</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Não quero deixar caução alta no cartão. Tem como zerar?</summary>
-        <div class="faq__answer">Sim, oferecemos o <strong>Zero Caução</strong> como opcional mensal. Você paga uma taxa pequena no aluguel e a gente <strong>dispensa a pré-autorização do cartão</strong>:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>HB20</strong>: +R$ 290/mês (em vez de R$ 1.500 travado no cartão)</li>
-          <li><strong>Cronos</strong>: +R$ 370/mês (em vez de R$ 2.000 travado no cartão)</li>
-        </ul>
-        Ideal pra quem usa o cartão pra outras despesas durante a estadia.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Tem desconto pra contratos mais longos?</summary>
-        <div class="faq__answer">Sim, <strong>desconto progressivo por período</strong>:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>30 dias</strong>: preço cheio</li>
-          <li><strong>60 dias</strong>: -5%</li>
-          <li><strong>90 dias</strong>: -10%</li>
-          <li><strong>180 dias</strong>: -15%</li>
-        </ul>
-        O desconto aparece automaticamente no <a href="reservar.html" style="color:var(--navy); font-weight:700;">simulador da reserva</a>.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>E se eu rodar mais de 3.000 km no mês?</summary>
-        <div class="faq__answer">A franquia mensal é <strong>3.000 km</strong>. Acima disso, cobramos por km excedente — só conferimos na devolução:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>HB20</strong>: R$ 0,80/km</li>
-          <li><strong>Cronos</strong>: R$ 1,00/km</li>
-        </ul>
-        Pra referência: <strong>3.000 km/mês</strong> dá pra rodar Uberlândia → BH ida e volta toda semana. Se sua rotina já é maior que isso, fale com a gente — fazemos pacote customizado.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>O que está incluído no preço da mensalidade?</summary>
-        <div class="faq__answer">Tudo, sem letra miúda:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li>Limite Total de km do período (varia por plano)</li>
-          <li>Seguro completo (cobertura colisão, roubo, terceiros)</li>
-          <li>Manutenção programada (revisões + óleo + pneus por desgaste + freios)</li>
-          <li>IPVA e licenciamento</li>
-          <li>Assistência 24h (guincho, chaveiro, pane)</li>
-          <li>Telemetria embarcada (segurança contra furto)</li>
-        </ul>
-        Você só paga combustível e pedágio. Multas de trânsito são repassadas ao condutor.</div>
-      </details>
-
-      <!-- CATEGORIA: MANUTENÇÃO (4 novas perguntas v3) -->
-      <details class="faq__item">
-        <summary>Quem paga a manutenção do carro durante o contrato?</summary>
-        <div class="faq__answer"><strong>A Nomade Drive é responsável por toda manutenção programada</strong>: troca de óleo, filtros, revisões periódicas, freios e pneus por desgaste natural. <strong>Zero custo pra você.</strong> Único bônus do nosso modelo: você não tem nem dor de cabeça nem despesa extra com oficina.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Como funciona a troca de óleo durante o contrato?</summary>
-        <div class="faq__answer">Quando o painel sinaliza próximo do limite (geralmente a <strong>1.000 km de antecedência</strong>), Danilo entra em contato proativamente e oferece <strong>3 opções</strong>:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>(A) Busca e devolução</strong>: buscamos o carro de manhã e devolvemos no mesmo dia (4-6h sem o carro)</li>
-          <li><strong>(B) Você leva</strong> à oficina parceira em horário agendado, aguarda 1-2h</li>
-          <li><strong>(C) Carro reserva</strong> temporário durante a manutenção (sujeito à disponibilidade)</li>
-        </ul>
-        Você escolhe a opção que se adapta à sua rotina. Sem cobrança extra em nenhuma das 3.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>E se acontecer um problema mecânico imprevisto?</summary>
-        <div class="faq__answer">Aciona Danilo via WhatsApp 24/7. <strong>Avaliamos a situação em até 30 minutos.</strong> Se for problema sério, levamos o carro à oficina parceira e providenciamos solução (incluindo carro reserva se necessário). <strong>Cliente não paga nada por manutenção corretiva de falha do veículo.</strong></div>
-      </details>
-
-      <details class="faq__item">
-        <summary>O que NÃO é coberto pela manutenção da Nomade Drive?</summary>
-        <div class="faq__answer">Pra ser transparente, o que é responsabilidade do cliente:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li>Combustível e lavagem do veículo</li>
-          <li>Pneu furado por descuido (prego, buraco evidente)</li>
-          <li>Bateria danificada por uso incorreto (luzes esquecidas)</li>
-          <li>Multas de trânsito e pedágios</li>
-          <li>Danos por colisão com culpa do condutor (cobertos pelo seguro com franquia)</li>
-        </ul>
-        Tudo escrito claramente no contrato.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Sou estrangeiro ou moro fora do Brasil. Posso alugar?</summary>
-        <div class="faq__answer">Sim, atendemos cliente internacional. Precisamos de:
-        <ul style="margin:10px 0 0 18px; padding:0;">
-          <li><strong>CNH internacional</strong> (Permis International / IDP) ou CNH brasileira válida</li>
-          <li>Passaporte</li>
-          <li>Comprovante de endereço (do país de origem serve)</li>
-          <li>Cartão de crédito internacional pra caução</li>
-        </ul>
-        Pagamento aceita transferência internacional (Wise/Remitly) além de PIX e cartão. Contrato disponível em <strong>português ou inglês</strong>. Fale com Daniel pelo WhatsApp <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">+55 (34) 98406-4864</a> que ele responde nos dois idiomas.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Quais formas de pagamento aceitam?</summary>
-        <div class="faq__answer">
-        <ul style="margin:0 0 0 18px; padding:0;">
-          <li><strong>PIX</strong> (recomendado, sem taxa)</li>
-          <li><strong>Cartão de crédito</strong> Visa, Master, Elo, Amex (nacional e internacional)</li>
-          <li><strong>Boleto bancário</strong> pra CNPJ (locação corporativa)</li>
-          <li><strong>Transferência internacional</strong> via Wise/Remitly pra clientes fora do Brasil</li>
-        </ul>
-        Cobrança mensal recorrente (sem reajuste durante o contrato).</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>E se eu quiser devolver o carro antes do prazo?</summary>
-        <div class="faq__answer"><strong>Devolução flexível sem multa.</strong> Comunica com 48h de antecedência pelo WhatsApp e fazemos <strong>reembolso proporcional</strong> dos dias não usados (descontando apenas o ajuste do desconto progressivo se você cair pra uma faixa menor). Sem fidelidade, sem letra miúda.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Como funciona a entrega do carro?</summary>
-        <div class="faq__answer">Você escolhe no mapa onde quer pegar o carro: <strong>Aeroporto Bombonato, Center Shopping, Hospital de Clínicas UFU, Praça Tubal Vilela, Posto BR</strong> ou outro endereço (informa o CEP). <strong>Entrega em até 24h</strong> em qualquer ponto de Uberlândia, gratuita pra contratos de 30+ dias. Fora da cidade, taxa de R$ 50-150 conforme distância.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Posso ver o carro antes de fechar contrato?</summary>
-        <div class="faq__answer">Sim. Agendamos <strong>visita de 30 minutos</strong> em ponto público de Uberlândia. Levamos o carro até você pra <strong>inspecionar antes de assinar</strong>. Sem compromisso — se não gostar, não fecha.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Posso renovar o contrato no fim do período?</summary>
-        <div class="faq__answer">Sim, <strong>renovação direta no WhatsApp</strong>. Sem fidelidade, sem multa, sem nova caução. Se você renovar pra um período maior, o desconto progressivo já entra (ex: contrato de 30d renovado pra mais 30d vira 60d → ganha 5% retroativo).</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Onde fica a loja física? Posso ir pessoalmente?</summary>
-        <div class="faq__answer">A Nomade Drive <strong>opera 100% digital</strong> — sem loja física pra reduzir custo e repassar pra você em preço melhor. Atendimento humano pelo WhatsApp 24/7. Pra visita presencial, agendamos em ponto público (shopping, aeroporto, café) com o carro junto.</div>
-      </details>
-
-      <details class="faq__item">
-        <summary>Quem é responsável pela empresa? É confiável?</summary>
-        <div class="faq__answer">Daniel Rodovalho (CEO, engenheiro com 14 anos de gestão corporativa) e sócio operacional em Uberlândia. <strong>CNPJ em processo de registro na Junta Comercial de MG</strong> — toda a documentação fica pública após emissão. Frota com seguro completo, contratos com assinatura digital (Autentique), pagamentos via Stripe + PIX (Banco Central). Pra qualquer dúvida sobre a empresa, fale direto comigo: <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">WhatsApp</a> ou <a href="mailto:contato@nomadedrive.com.br" style="color:var(--navy); font-weight:700;">contato@nomadedrive.com.br</a>.</div>
-      </details>
-
-    </div>
   </div>
 </section>
 
@@ -940,126 +236,14 @@
 <section class="cta-final">
   <div class="wrap">
     <h2>Pronto pra começar?</h2>
-    <p>2 carros disponíveis em Uberlândia agora. Resposta em até 2 horas úteis.</p>
+    <p>Atendimento humano em até 2h úteis. Carro entregue em até 24h.</p>
     <div class="cta-final__row">
-      <a href="#carros" class="btn btn--primary btn--lg">Ver carros disponíveis</a>
-      <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Vi%20o%20site%20da%20Nomade%20Drive%20e%20quero%20alugar%20um%20carro%20mensal" target="_blank" rel="noopener" class="btn btn--ghost-white">Falar pelo WhatsApp</a>
+      <a href="reservar.html" class="btn btn--primary">Reservar agora</a>
+      <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="btn btn--ghost-navy">WhatsApp</a>
     </div>
   </div>
 </section>
 
-<!-- FAIXA DE SELOS DE CONFIANÇA -->
-<section class="seals">
-  <div class="wrap">
-    <div class="seals__title">Operação verificada</div>
-    <div class="seals__row">
-      <div class="seal">
-        <span class="seal__logo" style="background:#0F1F3D; color:#fff; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:0.5px;">CNPJ</span>
-        <span><span class="seal__name">Operação registrada</span><span class="seal__sub">Junta Comercial MG</span></span>
-      </div>
-      <div class="seal">
-        <span class="seal__logo" style="background:#fff; border:1px solid var(--gray-200);"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/stripe.svg" alt="Stripe" style="width:60%; height:60%; padding:0; filter: invert(20%) sepia(91%) saturate(2058%) hue-rotate(228deg) brightness(96%) contrast(101%);" /></span>
-        <span><span class="seal__name">Stripe</span><span class="seal__sub">Pagamento internacional</span></span>
-      </div>
-      <div class="seal">
-        <span class="seal__logo" style="background:#32BCAD; color:#fff; font-family:'Inter',sans-serif; font-size:13px; font-weight:900;">PIX</span>
-        <span><span class="seal__name">PIX</span><span class="seal__sub">Banco Central</span></span>
-      </div>
-      <div class="seal">
-        <span class="seal__logo" style="background:#0F1F3D; color:#fff; font-family:'Inter',sans-serif; font-size:13px; font-weight:900;">A</span>
-        <span><span class="seal__name">Autentique</span><span class="seal__sub">Assinatura digital</span></span>
-      </div>
-      <div class="seal">
-        <span class="seal__logo" style="background:#0066FF; color:#fff; font-family:'Inter',sans-serif; font-size:11px; font-weight:900; letter-spacing:0.3px;">Cobli</span>
-        <span><span class="seal__name">Cobli</span><span class="seal__sub">Telemetria embarcada</span></span>
-      </div>
-      <div class="seal">
-        <span class="seal__logo" style="background:#2A9D8F; color:#fff; font-family:'Playfair Display',serif; font-size:18px; font-weight:900;">S</span>
-        <span><span class="seal__name">Seguro Frota</span><span class="seal__sub">Cobertura completa</span></span>
-      </div>
-    </div>
-    <p class="seals__note">Operação verificada · <strong>CNPJ em processo de emissão</strong>, contratos com assinatura digital, frota com seguro completo, atendimento humanizado em Uberlândia/MG.</p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="foot">
-  <div class="wrap">
-    <div class="foot__row">
-      <div class="foot__col foot__brand">
-        <strong>Nomade Drive</strong>
-        <p>Locação mensal de carros em Uberlândia/MG. Frota própria, contrato digital, entrega onde você estiver.</p>
-      </div>
-      <div class="foot__col">
-        <h5>Carros</h5>
-        <a href="carros/popular.html">HB20 Popular</a>
-        <a href="carros/sedan.html">Cronos Sedan</a>
-      </div>
-      <div class="foot__col">
-        <h5>Empresa</h5>
-        <a href="#sobre">Sobre nós</a>
-        <a href="#para-quem-e">Para quem é</a>
-        <a href="#faq">Dúvidas</a>
-        <a href="politica-privacidade.html">Política de Privacidade</a>
-        <a href="termos.html">Termos de uso</a>
-      </div>
-      <div class="foot__col">
-        <h5>Contato</h5>
-        <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp: (34) 98406-4864</a>
-        <a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a>
-        <a href="https://www.instagram.com/nomadedrive" target="_blank" rel="noopener">Instagram @nomadedrive</a>
-      </div>
-    </div>
-    <div class="foot__bottom">
-      <p><strong>Nomade Drive Locação de Veículos</strong> · CNPJ em processo · Uberlândia/MG · © 2026 — Todos os direitos reservados</p>
-    </div>
-  </div>
-</footer>
-
-<script>
-(function() {
-  var form = document.getElementById('suvWaitForm');
-  if (!form) return;
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    var nameEl = document.getElementById('suvWaitName');
-    var emailEl = document.getElementById('suvWaitEmail');
-    var statusEl = document.getElementById('suvWaitStatus');
-    var btn = form.querySelector('button[type="submit"]');
-    var name = nameEl.value.trim();
-    var email = emailEl.value.trim().toLowerCase();
-    if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      statusEl.style.display = 'block';
-      statusEl.style.color = '#991b1b';
-      statusEl.textContent = 'Preencha nome e e-mail válido.';
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = 'Enviando...';
-    try {
-      await fetch('https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          source: 'waitlist-suv',
-          source_url: window.location.href,
-          name: name,
-          email: email,
-          city: 'Uberlândia',
-          intent: 'waitlist-suv-compacto',
-          extra: { vehicle_interest: 'SUV Compacto', expected_arrival: 'Set/2026' }
-        })
-      });
-    } catch (err) { console.warn('Edge function falhou (UX não bloqueia):', err); }
-    statusEl.style.display = 'block';
-    statusEl.style.color = 'var(--sage-dark)';
-    statusEl.innerHTML = 'Pronto! Avisaremos você assim que o SUV chegar (Set/2026). Pra urgência, <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">fale pelo WhatsApp</a>.';
-    nameEl.value = '';
-    emailEl.value = '';
-    btn.textContent = 'Inscrito ✓';
-    setTimeout(function() { btn.disabled = false; btn.textContent = 'Avise-me quando chegar'; }, 4000);
-  });
-})();
-</script>
+<div id="site-footer"></div>
 </body>
 </html>

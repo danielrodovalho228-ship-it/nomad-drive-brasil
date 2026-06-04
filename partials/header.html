@@ -1,0 +1,41 @@
+<header class="nd-nav">
+  <div class="nd-nav__row">
+    <a href="index.html" class="nd-nav__brand" aria-label="Nomade Drive — início">
+      <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive" class="nd-nav__logo" />
+    </a>
+    <div class="nd-nav__right">
+      <a href="reservar.html" class="nd-nav__reservar">Reservar</a>
+      <button type="button" class="nd-nav__toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nd-drawer" data-nd-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside id="nd-drawer" class="nd-drawer" aria-label="Menu de navegação" aria-hidden="true">
+  <div class="nd-drawer__head">
+    <span class="nd-drawer__brand">Nomade Drive</span>
+    <button type="button" class="nd-drawer__close" aria-label="Fechar menu" data-nd-close>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+  </div>
+  <nav class="nd-drawer__nav" aria-label="Páginas">
+    <a href="index.html" data-nd-page="home">Início</a>
+    <a href="frota.html" data-nd-page="frota">Frota</a>
+    <a href="precos.html" data-nd-page="precos">Preços e planos</a>
+    <a href="como-funciona.html" data-nd-page="como-funciona">Como funciona</a>
+    <a href="publico.html" data-nd-page="publico">Para quem é</a>
+    <a href="sobre.html" data-nd-page="sobre">Sobre nós</a>
+    <a href="faq.html" data-nd-page="faq">Perguntas frequentes</a>
+    <a href="contato.html" data-nd-page="contato">Contato</a>
+  </nav>
+  <div class="nd-drawer__foot">
+    <a href="reservar.html" class="nd-drawer__cta nd-drawer__cta--gold">Reservar agora</a>
+    <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="nd-drawer__cta">Falar pelo WhatsApp</a>
+    <div class="nd-drawer__contact">
+      Suporte: <a href="mailto:contato@nomadedrive.com.br">contato@nomadedrive.com.br</a>
+    </div>
+  </div>
+</aside>
+
+<div class="nd-backdrop" data-nd-close hidden></div>

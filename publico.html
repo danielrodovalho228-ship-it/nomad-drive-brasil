@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Para quem é — Nomade Drive Brasil</title>
+<meta name="description" content="Locação mensal para profissionais em transição: executivos em transferência, médicos visitantes, famílias em mudança, nômades digitais e estudantes." />
+<meta name="theme-color" content="#0F3D2E" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #0F3D2E; --navy-light: #1a5440; --navy-dark: #0a2a20; --sage: #5A8A6B; --sage-dark: #436b51; --gold: #D4A853; --gold-dark: #b88f3f; --white: #fff; --cream: #FAFAF7; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; transition: all .15s; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover { background: var(--gold-dark); }
+
+  .publico { padding: 32px 0; }
+  .publico__grid { display: grid; gap: 18px; grid-template-columns: 1fr; max-width: 1080px; margin: 0 auto; }
+  @media (min-width: 720px) { .publico__grid { grid-template-columns: repeat(2, 1fr); } }
+  .who { background: var(--white); border-radius: 12px; border: 1px solid rgba(15,61,46,0.08); overflow: hidden; display: flex; flex-direction: column; transition: all .25s; }
+  .who:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(15,61,46,0.1); }
+  .who__banner { aspect-ratio: 5/2; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+  @media (max-width: 720px) { .who__banner { aspect-ratio: 16/7; } }
+  .who__banner img { width: 100%; height: 100%; object-fit: cover; }
+  .who__body { padding: 22px 24px 20px; flex: 1; display: flex; flex-direction: column; }
+  .who__tag { font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 8px; }
+  .who__title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .who__text { font-size: 14px; color: var(--gray-700); line-height: 1.6; margin-bottom: 14px; flex: 1; }
+  .who__cta { font-size: 13px; font-weight: 700; color: var(--navy); text-decoration: none; align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; }
+  .who__cta:hover { color: var(--gold-dark); }
+  .who__cta::after { content: '→'; transition: transform .15s; }
+  .who__cta:hover::after { transform: translateX(3px); }
+
+  .nao-atendemos { background: var(--cream); padding: 28px 0; border-top: 1px solid var(--gray-200); }
+  .nao-atendemos__inner { max-width: 720px; margin: 0 auto; }
+  .nao-atendemos h3 { font-size: 16px; margin-bottom: 8px; color: var(--navy); }
+  .nao-atendemos p { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
+  .nao-atendemos strong { color: var(--navy); }
+</style>
+<link rel="stylesheet" href="assets/site-shell.css?v=1" />
+<script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="publico">
+<div id="site-header"></div>
+
+<section class="page-intro">
+  <div class="page-intro__inner">
+    <p class="page-intro__crumbs"><a href="index.html">Início</a> · Para quem é</p>
+    <h1>Para quem é</h1>
+    <p>Locação mensal pensada pra profissionais em transição que precisam de carro de qualidade por 30 a 180 dias em Uberlândia.</p>
+  </div>
+</section>
+
+<section class="publico">
+  <div class="wrap">
+    <div class="publico__grid">
+
+      <article class="who">
+        <div class="who__banner"><img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="who__body">
+          <span class="who__tag">30-90 dias · Executivo</span>
+          <h3 class="who__title">Executivos em transferência</h3>
+          <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Você precisa do carro pronto antes de mexer com mudança ou financiamento.</p>
+          <a href="reservar.html" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+      <article class="who">
+        <div class="who__banner"><img src="images/perfis/medico.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="who__body">
+          <span class="who__tag">30-180 dias · Saúde</span>
+          <h3 class="who__title">Médicos e profissionais de saúde</h3>
+          <p class="who__text">Residência médica, plantão temporário, congresso longo ou consultoria em clínicas de Uberlândia. CNH e cartão estrangeiro aceitos.</p>
+          <a href="reservar.html" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+      <article class="who">
+        <div class="who__banner"><img src="images/perfis/familia.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="who__body">
+          <span class="who__tag">60-180 dias · Família</span>
+          <h3 class="who__title">Famílias em mudança</h3>
+          <p class="who__text">Período entre venda e compra de carro, mudança intermunicipal, espera por liberação de financiamento. SUV ou sedan automático para a família.</p>
+          <a href="reservar.html" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+      <article class="who">
+        <div class="who__banner"><img src="images/perfis/nomade.jpg" alt="" onerror="this.style.display='none'" /></div>
+        <div class="who__body">
+          <span class="who__tag">30-90 dias · Nômade</span>
+          <h3 class="who__title">Nômades digitais e estudantes</h3>
+          <p class="who__text">Quem trabalha remoto e precisa de mobilidade local sem amarrar carro próprio. Estudantes em intercâmbio ou pós-graduação curta na UFU.</p>
+          <a href="reservar.html" class="who__cta">Solicitar carro</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="nao-atendemos">
+  <div class="wrap">
+    <div class="nao-atendemos__inner">
+      <h3>Quem NÃO atendemos</h3>
+      <p>Pra ser transparente: <strong>não atendemos motoristas de aplicativo</strong> (Uber, 99, iFood, Rappi etc) nem transporte remunerado de passageiros (TRPIP). Nossa frota é destinada exclusivamente ao uso particular ou profissional não-remunerado. Pra motoristas de app, recomendamos plataformas especializadas como Kovi ou Yallo.</p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+</body>
+</html>

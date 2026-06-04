@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sobre nós — Nomade Drive Brasil</title>
+<meta name="description" content="Conheça quem está por trás da Nomade Drive: equipe enxuta, atendimento humano e os 6 compromissos com o cliente. Locação mensal em Uberlândia/MG." />
+<meta name="theme-color" content="#0F3D2E" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #0F3D2E; --navy-light: #1a5440; --gold: #D4A853; --gold-dark: #b88f3f; --gold-pale: #f7eed7; --white: #fff; --cream: #FAFAF7; --gray-900: #1A2A23; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; --sage: #5A8A6B; --sage-pale: #e6efe9; }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
+  h2 { font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; }
+
+  .about__intro { padding: 36px 0; background: var(--white); }
+  .about__grid { display: grid; gap: 32px; grid-template-columns: 1fr; align-items: start; max-width: 1040px; margin: 0 auto; }
+  @media (min-width: 720px) { .about__grid { grid-template-columns: 1.1fr 0.9fr; } }
+  .about__col p { font-size: 15px; color: var(--gray-700); line-height: 1.65; margin-bottom: 14px; }
+  .about__col p strong { color: var(--navy); }
+  .about__photo { background: var(--navy); border-radius: 12px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-size: 13px; text-align: center; padding: 24px; overflow: hidden; flex-direction: column; gap: 6px; }
+  .about__photo strong { color: var(--gold); font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; line-height: 1; }
+  .about__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+
+  .team { padding: 36px 0; background: var(--cream); }
+  .team__grid { display: grid; gap: 18px; grid-template-columns: 1fr; max-width: 880px; margin: 0 auto; }
+  @media (min-width: 700px) { .team__grid { grid-template-columns: repeat(2, 1fr); } }
+  .team__card { background: var(--white); border-radius: 12px; padding: 22px 24px; border: 1px solid var(--gray-200); }
+  .team__name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .team__role { font-size: 11.5px; font-weight: 700; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+  .team__bio { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
+
+  .compromissos { padding: 36px 0; background: var(--white); }
+  .compromissos__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1080px; margin: 0 auto; }
+  @media (min-width: 720px) { .compromissos__grid { grid-template-columns: repeat(3, 1fr); } }
+  .pledge { background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 20px 22px; transition: all .2s; position: relative; }
+  .pledge:hover { border-color: var(--navy-light); transform: translateY(-2px); }
+  .pledge--gold { background: var(--gold-pale); border-color: var(--gold); }
+  .pledge__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .pledge__num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; }
+  .pledge__thumb { width: 56px; height: 40px; border-radius: 5px; object-fit: cover; opacity: 0.9; flex-shrink: 0; }
+  .pledge__title { font-size: 14.5px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+  .pledge__text { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  .head { text-align: center; margin: 0 auto 22px; }
+  .head h2 { margin-bottom: 6px; }
+  .head p { font-size: 14.5px; color: var(--gray-700); }
+</style>
+<link rel="stylesheet" href="assets/site-shell.css?v=1" />
+<script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="sobre">
+<div id="site-header"></div>
+
+<section class="page-intro">
+  <div class="page-intro__inner">
+    <p class="page-intro__crumbs"><a href="index.html">Início</a> · Sobre nós</p>
+    <h1>Quem somos</h1>
+    <p>Locação mensal feita por gente que entende de mudança: profissionais em transição, médicos visitantes, famílias chegando a Uberlândia.</p>
+  </div>
+</section>
+
+<section class="about__intro">
+  <div class="wrap">
+    <div class="about__grid">
+      <div class="about__col">
+        <p>A <strong>Nomade Drive Brasil</strong> nasceu pra resolver um problema simples: quem fica em Uberlândia por 30, 60 ou 90 dias não quer entrar em loja de locadora, deixar caução absurda e brigar por minutos de atraso.</p>
+        <p>Operamos <strong>100% digital</strong>, com contrato online (Autentique), pagamento via PIX ou cartão e entrega onde você estiver — aeroporto, hotel, condomínio. <strong>Sem fila, sem balcão, sem letra miúda.</strong></p>
+        <p>Frota pequena e bem cuidada: cada carro tem seguro completo, manutenção programada e telemetria embarcada. <strong>Sem terceirização do atendimento</strong> — quem você fala no WhatsApp é o sócio, não um chatbot.</p>
+        <p>Estamos em <strong>Uberlândia/MG</strong>, atendendo a região metropolitana e cidades próximas (Araguari, Patos de Minas, Ituiutaba). CNPJ em registro na Junta Comercial de MG.</p>
+      </div>
+      <div class="about__photo">
+        <strong>Uberlândia/MG</strong>
+        <span>Operação local, atendimento humano</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team">
+  <div class="wrap">
+    <div class="head">
+      <h2>Quem está por trás</h2>
+      <p>Equipe enxuta de 2 sócios. Quem você fala é quem decide.</p>
+    </div>
+    <div class="team__grid">
+      <article class="team__card">
+        <h3 class="team__name">Daniel Rodovalho</h3>
+        <p class="team__role">Sócio fundador · CEO</p>
+        <p class="team__bio">Engenheiro com 14 anos em gestão corporativa. Cuida da estratégia, frota, parcerias e do atendimento internacional (PT/EN). Mora em Uberlândia desde 2018.</p>
+      </article>
+      <article class="team__card">
+        <h3 class="team__name">Danilo</h3>
+        <p class="team__role">Sócio operacional</p>
+        <p class="team__bio">Operação de campo: entrega, vistoria, manutenção e relacionamento direto com cliente. Quem você vê levando o carro pra você é ele.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="compromissos">
+  <div class="wrap">
+    <div class="head">
+      <h2>Nossos compromissos</h2>
+      <p>O que você pode esperar de nós, sempre.</p>
+    </div>
+    <div class="compromissos__grid">
+      <div class="pledge"><div class="pledge__head"><div class="pledge__num">2h</div><img class="pledge__thumb" src="images/compromissos/1-resposta-2h.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Resposta em até 2h</div><p class="pledge__text">Atendimento humano via WhatsApp em horário comercial. Sem chatbot.</p></div>
+      <div class="pledge"><div class="pledge__head"><div class="pledge__num">24h</div><img class="pledge__thumb" src="images/compromissos/2-entrega-24h.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Carro em 24 horas</div><p class="pledge__text">Dentro de Uberlândia, sem custo. Após assinatura e pagamento.</p></div>
+      <div class="pledge pledge--gold"><div class="pledge__head"><div class="pledge__num">∞</div><img class="pledge__thumb" src="images/compromissos/3-liberdade-km.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Liberdade Total de Km</div><p class="pledge__text">Limite Total do período — distribua os km como quiser entre os meses.</p></div>
+      <div class="pledge pledge--gold"><div class="pledge__head"><div class="pledge__num">0%</div><img class="pledge__thumb" src="images/compromissos/4-manutencao.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Manutenção sem dor</div><p class="pledge__text">Buscamos, fazemos e devolvemos. Sem custo extra. Carro reserva se preciso.</p></div>
+      <div class="pledge"><div class="pledge__head"><div class="pledge__num">0R$</div><img class="pledge__thumb" src="images/compromissos/5-devolucao-flex.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Devolução flexível</div><p class="pledge__text">Devolva antes do prazo sem penalidade. Reembolso proporcional.</p></div>
+      <div class="pledge"><div class="pledge__head"><div class="pledge__num">24/7</div><img class="pledge__thumb" src="images/compromissos/6-suporte-247.jpg" alt="" onerror="this.style.display='none'" /></div><div class="pledge__title">Suporte 24/7</div><p class="pledge__text">Qualquer urgência, qualquer hora. Daniel ou Danilo direto, sem intermediário.</p></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+</body>
+</html>
