@@ -180,6 +180,23 @@
   .cep-wrap { display: grid; gap: 10px; grid-template-columns: 140px 1fr; align-items: end; margin-bottom: 8px; }
   @media (max-width: 480px) { .cep-wrap { grid-template-columns: 1fr; } }
 
+  /* Seletor de plano (3 botões compactos) */
+  .plan-picker { display: none; margin-top: 18px; padding: 16px; background: var(--cream); border-radius: 10px; border: 1px solid rgba(15,61,46,0.06); }
+  .plan-picker.show { display: block; }
+  .plan-picker__label { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px; display: block; }
+  .plan-picker__grid { display: grid; gap: 8px; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 600px) { .plan-picker__grid { grid-template-columns: 1fr; } }
+  .plan-pick { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 12px 10px; cursor: pointer; text-align: center; transition: all .15s; position: relative; }
+  .plan-pick:hover { border-color: var(--navy); }
+  .plan-pick.selected { border-color: var(--navy); background: var(--navy-pale); box-shadow: 0 0 0 3px rgba(15,61,46,0.08); }
+  .plan-pick--featured { border-color: var(--gold); }
+  .plan-pick--featured::before { content: 'MAIS ESCOLHIDO'; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 3px; font-family: 'Inter', sans-serif; font-size: 8.5px; font-weight: 800; letter-spacing: 0.6px; white-space: nowrap; }
+  .plan-pick__name { display: block; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 800; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+  .plan-pick.selected .plan-pick__name { color: var(--navy); }
+  .plan-pick__km { display: block; font-family: 'Inter', sans-serif; font-size: 11.5px; color: var(--gray-700); margin-bottom: 4px; }
+  .plan-pick__km strong { color: var(--navy-dark); font-weight: 700; }
+  .plan-pick__price { display: block; font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 800; color: var(--navy); line-height: 1; margin-top: 4px; }
+
   /* Dropdown de motivo (compacto, colapsável) */
   .reason-select { position: relative; margin-top: 8px; }
   .reason-select__btn { width: 100%; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 13px 16px; cursor: pointer; transition: all .15s; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--navy); font-weight: 500; }
@@ -344,12 +361,35 @@
         <label>Qual carro você quer? <small>(carregando frota...)</small></label>
         <!-- Cards gerados dinamicamente via prices.js — adicione carro novo lá e aparece aqui -->
         <div class="picks picks--2col" id="carPicksList" style="margin-top:8px;"></div>
+
+        <!-- Seletor de plano (aparece após selecionar carro) -->
+        <div class="plan-picker" id="planPicker">
+          <span class="plan-picker__label">Escolha o plano de km</span>
+          <div class="plan-picker__grid">
+            <div class="plan-pick" data-plan="essencial">
+              <span class="plan-pick__name">Essencial</span>
+              <span class="plan-pick__km"><strong data-pp-km="essencial">9.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="essencial">R$ 9.450</span>
+            </div>
+            <div class="plan-pick plan-pick--featured selected" data-plan="estendido">
+              <span class="plan-pick__name">Estendido</span>
+              <span class="plan-pick__km"><strong data-pp-km="estendido">12.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="estendido">R$ 9.990</span>
+            </div>
+            <div class="plan-pick" data-plan="semLimite">
+              <span class="plan-pick__name">Sem Limite</span>
+              <span class="plan-pick__km"><strong data-pp-km="semLimite">15.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="semLimite">R$ 10.530</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="summary" id="summary1">
         <div class="summary__row"><span>Carro escolhido</span><strong id="sumCar">—</strong></div>
+        <div class="summary__row"><span>Plano</span><strong id="sumPlan">—</strong></div>
         <div class="summary__row"><span>Período</span><strong id="sumPeriod">—</strong></div>
-        <div class="summary__row"><span>Tarifa mensal</span><strong id="sumRate">—</strong></div>
+        <div class="summary__row"><span>Equivalente mensal</span><strong id="sumRate">—</strong></div>
         <div class="summary__row total"><span>Total estimado</span><strong id="sumTotal">R$ 0</strong></div>
       </div>
 
@@ -570,11 +610,20 @@
   renderCarPicks();
 
   var state = {
-    car: null, dateStart: null, dateEnd: null, days: 0,
+    car: null, plan: 'estendido', dateStart: null, dateEnd: null, days: 0,
     reason: null,
     point: null, cep: null, address: null, deliveryFee: 0,
     user: { name: '', email: '', phoneCountry: '+55', phoneNumber: '', terms: false }
   };
+
+  // Aproxima dias do contrato pra um dos 4 periodos canonicos do prices.js (30/60/90/180)
+  function canonDays(days) {
+    if (days >= 135) return 180;
+    if (days >= 75) return 90;
+    if (days >= 45) return 60;
+    return 30;
+  }
+  var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Sem Limite' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
   var REASON_SUGGESTIONS = {
@@ -621,14 +670,23 @@
     if (days >= 60) return 5;
     return 0;
   }
+  function calcPlanTotal() {
+    if (!state.car || !state.plan || state.days < 30) return 0;
+    if (!window.NOMADE_PRICES) return 0;
+    return window.NOMADE_PRICES.planTotal(state.car, state.plan, canonDays(state.days));
+  }
   function calcMonthlyRate() {
-    if (!state.car) return 0;
-    return Math.round(CARS[state.car].base * (1 - discountPct(state.days)/100));
+    if (!state.car || !state.plan || state.days < 30) return 0;
+    if (!window.NOMADE_PRICES) return 0;
+    return window.NOMADE_PRICES.planMonthly(state.car, state.plan, canonDays(state.days));
   }
   function calcTotal() {
-    if (!state.car || state.days < 30) return 0;
-    var months = state.days / 30;
-    return Math.round(calcMonthlyRate() * months) + state.deliveryFee;
+    return calcPlanTotal() + state.deliveryFee;
+  }
+  function calcPlanKm() {
+    if (!state.car || !state.plan || state.days < 30) return 0;
+    if (!window.NOMADE_PRICES) return 0;
+    return window.NOMADE_PRICES.planKm(state.car, state.plan, canonDays(state.days));
   }
   function showStatus(elId, msg) {
     var el = $(elId);
@@ -692,12 +750,16 @@
   // STEP 1
   function updateStep1() {
     state.days = calcDays();
-    $('sumCar').textContent = state.car ? CARS[state.car].name + ' (' + CARS[state.car].cat + ')' : '—';
+    refreshPlanPicker();
+    $('sumCar').textContent = state.car ? (CARS[state.car] ? CARS[state.car].name : state.car) : '—';
+    $('sumPlan').textContent = state.car && state.days >= 30
+      ? (PLAN_LABELS[state.plan] || state.plan) + ' (' + (window.NOMADE_PRICES ? window.NOMADE_PRICES.formatKm(calcPlanKm()) : '—') + ' total)'
+      : '—';
     if (state.dateStart && state.dateEnd && state.days > 0) {
       $('sumPeriod').textContent = fmtDateBR(state.dateStart) + ' → ' + fmtDateBR(state.dateEnd) + ' (' + state.days + ' dias)';
     } else { $('sumPeriod').textContent = '—'; }
-    var rate = calcMonthlyRate(), pct = discountPct(state.days);
-    $('sumRate').textContent = rate ? 'R$ ' + rate.toLocaleString('pt-BR') + '/mês' + (pct ? ' (-' + pct + '%)' : '') : '—';
+    var rate = calcMonthlyRate();
+    $('sumRate').textContent = rate ? 'R$ ' + rate.toLocaleString('pt-BR') + '/mês' : '—';
     $('sumTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
     var btn = $('btnStep2');
     if (state.car && state.dateStart && state.dateEnd && state.days >= 30) {
@@ -709,6 +771,43 @@
       }
     }
   }
+
+  // Refresca preços do planPicker quando car/dias mudam
+  function refreshPlanPicker() {
+    if (!window.NOMADE_PRICES) return;
+    var picker = $('planPicker');
+    if (!picker) return;
+    if (!state.car || state.days < 30) { picker.classList.remove('show'); return; }
+    picker.classList.add('show');
+    var days = canonDays(state.days);
+    ['essencial','estendido','semLimite'].forEach(function(planId) {
+      var price = window.NOMADE_PRICES.planTotal(state.car, planId, days);
+      var km = window.NOMADE_PRICES.planKm(state.car, planId, days);
+      var priceEl = document.querySelector('[data-pp-price="' + planId + '"]');
+      var kmEl = document.querySelector('[data-pp-km="' + planId + '"]');
+      if (priceEl) priceEl.textContent = window.NOMADE_PRICES.formatBRL(price);
+      if (kmEl) kmEl.textContent = window.NOMADE_PRICES.formatKm(km);
+    });
+  }
+
+  // Handler do seletor de plano
+  document.querySelectorAll('.plan-pick').forEach(function(p) {
+    p.addEventListener('click', function() {
+      document.querySelectorAll('.plan-pick').forEach(function(x) { x.classList.remove('selected'); });
+      p.classList.add('selected');
+      state.plan = p.dataset.plan;
+      updateStep1();
+    });
+  });
+
+  // Pré-seleção via URL ?plano=X (vinda dos cards de plano em carros/popular.html)
+  (function() {
+    var prePlan = new URLSearchParams(window.location.search).get('plano');
+    if (prePlan && ['essencial','estendido','semLimite'].indexOf(prePlan) >= 0) {
+      state.plan = prePlan;
+      document.querySelectorAll('.plan-pick').forEach(function(x) { x.classList.toggle('selected', x.dataset.plan === prePlan); });
+    }
+  })();
 
   $('dateStart').min = todayISO();
   $('dateStart').addEventListener('change', function(e) {
@@ -982,14 +1081,17 @@
           city: 'Uberlândia',
           intent: 'locacao-mensal',
           extra: {
-            car: CARS[state.car].name,
+            car: CARS[state.car] ? CARS[state.car].name : state.car,
             period: state.dateStart + ' → ' + state.dateEnd + ' (' + state.days + ' dias)',
-            monthly_rate: 'R$ ' + calcMonthlyRate(),
-            total: 'R$ ' + calcTotal(),
+            monthly_rate: 'R$ ' + calcMonthlyRate() + ' (equivalente)',
+            total: 'R$ ' + calcTotal() + ' (período inteiro)',
             delivery: POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : ''),
             delivery_fee: 'R$ ' + state.deliveryFee,
             reason: state.reason,
             reason_other: state.reasonOther || null,
+            plan: state.plan,
+            plan_label: PLAN_LABELS[state.plan] || state.plan,
+            km_total: calcPlanKm(),
             phone_country: state.user.phoneCountry,
             phone_local: state.user.phoneNumber
           }
@@ -999,13 +1101,16 @@
       console.warn('Edge function falhou (UX nao bloqueia):', err);
     }
 
-    $('succCar').textContent = CARS[state.car].name;
+    var carName = CARS[state.car] ? CARS[state.car].name : state.car;
+    var planLabel = PLAN_LABELS[state.plan] || state.plan;
+    $('succCar').textContent = carName + ' · plano ' + planLabel + ' (' + (window.NOMADE_PRICES ? window.NOMADE_PRICES.formatKm(calcPlanKm()) : '—') + ')';
     $('succPeriod').textContent = state.days + ' dias (' + fmtDateBR(state.dateStart) + ' → ' + fmtDateBR(state.dateEnd) + ')';
     $('succPoint').textContent = POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : '');
     $('succTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
 
     var waText = 'Olá! Acabei de solicitar um carro pelo site.\n\n' +
-      'Carro: ' + CARS[state.car].name + '\n' +
+      'Carro: ' + carName + '\n' +
+      'Plano: ' + planLabel + ' (' + (window.NOMADE_PRICES ? window.NOMADE_PRICES.formatKm(calcPlanKm()) : '—') + ' totais)\n' +
       'Periodo: ' + fmtDateBR(state.dateStart) + ' a ' + fmtDateBR(state.dateEnd) + ' (' + state.days + ' dias)\n' +
       'Entrega: ' + POINT_NAMES[state.point] + '\n' +
       'Total estimado: R$ ' + calcTotal().toLocaleString('pt-BR') + '\n\n' +
