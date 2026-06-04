@@ -192,26 +192,20 @@
   .pledge__title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.005em; }
   .pledge__text { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--gray-700); line-height: 1.55; margin: 0; }
 
-  /* COMO FUNCIONA — Zigue-zague */
+  /* COMO FUNCIONA — Grid compacto 5 cards (Linear/Stripe-style) */
   .how { padding: 56px 0; background: var(--white); }
-  .how__steps { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
-  @media (max-width: 720px) { .how__steps { gap: 36px; } }
-  .how__step { display: grid; gap: 32px; align-items: center; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .how__step { grid-template-columns: 1fr 1fr; gap: 56px; } }
-  .how__step:nth-child(even) .how__visual { order: -1; }
-  @media (min-width: 720px) {
-    .how__step:nth-child(even) .how__visual { order: 2; }
-    .how__step:nth-child(even) .how__content { order: 1; }
-  }
-  .how__visual { aspect-ratio: 4/3; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; text-align: center; }
-  .how__visual--alt { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
-  .how__visual-num { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900; color: var(--gold); line-height: 1; }
-  .how__visual-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); text-transform: uppercase; }
-  .how__visual-detail { font-family: 'Inter', sans-serif; font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 8px; line-height: 1.5; max-width: 220px; }
-  .how__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 10px; }
-  .how__title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
-  .how__desc { font-family: 'Inter', sans-serif; font-size: 15.5px; color: var(--gray-700); line-height: 1.65; margin: 0 0 8px; }
-  .how__time { font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--sage-dark); margin: 0; }
+  .how__steps { max-width: 1140px; margin: 0 auto; display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 720px) { .how__steps { grid-template-columns: repeat(5, 1fr); gap: 12px; } }
+  .how__step { background: var(--cream); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: all .2s; border: 1px solid rgba(15,61,46,0.06); }
+  .how__step:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,61,46,0.08); border-color: var(--navy-light); }
+  .how__thumb { aspect-ratio: 16/10; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+  .how__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .how__thumb-num { position: absolute; top: 10px; left: 12px; background: var(--gold); color: var(--navy); font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 2; }
+  .how__thumb-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; gap: 4px; }
+  .how__thumb-fallback small { font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+  .how__body { padding: 14px 16px 16px; flex: 1; }
+  .how__title { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 800; color: var(--navy); margin: 0 0 6px; letter-spacing: -0.005em; line-height: 1.25; }
+  .how__desc { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-700); line-height: 1.5; margin: 0; }
   .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
   .step { text-align: center; padding: 8px; }
@@ -617,67 +611,67 @@
     <div class="how__steps">
 
       <div class="how__step">
-        <div class="how__visual">
-          <span class="how__visual-label">Passo 01</span>
-          <span class="how__visual-num">01</span>
-          <span class="how__visual-detail">Catálogo com fotos, preços transparentes e 3 planos de km</span>
+        <div class="how__thumb">
+          <span class="how__thumb-num">1</span>
+          <img src="images/como-funciona/1-escolha.jpg" alt="Escolha pelo site"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="how__thumb-fallback" style="display:none;"><span>1</span><small>foto em breve</small></div>
         </div>
-        <div class="how__content">
-          <span class="how__tag">3 minutos · Sem cadastro obrigatório</span>
-          <h3 class="how__title">Escolha o carro pelo nosso site</h3>
-          <p class="how__desc">Veja fotos reais, especificações técnicas e tabela transparente de preços. Compare os 3 planos (Essencial, Estendido, Sem Limite) e descubra qual encaixa no seu uso.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__visual how__visual--alt">
-          <span class="how__visual-label">Passo 02</span>
-          <span class="how__visual-num">02</span>
-          <span class="how__visual-detail">Resposta em até 2h úteis · Atendimento humano</span>
-        </div>
-        <div class="how__content">
-          <span class="how__tag">Resposta média 30 minutos</span>
-          <h3 class="how__title">Solicite pelo WhatsApp ou site</h3>
-          <p class="how__desc">Daniel ou Danilo respondem em até 2 horas úteis. Atendimento humano, sem chatbots. Tira dúvidas, ajusta plano e ajuda você a escolher o melhor ponto de entrega.</p>
+        <div class="how__body">
+          <h3 class="how__title">Escolha pelo site</h3>
+          <p class="how__desc">Veja fotos reais, preços transparentes e 3 planos de km. ~3 min.</p>
         </div>
       </div>
 
       <div class="how__step">
-        <div class="how__visual">
-          <span class="how__visual-label">Passo 03</span>
-          <span class="how__visual-num">03</span>
-          <span class="how__visual-detail">Contrato Autentique + Validação Caf + PIX</span>
+        <div class="how__thumb">
+          <span class="how__thumb-num">2</span>
+          <img src="images/como-funciona/2-whatsapp.jpg" alt="Solicite pelo WhatsApp"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="how__thumb-fallback" style="display:none;"><span>2</span><small>foto em breve</small></div>
         </div>
-        <div class="how__content">
-          <span class="how__tag">100% digital · 2 minutos pra assinar</span>
-          <h3 class="how__title">Contrato digital + pagamento</h3>
-          <p class="how__desc">Recebe contrato via Autentique no seu e-mail e assina pelo celular. Validação de identidade automática via Caf. Pagamento PIX ou cartão de crédito até 12x.</p>
-        </div>
-      </div>
-
-      <div class="how__step">
-        <div class="how__visual how__visual--alt">
-          <span class="how__visual-label">Passo 04</span>
-          <span class="how__visual-num">04</span>
-          <span class="how__visual-detail">Aeroporto · Hotel · Condomínio · Ponto neutro</span>
-        </div>
-        <div class="how__content">
-          <span class="how__tag">Sem custo dentro de Uberlândia</span>
-          <h3 class="how__title">Entrega no local que você escolher</h3>
-          <p class="how__desc">Aeroporto Bombonato, hotel, condomínio ou ponto neutro em Uberlândia. Em até 24 horas após assinatura. Vistoria conjunta de 15 minutos no encontro.</p>
+        <div class="how__body">
+          <h3 class="how__title">Solicite pelo WhatsApp</h3>
+          <p class="how__desc">Daniel ou Danilo respondem em 2h úteis. Atendimento humano.</p>
         </div>
       </div>
 
       <div class="how__step">
-        <div class="how__visual">
-          <span class="how__visual-label">Passo 05</span>
-          <span class="how__visual-num">05</span>
-          <span class="how__visual-detail">Suporte WhatsApp + manutenção proativa</span>
+        <div class="how__thumb">
+          <span class="how__thumb-num">3</span>
+          <img src="images/como-funciona/3-contrato.jpg" alt="Contrato digital"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="how__thumb-fallback" style="display:none;"><span>3</span><small>foto em breve</small></div>
         </div>
-        <div class="how__content">
-          <span class="how__tag">Suporte humano direto · 24/7</span>
-          <h3 class="how__title">Use pelo tempo que precisar</h3>
-          <p class="how__desc">Suporte 24/7 via WhatsApp durante todo o período. Quando o carro chegar próximo da troca de óleo, Danilo te avisa com 1.000 km de antecedência e oferece 3 opções (busca, leva, reserva). Devolução flexível sem multa.</p>
+        <div class="how__body">
+          <h3 class="how__title">Contrato + pagamento</h3>
+          <p class="how__desc">Autentique no celular + Caf valida + PIX/cartão. 100% digital.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__thumb">
+          <span class="how__thumb-num">4</span>
+          <img src="images/como-funciona/4-entrega.jpg" alt="Entrega do carro"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="how__thumb-fallback" style="display:none;"><span>4</span><small>foto em breve</small></div>
+        </div>
+        <div class="how__body">
+          <h3 class="how__title">Entrega onde estiver</h3>
+          <p class="how__desc">Aeroporto, hotel ou condomínio. Em até 24h após assinatura.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__thumb">
+          <span class="how__thumb-num">5</span>
+          <img src="images/como-funciona/5-uso.jpg" alt="Use sem stress"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="how__thumb-fallback" style="display:none;"><span>5</span><small>foto em breve</small></div>
+        </div>
+        <div class="how__body">
+          <h3 class="how__title">Use sem stress</h3>
+          <p class="how__desc">Suporte 24/7 WhatsApp. Manutenção proativa. Devolução flexível.</p>
         </div>
       </div>
 
