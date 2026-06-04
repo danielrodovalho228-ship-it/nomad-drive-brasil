@@ -105,6 +105,30 @@
   .cta-final__row { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .cta-final .btn--ghost-navy { color: var(--white); border-color: var(--white); }
   .cta-final .btn--ghost-navy:hover { background: var(--white); color: var(--navy); }
+
+  /* AUDIENCE — Para quem é (DIFERENCIAL principal do negócio) */
+  .audience { padding: 40px 0 36px; background: var(--cream); border-bottom: 1px solid rgba(15,61,46,0.06); }
+  .audience__intro { max-width: 740px; margin: 0 auto 26px; text-align: center; }
+  .audience__eyebrow { font-size: 11.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 8px; }
+  .audience__intro h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 10px; line-height: 1.2; }
+  .audience__intro p { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; max-width: 620px; margin: 0 auto; }
+  .audience__intro strong { color: var(--navy); font-weight: 700; }
+  .audience__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1100px; margin: 0 auto; }
+  @media (min-width: 880px) { .audience__grid { grid-template-columns: repeat(4, 1fr); gap: 12px; } }
+  .audience-card { background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid rgba(15,61,46,0.08); display: flex; flex-direction: column; text-decoration: none; transition: all .25s cubic-bezier(0.4,0,0.2,1); }
+  .audience-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(15,61,46,0.1); border-color: var(--navy-light); }
+  .audience-card__banner { aspect-ratio: 16/10; overflow: hidden; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); position: relative; }
+  .audience-card__banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+  .audience-card:hover .audience-card__banner img { transform: scale(1.04); }
+  .audience-card__body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+  .audience-card__tag { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 6px; }
+  .audience-card__title { font-family: 'Playfair Display', serif; font-size: 15.5px; font-weight: 700; color: var(--navy); margin: 0 0 4px; line-height: 1.2; }
+  .audience-card__text { font-size: 12.5px; color: var(--gray-700); line-height: 1.45; margin: 0; }
+  .audience__cta { display: flex; justify-content: center; margin-top: 22px; }
+  .audience__cta a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--navy); text-decoration: none; padding: 8px 0; border-bottom: 2px solid var(--gold); transition: color .15s, border-color .15s; }
+  .audience__cta a:hover { color: var(--gold-dark); }
+  .audience__cta a::after { content: '→'; transition: transform .15s; }
+  .audience__cta a:hover::after { transform: translateX(3px); }
 </style>
 <link rel="stylesheet" href="assets/site-shell.css?v=1" />
 <script defer src="assets/site-shell.js?v=1"></script>
@@ -127,6 +151,59 @@
     <div class="hero__visual">
       <img src="images/car-hb20-1.jpg" alt="Hyundai HB20 — locação mensal Nomade Drive Uberlândia" />
       <div class="hero__badge">A partir de<strong>R$ 3.500</strong>30 dias · tudo incluso</div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM É — Diferencial principal do negócio (público não atendido pelas locadoras tradicionais) -->
+<section class="audience">
+  <div class="wrap">
+    <div class="audience__intro">
+      <div class="audience__eyebrow">Para quem é</div>
+      <h2>Feito para quem locadora tradicional não atende</h2>
+      <p>Profissionais em <strong>transição</strong> que precisam de carro por <strong>30 a 180 dias</strong> em Uberlândia — sem caução pesada, sem fila, sem fidelidade, com entrega onde estiver.</p>
+    </div>
+
+    <div class="audience__grid">
+      <a href="publico.html#executivo" class="audience-card">
+        <div class="audience-card__banner"><img src="images/perfis/executivo.jpg" alt="" loading="lazy" onerror="this.style.display='none'" /></div>
+        <div class="audience-card__body">
+          <div class="audience-card__tag">30-90 dias</div>
+          <div class="audience-card__title">Executivos em transferência</div>
+          <p class="audience-card__text">Mudança de cidade, treinamento, projeto temporário.</p>
+        </div>
+      </a>
+
+      <a href="publico.html#medico" class="audience-card">
+        <div class="audience-card__banner"><img src="images/perfis/medico.jpg" alt="" loading="lazy" onerror="this.style.display='none'" /></div>
+        <div class="audience-card__body">
+          <div class="audience-card__tag">30-180 dias</div>
+          <div class="audience-card__title">Médicos e área da saúde</div>
+          <p class="audience-card__text">Residência, plantão temporário, consultoria em UDI.</p>
+        </div>
+      </a>
+
+      <a href="publico.html#familia" class="audience-card">
+        <div class="audience-card__banner"><img src="images/perfis/familia.jpg" alt="" loading="lazy" onerror="this.style.display='none'" /></div>
+        <div class="audience-card__body">
+          <div class="audience-card__tag">60-180 dias</div>
+          <div class="audience-card__title">Famílias em mudança</div>
+          <p class="audience-card__text">Período entre venda e compra de carro, mudança regional.</p>
+        </div>
+      </a>
+
+      <a href="publico.html#nomade" class="audience-card">
+        <div class="audience-card__banner"><img src="images/perfis/nomade.jpg" alt="" loading="lazy" onerror="this.style.display='none'" /></div>
+        <div class="audience-card__body">
+          <div class="audience-card__tag">30-90 dias</div>
+          <div class="audience-card__title">Nômades e estudantes</div>
+          <p class="audience-card__text">Trabalho remoto local, intercâmbio ou pós na UFU.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="audience__cta">
+      <a href="publico.html">Ver detalhes de cada perfil</a>
     </div>
   </div>
 </section>
@@ -180,12 +257,12 @@
         </div>
       </a>
 
-      <a href="publico.html" class="nc">
-        <div class="nc__thumb"><img src="images/perfis/executivo.jpg" alt="" onerror="this.style.display='none'" /></div>
+      <a href="contato.html" class="nc">
+        <div class="nc__thumb"><img src="images/compromissos/1-resposta-2h.jpg" alt="" onerror="this.style.display='none'" /></div>
         <div class="nc__body">
-          <h3 class="nc__title">Para quem é</h3>
-          <p class="nc__desc">Executivos em transferência, médicos visitantes, famílias em mudança e nômades digitais.</p>
-          <span class="nc__cta">Ver perfis</span>
+          <h3 class="nc__title">Falar com a gente</h3>
+          <p class="nc__desc">WhatsApp em 2h úteis, e-mail e formulário. Daniel ou Danilo respondem direto.</p>
+          <span class="nc__cta">Ver canais</span>
         </div>
       </a>
 
