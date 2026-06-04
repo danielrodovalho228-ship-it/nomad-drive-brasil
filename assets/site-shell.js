@@ -22,6 +22,19 @@
 (function () {
   'use strict';
 
+  // === Auto-redirect: se URL tem hash de recovery do Supabase Auth,
+  // manda pra página de redefinir-senha.html sem perder o token.
+  // Executa ANTES de tudo (DOM ainda nem carregou) pra não deixar
+  // o usuário ver flash da home.
+  (function () {
+    var hash = window.location.hash || '';
+    if (hash.indexOf('type=recovery') === -1) return;
+    if (/redefinir-senha\.html/.test(window.location.pathname)) return;
+    var depth = (window.location.pathname.match(/\//g) || []).length - 1;
+    var prefix = depth > 0 ? '../'.repeat(depth) : '';
+    window.location.replace(prefix + 'redefinir-senha.html' + hash);
+  })();
+
   const HEADER_URL = 'partials/header.html';
   const FOOTER_URL = 'partials/footer.html';
 
