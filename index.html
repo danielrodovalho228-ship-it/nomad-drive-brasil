@@ -166,8 +166,37 @@
   .who__cta::after { content: '→'; transition: transform .2s; }
   .who__cta:hover::after { transform: translateX(2px); }
 
-  /* COMO FUNCIONA */
+  /* COMPROMISSOS — 6 cards */
+  .pledges { padding: 56px 0; background: var(--white); }
+  .pledges__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1080px; margin: 0 auto; }
+  @media (min-width: 720px) { .pledges__grid { grid-template-columns: repeat(3, 1fr); } }
+  .pledge { background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 22px 24px; transition: all .2s; }
+  .pledge:hover { border-color: var(--navy-light); transform: translateY(-2px); }
+  .pledge--highlight { background: var(--gold-pale); border-color: var(--gold); }
+  .pledge__num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 8px; }
+  .pledge__title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.005em; }
+  .pledge__text { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--gray-700); line-height: 1.55; margin: 0; }
+
+  /* COMO FUNCIONA — Zigue-zague */
   .how { padding: 56px 0; background: var(--white); }
+  .how__steps { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+  @media (max-width: 720px) { .how__steps { gap: 36px; } }
+  .how__step { display: grid; gap: 32px; align-items: center; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .how__step { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .how__step:nth-child(even) .how__visual { order: -1; }
+  @media (min-width: 720px) {
+    .how__step:nth-child(even) .how__visual { order: 2; }
+    .how__step:nth-child(even) .how__content { order: 1; }
+  }
+  .how__visual { aspect-ratio: 4/3; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; text-align: center; }
+  .how__visual--alt { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
+  .how__visual-num { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900; color: var(--gold); line-height: 1; }
+  .how__visual-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+  .how__visual-detail { font-family: 'Inter', sans-serif; font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 8px; line-height: 1.5; max-width: 220px; }
+  .how__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 10px; }
+  .how__title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
+  .how__desc { font-family: 'Inter', sans-serif; font-size: 15.5px; color: var(--gray-700); line-height: 1.65; margin: 0 0 8px; }
+  .how__time { font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--sage-dark); margin: 0; }
   .how__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .how__grid { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
   .step { text-align: center; padding: 8px; }
@@ -403,12 +432,13 @@
             <span class="car__spec">Manual</span>
             <span class="car__spec">5 lugares</span>
           </div>
-          <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
+          <div class="car__included">Limite Total do Período · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 3.500<small> /mês</small></span>
+            <span class="car__price-val">R$ 3.500<small> /30 dias</small></span>
+            <small class="car__price-from" style="margin-top:4px;">3 planos: Essencial · Estendido · Sem Limite</small>
           </div>
-          <a href="carros/popular.html" class="btn btn--primary btn--block car__cta">Ver detalhes do HB20</a>
+          <a href="carros/popular.html#precos" class="btn btn--primary btn--block car__cta">Ver os 3 planos</a>
         </div>
       </article>
 
@@ -426,12 +456,13 @@
             <span class="car__spec">Automático</span>
             <span class="car__spec">5 lugares</span>
           </div>
-          <div class="car__included">3.000 km/mês inclusos · seguro · manutenção</div>
+          <div class="car__included">Limite Total do Período · seguro · manutenção</div>
           <div class="car__price">
             <small class="car__price-from">A partir de</small>
-            <span class="car__price-val">R$ 4.500<small> /mês</small></span>
+            <span class="car__price-val">R$ 4.500<small> /30 dias</small></span>
+            <small class="car__price-from" style="margin-top:4px;">3 planos: Essencial · Estendido · Sem Limite</small>
           </div>
-          <a href="carros/sedan.html" class="btn btn--primary btn--block car__cta">Ver detalhes do Cronos</a>
+          <a href="carros/sedan.html#precos" class="btn btn--primary btn--block car__cta">Ver os 3 planos</a>
         </div>
       </article>
 
@@ -471,19 +502,122 @@
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
+<!-- COMPROMISSOS NOMADE DRIVE — 6 cards (v3) -->
+<section class="pledges">
+  <div class="wrap">
+    <div class="head">
+      <h2>Nossos compromissos</h2>
+      <p>O que você pode esperar de nós, sempre.</p>
+    </div>
+    <div class="pledges__grid">
+      <div class="pledge">
+        <div class="pledge__num">2h</div>
+        <div class="pledge__title">Resposta em até 2 horas</div>
+        <p class="pledge__text">Atendimento humano via WhatsApp em horário comercial. Sem chatbot.</p>
+      </div>
+      <div class="pledge">
+        <div class="pledge__num">24h</div>
+        <div class="pledge__title">Carro entregue em 24 horas</div>
+        <p class="pledge__text">Dentro de Uberlândia, sem custo. Após assinatura e pagamento.</p>
+      </div>
+      <div class="pledge pledge--highlight">
+        <div class="pledge__num">∞</div>
+        <div class="pledge__title">Liberdade Total de Km</div>
+        <p class="pledge__text">Limite Total do período — distribua os km como quiser entre os meses, sem multa mensal.</p>
+      </div>
+      <div class="pledge pledge--highlight">
+        <div class="pledge__num">0%</div>
+        <div class="pledge__title">Manutenção sem dor de cabeça</div>
+        <p class="pledge__text">Buscamos, fazemos e devolvemos. Sem custo extra. Carro reserva se preciso.</p>
+      </div>
+      <div class="pledge">
+        <div class="pledge__num">0R$</div>
+        <div class="pledge__title">Devolução flexível, sem multa</div>
+        <p class="pledge__text">Devolva antes do prazo sem penalidade. Reembolso proporcional dos dias não usados.</p>
+      </div>
+      <div class="pledge">
+        <div class="pledge__num">24/7</div>
+        <div class="pledge__title">Suporte 24/7 pelo WhatsApp</div>
+        <p class="pledge__text">Qualquer urgência, qualquer hora. Daniel ou Danilo direto, sem intermediário.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA — Zigue-zague (v3) -->
 <section class="how" id="como-funciona">
   <div class="wrap">
     <div class="head">
       <h2>Como funciona</h2>
       <p>Do clique ao volante em até 24 horas. Sem burocracia, sem visita à sede.</p>
     </div>
-    <div class="how__grid">
-      <div class="step"><div class="step__num">1</div><h4>Escolha o carro</h4><p>Veja fotos, preços e o que está incluído. Selecione o modelo que combina com você.</p></div>
-      <div class="step"><div class="step__num">2</div><h4>Solicite</h4><p>Clique em "Solicitar" e nosso time responde em até 2 horas úteis.</p></div>
-      <div class="step"><div class="step__num">3</div><h4>Assine digital</h4><p>Mandamos contrato pra você assinar pelo celular. Paga via PIX ou cartão.</p></div>
-      <div class="step"><div class="step__num">4</div><h4>Receba onde estiver</h4><p>Entregamos no aeroporto, hotel ou condomínio em até 24h.</p></div>
-      <div class="step"><div class="step__num">5</div><h4>Use sem stress</h4><p>Devolução flexível, sem multa. Suporte 24h pelo WhatsApp.</p></div>
+    <div class="how__steps">
+
+      <div class="how__step">
+        <div class="how__visual">
+          <span class="how__visual-label">Passo 01</span>
+          <span class="how__visual-num">01</span>
+          <span class="how__visual-detail">Catálogo com fotos, preços transparentes e 3 planos de km</span>
+        </div>
+        <div class="how__content">
+          <span class="how__tag">3 minutos · Sem cadastro obrigatório</span>
+          <h3 class="how__title">Escolha o carro pelo nosso site</h3>
+          <p class="how__desc">Veja fotos reais, especificações técnicas e tabela transparente de preços. Compare os 3 planos (Essencial, Estendido, Sem Limite) e descubra qual encaixa no seu uso.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__visual how__visual--alt">
+          <span class="how__visual-label">Passo 02</span>
+          <span class="how__visual-num">02</span>
+          <span class="how__visual-detail">Resposta em até 2h úteis · Atendimento humano</span>
+        </div>
+        <div class="how__content">
+          <span class="how__tag">Resposta média 30 minutos</span>
+          <h3 class="how__title">Solicite pelo WhatsApp ou site</h3>
+          <p class="how__desc">Daniel ou Danilo respondem em até 2 horas úteis. Atendimento humano, sem chatbots. Tira dúvidas, ajusta plano e ajuda você a escolher o melhor ponto de entrega.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__visual">
+          <span class="how__visual-label">Passo 03</span>
+          <span class="how__visual-num">03</span>
+          <span class="how__visual-detail">Contrato Autentique + Validação Caf + PIX</span>
+        </div>
+        <div class="how__content">
+          <span class="how__tag">100% digital · 2 minutos pra assinar</span>
+          <h3 class="how__title">Contrato digital + pagamento</h3>
+          <p class="how__desc">Recebe contrato via Autentique no seu e-mail e assina pelo celular. Validação de identidade automática via Caf. Pagamento PIX ou cartão de crédito até 12x.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__visual how__visual--alt">
+          <span class="how__visual-label">Passo 04</span>
+          <span class="how__visual-num">04</span>
+          <span class="how__visual-detail">Aeroporto · Hotel · Condomínio · Ponto neutro</span>
+        </div>
+        <div class="how__content">
+          <span class="how__tag">Sem custo dentro de Uberlândia</span>
+          <h3 class="how__title">Entrega no local que você escolher</h3>
+          <p class="how__desc">Aeroporto Bombonato, hotel, condomínio ou ponto neutro em Uberlândia. Em até 24 horas após assinatura. Vistoria conjunta de 15 minutos no encontro.</p>
+        </div>
+      </div>
+
+      <div class="how__step">
+        <div class="how__visual">
+          <span class="how__visual-label">Passo 05</span>
+          <span class="how__visual-num">05</span>
+          <span class="how__visual-detail">Suporte WhatsApp + manutenção proativa</span>
+        </div>
+        <div class="how__content">
+          <span class="how__tag">Suporte humano direto · 24/7</span>
+          <h3 class="how__title">Use pelo tempo que precisar</h3>
+          <p class="how__desc">Suporte 24/7 via WhatsApp durante todo o período. Quando o carro chegar próximo da troca de óleo, Danilo te avisa com 1.000 km de antecedência e oferece 3 opções (busca, leva, reserva). Devolução flexível sem multa.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -621,14 +755,49 @@
         <summary>O que está incluído no preço da mensalidade?</summary>
         <div class="faq__answer">Tudo, sem letra miúda:
         <ul style="margin:10px 0 0 18px; padding:0;">
-          <li>3.000 km/mês de franquia</li>
+          <li>Limite Total de km do período (varia por plano)</li>
           <li>Seguro completo (cobertura colisão, roubo, terceiros)</li>
-          <li>Manutenção (revisões + óleo + pneus + freios)</li>
+          <li>Manutenção programada (revisões + óleo + pneus por desgaste + freios)</li>
           <li>IPVA e licenciamento</li>
           <li>Assistência 24h (guincho, chaveiro, pane)</li>
           <li>Telemetria embarcada (segurança contra furto)</li>
         </ul>
         Você só paga combustível e pedágio. Multas de trânsito são repassadas ao condutor.</div>
+      </details>
+
+      <!-- CATEGORIA: MANUTENÇÃO (4 novas perguntas v3) -->
+      <details class="faq__item">
+        <summary>Quem paga a manutenção do carro durante o contrato?</summary>
+        <div class="faq__answer"><strong>A Nomade Drive é responsável por toda manutenção programada</strong>: troca de óleo, filtros, revisões periódicas, freios e pneus por desgaste natural. <strong>Zero custo pra você.</strong> Único bônus do nosso modelo: você não tem nem dor de cabeça nem despesa extra com oficina.</div>
+      </details>
+
+      <details class="faq__item">
+        <summary>Como funciona a troca de óleo durante o contrato?</summary>
+        <div class="faq__answer">Quando o painel sinaliza próximo do limite (geralmente a <strong>1.000 km de antecedência</strong>), Danilo entra em contato proativamente e oferece <strong>3 opções</strong>:
+        <ul style="margin:10px 0 0 18px; padding:0;">
+          <li><strong>(A) Busca e devolução</strong>: buscamos o carro de manhã e devolvemos no mesmo dia (4-6h sem o carro)</li>
+          <li><strong>(B) Você leva</strong> à oficina parceira em horário agendado, aguarda 1-2h</li>
+          <li><strong>(C) Carro reserva</strong> temporário durante a manutenção (sujeito à disponibilidade)</li>
+        </ul>
+        Você escolhe a opção que se adapta à sua rotina. Sem cobrança extra em nenhuma das 3.</div>
+      </details>
+
+      <details class="faq__item">
+        <summary>E se acontecer um problema mecânico imprevisto?</summary>
+        <div class="faq__answer">Aciona Danilo via WhatsApp 24/7. <strong>Avaliamos a situação em até 30 minutos.</strong> Se for problema sério, levamos o carro à oficina parceira e providenciamos solução (incluindo carro reserva se necessário). <strong>Cliente não paga nada por manutenção corretiva de falha do veículo.</strong></div>
+      </details>
+
+      <details class="faq__item">
+        <summary>O que NÃO é coberto pela manutenção da Nomade Drive?</summary>
+        <div class="faq__answer">Pra ser transparente, o que é responsabilidade do cliente:
+        <ul style="margin:10px 0 0 18px; padding:0;">
+          <li>Combustível e lavagem do veículo</li>
+          <li>Pneu furado por descuido (prego, buraco evidente)</li>
+          <li>Bateria danificada por uso incorreto (luzes esquecidas)</li>
+          <li>Multas de trânsito e pedágios</li>
+          <li>Danos por colisão com culpa do condutor (cobertos pelo seguro com franquia)</li>
+        </ul>
+        Tudo escrito claramente no contrato.</div>
       </details>
 
       <details class="faq__item">
