@@ -148,19 +148,33 @@
   .car--soon .car__photo { background: var(--navy-pale); display: flex; align-items: center; justify-content: center; color: var(--navy-light); }
   .car--soon .car__photo svg { width: 56px; height: 56px; stroke: currentColor; stroke-width: 1.5; fill: none; }
 
-  /* PARA QUEM É — estilo Linear/Stripe (border-left + tipografia, sem avatar) */
+  /* PARA QUEM É — Card com banner foto topo + tipografia (estilo Airbnb/Linear) */
   .who { padding: 56px 0; background: var(--cream); }
-  .who__grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  .who__grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
   @media (min-width: 720px) { .who__grid { grid-template-columns: repeat(2, 1fr); } }
-  .who__card { background: var(--white); border-radius: 12px; padding: 32px 32px 28px; border: 1px solid rgba(15,61,46,0.06); border-left: 4px solid var(--navy); display: flex; flex-direction: column; transition: all .25s cubic-bezier(0.4, 0, 0.2, 1); }
-  .who__card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(15,61,46,0.08); }
-  .who__card--executivo { border-left-color: var(--navy); }
-  .who__card--medico { border-left-color: var(--sage); }
-  .who__card--familia { border-left-color: var(--navy-light); }
-  .who__card--nomade { border-left-color: var(--gold); }
-  .who__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 14px; }
-  .who__title { font-family: 'Playfair Display', serif; font-size: 23px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
-  .who__text { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--gray-700); line-height: 1.65; margin: 0 0 20px; flex: 1; }
+  .who__card { background: var(--white); border-radius: 14px; border: 1px solid rgba(15,61,46,0.06); display: flex; flex-direction: column; overflow: hidden; transition: all .25s cubic-bezier(0.4, 0, 0.2, 1); }
+  .who__card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15,61,46,0.1); }
+  /* Banner foto topo do card */
+  .who__banner { aspect-ratio: 16/9; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); }
+  .who__banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+  .who__card:hover .who__banner img { transform: scale(1.04); }
+  .who__banner-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(15,61,46,0.4) 100%); pointer-events: none; }
+  .who__banner-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 20px; text-align: center; color: rgba(255,255,255,0.85); }
+  .who__banner-fallback strong { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: #fff; line-height: 1.1; letter-spacing: -0.01em; }
+  .who__banner-fallback span { font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 1.4px; color: var(--gold); text-transform: uppercase; }
+  .who__banner-fallback em { font-family: 'Inter', sans-serif; font-size: 10.5px; color: rgba(255,255,255,0.6); font-style: normal; margin-top: 4px; }
+  /* Banner gradient por perfil quando img falha */
+  .who__card--executivo .who__banner { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); }
+  .who__card--medico .who__banner { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
+  .who__card--familia .who__banner { background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%); }
+  .who__card--nomade .who__banner { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); }
+  .who__card--nomade .who__banner-fallback span { color: var(--navy); }
+  .who__card--nomade .who__banner-fallback em { color: rgba(15,31,46,0.6); }
+  /* Conteúdo abaixo do banner */
+  .who__body { padding: 26px 28px 24px; display: flex; flex-direction: column; flex: 1; }
+  .who__tag { display: inline-block; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.4px; color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px; }
+  .who__title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy); margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
+  .who__text { font-family: 'Inter', sans-serif; font-size: 14.5px; color: var(--gray-700); line-height: 1.65; margin: 0 0 18px; flex: 1; }
   .who__cta { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); text-decoration: none; transition: gap .2s, color .2s; align-self: flex-start; }
   .who__cta:hover { gap: 12px; color: var(--gold-dark); }
   .who__cta::after { content: '→'; transition: transform .2s; }
@@ -359,31 +373,79 @@
     <div class="who__grid">
 
       <article class="who__card who__card--executivo">
-        <span class="who__tag">30-90 dias · Executivo</span>
-        <h3 class="who__title">Executivos em transferência</h3>
-        <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Carro confiável, sem precisar comprar.</p>
-        <a href="reservar.html?perfil=executivo" class="who__cta">Solicitar carro</a>
+        <div class="who__banner">
+          <img src="images/perfis/executivo.jpg" alt="Executivo profissional em Uberlândia"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="who__banner-fallback" style="display:none;">
+            <span>Para executivos</span>
+            <strong>Em transferência</strong>
+            <em>Adicione foto em images/perfis/executivo.jpg</em>
+          </div>
+          <div class="who__banner-overlay"></div>
+        </div>
+        <div class="who__body">
+          <span class="who__tag">30-90 dias · Executivo</span>
+          <h3 class="who__title">Executivos em transferência</h3>
+          <p class="who__text">Mudança de cidade, treinamento corporativo, projeto temporário em Uberlândia. Carro confiável, sem precisar comprar.</p>
+          <a href="reservar.html?perfil=executivo" class="who__cta">Solicitar carro</a>
+        </div>
       </article>
 
       <article class="who__card who__card--medico">
-        <span class="who__tag">30-180 dias · Saúde</span>
-        <h3 class="who__title">Médicos e profissionais de saúde</h3>
-        <p class="who__text">Plantões em hospitais de Uberlândia (HC-UFU, Santa Marta, Madrecor), consultorias temporárias, residências médicas.</p>
-        <a href="reservar.html?perfil=medico" class="who__cta">Solicitar carro</a>
+        <div class="who__banner">
+          <img src="images/perfis/medico.jpg" alt="Profissional de saúde em hospital"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="who__banner-fallback" style="display:none;">
+            <span>Para médicos</span>
+            <strong>Profissionais de saúde</strong>
+            <em>Adicione foto em images/perfis/medico.jpg</em>
+          </div>
+          <div class="who__banner-overlay"></div>
+        </div>
+        <div class="who__body">
+          <span class="who__tag">30-180 dias · Saúde</span>
+          <h3 class="who__title">Médicos e profissionais de saúde</h3>
+          <p class="who__text">Plantões em hospitais de Uberlândia (HC-UFU, Santa Marta, Madrecor), consultorias temporárias, residências médicas.</p>
+          <a href="reservar.html?perfil=medico" class="who__cta">Solicitar carro</a>
+        </div>
       </article>
 
       <article class="who__card who__card--familia">
-        <span class="who__tag">60-180 dias · Família</span>
-        <h3 class="who__title">Famílias em mudança</h3>
-        <p class="who__text">Mudança de casa, reforma, espera por veículo próprio, transição de carreira. Espaço para 5, sem compromisso longo.</p>
-        <a href="reservar.html?perfil=familia" class="who__cta">Solicitar carro</a>
+        <div class="who__banner">
+          <img src="images/perfis/familia.jpg" alt="Família em mudança"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="who__banner-fallback" style="display:none;">
+            <span>Para famílias</span>
+            <strong>Em mudança</strong>
+            <em>Adicione foto em images/perfis/familia.jpg</em>
+          </div>
+          <div class="who__banner-overlay"></div>
+        </div>
+        <div class="who__body">
+          <span class="who__tag">60-180 dias · Família</span>
+          <h3 class="who__title">Famílias em mudança</h3>
+          <p class="who__text">Mudança de casa, reforma, espera por veículo próprio, transição de carreira. Espaço para 5, sem compromisso longo.</p>
+          <a href="reservar.html?perfil=familia" class="who__cta">Solicitar carro</a>
+        </div>
       </article>
 
       <article class="who__card who__card--nomade">
-        <span class="who__tag">30-90 dias · Nômade</span>
-        <h3 class="who__title">Nômades digitais e estudantes</h3>
-        <p class="who__text">Temporadas profissionais em Uberlândia, trabalho remoto, especialização universitária. Pague só pelo tempo que vai usar.</p>
-        <a href="reservar.html?perfil=nomade" class="who__cta">Solicitar carro</a>
+        <div class="who__banner">
+          <img src="images/perfis/nomade.jpg" alt="Jovem profissional remoto em café"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="who__banner-fallback" style="display:none;">
+            <span>Para nômades</span>
+            <strong>Digitais e estudantes</strong>
+            <em>Adicione foto em images/perfis/nomade.jpg</em>
+          </div>
+          <div class="who__banner-overlay"></div>
+        </div>
+        <div class="who__body">
+          <span class="who__tag">30-90 dias · Nômade</span>
+          <h3 class="who__title">Nômades digitais e estudantes</h3>
+          <p class="who__text">Temporadas profissionais em Uberlândia, trabalho remoto, especialização universitária. Pague só pelo tempo que vai usar.</p>
+          <a href="reservar.html?perfil=nomade" class="who__cta">Solicitar carro</a>
+        </div>
       </article>
 
     </div>
