@@ -185,10 +185,13 @@
   .pledges { padding: 56px 0; background: var(--white); }
   .pledges__grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); max-width: 1080px; margin: 0 auto; }
   @media (min-width: 720px) { .pledges__grid { grid-template-columns: repeat(3, 1fr); } }
-  .pledge { background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 22px 24px; transition: all .2s; }
+  .pledge { background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; padding: 22px 24px; transition: all .2s; position: relative; overflow: hidden; }
   .pledge:hover { border-color: var(--navy-light); transform: translateY(-2px); }
   .pledge--highlight { background: var(--gold-pale); border-color: var(--gold); }
-  .pledge__num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 8px; }
+  .pledge__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .pledge__num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; }
+  .pledge__thumb { width: 64px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; opacity: 0.92; }
+  @media (max-width: 540px) { .pledge__thumb { width: 52px; height: 36px; } }
   .pledge__title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.005em; }
   .pledge__text { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--gray-700); line-height: 1.55; margin: 0; }
 
@@ -568,32 +571,50 @@
     </div>
     <div class="pledges__grid">
       <div class="pledge">
-        <div class="pledge__num">2h</div>
+        <div class="pledge__head">
+          <div class="pledge__num">2h</div>
+          <img class="pledge__thumb" src="images/compromissos/1-resposta-2h.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Resposta em até 2 horas</div>
         <p class="pledge__text">Atendimento humano via WhatsApp em horário comercial. Sem chatbot.</p>
       </div>
       <div class="pledge">
-        <div class="pledge__num">24h</div>
+        <div class="pledge__head">
+          <div class="pledge__num">24h</div>
+          <img class="pledge__thumb" src="images/compromissos/2-entrega-24h.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Carro entregue em 24 horas</div>
         <p class="pledge__text">Dentro de Uberlândia, sem custo. Após assinatura e pagamento.</p>
       </div>
       <div class="pledge pledge--highlight">
-        <div class="pledge__num">∞</div>
+        <div class="pledge__head">
+          <div class="pledge__num">∞</div>
+          <img class="pledge__thumb" src="images/compromissos/3-liberdade-km.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Liberdade Total de Km</div>
         <p class="pledge__text">Limite Total do período — distribua os km como quiser entre os meses, sem multa mensal.</p>
       </div>
       <div class="pledge pledge--highlight">
-        <div class="pledge__num">0%</div>
+        <div class="pledge__head">
+          <div class="pledge__num">0%</div>
+          <img class="pledge__thumb" src="images/compromissos/4-manutencao.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Manutenção sem dor de cabeça</div>
         <p class="pledge__text">Buscamos, fazemos e devolvemos. Sem custo extra. Carro reserva se preciso.</p>
       </div>
       <div class="pledge">
-        <div class="pledge__num">0R$</div>
+        <div class="pledge__head">
+          <div class="pledge__num">0R$</div>
+          <img class="pledge__thumb" src="images/compromissos/5-devolucao-flex.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Devolução flexível, sem multa</div>
         <p class="pledge__text">Devolva antes do prazo sem penalidade. Reembolso proporcional dos dias não usados.</p>
       </div>
       <div class="pledge">
-        <div class="pledge__num">24/7</div>
+        <div class="pledge__head">
+          <div class="pledge__num">24/7</div>
+          <img class="pledge__thumb" src="images/compromissos/6-suporte-247.jpg" alt="" loading="lazy" onerror="this.style.display='none'" />
+        </div>
         <div class="pledge__title">Suporte 24/7 pelo WhatsApp</div>
         <p class="pledge__text">Qualquer urgência, qualquer hora. Daniel ou Danilo direto, sem intermediário.</p>
       </div>
