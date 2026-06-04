@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Redefinir senha · Nomade Drive Brasil</title>
+<link rel="icon" href="images/logo-nomade-drive.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --navy:#0F3D2E; --navy-light:#1a5a44; --sage:#5A8A6B; --gold:#D4A853; --gold-dark:#b88f3f; --cream:#FAFAF7; --white:#fff; --gray-50:#F8F9F9; --gray-200:#E5E9E7; --gray-500:#6B7572; --gray-700:#3a4945; --gray-900:#14201b; --red:#B91C1C; --red-bg:#FEF2F2; --green:#0F5132; --green-bg:#EFF6F1; }
+  * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+  body { font-family:'Inter',system-ui,sans-serif; background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; color:var(--gray-900); }
+  .card { width:100%; max-width:440px; background:var(--white); border-radius:18px; padding:38px 36px; box-shadow:0 24px 64px -20px rgba(0,0,0,.4); }
+  .brand { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+  .brand img { width:44px; height:44px; border-radius:10px; object-fit:cover; }
+  .brand-text strong { display:block; font-family:'Playfair Display',serif; font-size:18px; color:var(--navy); line-height:1.1; }
+  .brand-text span { display:block; font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:1.2px; font-weight:600; margin-top:2px; }
+  h1 { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--gray-900); margin:0 0 6px; line-height:1.2; }
+  .sub { font-size:14px; color:var(--gray-500); margin:0 0 26px; line-height:1.5; }
+  .field { margin-bottom:14px; }
+  label { display:block; font-size:12.5px; font-weight:600; color:var(--gray-700); margin-bottom:6px; text-transform:uppercase; letter-spacing:.4px; }
+  input[type="password"] { width:100%; padding:12px 14px; font-size:15px; font-family:inherit; color:var(--gray-900); background:var(--gray-50); border:1.5px solid var(--gray-200); border-radius:10px; }
+  input:focus { outline:none; border-color:var(--sage); background:var(--white); }
+  .help { font-size:11.5px; color:var(--gray-500); margin-top:4px; }
+  .btn { width:100%; padding:13px 20px; font-size:15px; font-weight:600; font-family:inherit; color:var(--white); background:var(--navy); border:none; border-radius:10px; cursor:pointer; transition:background .15s; margin-top:8px; }
+  .btn:hover { background:var(--navy-light); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; }
+  .msg { margin-top:14px; padding:12px 14px; border-radius:8px; font-size:13.5px; line-height:1.5; }
+  .msg--err { background:var(--red-bg); color:var(--red); border-left:3px solid var(--red); }
+  .msg--ok { background:var(--green-bg); color:var(--green); border-left:3px solid var(--green); }
+  .links { display:flex; justify-content:space-between; margin-top:24px; padding-top:20px; border-top:1px solid var(--gray-200); font-size:12.5px; }
+  .links a { color:var(--gray-500); text-decoration:none; }
+  .links a:hover { color:var(--navy); text-decoration:underline; }
+  .hidden { display:none !important; }
+  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; margin-right:6px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive" onerror="this.style.display='none'" />
+    <div class="brand-text">
+      <strong>Nomade Drive Brasil</strong>
+      <span>Redefinir senha</span>
+    </div>
+  </div>
+
+  <div id="stepForm">
+    <h1>Defina sua nova senha</h1>
+    <p class="sub">Mínimo 8 caracteres. Use letras, números e ao menos 1 símbolo.</p>
+    <form id="resetForm" novalidate>
+      <div class="field">
+        <label for="pwd1">Nova senha</label>
+        <input type="password" id="pwd1" autocomplete="new-password" minlength="8" required />
+      </div>
+      <div class="field">
+        <label for="pwd2">Confirme a nova senha</label>
+        <input type="password" id="pwd2" autocomplete="new-password" minlength="8" required />
+        <div class="help">As 2 senhas precisam coincidir.</div>
+      </div>
+      <button type="submit" class="btn" id="btnSave">Salvar nova senha</button>
+    </form>
+    <div id="formMsg" class="msg hidden"></div>
+  </div>
+
+  <div id="stepOk" class="hidden">
+    <h1>Senha redefinida ✓</h1>
+    <p class="sub">Tudo certo. Você já está logado — vamos pro painel.</p>
+    <div class="msg msg--ok" id="okMsg">Redirecionando…</div>
+  </div>
+
+  <div id="stepErr" class="hidden">
+    <h1>Link inválido ou expirado</h1>
+    <p class="sub">Esse link de redefinição não funciona mais. Solicite um novo.</p>
+    <a href="login.html" class="btn" style="display:block;text-align:center;text-decoration:none;line-height:1.2;">Voltar pro login</a>
+  </div>
+
+  <div class="links">
+    <a href="index.html">← Site</a>
+    <a href="login.html">Login</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var cfg = window.NOMADDRIVE_SUPABASE;
+  if (!cfg || !cfg.url || !cfg.anonKey) {
+    document.getElementById('stepForm').classList.add('hidden');
+    document.getElementById('stepErr').classList.remove('hidden');
+    return;
+  }
+  var client = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+  // O Supabase Auth manda o link com tokens no #hash da URL.
+  // Formato: #access_token=...&refresh_token=...&type=recovery&...
+  function parseHashTokens() {
+    var hash = (window.location.hash || '').replace(/^#/, '');
+    if (!hash) return null;
+    var p = new URLSearchParams(hash);
+    if (p.get('type') !== 'recovery') return null;
+    return {
+      access_token: p.get('access_token'),
+      refresh_token: p.get('refresh_token')
+    };
+  }
+
+  function showStep(name) {
+    document.getElementById('stepForm').classList.toggle('hidden', name !== 'form');
+    document.getElementById('stepOk').classList.toggle('hidden', name !== 'ok');
+    document.getElementById('stepErr').classList.toggle('hidden', name !== 'err');
+  }
+
+  function showMsg(el, text, kind) {
+    el.textContent = text;
+    el.className = 'msg msg--' + (kind || 'err');
+    el.classList.remove('hidden');
+  }
+
+  // Inicialização: lê tokens do hash, valida sessão
+  var tokens = parseHashTokens();
+  if (!tokens || !tokens.access_token) {
+    // Talvez já tem sessão (caso usuário tenha clicado link 2x)
+    client.auth.getSession().then(function (r) {
+      if (r && r.data && r.data.session) {
+        // Tem sessão — assume que é recovery e mostra form
+        showStep('form');
+      } else {
+        showStep('err');
+      }
+    });
+  } else {
+    // Define a sessão com o token de recovery
+    client.auth.setSession({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token || ''
+    }).then(function (r) {
+      if (r.error) {
+        console.error('setSession err', r.error);
+        showStep('err');
+      } else {
+        showStep('form');
+        // Limpa o hash da URL pra não vazar token
+        try { history.replaceState({}, '', window.location.pathname); } catch(e){}
+      }
+    });
+  }
+
+  // Submit do form
+  document.getElementById('resetForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('formMsg');
+    var btn = document.getElementById('btnSave');
+    var p1 = document.getElementById('pwd1').value;
+    var p2 = document.getElementById('pwd2').value;
+
+    if (p1.length < 8) { showMsg(msg, 'Senha precisa ter pelo menos 8 caracteres.'); return; }
+    if (p1 !== p2) { showMsg(msg, 'As 2 senhas não coincidem.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Salvando…';
+
+    client.auth.updateUser({ password: p1 }).then(function (r) {
+      btn.disabled = false;
+      btn.textContent = 'Salvar nova senha';
+      if (r.error) {
+        showMsg(msg, 'Erro ao salvar: ' + (r.error.message || 'tente de novo'));
+        return;
+      }
+      // Sucesso — mostra step OK e redireciona pro admin (se for admin) ou login
+      showStep('ok');
+      // checa role
+      client.from('user_roles').select('role,status').then(function (rr) {
+        var isAdmin = (rr.data || []).some(function (x) {
+          return (x.role === 'admin' || x.role === 'super_admin') && x.status === 'aprovado';
+        });
+        var dest = isAdmin ? 'admin.html' : 'index.html';
+        setTimeout(function () { window.location.href = dest; }, 1500);
+      });
+    }).catch(function (e) {
+      btn.disabled = false;
+      btn.textContent = 'Salvar nova senha';
+      showMsg(msg, 'Erro de rede. Tente de novo.');
+    });
+  });
+})();
+</script>
+</body>
+</html>
