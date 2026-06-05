@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex,nofollow" />
-<meta name="description" content="Acesso interno da Nomade Drive Brasil — área restrita à equipe." />
-<title>Acesso interno · Nomade Drive Brasil</title>
+<meta name="description" content="Entre na sua conta Nomade Drive Brasil — clientes e equipe." />
+<title>Entrar · Nomade Drive Brasil</title>
 <link rel="icon" href="images/logo-nomade-drive.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -222,14 +222,14 @@
     <img src="images/logo-nomade-drive.jpg" alt="Nomade Drive Brasil" />
     <div class="brand-text">
       <strong>Nomade Drive Brasil</strong>
-      <span>Acesso interno</span>
+      <span>Entrar</span>
     </div>
   </div>
 
   <!-- STEP 1: senha -->
   <div id="stepPassword">
-    <h1>Entrar na operação</h1>
-    <p class="sub">Acesso restrito à equipe Nomade Drive. Use o e-mail cadastrado pelo super admin.</p>
+    <h1>Bem-vindo</h1>
+    <p class="sub">Use o e-mail e senha da sua conta. <strong>Clientes</strong> vão pro painel pessoal; <strong>equipe</strong> vai pro painel admin.</p>
 
     <form id="loginForm" novalidate>
       <div class="field">
@@ -350,18 +350,26 @@
   }
 
   function verifyAdminAndRedirect() {
-    window.ndAuth.isAdmin().then(function (ok) {
-      if (ok) {
-        checkingMsg.textContent = "Acesso confirmado. Redirecionando…";
-        setTimeout(function () {
-          window.location.href = getRedirect();
-        }, 600);
+    // Detecta a role do usuário logado e manda pro painel certo.
+    // - super_admin / admin → admin.html
+    // - cliente            → dashboard-cliente.html (área do cliente)
+    // Honra ?redirect= apenas se o user tiver permissão pra ir lá.
+    window.ndAuth.isAdmin().then(function (isAdm) {
+      var redirect = getRedirect();
+      // Se URL pediu admin.html mas user não é admin, redireciona pro painel cliente
+      if (redirect === "admin.html" && !isAdm) {
+        checkingMsg.textContent = "Acesso confirmado. Indo pro seu painel…";
+        setTimeout(function () { window.location.href = "dashboard-cliente.html"; }, 600);
+        return;
+      }
+      if (isAdm) {
+        checkingMsg.textContent = "Acesso de admin confirmado. Redirecionando…";
+        setTimeout(function () { window.location.href = redirect; }, 600);
       } else {
-        // Logado mas não é admin — desloga e mostra erro
-        window.ndAuth.client().auth.signOut().then(function () {
-          showStep("password");
-          showError(loginError, "Esta conta não tem permissão de administrador. Use uma conta autorizada ou fale com o super admin.");
-        });
+        // Cliente comum: vai pro dashboard-cliente.html (ou ?redirect= se cliente-friendly)
+        var clientDest = (redirect === "admin.html") ? "dashboard-cliente.html" : redirect;
+        checkingMsg.textContent = "Bem-vindo. Indo pro seu painel…";
+        setTimeout(function () { window.location.href = clientDest; }, 600);
       }
     }).catch(function (e) {
       showStep("password");
