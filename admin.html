@@ -1028,7 +1028,8 @@
           <b id="kpiCrons" style="font-size:24px;font-weight:800;color:#1e40af;display:block;margin:4px 0;">—</b>
           <span id="kpiCronsSub" style="font-size:11px;color:#5b6b63;">de N total</span>
         </div>
-        <div class="kpi" style="background:#fef9c3;padding:14px 16px;border-radius:10px;border-left:4px solid #d4af37;">
+        <!-- KPI "Connect ativos" OCULTO (P2P legado: Stripe Connect era pra owners, frota propria nao usa). -->
+        <div hidden class="kpi" style="background:#fef9c3;padding:14px 16px;border-radius:10px;border-left:4px solid #d4af37;">
           <small style="color:#5b6b63;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">🏦 Connect ativos</small>
           <b id="kpiConnect" style="font-size:24px;font-weight:800;color:#854d0e;display:block;margin:4px 0;">—</b>
           <span id="kpiConnectRate" style="font-size:11px;color:#5b6b63;">de owners</span>
@@ -1054,8 +1055,8 @@
         </div>
       </div>
 
-      <!-- Connect breakdown -->
-      <div class="admin-card" style="margin-top:14px;">
+      <!-- Connect breakdown OCULTO (P2P legado: Stripe Connect era pra owners, frota propria nao usa). -->
+      <div hidden class="admin-card" style="margin-top:14px;">
         <h3 class="block-title" style="font-size:14px;">🏦 Stripe Connect breakdown</h3>
         <div id="connectBreakdown"><p class="note">Carregando...</p></div>
       </div>
