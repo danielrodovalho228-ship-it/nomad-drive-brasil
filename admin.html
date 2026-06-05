@@ -185,7 +185,7 @@
       <div class="admin-side__group">💰 FINANCEIRO</div>
       <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Receita e pagamentos</a>
       <a href="#contas-pagar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Contas a pagar</a>
-      <a href="#fiscal"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 14 2 2 4-4"/></svg>Fiscal (MEI/ME)</a>
+      <a href="#fiscal"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 14 2 2 4-4"/></svg>Fiscal (LTDA)</a>
       <a href="#nfs"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>Notas fiscais</a>
       <a href="#cupons"><svg viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><circle cx="16" cy="14" r="2"/></svg>🎟️ Cupons</a>
 
@@ -238,7 +238,7 @@
             <h2 class="cockpit-hero__title" id="cockpitGreeting">Olá, Daniel</h2>
             <p class="cockpit-hero__sub">Nomade Drive Brasil em números — tempo real</p>
             <p class="cockpit-hero__legal" id="cockpitLegal" hidden>
-              🧾 MEI · Titular: <strong id="cockpitTitular">—</strong>
+              🏢 LTDA · Lucro Presumido · CNAE 7711-0/00 · <strong id="cockpitTitular">—</strong>
             </p>
           </div>
           <div class="cockpit-hero__period" id="cockpitPeriod">📅 <span id="cockpitDate">—</span></div>
@@ -292,26 +292,12 @@
           <span class="cockpit-alert" id="alertSLA" hidden>🚨 <span id="alertSLACount">0</span> SLA vencendo</span>
           <span class="cockpit-alert" id="alertAvarias" hidden>⚠️ <span id="alertAvariasCount">0</span> avarias pendentes</span>
           <span class="cockpit-alert" id="alertMultas" hidden>🚦 <span id="alertMultasCount">0</span> multas a cobrar</span>
-          <span class="cockpit-alert cockpit-alert--info" id="alertDAS" hidden>🧾 DAS MEI vence em <span id="alertDASDays">—</span> dias</span>
-          <!-- alertSaques REMOVIDO (era P2P: pagamentos pra owners — frota propria nao usa) -->
+          <span class="cockpit-alert cockpit-alert--info" id="alertDAS" hidden>🧾 PIS+COFINS vence em <span id="alertDASDays">—</span> dias</span>
+          <!-- alertSaques REMOVIDO (era P2P) -->
         </div>
 
-        <!-- Linha 3: Limite MEI -->
-        <div class="cockpit-mei-bar" id="cockpitMeiBar">
-          <div class="cockpit-mei-bar__head">
-            <span class="cockpit-mei-bar__label">🧾 Faturamento MEI <span id="meiYear">2026</span></span>
-            <span class="cockpit-mei-bar__value">
-              <strong id="meiCurrent">R$ —</strong> de <span id="meiLimit">R$ 81.000</span>
-              (<span id="meiPct">—</span>%)
-            </span>
-          </div>
-          <div class="cockpit-mei-bar__track">
-            <div class="cockpit-mei-bar__fill" id="meiFill" style="width:0%"></div>
-          </div>
-          <p class="cockpit-mei-bar__warning" id="meiWarning" hidden>
-            ⚠️ Próximo do limite — considere migrar pra ME/EPP (Simples Nacional)
-          </p>
-        </div>
+        <!-- Bar de faturamento MEI REMOVIDA (LTDA Lucro Presumido nao tem teto de R$ 81k) -->
+        <div class="cockpit-mei-bar" id="cockpitMeiBar" hidden></div>
       </div>
     </section>
 
@@ -830,46 +816,44 @@
     </section>
 
     <!-- ============================================================
-         Fase 39 — FISCAL (MEI)
+         FISCAL — LTDA / Lucro Presumido (refatorado v3 frota propria)
          ============================================================ -->
     <section class="admin-block" id="fiscal">
-      <h2>🧾 Fiscal — MEI</h2>
-      <p class="note">Obrigações fiscais do MEI. Limite anual <strong>R$ 81.000</strong>. DAS mensal fixo (~R$ 75) vence dia 20. DASN anual em janeiro.</p>
+      <h2>🧾 Fiscal — LTDA / Lucro Presumido</h2>
+      <p class="note">Obrigações fiscais da LTDA no regime de Lucro Presumido. Tributos sobre a receita de locação (CNAE 7711-0/00): PIS 0,65% · COFINS 3% · IRPJ 1,2% (32% da receita × 15%) · CSLL 1,08% (32% × 9%) · ISS conforme município (geralmente 2-5%). Total estimado: <strong>~7,9% da receita bruta</strong>. Sem limite de faturamento (Presumido permite até R$ 78 milhões/ano).</p>
 
       <div class="kpi-grid">
-        <div class="kpi"><small>Faturamento ano corrente</small><b id="fisFaturamento">R$ —</b><span id="fisFaturamentoPct">— do limite</span></div>
-        <div class="kpi"><small>Próximo DAS</small><b id="fisProxDas">R$ —</b><span id="fisProxDasData">— em — dias</span></div>
-        <div class="kpi"><small>DAS pagos (ano)</small><b id="fisDasPagos">—</b><span>de 12 meses</span></div>
-        <div class="kpi"><small>Margem até virar ME</small><b id="fisMargem">R$ —</b><span>antes do limite</span></div>
+        <div class="kpi"><small>Receita bruta (mês corrente)</small><b id="fisFaturamento">R$ —</b><span id="fisFaturamentoPct">— do mês</span></div>
+        <div class="kpi"><small>Próximos impostos (PIS+COFINS)</small><b id="fisProxDas">R$ —</b><span id="fisProxDasData">vence dia 25</span></div>
+        <div class="kpi"><small>IRPJ+CSLL trimestral</small><b id="fisDasPagos">R$ —</b><span>vence último dia útil do mês seguinte ao trimestre</span></div>
+        <div class="kpi"><small>Receita acumulada (ano)</small><b id="fisMargem">R$ —</b><span>sem teto no Lucro Presumido</span></div>
       </div>
 
       <div class="admin-card" style="margin-top:18px;">
-        <h3 class="block-title">📅 DAS MEI — próximos 12 meses</h3>
+        <h3 class="block-title">📅 Obrigações fiscais — próximos meses</h3>
         <table class="admin-table">
           <thead><tr>
+            <th>Tributo</th>
             <th>Mês ref.</th>
             <th>Vencimento</th>
-            <th>Valor</th>
+            <th>Valor estimado</th>
             <th>Status</th>
-            <th>Ações</th>
           </tr></thead>
-          <tbody id="fisDasList"><tr><td colspan="5">Carregando...</td></tr></tbody>
+          <tbody id="fisDasList"><tr><td colspan="5">Carregando obrigações fiscais...</td></tr></tbody>
         </table>
       </div>
 
-      <div class="why-box why-box--warn" id="meiMigrateAlert" style="margin-top:16px;" hidden>
-        <h3>⚠️ Próximo do limite MEI</h3>
-        <p>Seu faturamento anual está se aproximando dos R$ 81.000 do limite MEI. Considere migrar pra <strong>ME (Microempresa)</strong> no Simples Nacional — DAS variável (4-15%) mas permite faturamento até R$ 360k/ano e equipe maior.</p>
-        <p style="margin-top:8px;"><strong>Próximos passos sugeridos:</strong> contratar um contador, abrir CNPJ ME, transferir contratos, comunicar Stripe sobre mudança de tipo.</p>
-      </div>
-
       <div class="why-box" style="margin-top:14px;background:#f0f9ff;border-left:3px solid #1a4d8c;">
-        <h3>📚 Lembretes anuais</h3>
+        <h3>📚 Calendário fiscal anual (LTDA Lucro Presumido)</h3>
         <ul style="margin:6px 0 0 18px;line-height:1.7;">
-          <li><strong>DASN-SIMEI:</strong> declaração anual do MEI — janeiro/maio (varia)</li>
-          <li><strong>IRPF (PF):</strong> declaração até final de abril — retiradas isentas até R$ 28.560/ano</li>
-          <li><strong>Renovação dados MEI:</strong> revisar atividades CNAE anualmente</li>
+          <li><strong>PIS + COFINS:</strong> mensal, vence dia 25 do mês seguinte</li>
+          <li><strong>IRPJ + CSLL:</strong> apuração trimestral (mar/jun/set/dez), vence último dia útil do mês seguinte</li>
+          <li><strong>ISS:</strong> mensal conforme legislação municipal de Uberlândia (geralmente dia 10-15)</li>
+          <li><strong>DCTF:</strong> mensal, até 15° dia útil do 2° mês seguinte</li>
+          <li><strong>ECF (escrituração contábil fiscal):</strong> anual até último dia útil de julho</li>
+          <li><strong>DEFIS:</strong> não se aplica (é declaração do Simples)</li>
         </ul>
+        <p style="margin-top:10px;font-size:13px;color:#5b6b63;">💡 Recomendação: ter contador dedicado (custo ~R$ 400-800/mês) — Lucro Presumido tem mais obrigações que MEI/Simples e exige escrituração contábil regular.</p>
       </div>
     </section>
 
@@ -884,12 +868,9 @@
           ➕ Adicionar pessoa
         </button>
       </h2>
-      <p class="note">Sócios, funcionários CLT, PJ, estagiários. Custo total da folha aparece nos KPIs.</p>
+      <p class="note">Sócios, funcionários CLT, PJ, estagiários. Custo total da folha aparece nos KPIs. LTDA permite múltiplos sócios e funcionários sem teto.</p>
 
-      <div class="why-box why-box--warn" id="meiTeamAlert" style="margin-bottom:14px;" hidden>
-        <h3>⚠️ MEI tem limite de funcionários</h3>
-        <p>MEI permite apenas <strong>1 funcionário CLT</strong> (titular + 1). Sócios NÃO são permitidos no MEI — Empresário Individual é unipessoal. Pra ter sócio ou mais de 1 funcionário, precisa migrar pra <strong>ME (Microempresa)</strong>.</p>
-      </div>
+      <!-- Alerta MEI REMOVIDO (LTDA nao tem limite de 1 funcionario) -->
 
       <!-- Form add funcionário -->
       <div class="admin-card" id="employeeFormCard" hidden style="margin-bottom:14px;border-left:3px solid #0f5132;">
