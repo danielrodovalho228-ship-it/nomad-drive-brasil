@@ -1227,9 +1227,84 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 
   /* Trava scroll do body quando drawer aberto */
   body.is-admin-drawer-open { overflow: hidden; }
+
+  /* KPI grid no mobile: 2 colunas (era 6 fixo) */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .kpi { padding: 12px 14px; }
+  .kpi b { font-size: 20px; }
+  .kpi small { font-size: 10.5px; }
+  .kpi span { font-size: 11px; }
+
+  /* Topbar empilha (botões abaixo do título) */
+  .admin-topbar { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+  .admin-topbar h1 { font-size: 20px; }
+  .admin-topbar p { font-size: 12.5px; }
+
+  /* Hero admin reduz padding + tamanho */
+  .admin-main .dash-hero {
+    padding: 18px 16px !important;
+    margin-bottom: 18px !important;
+    flex-direction: column !important;
+    text-align: center;
+    gap: 12px !important;
+  }
+  .admin-main .dash-hero .dash-hero__title { font-size: 18px !important; }
+  .admin-main .dash-hero .dash-hero__sub { font-size: 13px !important; }
+
+  /* Blocos: títulos menores + scroll horizontal em qq overflow */
+  .admin-block { margin-bottom: 22px; }
+  .admin-block h2 { font-size: 16px; margin-bottom: 12px; }
+  .admin-card { padding: 16px 14px; }
+
+  /* Tabelas: garante scroll horizontal limpo + fontes menores */
+  .admin-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.admin-table { font-size: 12.5px; min-width: 540px; }
+  table.admin-table th, table.admin-table td {
+    padding: 8px 10px; font-size: 12.5px;
+  }
+
+  /* Botões dentro do admin não devem estourar */
+  .admin-main .btn { padding: 9px 14px; font-size: 13.5px; }
+
+  /* Forms e inputs no admin */
+  .admin-main input, .admin-main select, .admin-main textarea {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
-@media (max-width: 560px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) {
+  .kpi-grid { grid-template-columns: 1fr !important; }
+  .admin-main { padding: 14px 12px 40px; }
+}
+
+/* Grids inline (style="...grid-template-columns:repeat(N,1fr)") dentro
+   de .admin-main quebram em mobile. Override força 2 cols < 900px,
+   1 col < 560px. !important porque inline style tem precedência. */
+@media (max-width: 900px) {
+  .admin-main [style*="grid-template-columns"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .admin-main [style*="display:grid"][style*="repeat"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 560px) {
+  .admin-main [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Cockpit KPIs (gradient verde card) também precisam responsive */
+@media (max-width: 900px) {
+  .cockpit-kpis { grid-template-columns: repeat(2, 1fr) !important; }
+  .cockpit-hero { padding: 20px 18px; }
+  .cockpit-hero__title { font-size: 19px; }
+}
+@media (max-width: 560px) {
+  .cockpit-kpis { grid-template-columns: 1fr !important; }
+}
 
 /* ====================================================================
    PROPRIETÁRIOS — "Esse modelo é ideal para quem?"
