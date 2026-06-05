@@ -192,10 +192,12 @@
       <a href="#sinistros"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6"/></svg>Sinistros e multas</a>
       <a href="#notificacoes"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Notificações internas</a>
 
-      <div class="admin-side__group">🚗 FROTA E PARCEIROS</div>
+      <div class="admin-side__group">🚗 FROTA</div>
       <a href="#frota"><svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="11" rx="1"/><polygon points="16 10 20 10 23 13 23 17 16 17 16 10"/><circle cx="5.5" cy="18.5" r="1.5"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>Frota (Fiat Cronos)</a>
-      <a href="#oficinas"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Oficinas parceiras</a>
-      <a href="#parceiros"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Parceiros B2B</a>
+      <!-- Oficinas/Parceiros B2B ocultos: sem porta publica no site pra eles se cadastrarem.
+           Quando voltarem a expansao com paginas /oficinas.html e /parceiros.html, religar aqui. -->
+      <a hidden href="#oficinas">Oficinas parceiras</a>
+      <a hidden href="#parceiros">Parceiros B2B</a>
 
       <div class="admin-side__group">💰 FINANCEIRO</div>
       <a href="#financeiro"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Receita e pagamentos</a>
@@ -538,8 +540,9 @@
       </div>
     </section>
 
-    <!-- OFICINAS PARCEIRAS DE MANUTENÇÃO (refatorado v3) -->
-    <section class="admin-block" id="oficinas">
+    <!-- OFICINAS PARCEIRAS DE MANUTENÇÃO — OCULTA (sem porta publica /oficinas.html
+         pra elas se cadastrarem; modulo religado quando expansao incluir essa pagina) -->
+    <section class="admin-block" id="oficinas" hidden>
       <h2>Oficinas parceiras de manutenção</h2>
       <p class="note">Oficinas que cuidam da manutenção programada da nossa frota (troca de óleo, freios, revisão, pneus). Cada oficina tem catálogo de serviços com preço combinado em <code>partner_services</code> (Sprint E).</p>
       <div class="admin-card">
@@ -551,8 +554,9 @@
       <p class="note" style="margin-top:12px;font-size:13px;">💡 Dica: cadastra oficinas em <code>partners</code> com <code>partner_type='workshop'</code> e status <code>prospect → negotiating → active</code>.</p>
     </section>
 
-    <!-- PARCEIROS B2B — Hospitais + Empresas + Seguradoras + Tech (refatorado v3) -->
-    <section class="admin-block" id="parceiros">
+    <!-- PARCEIROS B2B — OCULTA (sem porta publica /parceiros.html pra hospitais/
+         empresas/seguradoras se cadastrarem; religar quando tiver pagina B2B) -->
+    <section class="admin-block" id="parceiros" hidden>
       <h2>Parceiros B2B (hospitais, empresas, seguradoras)</h2>
       <p class="note">Parceiros que indicam clientes em volume: <strong>hospitais</strong> (HC-UFU, Santa Marta, Madrecor) com médicos visitantes; <strong>empresas</strong> (Cargill, Algar) com executivos em transferência; <strong>seguradoras</strong>; e <strong>tech</strong> (Caf, Autentique, Cobli).</p>
       <div class="admin-card">
