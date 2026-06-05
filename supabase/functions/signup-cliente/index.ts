@@ -128,9 +128,18 @@ Deno.serve(async (req) => {
       console.error("Erro criando user_role:", roleErr);
     }
 
-    // 4. Dispara e-mail pro cliente + alerta equipe — chamando sendEmail()
-    //    direto do _shared (sem HTTP roundtrip pro send-template, que
-    //    evita problemas de auth server-to-server).
+    // 4. Dispara e-mail pro cliente + alerta equipe.
+    //    Retorna status no response pra QA conseguir auditar de fora.
+    const emailReport: {
+      cliente: { sent: boolean; id?: string; error?: string };
+      equipe: { sent: boolean; recipients?: string[]; id?: string; error?: string };
+      team_env_set: boolean;
+    } = {
+      cliente: { sent: false },
+      equipe: { sent: false },
+      team_env_set: false,
+    };
+
     try {
       const firstName = fullName.split(/\s+/)[0];
 
@@ -150,13 +159,15 @@ Deno.serve(async (req) => {
           clientTpl.text,
           getReplyTo("mensal_lead_recebido")
         );
-        if (!r1.ok) console.warn("E-mail cliente falhou:", r1.error);
-        else console.log("E-mail cliente enviado:", r1.id);
+        emailReport.cliente = r1.ok
+          ? { sent: true, id: r1.id }
+          : { sent: false, error: r1.error };
       }
 
       // Equipe
-      const teamList = (Deno.env.get("TEAM_EMAIL_RECIPIENTS") ?? "")
-        .split(",").map(s => s.trim()).filter(Boolean);
+      const teamRecipientsRaw = Deno.env.get("TEAM_EMAIL_RECIPIENTS") ?? "";
+      emailReport.team_env_set = teamRecipientsRaw.length > 0;
+      const teamList = teamRecipientsRaw.split(",").map(s => s.trim()).filter(Boolean);
       if (teamList.length) {
         const teamTpl = renderTemplate("team_novo_lead", {
           first_name: firstName,
@@ -178,11 +189,12 @@ Deno.serve(async (req) => {
             teamTpl.text,
             getReplyTo("team_novo_lead")
           );
-          if (!r2.ok) console.warn("E-mail equipe falhou:", r2.error);
-          else console.log("E-mail equipe enviado:", r2.id);
+          emailReport.equipe = r2.ok
+            ? { sent: true, id: r2.id, recipients: teamList }
+            : { sent: false, error: r2.error, recipients: teamList };
         }
       } else {
-        console.warn("TEAM_EMAIL_RECIPIENTS vazio — pulando alerta de equipe");
+        emailReport.equipe = { sent: false, error: "TEAM_EMAIL_RECIPIENTS nao setado" };
       }
     } catch (e) {
       console.warn("Bloco de e-mails falhou (não fatal):", (e as Error)?.message);
@@ -194,7 +206,8 @@ Deno.serve(async (req) => {
       email,
       role: "client",
       status: "em_analise",
-      message: "Cadastro criado com sucesso. Faça login pra acessar seu painel."
+      message: "Cadastro criado com sucesso. Faça login pra acessar seu painel.",
+      emails: emailReport,
     });
   } catch (e) {
     console.error("signup-cliente exceção:", e);
