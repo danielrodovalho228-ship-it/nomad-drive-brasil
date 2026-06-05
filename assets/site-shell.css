@@ -201,6 +201,32 @@ body.is-drawer-open .nd-drawer { transform: translateX(0); }
 }
 .nd-drawer__nav a:hover::after { color: var(--gold-dark, #b88f3f); transform: translateX(3px); }
 
+/* Header de grupo dentro do drawer (Painel / Site) — usado pelo header-app */
+.nd-drawer__section {
+  display: block;
+  padding: 16px 22px 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(15,61,46,0.45);
+  background: transparent;
+  border: 0;
+}
+.nd-drawer__nav .nd-drawer__section:first-child { padding-top: 6px; }
+
+/* <button data-logout> reaproveita estilo do CTA — força reset de input */
+button.nd-drawer__cta {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+button.nd-drawer__cta--ghost {
+  border: 1px dashed rgba(15,61,46,0.25);
+}
+
 .nd-drawer__foot {
   padding: 20px 22px;
   border-top: 1px solid rgba(15,61,46,0.08);

@@ -36,7 +36,20 @@
   })();
 
   const HEADER_URL = 'partials/header.html';
+  const HEADER_APP_URL = 'partials/header-app.html';
   const FOOTER_URL = 'partials/footer.html';
+
+  // Escolhe o partial certo de header:
+  //  - body data-nd-shell="app"  → header-app.html (área logada do cliente)
+  //  - body data-nd-header-src="..." → URL customizada
+  //  - default                      → header.html (público)
+  function pickHeaderUrl() {
+    var custom = document.body.getAttribute('data-nd-header-src');
+    if (custom) return custom;
+    var mode = document.body.getAttribute('data-nd-shell');
+    if (mode === 'app') return HEADER_APP_URL;
+    return HEADER_URL;
+  }
 
   // Resolve path relativo correto se a página estiver em subpasta (ex: carros/popular.html)
   function resolvePath(url) {
@@ -128,11 +141,32 @@
     });
   }
 
+  // Religa botões [data-logout] que estão dentro do header injetado
+  // dinamicamente. Preferência: ndAuth.wireLogout() (auth.js) — ele já
+  // tem a lógica completa de signOut + redirect. Fallback simples se
+  // ndAuth não estiver carregado.
+  function wireLogout(scope) {
+    if (window.ndAuth && typeof window.ndAuth.wireLogout === 'function') {
+      window.ndAuth.wireLogout();
+      return;
+    }
+    scope.querySelectorAll('[data-logout]').forEach(function (btn) {
+      if (btn.getAttribute('data-logout-wired')) return;
+      btn.setAttribute('data-logout-wired', '1');
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.location.href = 'index.html';
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    loadPartial(HEADER_URL, 'site-header', scope => {
+    var headerUrl = pickHeaderUrl();
+    loadPartial(headerUrl, 'site-header', scope => {
       fixRelativeLinks(scope);
       markActive(scope);
       wireDrawer(scope);
+      wireLogout(scope);
     });
     loadPartial(FOOTER_URL, 'site-footer', scope => {
       fixRelativeLinks(scope);

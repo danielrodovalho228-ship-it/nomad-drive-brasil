@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="style-animations.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-components-modern.css?v=20260524-modern-1800" />
 <link rel="stylesheet" href="style-dashboards-modern.css?v=20260524-modern-1800" />
+<link rel="stylesheet" href="assets/site-shell.css?v=2" />
+<script defer src="assets/site-shell.js?v=2"></script>
 <style>
   /* Fase 61: hero do dashboard com background gradient + nome não corta */
   .dash-hero--cliente {
@@ -87,23 +89,10 @@
   }
 </style>
 </head>
-<body>
+<body data-nd-page="dashboard-cliente" data-nd-shell="app">
 
-<header class="nav nav--solid" id="nav">
-  <div class="container nav__inner">
-    <a href="index.html" class="brand" aria-label="Nomade Drive Brasil — início">
-      <span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></span>
-      <span class="brand__name">Nomade Drive <span>Brasil</span></span>
-    </a>
-    <div class="dash-nav-actions">
-      <a href="boas-vindas-cliente.html?force=1" title="Guia de primeiros passos">🎯 Próximos passos</a>
-      <a href="historico.html" title="Histórico de reservas">📋 Histórico</a>
-      <a href="index.html">Ver o site</a>
-      <div id="ndBell" style="display:inline-flex;align-items:center;"></div>
-      <button type="button" class="btn btn--ghost btn--sm" data-logout>Sair</button>
-    </div>
-  </div>
-</header>
+<!-- Header injetado por assets/site-shell.js (partials/header-app.html) -->
+<div id="site-header"></div>
 
 <main>
 <section class="dash">
@@ -1948,5 +1937,8 @@
 })();
 </script>
 <script src="fm-reveal.js?v=20260524-modern-1800" defer></script>
+
+<!-- Footer injetado por assets/site-shell.js (partials/footer.html) -->
+<div id="site-footer"></div>
 </body>
 </html>
