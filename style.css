@@ -63,7 +63,9 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 86px; }
+/* scroll-padding-top: garante que anchor links nao caiam atras do nd-nav
+   sticky. Altura do nav e ~64px desktop / ~60px mobile + folga. */
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
   font-family: var(--font-b);
   background: var(--bg);
@@ -164,7 +166,8 @@ ul, ol { list-style: none; }
 }
 
 /* ---------- hero ---------- */
-.hero { padding: 104px 0 38px; background: linear-gradient(180deg, var(--green-l), #fff 70%); }
+/* nd-nav sticky — sem compensador (era 104px do legado nav fixed). */
+.hero { padding: 28px 0 38px; background: linear-gradient(180deg, var(--green-l), #fff 70%); }
 .hero__inner { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
 .badge {
   display: inline-block; background: #fff; color: var(--green-d);
@@ -613,7 +616,7 @@ ul, ol { list-style: none; }
 @media (max-width: 620px) {
   .container { padding: 0 18px; }
   .section { padding: 40px 0; }
-  .hero { padding: 90px 0 32px; }
+  .hero { padding: 24px 0 32px; }
   .hero__cta { flex-direction: column; }
   .hero__cta .btn { width: 100%; }
   .steps { grid-template-columns: 1fr; }
@@ -642,7 +645,8 @@ ul, ol { list-style: none; }
 /* ====================================================================
    CAR DETAIL PAGE (car.html)
    ==================================================================== */
-.car-page { padding: 96px 0 60px; min-height: 70vh; }
+/* nd-nav sticky — sem compensador de fixed. */
+.car-page { padding: 16px 0 40px; min-height: 70vh; }
 .car-back {
   display: inline-flex; align-items: center; gap: 6px; font-size: 14px;
   color: var(--muted); margin-bottom: 18px; font-weight: 500;
@@ -874,7 +878,7 @@ ul, ol { list-style: none; }
 }
 @media (max-width: 620px) {
   .prot-cards, .flow, .admin-grid { grid-template-columns: 1fr; }
-  .page-hero { padding: 86px 0 18px; }
+  .page-hero { padding: 18px 0 18px; }
 }
 
 /* ====================================================================
@@ -1395,26 +1399,28 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
  * fique escondido atras do nav. !important pra sobrescrever
  * declaracoes inline e specificity de outros arquivos.
  * ============================================================ */
+/* Spacing reduzido — nd-nav e sticky e ocupa altura no fluxo, nao
+   precisa de padding-top compensador. */
 .wcm-hero,
 .welcome-hero,
 .gold-hero,
 .signup-hero {
-  padding-top: 96px !important;
+  padding-top: 20px !important;
 }
 .notif-page {
-  padding-top: 92px !important;
+  padding-top: 18px !important;
 }
 @media (max-width: 640px) {
   .wcm-hero,
   .welcome-hero,
   .gold-hero,
   .signup-hero {
-    padding-top: 92px !important;
+    padding-top: 16px !important;
     padding-left: 18px !important;
     padding-right: 18px !important;
   }
   .notif-page {
-    padding-top: 88px !important;
+    padding-top: 14px !important;
   }
 }
 @media (max-width: 380px) {
@@ -1422,7 +1428,7 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
   .welcome-hero,
   .gold-hero,
   .signup-hero {
-    padding-top: 84px !important;
+    padding-top: 12px !important;
   }
 }
 /* H1 responsivo dos heroes — clamp menor pra nao quebrar em iPhone SE */
@@ -1651,7 +1657,9 @@ table.admin-table tbody tr:last-child td { border-bottom: none; }
 /* ====================================================================
    DASHBOARDS — painéis por perfil
    ==================================================================== */
-.dash { padding: 94px 0 56px; }
+/* nd-nav e sticky, ocupa altura no fluxo — nao precisa de padding-top
+   compensador. Spacing reduzido (era 94px herdado de nav fixed). */
+.dash { padding: 16px 0 40px; }
 .dash-nav-actions { margin-left: auto; display: flex; align-items: center; gap: 14px; }
 .dash-nav-actions a { font-size: 14px; font-weight: 600; color: var(--muted); }
 .dash-nav-actions a:hover { color: var(--green-d); }
