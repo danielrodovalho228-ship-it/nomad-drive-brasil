@@ -2,29 +2,23 @@
  * prices.js — Configuração central de preços NomadeDrive v3
  * ============================================================
  *
- * MODELO NOVO (Prompt v3): Limite Total do Período
+ * MODELO: Limite Total do Período
  * 3 planos por carro: Essencial, Estendido (mais escolhido), Sem Limite
  * Km é TOTAL do período inteiro, não mensal — cliente distribui livre.
  *
- * Última atualização: 03/06/2026
+ * PIVOT 05/06/2026 — LANÇAMENTO ENXUTO 1 CARRO:
+ *   - Operação começa com 1 sedan automático (Fiat Cronos 2024)
+ *   - HB20 popular removido do site (margem fina + sem diferencial
+ *     contra a Localiza no segmento popular)
+ *   - Preço Cronos rebaixado pra ancorar levemente abaixo da
+ *     Localiza (sedan compacto ref. R$ 3.820 a 3.000 km/mês)
+ *
+ * Última atualização: 05/06/2026
  * ============================================================ */
 
 window.NOMADE_PRICES = {
-  // Carros disponíveis (Fase 1: 2 carros)
+  // Carros disponíveis (Lançamento: 1 carro)
   cars: {
-    popular: {
-      id: 'popular',
-      slug: 'popular',
-      name: 'Hyundai HB20',
-      category: 'Popular Econômico',
-      subtitle: 'Sense 1.0 Flex · 2023',
-      photo: 'images/car-hb20-1.jpg',
-      photos: ['images/car-hb20-1.jpg', 'images/car-hb20-2.jpg', 'images/car-hb20-3.jpg'],
-      caucaoBRL: 1500,           // pré-autorização cartão
-      kmExceededBRL: 0.80,       // R$/km acima do Limite Total
-      zeroCaucaoBRL: 290,        // upsell mensal
-      pageUrl: 'carros/popular.html'
-    },
     sedan: {
       id: 'sedan',
       slug: 'sedan',
@@ -40,17 +34,15 @@ window.NOMADE_PRICES = {
     }
   },
 
-  // 3 PLANOS por carro × 4 períodos (Limite Total do Período)
+  // 3 PLANOS × 4 períodos (Limite Total do Período)
+  // Preço ancorado levemente abaixo da Localiza sedan compacto
+  // (R$ 3.820 a 3.000 km/mês — ref. consulta 05/06/2026).
+  // Descontos por período: -5% (60d), -10% (90d), -15% (180d) sobre o pro-rata.
   plans: {
-    popular: {
-      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3500, 60: 6650, 90: 9450, 180: 17850 } },
-      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3700, 60: 7030, 90: 9990, 180: 18870 } },
-      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3900, 60: 7410, 90: 10530, 180: 19890 } }
-    },
     sedan: {
-      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 4500, 60: 8550, 90: 12150, 180: 22950 } },
-      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 4700, 60: 8930, 90: 12690, 180: 23970 } },
-      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 4900, 60: 9310, 90: 13230, 180: 24990 } }
+      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3690, 60: 7011, 90: 9963, 180: 18819 } },
+      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3740, 60: 7106, 90: 10098, 180: 19074 } },
+      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3790, 60: 7201, 90: 10233, 180: 19329 } }
     }
   },
 

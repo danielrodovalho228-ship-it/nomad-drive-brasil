@@ -592,12 +592,25 @@
       '</div>';
     }).join('');
     list.innerHTML = html;
-    if (label) label.innerHTML = 'Qual carro você quer? <small>(' + Object.keys(cars).length + ' modelos disponíveis)</small>';
-    // Aplicar pré-seleção via URL ?carro=X
+    var carIds = Object.keys(cars);
+    if (label) {
+      label.innerHTML = carIds.length === 1
+        ? 'Seu carro <small>(1 modelo disponível na frota)</small>'
+        : 'Qual carro você quer? <small>(' + carIds.length + ' modelos disponíveis)</small>';
+    }
+
+    // Aplicar pré-seleção via URL ?carro=X (aliases legados redirecionam)
     var preCar = new URLSearchParams(window.location.search).get('carro');
-    if (preCar && preCar !== 'hb20') {
-      var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
-      if (card) card.classList.add('selected');
+    if (preCar === 'hb20' || preCar === 'popular' || preCar === 'cronos') preCar = 'sedan';
+
+    // Se só tem 1 carro, auto-seleciona ele (UX melhor — não precisa clicar)
+    var autoSelect = carIds.length === 1 ? carIds[0] : preCar;
+    if (autoSelect) {
+      var card = document.querySelector('.pick--car[data-car="' + autoSelect + '"]');
+      if (card) {
+        card.classList.add('selected');
+        if (typeof state !== 'undefined') state.car = autoSelect;
+      }
     }
   }
   renderCarPicks();
@@ -619,19 +632,21 @@
   var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Sem Limite' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
+  // Lançamento enxuto: 1 carro só (sedan Cronos), sugestão sempre sedan
+  // + ponto de entrega contextual ao perfil.
   var REASON_SUGGESTIONS = {
-    'trabalho-remoto':       { car: 'popular', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. <strong>HB20</strong> econômico, ideal pra deslocamentos curtos do dia-a-dia.' },
+    'trabalho-remoto':       { car: 'sedan', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. Entrega na <strong>Praça Tubal Vilela</strong> — pega o <strong>Cronos automático</strong> e segue pro coworking.' },
     'tratamento-medico':     { car: 'sedan', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Cronos automático</strong> é mais confortável pra paciente e acompanhante.' },
     'relocacao-corporativa': { car: 'sedan', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Cronos automático</strong> passa imagem profissional pra reuniões.' },
-    'intercambio-pos':       { car: 'popular', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>HB20 econômico</strong> ideal pra orçamento de estudante/residente.' },
-    'reforma-transicao':     { car: 'popular', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>HB20</strong> é econômico pra você não pesar no bolso enquanto não tem o carro próprio.' },
+    'intercambio-pos':       { car: 'sedan', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>Cronos automático</strong> entregue na porta, conforto pra rotina acadêmica.' },
+    'reforma-transicao':     { car: 'sedan', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>Cronos</strong> com porta-malas grande pra carregar materiais e comprar mobília.' },
     'mudanca-familiar':      { car: 'sedan', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Cronos</strong> comporta família de 5 pessoas com porta-malas pra bagagem.' },
     'aposentadoria':         { car: 'sedan', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Cronos automático</strong> mais confortável pra viagens longas e dirigir sem cansaço.' },
     'viagem-longa':          { car: 'sedan', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. Cronos tem mais espaço pra bagagem e estradas.' }
   };
+  // Lançamento: 1 carro só (Cronos)
   var CARS = {
-    popular: { name: 'Hyundai HB20', cat: 'Popular Econômico', base: 3500 },
-    sedan: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 4500 }
+    sedan: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 3690 }
   };
   var POINTS_GEO = {
     'aeroporto':      { lat: -18.8835, lng: -48.2256, label: 'Aeroporto Bombonato',     sub: 'Terminal de Desembarque' },
@@ -913,10 +928,10 @@
 
   var urlParams = new URLSearchParams(window.location.search);
   var preCar = urlParams.get('carro');
-  // aceita 'popular', 'sedan' (canônico) e aliases 'hb20'/'cronos' (legados)
-  if (preCar === 'hb20') preCar = 'popular';
-  if (preCar === 'cronos') preCar = 'sedan';
-  if (preCar === 'popular' || preCar === 'sedan') {
+  // Lançamento enxuto: só 'sedan' válido. Aliases legados ('popular',
+  // 'hb20', 'cronos') redirecionam pro sedan único disponível.
+  if (preCar === 'hb20' || preCar === 'popular' || preCar === 'cronos') preCar = 'sedan';
+  if (preCar === 'sedan') {
     var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
     if (card) { card.classList.add('selected'); state.car = preCar; }
   }

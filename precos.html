@@ -73,10 +73,8 @@
 <section class="precos">
   <div class="wrap">
 
-    <div class="precos__toggle" role="tablist" aria-label="Carro">
-      <button type="button" data-car="popular" class="is-active">Hyundai HB20</button>
-      <button type="button" data-car="sedan">Fiat Cronos</button>
-    </div>
+    <!-- Lançamento enxuto: 1 carro só. Toggle de carro ficará disponível
+         de novo quando incluirmos um 2º veículo na frota. -->
     <div class="precos__period" role="tablist" aria-label="Período">
       <button type="button" data-days="30" class="is-active">30 dias</button>
       <button type="button" data-days="60">60 dias</button>
@@ -101,7 +99,7 @@
   var P = window.NOMADE_PRICES;
   if (!P) return;
 
-  var state = { car: 'popular', days: 30 }; // default 30d pra casar com 'a partir de R$ 3.500/30 dias' do hero
+  var state = { car: 'sedan', days: 30 }; // 1 carro só (Fiat Cronos); default 30d casa com hero "a partir de R$ 3.690"
   var grid = document.getElementById('plansGrid');
 
   function fmt(v) { return v.toLocaleString('pt-BR'); }
@@ -116,7 +114,7 @@
       var monthly = Math.round(total / (state.days / 30));
       var isFeatured = pid === 'estendido';
       var unlimited = pid === 'semLimite';
-      var carName = state.car === 'popular' ? 'HB20' : 'Cronos';
+      var carName = 'Cronos';
       return '<div class="plan' + (isFeatured ? ' plan--featured' : '') + '">' +
         (isFeatured ? '<span class="plan__tag">Mais escolhido</span>' : '') +
         '<h3 class="plan__name">' + plan.label + '</h3>' +
@@ -131,21 +129,15 @@
           '<li>Manutenção programada</li>' +
           '<li>IPVA + licenciamento</li>' +
           '<li>Assistência 24h</li>' +
-          (unlimited ? '<li>Maior limite de km</li>' : '<li>Km extra: R$ ' + (state.car === 'popular' ? '0,80' : '1,00') + '/km</li>') +
+          (unlimited ? '<li>Maior limite de km</li>' : '<li>Km extra: R$ 1,00/km</li>') +
         '</ul>' +
         '<a href="reservar.html?carro=' + state.car + '&plano=' + pid + '&dias=' + state.days + '" class="btn btn--primary plan__cta">Reservar ' + plan.label + '</a>' +
       '</div>';
     }).join('');
   }
 
-  document.querySelectorAll('.precos__toggle button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.precos__toggle button').forEach(function (x) { x.classList.remove('is-active'); });
-      b.classList.add('is-active');
-      state.car = b.dataset.car;
-      render();
-    });
-  });
+  // Toggle de carro removido (1 carro só) — quando voltar a ter 2+ carros,
+  // restaurar o bloco .precos__toggle no HTML e este listener.
   document.querySelectorAll('.precos__period button').forEach(function (b) {
     b.addEventListener('click', function () {
       document.querySelectorAll('.precos__period button').forEach(function (x) { x.classList.remove('is-active'); });
