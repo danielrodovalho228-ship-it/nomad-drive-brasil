@@ -653,13 +653,13 @@
         <h3 class="block-title">Últimos envios (50 mais recentes)</h3>
         <table class="admin-table">
           <thead><tr><th>Template</th><th>Destinatário</th><th>Status</th><th>Enviado</th><th>Ação</th></tr></thead>
-          <tbody id="emailLogList"><tr><td colspan="5" style="text-align:center;color:#6b7572;padding:24px;">Conecte uma tabela <code>email_log</code> ou consulte os logs da Edge Function diretamente em <a href="https://supabase.com/dashboard/project/zeexmbgacvsaciojcrwr/functions/send-template/logs" target="_blank" rel="noopener" style="color:#0F3D2E;font-weight:700;">Supabase → Functions → send-template → Logs</a>.</td></tr></tbody>
+          <tbody id="emailLogList"><tr><td colspan="5" style="text-align:center;color:#6b7572;padding:24px;">Nenhum envio registrado ainda. Quando os e-mails começarem a sair (lead, contrato, confirmação de pagamento), eles aparecem aqui em tempo real.</td></tr></tbody>
         </table>
       </div>
 
       <div class="admin-card" style="margin-top:18px;">
-        <h3 class="block-title">Catálogo dos 24 templates v3</h3>
-        <p class="note">Templates registrados em <code>emails/email-templates.js</code> + espelhados em <code>supabase/functions/_shared/template-catalog.ts</code>.</p>
+        <h3 class="block-title">Biblioteca dos 24 templates ativos</h3>
+        <p class="note">Cada template é disparado automaticamente em momentos específicos do fluxo (novo lead, KYC aprovado, contrato pronto, pagamento confirmado, devolução, etc).</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;font-size:13px;">
           <div>
             <strong style="color:#0F3D2E;display:block;margin-bottom:6px;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;">11 Cliente (mensal_*)</strong>
@@ -696,7 +696,7 @@
             </ul>
           </div>
         </div>
-        <p class="note" style="margin-top:14px;font-size:13px;">📨 Preview interativo: <a href="emails/preview.html" target="_blank" rel="noopener" style="color:#0F3D2E;font-weight:700;">abre o preview.html</a> pra ver cada template renderizado com dados de exemplo.</p>
+        <p class="note" style="margin-top:14px;font-size:13px;">📨 <a href="emails/preview.html" target="_blank" rel="noopener" style="color:#0F3D2E;font-weight:700;">Ver preview dos e-mails</a> com dados de exemplo.</p>
       </div>
     </section>
 

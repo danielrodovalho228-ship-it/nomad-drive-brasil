@@ -78,9 +78,9 @@
       <button type="button" data-car="sedan">Fiat Cronos</button>
     </div>
     <div class="precos__period" role="tablist" aria-label="Período">
-      <button type="button" data-days="30">30 dias</button>
+      <button type="button" data-days="30" class="is-active">30 dias</button>
       <button type="button" data-days="60">60 dias</button>
-      <button type="button" data-days="90" class="is-active">90 dias</button>
+      <button type="button" data-days="90">90 dias</button>
       <button type="button" data-days="180">180 dias</button>
     </div>
 
@@ -101,7 +101,7 @@
   var P = window.NOMADE_PRICES;
   if (!P) return;
 
-  var state = { car: 'popular', days: 90 };
+  var state = { car: 'popular', days: 30 }; // default 30d pra casar com 'a partir de R$ 3.500/30 dias' do hero
   var grid = document.getElementById('plansGrid');
 
   function fmt(v) { return v.toLocaleString('pt-BR'); }
