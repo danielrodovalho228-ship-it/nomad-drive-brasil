@@ -293,7 +293,7 @@
           <span class="cockpit-alert" id="alertAvarias" hidden>⚠️ <span id="alertAvariasCount">0</span> avarias pendentes</span>
           <span class="cockpit-alert" id="alertMultas" hidden>🚦 <span id="alertMultasCount">0</span> multas a cobrar</span>
           <span class="cockpit-alert cockpit-alert--info" id="alertDAS" hidden>🧾 DAS MEI vence em <span id="alertDASDays">—</span> dias</span>
-          <span class="cockpit-alert cockpit-alert--info" id="alertSaques" hidden>💸 R$ <span id="alertSaquesValor">0</span> em saques disponíveis</span>
+          <!-- alertSaques REMOVIDO (era P2P: pagamentos pra owners — frota propria nao usa) -->
         </div>
 
         <!-- Linha 3: Limite MEI -->
@@ -1067,7 +1067,7 @@
 
     <section class="admin-block" id="crescimento">
       <h2>📈 Crescimento</h2>
-      <p class="note">Funil de aquisição + métricas por período + top proprietários. Atualiza em tempo real.</p>
+      <p class="note">Funil de aquisição + métricas por período + clientes Nomade Gold. Atualiza em tempo real.</p>
 
       <!-- Funil -->
       <div class="admin-card" style="margin-bottom:14px;">
@@ -1444,7 +1444,7 @@
     loadFinanceiroDetalhado();
     loadNotasFiscais();
     loadVistorias();   // #4: gerenciar vistorias técnicas
-    loadInstallationOrders();  // Fase 28.6: instalações de rastreador
+    // loadInstallationOrders() DESATIVADO — secao #instalacoes oculta (P2P legado)
   }
 
   /* ====== FINANCEIRO DETALHADO (dados reais do banco) ====== */
@@ -1467,8 +1467,8 @@
           return p.kind === "mensalidade" && p.status === "pago";
         });
         var bruta = paid.reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0);
-        var taxa = bruta * 0.10;
-        var repasse = bruta - taxa;
+        var taxa = bruta * 0.03; // taxa Stripe ~3% (frota propria: nao tem split P2P de 10%)
+        var repasse = bruta - taxa; // receita liquida 100% menos gateway
         var caucao = rows
           .filter(function (p) { return p.kind === "caucao" && p.status === "autorizado"; })
           .reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0);
@@ -1500,7 +1500,7 @@
             tb.innerHTML = "";
             keys.forEach(function (ym) {
               var m = byMonth[ym];
-              var fee = m.bruta * 0.10;
+              var fee = m.bruta * 0.03; // Stripe ~3% (frota propria)
               var rep = m.bruta - fee;
               var tr = document.createElement("tr");
               tr.innerHTML =
@@ -3808,9 +3808,9 @@
       }
 
       // Saques disponíveis
-      if (s.saques_disponiveis > 0) {
-        $('alertSaques').removeAttribute('hidden');
-        $('alertSaquesValor').textContent = fmtBRL(s.saques_disponiveis).replace('R$', '').trim();
+      if (false && s.saques_disponiveis > 0) { // DESATIVADO — alertSaques P2P legado
+        // $('alertSaques').removeAttribute('hidden');
+        // $('alertSaquesValor').textContent = fmtBRL(s.saques_disponiveis).replace('R$', '').trim();
       }
 
       // MEI bar
