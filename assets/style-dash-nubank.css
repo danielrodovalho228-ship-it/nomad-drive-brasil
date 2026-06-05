@@ -1,0 +1,428 @@
+/* ====================================================================
+   Nomade Drive Brasil — Dashboard cliente NUBANK-STYLE (05/06/2026)
+   --------------------------------------------------------------------
+   Override de visual no dashboard-cliente.html. Mantém HTML e JS
+   intactos (mesmas classes/IDs) — só re-skin pra estilo "app de
+   consumo": cores fortes, cards grandes arredondados, hierarquia
+   visual clara, tipografia grande, sombras coloridas suaves.
+   Carregado DEPOIS de style-dashboards-modern.css pra ganhar precedência.
+   ==================================================================== */
+
+:root {
+  --nu-green:       #079344;
+  --nu-green-dark:  #066b32;
+  --nu-green-deep:  #0F3D2E;
+  --nu-green-soft:  #d4f1de;
+  --nu-green-pale:  #f0faf3;
+  --nu-gold:        #ffd966;
+  --nu-gold-warm:   #ffb13d;
+  --nu-coral:       #ff8a65;
+  --nu-purple:      #6f5cd6;
+  --nu-blue:        #4f8fff;
+  --nu-ink:         #14201b;
+  --nu-gray-800:    #2a3835;
+  --nu-gray-600:    #5b6b63;
+  --nu-gray-400:    #9aa8a2;
+  --nu-gray-200:    #e3e9e5;
+  --nu-gray-100:    #f0f3f1;
+  --nu-bg:          #f6f8f7;
+}
+
+/* Body fundo claro suave (não branco puro) */
+body { background: var(--nu-bg) !important; }
+
+/* ============================================================
+   HERO - gradiente Nubank-verde forte, ocupa o topo
+   ============================================================ */
+.dash-hero.dash-hero--cliente {
+  background: linear-gradient(135deg, #066b32 0%, #079344 45%, #20c997 100%) !important;
+  border-radius: 24px !important;
+  padding: 36px 32px !important;
+  margin: 22px auto 28px !important;
+  box-shadow: 0 18px 50px -16px rgba(7, 147, 68, 0.40) !important;
+  position: relative;
+  overflow: hidden;
+}
+.dash-hero.dash-hero--cliente::before {
+  content: "";
+  position: absolute;
+  top: -40%; right: -10%;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(255,217,102,0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+.dash-hero.dash-hero--cliente::after {
+  content: "";
+  position: absolute;
+  bottom: -50%; left: -10%;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 60%);
+  pointer-events: none;
+}
+.dash-hero.dash-hero--cliente .dash-hero__icon {
+  background: rgba(255,255,255,.20) !important;
+  border-radius: 20px !important;
+  width: 72px !important; height: 72px !important;
+}
+.dash-hero.dash-hero--cliente .dash-hero__eyebrow {
+  color: var(--nu-gold) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+}
+.dash-hero.dash-hero--cliente .dash-hero__title {
+  font-size: clamp(24px, 3.5vw, 34px) !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  margin-bottom: 8px !important;
+}
+.dash-hero.dash-hero--cliente .dash-hero__sub {
+  font-size: 15px !important;
+  line-height: 1.55 !important;
+  opacity: 0.95;
+}
+
+/* ============================================================
+   TOPLINE — "Olá Daniel" + status pill
+   ============================================================ */
+.dash-topline {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  flex-wrap: wrap;
+  margin: 6px 0 22px !important;
+}
+.dash-topline h1, #dashGreet {
+  font-family: 'Sora', 'Inter', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  color: var(--nu-green-deep) !important;
+  margin: 0 !important;
+}
+.dash-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 7px 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+  border: 0 !important;
+}
+.dash-pill::before {
+  content: "●";
+  font-size: 10px;
+  line-height: 1;
+}
+.dash-pill--neutral { background: var(--nu-gray-100) !important; color: var(--nu-gray-600) !important; }
+.dash-pill--success, .dash-pill--ok { background: var(--nu-green-soft) !important; color: var(--nu-green-dark) !important; }
+.dash-pill--warning, .dash-pill--warn { background: #fff4d6 !important; color: #946600 !important; }
+.dash-pill--error, .dash-pill--danger { background: #ffe1da !important; color: #b9421f !important; }
+
+/* ============================================================
+   CARDS DE AÇÃO RÁPIDA — KPIs no topo
+   ============================================================ */
+.dash-cards {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 14px !important;
+  margin-bottom: 28px !important;
+}
+.dash-kpi {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  padding: 20px 22px !important;
+  box-shadow: 0 4px 18px -6px rgba(15, 61, 46, 0.08) !important;
+  transition: transform .15s ease, box-shadow .15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.dash-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -6px rgba(7, 147, 68, 0.18) !important;
+}
+.dash-kpi::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--nu-green) 0%, var(--nu-green-dark) 100%);
+}
+.dash-kpi:nth-child(2)::before { background: linear-gradient(180deg, var(--nu-gold-warm), var(--nu-gold)); }
+.dash-kpi:nth-child(3)::before { background: linear-gradient(180deg, var(--nu-purple), var(--nu-blue)); }
+.dash-kpi span {
+  display: block !important;
+  font-size: 12px !important;
+  color: var(--nu-gray-600) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+.dash-kpi strong {
+  display: block !important;
+  font-family: 'Sora', 'Inter', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: var(--nu-green-deep) !important;
+  line-height: 1.1 !important;
+}
+
+/* ============================================================
+   PAINÉIS — cards grandes arredondados
+   ============================================================ */
+.dash-panel {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  padding: 28px 28px !important;
+  margin-bottom: 22px !important;
+  box-shadow: 0 4px 18px -6px rgba(15, 61, 46, 0.06) !important;
+}
+.dash-panel h2 {
+  font-family: 'Sora', 'Inter', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: var(--nu-green-deep) !important;
+  margin-bottom: 10px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-panel > p, .dash-panel > p:first-of-type {
+  color: var(--nu-gray-600) !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 16px !important;
+}
+
+/* ============================================================
+   SIDEBAR — cards arredondados em vez de lista flat
+   ============================================================ */
+.dash-side {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  padding: 18px 14px !important;
+  box-shadow: 0 4px 18px -6px rgba(15, 61, 46, 0.06) !important;
+  height: fit-content;
+  position: sticky;
+  top: 16px;
+}
+.dash-side__title {
+  font-family: 'Sora', 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: var(--nu-gray-400) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.2px !important;
+  padding: 4px 10px 12px !important;
+}
+.dash-side__nav a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 11px 12px !important;
+  margin-bottom: 4px !important;
+  border-radius: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: var(--nu-gray-800) !important;
+  text-decoration: none !important;
+  transition: background .15s, color .15s, transform .12s;
+}
+.dash-side__nav a svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  flex-shrink: 0;
+}
+.dash-side__nav a:hover {
+  background: var(--nu-green-pale) !important;
+  color: var(--nu-green-dark) !important;
+  transform: translateX(2px);
+}
+.dash-side__nav a.is-active, .dash-side__nav a:active {
+  background: linear-gradient(135deg, var(--nu-green) 0%, var(--nu-green-dark) 100%) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   LISTAS DE ITENS (solicitações, reservas, documentos)
+   ============================================================ */
+.dash-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.dash-row {
+  background: var(--nu-gray-100) !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  transition: background .15s, transform .12s;
+}
+.dash-row:hover {
+  background: #fff !important;
+  transform: translateX(3px);
+  box-shadow: 0 4px 14px -4px rgba(15, 61, 46, 0.10);
+}
+.dash-row strong {
+  color: var(--nu-green-deep) !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+}
+.dash-row span {
+  color: var(--nu-gray-600) !important;
+  font-size: 13px !important;
+  line-height: 1.45;
+}
+
+/* Estado vazio — humanizado */
+.dash-empty {
+  background: linear-gradient(135deg, var(--nu-green-pale) 0%, #fff 100%) !important;
+  border: 2px dashed var(--nu-green-soft) !important;
+  border-radius: 16px !important;
+  padding: 32px 24px !important;
+  text-align: center !important;
+  color: var(--nu-gray-600) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+.dash-empty::before {
+  content: "✨";
+  display: block;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   STEPS NUMERADOS
+   ============================================================ */
+.dash-steps {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 14px 0 18px !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+.dash-steps li {
+  background: var(--nu-green-pale) !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  font-size: 13.5px !important;
+  color: var(--nu-gray-800) !important;
+  line-height: 1.55 !important;
+  position: relative;
+  padding-left: 50px !important;
+  counter-increment: nu-step;
+}
+.dash-steps { counter-reset: nu-step; }
+.dash-steps li::before {
+  content: counter(nu-step);
+  position: absolute;
+  left: 14px; top: 14px;
+  width: 26px; height: 26px;
+  background: var(--nu-green);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+.dash-steps li strong { display: none; }
+
+/* ============================================================
+   TODOS / ALERTAS DE TAREFA
+   ============================================================ */
+.dash-todos {
+  background: linear-gradient(135deg, var(--nu-gold) 0%, var(--nu-gold-warm) 100%) !important;
+  border-radius: 18px !important;
+  padding: 18px 22px !important;
+  margin-bottom: 22px !important;
+  color: var(--nu-green-deep) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 6px 18px -6px rgba(255,177,61,0.4) !important;
+}
+
+/* ============================================================
+   BOTÕES (override do .btn dentro do dashboard)
+   ============================================================ */
+.dash-main .btn, .dash-panel .btn {
+  border-radius: 12px !important;
+  padding: 11px 22px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  transition: transform .12s, box-shadow .15s !important;
+}
+.dash-main .btn--primary, .dash-panel .btn--primary {
+  background: linear-gradient(135deg, var(--nu-green) 0%, var(--nu-green-dark) 100%) !important;
+  border: 0 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px -4px rgba(7,147,68,0.45) !important;
+}
+.dash-main .btn--primary:hover, .dash-panel .btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px -4px rgba(7,147,68,0.55) !important;
+}
+.dash-main .btn--ghost, .dash-panel .btn--ghost {
+  background: #fff !important;
+  border: 1.5px solid var(--nu-green-soft) !important;
+  color: var(--nu-green-dark) !important;
+}
+
+/* ============================================================
+   AVATAR / SAUDAÇÃO PERSONALIZADA (caso JS popule)
+   ============================================================ */
+#dashGreet::before {
+  content: "👋 ";
+  margin-right: 4px;
+}
+
+/* ============================================================
+   RESPONSIVO MOBILE
+   ============================================================ */
+@media (max-width: 900px) {
+  .dash-shell { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .dash-side { position: static; padding: 14px 10px !important; }
+  .dash-side__nav { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 6px !important; }
+  .dash-hero.dash-hero--cliente { padding: 26px 20px !important; border-radius: 18px !important; margin: 16px auto 20px !important; }
+  .dash-panel { padding: 22px 18px !important; border-radius: 16px !important; }
+  .dash-cards { gap: 10px !important; }
+  .dash-kpi { padding: 16px 18px !important; }
+  .dash-kpi strong { font-size: 19px !important; }
+  .dash-topline h1, #dashGreet { font-size: 22px !important; }
+}
+@media (max-width: 560px) {
+  .dash-side__nav { grid-template-columns: 1fr; }
+  .dash-cards { grid-template-columns: 1fr !important; }
+  .dash-steps { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   POLISH FINAL — micro-animação entrada
+   ============================================================ */
+@keyframes nuFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dash-panel { animation: nuFadeUp .4s ease both; }
+.dash-panel:nth-child(2) { animation-delay: .05s; }
+.dash-panel:nth-child(3) { animation-delay: .10s; }
+.dash-panel:nth-child(4) { animation-delay: .15s; }
+.dash-kpi { animation: nuFadeUp .35s ease both; }
+.dash-kpi:nth-child(2) { animation-delay: .05s; }
+.dash-kpi:nth-child(3) { animation-delay: .10s; }
