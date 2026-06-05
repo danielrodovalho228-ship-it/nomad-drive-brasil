@@ -226,6 +226,17 @@ body.is-drawer-open .nd-drawer { transform: translateX(0); }
   color: var(--navy, #0F3D2E);
 }
 .nd-drawer__cta--gold:hover { background: var(--gold-dark, #b88f3f); }
+.nd-drawer__cta--ghost {
+  background: transparent;
+  color: var(--gray-500, #6B7572);
+  border: 1px dashed rgba(15,61,46,0.25);
+  font-size: 13.5px;
+}
+.nd-drawer__cta--ghost:hover {
+  background: rgba(15,61,46,0.04);
+  color: var(--navy, #0F3D2E);
+  border-color: rgba(15,61,46,0.5);
+}
 .nd-drawer__contact {
   font-size: 12.5px;
   color: rgba(15,61,46,0.6);
