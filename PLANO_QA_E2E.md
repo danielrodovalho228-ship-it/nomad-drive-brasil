@@ -168,6 +168,45 @@ DELETE FROM user_documents WHERE user_id = '<id do cliente teste>';
 
 ---
 
+## 🏷 Códigos de protocolo (referência única do time)
+
+Todo registro do sistema gera um **protocolo único** automaticamente via trigger SQL. Aparece no **rodapé dos e-mails transacionais**, nos **cards do painel admin** e no **dashboard do cliente** (seções Solicitações/Histórico). Formato padrão: `XX-AAAA-####` (2 letras prefixo + ano 4 dígitos + sequencial 4 dígitos zero-padded).
+
+| Prefixo | Significado | Tabela | Trigger | Aparece nos e-mails |
+|---|---|---|---|---|
+| **RS-AAAA-####** | 🚗 Reserva (booking) | `bookings` | `set_booking_protocol` | Pagamento confirmado · Caução autorizada · Entrega agendada · Devolução · Renovação |
+| **PG-AAAA-####** | 💰 Pagamento/cobrança | `payments` | `set_payment_protocol` | Mensalidade cobrada · Caução capturada · Recibo/NF |
+| **VS-AAAA-####** | 🔍 Vistoria (check-in/out) | `rental_inspections` | `set_inspection_protocol` | Vistoria de retirada OK · Vistoria de devolução |
+| **AV-AAAA-####** | 🔧 Avaria | `damages` | `set_damage_defaults` | Avaria reportada · Cotação enviada · Contestação registrada |
+| **PR-AAAA-####** | 🛡 Caso de proteção/sinistro | `protection_cases` | `set_protection_case_defaults` | Sinistro aberto · Caso encerrado · Triagem do parceiro |
+| **NDB-AAAA-######** | 📝 Aplicação/cadastro (6 dígitos) | `applications` | `set_application_protocol` | Documentos solicitados · Análise concluída · Aprovação KYC |
+
+### ⚠️ Sobre e-mails legados `[QA] ... QA-YYMMDD-####`
+
+Os e-mails com prefixo `[QA]` no assunto e protocolo no formato `QA-260531-5239` são **simulações da época de testes (tabela `qa_bookings`)**. **NÃO** representam fluxo de produção. Se aparecerem na inbox do time, podem ser arquivados — não são bugs.
+
+E-mails reais da operação **sempre** usam um dos 6 prefixos da tabela acima.
+
+### Como QA valida que protocolo está funcionando
+
+1. Roda Suite 5 (cliente cria solicitação) → sistema gera `RS-2026-####`
+2. No e-mail "Pagamento confirmado" que cliente recebe → rodapé deve mostrar `📋 Protocolo: RS-2026-####`
+3. No painel admin (Reservas ativas) → cabeçalho do card deve mostrar o mesmo `RS-2026-####`
+4. Suporte recebe ticket do cliente → consulta no admin por protocolo → encontra reserva, cliente, pagamentos, vistorias, avarias relacionadas com o mesmo prefixo
+
+### Exemplo demonstrado em 05/06/2026
+
+Booking de demonstração criado pelo Daniel:
+- Cliente: `danielrodovalho228@gmail.com`
+- Carro: Fiat Cronos 2024
+- Plano: Estendido 30 dias · R$ 3.740
+- Período: 08/06/2026 → 08/07/2026
+- **Protocolo gerado pelo trigger: `RS-2026-0007`**
+- E-mail "Mensalidade confirmada" enviado pela Edge Function `send-template`
+- Resend ID: `442d508c-7205-4697-a3d5-8b0301196670`
+
+---
+
 ## 🔒 Suite 8 — Segurança (não pode acontecer)
 
 | # | Cenário | Resultado esperado |
