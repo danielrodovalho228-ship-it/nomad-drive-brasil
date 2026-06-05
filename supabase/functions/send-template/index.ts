@@ -48,11 +48,35 @@ Deno.serve(async (req) => {
   try {
     const url = Deno.env.get("SUPABASE_URL")!;
     const anon = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const userClient = createClient(url, anon, {
-      global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } },
-    });
-    const { data: userData } = await userClient.auth.getUser();
-    if (!userData?.user) return json({ error: "Não autenticado." }, 401);
+    const authHeader = req.headers.get("Authorization") ?? "";
+
+    // Server-to-server bypass: outras Edge Functions (signup-cliente,
+    // stripe-webhook, etc.) chamam send-template com o SERVICE_ROLE_KEY
+    // no header Authorization. Esse JWT NÃO tem `sub` de user, então
+    // auth.getUser() falharia. Detectamos pelo claim role === 'service_role'
+    // dentro do JWT — sem comparar a string inteira (mais robusto).
+    function decodeRole(hdr: string): string | null {
+      if (!hdr.startsWith("Bearer ")) return null;
+      const tok = hdr.slice(7);
+      const parts = tok.split(".");
+      if (parts.length !== 3) return null;
+      try {
+        const padded = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+        const padding = "=".repeat((4 - padded.length % 4) % 4);
+        const payload = JSON.parse(atob(padded + padding));
+        return payload?.role ?? null;
+      } catch { return null; }
+    }
+    const role = decodeRole(authHeader);
+    const isServiceRoleCall = role === "service_role";
+
+    if (!isServiceRoleCall) {
+      const userClient = createClient(url, anon, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: userData } = await userClient.auth.getUser();
+      if (!userData?.user) return json({ error: "Não autenticado." }, 401);
+    }
 
     const { template_key, vars, to, to_user_id, team_recipients } = await req.json();
 

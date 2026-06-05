@@ -16,6 +16,8 @@
 // verify_jwt: false (público — qualquer um pode se cadastrar)
 // ====================================================================
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { renderTemplate, getReplyTo } from "../_shared/template-catalog.ts";
+import { sendEmail } from "../_shared/email.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -126,51 +128,64 @@ Deno.serve(async (req) => {
       console.error("Erro criando user_role:", roleErr);
     }
 
-    // 4. Dispara e-mail de boas-vindas pro cliente (template mensal_lead_recebido)
-    //    + alerta equipe (team_novo_lead). Falha silenciosa.
+    // 4. Dispara e-mail pro cliente + alerta equipe — chamando sendEmail()
+    //    direto do _shared (sem HTTP roundtrip pro send-template, que
+    //    evita problemas de auth server-to-server).
     try {
       const firstName = fullName.split(/\s+/)[0];
-      const supabaseFn = `${url}/functions/v1/send-template`;
 
       // Cliente
-      fetch(supabaseFn, {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + serviceKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          template_key: "mensal_lead_recebido",
-          to: email,
-          vars: { first_name: firstName, car_name: "—", plan_name: "—", period_days: "—", start_date: "—" }
-        })
-      }).catch(e => console.warn("e-mail cliente falhou:", e));
+      const clientTpl = renderTemplate("mensal_lead_recebido", {
+        first_name: firstName,
+        car_name: "—",
+        plan_name: "—",
+        period_days: "—",
+        start_date: "—"
+      });
+      if (clientTpl) {
+        const r1 = await sendEmail(
+          email,
+          clientTpl.subject,
+          clientTpl.html,
+          clientTpl.text,
+          getReplyTo("mensal_lead_recebido")
+        );
+        if (!r1.ok) console.warn("E-mail cliente falhou:", r1.error);
+        else console.log("E-mail cliente enviado:", r1.id);
+      }
 
       // Equipe
-      fetch(supabaseFn, {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + serviceKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          template_key: "team_novo_lead",
-          vars: {
-            first_name: firstName,
-            last_name: fullName.split(/\s+/).slice(1).join(" "),
-            user_email: email,
-            phone,
-            phone_e164: phone.replace(/\D/g, ""),
-            car_name: "(não escolhido ainda)",
-            plan_name: "(não escolhido ainda)",
-            period_days: "—",
-            start_date: "—",
-            source: "signup site"
-          }
-        })
-      }).catch(e => console.warn("e-mail equipe falhou:", e));
+      const teamList = (Deno.env.get("TEAM_EMAIL_RECIPIENTS") ?? "")
+        .split(",").map(s => s.trim()).filter(Boolean);
+      if (teamList.length) {
+        const teamTpl = renderTemplate("team_novo_lead", {
+          first_name: firstName,
+          last_name: fullName.split(/\s+/).slice(1).join(" "),
+          user_email: email,
+          phone,
+          phone_e164: phone.replace(/\D/g, ""),
+          car_name: "(não escolhido ainda)",
+          plan_name: "(não escolhido ainda)",
+          period_days: "—",
+          start_date: "—",
+          source: "signup site"
+        });
+        if (teamTpl) {
+          const r2 = await sendEmail(
+            teamList,
+            teamTpl.subject,
+            teamTpl.html,
+            teamTpl.text,
+            getReplyTo("team_novo_lead")
+          );
+          if (!r2.ok) console.warn("E-mail equipe falhou:", r2.error);
+          else console.log("E-mail equipe enviado:", r2.id);
+        }
+      } else {
+        console.warn("TEAM_EMAIL_RECIPIENTS vazio — pulando alerta de equipe");
+      }
     } catch (e) {
-      console.warn("Bloco de e-mails falhou (não fatal):", e);
+      console.warn("Bloco de e-mails falhou (não fatal):", (e as Error)?.message);
     }
 
     return json({
