@@ -101,35 +101,8 @@
 }
 .cockpit-alert--info { background: rgba(96, 165, 250, 0.25); }
 
-.cockpit-mei-bar {
-  margin-top: 18px; padding: 14px 18px;
-  background: rgba(255,255,255,0.1); border-radius: 12px;
-  position: relative;
-}
-.cockpit-mei-bar__head {
-  display: flex; justify-content: space-between;
-  align-items: center; flex-wrap: wrap; gap: 8px;
-  margin-bottom: 10px; font-size: 13px;
-}
-.cockpit-mei-bar__label { font-weight: 600; opacity: 0.95; }
-.cockpit-mei-bar__value strong {
-  font-size: 16px; font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-.cockpit-mei-bar__track {
-  height: 8px; background: rgba(0,0,0,0.2);
-  border-radius: 4px; overflow: hidden;
-}
-.cockpit-mei-bar__fill {
-  height: 100%;
-  background: linear-gradient(90deg, #4ade80, #fbbf24 70%, #f87171);
-  border-radius: 4px;
-  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.cockpit-mei-bar__warning {
-  margin-top: 8px; font-size: 12.5px;
-  font-weight: 600; color: #fef3c7;
-}
+/* CSS de bar de faturamento c/ teto removido — era do regime antigo.
+   LTDA Lucro Presumido nao tem teto, entao a bar visual foi descontinuada. */
 
 @media (max-width: 640px) {
   .cockpit-hero { padding: 20px 18px; }
@@ -311,8 +284,8 @@
           <!-- alertSaques REMOVIDO (era P2P) -->
         </div>
 
-        <!-- Bar de faturamento MEI REMOVIDA (LTDA Lucro Presumido nao tem teto de R$ 81k) -->
-        <div class="cockpit-mei-bar" id="cockpitMeiBar" hidden></div>
+        <!-- Bar de faturamento antiga REMOVIDA (LTDA Lucro Presumido nao tem teto de faturamento) -->
+        <!-- Bar de faturamento antiga removida (LTDA Lucro Presumido nao tem teto) -->
       </div>
     </section>
 
@@ -868,7 +841,7 @@
           <li><strong>ECF (escrituração contábil fiscal):</strong> anual até último dia útil de julho</li>
           <li><strong>DEFIS:</strong> não se aplica (é declaração do Simples)</li>
         </ul>
-        <p style="margin-top:10px;font-size:13px;color:#5b6b63;">💡 Recomendação: ter contador dedicado (custo ~R$ 400-800/mês) — Lucro Presumido tem mais obrigações que MEI/Simples e exige escrituração contábil regular.</p>
+        <p style="margin-top:10px;font-size:13px;color:#5b6b63;">💡 Recomendação: ter contador dedicado (custo ~R$ 400-800/mês) — Lucro Presumido exige escrituração contábil regular e acompanhamento mensal das apurações.</p>
       </div>
     </section>
 
@@ -885,7 +858,7 @@
       </h2>
       <p class="note">Sócios, funcionários CLT, PJ, estagiários. Custo total da folha aparece nos KPIs. LTDA permite múltiplos sócios e funcionários sem teto.</p>
 
-      <!-- Alerta MEI REMOVIDO (LTDA nao tem limite de 1 funcionario) -->
+      <!-- Alerta antigo REMOVIDO (LTDA nao tem limite de funcionarios) -->
 
       <!-- Form add funcionário -->
       <div class="admin-card" id="employeeFormCard" hidden style="margin-bottom:14px;border-left:3px solid #0f5132;">
@@ -1985,7 +1958,7 @@
 
   /* #8: botão "Cancelar assinatura" pra cada reserva com subscription
      ativa. Admin clica → confirma → invoca stripe-subscription cancel.
-     O e-mail "Assinatura cancelada" é enviado pela Edge Function. */
+     O e-mail "Assinatura cancelada" é enviado pela rotina automática. */
   function makeCancelSubButton(booking) {
     var btn = document.createElement("button");
     btn.type = "button";
@@ -3755,7 +3728,7 @@
       }
     }).catch(function () {});
 
-    // Titular MEI (de business_settings)
+    // Titular da LTDA (de business_settings)
     sb.from('business_settings').select('legal_name, tax_regime').maybeSingle()
       .then(function (br) {
         var s = br && br.data;
@@ -3764,7 +3737,7 @@
         var titularName = String(s.legal_name).replace(/\s+\d+$/, '').trim();
         var titularEl = $('cockpitTitular');
         if (titularEl) titularEl.textContent = titularName +
-          ' (' + String(s.tax_regime || 'mei').toUpperCase() + ')';
+          ' (' + String(s.tax_regime || 'ltda').toUpperCase() + ')';
         $('cockpitLegal').removeAttribute('hidden');
       }).catch(function () {});
 
@@ -3818,18 +3791,9 @@
         // $('alertSaquesValor').textContent = fmtBRL(s.saques_disponiveis).replace('R$', '').trim();
       }
 
-      // MEI bar
-      var fat = Number(s.faturamento_ano_corrente) || 0;
-      var lim = Number(s.mei_limit) || 81000;
-      var pct = Math.min(100, (fat / lim) * 100);
-      $('meiCurrent').textContent = fmtBRL(fat);
-      $('meiLimit').textContent = fmtBRL(lim);
-      $('meiPct').textContent = pct.toFixed(1);
-      $('meiYear').textContent = new Date().getFullYear();
-      $('meiFill').style.width = pct + '%';
-      if (pct >= 75) {
-        $('meiWarning').removeAttribute('hidden');
-      }
+      // Bloco de faturamento antigo desativado (LTDA Lucro Presumido nao
+      // tem teto, entao a bar visual foi removida do HTML e este JS ficou
+      // sem alvos). Mantido como no-op pra histórico.
     }).catch(function (e) {
       console.warn('ceo_cockpit_summary não disponível:', e && e.message);
     });
@@ -3948,12 +3912,12 @@
   }
 
   /* ============================================================
-   * FISCAL MEI
+   * FISCAL LTDA / Lucro Presumido
    * ============================================================ */
   function loadFiscal() {
     var sb = getClient(); if (!sb) return;
     // DAS list
-    sb.from('tax_obligations').select('*').eq('kind', 'das_mei')
+    sb.from('tax_obligations').select('*').in('kind', ['das_ltda', 'das'])
       .order('due_date', { ascending: true }).limit(24)
       .then(function (r) {
         var tb = $('fisDasList');
@@ -3996,21 +3960,20 @@
         });
       });
 
-    // KPIs faturamento (lê do cockpit summary)
+    // KPIs faturamento LTDA (lê do cockpit summary).
+    // Sem teto: Lucro Presumido permite até R$ 78 mi/ano.
     sb.from('ceo_cockpit_summary').select('*').maybeSingle().then(function (r) {
       var s = r && r.data; if (!s) return;
       var fat = Number(s.faturamento_ano_corrente) || 0;
-      var lim = Number(s.mei_limit) || 81000;
-      var pct = (fat / lim) * 100;
-      $('fisFaturamento').textContent = fmtBRL(fat);
-      $('fisFaturamentoPct').textContent = pct.toFixed(1) + '% do limite';
+      var fatMes = Number(s.faturamento_mes_corrente) || 0;
+      $('fisFaturamento').textContent = fmtBRL(fatMes);
+      $('fisFaturamentoPct').textContent = 'do mês';
       $('fisProxDas').textContent = fmtBRL(s.proximo_das_valor);
       var dasDays = daysUntil(s.proximo_das_data);
       $('fisProxDasData').textContent = s.proximo_das_data
         ? fmtDateBR(s.proximo_das_data) + (dasDays != null ? ' (em ' + dasDays + 'd)' : '')
         : '—';
-      $('fisMargem').textContent = fmtBRL(Math.max(0, lim - fat));
-      if (pct >= 75) $('meiMigrateAlert').removeAttribute('hidden');
+      $('fisMargem').textContent = fmtBRL(fat);
     });
   }
   window.loadFiscal = loadFiscal;
@@ -4047,12 +4010,10 @@
         $('empFolha').textContent = fmtBRL(folha);
         $('empAnual').textContent = fmtBRL(folha * 12);
 
-        // Alerta MEI se tem sócio ou mais de 1 funcionário CLT
-        var socios = rows.filter(function (e) { return e.contract_type === 'socio'; }).length;
-        var clts = rows.filter(function (e) { return e.contract_type === 'clt'; }).length;
-        if (socios > 0 || clts > 1) {
-          $('meiTeamAlert').removeAttribute('hidden');
-        }
+        // Alerta antigo de estrutura (sócios+CLT) desativado — LTDA permite
+        // multiplos sócios e CLTs sem limite.
+        // var socios = rows.filter(function (e) { return e.contract_type === 'socio'; }).length;
+        // var clts = rows.filter(function (e) { return e.contract_type === 'clt'; }).length;
 
         if (!rows.length) {
           tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8a948e;padding:20px;">Nenhuma pessoa cadastrada ainda.</td></tr>';

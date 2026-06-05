@@ -101,16 +101,8 @@
   <div class="container">
     <div class="auth-msg" id="dashNotice" hidden></div>
 
-    <div class="dash-hero dash-hero--cliente" role="banner">
-      <div class="dash-hero__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-      </div>
-      <div class="dash-hero__text">
-        <p class="dash-hero__eyebrow">Sua conta · Nomade Drive</p>
-        <h1 class="dash-hero__title">Tudo da sua locação em um lugar só</h1>
-        <p class="dash-hero__sub">Reservas, documentos, pagamentos e suporte direto pelo seu painel — atendimento humano em até 2h úteis.</p>
-      </div>
-    </div>
+    <!-- Hero institucional removida — padrão Nubank-style: home logada começa direto
+         com saudação + estado da conta + ações. Bloco institucional foi pro rodapé como mini-banner. -->
 
     <div class="dash-shell">
 
@@ -130,10 +122,45 @@
       </aside>
 
       <div class="dash-main">
-        <div class="dash-todos" id="dashTodos" hidden></div>
+        <!-- TOPLINE: saudação + status (Nubank-style: 1ª coisa que o user vê) -->
         <div class="dash-topline">
           <h1 id="dashGreet">Olá!</h1>
           <span class="dash-pill dash-pill--neutral" id="dashStatus">Carregando...</span>
+        </div>
+
+        <!-- AÇÕES PENDENTES (sobe pra direto abaixo da saudação) -->
+        <div class="dash-todos" id="dashTodos" hidden></div>
+
+        <!-- QUICK ACTIONS: 4 verbos de ação (Nubank-style) — JS popula badges dinâmicos -->
+        <div class="dash-quick-actions" aria-label="Ações rápidas">
+          <a href="#documentos" class="dash-qa dash-qa--primary">
+            <span class="dash-qa__icon">📤</span>
+            <div class="dash-qa__text">
+              <strong>Enviar documentos</strong>
+              <span id="dashQaDocsBadge">4 pendentes</span>
+            </div>
+          </a>
+          <a href="reservar.html" class="dash-qa">
+            <span class="dash-qa__icon">🚗</span>
+            <div class="dash-qa__text">
+              <strong>Reservar agora</strong>
+              <span id="dashQaReservarBadge">Após aprovação dos docs</span>
+            </div>
+          </a>
+          <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" class="dash-qa">
+            <span class="dash-qa__icon">💬</span>
+            <div class="dash-qa__text">
+              <strong>Falar com suporte</strong>
+              <span>Resposta em até 2h úteis</span>
+            </div>
+          </a>
+          <a href="#fidelidade" class="dash-qa">
+            <span class="dash-qa__icon">🥉</span>
+            <div class="dash-qa__text">
+              <strong>Programa Nomade Gold</strong>
+              <span id="dashQaTierBadge">Você é Bronze</span>
+            </div>
+          </a>
         </div>
 
         <div class="dash-cards" id="visao">
