@@ -372,7 +372,7 @@
     <!-- LEADS -->
     <section class="admin-block" id="leads">
       <h2>📩 Leads de locação</h2>
-      <p class="note">Pipeline de leads do form da landing + pedidos de clientes logados (rental_requests). Mova pelo funil pra acompanhar conversão.</p>
+      <p class="note">Pipeline de leads do form da landing + pedidos de clientes logados no painel. Mova pelo funil pra acompanhar conversão.</p>
 
       <!-- KPIs do funil -->
       <div class="leads-kpis" id="leadsKpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0 18px;">
@@ -426,8 +426,8 @@
 
       <!-- Lista antiga (rental_requests = clientes logados pedindo carro específico) -->
       <div class="admin-card" style="margin-top:14px;">
-        <h3 class="block-title">👤 Pedidos de clientes logados (rental_requests)</h3>
-        <p class="note">Solicitações criadas via car.html → "Quero alugar este carro" (Backlog #3).</p>
+        <h3 class="block-title">👤 Pedidos de clientes logados</h3>
+        <p class="note">Solicitações que o cliente cria direto no painel após o cadastro (botão "Quero alugar este carro").</p>
         <table class="admin-table">
           <thead><tr><th>Data</th><th>Cidade</th><th>Duração</th><th>Início desejado</th><th>Status</th></tr></thead>
           <tbody id="leadsListRR"><tr><td colspan="5">Carregando...</td></tr></tbody>
@@ -544,14 +544,14 @@
          pra elas se cadastrarem; modulo religado quando expansao incluir essa pagina) -->
     <section class="admin-block" id="oficinas" hidden>
       <h2>Oficinas parceiras de manutenção</h2>
-      <p class="note">Oficinas que cuidam da manutenção programada da nossa frota (troca de óleo, freios, revisão, pneus). Cada oficina tem catálogo de serviços com preço combinado em <code>partner_services</code> (Sprint E).</p>
+      <p class="note">Oficinas que cuidam da manutenção programada da nossa frota (troca de óleo, freios, revisão, pneus). Cada oficina tem catálogo de serviços com preço combinado.</p>
       <div class="admin-card">
         <table class="admin-table">
           <thead><tr><th>Oficina</th><th>Cidade</th><th>Responsável</th><th>Status</th></tr></thead>
           <tbody id="oficinasList"><tr><td colspan="4">Carregando oficinas...</td></tr></tbody>
         </table>
       </div>
-      <p class="note" style="margin-top:12px;font-size:13px;">💡 Dica: cadastra oficinas em <code>partners</code> com <code>partner_type='workshop'</code> e status <code>prospect → negotiating → active</code>.</p>
+      <p class="note" style="margin-top:12px;font-size:13px;">💡 Dica: cadastra oficina com status inicial "prospecção", evolui pra "em negociação" e finalmente "ativa".</p>
     </section>
 
     <!-- PARCEIROS B2B — OCULTA (sem porta publica /parceiros.html pra hospitais/
@@ -565,7 +565,7 @@
           <tbody id="parceirosList"><tr><td colspan="4">Carregando parceiros...</td></tr></tbody>
         </table>
       </div>
-      <p class="note" style="margin-top:12px;font-size:13px;">💡 Cadastra em <code>partners</code> (Sprint E) com tipo <code>hospital</code> / <code>corporate</code> / <code>insurer</code> / <code>tech</code>. Comissão configurável por parceiro (<code>commission_pct</code>).</p>
+      <p class="note" style="margin-top:12px;font-size:13px;">💡 Cadastra parceiro por tipo (hospital, corporate, seguradora, tech) e define comissão individual por parceiro.</p>
     </section>
 
     <!-- SINISTROS E MULTAS DA FROTA (refatorado v3) -->
@@ -585,7 +585,7 @@
     <!-- MANUTENÇÃO E ALERTAS (Sprint E v3 — maintenance_alerts) -->
     <section class="admin-block" id="manutencao">
       <h2>🔧 Manutenção e alertas da frota</h2>
-      <p class="note">Alertas abertos pela <code>maintenance-trigger</code> Edge Function. Tipos: troca de óleo (km próximo do limite), uso suspeito (telemetria detecta padrão Uber/iFood — Cláusula 7h), documento vencendo (IPVA/licenciamento D-30), desgaste de pneu.</p>
+      <p class="note">Alertas automáticos da operação. Tipos: troca de óleo (km próximo do limite), uso suspeito (telemetria detecta padrão de aplicativo — Cláusula 7h), documento vencendo (IPVA/licenciamento D-30), desgaste de pneu.</p>
 
       <div class="admin-card" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;">
         <div style="padding:16px;background:#f6f8f7;border-radius:10px;border-left:4px solid #C77D2B;">
@@ -623,17 +623,17 @@
         <p class="note">Última troca de óleo, freios, pneus, revisões — por veículo. Próxima manutenção calculada automático conforme km.</p>
         <table class="admin-table" style="margin-top:10px;">
           <thead><tr><th>Veículo</th><th>Última troca de óleo</th><th>Próxima (km)</th><th>IPVA</th><th>Licenc.</th></tr></thead>
-          <tbody id="maintenanceHistory"><tr><td colspan="5" style="text-align:center;color:#6b7572;">Carregando histórico de <code>vehicle_maintenance</code>...</td></tr></tbody>
+          <tbody id="maintenanceHistory"><tr><td colspan="5" style="text-align:center;color:#6b7572;">Carregando histórico de manutenção...</td></tr></tbody>
         </table>
       </div>
 
-      <p class="note" style="margin-top:12px;font-size:13px;">⚙ Esquema: <code>maintenance_alerts</code> + <code>vehicle_maintenance</code> + Edge Function <code>maintenance-trigger</code> (Sprint E). Pra ativar 100%: conectar telemetria Cobli → webhook chama a Edge Function → alerta cai aqui automático.</p>
+      <p class="note" style="margin-top:12px;font-size:13px;">⚙ Pra ativar 100% automático: conectar a telemetria Cobli, que dispara o alerta direto neste painel quando bate as regras (km, padrão de uso, datas).</p>
     </section>
 
     <!-- E-MAILS ENVIADOS (Sprint C v3 — send-template log + preview) -->
     <section class="admin-block" id="emails">
       <h2>✉ E-mails enviados</h2>
-      <p class="note">Log dos disparos da Edge Function <code>send-template</code> + preview dos 24 templates v3 (11 cliente + 13 equipe).</p>
+      <p class="note">Log de todos os e-mails enviados pelos automatismos + preview dos 24 templates (11 pro cliente, 13 pra equipe).</p>
 
       <div class="admin-card" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;">
         <div style="padding:14px;background:#f6f8f7;border-radius:10px;">
@@ -1054,7 +1054,7 @@
         </div>
         <!-- Funil rental_requests -->
         <div class="admin-card">
-          <h3 class="block-title" style="font-size:14px;">📊 Funil rental_requests (7d)</h3>
+          <h3 class="block-title" style="font-size:14px;">📊 Funil de pedidos online (7d)</h3>
           <div id="rentalFunnelView"><p class="note">Carregando...</p></div>
         </div>
       </div>
@@ -1163,7 +1163,7 @@
 
       <div class="why-box" style="margin-top:14px;background:#f0f9ff;border-left:3px solid #1a4d8c;">
         <h3>📋 Como coletar NPS</h3>
-        <p>Pós-locação, enviar e-mail automático: <em>"De 0 a 10, quanto recomendaria a Nomade Drive a um amigo?"</em>. Resposta vira linha em <code>nps_responses</code>. <strong>Fase 41 (futuro):</strong> Edge Function que dispara o e-mail D+1 do check-out.</p>
+        <p>Pós-locação, enviamos e-mail automático: <em>"De 0 a 10, quanto recomendaria a Nomade Drive a um amigo?"</em>. A resposta entra como linha aqui no painel pra acompanhar tendências.</p>
       </div>
     </section>
 
@@ -3728,7 +3728,7 @@
           '</div>';
         $('npsDistribution').innerHTML = npsHtml;
       } else {
-        $('npsDistribution').innerHTML = '<p style="color:#8a948e;text-align:center;padding:20px;">Sem respostas NPS ainda. Configurar e-mail pós-locação na Fase 41.</p>';
+        $('npsDistribution').innerHTML = '<p style="color:#8a948e;text-align:center;padding:20px;">Sem respostas NPS ainda. Vai aparecer depois da primeira locação concluída.</p>';
       }
     }).catch(function (e) {
       console.warn('quality_summary indisponível:', e && e.message);
