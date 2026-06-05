@@ -124,18 +124,13 @@
     el.classList.remove('hidden');
   }
 
-  // Inicialização: lê tokens do hash, valida sessão
+  // Inicialização: SÓ permite reset se tiver token de recovery no hash.
+  // P0 SEGURANÇA: removido fallback "se já tem sessão, mostra form" — era
+  // brecha (cliente logado podia mudar senha sem ter pedido recovery).
+  // Pra mudar senha estando logado, use Configurações no painel.
   var tokens = parseHashTokens();
   if (!tokens || !tokens.access_token) {
-    // Talvez já tem sessão (caso usuário tenha clicado link 2x)
-    client.auth.getSession().then(function (r) {
-      if (r && r.data && r.data.session) {
-        // Tem sessão — assume que é recovery e mostra form
-        showStep('form');
-      } else {
-        showStep('err');
-      }
-    });
+    showStep('err');
   } else {
     // Define a sessão com o token de recovery
     client.auth.setSession({

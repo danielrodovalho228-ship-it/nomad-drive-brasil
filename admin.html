@@ -1329,17 +1329,25 @@
   }
   a.getSession().then(function (s) {
     if (!s) {
-      deny("Acesso restrito",
-        "Esta área é exclusiva para administradores autorizados. Faça login para continuar.",
-        [{ href: "login.html?redirect=admin.html", text: "Entrar", solid: true },
-         { href: "index.html", text: "Voltar ao site" }]);
+      // P0 SEGURANCA: redireciona IMEDIATAMENTE pra login em vez de
+      // mostrar tela com botao. Evita que qualquer um veja qualquer
+      // parte do admin antes de autenticar.
+      window.location.replace("login.html?redirect=admin.html");
       return;
     }
     a.isAdmin().then(function (ok) {
       if (!ok) {
-        deny("Acesso restrito",
-          "Sua conta não tem permissão de administrador. Se você acredita que isso é um engano, fale com a equipe da Nomade Drive.",
-          [{ href: "index.html", text: "Voltar ao site", solid: true }]);
+        // P0 SEGURANCA: usuario logado mas SEM role admin/super_admin
+        // aprovado. Faz logout AGRESSIVO (limpa sessao client-side) +
+        // redirect pra home. Nao mostra nem o gate — sem brecha visual.
+        try { a.client().auth.signOut(); } catch(e) {}
+        try {
+          // Limpa qualquer resto de sessao Supabase no storage
+          Object.keys(localStorage).forEach(function(k){
+            if (k.indexOf("supabase") === 0 || k.indexOf("sb-") === 0) localStorage.removeItem(k);
+          });
+        } catch(e) {}
+        window.location.replace("index.html?msg=acesso_negado");
         return;
       }
       gate.hidden = true;
