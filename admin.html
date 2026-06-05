@@ -210,7 +210,7 @@
       <div class="dash-hero__text">
         <p class="dash-hero__eyebrow">Painel administrativo</p>
         <h1 class="dash-hero__title">Operação Nomade Drive</h1>
-        <p class="dash-hero__sub">KPIs, cadastros, verificação de identidade, frota, parceiros, proteção e auditoria — em um só lugar.</p>
+        <p class="dash-hero__sub">KPIs, cadastros, verificação de identidade, frota, parceiros B2B, sinistros e auditoria — em um só lugar.</p>
       </div>
     </div>
 
@@ -322,7 +322,7 @@
       <div class="kpi-grid">
         <div class="kpi"><small>Cadastros em análise</small><b id="kCadastros">—</b><span>aguardando aprovação</span></div>
         <div class="kpi"><small>Clientes em análise</small><b id="kClientes">—</b><span>perfis de locatário</span></div>
-        <div class="kpi"><small>Proprietários em análise</small><b id="kProprietarios">—</b><span>perfis de proprietário</span></div>
+        <!-- KPI Proprietarios em analise REMOVIDO (P2P legado, frota propria nao tem owners externos) -->
         <div class="kpi"><small>Veículos cadastrados</small><b id="kVeiculos">—</b><span>na base</span></div>
         <div class="kpi"><small>Veículos aprovados</small><b id="kVeicAprov">—</b><span>prontos para a frota</span></div>
         <div class="kpi"><small>Locações</small><b id="kLocacoes">—</b><span>registradas</span></div>
@@ -703,14 +703,14 @@
     <!-- FINANCEIRO -->
     <section class="admin-block" id="financeiro">
       <h2>Financeiro</h2>
-      <p class="note">Dados reais do banco — toda mensalidade paga, taxa da plataforma (10%) e repasse ao proprietário (90%). Valores em BRL.</p>
+      <p class="note">Receita real do banco — toda mensalidade paga vai 100% pra empresa (frota própria, sem split). Valores em BRL.</p>
       <div class="kpi-grid">
         <div class="kpi"><small>Receita bruta total</small><b id="finReceita">R$ —</b><span>mensalidades pagas</span></div>
-        <div class="kpi"><small>Taxa da plataforma (10%)</small><b id="finTaxa">R$ —</b><span>fee recebido</span></div>
-        <div class="kpi"><small>Repasses aos proprietários</small><b id="finRepasse">R$ —</b><span>transferido (90%)</span></div>
+        <div class="kpi"><small>Receita líquida (100%)</small><b id="finRepasse">R$ —</b><span>após gateway (~3% Stripe)</span></div>
         <div class="kpi"><small>Caução autorizada ativa</small><b id="finCaucao">R$ —</b><span>retida (sem cobrança)</span></div>
         <div class="kpi"><small>Mensalidades cobradas</small><b id="finCount">—</b><span>total de cobranças pagas</span></div>
         <div class="kpi"><small>Ticket médio mensal</small><b id="finTicket">R$ —</b><span>por cobrança</span></div>
+        <div class="kpi"><small>Taxa do gateway</small><b id="finTaxa">R$ —</b><span>Stripe (~3% das vendas)</span></div>
       </div>
 
       <div class="admin-card" style="margin-top:18px;">
@@ -1092,20 +1092,7 @@
         </table>
       </div>
 
-      <!-- Top owners -->
-      <div class="admin-card">
-        <h3 class="block-title">🏆 Top proprietários por receita gerada</h3>
-        <table class="admin-table">
-          <thead><tr>
-            <th>#</th>
-            <th>Nome</th>
-            <th>Veículos</th>
-            <th>Reservas ativas</th>
-            <th>Receita gerada</th>
-          </tr></thead>
-          <tbody id="topOwnersList"><tr><td colspan="5">Carregando...</td></tr></tbody>
-        </table>
-      </div>
+      <!-- Bloco "Top proprietarios" REMOVIDO (era P2P, frota propria nao tem owners externos) -->
 
       <!-- Fase 43 — Top clientes por tier de fidelidade -->
       <div class="admin-card" style="margin-top:14px;">
@@ -1239,7 +1226,7 @@
             <option value="user_roles">🔑 Papéis</option>
             <option value="applications">📝 Cadastros</option>
             <option value="payments">💰 Pagamentos</option>
-            <option value="withdrawals">💸 Saques</option>
+            <!-- option withdrawals REMOVIDO (saques P2P legado) -->
           </select>
 
           <select id="logFilterAction" style="font-size:13px;padding:6px 10px;border:1px solid #ccd5cf;border-radius:6px;background:#fff;cursor:pointer;">
@@ -1290,33 +1277,7 @@
         <p class="note">Nenhum dado sensível é publicado nesta página.</p>
       </div>
 
-      <!-- ============================================================
-           Fase 32 Sprint 2.5 — Ferramentas Stripe Connect
-           ============================================================ -->
-      <div class="admin-card" style="margin-top:16px;">
-        <h3 style="margin:0 0 8px;font-size:16px;">🔧 Stripe Connect — Configurar payouts manuais</h3>
-        <p class="note" style="margin:0 0 12px;">
-          Proprietários (Connected Accounts Express) vêm com schedule "daily" por default.
-          Pra ativar saques parciais (Sprint 2 Fase 32) precisam estar em modo <strong>manual</strong>.
-          O Dashboard do Stripe não permite editar Express via UI — só via API.
-        </p>
-
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px;">
-          <label class="field" style="flex:1;min-width:240px;">
-            <span style="font-size:12px;color:#5b6b63;font-weight:600;">E-mail do proprietário</span>
-            <input type="email" id="stripeManualEmail" value="qa-proprietario@nomadedrive.com.br"
-              style="width:100%;padding:8px;border:1px solid #ccd5cf;border-radius:6px;font-size:14px;" />
-          </label>
-          <button type="button" class="btn btn--solid btn--sm" id="btnStripeManualOne">
-            Configurar este
-          </button>
-          <button type="button" class="btn btn--outline btn--sm" id="btnStripeManualAll" title="Processa TODAS as Connected Accounts">
-            Configurar TODAS
-          </button>
-        </div>
-
-        <div id="stripeManualOut" style="margin-top:10px;padding:10px 12px;background:#f9fafb;border-radius:8px;font-family:monospace;font-size:12.5px;color:#5b6b63;line-height:1.5;white-space:pre-wrap;display:none;"></div>
-      </div>
+      <!-- Bloco Stripe Connect Manual Payouts REMOVIDO (era P2P, frota propria nao usa Connect) -->
     </section>
 
   </main>
@@ -1331,110 +1292,7 @@
 <script>document.addEventListener("DOMContentLoaded", function () { if (window.ndNotifs) ndNotifs.mount("#ndBell"); });</script>
 <script src="emails-runtime.js?v=20260524f"></script>
 <script src="script.js?v=20260524e"></script>
-<script>
-/* ============================================================
- * Fase 32 Sprint 2.5 — Botão "Configurar manual payouts"
- * ============================================================
- * Helper UI pro super-admin invocar setup-manual-payouts sem
- * precisar do Console do navegador. Funciona depois do login.
- * ============================================================ */
-(function () {
-  function showOut(msg, kind) {
-    var el = document.getElementById('stripeManualOut');
-    if (!el) return;
-    el.style.display = 'block';
-    el.style.background = kind === 'ok' ? '#e6f4ec' : kind === 'error' ? '#fde8eb' : '#f9fafb';
-    el.style.color = kind === 'ok' ? '#0f5132' : kind === 'error' ? '#b00020' : '#5b6b63';
-    el.textContent = msg;
-  }
-  function callSetup(body, btn) {
-    if (!window.ndAuth || !window.ndAuth.client) {
-      showOut('Auth não disponível. Recarregue a página.', 'error');
-      return;
-    }
-    var sb = window.ndAuth.client();
-    if (!sb) {
-      showOut('Você não está logado. Faça login como super-admin primeiro.', 'error');
-      return;
-    }
-    if (btn) { btn.disabled = true; var orig = btn.textContent; btn.textContent = '⏳ Processando...'; }
-    showOut('⏳ Chamando setup-manual-payouts...', 'loading');
-
-    sb.functions.invoke('setup-manual-payouts', { body: body }).then(async function (r) {
-      if (btn) { btn.disabled = false; btn.textContent = orig; }
-      console.log('setup-manual-payouts response:', r);
-      var d = r && r.data;
-
-      // Fase 32 Sprint 2.5 fix: extrai mensagem real do erro quando Edge
-      // Function retorna 4xx/5xx (Supabase client esconde no error.context)
-      if (r && r.error && r.error.context) {
-        try {
-          var ctx = r.error.context;
-          if (typeof ctx.json === 'function') {
-            d = await ctx.json();
-            console.log('Error body parsed:', d);
-          } else if (ctx.body) {
-            try { d = JSON.parse(ctx.body); } catch(e) {}
-          }
-        } catch(e) { console.warn('Não consegui parsear error body:', e); }
-      }
-
-      if (d && d.ok) {
-        if (d.results) {
-          // Modo "all"
-          var lines = ['✅ Processadas ' + d.processed + ' conta(s):\n'];
-          d.results.forEach(function (it) {
-            lines.push((it.ok ? '✅' : '❌') + ' ' + it.account_id +
-              ' user=' + (it.user_id ? it.user_id.slice(0,8) : '?') +
-              (it.schedule ? ' schedule=' + it.schedule : '') +
-              (it.error ? ' err=' + it.error : ''));
-          });
-          showOut(lines.join('\n'), 'ok');
-        } else {
-          // Modo single
-          showOut('✅ ' + (d.message || 'Sucesso!') +
-            '\n\nAccount: ' + d.account_id +
-            '\nSchedule: ' + d.schedule +
-            '\nPayouts enabled: ' + d.payouts_enabled, 'ok');
-        }
-      } else {
-        var err = (d && d.error) || (r && r.error && r.error.message) || 'Erro desconhecido';
-        var hint = (d && d.hint) ? '\n\n💡 Dica: ' + d.hint : '';
-        var status = (r && r.error && r.error.context && r.error.context.status)
-          ? '\n\nHTTP Status: ' + r.error.context.status : '';
-        showOut('❌ ' + err + hint + status, 'error');
-      }
-    }).catch(function (e) {
-      if (btn) { btn.disabled = false; btn.textContent = orig; }
-      console.error('setup-manual-payouts exception:', e);
-      showOut('❌ Erro de rede: ' + (e && e.message || e), 'error');
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', function () {
-    var btnOne = document.getElementById('btnStripeManualOne');
-    var btnAll = document.getElementById('btnStripeManualAll');
-    var inpEmail = document.getElementById('stripeManualEmail');
-
-    if (btnOne) btnOne.addEventListener('click', function () {
-      var email = (inpEmail && inpEmail.value || '').trim();
-      if (!email) { showOut('Preencha o e-mail.', 'error'); return; }
-      callSetup({ email: email }, btnOne);
-    });
-
-    if (btnAll) btnAll.addEventListener('click', async function () {
-      var ok = await ndModal.confirm({
-        title: 'Processar TODAS as Connected Accounts?',
-        body: 'Isto vai configurar todas como MANUAL payouts no Stripe Connect.',
-        okText: 'Sim, processar todas', cancelText: 'Cancelar',
-        icon: '⚙️', danger: false
-      });
-      if (!ok) return;
-      callSetup({ all: true }, btnAll);
-    });
-  });
-})();
-</script>
+<!-- Bloco JS Stripe Connect Manual Payouts REMOVIDO (Sprint 2.5 P2P legado) -->
 <script>
 (function () {
   var gate = document.getElementById("adminGate");
@@ -1522,7 +1380,7 @@
         link: "#documentos", linkLabel: "abrir verificação",
         tip: "Documentos enviados pelos clientes (CNH, RG, comprovantes) aguardando revisão." },
       { count: adminTodos.ocorrencias,
-        label: "ocorrência(s) de proteção sem triagem.",
+        label: "sinistro(s) ou multa(s) sem triagem.",
         link: "#sinistros", linkLabel: "abrir triagem",
         tip: "Sinistros, danos, multas e outros eventos abertos pelos clientes — pedem parecer." },
       { count: adminTodos.oficinasAnalise,
@@ -1539,7 +1397,7 @@
       setK("kCadastros", n); adminTodos.cadastros = n || 0; refreshAdminTodos();
     });
     countOf("applications", [["profile_type", "client"], ["status", "em_analise"]]).then(function (n) { setK("kClientes", n); });
-    countOf("applications", [["profile_type", "owner"], ["status", "em_analise"]]).then(function (n) { setK("kProprietarios", n); });
+    // Query kProprietarios REMOVIDA (KPI saiu do HTML — P2P legado)
     countOf("vehicles", []).then(function (n) { setK("kVeiculos", n); });
     countOf("vehicles", [["status", "aprovado"]]).then(function (n) { setK("kVeicAprov", n); });
     countOf("vehicles", [["status", "em_analise"]]).then(function (n) {
@@ -3552,8 +3410,10 @@
       }).join('');
     }).catch(function () {});
 
-    // Top owners
-    sb.from('top_owners').select('*').limit(10).then(function (r) {
+    // Query top_owners DESATIVADA (era P2P — frota propria nao tem owners externos)
+    // Bloco HTML removido em 2026-06-04 (refactor admin v3)
+    // Comentado em vez de deletado pra preservar a logica de medalhas caso reuse.
+    if (false) sb.from('top_owners').select('*').limit(10).then(function (r) {
       var rows = (r && r.data) || [];
       var tb = $('topOwnersList'); if (!tb) return;
       if (!rows.length) {
@@ -3920,8 +3780,8 @@
       $('kpiFrota').textContent = fmtInt(s.veiculos_aprovados) + '/' + fmtInt(s.veiculos_total);
       $('kpiFrotaSub').textContent = fmtInt(s.bookings_ativos) + ' em uso';
 
-      // KPI 4: Base
-      var totalBase = (s.clientes_aprovados || 0) + (s.proprietarios_aprovados || 0);
+      // KPI 4: Base (v3 frota propria - so clientes, sem owners)
+      var totalBase = (s.clientes_aprovados || 0);
       $('kpiBase').textContent = fmtInt(totalBase);
       $('kpiBaseSub').textContent = '+' + fmtInt(s.novos_usuarios_mes) + ' no mês';
 
