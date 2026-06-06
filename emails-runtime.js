@@ -85,10 +85,13 @@
       '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 12px;background:#f4f5f7;"><tr><td align="center">' +
       '<table cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(20,40,30,.15);">' +
       '<tr><td style="background:' + gradient + ';padding:24px 28px;">' +
-      // Layout EMPILHADO: logo em cima, badge embaixo. Antes era 2 colunas
-      // lado a lado, que sobrepunha em Gmail mobile (telas estreitas).
-      '<img src="' + LOGO + '" alt="Nomade Drive Brasil" width="120" style="display:block;height:auto;border:0;background:#fff;border-radius:6px;padding:4px 8px;margin-bottom:12px;">' +
+      // Banner clicável: wrap em <a> que leva pro site. Layout EMPILHADO
+      // (logo em cima, badge embaixo) — antes era lado a lado, sobrepunha
+      // em Gmail mobile. Espaçamento generoso entre logo e badge (18px).
+      '<a href="' + SITE + '" style="text-decoration:none;display:block;color:inherit;">' +
+      '<img src="' + LOGO + '" alt="Nomade Drive Brasil" width="120" style="display:block;height:auto;border:0;background:#fff;border-radius:6px;padding:4px 8px;margin-bottom:18px;">' +
       '<div style="color:#fff;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.95;">' + escapeHtml(badge) + '</div>' +
+      '</a>' +
       '</td></tr>' +
       '<tr><td style="padding:30px 28px 24px;">' +
       '<h1 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#14201b;">' + escapeHtml(opts.title) + '</h1>' +

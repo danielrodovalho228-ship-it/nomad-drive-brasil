@@ -1260,7 +1260,7 @@
 <script src="statuses.js?v=20260524e"></script>
 <script src="nd-notifications.js?v=20260525a"></script>
 <script>document.addEventListener("DOMContentLoaded", function () { if (window.ndNotifs) ndNotifs.mount("#ndBell"); });</script>
-<script src="emails-runtime.js?v=20260524f"></script>
+<script src="emails-runtime.js?v=20260606b"></script>
 <script src="script.js?v=20260524e"></script>
 <!-- Bloco JS Stripe Connect Manual Payouts REMOVIDO (Sprint 2.5 P2P legado) -->
 <script>
@@ -1761,13 +1761,41 @@
         doc.status = newStatus;
         kycMsg("Status do documento atualizado com sucesso.", "ok");
 
-        // #6: notifica o cliente quando aprovamos/recusamos o documento
+        // #6 (refeito): notifica o cliente de forma INTELIGENTE.
+        // - APROVADO: só dispara kyc_approved quando TODOS os docs do user
+        //   estiverem aprovados (evita flood de N e-mails iguais).
+        // - RECUSADO/PENDENTE: dispara na hora (cliente precisa saber qual
+        //   doc reenviar). Aqui o e-mail "Documentos precisam de ajustes"
+        //   é direto e ele já corre pra arrumar.
         if (window.ndEmails && doc.user_id) {
           if (newStatus === "aprovado" || newStatus === "aprovado_com_ressalvas") {
-            window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_approved", {}).then(function (r) {
-              if (r && r.ok) kycMsg("Documento aprovado e e-mail enviado ao cliente.", "ok");
-              else console.warn("kyc_approved email falhou:", r && r.error);
-            });
+            // Conta quantos docs do user ainda NÃO estão aprovados.
+            // Se zero, é o último → dispara o e-mail uma única vez.
+            c.from("user_documents")
+              .select("status", { count: "exact", head: false })
+              .eq("user_id", doc.user_id)
+              .then(function (rDocs) {
+                if (rDocs && rDocs.data) {
+                  var pendentes = rDocs.data.filter(function (d) {
+                    return d.status !== "aprovado" && d.status !== "aprovado_com_ressalvas";
+                  }).length;
+                  if (pendentes === 0) {
+                    // Último doc aprovado → AGORA sim dispara o e-mail
+                    window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_approved", {}).then(function (r) {
+                      if (r && r.ok) kycMsg("Todos os documentos do cliente aprovados — e-mail enviado.", "ok");
+                      else console.warn("kyc_approved email falhou:", r && r.error);
+                    });
+                  } else {
+                    // Ainda faltam documentos → silencioso. Mensagem clara pro admin.
+                    kycMsg("Documento aprovado. Faltam " + pendentes + " documento(s) — e-mail final ao cliente só quando todos forem aprovados.", "ok");
+                  }
+                } else {
+                  // Fallback: se falhou a contagem, dispara mesmo (comportamento antigo)
+                  window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_approved", {}).then(function (r) {
+                    if (r && r.ok) kycMsg("Documento aprovado e e-mail enviado ao cliente.", "ok");
+                  });
+                }
+              });
           } else if (newStatus === "recusado" || newStatus === "documentos_pendentes") {
             window.ndEmails.notifyVerbose(c, doc.user_id, "kyc_rejected",
               { reason: notes || "Sem motivo registrado." }
