@@ -9,9 +9,10 @@
  * PIVOT 05/06/2026 — LANÇAMENTO ENXUTO 1 CARRO:
  *   - Operação começa com 1 sedan automático (Fiat Cronos 2024)
  *   - HB20 popular removido do site (margem fina + sem diferencial
- *     contra a Localiza no segmento popular)
- *   - Preço Cronos rebaixado pra ancorar levemente abaixo da
- *     Localiza (sedan compacto ref. R$ 3.820 a 3.000 km/mês)
+ *     contra locadoras tradicionais no segmento popular)
+ *   - Preço Cronos rebaixado pra ancorar levemente abaixo das
+ *     locadoras tradicionais (sedan compacto ref. R$ 3.820 a
+ *     3.000 km/mês — consulta interna 05/06/2026)
  *
  * Última atualização: 05/06/2026
  * ============================================================ */
@@ -35,8 +36,8 @@ window.NOMADE_PRICES = {
   },
 
   // 3 PLANOS × 4 períodos (Limite Total do Período)
-  // Preço ancorado levemente abaixo da Localiza sedan compacto
-  // (R$ 3.820 a 3.000 km/mês — ref. consulta 05/06/2026).
+  // Preço ancorado levemente abaixo de locadoras tradicionais (sedan
+  // compacto ref. R$ 3.820 a 3.000 km/mês — consulta interna 05/06/2026).
   // Descontos por período: -5% (60d), -10% (90d), -15% (180d) sobre o pro-rata.
   plans: {
     sedan: {
