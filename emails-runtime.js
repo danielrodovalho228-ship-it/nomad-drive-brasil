@@ -85,10 +85,11 @@
       '<table cellpadding="0" cellspacing="0" width="100%" style="padding:24px 12px;background:#f4f5f7;"><tr><td align="center">' +
       '<table cellpadding="0" cellspacing="0" width="600" style="max-width:600px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(20,40,30,.15);">' +
       '<tr><td style="background:' + gradient + ';padding:24px 28px;">' +
-      '<table cellpadding="0" cellspacing="0" width="100%"><tr>' +
-      '<td valign="middle"><img src="' + LOGO + '" alt="Nomade Drive Brasil" width="120" style="display:block;height:auto;border:0;background:#fff;border-radius:6px;padding:4px 8px;"></td>' +
-      '<td align="right" valign="middle" style="color:#fff;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.92;">' + escapeHtml(badge) + '</td>' +
-      '</tr></table></td></tr>' +
+      // Layout EMPILHADO: logo em cima, badge embaixo. Antes era 2 colunas
+      // lado a lado, que sobrepunha em Gmail mobile (telas estreitas).
+      '<img src="' + LOGO + '" alt="Nomade Drive Brasil" width="120" style="display:block;height:auto;border:0;background:#fff;border-radius:6px;padding:4px 8px;margin-bottom:12px;">' +
+      '<div style="color:#fff;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.95;">' + escapeHtml(badge) + '</div>' +
+      '</td></tr>' +
       '<tr><td style="padding:30px 28px 24px;">' +
       '<h1 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#14201b;">' + escapeHtml(opts.title) + '</h1>' +
       bodyHtml + sectionsHtml + ctaHtml +
@@ -121,12 +122,15 @@
             "A equipe Nomade Drive analisou seus documentos e <strong>aprovou</strong> sua verificação de identidade. Você já pode criar uma nova solicitação de locação a qualquer momento."
           ],
           ctaText: "Criar solicitação de locação",
-          ctaUrl: SITE + "/dashboard-cliente.html#solicitacoes"
+          // Vai DIRETO pra reservar.html. Se houver sessão valida, segue
+          // pro fluxo de reserva; se não, login.html redireciona pra
+          // reservar.html pos-autenticacao (preserva intencao).
+          ctaUrl: SITE + "/reservar.html"
         }),
         text: "Olá " + (p.full_name || "") + ",\n\n" +
           "Sua verificação de identidade foi APROVADA.\n" +
           "Você já pode criar uma nova solicitação de locação.\n\n" +
-          "Acesse: " + SITE + "/dashboard-cliente.html#solicitacoes"
+          "Acesse: " + SITE + "/reservar.html"
       };
     },
 
