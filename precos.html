@@ -110,6 +110,96 @@
   </div>
 </section>
 
+<!-- ===========================================================
+     ADICIONAIS OPCIONAIS (P2) — apresentação informativa.
+     O cliente escolhe DE VERDADE em reservar.html. Aqui é só pra
+     ele saber que existem antes de começar a reserva.
+     SYNC: este bloco também aparece em carros/sedan.html.
+     Se mudar preço, atualize nos 2 lugares + reservar.html ADDONS_CATALOG.
+     =========================================================== */
+<style>
+  .addons-info { padding: 36px 0 40px; background: var(--white); border-top: 1px solid var(--gray-200, #e2e6e3); }
+  .addons-info__head { text-align: center; max-width: 720px; margin: 0 auto 22px; padding: 0 24px; }
+  .addons-info__eyebrow { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.3px; color: var(--gold-dark, #b88f3f); text-transform: uppercase; margin-bottom: 8px; }
+  .addons-info__head h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; color: var(--navy, #0F3D2E); }
+  .addons-info__head p { font-size: 14px; color: var(--gray-700, #5C6B62); line-height: 1.6; }
+  .addons-info__head strong { color: var(--navy, #0F3D2E); }
+  .addons-info__grid { display: grid; gap: 14px; grid-template-columns: 1fr; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 720px) { .addons-info__grid { grid-template-columns: repeat(2, 1fr); } }
+  .addon-card { background: var(--white); border: 1px solid var(--gray-200, #e2e6e3); border-radius: 10px; padding: 18px 20px; transition: all .15s; }
+  .addon-card:hover { border-color: var(--navy-light, #1a5440); transform: translateY(-2px); box-shadow: 0 10px 22px rgba(15,61,46,0.08); }
+  .addon-card__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+  .addon-card__title { font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 800; color: var(--navy, #0F3D2E); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .addon-card__pill { display: inline-block; background: var(--gold-dark, #b88f3f); color: var(--white, #fff); font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; }
+  .addon-card__price { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 800; color: var(--navy, #0F3D2E); white-space: nowrap; }
+  .addon-card__price small { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--gray-500, #8a9890); font-weight: 500; }
+  .addon-card__desc { font-size: 12.5px; color: var(--gray-700, #5C6B62); line-height: 1.55; }
+  .addons-info__cta { display: flex; justify-content: center; margin-top: 24px; padding: 0 24px; }
+  .addons-info__cta a { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--navy, #0F3D2E); text-decoration: none; padding: 10px 22px; background: var(--gold, #D4A853); border-radius: 8px; transition: all .15s; }
+  .addons-info__cta a:hover { background: var(--gold-dark, #b88f3f); transform: translateY(-1px); }
+  .addons-info__note { margin-top: 20px; padding: 14px 18px; background: var(--cream, #FAFAF7); border-left: 4px solid var(--navy, #0F3D2E); border-radius: 6px; max-width: 1080px; margin-left: auto; margin-right: auto; font-size: 12.5px; color: var(--gray-700, #5C6B62); line-height: 1.6; }
+  .addons-info__note strong { color: var(--navy, #0F3D2E); }
+</style>
+<section class="addons-info">
+  <div class="addons-info__head">
+    <div class="addons-info__eyebrow">Personalize sua locação</div>
+    <h2>Serviços e proteções opcionais</h2>
+    <p><strong>Tudo opcional</strong> e desmarcado por padrão na hora da reserva. Você pode alugar sem contratar nenhum — escolhe só o que faz sentido pra você.</p>
+  </div>
+
+  <div class="addons-info__grid">
+
+    <div class="addon-card">
+      <div class="addon-card__head">
+        <div class="addon-card__title">Isenção de franquia <span class="addon-card__pill">Em breve</span></div>
+        <div class="addon-card__price">R$ 200<small> /mês</small></div>
+      </div>
+      <p class="addon-card__desc">Em caso de avaria, você não paga a franquia até o teto contratado. <strong>Não é seguro</strong> — é serviço opcional da Nomade Drive. Alternativa: caução pré-autorizada de R$ 2.000 no cartão (não vira cobrança se devolver sem dano).</p>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-card__head">
+        <div class="addon-card__title">Proteção de vidros e pneus</div>
+        <div class="addon-card__price">R$ 60<small> /mês</small></div>
+      </div>
+      <p class="addon-card__desc">Troca de para-brisa, vidros laterais ou pneus furados sem custo extra. Útil em estradas e ruas com buracos.</p>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-card__head">
+        <div class="addon-card__title">Segundo condutor autorizado</div>
+        <div class="addon-card__price">R$ 70<small> /mês</small></div>
+      </div>
+      <p class="addon-card__desc">Adicione cônjuge, filho(a) ou colega ao contrato. Sem custo extra de revisão de CNH — só o adicional mensal.</p>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-card__head">
+        <div class="addon-card__title">Entrega premium / leva-e-traz</div>
+        <div class="addon-card__price">R$ 80<small> /mês</small></div>
+      </div>
+      <p class="addon-card__desc">Entrega e devolução em horário/local especial (madrugada, feriado, fora de Uberlândia ou no seu trabalho).</p>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-card__head">
+        <div class="addon-card__title">Higienização reforçada / pet</div>
+        <div class="addon-card__price">R$ 50<small> /mês</small></div>
+      </div>
+      <p class="addon-card__desc">Transporte de animais permitido + higienização especializada na devolução. Cobre cachorros e gatos de qualquer porte.</p>
+    </div>
+
+  </div>
+
+  <div class="addons-info__note">
+    <strong>Compromisso de transparência:</strong> a locação <strong>não está condicionada</strong> à contratação de nenhum adicional. Você escolhe na hora da reserva, sem nada pré-marcado.
+  </div>
+
+  <div class="addons-info__cta">
+    <a href="reservar.html">Reservar e escolher meus adicionais →</a>
+  </div>
+</section>
+
 <script>
 (function () {
   var P = window.NOMADE_PRICES;
