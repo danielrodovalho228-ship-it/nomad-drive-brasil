@@ -396,5 +396,132 @@ body.is-drawer-open { overflow: hidden; }
   .page-intro { padding: 24px 0 20px; }
 }
 
+/* ============================================================
+   BOTÕES — fallback global pra páginas que não definem inline
+   (usado pelo .hero-page e em qualquer link com classe .btn).
+   Sem !important pra inline styles sobrescreverem se quiser.
+   ============================================================ */
+.btn--ghost-navy {
+  background: transparent;
+  color: var(--navy, #0F3D2E);
+  border: 2px solid var(--navy, #0F3D2E);
+}
+.btn--ghost-navy:hover {
+  background: var(--navy, #0F3D2E);
+  color: var(--white, #fff);
+}
+
+/* ============================================================
+   HERO-PAGE — upgrade visual das páginas internas (Fase 93-B)
+   Replica o padrão do hero do index.html:
+   - eyebrow tag dourado uppercase
+   - h1 Playfair grande
+   - sub Inter com strong em navy
+   - row de CTAs (primary + ghost-navy)
+   - visual à direita (imagem com badge flutuante opcional)
+   Usar em vez de .page-intro nas páginas que precisam de personalidade.
+   ============================================================ */
+.hero-page {
+  background: var(--cream, #FAFAF7);
+  padding: 44px 0 56px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(15,61,46,0.06);
+}
+.hero-page__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  gap: 36px;
+  align-items: center;
+}
+.hero-page--with-visual .hero-page__inner {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 880px) {
+  .hero-page--with-visual .hero-page__inner {
+    grid-template-columns: 1fr 1.25fr;
+    gap: 52px;
+  }
+}
+.hero-page__eyebrow {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  color: var(--gold-dark, #b88f3f);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hero-page h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 4.6vw, 46px);
+  font-weight: 900;
+  color: var(--navy, #0F3D2E);
+  margin: 0 0 14px;
+  letter-spacing: -0.018em;
+  line-height: 1.12;
+}
+.hero-page__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.7vw, 17.5px);
+  color: var(--gray-700, #5C6B62);
+  margin: 0 0 24px;
+  max-width: 560px;
+  line-height: 1.6;
+}
+.hero-page__sub strong { color: var(--navy, #0F3D2E); font-weight: 700; }
+.hero-page__cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+/* Visual */
+.hero-page__visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-page__visual img {
+  width: 100%;
+  max-width: 620px;
+  border-radius: 14px;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  box-shadow: var(--shadow-lg, 0 18px 40px rgba(15,61,46,0.14));
+}
+.hero-page__badge {
+  position: absolute;
+  bottom: -14px;
+  right: 16px;
+  background: var(--navy, #0F3D2E);
+  color: var(--white, #fff);
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+  box-shadow: var(--shadow-lg, 0 18px 40px rgba(15,61,46,0.14));
+  line-height: 1.35;
+}
+.hero-page__badge strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  display: block;
+  line-height: 1.1;
+  margin: 2px 0;
+  color: var(--gold, #D4A853);
+  font-weight: 900;
+}
+@media (max-width: 720px) {
+  .hero-page { padding: 30px 0 44px; }
+  .hero-page__badge { bottom: -12px; right: 10px; padding: 10px 16px; font-size: 11.5px; }
+  .hero-page__badge strong { font-size: 17px; }
+}
+
 /* Reset placeholder do header (evita CLS antes do JS injetar) */
 #site-header { min-height: var(--nav-h); display: block; }
