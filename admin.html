@@ -1256,7 +1256,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260523c"></script>
 <script src="nd-modal.js?v=20260524g"></script>
-<script src="auth.js?v=20260524e"></script>
+<script src="auth.js?v=20260606a"></script>
 <script src="statuses.js?v=20260524e"></script>
 <script src="nd-notifications.js?v=20260525a"></script>
 <script>document.addEventListener("DOMContentLoaded", function () { if (window.ndNotifs) ndNotifs.mount("#ndBell"); });</script>
@@ -1297,7 +1297,23 @@
     if (note) note.hidden = false;
     return;
   }
-  a.getSession().then(function (s) {
+  // Fallback visual: se algo travar (rede, RLS, timeout) o usuário sai do
+  // "Verificando acesso…" eterno e tem opções claras.
+  function gateError(reasonText) {
+    deny(
+      "Não foi possível verificar seu acesso",
+      reasonText || "Algo deu errado. Verifique sua conexão e tente novamente.",
+      [
+        { href: "javascript:location.reload()", text: "Tentar novamente", solid: true },
+        { href: "login.html", text: "Ir para login", solid: false },
+        { href: "index.html", text: "Voltar ao site", solid: false }
+      ]
+    );
+  }
+
+  // Envolve em withTimeout pra nunca travar a página indefinidamente
+  var sessionPromise = a.withTimeout ? a.withTimeout(a.getSession(), 8000) : a.getSession();
+  sessionPromise.then(function (s) {
     if (!s) {
       // P0 SEGURANCA: redireciona IMEDIATAMENTE pra login em vez de
       // mostrar tela com botao. Evita que qualquer um veja qualquer
@@ -1305,7 +1321,8 @@
       window.location.replace("login.html?redirect=admin.html");
       return;
     }
-    a.isAdmin().then(function (ok) {
+    var adminPromise = a.withTimeout ? a.withTimeout(a.isAdmin(), 8000) : a.isAdmin();
+    adminPromise.then(function (ok) {
       if (!ok) {
         // P0 SEGURANCA: usuario logado mas SEM role admin/super_admin
         // aprovado. Faz logout AGRESSIVO (limpa sessao client-side) +
@@ -1324,7 +1341,13 @@
       var demoBadge = document.getElementById("adminDemoBadge");
       if (demoBadge) demoBadge.hidden = true;
       loadAdminData();
+    }).catch(function (err) {
+      console.error("[admin] isAdmin falhou:", err);
+      gateError("Falha ao verificar permissões. " + ((err && err.message) || ""));
     });
+  }).catch(function (err) {
+    console.error("[admin] getSession falhou:", err);
+    gateError("Falha ao verificar sessão. " + ((err && err.message) || ""));
   });
 
   function setK(id, v) {
