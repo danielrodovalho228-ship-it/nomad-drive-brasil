@@ -238,6 +238,40 @@
   /* Badge "Sugerido pra você" nos cards de carro e ponto */
   .pick__suggested-badge { position: absolute; top: -10px; left: 10px; background: var(--gold); color: var(--navy); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.4px; text-transform: uppercase; }
 
+  /* ===========================================================
+     ADICIONAIS OPCIONAIS (Prioridade 1) — serviços e proteções
+     que o cliente pode contratar JUNTO com a locação.
+     Cada item é DESMARCADO por padrão (anti-venda-casada).
+     =========================================================== */
+  .addons { margin-top: 14px; display: grid; gap: 12px; }
+  .addon { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 16px 18px; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 10px; cursor: pointer; transition: all .15s; align-items: flex-start; }
+  .addon:hover { border-color: var(--navy-light); background: rgba(15,61,46,0.02); }
+  .addon.is-on { border-color: var(--gold); background: var(--gold-pale); }
+  .addon.is-locked { opacity: 0.62; cursor: not-allowed; }
+  .addon.is-locked:hover { border-color: var(--gray-200); background: var(--white); }
+  .addon__main { display: flex; flex-direction: column; gap: 4px; }
+  .addon__title { font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .addon__pill { display: inline-block; background: var(--navy); color: var(--white); font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; }
+  .addon__pill--soon { background: var(--gold-dark); color: var(--white); }
+  .addon__desc { font-size: 12.5px; color: var(--gray-700); line-height: 1.5; }
+  .addon__desc strong { color: var(--navy); }
+  .addon__price { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: var(--navy); white-space: nowrap; line-height: 1; }
+  .addon__price small { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--gray-500); font-weight: 500; display: block; margin-top: 3px; }
+  .addon__check { width: 22px; height: 22px; border: 2px solid var(--gray-300); border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; background: var(--white); margin-top: 2px; }
+  .addon.is-on .addon__check { background: var(--gold-dark); border-color: var(--gold-dark); color: var(--white); }
+  .addon.is-on .addon__check::after { content: '✓'; font-size: 14px; font-weight: 800; }
+  .addon__row { display: flex; align-items: flex-start; gap: 12px; }
+  .addon__alt { margin-top: 6px; padding: 8px 12px; background: rgba(245,184,46,0.10); border-left: 3px solid var(--gold); border-radius: 5px; font-size: 11.5px; color: var(--navy); line-height: 1.5; }
+  .addon__alt strong { color: var(--navy); }
+  .addon__link { font-size: 11.5px; color: var(--gold-dark); font-weight: 700; text-decoration: underline; }
+  .addon__note { font-size: 11.5px; color: var(--gray-700); padding: 10px 14px; background: var(--cream); border-radius: 6px; line-height: 1.5; margin-bottom: 12px; }
+  .addon__note strong { color: var(--navy); }
+  @media (max-width: 480px) {
+    .addon { padding: 14px 14px; }
+    .addon__title { font-size: 13.5px; }
+    .addon__price { font-size: 16px; }
+  }
+
   /* FOOTER */
   .foot-mini { padding: 26px 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-200); }
   .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
@@ -385,6 +419,7 @@
         <div class="summary__row"><span>Plano</span><strong id="sumPlan">—</strong></div>
         <div class="summary__row"><span>Período</span><strong id="sumPeriod">—</strong></div>
         <div class="summary__row"><span>Equivalente mensal</span><strong id="sumRate">—</strong></div>
+        <div class="summary__row" id="sumAddonsRow" style="display:none;"><span>Adicionais opcionais</span><strong id="sumAddons">—</strong></div>
         <div class="summary__row total"><span>Total estimado</span><strong id="sumTotal">R$ 0</strong></div>
       </div>
 
@@ -457,6 +492,98 @@
           <input type="text" id="addressInput" placeholder="Endereço aparece após validar o CEP..." disabled />
         </div>
         <p class="field-hint" id="cepStatus">Digite o CEP e a gente busca o endereço automaticamente.</p>
+      </div>
+
+      <!-- ADICIONAIS OPCIONAIS — serviços e proteções contratuais opcionais.
+           Nenhum vem pré-marcado (anti-venda-casada). Cada toggle soma ao
+           total estimado em tempo real. A isenção de franquia fica desabilitada
+           ("em breve") até validação jurídica — a alternativa caução sempre é
+           mostrada pra dar escolha real. -->
+      <div class="field" style="margin-top:24px;">
+        <label>Personalize sua locação <small>(tudo opcional — você pode alugar sem nenhum)</small></label>
+        <p class="addon__note">
+          <strong>Tudo aqui é opcional.</strong> Nenhum item é obrigatório pra contratar a locação. Os preços são mensais e somam ao total estimado abaixo.
+        </p>
+
+        <div class="addons" id="addonsList">
+
+          <!-- Isenção de franquia — DESABILITADO até validação jurídica -->
+          <div class="addon is-locked" data-addon="franquia" data-monthly="200" aria-disabled="true">
+            <div class="addon__row">
+              <div class="addon__check" aria-hidden="true"></div>
+              <div class="addon__main">
+                <div class="addon__title">
+                  Isenção de franquia
+                  <span class="addon__pill addon__pill--soon">Em breve</span>
+                </div>
+                <div class="addon__desc">
+                  Em caso de avaria, você não paga a franquia até o teto contratado. <strong>Não é seguro</strong> — é um serviço opcional da Nomade Drive. <a href="termos.html#adicionais" target="_blank" rel="noopener" class="addon__link">Ver condições</a>.
+                </div>
+                <div class="addon__alt">
+                  <strong>Alternativa:</strong> se você <strong>não contratar</strong>, vamos pedir uma <strong>caução pré-autorizada de R$ 2.000</strong> no cartão (não vira cobrança se devolver sem dano). A locação <strong>não está condicionada</strong> a contratar esta proteção.
+                </div>
+              </div>
+            </div>
+            <div class="addon__price">R$ 200<small>/mês</small></div>
+          </div>
+
+          <!-- Proteção de vidros e pneus -->
+          <div class="addon" data-addon="vidros" data-monthly="60">
+            <div class="addon__row">
+              <div class="addon__check" aria-hidden="true"></div>
+              <div class="addon__main">
+                <div class="addon__title">Proteção de vidros e pneus</div>
+                <div class="addon__desc">
+                  Troca de para-brisa, vidros laterais ou pneus furados <strong>sem custo extra</strong>. Útil em estradas e ruas com buracos.
+                </div>
+              </div>
+            </div>
+            <div class="addon__price">R$ 60<small>/mês</small></div>
+          </div>
+
+          <!-- Segundo condutor -->
+          <div class="addon" data-addon="condutor" data-monthly="70">
+            <div class="addon__row">
+              <div class="addon__check" aria-hidden="true"></div>
+              <div class="addon__main">
+                <div class="addon__title">Segundo condutor autorizado</div>
+                <div class="addon__desc">
+                  Adicione cônjuge, filho(a) ou colega ao contrato. Sem custo extra de revisão de CNH — só o adicional mensal.
+                </div>
+              </div>
+            </div>
+            <div class="addon__price">R$ 70<small>/mês</small></div>
+          </div>
+
+          <!-- Entrega premium -->
+          <div class="addon" data-addon="entrega" data-monthly="80">
+            <div class="addon__row">
+              <div class="addon__check" aria-hidden="true"></div>
+              <div class="addon__main">
+                <div class="addon__title">Entrega premium / leva-e-traz</div>
+                <div class="addon__desc">
+                  Entrega e devolução em horário/local especial (madrugada, feriado, fora de Uberlândia ou no seu trabalho). Substitui a entrega gratuita.
+                </div>
+              </div>
+            </div>
+            <div class="addon__price">R$ 80<small>/mês</small></div>
+          </div>
+
+          <!-- Higienização reforçada / pet -->
+          <div class="addon" data-addon="pet" data-monthly="50">
+            <div class="addon__row">
+              <div class="addon__check" aria-hidden="true"></div>
+              <div class="addon__main">
+                <div class="addon__title">Higienização reforçada / pet</div>
+                <div class="addon__desc">
+                  Transporte de animais permitido + higienização especializada na devolução (remove pelos e odor). Cobre cachorros e gatos de qualquer porte.
+                </div>
+              </div>
+            </div>
+            <div class="addon__price">R$ 50<small>/mês</small></div>
+          </div>
+
+        </div>
       </div>
 
       <div class="err-callout" id="err2"><span id="err2Msg"></span></div>
@@ -549,6 +676,7 @@
           <div class="summary__row"><span>Carro</span><strong id="succCar">—</strong></div>
           <div class="summary__row"><span>Período</span><strong id="succPeriod">—</strong></div>
           <div class="summary__row"><span>Local de entrega</span><strong id="succPoint">—</strong></div>
+          <div class="summary__row"><span>Adicionais</span><strong id="succAddons">—</strong></div>
           <div class="summary__row total"><span>Total estimado</span><strong id="succTotal">R$ 0</strong></div>
         </div>
 
@@ -619,8 +747,38 @@
     car: null, plan: 'estendido', dateStart: null, dateEnd: null, days: 0,
     reason: null,
     point: null, cep: null, address: null, deliveryFee: 0,
+    // Adicionais opcionais (Prioridade 1) — todos DESMARCADOS por padrão.
+    // 'franquia' nunca vira true até validação jurídica (UI mantém locked).
+    addons: { franquia: false, vidros: false, condutor: false, entrega: false, pet: false },
     user: { name: '', email: '', phoneCountry: '+55', phoneNumber: '', terms: false }
   };
+
+  // Catálogo dos adicionais — fonte única de verdade pra preço e label.
+  // Se mudar valor aqui, automaticamente reflete no cálculo e no resumo.
+  var ADDONS_CATALOG = {
+    franquia:  { label: 'Isenção de franquia',         monthly: 200, locked: true },
+    vidros:    { label: 'Proteção vidros e pneus',     monthly: 60 },
+    condutor:  { label: 'Segundo condutor',            monthly: 70 },
+    entrega:   { label: 'Entrega premium',             monthly: 80 },
+    pet:       { label: 'Higienização reforçada/pet',  monthly: 50 }
+  };
+
+  // Total mensal dos adicionais selecionados
+  function calcAddonsMonthly() {
+    var total = 0;
+    Object.keys(state.addons).forEach(function (k) {
+      if (state.addons[k] && ADDONS_CATALOG[k] && !ADDONS_CATALOG[k].locked) {
+        total += ADDONS_CATALOG[k].monthly;
+      }
+    });
+    return total;
+  }
+  // Total do período = mensal × meses (arredonda meses pelo período em dias)
+  function calcAddonsPeriod() {
+    if (state.days < 30) return 0;
+    var months = Math.max(1, Math.round(state.days / 30));
+    return calcAddonsMonthly() * months;
+  }
 
   // Aproxima dias do contrato pra um dos 4 periodos canonicos do prices.js (30/60/90/180)
   function canonDays(days) {
@@ -689,7 +847,8 @@
     return window.NOMADE_PRICES.planMonthly(state.car, state.plan, canonDays(state.days));
   }
   function calcTotal() {
-    return calcPlanTotal() + state.deliveryFee;
+    // plano + entrega + adicionais (período inteiro)
+    return calcPlanTotal() + state.deliveryFee + calcAddonsPeriod();
   }
   function calcPlanKm() {
     if (!state.car || !state.plan || state.days < 30) return 0;
@@ -768,6 +927,15 @@
     } else { $('sumPeriod').textContent = '—'; }
     var rate = calcMonthlyRate();
     $('sumRate').textContent = rate ? 'R$ ' + rate.toLocaleString('pt-BR') + '/mês' : '—';
+    // Linha de adicionais — só aparece se cliente selecionou pelo menos 1
+    var addonsTotal = calcAddonsPeriod();
+    var addonsRow = $('sumAddonsRow');
+    if (addonsTotal > 0 && addonsRow) {
+      addonsRow.style.display = '';
+      $('sumAddons').textContent = 'R$ ' + addonsTotal.toLocaleString('pt-BR') + ' (período)';
+    } else if (addonsRow) {
+      addonsRow.style.display = 'none';
+    }
     $('sumTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
     var btn = $('btnStep2');
     if (state.car && state.dateStart && state.dateEnd && state.days >= 30) {
@@ -1025,6 +1193,20 @@
     setStep(3);
   });
 
+  // ADICIONAIS OPCIONAIS — handler dos toggles. Cards desabilitados
+  // (data-addon='franquia' enquanto não há validação jurídica) ignoram clique.
+  document.querySelectorAll('.addon[data-addon]').forEach(function (card) {
+    if (card.classList.contains('is-locked')) return;
+    card.addEventListener('click', function (ev) {
+      var key = card.dataset.addon;
+      if (!key || !ADDONS_CATALOG[key] || ADDONS_CATALOG[key].locked) return;
+      state.addons[key] = !state.addons[key];
+      card.classList.toggle('is-on', state.addons[key]);
+      // Atualiza o resumo do step 1 (que mostra o total)
+      updateStep1();
+    });
+  });
+
   // Quando entra no step 2 a primeira vez, pré-aplica ponto sugerido se houver
   var _step2EnteredOnce = false;
   var _origSetStep = setStep;
@@ -1105,6 +1287,13 @@
             plan: state.plan,
             plan_label: PLAN_LABELS[state.plan] || state.plan,
             km_total: calcPlanKm(),
+            // Adicionais contratados (P1) — array de keys + total monetário pra
+            // o admin saber o que foi vendido junto com a locação base.
+            addons_selected: Object.keys(state.addons).filter(function(k){ return state.addons[k]; }),
+            addons_labels: Object.keys(state.addons).filter(function(k){ return state.addons[k]; })
+                                  .map(function(k){ return ADDONS_CATALOG[k] && ADDONS_CATALOG[k].label; }),
+            addons_monthly: 'R$ ' + calcAddonsMonthly(),
+            addons_period: 'R$ ' + calcAddonsPeriod(),
             phone_country: state.user.phoneCountry,
             phone_local: state.user.phoneNumber
           }
@@ -1116,16 +1305,27 @@
 
     var carName = CARS[state.car] ? CARS[state.car].name : state.car;
     var planLabel = PLAN_LABELS[state.plan] || state.plan;
+    var addonsLabels = Object.keys(state.addons)
+      .filter(function(k){ return state.addons[k]; })
+      .map(function(k){ return ADDONS_CATALOG[k] && ADDONS_CATALOG[k].label; })
+      .filter(Boolean);
+    var addonsSummary = addonsLabels.length > 0
+      ? addonsLabels.join(', ') + ' (R$ ' + calcAddonsPeriod().toLocaleString('pt-BR') + ' no período)'
+      : 'Nenhum adicional selecionado';
     $('succCar').textContent = carName + ' · plano ' + planLabel + ' (' + (window.NOMADE_PRICES ? window.NOMADE_PRICES.formatKm(calcPlanKm()) : '—') + ')';
     $('succPeriod').textContent = state.days + ' dias (' + fmtDateBR(state.dateStart) + ' → ' + fmtDateBR(state.dateEnd) + ')';
     $('succPoint').textContent = POINT_NAMES[state.point] + (state.address ? ' (' + state.address + ')' : '');
     $('succTotal').textContent = 'R$ ' + calcTotal().toLocaleString('pt-BR');
+    // Insere linha de adicionais no success screen (se houver)
+    var succAddonsEl = document.getElementById('succAddons');
+    if (succAddonsEl) succAddonsEl.textContent = addonsSummary;
 
     var waText = 'Olá! Acabei de solicitar um carro pelo site.\n\n' +
       'Carro: ' + carName + '\n' +
       'Plano: ' + planLabel + ' (' + (window.NOMADE_PRICES ? window.NOMADE_PRICES.formatKm(calcPlanKm()) : '—') + ' totais)\n' +
       'Periodo: ' + fmtDateBR(state.dateStart) + ' a ' + fmtDateBR(state.dateEnd) + ' (' + state.days + ' dias)\n' +
       'Entrega: ' + POINT_NAMES[state.point] + '\n' +
+      (addonsLabels.length > 0 ? 'Adicionais: ' + addonsLabels.join(', ') + '\n' : '') +
       'Total estimado: R$ ' + calcTotal().toLocaleString('pt-BR') + '\n\n' +
       'Nome: ' + state.user.name;
     $('succWhatsapp').href = 'https://wa.me/5534984064864?text=' + encodeURIComponent(waText);
