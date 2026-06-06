@@ -1299,16 +1299,40 @@
   }
   // Fallback visual: se algo travar (rede, RLS, timeout) o usuário sai do
   // "Verificando acesso…" eterno e tem opções claras.
+  // "Limpar sessão e tentar de novo" remove tokens corrompidos antes de recarregar.
   function gateError(reasonText) {
     deny(
       "Não foi possível verificar seu acesso",
       reasonText || "Algo deu errado. Verifique sua conexão e tente novamente.",
       [
-        { href: "javascript:location.reload()", text: "Tentar novamente", solid: true },
-        { href: "login.html", text: "Ir para login", solid: false },
+        { href: "#clear-and-reload", text: "Limpar sessão e tentar de novo", solid: true },
+        { href: "login.html?redirect=admin.html", text: "Ir para login", solid: false },
         { href: "index.html", text: "Voltar ao site", solid: false }
       ]
     );
+    // Wire o primeiro botão pra limpar storage Supabase + reload
+    var first = actions.querySelector('a[href="#clear-and-reload"]');
+    if (first) {
+      first.addEventListener("click", function (e) {
+        e.preventDefault();
+        try {
+          Object.keys(localStorage).forEach(function(k){
+            if (k.indexOf("supabase") === 0 || k.indexOf("sb-") === 0 || k.indexOf("ndb-auth") === 0) {
+              localStorage.removeItem(k);
+            }
+          });
+        } catch(e) {}
+        try {
+          Object.keys(sessionStorage).forEach(function(k){
+            if (k.indexOf("supabase") === 0 || k.indexOf("sb-") === 0 || k.indexOf("ndb-auth") === 0) {
+              sessionStorage.removeItem(k);
+            }
+          });
+        } catch(e) {}
+        // Manda direto pro login (sessão limpa = vai ter que entrar de novo mesmo)
+        window.location.replace("login.html?redirect=admin.html&reason=session_expired");
+      });
+    }
   }
 
   // Envolve em withTimeout pra nunca travar a página indefinidamente
