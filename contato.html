@@ -39,6 +39,13 @@
 
   .form-section { background: var(--cream); padding: 36px 0; }
   .form-wrap { max-width: 640px; margin: 0 auto; background: var(--white); padding: 32px 30px; border-radius: 14px; border: 1px solid var(--gray-200); }
+  /* Mobile: card form com padding apertado, channel cards menos sufocados */
+  @media (max-width: 540px) {
+    .form-section { padding: 22px 0; }
+    .form-wrap { padding: 22px 18px; border-radius: 12px; margin: 0 14px; }
+    .ch { padding: 20px 18px; border-radius: 10px; }
+    .contato__grid { gap: 12px; padding: 0 14px; }
+  }
   .form-wrap h2 { font-size: 22px; margin-bottom: 6px; }
   .form-wrap > p { font-size: 14px; color: var(--gray-700); margin-bottom: 22px; }
   .field { margin-bottom: 14px; }

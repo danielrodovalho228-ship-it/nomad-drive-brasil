@@ -43,6 +43,11 @@
     padding: 38px 36px;
     box-shadow: 0 24px 64px -20px rgba(0,0,0,0.4);
   }
+  /* Mobile: padding apertado + radius menor pra nao parecer "caixa apertada" */
+  @media (max-width: 540px) {
+    body { padding: 12px; }
+    .card { border-radius: 14px; padding: 24px 20px; box-shadow: 0 12px 32px -10px rgba(0,0,0,0.45); }
+  }
   .brand {
     display: flex; align-items: center; gap: 12px;
     margin-bottom: 28px;

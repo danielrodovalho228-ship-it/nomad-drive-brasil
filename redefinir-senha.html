@@ -14,6 +14,8 @@
   * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
   body { font-family:'Inter',system-ui,sans-serif; background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; color:var(--gray-900); }
   .card { width:100%; max-width:440px; background:var(--white); border-radius:18px; padding:38px 36px; box-shadow:0 24px 64px -20px rgba(0,0,0,.4); }
+  /* Mobile: padding apertado + radius menor (mesmo padrao login/cadastro) */
+  @media (max-width: 540px) { body { padding: 12px; } .card { border-radius: 14px; padding: 24px 20px; box-shadow: 0 12px 32px -10px rgba(0,0,0,.45); } }
   .brand { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
   .brand img { width:44px; height:44px; border-radius:10px; object-fit:cover; }
   .brand-text strong { display:block; font-family:'Playfair Display',serif; font-size:18px; color:var(--navy); line-height:1.1; }
