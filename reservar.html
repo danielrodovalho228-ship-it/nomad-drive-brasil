@@ -329,12 +329,91 @@
   @media (max-width: 540px) {
     .addons-wrap { padding: 20px 18px 18px; }
     .addons-wrap__title { font-size: 18.5px; }
-    .addon-v2 { grid-template-columns: auto 1fr; gap: 12px; padding: 12px 14px; }
+    .addon-v2 { grid-template-columns: auto 1fr; gap: 12px; padding: 12px 14px; padding-right: 36px; }
     .addon-v2__price-col { grid-column: 2 / 3; text-align: left; padding-top: 4px; }
     .addon-v2__price { font-size: 17px; }
     .addons-bar { padding: 11px 14px; flex-direction: column; align-items: flex-start; gap: 8px; }
     .addons-bar__right strong { font-size: 19px; }
   }
+
+  /* ===========================================================
+     P1: Indicador visual de checkbox em cada card (opt-in claro).
+     Sem isso, o card colorido pode parecer "ativo" mesmo desmarcado.
+     =========================================================== */
+  .addon-v2 { padding-right: 44px; }  /* abre espaco pra checkbox no canto */
+  .addon-v2__checkbox {
+    position: absolute; top: 14px; right: 14px;
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid var(--gray-300);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    color: transparent; font-size: 14px; font-weight: 800;
+    transition: all .15s;
+  }
+  .addon-v2:hover:not(.is-locked) .addon-v2__checkbox { border-color: var(--navy-light); }
+  .addon-v2.is-on .addon-v2__checkbox {
+    border-color: var(--sage, #5A8A6B);
+    background: var(--sage, #5A8A6B);
+    color: var(--white);
+  }
+  .addon-v2.is-on .addon-v2__checkbox::after { content: '✓'; }
+  /* Substitui o "ponto verde" antigo do is-on::before — agora a confirmacao
+     visual eh o checkbox preenchido (mais legivel) */
+  .addon-v2.is-on::before { display: none; }
+  .addon-v2.is-locked .addon-v2__checkbox {
+    background: var(--gray-100); border-color: var(--gray-300);
+    color: var(--gray-500);
+  }
+  .addon-v2.is-locked .addon-v2__checkbox::after { content: '⏳'; }
+
+  /* ===========================================================
+     P2: Bloco "Ja incluso na mensalidade" — esclarece o basico
+     =========================================================== */
+  .included-box { background: var(--sage-pale, #e6efe9); border: 1px solid rgba(90,138,107,0.25); border-radius: 12px; padding: 16px 18px 18px; margin-bottom: 22px; }
+  .included-box__head { display: flex; align-items: center; gap: 8px; color: var(--sage-dark, #436b51); font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 800; margin-bottom: 10px; letter-spacing: 0.2px; }
+  .included-box__list { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 4px; grid-template-columns: 1fr; }
+  @media (min-width: 540px) { .included-box__list { grid-template-columns: 1fr 1fr; gap: 6px 18px; } }
+  .included-box__list li { font-size: 13px; color: var(--navy); display: flex; align-items: center; gap: 7px; line-height: 1.5; }
+  .included-box__check { color: var(--sage, #5A8A6B); font-weight: 900; font-size: 13px; flex-shrink: 0; }
+  .included-box__note { font-size: 12.5px; color: var(--gray-700); line-height: 1.6; margin: 0; padding-top: 10px; border-top: 1px dashed rgba(90,138,107,0.3); }
+  .included-box__note strong { color: var(--navy); }
+  .included-box__note em { font-style: italic; color: var(--gold-dark); }
+
+  /* ===========================================================
+     P3: Caixa de caucao dinamica (atualiza com isencao toggle)
+     =========================================================== */
+  .caucao-box { display: flex; align-items: flex-start; gap: 12px; margin-top: 14px; padding: 14px 16px; background: var(--cream); border: 1.5px dashed var(--gold); border-radius: 10px; }
+  .caucao-box__icon { width: 36px; height: 36px; border-radius: 8px; background: var(--gold-pale); color: var(--gold-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .caucao-box__body { flex: 1; min-width: 0; }
+  .caucao-box__label { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 3px; }
+  .caucao-box__value { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 4px; }
+  .caucao-box__value em { font-family: 'Inter', sans-serif; font-style: italic; font-size: 12.5px; color: var(--gray-700); font-weight: 500; margin-left: 4px; }
+  .caucao-box__hint { font-size: 12px; color: var(--gray-700); line-height: 1.55; }
+  .caucao-box__hint strong { color: var(--navy); }
+  /* Estado quando isencao MARCADA: caucao menor */
+  .caucao-box.is-reduced { border-color: var(--sage); }
+  .caucao-box.is-reduced .caucao-box__icon { background: var(--sage-pale); color: var(--sage-dark); }
+  .caucao-box.is-reduced .caucao-box__label { color: var(--sage-dark); }
+
+  /* ===========================================================
+     P4: Explicador expansivel "E se eu bater?"
+     =========================================================== */
+  .what-if { margin-top: 14px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; }
+  .what-if summary { display: flex; align-items: center; gap: 9px; padding: 12px 16px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; color: var(--navy); list-style: none; user-select: none; }
+  .what-if summary::-webkit-details-marker { display: none; }
+  .what-if summary svg { color: var(--gold-dark); flex-shrink: 0; }
+  .what-if summary::after { content: '+'; margin-left: auto; font-size: 22px; font-weight: 900; color: var(--gold-dark); line-height: 1; transition: transform .2s; }
+  .what-if[open] summary::after { transform: rotate(45deg); }
+  .what-if summary:hover { background: var(--gray-50); }
+  .what-if__body { padding: 4px 16px 16px; border-top: 1px solid var(--gray-200); display: grid; gap: 12px; }
+  .what-if__scenario { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: flex-start; padding-top: 10px; }
+  .what-if__icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; color: var(--white); flex-shrink: 0; }
+  .what-if__icon--ok { background: var(--sage); }
+  .what-if__icon--warn { background: var(--gold-dark); }
+  .what-if__icon--key { background: var(--navy); }
+  .what-if__scenario strong { display: block; font-size: 13px; color: var(--navy); margin-bottom: 3px; line-height: 1.3; }
+  .what-if__scenario p { margin: 0; font-size: 12.5px; color: var(--gray-700); line-height: 1.55; }
+  .what-if__scenario p strong { display: inline; font-size: inherit; margin: 0; color: var(--navy); }
 
   /* FOOTER */
   .foot-mini { padding: 26px 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-200); }
@@ -483,10 +562,30 @@
            Redesign: categorias (Proteção vs Conforto), icones SVG, layout
            assimétrico, tom mais humano. Nada pré-marcado (anti-venda-casada). -->
       <div class="addons-wrap">
+        <!-- P2: Bloco "Ja incluso na mensalidade" — esclarece o que o cliente
+             ja tem direito sem pagar extra. Reduz ansiedade e contextualiza
+             a logica da franquia (que e o que as protecoes opcionais
+             abaixo reduzem/eliminam). -->
+        <div class="included-box">
+          <div class="included-box__head">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+            <strong>Já está incluso na sua mensalidade</strong>
+          </div>
+          <ul class="included-box__list">
+            <li><span class="included-box__check">✓</span> Seguro do carro (roubo, perda total, terceiros)</li>
+            <li><span class="included-box__check">✓</span> Manutenção programada</li>
+            <li><span class="included-box__check">✓</span> IPVA e licenciamento</li>
+            <li><span class="included-box__check">✓</span> Assistência 24h</li>
+          </ul>
+          <p class="included-box__note">
+            <strong>Sobre a franquia:</strong> o seguro cobre o carro. Em caso de sinistro, existe uma <strong>franquia</strong> <em>(valor a confirmar com a apólice)</em> que é responsabilidade de quem está com o carro — é isso que as proteções opcionais abaixo <strong>reduzem ou eliminam</strong>.
+          </p>
+        </div>
+
         <div class="addons-wrap__head">
-          <div class="addons-wrap__eyebrow">Personalize</div>
+          <div class="addons-wrap__eyebrow">Personalize · opt-in</div>
           <h3 class="addons-wrap__title">Extras opcionais — você escolhe</h3>
-          <p class="addons-wrap__sub">Tudo opcional. Nenhum item é obrigatório pra fechar a locação. Marque o que faz sentido pra você — o valor mensal soma ao plano logo abaixo.</p>
+          <p class="addons-wrap__sub"><strong>Nenhum item é obrigatório.</strong> Os 4 cards abaixo vêm <strong>desmarcados</strong> por padrão. Marque só o que faz sentido pra você — o valor mensal soma ao plano logo abaixo.</p>
         </div>
 
         <!-- CATEGORIA 1: Proteção -->
@@ -506,11 +605,12 @@
                 <div class="addon-v2__title">Isenção de franquia</div>
                 <span class="addon-v2__chip addon-v2__chip--soon">Em breve · validação jurídica</span>
               </div>
-              <p class="addon-v2__desc">Em caso de avaria, você não paga a franquia até o teto contratado. <strong>Não é seguro</strong> — é um serviço opcional da Nomade Drive. <a href="termos.html#adicionais" target="_blank" rel="noopener" class="addon-v2__link">Ver condições</a></p>
+              <p class="addon-v2__desc">Em caso de sinistro coberto pelo seguro, você não paga a franquia até o teto contratado. <strong>Não é seguro</strong> — é um serviço opcional da Nomade Drive. <a href="termos.html#adicionais" target="_blank" rel="noopener" class="addon-v2__link">Ver condições</a></p>
               <div class="addon-v2__alt">
-                <strong>Se você não contratar:</strong> caução pré-autorizada de R$ 2.000 no cartão (não vira cobrança se devolver sem dano). A locação <strong>não está condicionada</strong> a contratar esta proteção.
+                <strong>Se você não contratar:</strong> a caução pré-autorizada no cartão fica no <strong>valor maior <em>(a confirmar)</em></strong> — ela cobre a franquia caso ocorra um sinistro. Não vira cobrança se devolver sem dano. A locação <strong>não está condicionada</strong> a contratar esta proteção.
               </div>
             </div>
+            <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
               <div class="addon-v2__price">R$ 200</div>
               <div class="addon-v2__per">por mês</div>
@@ -528,6 +628,7 @@
               </div>
               <p class="addon-v2__desc">Troca de para-brisa, vidros laterais e pneus furados <strong>sem custo extra</strong>. Útil em estrada e rua com buraco.</p>
             </div>
+            <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
               <div class="addon-v2__price">R$ 60</div>
               <div class="addon-v2__per">por mês</div>
@@ -553,6 +654,7 @@
               </div>
               <p class="addon-v2__desc">Adiciona cônjuge, filho(a) ou colega ao contrato. <strong>Sem custo extra</strong> de revisão de CNH — só o mensal.</p>
             </div>
+            <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
               <div class="addon-v2__price">R$ 70</div>
               <div class="addon-v2__per">por mês</div>
@@ -570,6 +672,7 @@
               </div>
               <p class="addon-v2__desc">Madrugada, feriado, fora de Uberlândia ou no seu trabalho. Substitui a entrega gratuita padrão.</p>
             </div>
+            <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
               <div class="addon-v2__price">R$ 80</div>
               <div class="addon-v2__per">por mês</div>
@@ -587,6 +690,7 @@
               </div>
               <p class="addon-v2__desc">Transporte de cão ou gato (qualquer porte) liberado + higienização especializada na devolução.</p>
             </div>
+            <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
               <div class="addon-v2__price">R$ 50</div>
               <div class="addon-v2__per">por mês</div>
@@ -604,6 +708,54 @@
             <span>+</span><strong id="addonsBarTotal">R$ 0</strong><small>/mês</small>
           </div>
         </div>
+
+        <!-- P3: Indicador dinâmico de caução. Texto muda conforme o cliente
+             marca/desmarca a Isenção de franquia. Hoje a isencao esta locked
+             (em breve), entao mostra o cenario sem isencao. Quando ativar,
+             marcar a isencao = mostra cenario com isencao. -->
+        <div class="caucao-box" id="caucaoBox">
+          <div class="caucao-box__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="8" cy="14.5" r="1"/></svg>
+          </div>
+          <div class="caucao-box__body">
+            <div class="caucao-box__label">Caução / pré-autorização no cartão</div>
+            <div class="caucao-box__value" id="caucaoBoxValue">a confirmar <em>(apólice em definição)</em></div>
+            <div class="caucao-box__hint" id="caucaoBoxHint">Cobre franquia em caso de sinistro. <strong>Não vira cobrança</strong> se devolver sem dano. A locação não está condicionada a contratar nenhuma proteção.</div>
+          </div>
+        </div>
+
+        <!-- P4: Explicador expansível "E se eu bater?" — desambigua os 3 cenarios
+             possiveis pra cliente entender QUANDO a protecao opcional importa
+             vs quando o seguro ja resolve. -->
+        <details class="what-if">
+          <summary>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>E se eu bater ou danificar o carro?</span>
+          </summary>
+          <div class="what-if__body">
+            <div class="what-if__scenario">
+              <div class="what-if__icon what-if__icon--ok">1</div>
+              <div>
+                <strong>Dano pequeno (risco, amassado leve, vidro, pneu)</strong>
+                <p>Se você contratou as proteções relevantes (vidros e pneus, por exemplo), o reparo é por nossa conta — sem custo extra. <strong>Sem proteção contratada:</strong> o custo do reparo é descontado da caução pré-autorizada.</p>
+              </div>
+            </div>
+            <div class="what-if__scenario">
+              <div class="what-if__icon what-if__icon--warn">2</div>
+              <div>
+                <strong>Sinistro maior (colisão, roubo, perda total)</strong>
+                <p>O <strong>seguro do carro</strong> (já incluso na mensalidade) cobre. <strong>Sobra a franquia</strong>, que é responsabilidade do condutor — a Isenção de franquia opcional elimina esse custo até o teto contratado.</p>
+              </div>
+            </div>
+            <div class="what-if__scenario">
+              <div class="what-if__icon what-if__icon--key">3</div>
+              <div>
+                <strong>Sem contratar nenhuma proteção opcional</strong>
+                <p>A caução pré-autorizada no cartão fica no <strong>valor maior</strong> — ela cobre o que pode ser cobrado de você (franquia, danos pequenos). Não vira cobrança se devolver tudo certo. Você fica livre pra alugar sem extras.</p>
+              </div>
+            </div>
+          </div>
+        </details>
       </div>
 
       <div class="summary" id="summary1">
@@ -1336,6 +1488,27 @@
     setStep(3);
   });
 
+  // P3: Caucao dinamica — atualiza texto conforme isencao de franquia
+  // marcada/desmarcada. Hoje a isencao esta locked, entao sempre cai no
+  // cenario "sem isencao" (caucao maior). Quando ativar, marcando a isencao
+  // a caucao vira "menor/zero".
+  function refreshCaucaoBox() {
+    var box = document.getElementById('caucaoBox');
+    var valueEl = document.getElementById('caucaoBoxValue');
+    var hintEl = document.getElementById('caucaoBoxHint');
+    if (!box || !valueEl || !hintEl) return;
+    var hasIsencao = state.addons.franquia === true;
+    if (hasIsencao) {
+      box.classList.add('is-reduced');
+      valueEl.innerHTML = '<strong>menor valor</strong> <em>(a confirmar com a apólice)</em>';
+      hintEl.innerHTML = '✓ Com a isenção contratada, a caução cai pro <strong>nível reduzido</strong>. Ainda fica como pré-autorização — não vira cobrança se devolver sem dano.';
+    } else {
+      box.classList.remove('is-reduced');
+      valueEl.innerHTML = '<strong>valor maior</strong> <em>(a confirmar com a apólice)</em>';
+      hintEl.innerHTML = 'Cobre franquia em caso de sinistro. <strong>Não vira cobrança</strong> se devolver sem dano. A locação não está condicionada a contratar nenhuma proteção.';
+    }
+  }
+
   // ADICIONAIS OPCIONAIS V2 — handler dos toggles. Cards locked ignoram clique.
   // Tambem atualiza a barra live (.addons-bar) no fundo do bloco.
   function refreshAddonsBar() {
@@ -1367,11 +1540,13 @@
       state.addons[key] = !state.addons[key];
       card.classList.toggle('is-on', state.addons[key]);
       refreshAddonsBar();
+      refreshCaucaoBox();
       updateStep1();
     });
   });
-  // Inicializa barra ao carregar (caso de pre-fill futuro)
+  // Inicializa barra + caucao ao carregar (caso de pre-fill futuro)
   refreshAddonsBar();
+  refreshCaucaoBox();
 
   // Quando entra no step 2 a primeira vez, pré-aplica ponto sugerido se houver
   var _step2EnteredOnce = false;
