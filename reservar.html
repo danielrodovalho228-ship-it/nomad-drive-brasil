@@ -943,7 +943,7 @@
     } else {
       btn.disabled = true;
       if (state.car && state.dateStart && state.dateEnd && state.days < 30) {
-        showStatus('err1', 'Período mínimo é 30 dias. Atualmente: ' + state.days + ' dias.');
+        showStatus('err1', 'Ops! Nossa locação mensal é a partir de 30 dias 🙂. Você selecionou ' + state.days + ' dia' + (state.days === 1 ? '' : 's') + '. Para períodos mais curtos, vale a pena olhar uma locadora de diária. A gente faz mensal pra valer a pena.');
       }
     }
   }
@@ -985,14 +985,57 @@
     }
   })();
 
-  $('dateStart').min = todayISO();
+  // Helper: soma N dias a um ISO date string (YYYY-MM-DD)
+  function addDaysISO(iso, days) {
+    if (!iso) return '';
+    var parts = iso.split('-');
+    var d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
+    d.setDate(d.getDate() + days);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  // Calcula diferença em dias entre 2 ISO dates
+  function diffDaysISO(start, end) {
+    if (!start || !end) return 0;
+    var s = start.split('-'), e = end.split('-');
+    var d1 = new Date(parseInt(s[0],10), parseInt(s[1],10)-1, parseInt(s[2],10));
+    var d2 = new Date(parseInt(e[0],10), parseInt(e[1],10)-1, parseInt(e[2],10));
+    return Math.round((d2 - d1) / 86400000);
+  }
+
+  // === PRÉ-PREENCHE datas (hoje + hoje+30) pra reduzir fricção ===
+  // O usuário pode editar livremente; auto-fill é só ponto de partida.
+  // (Decisão do Daniel: 95% das reservas são >= 30 dias mesmo)
+  var _todayISO = todayISO();
+  var _defaultEndISO = addDaysISO(_todayISO, 30);
+  $('dateStart').min = _todayISO;
+  $('dateStart').value = _todayISO;
+  $('dateEnd').min = _defaultEndISO;
+  $('dateEnd').value = _defaultEndISO;
+  state.dateStart = _todayISO;
+  state.dateEnd = _defaultEndISO;
+  // Roda updateStep1 depois que o resto do JS terminar (resolve order issue)
+  setTimeout(function () { updateStep1(); }, 0);
+
   $('dateStart').addEventListener('change', function(e) {
-    state.dateStart = e.target.value;
-    $('dateEnd').min = state.dateStart || todayISO();
-    if (state.dateEnd && state.dateEnd < state.dateStart) { $('dateEnd').value = ''; state.dateEnd = null; }
+    var newStart = e.target.value;
+    state.dateStart = newStart;
+    // Auto-atualiza data de devolução pra +30 dias da nova retirada,
+    // a menos que o usuário já tenha esticado pra mais do que isso.
+    // Assim quem mexe na retirada sem querer perde só a devolução padrão.
+    var minEnd = addDaysISO(newStart, 30);
+    var currentDur = diffDaysISO(newStart, state.dateEnd);
+    if (!state.dateEnd || currentDur < 30) {
+      // Tava vazio ou < 30 → seta pra +30
+      $('dateEnd').value = minEnd;
+      state.dateEnd = minEnd;
+    }
+    $('dateEnd').min = minEnd;
     updateStep1();
   });
-  $('dateEnd').addEventListener('change', function(e) { state.dateEnd = e.target.value; updateStep1(); });
+  $('dateEnd').addEventListener('change', function(e) {
+    state.dateEnd = e.target.value;
+    updateStep1();
+  });
 
   // Handler de seleção de carro (delegado, funciona com cards dinâmicos)
   function bindCarPickHandlers() {
