@@ -67,7 +67,19 @@
   .strip__item { padding: 4px 18px; position: relative; }
   .strip__item + .strip__item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
   .strip__item strong { color: var(--gold); font-weight: 700; }
-  @media (max-width: 720px) { .strip__row { flex-direction: column; gap: 10px; } .strip__item + .strip__item::before { display: none; } }
+  /* Mobile: mantem horizontal mas wrap em 2 linhas (3+2 ou 2+2+1), font menor,
+     padding apertado. Antes era column (5 linhas verticais) — desperdicava
+     espaco e empurrava o resto da pagina pra baixo. */
+  @media (max-width: 720px) {
+    .strip { padding: 20px 0; }
+    .strip__row { font-size: 12.5px; gap: 4px 0; }
+    .strip__item { padding: 4px 11px; }
+    .strip__item + .strip__item::before { height: 14px; }
+  }
+  @media (max-width: 420px) {
+    .strip__row { font-size: 11.5px; }
+    .strip__item { padding: 3px 8px; }
+  }
 
   /* HOME CARDS — grid de links pras páginas internas */
   .nav-cards { padding: 36px 0; background: var(--white); }
