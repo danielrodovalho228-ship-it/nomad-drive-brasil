@@ -51,6 +51,56 @@
   .plan__features li::before { content: '✓'; color: var(--sage); font-weight: 800; flex-shrink: 0; }
   .plan__cta { margin-top: auto; }
 
+  /* ===========================================================
+     PLANOS NOMEADOS (P1) — 3 cards: SEDAN / SUV / PREMIUM
+     SEDAN disponivel; SUV e PREMIUM com chip "EM BREVE".
+     =========================================================== */
+  .planos { padding: 32px 0 8px; background: var(--white); }
+  .planos__head { text-align: center; max-width: 720px; margin: 0 auto 22px; padding: 0 24px; }
+  .planos__eyebrow { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.3px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 8px; }
+  .planos__head h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; color: var(--navy); }
+  .planos__head p { font-size: 14px; color: var(--gray-700); line-height: 1.6; }
+  .planos__grid { display: grid; gap: 16px; grid-template-columns: 1fr; max-width: 1080px; margin: 0 auto; padding: 0 24px 28px; }
+  @media (min-width: 720px) { .planos__grid { grid-template-columns: repeat(3, 1fr); } }
+  .plano-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px; padding: 24px 22px 22px; display: flex; flex-direction: column; transition: all .2s; position: relative; }
+  .plano-card:hover:not(.plano-card--soon) { border-color: var(--navy); transform: translateY(-3px); box-shadow: 0 18px 40px rgba(15,61,46,0.1); }
+  .plano-card--active { border-color: var(--gold); background: linear-gradient(180deg, var(--gold-pale) 0%, var(--white) 30%); }
+  .plano-card--soon { opacity: 0.85; background: var(--gray-50); border-style: dashed; }
+  .plano-card__chip { position: absolute; top: -12px; left: 18px; padding: 4px 11px; border-radius: 999px; font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.7px; text-transform: uppercase; }
+  .plano-card__chip--ok { background: var(--sage); color: var(--white); }
+  .plano-card__chip--soon { background: var(--gold-dark); color: var(--white); }
+  .plano-card__name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: var(--navy); margin: 6px 0 4px; letter-spacing: -0.01em; }
+  .plano-card__cars { font-size: 12.5px; color: var(--gray-500); font-weight: 600; margin-bottom: 18px; line-height: 1.4; }
+  .plano-card__price { padding: 14px 0 12px; border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); margin-bottom: 14px; }
+  .plano-card__from { font-size: 11.5px; color: var(--gray-500); letter-spacing: 0.3px; }
+  .plano-card__price-val { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--navy); line-height: 1; margin-top: 2px; }
+  .plano-card__price-val small { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--gray-700); font-weight: 500; }
+  .plano-card__per { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+  .plano-card--soon .plano-card__price-val { color: var(--gray-500); }
+  .plano-card__includes { list-style: none; padding: 0; margin: 0 0 14px; flex: 1; }
+  .plano-card__includes li { padding: 4px 0; font-size: 12.5px; color: var(--gray-700); display: flex; align-items: flex-start; gap: 7px; line-height: 1.5; }
+  .plano-card__includes li::before { content: '✓'; color: var(--sage); font-weight: 800; flex-shrink: 0; }
+  .plano-card__km { font-size: 11.5px; color: var(--gray-700); padding: 8px 12px; background: var(--cream); border-radius: 6px; margin-bottom: 14px; }
+  .plano-card__km strong { color: var(--navy); }
+  .plano-card__cta { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+  .plano-card__cta .btn { width: 100%; justify-content: center; padding: 12px 18px; font-size: 14px; }
+  .plano-card__cta-note { font-size: 11px; color: var(--gold-dark); text-align: center; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+  .plano-card__wait { width: 100%; padding: 11px 18px; background: var(--white); color: var(--navy); border: 1.5px dashed var(--navy); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; text-align: center; text-decoration: none; display: inline-block; }
+  .plano-card__wait:hover { background: var(--navy); color: var(--white); }
+
+  /* Promo destaque fidelizacao 90+ dias */
+  .promo-loyalty { max-width: 1080px; margin: 0 auto 26px; padding: 0 24px; }
+  .promo-loyalty__inner { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: var(--white); border-radius: 14px; padding: 22px 24px; display: flex; align-items: center; gap: 18px; box-shadow: 0 12px 28px rgba(15,61,46,0.15); }
+  .promo-loyalty__icon { width: 48px; height: 48px; border-radius: 12px; background: var(--gold); color: var(--navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 22px; }
+  .promo-loyalty__body { flex: 1; min-width: 0; }
+  .promo-loyalty__title { font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold); text-transform: uppercase; margin-bottom: 3px; }
+  .promo-loyalty__text { font-size: 14.5px; color: var(--white); line-height: 1.45; margin: 0; }
+  .promo-loyalty__text strong { color: var(--gold); font-weight: 800; }
+  @media (max-width: 540px) {
+    .promo-loyalty__inner { flex-direction: column; align-items: flex-start; padding: 18px 18px; }
+    .promo-loyalty__icon { width: 38px; height: 38px; font-size: 18px; }
+  }
+
   .precos__info { max-width: 880px; margin: 32px auto 0; padding: 22px 26px; background: var(--cream); border-left: 4px solid var(--navy); border-radius: 8px; }
   .precos__info h3 { font-size: 17px; margin-bottom: 8px; color: var(--navy); }
   .precos__info p { font-size: 13.5px; color: var(--gray-700); line-height: 1.65; margin: 0; }
@@ -76,13 +126,117 @@
     </div>
     <div class="hero-page__visual">
       <img src="images/compromissos/3-liberdade-km.jpg" alt="Liberdade de quilometragem — 3 planos com Limite Total" onerror="this.style.display='none'" />
-      <div class="hero-page__badge">A partir de<strong>R$ 3.690</strong>30 dias · plano Essencial</div>
+      <div class="hero-page__badge">Plano Sedan<strong>R$ 3.790</strong>30 dias · tudo incluso</div>
     </div>
+  </div>
+</section>
+
+<!-- P1: PLANOS NOMEADOS — Sedan disponivel, SUV + Premium em breve.
+     Foco estrategico: nao tem plano "popular/economico" (fora do nicho).
+     Cada plano mostra "tudo incluso" + 3 niveis de km nas sub-opcoes (Sedan). -->
+<section class="planos">
+  <div class="planos__head">
+    <div class="planos__eyebrow">Escolha seu plano</div>
+    <h2>3 planos por categoria de veículo</h2>
+    <p>Cada plano vem com <strong>tudo incluso</strong> e oferece 3 níveis de quilometragem (Essencial, Estendido e Sem Limite). Você escolhe na hora da reserva.</p>
+  </div>
+
+  <!-- Promo fidelizacao 90+ dias -->
+  <div class="promo-loyalty">
+    <div class="promo-loyalty__inner">
+      <div class="promo-loyalty__icon">%</div>
+      <div class="promo-loyalty__body">
+        <div class="promo-loyalty__title">Fidelização — 90 dias ou mais</div>
+        <p class="promo-loyalty__text">Contratos a partir de 90 dias no <strong>Plano Sedan</strong> saem por <strong>R$ 3.590/mês</strong> (R$ 200 abaixo da base de 30 dias).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="planos__grid">
+
+    <!-- PLANO SEDAN — DISPONIVEL -->
+    <div class="plano-card plano-card--active">
+      <span class="plano-card__chip plano-card__chip--ok">Disponível</span>
+      <h3 class="plano-card__name">Plano Sedan</h3>
+      <div class="plano-card__cars">Fiat Cronos · Chevrolet Onix Sedan automático (lançamento)</div>
+      <div class="plano-card__price">
+        <div class="plano-card__from">a partir de</div>
+        <div class="plano-card__price-val">R$ 3.790<small>/mês</small></div>
+        <div class="plano-card__per">Plano 30 dias · tudo incluso</div>
+      </div>
+      <ul class="plano-card__includes">
+        <li>Seguro do carro (roubo, perda total, terceiros)</li>
+        <li>Manutenção programada</li>
+        <li>IPVA e licenciamento</li>
+        <li>Assistência 24h</li>
+      </ul>
+      <div class="plano-card__km">
+        <strong>3 níveis de quilometragem:</strong> Essencial (3.000 km) · Estendido (4.000 km) · Sem Limite (5.000 km), por mês. Você escolhe na reserva.
+      </div>
+      <div class="plano-card__cta">
+        <a href="reservar.html?carro=sedan" class="btn btn--primary">Reservar Plano Sedan</a>
+        <div class="plano-card__cta-note">⏱ 90+ dias = R$ 3.590/mês</div>
+      </div>
+    </div>
+
+    <!-- PLANO SUV — EM BREVE -->
+    <div class="plano-card plano-card--soon">
+      <span class="plano-card__chip plano-card__chip--soon">Em breve</span>
+      <h3 class="plano-card__name">Plano SUV</h3>
+      <div class="plano-card__cars">Chevrolet Tracker · Jeep Renegade (próxima fase)</div>
+      <div class="plano-card__price">
+        <div class="plano-card__from">a partir de</div>
+        <div class="plano-card__price-val">R$ 4.690<small>/mês</small></div>
+        <div class="plano-card__per">Plano 30 dias · tudo incluso</div>
+      </div>
+      <ul class="plano-card__includes">
+        <li>Seguro do carro (roubo, perda total, terceiros)</li>
+        <li>Manutenção programada</li>
+        <li>IPVA e licenciamento</li>
+        <li>Assistência 24h</li>
+      </ul>
+      <div class="plano-card__km">
+        Mesma estrutura de 3 níveis de km do Plano Sedan, com valores ajustados pro porte do veículo.
+      </div>
+      <div class="plano-card__cta">
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Tenho%20interesse%20no%20Plano%20SUV%20quando%20estiver%20dispon%C3%ADvel." target="_blank" rel="noopener" class="plano-card__wait">Entrar na lista de espera</a>
+      </div>
+    </div>
+
+    <!-- PLANO PREMIUM — SOB CONSULTA -->
+    <div class="plano-card plano-card--soon">
+      <span class="plano-card__chip plano-card__chip--soon">Em breve</span>
+      <h3 class="plano-card__name">Plano Premium</h3>
+      <div class="plano-card__cars">Toyota Corolla · Jeep Compass (fase futura)</div>
+      <div class="plano-card__price">
+        <div class="plano-card__from">a partir de</div>
+        <div class="plano-card__price-val">Sob consulta</div>
+        <div class="plano-card__per">Proposta sob medida</div>
+      </div>
+      <ul class="plano-card__includes">
+        <li>Seguro do carro (roubo, perda total, terceiros)</li>
+        <li>Manutenção programada</li>
+        <li>IPVA e licenciamento</li>
+        <li>Atendimento dedicado</li>
+      </ul>
+      <div class="plano-card__km">
+        Categoria executiva, com flexibilidade de configurações e prazos sob medida.
+      </div>
+      <div class="plano-card__cta">
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Tenho%20interesse%20no%20Plano%20Premium%20quando%20estiver%20dispon%C3%ADvel." target="_blank" rel="noopener" class="plano-card__wait">Falar com a equipe</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <section class="precos">
   <div class="wrap">
+    <div class="planos__head" style="margin-top:8px;">
+      <div class="planos__eyebrow">Plano Sedan · simule por período</div>
+      <h2>Valores reais por período de contrato</h2>
+      <p>Os 3 níveis de km do Plano Sedan, em 30, 60, 90 ou 180 dias.</p>
+    </div>
 
     <!-- Lançamento enxuto: 1 carro só. Toggle de carro ficará disponível
          de novo quando incluirmos um 2º veículo na frota. -->
