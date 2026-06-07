@@ -98,8 +98,10 @@
 
   /* Form fields */
   .field { margin-bottom: 20px; }
-  .field--row { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 20px; }
-  @media (min-width: 600px) { .field--row { grid-template-columns: 1fr 1fr; } }
+  /* Default 2 colunas — datas tipo "Jun 8, 2026" cabem em qualquer mobile
+     >= 360px. Em telas bem pequenas (< 360px), volta pra 1 coluna. */
+  .field--row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 359px) { .field--row { grid-template-columns: 1fr; gap: 14px; } }
   .field label { display: block; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; letter-spacing: 0.3px; }
   .field label small { color: var(--gray-500); font-weight: 500; margin-left: 4px; }
   .field input, .field select, .field textarea {
