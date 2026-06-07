@@ -53,8 +53,10 @@
   @media (min-width: 880px) { .hero__inner { grid-template-columns: 1fr 1.4fr; gap: 48px; } }
   .hero__tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--gold-dark); margin-bottom: 14px; text-transform: uppercase; }
   .hero h1 { margin-bottom: 14px; }
-  .hero__sub { font-size: clamp(15px, 1.7vw, 18px); color: var(--gray-700); margin-bottom: 22px; max-width: 540px; line-height: 1.55; }
+  .hero__sub { font-size: clamp(15px, 1.7vw, 18px); color: var(--gray-700); margin-bottom: 14px; max-width: 540px; line-height: 1.55; }
   .hero__sub strong { color: var(--navy); font-weight: 600; }
+  .hero__positioning { font-size: 13.5px; color: var(--navy); margin-bottom: 22px; max-width: 540px; line-height: 1.55; padding: 10px 14px; background: var(--gold-pale); border-left: 3px solid var(--gold-dark); border-radius: 4px; }
+  .hero__positioning strong { color: var(--gold-dark); font-weight: 800; }
   .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .hero__visual { display: flex; align-items: center; justify-content: center; position: relative; }
   .hero__visual img { width: 100%; max-width: 680px; border-radius: 14px; aspect-ratio: 3/2; object-fit: cover; box-shadow: var(--shadow-lg); }
@@ -155,6 +157,7 @@
       <span class="hero__tag">Atendimento humano · Uberlândia-MG</span>
       <h1>Carros para quem está chegando em Uberlândia</h1>
       <p class="hero__sub">Locação mensal de <strong>30 a 180 dias</strong> com 3 planos de quilometragem. Entrega no aeroporto, no hotel ou no condomínio. <strong>Sem fila, sem loja, sem letra miúda.</strong></p>
+      <p class="hero__positioning"><strong>Até ~10% abaixo das grandes locadoras</strong>, com entrega onde você estiver e atendimento humano. Não somos os mais baratos — somos a opção com relacionamento local.</p>
       <div class="hero__cta">
         <a href="reservar.html" class="btn btn--primary">Reservar agora</a>
         <a href="frota.html" class="btn btn--ghost-navy">Ver frota</a>
@@ -162,7 +165,7 @@
     </div>
     <div class="hero__visual">
       <img src="images/car-cronos-1.jpg" alt="Fiat Cronos sedan automático — locação mensal Nomade Drive Uberlândia" />
-      <div class="hero__badge">A partir de<strong>R$ 3.690</strong>30 dias · tudo incluso</div>
+      <div class="hero__badge">Plano Sedan<strong>R$ 3.790</strong>30 dias · ou R$ 3.590 em 90+ dias</div>
     </div>
   </div>
 </section>
@@ -300,12 +303,13 @@
   </div>
 </section>
 
-<!-- COMPARATIVO -->
+<!-- COMPARATIVO — "Por que a NomadeDrive" -->
 <section class="compare">
   <div class="wrap">
     <div class="head">
-      <h2>Por que mensal Nomade vs locadora tradicional?</h2>
-      <p>Atendimento humano, entrega onde você estiver e km flexível — por um preço levemente abaixo da locadora líder.</p>
+      <span style="display:inline-block;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:800;letter-spacing:1.3px;color:var(--gold-dark);text-transform:uppercase;margin-bottom:8px;">Por que a NomadeDrive</span>
+      <h2>A experiência que locadora grande não entrega</h2>
+      <p>Não somos os mais baratos — somos o oposto da locadora gigante, propositalmente. Atendimento humano, entrega onde você estiver, km flexível e <strong>relacionamento local</strong>. <a href="sobre.html" style="color:var(--navy);font-weight:700;text-decoration:underline;">Conheça nossos 5 compromissos</a>.</p>
     </div>
     <table class="compare__table">
       <thead><tr><th>Item</th><th>Locadora tradicional</th><th>Nomade Drive</th></tr></thead>
@@ -317,7 +321,7 @@
         <tr><td>Manutenção</td><td>Cliente leva</td><td>Buscamos + devolvemos</td></tr>
         <tr><td>Entrega</td><td>Loja apenas</td><td>Onde você estiver</td></tr>
         <tr><td>Atendimento</td><td>Chatbot + URA</td><td>Daniel/Danilo direto WhatsApp</td></tr>
-        <tr><td>Preço mensal sedan compacto</td><td>R$ 3.820+ (3.000 km/mês)</td><td><strong>R$ 3.690</strong> (3.000 km do período)</td></tr>
+        <tr><td>Preço mensal Plano Sedan</td><td>R$ 4.200+ (3.000 km/mês)</td><td><strong>R$ 3.790</strong> (R$ 3.590 em 90+ dias)</td></tr>
       </tbody>
     </table>
     <p style="margin-top:14px;font-size:13.5px;color:var(--gray-500);text-align:center;">Comparativo com locadoras tradicionais consultado em 05/06/2026. Não somos os mais baratos — somos a opção com <strong>atendimento humano</strong> e <strong>km que não evapora no fim do mês</strong>.</p>

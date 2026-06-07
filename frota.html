@@ -49,6 +49,13 @@
   .car__cta { display: flex; gap: 8px; margin-top: auto; flex-wrap: wrap; }
   .car__cta .btn { flex: 1; min-width: 120px; padding: 10px 16px; font-size: 13.5px; }
 
+  /* Cards "Em breve" — lista de espera de novos planos */
+  .car--soon { opacity: 0.92; border-style: dashed; }
+  .car--soon:hover { transform: none; box-shadow: 0 8px 22px rgba(15,61,46,0.06); }
+  .car__photo--soon { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); display: flex; align-items: center; justify-content: center; }
+  .car__photo-soon { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--gold); letter-spacing: -0.02em; opacity: 0.85; }
+  .car__photo-badge--soon { background: var(--gold-dark); color: var(--white); }
+
   .frota__soon { padding: 32px 0 36px; background: var(--cream); text-align: center; }
   .frota__soon h3 { font-size: 18px; margin-bottom: 6px; color: var(--navy); }
   .frota__soon p { font-size: 14px; color: var(--gray-700); max-width: 520px; margin: 0 auto; }
@@ -81,10 +88,11 @@
   <div class="wrap">
     <div class="frota__grid">
 
+      <!-- PLANO SEDAN — DISPONIVEL -->
       <article class="car">
         <div class="car__photo">
           <img src="images/car-cronos-1.jpg" alt="Fiat Cronos — sedan automático locação mensal" loading="lazy" />
-          <span class="car__photo-badge">Disponível</span>
+          <span class="car__photo-badge">Plano Sedan · disponível</span>
         </div>
         <div class="car__body">
           <h2 class="car__name">Fiat Cronos</h2>
@@ -98,13 +106,59 @@
           </div>
           <span class="car__included">✓ Seguro + manutenção + IPVA inclusos</span>
           <div class="car__price">
-            <span class="car__price-from">A partir de</span>
-            <span class="car__price-val">R$ 3.690<small> / 30 dias</small></span>
+            <span class="car__price-from">Plano Sedan · a partir de</span>
+            <span class="car__price-val">R$ 3.790<small> / 30 dias</small></span>
           </div>
-          <p class="car__plans-info">3 planos disponíveis: <strong>Essencial</strong> · <strong>Estendido</strong> · <strong>Sem Limite</strong></p>
+          <p class="car__plans-info">3 níveis de km: <strong>Essencial</strong> · <strong>Estendido</strong> · <strong>Sem Limite</strong> · <em>R$ 3.590 em 90+ dias</em></p>
           <div class="car__cta">
             <a href="carros/sedan.html" class="btn btn--ghost">Ver detalhes</a>
             <a href="reservar.html?carro=sedan" class="btn btn--primary">Reservar</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- PLANO SUV — EM BREVE (lista de espera) -->
+      <article class="car car--soon">
+        <div class="car__photo car__photo--soon">
+          <span class="car__photo-badge car__photo-badge--soon">Em breve</span>
+          <div class="car__photo-soon">SUV</div>
+        </div>
+        <div class="car__body">
+          <h2 class="car__name">Plano SUV</h2>
+          <p class="car__cat">Tracker · Renegade · próxima fase</p>
+          <p style="font-size:13px;color:var(--gray-700);line-height:1.55;margin:14px 0 18px;">
+            Categoria SUV automática com a mesma estrutura de planos. Já estamos negociando os veículos.
+            <strong>Entre na lista de espera</strong> e te avisamos quando abrir.
+          </p>
+          <div class="car__price">
+            <span class="car__price-from">Plano SUV · a partir de</span>
+            <span class="car__price-val" style="color:var(--gray-500);">R$ 4.690<small> / 30 dias</small></span>
+          </div>
+          <div class="car__cta">
+            <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20entrar%20na%20lista%20de%20espera%20do%20Plano%20SUV." target="_blank" rel="noopener" class="btn btn--ghost" style="width:100%;justify-content:center;">📋 Entrar na lista de espera</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- PLANO PREMIUM — SOB CONSULTA -->
+      <article class="car car--soon">
+        <div class="car__photo car__photo--soon">
+          <span class="car__photo-badge car__photo-badge--soon">Em breve</span>
+          <div class="car__photo-soon">PREMIUM</div>
+        </div>
+        <div class="car__body">
+          <h2 class="car__name">Plano Premium</h2>
+          <p class="car__cat">Corolla · Compass · fase futura</p>
+          <p style="font-size:13px;color:var(--gray-700);line-height:1.55;margin:14px 0 18px;">
+            Categoria executiva sob medida — pra clientes corporativos e estadias mais longas.
+            <strong>Proposta personalizada</strong> conforme o perfil.
+          </p>
+          <div class="car__price">
+            <span class="car__price-from">Plano Premium</span>
+            <span class="car__price-val" style="color:var(--gray-500);">Sob consulta</span>
+          </div>
+          <div class="car__cta">
+            <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Tenho%20interesse%20no%20Plano%20Premium%20quando%20estiver%20dispon%C3%ADvel." target="_blank" rel="noopener" class="btn btn--ghost" style="width:100%;justify-content:center;">💬 Falar com a equipe</a>
           </div>
         </div>
       </article>
@@ -115,8 +169,8 @@
 
 <section class="frota__soon">
   <div class="wrap">
-    <h3>Próximos carros chegando</h3>
-    <p>Estamos validando a operação com 1 carro. Conforme demanda aumentar, vamos incluir mais opções (sedan maior, SUV compacto). Quer ser avisado quando expandirmos? <a href="contato.html" style="color:var(--navy);font-weight:700;text-decoration:underline;">Avise-me</a>.</p>
+    <h3>Plano Sedan no lançamento — SUV e Premium em fila</h3>
+    <p>Começamos focados no <strong>Plano Sedan</strong> com Fiat Cronos automático pra entregar uma operação impecável. Conforme a demanda cresce, abrimos as próximas categorias. <a href="https://wa.me/5534984064864" target="_blank" rel="noopener" style="color:var(--navy);font-weight:700;text-decoration:underline;">Falar no WhatsApp</a> ou <a href="empresas.html" style="color:var(--navy);font-weight:700;text-decoration:underline;">conhecer a oferta para empresas</a>.</p>
   </div>
 </section>
 

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Para Empresas — Nomade Drive Brasil</title>
+<meta name="description" content="Locação mensal de carros para empresas em Uberlândia. Atendimento dedicado, carro reserva garantido, faturamento mensal único e relacionamento local. Hospitais, clínicas, construtoras e empresas com profissionais de fora." />
+<meta name="theme-color" content="#0F3D2E" />
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #0F3D2E; --navy-light: #1a5440; --navy-pale: #e8f0eb; --gold: #D4A853; --gold-dark: #b88f3f; --gold-pale: #f7eed7; --white: #fff; --cream: #FAFAF7; --gray-900: #1A2A23; --gray-700: #5C6B62; --gray-500: #8a9890; --gray-200: #e2e6e3; --gray-100: #eef1ef; --sage: #5A8A6B; --sage-dark: #436b51; --sage-pale: #e6efe9; --shadow-lg: 0 18px 40px rgba(15,61,46,0.14); }
+  body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: inherit; } button { font: inherit; cursor: pointer; border: none; background: none; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  h1,h2,h3 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 26px; border-radius: 8px; font-weight: 700; font-size: 14.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; font-family: 'Inter', sans-serif; }
+  .btn--primary { background: var(--gold); color: var(--navy); }
+  .btn--primary:hover { background: var(--gold-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(245,184,46,0.35); }
+  .btn--ghost-navy { background: transparent; color: var(--navy); border-color: var(--navy); }
+  .btn--ghost-navy:hover { background: var(--navy); color: var(--white); }
+  .btn--white { background: var(--white); color: var(--navy); }
+  .btn--white:hover { background: var(--gold); color: var(--navy); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: var(--white); padding: 60px 0 64px; }
+  .hero__inner { display: grid; gap: 32px; align-items: center; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 880px) { .hero__inner { grid-template-columns: 1.2fr 1fr; } }
+  .hero__eyebrow { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); padding: 5px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 800; color: var(--gold); letter-spacing: 1.3px; text-transform: uppercase; margin-bottom: 18px; }
+  .hero h1 { color: var(--white); font-size: clamp(28px, 4.5vw, 44px); font-weight: 900; margin-bottom: 16px; line-height: 1.12; }
+  .hero__sub { font-size: clamp(15px, 1.6vw, 17px); color: rgba(255,255,255,0.85); margin-bottom: 24px; max-width: 540px; line-height: 1.6; }
+  .hero__sub strong { color: var(--gold); font-weight: 700; }
+  .hero__cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero__visual { display: none; }
+  @media (min-width: 880px) {
+    .hero__visual { display: flex; justify-content: center; align-items: center; }
+    .hero__card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 28px 26px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); max-width: 360px; }
+    .hero__card__num { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+    .hero__card__label { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 22px; }
+    .hero__card__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+    .hero__card__list li { color: var(--white); font-size: 13.5px; display: flex; align-items: flex-start; gap: 8px; }
+    .hero__card__list li::before { content: '✓'; color: var(--gold); font-weight: 900; flex-shrink: 0; }
+  }
+
+  /* TARGETS — Para quem é */
+  .targets { padding: 50px 0 44px; background: var(--cream); }
+  .targets__head { text-align: center; max-width: 720px; margin: 0 auto 28px; padding: 0 24px; }
+  .targets__eyebrow { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.3px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 8px; }
+  .targets__head h2 { font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; }
+  .targets__head p { font-size: 14px; color: var(--gray-700); line-height: 1.6; }
+  .targets__grid { display: grid; gap: 14px; grid-template-columns: 1fr; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 560px) { .targets__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 880px) { .targets__grid { grid-template-columns: 1fr 1fr 1fr 1fr; } }
+  .target-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 22px 20px; transition: all .2s; }
+  .target-card:hover { border-color: var(--navy-light); transform: translateY(-2px); box-shadow: 0 16px 32px rgba(15,61,46,0.08); }
+  .target-card__icon { width: 44px; height: 44px; border-radius: 11px; background: var(--gold-pale); color: var(--gold-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .target-card h3 { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+  .target-card p { font-size: 12.5px; color: var(--gray-700); line-height: 1.55; }
+
+  /* DIFFS — 5 diferenciais B2B */
+  .diffs { padding: 56px 0 50px; background: var(--white); }
+  .diffs__head { text-align: center; max-width: 720px; margin: 0 auto 32px; padding: 0 24px; }
+  .diffs__head h2 { font-size: clamp(24px, 3.4vw, 32px); margin-bottom: 10px; }
+  .diffs__head p { font-size: 15px; color: var(--gray-700); line-height: 1.6; }
+  .diffs__list { max-width: 1040px; margin: 0 auto; padding: 0 24px; display: grid; gap: 18px; }
+  .diff { display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: flex-start; padding: 22px 22px; background: var(--cream); border-radius: 14px; border: 1px solid var(--gray-200); transition: all .2s; }
+  .diff:hover { border-color: var(--navy-light); background: var(--white); }
+  .diff__num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--gold); line-height: 1; }
+  .diff h3 { font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 6px; color: var(--navy); }
+  .diff p { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
+  .diff p strong { color: var(--navy); font-weight: 700; }
+
+  /* CTA section */
+  .cta { padding: 56px 0 60px; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: var(--white); text-align: center; }
+  .cta h2 { color: var(--white); font-size: clamp(22px, 3vw, 30px); margin-bottom: 10px; }
+  .cta p { color: rgba(255,255,255,0.82); font-size: 14.5px; max-width: 580px; margin: 0 auto 24px; line-height: 1.55; }
+  .cta__row { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 0 24px; }
+  .cta__note { margin-top: 20px; font-size: 12.5px; color: rgba(255,255,255,0.6); padding: 0 24px; }
+
+  /* Form mini */
+  .b2b-form { background: var(--white); padding: 48px 0 56px; }
+  .b2b-form__wrap { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+  .b2b-form__intro { text-align: center; margin-bottom: 22px; }
+  .b2b-form__intro h2 { font-size: 22px; margin-bottom: 6px; }
+  .b2b-form__intro p { font-size: 14px; color: var(--gray-700); }
+  .b2b-form__card { background: var(--cream); border: 1px solid var(--gray-200); border-radius: 14px; padding: 28px 26px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 11.5px; font-weight: 800; color: var(--navy); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .field input, .field textarea, .field select { width: 100%; padding: 11px 13px; font-size: 14px; border: 1.5px solid var(--gray-200); border-radius: 8px; background: var(--white); font-family: inherit; color: var(--navy); }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--navy); }
+  .field textarea { resize: vertical; min-height: 88px; }
+  .field--row { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 540px) { .field--row { grid-template-columns: 1fr 1fr; } }
+  .b2b-form__cta { display: flex; flex-direction: column; gap: 9px; margin-top: 8px; }
+  .b2b-form__cta .btn { width: 100%; justify-content: center; padding: 14px 18px; }
+  .b2b-form__divider { text-align: center; margin: 18px 0; color: var(--gray-500); font-size: 12px; }
+  .b2b-form__msg { padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-top: 10px; }
+  .b2b-form__msg--ok { background: var(--sage-pale); color: var(--sage-dark); border-left: 3px solid var(--sage); }
+
+  @media (max-width: 540px) {
+    .wrap { padding: 0 14px; }
+    .hero { padding: 36px 0 40px; }
+    .hero__inner { padding: 0 14px; }
+    .targets { padding: 36px 0; }
+    .diffs { padding: 36px 0; }
+    .diffs__list { padding: 0 14px; }
+    .diff { grid-template-columns: 44px 1fr; gap: 14px; padding: 18px; }
+    .diff__num { font-size: 28px; }
+    .cta { padding: 36px 0 40px; }
+    .b2b-form { padding: 36px 0; }
+    .b2b-form__card { padding: 22px 18px; }
+  }
+</style>
+<link rel="stylesheet" href="assets/site-shell.css?v=20260606c" />
+<script defer src="assets/site-shell.js?v=1"></script>
+</head>
+<body data-nd-page="empresas">
+
+<div id="site-header"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__inner">
+    <div>
+      <span class="hero__eyebrow">Para empresas · Uberlândia-MG</span>
+      <h1>Mobilidade mensal para sua empresa, sem dor de cabeça</h1>
+      <p class="hero__sub">Hospitais, clínicas, construtoras e empresas que recebem profissionais de fora — a Nomade Drive entrega carros mensais com <strong>atendimento direto</strong>, <strong>flexibilidade real</strong> e <strong>relacionamento local</strong>. Sem call center, sem URA, sem letra miúda.</p>
+      <div class="hero__cta">
+        <a href="#proposta" class="btn btn--primary">Solicitar proposta</a>
+        <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20conhecer%20a%20Nomade%20Drive%20para%20empresas." target="_blank" rel="noopener" class="btn btn--white">WhatsApp da equipe</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="hero__card">
+        <div class="hero__card__num">5</div>
+        <div class="hero__card__label">diferenciais B2B que entregamos</div>
+        <ul class="hero__card__list">
+          <li>Conta dedicada — uma pessoa</li>
+          <li>Carro reserva garantido</li>
+          <li>Faturamento mensal único</li>
+          <li>Teste 30 dias sem amarra longa</li>
+          <li>Desconto por volume (3+ carros)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRA QUEM É -->
+<section class="targets">
+  <div class="targets__head">
+    <div class="targets__eyebrow">Para quem é</div>
+    <h2>Empresas que recebem ou movimentam pessoas em Uberlândia</h2>
+    <p>Profissionais de fora vindo prestar serviço, equipes em projeto, recebimento de visitantes — quando o carro precisa estar pronto e o gestor não quer perder tempo com locadora grande.</p>
+  </div>
+  <div class="targets__grid">
+    <div class="target-card">
+      <div class="target-card__icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h2l2-7h10l2 7h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 7v3M15 7v3M12 7v3"/></svg>
+      </div>
+      <h3>Hospitais e clínicas</h3>
+      <p>Médicos em rotação, plantonistas, residentes e especialistas convidados. Carro pronto no dia que chegam.</p>
+    </div>
+    <div class="target-card">
+      <div class="target-card__icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg>
+      </div>
+      <h3>Construtoras e obras</h3>
+      <p>Engenheiros e gestores na fiscalização de obras locais. Locação que acompanha o cronograma do projeto.</p>
+    </div>
+    <div class="target-card">
+      <div class="target-card__icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4z"/><path d="M4 14h16v6H4z"/><circle cx="8" cy="7" r="1"/><circle cx="8" cy="17" r="1"/></svg>
+      </div>
+      <h3>Indústrias e empresas</h3>
+      <p>Profissionais em transferência ou consultores temporários. Faturamento mensal único, sem complicação contábil.</p>
+    </div>
+    <div class="target-card">
+      <div class="target-card__icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 12 0v2"/><circle cx="18" cy="9" r="2.5"/><path d="M22 19a4 4 0 0 0-5-3.9"/></svg>
+      </div>
+      <h3>Eventos e visitas técnicas</h3>
+      <p>Recebimento de palestrantes, auditores, autoridades. Carro com motorista ou autodirigido, conforme a ocasião.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 DIFERENCIAIS -->
+<section class="diffs">
+  <div class="diffs__head">
+    <h2>Por que empresas escolhem a Nomade Drive</h2>
+    <p>Não somos a locadora grande — somos o oposto dela, propositalmente. Os 5 diferenciais que justificam:</p>
+  </div>
+  <div class="diffs__list">
+    <div class="diff">
+      <div class="diff__num">1</div>
+      <div>
+        <h3>Conta dedicada — uma pessoa que você conhece pelo nome</h3>
+        <p>O gestor da sua empresa tem <strong>contato direto</strong> com um dos sócios da Nomade Drive. Sem call center, sem URA, sem ticket. Você liga, manda WhatsApp, fala — e é resolvido na hora.</p>
+      </div>
+    </div>
+    <div class="diff">
+      <div class="diff__num">2</div>
+      <div>
+        <h3>Carro reserva garantido em caso de pane</h3>
+        <p>Se um veículo apresentar problema mecânico, providenciamos <strong>substituto da mesma categoria</strong> em até 12h dentro de Uberlândia. Seu profissional não fica a pé.</p>
+      </div>
+    </div>
+    <div class="diff">
+      <div class="diff__num">3</div>
+      <div>
+        <h3>Faturamento mensal único com NF</h3>
+        <p>Uma nota fiscal por mês cobrindo todos os veículos da sua empresa. <strong>Sem boletos avulsos</strong>, sem cobranças surpresa, sem precisar correr atrás de comprovante.</p>
+      </div>
+    </div>
+    <div class="diff">
+      <div class="diff__num">4</div>
+      <div>
+        <h3>Período de teste de 30 dias sem amarra longa</h3>
+        <p>Comece com 30 dias pra avaliar. Gostou, continua. Não rolou, devolve sem multa. <strong>Sem fidelidade obrigatória de 12 meses</strong> como nas grandes.</p>
+      </div>
+    </div>
+    <div class="diff">
+      <div class="diff__num">5</div>
+      <div>
+        <h3>Desconto por volume — a partir de 3 carros</h3>
+        <p>Empresa com 3 ou mais veículos simultâneos negocia <strong>condições especiais</strong> de preço, prazo e flexibilidade de troca. Quanto mais carros, mais vantajoso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA HORIZONTAL -->
+<section class="cta">
+  <h2>Pronto pra uma proposta sob medida?</h2>
+  <p>Não temos preço de tabela B2B. Cada empresa tem perfil próprio — fazemos proposta personalizada conforme o volume, o tipo de profissional e a operação.</p>
+  <div class="cta__row">
+    <a href="#proposta" class="btn btn--primary">Solicitar proposta</a>
+    <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Quero%20uma%20proposta%20Nomade%20Drive%20para%20empresa." target="_blank" rel="noopener" class="btn btn--white">Falar no WhatsApp agora</a>
+  </div>
+  <div class="cta__note">Respondemos em <strong>horário comercial</strong>. Não prometemos prazo que não conseguimos cumprir.</div>
+</section>
+
+<!-- FORM B2B -->
+<section class="b2b-form" id="proposta">
+  <div class="b2b-form__wrap">
+    <div class="b2b-form__intro">
+      <h2>Solicitar proposta para empresa</h2>
+      <p>Conta rápida pra equipe entender o cenário e voltar com proposta sob medida.</p>
+    </div>
+    <div class="b2b-form__card">
+      <form id="b2bForm" novalidate>
+        <div class="field">
+          <label for="b2bCompany">Empresa</label>
+          <input type="text" id="b2bCompany" required placeholder="Razão social ou nome fantasia" />
+        </div>
+        <div class="field--row">
+          <div class="field">
+            <label for="b2bName">Seu nome</label>
+            <input type="text" id="b2bName" required placeholder="Como devo te chamar" />
+          </div>
+          <div class="field">
+            <label for="b2bRole">Cargo</label>
+            <input type="text" id="b2bRole" placeholder="Ex: Diretor administrativo" />
+          </div>
+        </div>
+        <div class="field--row">
+          <div class="field">
+            <label for="b2bEmail">E-mail corporativo</label>
+            <input type="email" id="b2bEmail" required placeholder="voce@empresa.com.br" />
+          </div>
+          <div class="field">
+            <label for="b2bPhone">WhatsApp</label>
+            <input type="tel" id="b2bPhone" required placeholder="(34) 9 9999-9999" />
+          </div>
+        </div>
+        <div class="field--row">
+          <div class="field">
+            <label for="b2bCars">Quantos carros</label>
+            <select id="b2bCars" required>
+              <option value="">Selecione...</option>
+              <option value="1">1 carro</option>
+              <option value="2">2 carros</option>
+              <option value="3-5">3 a 5 carros</option>
+              <option value="6-10">6 a 10 carros</option>
+              <option value="10+">Mais de 10 carros</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="b2bPeriod">Período estimado</label>
+            <select id="b2bPeriod" required>
+              <option value="">Selecione...</option>
+              <option value="30-60">30 a 60 dias</option>
+              <option value="60-180">60 a 180 dias</option>
+              <option value="180+">Mais de 180 dias</option>
+              <option value="continuo">Contínuo / sem prazo</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="b2bNotes">Conte rapidamente o cenário</label>
+          <textarea id="b2bNotes" placeholder="Ex: somos um hospital que recebe médicos visitantes mensalmente. Hoje usamos taxi e Uber. Queremos avaliar locação mensal pra reduzir custo e ter mais controle."></textarea>
+        </div>
+        <div class="b2b-form__cta">
+          <button type="submit" class="btn btn--primary" id="b2bSubmit">Enviar para a equipe Nomade Drive</button>
+          <div class="b2b-form__divider">ou</div>
+          <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Sou%20da%20empresa%20___%20e%20quero%20uma%20proposta%20Nomade%20Drive%20para%20___%20carros." target="_blank" rel="noopener" class="btn btn--ghost-navy">Falar direto no WhatsApp</a>
+        </div>
+        <div id="b2bMsg" class="b2b-form__msg b2b-form__msg--ok" style="display:none;"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script>
+(function () {
+  var form = document.getElementById('b2bForm');
+  var msg = document.getElementById('b2bMsg');
+  var btn = document.getElementById('b2bSubmit');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var data = {
+      company: document.getElementById('b2bCompany').value.trim(),
+      name: document.getElementById('b2bName').value.trim(),
+      role: document.getElementById('b2bRole').value.trim(),
+      email: document.getElementById('b2bEmail').value.trim().toLowerCase(),
+      phone: document.getElementById('b2bPhone').value.trim(),
+      cars: document.getElementById('b2bCars').value,
+      period: document.getElementById('b2bPeriod').value,
+      notes: document.getElementById('b2bNotes').value.trim()
+    };
+
+    if (!data.company || !data.name || !data.email || !data.phone || !data.cars || !data.period) {
+      msg.style.display = 'block';
+      msg.style.background = '#FEF2F2';
+      msg.style.color = '#9B2D2D';
+      msg.style.borderLeftColor = '#9B2D2D';
+      msg.textContent = 'Preencha todos os campos obrigatórios.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    // Tenta enviar ao Edge Function nova-lead (mesmo endpoint usado em
+    // outros formularios). Se falhar, abre WhatsApp com a info pre-preenchida
+    // como fallback.
+    var EDGE = 'https://zeexmbgacvsaciojcrwr.supabase.co/functions/v1/nova-lead';
+    fetch(EDGE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'site-empresas-b2b',
+        source_url: window.location.href,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        city: 'Uberlândia',
+        intent: 'b2b-locacao-mensal',
+        extra: {
+          company: data.company,
+          role: data.role,
+          cars: data.cars,
+          period: data.period,
+          notes: data.notes
+        }
+      })
+    }).catch(function () {}).finally(function () {
+      btn.disabled = false;
+      btn.textContent = 'Enviar para a equipe Nomade Drive';
+      msg.style.display = 'block';
+      msg.textContent = '✓ Recebemos sua solicitação. A equipe Nomade Drive entra em contato em horário comercial pelo WhatsApp ou e-mail.';
+      form.reset();
+      // Scroll suave pra mensagem
+      setTimeout(function () { msg.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+    });
+  });
+})();
+</script>
+</body>
+</html>
