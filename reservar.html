@@ -426,6 +426,57 @@
   .what-if__scenario p { margin: 0; font-size: 12.5px; color: var(--gray-700); line-height: 1.55; }
   .what-if__scenario p strong { display: inline; font-size: inherit; margin: 0; color: var(--navy); }
 
+  /* ===========================================================
+     P2 UPGRADE: included-box agora <details> colapsavel.
+     Default fechado em mobile (menos scroll), aberto em desktop.
+     =========================================================== */
+  .included-box { padding: 0; overflow: hidden; }
+  .included-box > summary { padding: 14px 16px; cursor: pointer; list-style: none; user-select: none; display: flex; align-items: center; gap: 8px; }
+  .included-box > summary::-webkit-details-marker { display: none; }
+  .included-box__chevron { margin-left: auto; font-size: 22px; font-weight: 900; color: var(--sage-dark); line-height: 1; transition: transform .2s; }
+  .included-box[open] .included-box__chevron { transform: rotate(45deg); }
+  .included-box > ul, .included-box > p { margin-left: 16px; margin-right: 16px; }
+  .included-box > ul { margin-top: 4px; margin-bottom: 10px; }
+  .included-box > p { padding-bottom: 14px; }
+
+  /* ===========================================================
+     AUMENTO DE FONTE — textos pequenos do addons em mobile
+     ficavam ilegiveis. Bump leve em descricoes/notas.
+     =========================================================== */
+  @media (max-width: 540px) {
+    .addons-wrap__sub { font-size: 13.5px; }
+    .addon-v2__title { font-size: 15px; }
+    .addon-v2__desc { font-size: 13.5px; line-height: 1.55; }
+    .addon-v2__price { font-size: 18px; }
+    .included-box li { font-size: 13.5px; }
+    .included-box__note { font-size: 13px; }
+    .caucao-box__value { font-size: 16.5px; }
+    .caucao-box__hint { font-size: 12.5px; }
+    .what-if__scenario strong { font-size: 13.5px; }
+    .what-if__scenario p { font-size: 13px; }
+  }
+
+  /* ===========================================================
+     BARRA FLUTUANTE DE TOTAL (sticky bottom)
+     Mobile only. Aparece no Step 1. Mostra total + CTA continuar.
+     =========================================================== */
+  .floating-total { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; padding: 10px 12px 12px; background: rgba(15,61,46,0.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 -8px 20px rgba(0,0,0,0.18); border-top: 1px solid rgba(255,255,255,0.08); }
+  .floating-total__inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  .floating-total__info { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .floating-total__label { font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.8px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+  .floating-total__value { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--gold); line-height: 1; }
+  .floating-total__hint { font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.2; }
+  .floating-total__btn { display: inline-flex; align-items: center; gap: 7px; padding: 12px 18px; background: var(--gold); color: var(--navy); border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all .15s; flex-shrink: 0; }
+  .floating-total__btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+  .floating-total__btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Mostra apenas em mobile e quando nao for hidden */
+  @media (max-width: 720px) {
+    .floating-total:not([hidden]) { display: block; }
+    /* Padding extra no main pra que o conteudo nao seja coberto pela barra */
+    main { padding-bottom: 90px; }
+  }
+
   /* FOOTER */
   .foot-mini { padding: 26px 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--gray-500); background: var(--white); border-top: 1px solid var(--gray-200); }
   .foot-mini a { color: var(--gray-700); text-decoration: none; margin: 0 8px; }
@@ -573,15 +624,14 @@
            Redesign: categorias (Proteção vs Conforto), icones SVG, layout
            assimétrico, tom mais humano. Nada pré-marcado (anti-venda-casada). -->
       <div class="addons-wrap">
-        <!-- P2: Bloco "Ja incluso na mensalidade" — esclarece o que o cliente
-             ja tem direito sem pagar extra. Reduz ansiedade e contextualiza
-             a logica da franquia (que e o que as protecoes opcionais
-             abaixo reduzem/eliminam). -->
-        <div class="included-box">
-          <div class="included-box__head">
+        <!-- P2: Bloco "Ja incluso na mensalidade" — agora COLAPSAVEL (details).
+             Por padrao fechado em mobile (menos scroll). Click expande. -->
+        <details class="included-box">
+          <summary class="included-box__head">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-            <strong>Já está incluso na sua mensalidade</strong>
-          </div>
+            <strong>O que já está incluso na sua mensalidade</strong>
+            <span class="included-box__chevron" aria-hidden="true">+</span>
+          </summary>
           <ul class="included-box__list">
             <li><span class="included-box__check">✓</span> Seguro do carro (roubo, perda total, terceiros)</li>
             <li><span class="included-box__check">✓</span> Manutenção programada</li>
@@ -591,7 +641,7 @@
           <p class="included-box__note">
             <strong>Sobre a franquia:</strong> o seguro cobre o carro. Em caso de sinistro, existe uma <strong>franquia</strong> <em>(valor a confirmar com a apólice)</em> que é responsabilidade de quem está com o carro — é isso que as proteções opcionais abaixo <strong>reduzem ou eliminam</strong>.
           </p>
-        </div>
+        </details>
 
         <div class="addons-wrap__head">
           <div class="addons-wrap__eyebrow">Personalize · opt-in</div>
@@ -617,9 +667,6 @@
                 <span class="addon-v2__chip addon-v2__chip--soon">Em breve · validação jurídica</span>
               </div>
               <p class="addon-v2__desc">Em caso de sinistro coberto pelo seguro, você não paga a franquia até o teto contratado. <strong>Não é seguro</strong> — é um serviço opcional da Nomade Drive. <a href="termos.html#adicionais" target="_blank" rel="noopener" class="addon-v2__link">Ver condições</a></p>
-              <div class="addon-v2__alt">
-                <strong>Se você não contratar:</strong> a caução pré-autorizada no cartão fica no <strong>valor maior <em>(a confirmar)</em></strong> — ela cobre a franquia caso ocorra um sinistro. Não vira cobrança se devolver sem dano. A locação <strong>não está condicionada</strong> a contratar esta proteção.
-              </div>
             </div>
             <div class="addon-v2__checkbox" aria-hidden="true"></div>
             <div class="addon-v2__price-col">
@@ -953,6 +1000,23 @@
   </div>
 </main>
 
+<!-- BARRA FLUTUANTE DE TOTAL — visivel em mobile no Step 1.
+     Mostra total estimado vivo + botao Continuar sem precisar rolar.
+     Esconde no Success, e no Step 2/3 pra nao competir com proprias actions. -->
+<div class="floating-total" id="floatingTotal" hidden>
+  <div class="floating-total__inner">
+    <div class="floating-total__info">
+      <span class="floating-total__label">Total estimado</span>
+      <strong class="floating-total__value" id="floatingTotalValue">R$ 0</strong>
+      <span class="floating-total__hint" id="floatingTotalHint">—</span>
+    </div>
+    <button type="button" class="floating-total__btn" id="floatingTotalBtn">
+      Continuar
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
+  </div>
+</div>
+
 <footer class="foot-mini">
   <a href="index.html">Início</a> ·
   <a href="termos.html">Termos</a> ·
@@ -1128,6 +1192,9 @@
     document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('on'); });
     $('step' + n).classList.add('on');
     var isNumStep = (n === 1 || n === 2 || n === 3);
+    // Barra flutuante: visivel SO no step 1 (onde o cliente esta montando o total)
+    var floatBar = document.getElementById('floatingTotal');
+    if (floatBar) floatBar.hidden = (n !== 1);
     if (isNumStep) {
       for (var i = 1; i <= 3; i++) {
         var node = document.querySelector('.step-node[data-step="' + i + '"]');
@@ -1209,6 +1276,33 @@
         showStatus('err1', 'Ops! Nossa locação mensal é a partir de 30 dias 🙂. Você selecionou ' + state.days + ' dia' + (state.days === 1 ? '' : 's') + '. Para períodos mais curtos, vale a pena olhar uma locadora de diária. A gente faz mensal pra valer a pena.');
       }
     }
+    // BARRA FLUTUANTE — sincroniza com updateStep1
+    refreshFloatingTotal();
+  }
+
+  // Atualiza barra flutuante de total estimado (sticky bottom em mobile)
+  function refreshFloatingTotal() {
+    var bar = document.getElementById('floatingTotal');
+    var valEl = document.getElementById('floatingTotalValue');
+    var hintEl = document.getElementById('floatingTotalHint');
+    var btnEl = document.getElementById('floatingTotalBtn');
+    if (!bar || !valEl) return;
+    var total = calcTotal();
+    valEl.textContent = 'R$ ' + total.toLocaleString('pt-BR');
+    // Hint contextual
+    var addonsTotal = calcAddonsMonthly();
+    var planLabel = state.plan ? (PLAN_LABELS[state.plan] || state.plan) : '';
+    var hint = '';
+    if (state.days > 0 && planLabel) {
+      hint = planLabel + ' · ' + state.days + ' dias';
+      if (addonsTotal > 0) hint += ' · +' + 'R$ ' + addonsTotal + ' extras';
+    } else if (state.days > 0) {
+      hint = state.days + ' dias';
+    }
+    if (hintEl) hintEl.textContent = hint || 'Escolha datas e carro';
+    // CTA: so habilita quando consegue avancar
+    var canContinue = state.car && state.dateStart && state.dateEnd && state.days >= 30;
+    if (btnEl) btnEl.disabled = !canContinue;
   }
 
   // Refresca preços do planPicker quando car/dias mudam
@@ -1558,6 +1652,19 @@
   // Inicializa barra + caucao ao carregar (caso de pre-fill futuro)
   refreshAddonsBar();
   refreshCaucaoBox();
+  refreshFloatingTotal();
+
+  // BARRA FLUTUANTE — click no botao Continuar replica o btnStep2
+  var floatBtn = document.getElementById('floatingTotalBtn');
+  if (floatBtn) {
+    floatBtn.addEventListener('click', function () {
+      var btn = $('btnStep2');
+      if (btn && !btn.disabled) btn.click();
+    });
+  }
+  // Mostra a barra ao carregar (default step 1)
+  var initialBar = document.getElementById('floatingTotal');
+  if (initialBar) initialBar.hidden = false;
 
   // Quando entra no step 2 a primeira vez, pré-aplica ponto sugerido se houver
   var _step2EnteredOnce = false;
