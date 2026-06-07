@@ -241,9 +241,30 @@
         <input type="password" id="password" name="password" autocomplete="current-password" required minlength="8" />
       </div>
       <button type="submit" class="btn-primary" id="btnSignIn">Entrar</button>
+      <div style="text-align:center;margin-top:14px;">
+        <a href="#" id="linkForgotPassword" style="font-size:13.5px;color:var(--navy,#0F3D2E);font-weight:600;text-decoration:underline;">Esqueci minha senha</a>
+      </div>
     </form>
 
     <div id="loginError" class="error hidden"></div>
+  </div>
+
+  <!-- STEP "Forgot Password" — formulário pra solicitar reset por e-mail -->
+  <div id="stepForgot" class="hidden">
+    <h1>Esqueci minha senha</h1>
+    <p class="sub">Digite o e-mail da sua conta. Vamos enviar um link pra você criar uma senha nova.</p>
+
+    <form id="forgotForm" novalidate>
+      <div class="field">
+        <label for="forgotEmail">E-mail</label>
+        <input type="email" id="forgotEmail" name="forgotEmail" autocomplete="email" required placeholder="seu@email.com" />
+      </div>
+      <button type="submit" class="btn-primary" id="btnForgot">Enviar link de recuperação</button>
+      <button type="button" class="btn-ghost" id="btnCancelForgot">← Voltar para login</button>
+    </form>
+
+    <div id="forgotMsg" class="info hidden"></div>
+    <div id="forgotError" class="error hidden"></div>
   </div>
 
   <!-- STEP 2: MFA TOTP (aparece se a conta tiver 2FA habilitado) -->
@@ -296,17 +317,26 @@
   var stepPassword = document.getElementById("stepPassword");
   var stepMfa = document.getElementById("stepMfa");
   var stepChecking = document.getElementById("stepChecking");
+  // BUG FIX (06/06): tela de "Esqueci minha senha" estava ausente. Adicionada agora.
+  var stepForgot = document.getElementById("stepForgot");
 
   var loginForm = document.getElementById("loginForm");
   var mfaForm = document.getElementById("mfaForm");
+  var forgotForm = document.getElementById("forgotForm");
   var btnSignIn = document.getElementById("btnSignIn");
   var btnVerifyOtp = document.getElementById("btnVerifyOtp");
   var btnCancelMfa = document.getElementById("btnCancelMfa");
+  var btnForgot = document.getElementById("btnForgot");
+  var btnCancelForgot = document.getElementById("btnCancelForgot");
+  var linkForgotPassword = document.getElementById("linkForgotPassword");
   var emailInput = document.getElementById("email");
   var passwordInput = document.getElementById("password");
   var otpInput = document.getElementById("otpCode");
+  var forgotEmailInput = document.getElementById("forgotEmail");
   var loginError = document.getElementById("loginError");
   var mfaError = document.getElementById("mfaError");
+  var forgotError = document.getElementById("forgotError");
+  var forgotMsg = document.getElementById("forgotMsg");
   var checkingMsg = document.getElementById("checkingMsg");
 
   // Redirect destino (default = admin.html)
@@ -332,6 +362,67 @@
     stepPassword.classList.toggle("hidden", name !== "password");
     stepMfa.classList.toggle("hidden", name !== "mfa");
     stepChecking.classList.toggle("hidden", name !== "checking");
+    if (stepForgot) stepForgot.classList.toggle("hidden", name !== "forgot");
+  }
+
+  // BUG FIX 06/06 (P1): handlers do fluxo "Esqueci minha senha"
+  if (linkForgotPassword) {
+    linkForgotPassword.addEventListener("click", function (e) {
+      e.preventDefault();
+      // Pré-preenche o e-mail se já tiver digitado
+      if (emailInput && emailInput.value && forgotEmailInput) {
+        forgotEmailInput.value = emailInput.value;
+      }
+      clearError(loginError);
+      clearError(forgotError);
+      if (forgotMsg) forgotMsg.classList.add("hidden");
+      showStep("forgot");
+    });
+  }
+  if (btnCancelForgot) {
+    btnCancelForgot.addEventListener("click", function () {
+      clearError(forgotError);
+      if (forgotMsg) forgotMsg.classList.add("hidden");
+      showStep("password");
+    });
+  }
+  if (forgotForm) {
+    forgotForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearError(forgotError);
+      if (forgotMsg) forgotMsg.classList.add("hidden");
+      var email = (forgotEmailInput.value || "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError(forgotError, "Digite um e-mail válido.");
+        return;
+      }
+      if (!window.ndAuth || !window.ndAuth.configured) {
+        showError(forgotError, "Sistema de autenticação não configurado.");
+        return;
+      }
+      setBusy(btnForgot, true, "Enviando…");
+      var client = window.ndAuth.client();
+      // redirectTo aponta pra redefinir-senha.html, que já existe no site
+      var redirectTo = window.location.origin + "/redefinir-senha.html";
+      client.auth.resetPasswordForEmail(email, { redirectTo: redirectTo })
+        .then(function (r) {
+          setBusy(btnForgot, false);
+          if (r && r.error) {
+            showError(forgotError, r.error.message || "Não foi possível enviar o e-mail. Tente de novo.");
+            return;
+          }
+          if (forgotMsg) {
+            forgotMsg.textContent = "✓ Enviamos um link pra " + email + ". Verifique sua caixa de entrada (e o spam). O link expira em 1 hora.";
+            forgotMsg.classList.remove("hidden");
+          }
+          // Limpa o input pra deixar claro que enviou
+          forgotEmailInput.value = "";
+        })
+        .catch(function (err) {
+          setBusy(btnForgot, false);
+          showError(forgotError, "Falha de conexão. Verifique sua internet e tente de novo.");
+        });
+    });
   }
   function setBusy(btn, busy, label) {
     btn.disabled = busy;
