@@ -112,6 +112,32 @@
    * Templates
    * ============================================================ */
   var templates = {
+    // P4 (briefing remoto): lembrete gentil pra cliente registrar
+    // fotos/video da retirada. NUNCA bloqueia uso. Disparado por cron
+    // X horas depois se client_pickup_inspection_at IS NULL.
+    client_pickup_reminder: function (p) {
+      return {
+        replyTo: "contato@nomadedrive.com.br",
+        subject: "Aproveite 1 minuto pra registrar como o carro chegou 📸",
+        html: baseTemplate({
+          badge: "Sugestão amigável",
+          title: "Registre como o carro chegou — pra sua proteção",
+          preheader: "Não é obrigatório. É uma forma de proteger você em caso de dúvida.",
+          body: [
+            "Olá " + escapeHtml(p.full_name || "") + "!",
+            "A gente já fez a <strong>vistoria oficial</strong> na entrega e você recebeu cópia das fotos. Esse e-mail é só um lembrete gentil: <strong>se sobrar 1 minuto, registre você também</strong> pelo celular como o carro chegou (foto/vídeo dos 4 lados, painel, pneus).",
+            "<strong>Por quê?</strong> Em caso de dúvida sobre algum dano depois, ter o registro do cliente protege você. <strong>Não é obrigatório</strong> — a vistoria oficial é a do operador. Só é uma camada extra de tranquilidade pra ambos.",
+            "Como fazer: <strong>responda este e-mail com as fotos</strong> ou mande no nosso WhatsApp. Pronto."
+          ],
+          ctaText: "Mandar fotos pelo WhatsApp",
+          ctaUrl: "https://wa.me/5534984064864?text=" + encodeURIComponent("Olá! Quero mandar fotos da retirada do meu carro. Reserva: " + (p.protocol_number || ""))
+        }),
+        text: "Olá " + (p.full_name || "") + ",\n\n" +
+          "Lembrete gentil: registre como o carro chegou (fotos/vídeo pelo celular). NÃO é obrigatório, é uma camada extra de proteção pra você.\n\n" +
+          "WhatsApp: https://wa.me/5534984064864"
+      };
+    },
+
     kyc_approved: function (p) {
       return {
         replyTo: "contato@nomadedrive.com.br",
