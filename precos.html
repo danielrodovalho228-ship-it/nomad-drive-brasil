@@ -235,11 +235,16 @@
     <div class="planos__head" style="margin-top:8px;">
       <div class="planos__eyebrow">Plano Sedan · simule por período</div>
       <h2>Valores reais por período de contrato</h2>
-      <p>Os 3 níveis de km do Plano Sedan, em 30, 60, 90 ou 180 dias.</p>
+      <p>Os 3 níveis de km do Plano Sedan, em 30, 60, 90 ou 180 dias. Escolha entre os <strong>2 modelos disponíveis</strong> (mesmo preço, mesma categoria).</p>
     </div>
 
-    <!-- Lançamento enxuto: 1 carro só. Toggle de carro ficará disponível
-         de novo quando incluirmos um 2º veículo na frota. -->
+    <!-- Toggle de carro (Cronos vs Onix Sedan) — mesma faixa, mesmo preço.
+         Default selecionado: Onix Sedan. -->
+    <div class="precos__toggle" role="tablist" aria-label="Modelo">
+      <button type="button" data-car="onix" class="is-active">Chevrolet Onix Sedan</button>
+      <button type="button" data-car="sedan">Fiat Cronos</button>
+    </div>
+
     <div class="precos__period" role="tablist" aria-label="Período">
       <button type="button" data-days="30" class="is-active">30 dias</button>
       <button type="button" data-days="60">60 dias</button>
@@ -359,13 +364,16 @@
   var P = window.NOMADE_PRICES;
   if (!P) return;
 
-  var state = { car: 'sedan', days: 30 }; // 1 carro só (Fiat Cronos); default 30d casa com hero "a partir de R$ 3.690"
+  // "Substituir Cronos pelo Onix na parte de baixo" → default = onix.
+  // Toggle continua mostrando os 2 (mesmo preço/categoria) pra cliente comparar.
+  var state = { car: 'onix', days: 30 };
   var grid = document.getElementById('plansGrid');
 
   function fmt(v) { return v.toLocaleString('pt-BR'); }
 
   function render() {
     var carPlans = P.plans[state.car];
+    if (!carPlans) return;
     var planOrder = ['essencial', 'estendido', 'semLimite'];
     grid.innerHTML = planOrder.map(function (pid) {
       var plan = carPlans[pid];
@@ -374,7 +382,6 @@
       var monthly = Math.round(total / (state.days / 30));
       var isFeatured = pid === 'estendido';
       var unlimited = pid === 'semLimite';
-      var carName = 'Cronos';
       return '<div class="plan' + (isFeatured ? ' plan--featured' : '') + '">' +
         (isFeatured ? '<span class="plan__tag">Mais escolhido</span>' : '') +
         '<h3 class="plan__name">' + plan.label + '</h3>' +
@@ -396,8 +403,16 @@
     }).join('');
   }
 
-  // Toggle de carro removido (1 carro só) — quando voltar a ter 2+ carros,
-  // restaurar o bloco .precos__toggle no HTML e este listener.
+  // Toggle de carro (Onix vs Cronos)
+  document.querySelectorAll('.precos__toggle button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.precos__toggle button').forEach(function (x) { x.classList.remove('is-active'); });
+      b.classList.add('is-active');
+      state.car = b.dataset.car;
+      render();
+    });
+  });
+
   document.querySelectorAll('.precos__period button').forEach(function (b) {
     b.addEventListener('click', function () {
       document.querySelectorAll('.precos__period button').forEach(function (x) { x.classList.remove('is-active'); });

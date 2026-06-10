@@ -18,7 +18,9 @@
  * ============================================================ */
 
 window.NOMADE_PRICES = {
-  // Carros disponíveis (Lançamento: 1 carro)
+  // Carros disponíveis no Plano Sedan (lançamento: 2 modelos da mesma categoria)
+  // - sedan  = Fiat Cronos (carro inaugural)
+  // - onix   = Chevrolet Onix Sedan (segundo carro, mesma categoria + preço)
   cars: {
     sedan: {
       id: 'sedan',
@@ -32,6 +34,19 @@ window.NOMADE_PRICES = {
       kmExceededBRL: 1.00,
       zeroCaucaoBRL: 370,
       pageUrl: 'carros/sedan.html'
+    },
+    onix: {
+      id: 'onix',
+      slug: 'onix',
+      name: 'Chevrolet Onix Sedan',
+      category: 'Sedan Médio Automático',
+      subtitle: 'LTZ Turbo 1.0 Auto · 2024',
+      photo: 'images/car-onix-1.jpg',
+      photos: ['images/car-onix-1.jpg'],
+      caucaoBRL: 2000,
+      kmExceededBRL: 1.00,
+      zeroCaucaoBRL: 370,
+      pageUrl: 'carros/sedan.html'
     }
   },
 
@@ -39,8 +54,14 @@ window.NOMADE_PRICES = {
   // Preço ancorado levemente abaixo de locadoras tradicionais (sedan
   // compacto ref. R$ 3.820 a 3.000 km/mês — consulta interna 05/06/2026).
   // Descontos por período: -5% (60d), -10% (90d), -15% (180d) sobre o pro-rata.
+  // Cronos e Onix Sedan ficam na MESMA categoria e seguem a MESMA tabela.
   plans: {
     sedan: {
+      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3690, 60: 7011, 90: 9963, 180: 18819 } },
+      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3740, 60: 7106, 90: 10098, 180: 19074 } },
+      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3790, 60: 7201, 90: 10233, 180: 19329 } }
+    },
+    onix: {
       essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3690, 60: 7011, 90: 9963, 180: 18819 } },
       estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3740, 60: 7106, 90: 10098, 180: 19074 } },
       semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3790, 60: 7201, 90: 10233, 180: 19329 } }
