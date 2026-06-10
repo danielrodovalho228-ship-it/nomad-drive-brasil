@@ -96,6 +96,58 @@
   </div>
 </section>
 
+<!-- P3: Retirada sem contato — diferencial NomadeDrive (operacao remota) -->
+<style>
+  .no-contact { padding: 44px 0 48px; background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%); }
+  .no-contact__inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .no-contact__head { text-align: center; max-width: 720px; margin: 0 auto 28px; }
+  .no-contact__eyebrow { display: inline-block; font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.3px; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 8px; padding: 4px 12px; background: var(--gold-pale); border-radius: 999px; }
+  .no-contact__head h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 28px); color: var(--navy); margin-bottom: 8px; }
+  .no-contact__head p { font-size: 14.5px; color: var(--gray-700); line-height: 1.6; }
+  .no-contact__head p strong { color: var(--navy); }
+  .no-contact__grid { display: grid; gap: 14px; grid-template-columns: 1fr; max-width: 980px; margin: 0 auto; }
+  @media (min-width: 720px) { .no-contact__grid { grid-template-columns: repeat(3, 1fr); } }
+  .nc-step { background: var(--white); border: 1px solid var(--gray-200); border-radius: 14px; padding: 22px 22px; position: relative; }
+  .nc-step__num { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 10px; }
+  .nc-step h3 { font-family: 'Inter', sans-serif; font-size: 15.5px; font-weight: 800; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+  .nc-step p { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; margin: 0; }
+  .nc-step p strong { color: var(--navy); }
+  .nc-extra { margin-top: 22px; padding: 18px 22px; background: var(--navy); color: var(--white); border-radius: 12px; display: flex; align-items: flex-start; gap: 14px; }
+  .nc-extra svg { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+  .nc-extra p { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.55; margin: 0; }
+  .nc-extra strong { color: var(--gold); }
+</style>
+<section class="no-contact">
+  <div class="no-contact__inner">
+    <div class="no-contact__head">
+      <div class="no-contact__eyebrow">Você escolhe</div>
+      <h2>Entrega no local <strong>OU</strong> retirada sem contato</h2>
+      <p><strong>Operação enxuta e remota.</strong> Você não precisa esperar ninguém na hora marcada — o carro pode ser entregue por nós ou ficar disponível num ponto seguro com chave em cofre.</p>
+    </div>
+    <div class="no-contact__grid">
+      <div class="nc-step">
+        <div class="nc-step__num">1</div>
+        <h3>Reserve pelo site</h3>
+        <p>Wizard de 3 passos, leva 3 minutos. Escolhe carro, datas, plano e adicionais. Pagamento e contrato 100% digital.</p>
+      </div>
+      <div class="nc-step">
+        <div class="nc-step__num">2</div>
+        <h3>Receba local + senha</h3>
+        <p>Após confirmação, mandamos o <strong>endereço do ponto de troca</strong> e uma <strong>senha rotativa única do seu contrato</strong> — gerada pra você, expira no fim da locação.</p>
+      </div>
+      <div class="nc-step">
+        <div class="nc-step__num">3</div>
+        <h3>Retire a chave do cofre</h3>
+        <p>No horário combinado, vai no ponto, digita sua senha, abre o cofre e pega a chave. Sem precisar esperar atendente. <strong>Devolução segue o mesmo caminho</strong>.</p>
+      </div>
+    </div>
+    <div class="nc-extra">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <p><strong>Segurança:</strong> a senha é única por contrato, expira na devolução, e o cofre fica em <strong>ponto externo controlado</strong> (não dentro do carro). Identidade do cliente é validada antes da liberação.</p>
+    </div>
+  </div>
+</section>
+
 <section class="timing">
   <div class="wrap">
     <div class="timing__grid">
