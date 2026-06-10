@@ -35,6 +35,35 @@
     window.location.replace(prefix + 'redefinir-senha.html' + hash);
   })();
 
+  // === Design System v4 (Redesign fintech) ===
+  // Injeta a fonte Plus Jakarta Sans, o nd-design.css e o nd-ui.js em
+  // TODAS as páginas sem precisar editar cada HTML. O nd-design.css
+  // entra DEPOIS dos estilos da página, então as regras dele vencem.
+  (function injectDesignSystem() {
+    var depth = (location.pathname.match(/\//g) || []).length - 1;
+    var prefix = depth > 0 ? '../'.repeat(depth) : '';
+    var head = document.head;
+
+    if (!document.querySelector('link[href*="Plus+Jakarta"]')) {
+      var f = document.createElement('link');
+      f.rel = 'stylesheet';
+      f.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap';
+      head.appendChild(f);
+    }
+    if (!document.querySelector('link[href*="nd-design.css"]')) {
+      var c = document.createElement('link');
+      c.rel = 'stylesheet';
+      c.href = prefix + 'assets/nd-design.css?v=1';
+      head.appendChild(c);
+    }
+    if (!document.querySelector('script[src*="nd-ui.js"]')) {
+      var s = document.createElement('script');
+      s.defer = true;
+      s.src = prefix + 'assets/nd-ui.js?v=1';
+      head.appendChild(s);
+    }
+  })();
+
   const HEADER_URL = 'partials/header.html';
   const HEADER_APP_URL = 'partials/header-app.html';
   const FOOTER_URL = 'partials/footer.html';
