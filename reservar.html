@@ -50,11 +50,15 @@
     --shadow-lg: 0 18px 40px rgba(15,61,46,0.14);
   }
   body { font-family: 'Inter', sans-serif; color: var(--navy); background: var(--cream); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  /* Mobile: body branco puro — elimina contraste cream/white que parecia
+     "caixa cinza dentro de outra caixa". Visual single-layer profissional. */
+  @media (max-width: 540px) { body { background: var(--white); } }
   img { max-width: 100%; height: auto; display: block; }
   a { color: var(--navy); } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; width: 100%; }
-  /* Mobile: padding lateral mais apertado pra dar mais respiro pro conteudo */
-  @media (max-width: 540px) { .wrap { padding: 0 14px; } }
+  /* Mobile: padding lateral 20px (antes 14px). Cards nao encostam mais
+     na lateral; ainda da pra ler bem em telas a partir de 360px. */
+  @media (max-width: 540px) { .wrap { padding: 0 20px; } }
   h1,h2,h3,h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
@@ -1024,7 +1028,7 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
-<script src="prices.js"></script>
+<script src="prices.js?v=20260610b"></script>
 <script>
 (function() {
   // ===== Renderiza cards de carro dinamicamente do prices.js =====
