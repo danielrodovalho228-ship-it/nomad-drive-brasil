@@ -53,8 +53,9 @@
   img { max-width: 100%; height: auto; display: block; }
   a { color: var(--navy); } button { font: inherit; cursor: pointer; border: none; background: none; }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; width: 100%; }
-  /* Mobile: padding lateral mais apertado pra dar mais respiro pro conteudo */
-  @media (max-width: 540px) { .wrap { padding: 0 14px; } }
+  /* Mobile: padding lateral 20px (antes 14px). Cards nao encostam mais
+     na lateral; ainda da pra ler bem em telas a partir de 360px. */
+  @media (max-width: 540px) { .wrap { padding: 0 20px; } }
   h1,h2,h3,h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.015em; color: var(--navy); line-height: 1.2; font-weight: 700; }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 8px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 2px solid transparent; transition: all .15s; cursor: pointer; font-family: 'Inter', sans-serif; }
@@ -602,20 +603,21 @@
           <div class="plan-picker__grid">
             <div class="plan-pick" data-plan="essencial">
               <span class="plan-pick__name">Essencial</span>
-              <span class="plan-pick__km"><strong data-pp-km="essencial">9.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="essencial">R$ 9.450</span>
+              <span class="plan-pick__km"><strong data-pp-km="essencial">3.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="essencial">R$ 3.790</span>
             </div>
             <div class="plan-pick plan-pick--featured selected" data-plan="estendido">
               <span class="plan-pick__name">Estendido</span>
-              <span class="plan-pick__km"><strong data-pp-km="estendido">12.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="estendido">R$ 9.990</span>
+              <span class="plan-pick__km"><strong data-pp-km="estendido">4.500 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="estendido">R$ 3.990</span>
             </div>
             <div class="plan-pick" data-plan="semLimite">
-              <span class="plan-pick__name">Sem Limite</span>
-              <span class="plan-pick__km"><strong data-pp-km="semLimite">15.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="semLimite">R$ 10.530</span>
+              <span class="plan-pick__name">Km Livre</span>
+              <span class="plan-pick__km"><strong data-pp-km="semLimite">6.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="semLimite">R$ 4.290</span>
             </div>
           </div>
+          <p style="margin:10px 2px 0;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--gray-700);">Passou do limite? <strong style="color:var(--navy);">R$ 1,00/km, sem multa</strong> — cobrado de forma transparente na devolução.</p>
         </div>
       </div>
 
@@ -1024,7 +1026,7 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
-<script src="prices.js"></script>
+<script src="prices.js?v=20260610d"></script>
 <script>
 (function() {
   // ===== Renderiza cards de carro dinamicamente do prices.js =====
@@ -1114,7 +1116,7 @@
     if (days >= 45) return 60;
     return 30;
   }
-  var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Sem Limite' };
+  var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Km Livre' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
   // Lançamento enxuto: 1 carro só (sedan Cronos), sugestão sempre sedan

@@ -1,0 +1,385 @@
+/* ====================================================================
+   NOMADE DRIVE — Design System v4 "fintech premium"  (Redesign R1)
+   --------------------------------------------------------------------
+   Injetado automaticamente em TODAS as páginas pelo site-shell.js
+   (depois do site-shell.css, então as regras daqui VENCEM as antigas).
+
+   Paleta: verde NomadeDrive dominante + dourado SÓ em CTA/destaque.
+   Fonte única: Plus Jakarta Sans (injetada junto).
+   Escala de espaçamento: base 8px.
+   ==================================================================== */
+
+:root {
+  /* ---- Cor ---- */
+  --nd-green-950: #07211A;
+  --nd-green-900: #0A2A20;
+  --nd-green-800: #0F3D2E;   /* marca */
+  --nd-green-700: #1A5440;
+  --nd-green-600: #2A6B50;
+  --nd-green-100: #E8F0EB;
+  --nd-green-50:  #F2F6F3;
+  --nd-gold:      #D4A853;   /* SÓ CTA e destaque */
+  --nd-gold-600:  #B88F3F;
+  --nd-gold-100:  #F7EED7;
+  --nd-ink:       #15261E;   /* texto principal */
+  --nd-ink-soft:  #45554C;   /* texto corpo */
+  --nd-gray-400:  #8A9890;
+  --nd-gray-200:  #E2E6E3;
+  --nd-gray-100:  #EEF1EF;
+  --nd-bg:        #FFFFFF;
+  --nd-bg-soft:   #F6F7F4;   /* seção alternada */
+
+  /* ---- Tipo ---- */
+  --nd-font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* ---- Forma ---- */
+  --nd-r-pill: 999px;
+  --nd-r-card: 20px;
+  --nd-r-input: 14px;
+
+  /* ---- Sombra ---- */
+  --nd-sh-rest:  0 2px 10px rgba(15,61,46,0.05);
+  --nd-sh-hover: 0 24px 48px -16px rgba(15,61,46,0.18);
+  --nd-sh-nav:   0 10px 30px -12px rgba(10,42,32,0.16);
+
+  /* ---- Movimento ---- */
+  --nd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Navbar nova é mais alta que a antiga */
+  --nav-h: 68px;
+}
+@media (max-width: 720px) { :root { --nav-h: 60px; } }
+
+/* Foco visível pra teclado em todo o site (AA) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--nd-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Navbar é FIXA: âncoras internas (#pagamento, #medico, etc.) precisam
+   de respiro pra não esconder o título atrás da barra. */
+:where([id]) { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+/* ============================================================
+   CONTAINER + SEÇÕES
+   ============================================================ */
+.nd-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+@media (max-width: 540px) { .nd-wrap { padding: 0 20px; } }
+
+.nd-sec { padding: 96px 0; }
+.nd-sec--tight { padding: 64px 0; }
+.nd-sec--soft { background: var(--nd-bg-soft); }
+.nd-sec--dark { background: var(--nd-green-900); color: #fff; }
+@media (max-width: 720px) {
+  .nd-sec { padding: 64px 0; }
+  .nd-sec--tight { padding: 48px 0; }
+}
+
+/* Cabeçalho de seção (editorial: alinhado à esquerda por padrão) */
+.nd-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--nd-font);
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--nd-green-600);
+  margin-bottom: 16px;
+}
+.nd-eyebrow::before { content: ''; width: 22px; height: 2px; background: var(--nd-gold); border-radius: 2px; }
+.nd-sec--dark .nd-eyebrow { color: rgba(255,255,255,0.65); }
+.nd-h2 {
+  font-family: var(--nd-font);
+  font-size: clamp(30px, 3.6vw, 40px);
+  font-weight: 800; letter-spacing: -0.022em; line-height: 1.12;
+  color: var(--nd-ink); margin: 0 0 14px;
+}
+.nd-sec--dark .nd-h2 { color: #fff; }
+.nd-lead {
+  font-family: var(--nd-font);
+  font-size: clamp(16px, 1.6vw, 18px); line-height: 1.6;
+  color: var(--nd-ink-soft); max-width: 620px; margin: 0;
+}
+.nd-sec--dark .nd-lead { color: rgba(255,255,255,0.72); }
+
+/* ============================================================
+   BOTÕES — pílula fintech
+   ============================================================ */
+.nd-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: var(--nd-font); font-size: 15.5px; font-weight: 700;
+  padding: 16px 32px; border-radius: var(--nd-r-pill);
+  text-decoration: none; border: 0; cursor: pointer;
+  transition: transform 0.2s var(--nd-ease), box-shadow 0.2s, background 0.2s, color 0.2s;
+  will-change: transform;
+}
+.nd-btn:active { transform: scale(0.98); }
+.nd-btn--gold { background: var(--nd-gold); color: var(--nd-green-900); }
+.nd-btn--gold:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -8px rgba(212,168,83,0.5); background: #DDB465; }
+.nd-btn--gold:active { transform: scale(0.98); }
+.nd-btn--outline { background: transparent; color: var(--nd-green-800); box-shadow: inset 0 0 0 1.5px var(--nd-green-800); }
+.nd-btn--outline:hover { background: var(--nd-green-800); color: #fff; transform: translateY(-2px); box-shadow: inset 0 0 0 1.5px var(--nd-green-800), 0 12px 24px -10px rgba(15,61,46,0.4); }
+.nd-btn--light { background: transparent; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.32); }
+.nd-btn--light:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+.nd-btn--sm { padding: 11px 22px; font-size: 14px; }
+.nd-btn--lg { padding: 18px 40px; font-size: 16.5px; }
+
+/* Link discreto com seta */
+.nd-arrow-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--nd-font); font-size: 15px; font-weight: 700;
+  color: var(--nd-green-800); text-decoration: none;
+  transition: gap 0.2s var(--nd-ease), color 0.2s;
+}
+.nd-arrow-link:hover { gap: 13px; color: var(--nd-gold-600); }
+.nd-arrow-link--light { color: rgba(255,255,255,0.85); }
+.nd-arrow-link--light:hover { color: var(--nd-gold); }
+
+/* ============================================================
+   CHIPS / BADGES
+   ============================================================ */
+.nd-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--nd-font); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.03em; padding: 6px 14px; border-radius: var(--nd-r-pill);
+}
+.nd-chip--ok { background: var(--nd-green-100); color: var(--nd-green-700); }
+.nd-chip--ok::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--nd-green-600); }
+.nd-chip--soon { background: var(--nd-gold-100); color: var(--nd-gold-600); }
+.nd-chip--featured { background: var(--nd-gold); color: var(--nd-green-900); text-transform: uppercase; font-size: 11px; letter-spacing: 0.07em; }
+.nd-chip--light { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.14); }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.nd-card {
+  background: var(--nd-bg);
+  border: 1px solid rgba(15,61,46,0.08);
+  border-radius: var(--nd-r-card);
+  box-shadow: var(--nd-sh-rest);
+  transition: transform 0.25s var(--nd-ease), box-shadow 0.25s, border-color 0.25s;
+}
+.nd-card:hover { transform: translateY(-4px); box-shadow: var(--nd-sh-hover); border-color: rgba(15,61,46,0.16); }
+
+/* ============================================================
+   INPUTS — label flutuante (base; usado no fluxo de reserva)
+   ============================================================ */
+.nd-field { position: relative; font-family: var(--nd-font); }
+.nd-field input, .nd-field select {
+  width: 100%; height: 54px; padding: 22px 16px 8px;
+  font-family: var(--nd-font); font-size: 15.5px; color: var(--nd-ink);
+  background: var(--nd-bg); border: 1px solid var(--nd-gray-200);
+  border-radius: var(--nd-r-input);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+}
+.nd-field input:focus, .nd-field select:focus {
+  outline: none; border-color: var(--nd-green-700);
+  box-shadow: 0 0 0 3px rgba(15,61,46,0.1);
+}
+.nd-field label {
+  position: absolute; left: 16px; top: 17px;
+  font-size: 15px; color: var(--nd-gray-400); pointer-events: none;
+  transition: top 0.18s var(--nd-ease), font-size 0.18s, color 0.18s;
+}
+.nd-field input:focus + label,
+.nd-field input:not(:placeholder-shown) + label,
+.nd-field.is-filled label {
+  top: 7px; font-size: 11.5px; font-weight: 700; color: var(--nd-green-700);
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+
+/* ============================================================
+   ACCORDION (FAQ)
+   ============================================================ */
+.nd-acc { border-bottom: 1px solid var(--nd-gray-200); font-family: var(--nd-font); }
+.nd-acc__q {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: 100%; padding: 22px 4px; background: none; border: 0; cursor: pointer;
+  font-family: var(--nd-font); font-size: 16.5px; font-weight: 700;
+  color: var(--nd-ink); text-align: left; transition: color 0.2s;
+}
+.nd-acc__q:hover { color: var(--nd-green-700); }
+.nd-acc__q::after {
+  content: ''; flex-shrink: 0; width: 12px; height: 12px;
+  border-right: 2.5px solid var(--nd-green-700); border-bottom: 2.5px solid var(--nd-green-700);
+  transform: rotate(45deg); margin-top: -6px;
+  transition: transform 0.3s var(--nd-ease);
+}
+.nd-acc.open .nd-acc__q::after { transform: rotate(225deg); margin-top: 6px; }
+.nd-acc__a {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s var(--nd-ease);
+}
+.nd-acc.open .nd-acc__a { grid-template-rows: 1fr; }
+.nd-acc__a > div { overflow: hidden; }
+.nd-acc__a p {
+  font-size: 15px; line-height: 1.65; color: var(--nd-ink-soft);
+  margin: 0; padding: 0 4px 22px;
+}
+
+/* ============================================================
+   NAVBAR — fixa, branca com blur, links centrais, CTA dourado
+   ============================================================ */
+.nd-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(255,255,255,0.88);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid rgba(15,61,46,0.07);
+  transition: box-shadow 0.25s, background 0.25s;
+}
+.nd-nav.is-scrolled {
+  background: rgba(255,255,255,0.96);
+  box-shadow: var(--nd-sh-nav);
+}
+.nd-nav__row {
+  position: relative;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; gap: 12px;
+}
+.nd-nav__logo { height: 40px; width: auto; display: block; }
+@media (max-width: 720px) { .nd-nav__logo { height: 36px; } }
+
+/* Links centrais (desktop) */
+.nd-nav__links { display: none; }
+@media (min-width: 1000px) {
+  .nd-nav__links {
+    display: flex; gap: 4px;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+}
+.nd-nav__links a {
+  font-family: var(--nd-font); font-size: 14.5px; font-weight: 600;
+  color: var(--nd-ink-soft); text-decoration: none;
+  padding: 9px 16px; border-radius: var(--nd-r-pill);
+  transition: background 0.2s, color 0.2s;
+}
+.nd-nav__links a:hover { background: var(--nd-green-50); color: var(--nd-green-800); }
+.nd-nav__links a.is-active { background: var(--nd-green-100); color: var(--nd-green-800); font-weight: 700; }
+
+/* CTA Reservar — pílula dourada */
+.nd-nav__reservar {
+  display: inline-flex; align-items: center;
+  background: var(--nd-gold); color: var(--nd-green-900);
+  font-family: var(--nd-font); font-weight: 700; font-size: 14px;
+  padding: 11px 24px; border-radius: var(--nd-r-pill);
+  text-decoration: none; letter-spacing: 0.01em;
+  transition: transform 0.2s var(--nd-ease), box-shadow 0.2s, background 0.2s;
+}
+.nd-nav__reservar:hover {
+  background: #DDB465; transform: translateY(-2px);
+  box-shadow: 0 10px 22px -8px rgba(212,168,83,0.55);
+}
+.nd-nav__reservar:active { transform: scale(0.97); }
+@media (max-width: 480px) { .nd-nav__reservar { padding: 9px 18px; font-size: 13px; } }
+
+/* Hambúrguer — minimal, sem borda */
+.nd-nav__toggle {
+  width: 44px; height: 44px; border: 0; border-radius: var(--nd-r-pill);
+  background: transparent; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 5px; cursor: pointer; padding: 0;
+  transition: background 0.2s;
+}
+.nd-nav__toggle:hover { background: var(--nd-green-50); border: 0; }
+.nd-nav__toggle span {
+  display: block; width: 20px; height: 2px; border-radius: 2px;
+  background: var(--nd-green-800);
+  transition: transform 0.25s var(--nd-ease), opacity 0.15s;
+}
+
+/* ============================================================
+   MENU MOBILE TELA CHEIA — painel verde deslizante
+   ============================================================ */
+.nd-drawer {
+  width: min(440px, 100%);
+  background: linear-gradient(165deg, #0E382B 0%, var(--nd-green-950) 100%);
+  box-shadow: -30px 0 70px rgba(4,16,12,0.5);
+}
+@media (max-width: 720px) { .nd-drawer { width: 100%; } }
+
+.nd-drawer__head {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nd-drawer__brand {
+  font-family: var(--nd-font); font-size: 16px; font-weight: 800;
+  color: #fff; letter-spacing: -0.01em;
+}
+.nd-drawer__close {
+  width: 42px; height: 42px; border-radius: var(--nd-r-pill);
+  color: #fff; border: 1px solid rgba(255,255,255,0.2);
+  transition: background 0.2s, transform 0.2s;
+}
+.nd-drawer__close:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+
+.nd-drawer__nav { padding: 18px 0; }
+.nd-drawer__nav a {
+  font-family: var(--nd-font); font-size: 19px; font-weight: 600;
+  color: rgba(255,255,255,0.88); border-bottom: 0;
+  padding: 14px 28px;
+  opacity: 0; transform: translateX(28px);
+  transition: opacity 0.45s ease, transform 0.45s var(--nd-ease),
+              background 0.2s, color 0.2s, padding 0.2s;
+}
+body.is-drawer-open .nd-drawer__nav a { opacity: 1; transform: none; }
+/* Cascata: cada link entra 50ms depois do anterior */
+body.is-drawer-open .nd-drawer__nav a:nth-child(1)  { transition-delay: 0.05s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(2)  { transition-delay: 0.10s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(3)  { transition-delay: 0.15s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(4)  { transition-delay: 0.20s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(5)  { transition-delay: 0.25s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(6)  { transition-delay: 0.30s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(7)  { transition-delay: 0.35s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(8)  { transition-delay: 0.40s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(9)  { transition-delay: 0.45s; }
+body.is-drawer-open .nd-drawer__nav a:nth-child(10) { transition-delay: 0.50s; }
+.nd-drawer__nav a:hover { background: rgba(255,255,255,0.05); color: #fff; padding-left: 38px; }
+.nd-drawer__nav a.is-active { color: var(--nd-gold); background: rgba(212,168,83,0.08); }
+.nd-drawer__nav a::after { color: rgba(255,255,255,0.3); }
+.nd-drawer__nav a:hover::after { color: var(--nd-gold); }
+
+.nd-drawer__foot { border-top: 1px solid rgba(255,255,255,0.08); padding: 22px 24px; }
+.nd-drawer__cta {
+  font-family: var(--nd-font); border-radius: var(--nd-r-pill);
+  background: rgba(255,255,255,0.08); color: #fff;
+  border: 1px solid rgba(255,255,255,0.16);
+  transition: background 0.2s, transform 0.2s var(--nd-ease);
+}
+.nd-drawer__cta:hover { background: rgba(255,255,255,0.14); transform: translateY(-1px); }
+.nd-drawer__cta--gold { background: var(--nd-gold); color: var(--nd-green-900); border: 0; }
+.nd-drawer__cta--gold:hover { background: #DDB465; }
+button.nd-drawer__cta--ghost, .nd-drawer__cta--ghost {
+  background: transparent; color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.nd-drawer__cta--ghost:hover { color: #fff; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.4); }
+.nd-drawer__contact { color: rgba(255,255,255,0.5); }
+.nd-drawer__contact a { color: rgba(255,255,255,0.85); }
+.nd-drawer__section { color: rgba(255,255,255,0.4); }
+
+.nd-backdrop {
+  background: rgba(4,16,12,0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+/* ============================================================
+   MOVIMENTO — reveal on scroll + utilidades
+   ============================================================ */
+.nd-reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s var(--nd-ease), transform 0.7s var(--nd-ease);
+}
+.nd-reveal.in { opacity: 1; transform: none; }
+/* Cascata pra grids: filhos entram escalonados */
+.nd-stagger > .nd-reveal:nth-child(2) { transition-delay: 0.08s; }
+.nd-stagger > .nd-reveal:nth-child(3) { transition-delay: 0.16s; }
+.nd-stagger > .nd-reveal:nth-child(4) { transition-delay: 0.24s; }
+.nd-stagger > .nd-reveal:nth-child(5) { transition-delay: 0.32s; }
+.nd-stagger > .nd-reveal:nth-child(6) { transition-delay: 0.40s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-reveal { opacity: 1; transform: none; transition: none; }
+  .nd-btn, .nd-nav__reservar, .nd-card { transition: none; }
+  body.is-drawer-open .nd-drawer__nav a { transition-delay: 0s; }
+}
