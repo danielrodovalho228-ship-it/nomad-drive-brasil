@@ -603,18 +603,18 @@
           <div class="plan-picker__grid">
             <div class="plan-pick" data-plan="essencial">
               <span class="plan-pick__name">Essencial</span>
-              <span class="plan-pick__km"><strong data-pp-km="essencial">9.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="essencial">R$ 9.450</span>
+              <span class="plan-pick__km"><strong data-pp-km="essencial">3.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="essencial">R$ 3.790</span>
             </div>
             <div class="plan-pick plan-pick--featured selected" data-plan="estendido">
               <span class="plan-pick__name">Estendido</span>
-              <span class="plan-pick__km"><strong data-pp-km="estendido">12.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="estendido">R$ 9.990</span>
+              <span class="plan-pick__km"><strong data-pp-km="estendido">4.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="estendido">R$ 3.990</span>
             </div>
             <div class="plan-pick" data-plan="semLimite">
-              <span class="plan-pick__name">Sem Limite</span>
-              <span class="plan-pick__km"><strong data-pp-km="semLimite">15.000 km</strong> total</span>
-              <span class="plan-pick__price" data-pp-price="semLimite">R$ 10.530</span>
+              <span class="plan-pick__name">Máximo</span>
+              <span class="plan-pick__km"><strong data-pp-km="semLimite">6.000 km</strong> total</span>
+              <span class="plan-pick__price" data-pp-price="semLimite">R$ 4.290</span>
             </div>
           </div>
         </div>
@@ -1025,7 +1025,7 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
-<script src="prices.js?v=20260610b"></script>
+<script src="prices.js?v=20260610c"></script>
 <script>
 (function() {
   // ===== Renderiza cards de carro dinamicamente do prices.js =====
@@ -1115,7 +1115,7 @@
     if (days >= 45) return 60;
     return 30;
   }
-  var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Sem Limite' };
+  var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Máximo' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
   // Lançamento enxuto: 1 carro só (sedan Cronos), sugestão sempre sedan

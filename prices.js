@@ -1,26 +1,30 @@
 /* ============================================================
- * prices.js — Configuração central de preços NomadeDrive v3
+ * prices.js — TABELA CANÔNICA DE PREÇOS NomadeDrive
  * ============================================================
  *
- * MODELO: Limite Total do Período
- * 3 planos por carro: Essencial, Estendido (mais escolhido), Sem Limite
- * Km é TOTAL do período inteiro, não mensal — cliente distribui livre.
+ * ÚNICA FONTE DA VERDADE de preços do site inteiro.
+ * Nenhuma página pode hardcodear preço — todas leem daqui.
  *
- * PIVOT 05/06/2026 — LANÇAMENTO ENXUTO 1 CARRO:
- *   - Operação começa com 1 sedan automático (Fiat Cronos 2024)
- *   - HB20 popular removido do site (margem fina + sem diferencial
- *     contra locadoras tradicionais no segmento popular)
- *   - Preço Cronos rebaixado pra ancorar levemente abaixo das
- *     locadoras tradicionais (sedan compacto ref. R$ 3.820 a
- *     3.000 km/mês — consulta interna 05/06/2026)
+ * REGRAS (Prioridade Zero — 10/06/2026):
+ *   - Plano Sedan BASE 30 dias = R$ 3.790/mês = nível ESSENCIAL
+ *   - Níveis: Essencial 3.790 · Estendido 3.990 (+200) ·
+ *             Máximo 4.290 (+500, teto 6.000 km/mês, excedente R$ 1/km)
+ *     ("Máximo" substituiu "Sem Limite" — não existe km ilimitado real;
+ *      o id interno continua 'semLimite' por compat de URLs antigas)
+ *   - Promo 90+ dias: desconto FIXO de R$ 200/mês sobre o nível
+ *     escolhido. PROIBIDO desconto percentual.
+ *     Validação: Essencial 90 dias = 3 × 3.590 = R$ 10.770 total.
+ *   - Caução padrão: pré-autorização de R$ 2.000 no cartão
+ *     (escala por perfil só nos termos).
+ *   - "Zero Caução R$ 370" foi REMOVIDO da venda: era o mesmo produto
+ *     que "Isenção de franquia R$ 200" com nome/preço conflitantes.
+ *     Produto único: Isenção de franquia — EM BREVE (validação jurídica).
  *
- * Última atualização: 05/06/2026
+ * Última atualização: 10/06/2026
  * ============================================================ */
 
 window.NOMADE_PRICES = {
-  // Carros disponíveis no Plano Sedan (lançamento: 2 modelos da mesma categoria)
-  // - sedan  = Fiat Cronos (carro inaugural)
-  // - onix   = Chevrolet Onix Sedan (segundo carro, mesma categoria + preço)
+  // Carros do Plano Sedan (mesma categoria, mesma tabela)
   cars: {
     sedan: {
       id: 'sedan',
@@ -32,7 +36,6 @@ window.NOMADE_PRICES = {
       photos: ['images/car-cronos-1.jpg', 'images/car-cronos-2.jpg', 'images/car-cronos-3.jpg'],
       caucaoBRL: 2000,
       kmExceededBRL: 1.00,
-      zeroCaucaoBRL: 370,
       pageUrl: 'carros/sedan.html'
     },
     onix: {
@@ -45,27 +48,41 @@ window.NOMADE_PRICES = {
       photos: ['images/car-onix-1.jpg'],
       caucaoBRL: 2000,
       kmExceededBRL: 1.00,
-      zeroCaucaoBRL: 370,
       pageUrl: 'carros/sedan.html'
     }
   },
 
-  // 3 PLANOS × 4 períodos (Limite Total do Período)
-  // Preço ancorado levemente abaixo de locadoras tradicionais (sedan
-  // compacto ref. R$ 3.820 a 3.000 km/mês — consulta interna 05/06/2026).
-  // Descontos por período: -5% (60d), -10% (90d), -15% (180d) sobre o pro-rata.
-  // Cronos e Onix Sedan ficam na MESMA categoria e seguem a MESMA tabela.
+  // Desconto fixo por fidelização (>= 90 dias): R$ 200/mês sobre o nível.
+  loyaltyDiscountMonthlyBRL: 200,
+  loyaltyMinDays: 90,
+
+  // 3 NÍVEIS × 4 períodos.
+  // priceDays = nível × meses − (200 × meses quando período >= 90 dias).
+  //   essencial 3.790: 30=3.790 | 60=7.580 | 90=3×3.590=10.770 | 180=6×3.590=21.540
+  //   estendido 3.990: 30=3.990 | 60=7.980 | 90=3×3.790=11.370 | 180=6×3.790=22.740
+  //   máximo    4.290: 30=4.290 | 60=8.580 | 90=3×4.090=12.270 | 180=6×4.090=24.540
+  // kmDays = km/mês × meses (Máximo tem TETO de 6.000 km/mês).
   plans: {
     sedan: {
-      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3690, 60: 7011, 90: 9963, 180: 18819 } },
-      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3740, 60: 7106, 90: 10098, 180: 19074 } },
-      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3790, 60: 7201, 90: 10233, 180: 19329 } }
+      essencial: { label: 'Essencial', monthlyBRL: 3790, kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3790, 60: 7580, 90: 10770, 180: 21540 } },
+      estendido: { label: 'Estendido', highlight: true, monthlyBRL: 3990, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3990, 60: 7980, 90: 11370, 180: 22740 } },
+      semLimite: { label: 'Máximo', monthlyBRL: 4290, kmCapMonthly: 6000, kmDays: { 30: 6000, 60: 12000, 90: 18000, 180: 36000 }, priceDays: { 30: 4290, 60: 8580, 90: 12270, 180: 24540 } }
     },
     onix: {
-      essencial: { label: 'Essencial', kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3690, 60: 7011, 90: 9963, 180: 18819 } },
-      estendido: { label: 'Estendido', highlight: true, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3740, 60: 7106, 90: 10098, 180: 19074 } },
-      semLimite: { label: 'Sem Limite', kmDays: { 30: 5000, 60: 10000, 90: 15000, 180: 30000 }, priceDays: { 30: 3790, 60: 7201, 90: 10233, 180: 19329 } }
+      essencial: { label: 'Essencial', monthlyBRL: 3790, kmDays: { 30: 3000, 60: 6000, 90: 9000, 180: 18000 }, priceDays: { 30: 3790, 60: 7580, 90: 10770, 180: 21540 } },
+      estendido: { label: 'Estendido', highlight: true, monthlyBRL: 3990, kmDays: { 30: 4000, 60: 8000, 90: 12000, 180: 24000 }, priceDays: { 30: 3990, 60: 7980, 90: 11370, 180: 22740 } },
+      semLimite: { label: 'Máximo', monthlyBRL: 4290, kmCapMonthly: 6000, kmDays: { 30: 6000, 60: 12000, 90: 18000, 180: 36000 }, priceDays: { 30: 4290, 60: 8580, 90: 12270, 180: 24540 } }
     }
+  },
+
+  // Adicionais opcionais (opt-in, NUNCA pré-marcados).
+  // Isenção de franquia: EM BREVE (validação jurídica) — sem botão de compra.
+  addons: {
+    franquia: { label: 'Isenção de franquia', monthlyBRL: 200, locked: true, soon: true },
+    vidros:   { label: 'Proteção vidros e pneus', monthlyBRL: 60 },
+    condutor: { label: 'Segundo condutor', monthlyBRL: 70 },
+    entrega:  { label: 'Entrega premium', monthlyBRL: 80 },
+    pet:      { label: 'Higienização reforçada/pet', monthlyBRL: 50 }
   },
 
   // Pacote incluído (mostrar em cada card)
