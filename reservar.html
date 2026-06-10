@@ -1496,12 +1496,17 @@
 
   var urlParams = new URLSearchParams(window.location.search);
   var preCar = urlParams.get('carro');
-  // Lançamento enxuto: só 'sedan' válido. Aliases legados ('popular',
-  // 'hb20', 'cronos') redirecionam pro sedan único disponível.
+  // Aliases legados: 'cronos' -> 'sedan' (Fiat Cronos = id 'sedan'),
+  // 'hb20'/'popular' -> 'sedan' (HB20 removido do site, fallback no Cronos)
   if (preCar === 'hb20' || preCar === 'popular' || preCar === 'cronos') preCar = 'sedan';
-  if (preCar === 'sedan') {
+  // Valida que o carId existe no prices.js cars antes de aplicar
+  if (preCar && window.NOMADE_PRICES && window.NOMADE_PRICES.cars && window.NOMADE_PRICES.cars[preCar]) {
     var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
-    if (card) { card.classList.add('selected'); state.car = preCar; }
+    if (card) {
+      document.querySelectorAll('.pick--car').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      state.car = preCar;
+    }
   }
   // perfil pre-seleciona motivo no step 3
   var preProfile = urlParams.get('perfil');
