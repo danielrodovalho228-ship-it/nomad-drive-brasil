@@ -57,6 +57,10 @@
   border-radius: 4px;
 }
 
+/* Navbar é FIXA: âncoras internas (#pagamento, #medico, etc.) precisam
+   de respiro pra não esconder o título atrás da barra. */
+:where([id]) { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
 /* ============================================================
    CONTAINER + SEÇÕES
    ============================================================ */
