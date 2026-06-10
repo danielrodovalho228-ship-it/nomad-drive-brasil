@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Preços e planos — Nomade Drive Brasil</title>
-<meta name="description" content="3 níveis de quilometragem (Essencial, Estendido, Máximo) para locação mensal de carros em Uberlândia. A partir de R$ 3.790/mês com tudo incluso. Sem fidelidade." />
+<meta name="description" content="3 níveis de quilometragem (Essencial, Estendido, Km Livre) para locação mensal de carros em Uberlândia. A partir de R$ 3.790/mês com tudo incluso. Sem fidelidade." />
 <meta name="theme-color" content="#0F3D2E" />
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -107,7 +107,7 @@
   .precos__info strong { color: var(--navy); }
 </style>
 <link rel="stylesheet" href="assets/site-shell.css?v=20260606c" />
-<script src="prices.js?v=20260610c"></script>
+<script src="prices.js?v=20260610d"></script>
 <script defer src="assets/site-shell.js?v=1"></script>
 </head>
 <body data-nd-page="precos">
@@ -138,7 +138,7 @@
   <div class="planos__head">
     <div class="planos__eyebrow">Escolha seu plano</div>
     <h2>3 planos por categoria de veículo</h2>
-    <p>Cada plano vem com <strong>tudo incluso</strong> e oferece 3 níveis de quilometragem (Essencial, Estendido e Máximo). Você escolhe na hora da reserva.</p>
+    <p>Cada plano vem com <strong>tudo incluso</strong> e oferece 3 níveis de quilometragem (Essencial, Estendido e Km Livre). Você escolhe na hora da reserva.</p>
   </div>
 
   <!-- Promo fidelizacao 90+ dias -->
@@ -171,7 +171,7 @@
         <li>Assistência 24h</li>
       </ul>
       <div class="plano-card__km">
-        <strong>3 níveis de quilometragem:</strong> Essencial (3.000 km) · Estendido (4.000 km) · Máximo (teto 6.000 km), por mês. Você escolhe na reserva.
+        <strong>3 níveis de quilometragem:</strong> Essencial (3.000 km) · Estendido (4.500 km) · Km Livre (teto 6.000 km), por mês. Você escolhe na reserva.
       </div>
       <div class="plano-card__cta">
         <a href="reservar.html?carro=sedan" class="btn btn--primary">Reservar Plano Sedan</a>
@@ -258,11 +258,31 @@
 
     <div class="precos__info">
       <h3>Sem fidelidade. Sem letra miúda. Caução só pré-autorizada.</h3>
-      <p>O <strong>valor mostrado é o total do período</strong> — você paga antecipado e pronto. Manutenção programada (busca/devolve), seguro completo, IPVA e licenciamento já estão inclusos. Ultrapassou o limite de km? Pagamos só os km extras no fim, sem multa.</p>
+      <p>O <strong>valor mostrado é o total do período</strong> — você paga antecipado e pronto. Manutenção programada (busca/devolve), seguro completo, IPVA e licenciamento já estão inclusos. Ultrapassou o limite de km? Cobramos só os km extras na devolução: <strong>R$ 1,00/km, sem multa</strong>.</p>
 
       <div style="margin-top:18px;padding:16px 18px;background:var(--sage-pale,#e6efe9);border-left:4px solid var(--sage,#5A8A6B);border-radius:8px;">
         <strong style="color:var(--navy,#0F3D2E);font-size:15px;display:block;margin-bottom:6px;">🚗 Diferença pra locadora tradicional: km que não evapora</strong>
         <p style="font-size:14px;color:var(--gray-700);margin:0;line-height:1.55;">Em locadoras tradicionais você paga por km/mês — se rodar menos em um mês, perde. Aqui o limite é do <strong>período inteiro</strong>: roda pouco em janeiro e muito em fevereiro, ou vice-versa. Você distribui à vontade.</p>
+      </div>
+    </div>
+
+    <!-- Mini-seção "Como funciona o km" (Política de KM v2) —
+         3 passos, tom transparência, sem letra miúda. -->
+    <div style="max-width:880px;margin:28px auto 0;">
+      <h3 style="font-size:17px;color:var(--navy);margin-bottom:14px;text-align:center;">Como funciona o km</h3>
+      <div style="display:grid;gap:12px;grid-template-columns:1fr;">
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:14px 16px;">
+          <span style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">1</span>
+          <p style="font-size:14px;color:var(--gray-700);margin:0;line-height:1.55;"><strong style="color:var(--navy);">Escolha o nível pelo seu uso</strong> — 3.000, 4.500 ou 6.000 km por mês. Na dúvida, o Estendido cobre a maioria das rotinas.</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:14px 16px;">
+          <span style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">2</span>
+          <p style="font-size:14px;color:var(--gray-700);margin:0;line-height:1.55;"><strong style="color:var(--navy);">Rode tranquilo</strong> — o limite é do período inteiro, você distribui entre os meses como quiser. A rodagem é registrada com odômetro fotografado na entrega e na devolução.</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:14px 16px;">
+          <span style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">3</span>
+          <p style="font-size:14px;color:var(--gray-700);margin:0;line-height:1.55;"><strong style="color:var(--navy);">Passou do limite?</strong> Cobramos de forma transparente na devolução: <strong style="color:var(--navy);">R$ 1,00 por km excedente, sem multa adicional</strong>. Simples assim.</p>
+        </div>
       </div>
     </div>
 
@@ -396,7 +416,7 @@
           '<li>Manutenção programada</li>' +
           '<li>IPVA + licenciamento</li>' +
           '<li>Assistência 24h</li>' +
-          '<li>Km extra: R$ 1,00/km</li>' +
+          '<li>Passou? R$ 1,00/km, sem multa</li>' +
         '</ul>' +
         '<a href="reservar.html?carro=' + state.car + '&plano=' + pid + '&dias=' + state.days + '" class="btn btn--primary plan__cta">Reservar ' + plan.label + '</a>' +
       '</div>';
