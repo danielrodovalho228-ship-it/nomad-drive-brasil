@@ -53,13 +53,13 @@
     if (!document.querySelector('link[href*="nd-design.css"]')) {
       var c = document.createElement('link');
       c.rel = 'stylesheet';
-      c.href = prefix + 'assets/nd-design.css?v=1';
+      c.href = prefix + 'assets/nd-design.css?v=3';
       head.appendChild(c);
     }
     if (!document.querySelector('script[src*="nd-ui.js"]')) {
       var s = document.createElement('script');
       s.defer = true;
-      s.src = prefix + 'assets/nd-ui.js?v=1';
+      s.src = prefix + 'assets/nd-ui.js?v=2';
       head.appendChild(s);
     }
   })();

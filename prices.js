@@ -102,6 +102,33 @@ window.NOMADE_PRICES = {
     ]
   },
 
+  // ============================================================
+  // REFERÊNCIA DE MERCADO — locadoras tradicionais (simulação)
+  // Usado na seção "Compare o preço final" (home + precos).
+  // NUNCA citar concorrente por nome. Valores SIMULADOS — atualizar
+  // dataSimulacao + números quando refizer a pesquisa.
+  // Preço REAL = diária + proteção recomendada + taxas (não o anunciado).
+  // ============================================================
+  referencia_mercado: {
+    dataSimulacao: 'junho de 2026',
+    local: 'Uberlândia',
+    // Card A — anatomia do preço (sedan automático, contrato longo)
+    anatomia: [
+      { label: 'Diária anunciada', detail: '~R$ 108/dia × 30 dias', valor: 3240, plus: false },
+      { label: 'Proteção (pacote recomendado)', detail: '~R$ 30/dia', valor: 890, plus: true },
+      { label: 'Taxa administrativa (~15%)', detail: 'sobre tudo', valor: 620, plus: true }
+    ],
+    anatomiaTotal: 4700,
+    anatomiaKmMes: 1700,
+    // Tabela por categoria (só categorias que existem ou anunciadas)
+    categorias: [
+      { nome: 'Sedan automático', tradMin: 4179, tradMax: 4751, nomade: 'R$ 3.790', nomadeNota: 'R$ 3.590 em 90+ dias', status: 'disponivel' },
+      { nome: 'SUV compacto', tradMin: 5055, tradMax: 5213, nomade: 'R$ 4.690', nomadeNota: '', status: 'em breve' },
+      { nome: 'Premium / executivo', tradMin: 5200, tradMax: null, nomade: 'Sob consulta', nomadeNota: '', status: 'em breve' }
+    ],
+    economiaSedanMaxBRL: 960
+  },
+
   // ===== Helpers =====
   planTotal: function(carId, planId, days) {
     var plan = this.plans[carId] && this.plans[carId][planId];

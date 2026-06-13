@@ -383,3 +383,97 @@ button.nd-drawer__cta--ghost, .nd-drawer__cta--ghost {
   .nd-btn, .nd-nav__reservar, .nd-card { transition: none; }
   body.is-drawer-open .nd-drawer__nav a { transition-delay: 0s; }
 }
+
+/* ============================================================
+   COMPARE O PREÇO FINAL (.ptruth) — anatomia do preço +
+   tabela por categoria + contraste de contrato longo.
+   Renderizado por nd-ui.js a partir de NOMADE_PRICES.referencia_mercado.
+   ============================================================ */
+.ptruth { background: var(--nd-bg-soft); padding: 88px 0; font-family: var(--nd-font); }
+@media (max-width: 720px) { .ptruth { padding: 56px 0; } }
+.ptruth__wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+@media (max-width: 540px) { .ptruth__wrap { padding: 0 20px; } }
+.ptruth__head { text-align: center; max-width: 680px; margin: 0 auto 40px; }
+.ptruth__head .nd-eyebrow { justify-content: center; }
+.ptruth__head h2 { font-size: clamp(28px, 3.4vw, 38px); font-weight: 800; letter-spacing: -0.022em; line-height: 1.12; color: var(--nd-ink); margin: 0 0 12px; }
+.ptruth__head p { font-size: clamp(15px, 1.5vw, 17px); line-height: 1.6; color: var(--nd-ink-soft); margin: 0; }
+
+/* PARTE 1 — dois cards lado a lado */
+.ptruth__anatomy { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 860px) { .ptruth__anatomy { grid-template-columns: 1fr auto 1fr; gap: 0; } }
+.ptruth-card { background: var(--nd-bg); border-radius: var(--nd-r-card); padding: 28px 26px; display: flex; flex-direction: column; }
+.ptruth-card--trad { border: 1px solid var(--nd-gray-200); box-shadow: var(--nd-sh-rest); }
+.ptruth-card--nomade { background: linear-gradient(165deg, #0E3A2C 0%, var(--nd-green-900) 100%); color: #fff; box-shadow: 0 30px 60px -24px rgba(10,42,32,0.5); position: relative; overflow: hidden; }
+.ptruth-card--nomade::before { content: ''; position: absolute; top: -120px; right: -100px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(212,168,83,0.16) 0%, rgba(212,168,83,0) 65%); pointer-events: none; }
+.ptruth-card__tag { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 18px; }
+.ptruth-card--trad .ptruth-card__tag { color: var(--nd-gray-400); }
+.ptruth-card--nomade .ptruth-card__tag { color: var(--nd-gold); position: relative; z-index: 1; }
+/* extrato/recibo */
+.ptruth-line { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 12px 0; border-bottom: 1px dashed var(--nd-gray-200); }
+.ptruth-line__label { font-size: 14px; color: var(--nd-ink); font-weight: 600; }
+.ptruth-line__detail { display: block; font-size: 12px; color: var(--nd-gray-400); font-weight: 500; margin-top: 2px; }
+.ptruth-line__val { font-size: 15px; font-weight: 700; color: var(--nd-ink); white-space: nowrap; }
+.ptruth-line__val--plus::before { content: '+ '; color: var(--nd-gray-400); }
+.ptruth-card__total { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-top: 16px; padding-top: 16px; }
+.ptruth-card__total-label { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--nd-ink); }
+.ptruth-card__total-val { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--nd-ink); white-space: nowrap; }
+.ptruth-card__foot { font-size: 12.5px; color: var(--nd-gray-400); margin-top: 10px; }
+/* card nomade — número grande único */
+.ptruth-card--nomade .ptruth-card__big { position: relative; z-index: 1; margin: auto 0; }
+.ptruth-card__price { font-size: clamp(44px, 6vw, 58px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: #fff; }
+.ptruth-card__price small { font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0; }
+.ptruth-card__sub { font-size: 14.5px; line-height: 1.55; color: rgba(255,255,255,0.82); margin-top: 14px; position: relative; z-index: 1; }
+.ptruth-card__sub strong { color: var(--nd-gold); font-weight: 700; }
+.ptruth-card__pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; position: relative; z-index: 1; }
+.ptruth-card__pill { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); padding: 5px 11px; border-radius: 999px; }
+/* divisor central "vs" */
+.ptruth__vs { display: flex; align-items: center; justify-content: center; }
+.ptruth__vs span { width: 48px; height: 48px; border-radius: 50%; background: var(--nd-bg); border: 1px solid var(--nd-gray-200); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: var(--nd-gray-400); box-shadow: var(--nd-sh-rest); }
+@media (min-width: 860px) { .ptruth__vs { padding: 0 4px; } .ptruth__vs span { margin: 0 -24px; position: relative; z-index: 2; } }
+@media (max-width: 859px) { .ptruth__vs { margin: -8px 0; } }
+.ptruth__microcopy { text-align: center; font-size: clamp(16px, 1.8vw, 19px); font-weight: 700; color: var(--nd-ink); margin: 34px auto 0; max-width: 560px; letter-spacing: -0.01em; }
+
+/* PARTE 2 — tabela por categoria */
+.ptruth__cats { margin-top: 56px; }
+.ptruth__cats h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.015em; color: var(--nd-ink); text-align: center; margin: 0 0 20px; }
+.ptruth-tbl { width: 100%; max-width: 880px; margin: 0 auto; border-collapse: separate; border-spacing: 0; background: var(--nd-bg); border: 1px solid var(--nd-gray-200); border-radius: var(--nd-r-card); overflow: hidden; box-shadow: var(--nd-sh-rest); }
+.ptruth-tbl th, .ptruth-tbl td { padding: 15px 18px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--nd-gray-100); vertical-align: middle; }
+.ptruth-tbl thead th { background: var(--nd-green-900); color: #fff; font-weight: 700; font-size: 12.5px; letter-spacing: 0.02em; }
+.ptruth-tbl thead th:last-child { background: var(--nd-gold); color: var(--nd-green-900); }
+.ptruth-tbl tbody td:first-child { font-weight: 700; color: var(--nd-ink); }
+.ptruth-tbl tbody td:nth-child(2) { color: var(--nd-ink-soft); }
+.ptruth-tbl tbody td:last-child { font-weight: 700; color: var(--nd-green-800); background: var(--nd-green-50); }
+.ptruth-tbl tbody tr:last-child td { border-bottom: 0; }
+.ptruth-tbl__nota { display: block; font-size: 12px; font-weight: 600; color: var(--nd-gold-600); margin-top: 2px; }
+.ptruth-tbl__chip { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; }
+.ptruth-tbl__chip--ok { background: var(--nd-green-100); color: var(--nd-green-700); }
+.ptruth-tbl__chip--soon { background: var(--nd-gold-100); color: var(--nd-gold-600); }
+.ptruth__econ { max-width: 880px; margin: 16px auto 0; text-align: center; font-size: 14px; font-weight: 700; color: var(--nd-green-800); background: var(--nd-green-50); border: 1px solid var(--nd-green-100); border-radius: 12px; padding: 12px 18px; }
+.ptruth__econ strong { color: var(--nd-gold-600); }
+
+/* PARTE 3 — contraste de contrato longo */
+.ptruth__contract { display: grid; gap: 0; grid-template-columns: 1fr; max-width: 880px; margin: 36px auto 0; border-radius: var(--nd-r-card); overflow: hidden; border: 1px solid var(--nd-gray-200); }
+@media (min-width: 640px) { .ptruth__contract { grid-template-columns: 1fr 1fr; } }
+.ptruth__contract > div { padding: 20px 24px; }
+.ptruth__contract-them { background: var(--nd-bg); }
+.ptruth__contract-us { background: var(--nd-green-900); color: #fff; }
+.ptruth__contract h4 { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 8px; }
+.ptruth__contract-them h4 { color: var(--nd-gray-400); }
+.ptruth__contract-us h4 { color: var(--nd-gold); }
+.ptruth__contract p { font-size: 14.5px; line-height: 1.55; margin: 0; }
+.ptruth__contract-them p { color: var(--nd-ink-soft); }
+.ptruth__contract-us p { color: rgba(255,255,255,0.9); }
+.ptruth__contract-us strong { color: var(--nd-gold); }
+
+/* Rodapé disclaimer */
+.ptruth__disclaimer { max-width: 880px; margin: 28px auto 0; font-size: 12px; line-height: 1.55; color: var(--nd-gray-400); text-align: center; }
+
+/* Mobile: tabela compacta pra não estourar largura */
+@media (max-width: 560px) {
+  .ptruth-tbl { table-layout: fixed; }
+  .ptruth-tbl th, .ptruth-tbl td { padding: 11px 9px; font-size: 12px; word-break: break-word; }
+  .ptruth-tbl thead th { font-size: 10.5px; }
+  .ptruth-tbl th:first-child, .ptruth-tbl td:first-child { width: 28%; }
+  .ptruth-tbl__chip { margin-left: 0; margin-top: 4px; }
+  .ptruth-card { padding: 22px 18px; }
+}
