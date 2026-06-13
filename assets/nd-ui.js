@@ -116,6 +116,9 @@
     var sedan90 = P.planMonthly('sedan', 'essencial', 90);
     var sedanKm = (P.plans.sedan.essencial.kmMonthly || 3000).toLocaleString('pt-BR');
 
+    // Total real = SOMA das linhas (recibo precisa fechar — transparência).
+    var anatomiaTotal = R.anatomia.reduce(function (s, l) { return s + l.valor; }, 0);
+
     var lines = R.anatomia.map(function (l) {
       return '<div class="ptruth-line">' +
         '<span><span class="ptruth-line__label">' + l.label + '</span>' +
@@ -150,7 +153,7 @@
             lines +
             '<div class="ptruth-card__total">' +
               '<span class="ptruth-card__total-label">Total real</span>' +
-              '<span class="ptruth-card__total-val">' + fmt(R.anatomiaTotal) + '<span style="font-size:14px;font-weight:600;color:var(--nd-gray-400);">/mês</span></span>' +
+              '<span class="ptruth-card__total-val">' + fmt(anatomiaTotal) + '<span style="font-size:14px;font-weight:600;color:var(--nd-gray-400);">/mês</span></span>' +
             '</div>' +
             '<div class="ptruth-card__foot">com ~' + R.anatomiaKmMes.toLocaleString('pt-BR') + ' km/mês em contratos longos</div>' +
           '</div>' +

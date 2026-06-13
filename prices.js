@@ -118,7 +118,7 @@ window.NOMADE_PRICES = {
       { label: 'Proteção (pacote recomendado)', detail: '~R$ 30/dia', valor: 890, plus: true },
       { label: 'Taxa administrativa (~15%)', detail: 'sobre tudo', valor: 620, plus: true }
     ],
-    anatomiaTotal: 4700,
+    anatomiaTotal: 4750, // = soma das linhas (3240+890+620). O render recalcula pela soma; mantido aqui só por referência.
     anatomiaKmMes: 1700,
     // Tabela por categoria (só categorias que existem ou anunciadas)
     categorias: [

@@ -59,7 +59,7 @@
     if (!document.querySelector('script[src*="nd-ui.js"]')) {
       var s = document.createElement('script');
       s.defer = true;
-      s.src = prefix + 'assets/nd-ui.js?v=2';
+      s.src = prefix + 'assets/nd-ui.js?v=3';
       head.appendChild(s);
     }
   })();
