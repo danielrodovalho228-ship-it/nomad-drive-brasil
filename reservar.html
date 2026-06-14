@@ -1026,7 +1026,7 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
-<script src="prices.js?v=20260610d"></script>
+<script src="prices.js?v=20260610e"></script>
 <script>
 (function() {
   // ===== Renderiza cards de carro dinamicamente do prices.js =====
@@ -1039,8 +1039,12 @@
     var cars = window.NOMADE_PRICES.cars;
     var html = Object.keys(cars).map(function(carId) {
       var car = cars[carId];
+      // Foto real ainda não inserida → placeholder marcado (sem imagem de carro).
+      var visual = car.photo
+        ? '<img src="' + car.photo + '" alt="' + car.name + '" loading="lazy" onerror="this.style.opacity=0.3;" />'
+        : '<div class="car-ph" style="width:92px;height:64px;min-height:0;border-radius:6px;flex-shrink:0;padding:4px;"><span class="car-ph__label" style="font-size:9px;">[FOTO POLO]</span></div>';
       return '<div class="pick pick--car" data-car="' + carId + '">' +
-        '<img src="' + car.photo + '" alt="' + car.name + '" loading="lazy" onerror="this.style.opacity=0.3;" />' +
+        visual +
         '<div class="pick--car__body">' +
           '<div class="pick--car__cat">' + car.category + '</div>' +
           '<div class="pick--car__name">' + car.name + '</div>' +
@@ -1056,9 +1060,9 @@
         : 'Qual carro você quer? <small>(' + carIds.length + ' modelos disponíveis)</small>';
     }
 
-    // Aplicar pré-seleção via URL ?carro=X (aliases legados redirecionam)
+    // Aplicar pré-seleção via URL ?carro=X (aliases legados redirecionam pro Polo)
     var preCar = new URLSearchParams(window.location.search).get('carro');
-    if (preCar === 'hb20' || preCar === 'popular' || preCar === 'cronos') preCar = 'sedan';
+    if (['hb20', 'popular', 'cronos', 'sedan', 'onix'].indexOf(preCar) !== -1) preCar = 'polo';
 
     // Se só tem 1 carro, auto-seleciona ele (UX melhor — não precisa clicar)
     var autoSelect = carIds.length === 1 ? carIds[0] : preCar;
@@ -1119,22 +1123,27 @@
   var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Km Livre' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
-  // Lançamento enxuto: 1 carro só (sedan Cronos), sugestão sempre sedan
+  // Lançamento: 1 carro só (Volkswagen Polo automático), sugestão sempre polo
   // + ponto de entrega contextual ao perfil.
   var REASON_SUGGESTIONS = {
-    'trabalho-remoto':       { car: 'sedan', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. Entrega na <strong>Praça Tubal Vilela</strong> — pega o <strong>Cronos automático</strong> e segue pro coworking.' },
-    'tratamento-medico':     { car: 'sedan', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Cronos automático</strong> é mais confortável pra paciente e acompanhante.' },
-    'relocacao-corporativa': { car: 'sedan', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Cronos automático</strong> passa imagem profissional pra reuniões.' },
-    'intercambio-pos':       { car: 'sedan', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>Cronos automático</strong> entregue na porta, conforto pra rotina acadêmica.' },
-    'reforma-transicao':     { car: 'sedan', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>Cronos</strong> com porta-malas grande pra carregar materiais e comprar mobília.' },
-    'mudanca-familiar':      { car: 'sedan', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Cronos</strong> comporta família de 5 pessoas com porta-malas pra bagagem.' },
-    'aposentadoria':         { car: 'sedan', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Cronos automático</strong> mais confortável pra viagens longas e dirigir sem cansaço.' },
-    'viagem-longa':          { car: 'sedan', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. Cronos tem mais espaço pra bagagem e estradas.' }
+    'trabalho-remoto':       { car: 'polo', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. Entrega na <strong>Praça Tubal Vilela</strong> — pega o <strong>Polo automático</strong> e segue pro coworking.' },
+    'tratamento-medico':     { car: 'polo', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Polo automático</strong> é confortável pra paciente e acompanhante.' },
+    'relocacao-corporativa': { car: 'polo', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Polo automático</strong>, novo e completo, passa imagem profissional pra reuniões.' },
+    'intercambio-pos':       { car: 'polo', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>Polo automático</strong> entregue na porta, conforto pra rotina acadêmica.' },
+    'reforma-transicao':     { car: 'polo', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>Polo automático</strong>, prático pra rotina da transição.' },
+    'mudanca-familiar':      { car: 'polo', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Polo automático</strong>, confortável e econômico pra família que está chegando.' },
+    'aposentadoria':         { car: 'polo', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Polo automático</strong>, fácil de dirigir e sem cansaço no dia a dia.' },
+    'viagem-longa':          { car: 'polo', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. <strong>Polo automático</strong>, novo e econômico pra rodar pela região.' }
   };
-  // Lançamento: 1 carro só (Cronos)
-  var CARS = {
-    sedan: { name: 'Fiat Cronos', cat: 'Sedan Médio Automático', base: 3690 }
-  };
+  // Lançamento: 1 carro só (Volkswagen Polo automático)
+  // CARS derivado do prices.js (fonte única) — fica em sincronia com a frota.
+  var CARS = {};
+  (function () {
+    var c = (window.NOMADE_PRICES && window.NOMADE_PRICES.cars) || {};
+    Object.keys(c).forEach(function (id) {
+      CARS[id] = { name: c[id].name, cat: c[id].category, base: (window.NOMADE_PRICES.planMonthly(id, 'essencial', 30) || 0) };
+    });
+  })();
   var POINTS_GEO = {
     'aeroporto':      { lat: -18.8835, lng: -48.2256, label: 'Aeroporto Bombonato',     sub: 'Terminal de Desembarque' },
     'center-shopping':{ lat: -18.9131, lng: -48.2755, label: 'Center Shopping',          sub: 'Av. João Naves de Ávila' },
@@ -1498,16 +1507,21 @@
 
   var urlParams = new URLSearchParams(window.location.search);
   var preCar = urlParams.get('carro');
-  // Aliases legados: 'cronos' -> 'sedan' (Fiat Cronos = id 'sedan'),
-  // 'hb20'/'popular' -> 'sedan' (HB20 removido do site, fallback no Cronos)
-  if (preCar === 'hb20' || preCar === 'popular' || preCar === 'cronos') preCar = 'sedan';
-  // Valida que o carId existe no prices.js cars antes de aplicar
-  if (preCar && window.NOMADE_PRICES && window.NOMADE_PRICES.cars && window.NOMADE_PRICES.cars[preCar]) {
+  // Aliases legados → 'polo' (veículo de lançamento atual). Mantém links
+  // antigos (cronos/onix/sedan/hb20/popular) funcionando.
+  if (['hb20', 'popular', 'cronos', 'sedan', 'onix'].indexOf(preCar) !== -1) preCar = 'polo';
+  var cars = (window.NOMADE_PRICES && window.NOMADE_PRICES.cars) || {};
+  var carIds = Object.keys(cars);
+  // Se ?carro= não veio (ou inválido) e só há 1 carro na frota, seleciona ele.
+  if ((!preCar || !cars[preCar]) && carIds.length === 1) preCar = carIds[0];
+  // Aplica a seleção (define state.car aqui, já que 'state' existe neste ponto).
+  if (preCar && cars[preCar]) {
     var card = document.querySelector('.pick--car[data-car="' + preCar + '"]');
     if (card) {
       document.querySelectorAll('.pick--car').forEach(function(c) { c.classList.remove('selected'); });
       card.classList.add('selected');
       state.car = preCar;
+      if (typeof updateStep1 === 'function') updateStep1();
     }
   }
   // perfil pre-seleciona motivo no step 3

@@ -53,7 +53,7 @@
     if (!document.querySelector('link[href*="nd-design.css"]')) {
       var c = document.createElement('link');
       c.rel = 'stylesheet';
-      c.href = prefix + 'assets/nd-design.css?v=3';
+      c.href = prefix + 'assets/nd-design.css?v=4';
       head.appendChild(c);
     }
     if (!document.querySelector('script[src*="nd-ui.js"]')) {

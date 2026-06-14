@@ -477,3 +477,31 @@ button.nd-drawer__cta--ghost, .nd-drawer__cta--ghost {
   .ptruth-tbl__chip { margin-left: 0; margin-top: 4px; }
   .ptruth-card { padding: 22px 18px; }
 }
+
+/* ============================================================
+   PLACEHOLDER DE FOTO (.car-ph) — espaço marcado p/ foto real
+   do veículo (Daniel insere depois). NÃO é imagem de carro.
+   Preenche o container de imagem mantendo a proporção do pai.
+   ============================================================ */
+.car-ph {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%; height: 100%; min-height: 120px; box-sizing: border-box;
+  text-align: center; padding: 18px; gap: 8px;
+  font-family: var(--nd-font); color: var(--nd-green-700, #1A5440);
+  background:
+    repeating-linear-gradient(45deg, #f2f6f3 0, #f2f6f3 14px, #eaf0ec 14px, #eaf0ec 28px);
+  border: 2px dashed var(--nd-green-600, #2A6B50);
+  border-radius: inherit;
+}
+.car-ph::before {
+  content: '📷';
+  font-size: 22px; line-height: 1; opacity: 0.55;
+}
+.car-ph__label {
+  font-size: 13px; font-weight: 800; letter-spacing: 0.01em; line-height: 1.35;
+  color: var(--nd-green-800, #0F3D2E);
+}
+.car-ph__hint {
+  font-size: 11px; font-weight: 600; color: var(--nd-gray-400, #8A9890);
+  letter-spacing: 0.02em; text-transform: uppercase;
+}

@@ -107,7 +107,7 @@
   .precos__info strong { color: var(--navy); }
 </style>
 <link rel="stylesheet" href="assets/site-shell.css?v=20260606c" />
-<script src="prices.js?v=20260610d"></script>
+<script src="prices.js?v=20260610e"></script>
 <script defer src="assets/site-shell.js?v=1"></script>
 </head>
 <body data-nd-page="precos">
@@ -126,7 +126,7 @@
     </div>
     <div class="hero-page__visual">
       <img src="images/compromissos/3-liberdade-km.jpg" alt="Liberdade de quilometragem — 3 planos com Limite Total" onerror="this.style.display='none'" />
-      <div class="hero-page__badge">Plano Sedan<strong>R$ 3.790</strong>30 dias · tudo incluso</div>
+      <div class="hero-page__badge">Polo automático<strong>R$ 3.790</strong>30 dias · tudo incluso</div>
     </div>
   </div>
 </section>
@@ -147,18 +147,18 @@
       <div class="promo-loyalty__icon">%</div>
       <div class="promo-loyalty__body">
         <div class="promo-loyalty__title">Fidelização — 90 dias ou mais</div>
-        <p class="promo-loyalty__text">Contratos a partir de 90 dias têm <strong>desconto fixo de R$ 200/mês</strong> em qualquer nível do Plano Sedan — o Essencial sai por <strong>R$ 3.590/mês</strong>.</p>
+        <p class="promo-loyalty__text">Contratos a partir de 90 dias têm <strong>desconto fixo de R$ 500/mês</strong> em qualquer nível — o Essencial sai por <strong>R$ 3.290/mês</strong>.</p>
       </div>
     </div>
   </div>
 
   <div class="planos__grid">
 
-    <!-- PLANO SEDAN — DISPONIVEL -->
+    <!-- PLANO HATCH — DISPONIVEL (VW Polo automático) -->
     <div class="plano-card plano-card--active">
       <span class="plano-card__chip plano-card__chip--ok">Disponível</span>
-      <h3 class="plano-card__name">Plano Sedan</h3>
-      <div class="plano-card__cars">Fiat Cronos · Chevrolet Onix Sedan automático (lançamento)</div>
+      <h3 class="plano-card__name">Plano Hatch</h3>
+      <div class="plano-card__cars">Volkswagen Polo automático (lançamento)</div>
       <div class="plano-card__price">
         <div class="plano-card__from">a partir de</div>
         <div class="plano-card__price-val">R$ 3.790<small>/mês</small></div>
@@ -174,8 +174,8 @@
         <strong>3 níveis de quilometragem:</strong> Essencial (3.000 km) · Estendido (4.500 km) · Km Livre (teto 6.000 km), por mês. Você escolhe na reserva.
       </div>
       <div class="plano-card__cta">
-        <a href="reservar.html?carro=sedan" class="btn btn--primary">Reservar Plano Sedan</a>
-        <div class="plano-card__cta-note">⏱ 90+ dias = −R$ 200/mês (Essencial R$ 3.590)</div>
+        <a href="reservar.html?carro=polo" class="btn btn--primary">Reservar Polo automático</a>
+        <div class="plano-card__cta-note">⏱ 90+ dias = −R$ 500/mês (Essencial R$ 3.290)</div>
       </div>
     </div>
 
@@ -196,7 +196,7 @@
         <li>Assistência 24h</li>
       </ul>
       <div class="plano-card__km">
-        Mesma estrutura de 3 níveis de km do Plano Sedan, com valores ajustados pro porte do veículo.
+        Mesma estrutura de 3 níveis de km do Plano Hatch, com valores ajustados pro porte do veículo.
       </div>
       <div class="plano-card__cta">
         <a href="https://wa.me/5534984064864?text=Ol%C3%A1!%20Tenho%20interesse%20no%20Plano%20SUV%20quando%20estiver%20dispon%C3%ADvel." target="_blank" rel="noopener" class="plano-card__wait">Entrar na lista de espera</a>
@@ -233,16 +233,9 @@
 <section class="precos">
   <div class="wrap">
     <div class="planos__head" style="margin-top:8px;">
-      <div class="planos__eyebrow">Plano Sedan · simule por período</div>
+      <div class="planos__eyebrow">Volkswagen Polo · simule por período</div>
       <h2>Valores reais por período de contrato</h2>
-      <p>Os 3 níveis de km do Plano Sedan, em 30, 60, 90 ou 180 dias. Escolha entre os <strong>2 modelos disponíveis</strong> (mesmo preço, mesma categoria).</p>
-    </div>
-
-    <!-- Toggle de carro (Cronos vs Onix Sedan) — mesma faixa, mesmo preço.
-         Default selecionado: Onix Sedan. -->
-    <div class="precos__toggle" role="tablist" aria-label="Modelo">
-      <button type="button" data-car="onix" class="is-active">Chevrolet Onix Sedan</button>
-      <button type="button" data-car="sedan">Fiat Cronos</button>
+      <p>Os 3 níveis de km do Polo automático, em 30, 60, 90 ou 180 dias.</p>
     </div>
 
     <div class="precos__period" role="tablist" aria-label="Período">
@@ -288,9 +281,6 @@
 
   </div>
 </section>
-
-<!-- COMPARE O PREÇO FINAL — renderizado por nd-ui.js a partir de prices.js -->
-<section data-pricetruth></section>
 
 <!-- ===========================================================
      ADICIONAIS OPCIONAIS (P2) — apresentação informativa.
@@ -387,9 +377,8 @@
   var P = window.NOMADE_PRICES;
   if (!P) return;
 
-  // "Substituir Cronos pelo Onix na parte de baixo" → default = onix.
-  // Toggle continua mostrando os 2 (mesmo preço/categoria) pra cliente comparar.
-  var state = { car: 'onix', days: 30 };
+  // 1 carro de lançamento: Volkswagen Polo automático.
+  var state = { car: 'polo', days: 30 };
   var grid = document.getElementById('plansGrid');
 
   function fmt(v) { return v.toLocaleString('pt-BR'); }
@@ -425,16 +414,6 @@
       '</div>';
     }).join('');
   }
-
-  // Toggle de carro (Onix vs Cronos)
-  document.querySelectorAll('.precos__toggle button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.precos__toggle button').forEach(function (x) { x.classList.remove('is-active'); });
-      b.classList.add('is-active');
-      state.car = b.dataset.car;
-      render();
-    });
-  });
 
   document.querySelectorAll('.precos__period button').forEach(function (b) {
     b.addEventListener('click', function () {

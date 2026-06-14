@@ -10,7 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
 <meta property="og:title" content="Nomade Drive — Aluguel mensal de carros em Uberlândia" />
 <meta property="og:description" content="Locação 30 a 180 dias. Entregamos onde você estiver. Contrato digital." />
-<meta property="og:image" content="images/car-cronos-1.jpg" />
+<meta property="og:image" content="images/logo-nomade-drive.jpg" />
 <meta property="og:url" content="https://nomadedrive.com.br/" />
 <meta property="og:type" content="website" />
 
@@ -244,8 +244,8 @@
   .audience__cta a:hover::after { transform: translateX(3px); }
 </style>
 <link rel="stylesheet" href="assets/site-shell.css?v=20260606c" />
-<link rel="stylesheet" href="assets/nd-design.css?v=3" />
-<script src="prices.js?v=20260610d"></script>
+<link rel="stylesheet" href="assets/nd-design.css?v=4" />
+<script src="prices.js?v=20260610e"></script>
 <script defer src="assets/site-shell.js?v=1"></script>
 </head>
 <body data-nd-page="home">
@@ -259,9 +259,9 @@
       <h1 class="ndhero__title" data-h="2">Seu carro em Uberlândia, <em>entregue onde você estiver.</em></h1>
       <p class="ndhero__sub" data-h="3">Locação mensal com tudo incluso. Sem fila, sem loja, sem letra miúda.</p>
       <div class="ndhero__price" data-h="4">
-        <span class="ndhero__price-label">a partir de</span>
-        <span class="ndhero__price-val">R$ 3.590<small>/mês</small></span>
-        <span class="ndhero__price-note">em contratos de 90+ dias</span>
+        <span class="ndhero__price-label">Volkswagen Polo automático</span>
+        <span class="ndhero__price-val">R$ 3.790<small>/mês</small></span>
+        <span class="ndhero__price-note">ou R$ 3.290/mês em 90+ dias</span>
       </div>
       <div class="ndhero__cta" data-h="5">
         <a href="reservar.html" class="nd-btn nd-btn--gold nd-btn--lg">Reservar</a>
@@ -270,7 +270,10 @@
     </div>
     <div class="ndhero__media" data-h>
       <figure class="ndhero__photo">
-        <img src="images/car-cronos-1.jpg" alt="Fiat Cronos sedan automático — locação mensal Nomade Drive Uberlândia" fetchpriority="high" />
+        <div class="car-ph" style="aspect-ratio:4/3;">
+          <span class="car-ph__label">[FOTO POLO — frente 3/4 externa]</span>
+          <span class="car-ph__hint">foto real em breve</span>
+        </div>
       </figure>
       <div class="ndhero__chipcard">Seguro, manutenção e IPVA inclusos</div>
     </div>
@@ -353,11 +356,11 @@
     <div class="nav-cards__grid">
 
       <a href="frota.html" class="nc">
-        <div class="nc__thumb"><img src="images/car-cronos-1.jpg" alt="" /></div>
+        <div class="nc__thumb"><div class="car-ph"><span class="car-ph__label" style="font-size:11px;">[FOTO POLO — lateral]</span></div></div>
         <div class="nc__body">
-          <h3 class="nc__title">Ver os carros</h3>
-          <p class="nc__desc">Lançamento com 2 sedans automáticos 2024 (Fiat Cronos e Chevrolet Onix Sedan). Fotos reais, specs e Limite Total de km — você escolhe quanto roda.</p>
-          <span class="nc__cta">Ver carros</span>
+          <h3 class="nc__title">Ver o carro</h3>
+          <p class="nc__desc">Lançamento com o Volkswagen Polo automático — novo, completo e econômico. Specs, fotos e Limite Total de km: você escolhe quanto roda.</p>
+          <span class="nc__cta">Ver carro</span>
         </div>
       </a>
 
@@ -430,12 +433,9 @@
         <tr><td>Atendimento</td><td>Chatbot + URA</td><td>Daniel/Danilo direto WhatsApp</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:14px;font-size:13.5px;color:var(--gray-500);text-align:center;">Comparativo com locadoras tradicionais consultado em 05/06/2026. A opção com <strong>atendimento humano</strong> e <strong>km que não evapora no fim do mês</strong>. Veja o preço final lado a lado abaixo.</p>
+    <p style="margin-top:14px;font-size:13.5px;color:var(--gray-500);text-align:center;">A opção com <strong>atendimento humano</strong>, <strong>flexibilidade</strong> e <strong>km que não evapora no fim do mês</strong> — para quem está chegando a Uberlândia.</p>
   </div>
 </section>
-
-<!-- COMPARE O PREÇO FINAL — renderizado por nd-ui.js a partir de prices.js -->
-<section data-pricetruth></section>
 
 <!-- CTA FINAL -->
 <section class="cta-final">
