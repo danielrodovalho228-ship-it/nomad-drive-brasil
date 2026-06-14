@@ -210,6 +210,13 @@
   .compare__table tbody td:nth-child(2) { color: var(--gray-500); }
   .compare__table tbody td:nth-child(3) { color: var(--navy); font-weight: 600; background: var(--gold-pale); }
   .compare__table tbody tr:last-child td { border-bottom: none; }
+  /* Mobile: tabela comparativa compacta pra não estourar 375px */
+  @media (max-width: 600px) {
+    .compare__table th, .compare__table td { padding: 9px 9px; font-size: 12px; word-break: break-word; }
+    .compare__table thead th { font-size: 10.5px; letter-spacing: 0.2px; }
+    .compare__table { table-layout: fixed; }
+    .compare__table th:first-child, .compare__table td:first-child { width: 24%; }
+  }
 
   /* CTA FINAL */
   .cta-final { padding: 40px 0; background: var(--navy); color: var(--white); text-align: center; }
@@ -245,7 +252,7 @@
 </style>
 <link rel="stylesheet" href="assets/site-shell.css?v=20260606c" />
 <link rel="stylesheet" href="assets/nd-design.css?v=4" />
-<script src="prices.js?v=20260610e"></script>
+<script src="prices.js?v=20260610f"></script>
 <script defer src="assets/site-shell.js?v=1"></script>
 </head>
 <body data-nd-page="home">
@@ -259,7 +266,7 @@
       <h1 class="ndhero__title" data-h="2">Seu carro em Uberlândia, <em>entregue onde você estiver.</em></h1>
       <p class="ndhero__sub" data-h="3">Locação mensal com tudo incluso. Sem fila, sem loja, sem letra miúda.</p>
       <div class="ndhero__price" data-h="4">
-        <span class="ndhero__price-label">Volkswagen Polo automático</span>
+        <span class="ndhero__price-label">Hatch automático</span>
         <span class="ndhero__price-val">R$ 3.790<small>/mês</small></span>
         <span class="ndhero__price-note">ou R$ 3.290/mês em 90+ dias</span>
       </div>
@@ -270,10 +277,7 @@
     </div>
     <div class="ndhero__media" data-h>
       <figure class="ndhero__photo">
-        <div class="car-ph" style="aspect-ratio:4/3;">
-          <span class="car-ph__label">[FOTO POLO — frente 3/4 externa]</span>
-          <span class="car-ph__hint">foto real em breve</span>
-        </div>
+        <img src="images/car-hatch-1.jpg" alt="Hatch automático — locação mensal Nomade Drive Uberlândia" fetchpriority="high" />
       </figure>
       <div class="ndhero__chipcard">Seguro, manutenção e IPVA inclusos</div>
     </div>
@@ -356,10 +360,10 @@
     <div class="nav-cards__grid">
 
       <a href="frota.html" class="nc">
-        <div class="nc__thumb"><div class="car-ph"><span class="car-ph__label" style="font-size:11px;">[FOTO POLO — lateral]</span></div></div>
+        <div class="nc__thumb"><img src="images/car-hatch-1.jpg" alt="Hatch automático" /></div>
         <div class="nc__body">
           <h3 class="nc__title">Ver o carro</h3>
-          <p class="nc__desc">Lançamento com o Volkswagen Polo automático — novo, completo e econômico. Specs, fotos e Limite Total de km: você escolhe quanto roda.</p>
+          <p class="nc__desc">Lançamento com o Hatch automático — novo, completo e econômico. Specs, fotos e Limite Total de km: você escolhe quanto roda.</p>
           <span class="nc__cta">Ver carro</span>
         </div>
       </a>

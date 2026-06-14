@@ -5,7 +5,7 @@
  * ÚNICA FONTE DA VERDADE de preços do site inteiro.
  * Nenhuma página pode hardcodear preço — todas leem daqui.
  *
- * VEÍCULO DE LANÇAMENTO (10/06/2026): Volkswagen Polo automático
+ * VEÍCULO DE LANÇAMENTO (10/06/2026): Hatch automático (ilustração; marca a confirmar)
  *   (hatch automático, novo, garantia de fábrica). Substituiu o
  *   sedan (Fiat Cronos / Chevrolet Onix). O id interno do carro é
  *   'polo'. Aliases antigos (sedan/onix/cronos) redirecionam pra ele
@@ -37,16 +37,15 @@ window.NOMADE_PRICES = {
     polo: {
       id: 'polo',
       slug: 'polo',
-      name: 'Volkswagen Polo',
+      name: 'Hatch automático',
       category: 'Hatch Automático',
-      subtitle: 'Polo automático · novo, garantia de fábrica',
-      photo: '',          // vazio → site mostra placeholder marcado
-      photos: [],         // fotos reais entram aqui depois
+      subtitle: 'Automático · novo, garantia de fábrica',
+      photo: 'images/car-hatch-1.jpg',   // ilustração; foto real do modelo entra depois
+      photos: ['images/car-hatch-1.jpg'],
       photoPlaceholders: [
-        '[FOTO POLO — frente 3/4 externa]',
-        '[FOTO POLO — interior / painel]',
-        '[FOTO POLO — porta-malas]',
-        '[FOTO POLO — lateral]'
+        '[FOTO — interior / painel]',
+        '[FOTO — porta-malas]',
+        '[FOTO — lateral]'
       ],
       caucaoBRL: 2000,
       kmExceededBRL: 1.00,

@@ -1026,7 +1026,7 @@
   <a href="https://wa.me/5534984064864" target="_blank" rel="noopener">WhatsApp</a>
 </footer>
 
-<script src="prices.js?v=20260610e"></script>
+<script src="prices.js?v=20260610f"></script>
 <script>
 (function() {
   // ===== Renderiza cards de carro dinamicamente do prices.js =====
@@ -1042,7 +1042,7 @@
       // Foto real ainda não inserida → placeholder marcado (sem imagem de carro).
       var visual = car.photo
         ? '<img src="' + car.photo + '" alt="' + car.name + '" loading="lazy" onerror="this.style.opacity=0.3;" />'
-        : '<div class="car-ph" style="width:92px;height:64px;min-height:0;border-radius:6px;flex-shrink:0;padding:4px;"><span class="car-ph__label" style="font-size:9px;">[FOTO POLO]</span></div>';
+        : '<div class="car-ph" style="width:92px;height:64px;min-height:0;border-radius:6px;flex-shrink:0;padding:4px;"><span class="car-ph__label" style="font-size:9px;">[FOTO]</span></div>';
       return '<div class="pick pick--car" data-car="' + carId + '">' +
         visual +
         '<div class="pick--car__body">' +
@@ -1123,19 +1123,19 @@
   var PLAN_LABELS = { essencial: 'Essencial', estendido: 'Estendido', semLimite: 'Km Livre' };
 
   // Sugestões inteligentes por categoria (baseado FurnishedFinder)
-  // Lançamento: 1 carro só (Volkswagen Polo automático), sugestão sempre polo
+  // Lançamento: 1 carro só (Hatch automático), sugestão sempre polo
   // + ponto de entrega contextual ao perfil.
   var REASON_SUGGESTIONS = {
-    'trabalho-remoto':       { car: 'polo', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. Entrega na <strong>Praça Tubal Vilela</strong> — pega o <strong>Polo automático</strong> e segue pro coworking.' },
-    'tratamento-medico':     { car: 'polo', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Polo automático</strong> é confortável pra paciente e acompanhante.' },
-    'relocacao-corporativa': { car: 'polo', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Polo automático</strong>, novo e completo, passa imagem profissional pra reuniões.' },
-    'intercambio-pos':       { car: 'polo', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>Polo automático</strong> entregue na porta, conforto pra rotina acadêmica.' },
-    'reforma-transicao':     { car: 'polo', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>Polo automático</strong>, prático pra rotina da transição.' },
-    'mudanca-familiar':      { car: 'polo', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Polo automático</strong>, confortável e econômico pra família que está chegando.' },
-    'aposentadoria':         { car: 'polo', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Polo automático</strong>, fácil de dirigir e sem cansaço no dia a dia.' },
-    'viagem-longa':          { car: 'polo', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. <strong>Polo automático</strong>, novo e econômico pra rodar pela região.' }
+    'trabalho-remoto':       { car: 'polo', point: 'tubal-vilela',    text: 'Centro tem mais coworkings e cafés. Entrega na <strong>Praça Tubal Vilela</strong> — pega o <strong>Hatch automático</strong> e segue pro coworking.' },
+    'tratamento-medico':     { car: 'polo', point: 'hc-ufu',          text: '<strong>HC-UFU</strong> é o ponto mais próximo dos principais hospitais. <strong>Hatch automático</strong> é confortável pra paciente e acompanhante.' },
+    'relocacao-corporativa': { car: 'polo', point: 'center-shopping', text: 'Center Shopping fica no eixo corporativo. <strong>Hatch automático</strong>, novo e completo, passa imagem profissional pra reuniões.' },
+    'intercambio-pos':       { car: 'polo', point: 'hc-ufu',          text: 'HC-UFU fica colado no campus Umuarama da UFU. <strong>Hatch automático</strong> entregue na porta, conforto pra rotina acadêmica.' },
+    'reforma-transicao':     { car: 'polo', point: 'custom',          text: 'Entregamos no endereço da obra ou novo apartamento. <strong>Hatch automático</strong>, prático pra rotina da transição.' },
+    'mudanca-familiar':      { car: 'polo', point: 'custom',          text: 'Entregamos no seu novo endereço. <strong>Hatch automático</strong>, confortável e econômico pra família que está chegando.' },
+    'aposentadoria':         { car: 'polo', point: 'custom',          text: 'Entrega no hotel ou condomínio. <strong>Hatch automático</strong>, fácil de dirigir e sem cansaço no dia a dia.' },
+    'viagem-longa':          { car: 'polo', point: 'aeroporto',       text: 'Buscamos você no <strong>Aeroporto Bombonato</strong> desembarcando. <strong>Hatch automático</strong>, novo e econômico pra rodar pela região.' }
   };
-  // Lançamento: 1 carro só (Volkswagen Polo automático)
+  // Lançamento: 1 carro só (Hatch automático)
   // CARS derivado do prices.js (fonte única) — fica em sincronia com a frota.
   var CARS = {};
   (function () {
