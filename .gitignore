@@ -53,3 +53,13 @@ Conclusao do Negocio/
 
 # --- Residuo de filter-branch (limpeza de .pptx em 05/2026) - NUNCA commitar ---
 .git-rewrite/
+
+# --- Supabase CLI temp (nunca versionar) ---
+supabase/.temp/
+
+# --- Planilhas internas de socios/planejamento ---
+NomadeDrive_Planilha_Socios*.xlsx
+NomadeDrive_VivaNomads*.xlsx
+
+# --- Midia bruta do Instagram (binarios pesados, nao deploy) ---
+Instagram/
